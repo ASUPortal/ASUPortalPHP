@@ -47,4 +47,11 @@ class CCorriculumDisciplineLabor extends CActiveModel {
             "value" => "Количество часов"
         );
     }
+    public function validationRules() {
+        return array(
+            "selected" => array(
+                "type_id"
+            )
+        );
+    }
 }

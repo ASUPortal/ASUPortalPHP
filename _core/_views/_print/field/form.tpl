@@ -41,11 +41,13 @@
     </p>
 
     {if CRequest::getString("action") == "edit"}
+        {if $field->children->getCount() > 0}
     <p>
         {CHtml::activeLabel("parent_node", $field)}
         {CHtml::activeDropDownList("parent_node", $field, $parents)}
         {CHtml::error("parent_node", $field)}
     </p>
+        {/if}
     {/if}
 
     <p>

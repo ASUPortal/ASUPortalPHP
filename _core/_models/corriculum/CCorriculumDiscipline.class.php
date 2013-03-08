@@ -113,4 +113,11 @@ class CCorriculumDiscipline extends CActiveModel {
         }
         return $res;
     }
+    public function validationRules() {
+        return array(
+            "selected" => array(
+                "discipline_id"
+            )
+        );
+    }
 }

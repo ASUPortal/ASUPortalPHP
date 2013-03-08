@@ -71,15 +71,16 @@ class CPrintController extends CBaseController {
             /**
              * Это место для экспериментов и написания отладочного кода
              */
+            $cycleName = "ГСЭ";
             $value = "";
             if (is_null($object->group)) {
                 $value = "__________";
             } elseif (is_null($object->group->corriculum)) {
                 $value = "__________";
-            } elseif (is_null($object->group->corriculum->getCycleByAbbreviatedName("ГСЭ"))) {
+            } elseif (is_null($object->group->corriculum->getCycleByAbbreviatedName($cycleName))) {
                 $value = "__________";
             } else {
-                $cycle = $object->group->corriculum->getCycleByAbbreviatedName("ГСЭ");
+                $cycle = $object->group->corriculum->getCycleByAbbreviatedName($cycleName);
                 $arr = array();
                 /**
                  * Собираем дисциплины в таблицу
@@ -90,7 +91,21 @@ class CPrintController extends CBaseController {
                         $d[0] = $disc->discipline->getValue();
                     }
                     $d[1] = $disc->getLaborValue();
-                    $d[2] = "Оценка";
+                    $d[2] = "__________";
+                    /**
+                     * Получаем оценку студента по выбранной дисциплине.
+                     * Пока получаем просто последнюю оценку вне зависимости
+                     * от формы контроля по дисциплине
+                     */
+                    $query = new CQuery();
+                    $query->select("act.id, mark.name as name")
+                        ->from(TABLE_STUDENTS_ACTIVITY." as act")
+                        ->condition("act.student_id = ".$object->getId()." and act.kadri_id = 380 and act.subject_id = ".$disc->discipline->getId())
+                        ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
+                        ->order("act.id asc");
+                    foreach ($query->execute()->getItems() as $item) {
+                        $d[2] = $item["name"];
+                    }
                     $arr[] = $d;
                 }
                 $value = $arr;
