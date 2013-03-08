@@ -3,7 +3,7 @@
 {block name="asu_center"}
 <h2>Описатели полей</h2>
 
-<table width="100%" cellpadding="2" cellspacing="0" border="1">
+<table width="100%" cellpadding="2" cellspacing="0" border="1" id="table">
     <tr>
         <th>&nbsp;</th>
         <th>#</th>

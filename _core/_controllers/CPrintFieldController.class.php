@@ -24,6 +24,8 @@ class CPrintFieldController extends CBaseController {
             $field = CPrintManager::getField($item->getId());
             $fields->add($field->getId(), $field);
         }
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("fields", $fields);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_print/field/index.tpl");
@@ -95,5 +97,98 @@ class CPrintFieldController extends CBaseController {
         $this->setData("formsets", $formsets);
         $this->setData("field", $field);
         $this->renderView("_print/field/edit.tpl");        
+    }
+    public function actionExport() {
+        /**
+         * Выбираем данные. Если ничего не получено, то
+         * экспортируем все описатели
+         */
+        $selected = CRequest::getArray("selected");
+        $query = new CQuery();
+        $query->select("id")
+            ->from(TABLE_PRINT_FIELDS);
+        if (count($selected) > 0) {
+            $query->condition("id in (".implode(", ", $selected).")");
+        }
+        $fields = array();
+        foreach ($query->execute()->getItems() as $item) {
+            $field = CPrintManager::getField($item["id"]);
+            $field_arr = array(
+                "alias" => $field->alias,
+                "title" => $field->title,
+                "description" => $field->description,
+                "value_evaluate" => $field->value_evaluate,
+                "parent_node" => $field->parent_node,
+            );
+            /**
+             * Данные о родителе и связанных вставляем как алиасы
+             */
+            if (!is_null($field->parent)) {
+                $field_arr["parent"] = $field->parent->alias;
+            }
+            /**
+             * Данные о наборе форм так же
+             */
+            if (!is_null($field->formset)) {
+                $field_arr["formset"] = $field->formset->alias;
+            }
+            $fields[] = $field_arr;
+        }
+        echo serialize($fields);
+    }
+    public function actionImport() {
+        $import_data = CRequest::getString("export_data");
+        $import_data = unserialize($import_data);
+        /**
+         * Первый проход
+         * Добавляем или обновляем описатели без учета иерархии
+         */
+        foreach ($import_data as $field_arr) {
+            $field = CPrintManager::getField($field_arr["alias"]);
+            if (is_null($field)) {
+                $field = new CPrintField();
+                $field->alias = $field_arr["alias"];
+            }
+            /**
+             * Обновляем данными из массива
+             */
+            $field->description = $field_arr["description"];
+            $field->value_evaluate = $field_arr["value_evaluate"];
+            $field->parent_node = $field_arr["parent_node"];
+            $field->title = $field_arr["title"];
+            /**
+             * Привязываем к набору форм
+             */
+            $formset = CPrintManager::getFormset($field_arr["formset"]);
+            if (is_null($formset)) {
+                trigger_error("Не могу найти набор форм ".$field_arr["formset"].". Продолжение невозможно", E_USER_ERROR);
+            }
+            $field->formset_id = $formset->getId();
+            $field->save();
+        }
+        /**
+         * Второй проход
+         * Выстраиваем иерархию
+         */
+        foreach ($import_data as $field_arr) {
+            if (array_key_exists("parent", $field_arr)) {
+                $parent = CPrintManager::getField($field_arr["parent"]);
+                if (is_null($parent)) {
+                    trigger_error("Не могу найти описатель с псевдонимом ".$field_arr["parent"].". Импортируйте сначала его", E_USER_ERROR);
+                }
+                $field = CPrintManager::getField($field_arr["alias"]);
+                $field->parent_id = $parent->getId();
+                $field->save();
+            }
+        }
+        /**
+         * Возвращаемся обратно
+         */
+        $this->redirect("?action=index");
+    }
+    public function actionDelete() {
+        $field = CPrintManager::getField(CRequest::getInt("id"));
+        $field->remove();
+        $this->redirect("?action=index");
     }
 }

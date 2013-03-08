@@ -103,12 +103,18 @@ class CPrintManager {
      */
     public static function getField($key) {
         if (!self::getCacheField()->hasElement($key)) {
+            $item = null;
             if (is_numeric($key)) {
                 $item = CActiveRecordProvider::getById(TABLE_PRINT_FIELDS, $key);
+            } elseif (is_string($key)) {
+                foreach (CActiveRecordProvider::getWithCondition(TABLE_PRINT_FIELDS, "LCASE(alias) = '".mb_strtolower($key)."'")->getItems() as $i) {
+                    $item = $i;
+                }
             }
             if (!is_null($item)) {
                 $field = new CPrintField($item);
                 self::getCacheField()->add($field->getId(), $field);
+                self::getCacheField()->add($field->alias, $field);
             }
         }
         return self::getCacheField()->getItem($key);

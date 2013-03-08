@@ -12,6 +12,7 @@
     define("QUERY_UPDATE", "UPDATE");
     define("QUERY_INSERT", "INSERT");
     define("QUERY_REMOVE", "REMOVE");
+    define("QUERY_CUSTOM", "CUSTOM");
 
 class CQuery {
     private $_fields = null;
@@ -235,6 +236,10 @@ class CQuery {
             case QUERY_REMOVE: {
                 return $this->queryRemove();
                 break;
+            };
+            case QUERY_CUSTOM: {
+                return $this->queryCustom();
+                break;
             }
         }
     }
@@ -312,5 +317,23 @@ class CQuery {
     }
     public function getCondition() {
         return $this->_condition;
+    }
+
+    /**
+     * Запрос собственного типа, для всякого разного
+     *
+     * @param $query
+     */
+    public function query($query) {
+        $this->_type = QUERY_CUSTOM;
+        $this->_query = $query;
+    }
+    private function queryCustom() {
+        $res = new CArrayList();
+        $q = mysql_query($this->getQueryString()) or die(mysql_error()." -> ".$this->getQueryString());
+        while ($row = mysql_fetch_assoc($q)) {
+            $res->add($res->getCount(), $row);
+        }
+        return $res;
     }
 }

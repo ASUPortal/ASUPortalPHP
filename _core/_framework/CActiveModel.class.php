@@ -11,6 +11,7 @@
 class CActiveModel extends CModel{
     private $_aRecord = null;
     protected $_table = null;
+    private $_dbTable = null;
 
     public function __construct(CActiveRecord $aRecord = null) {
         if (is_null($aRecord)) {
@@ -162,6 +163,15 @@ class CActiveModel extends CModel{
      * Сохранение или обновление данных модели
      */
     public function save() {
+        /**
+         * Из публичных свойств объекта пробуем получить
+         * данные для записи на случай, если их не положил пользователь
+         */
+        foreach (get_object_vars($this) as $key=>$value) {
+            if ($this->getDbTable()->getFields()->hasElement($key)) {
+                $this->getRecord()->setItemValue($key, $value);
+            }
+        }
         if (is_null($this->getId()) | $this->getId() == "") {
             $this->saveModel();
             $this->setId(mysql_insert_id());
@@ -432,5 +442,17 @@ class CActiveModel extends CModel{
         foreach ($array as $key=>$value) {
             $this->getRecord()->setItemValue($key, $value);
         }
+    }
+
+    /**
+     * Информация о таблице, в которой хранится запись
+     *
+     * @return CDbTable
+     */
+    private function getDbTable() {
+        if (is_null($this->_dbTable)) {
+            $this->_dbTable = new CDbTable($this->getTable());
+        }
+        return $this->_dbTable;
     }
 }

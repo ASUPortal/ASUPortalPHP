@@ -8,6 +8,20 @@
  */
 class CPrintField extends CActiveModel {
     protected $_table = TABLE_PRINT_FIELDS;
+    /**
+     * Публичные свойства
+     */
+    public $title;
+    public $alias;
+    public $description;
+    public $value_evaluate;
+    public $parent_node;
+    public $formset_id;
+    public $parent_id;
+    public $type_id;
+    /**
+     * Свойства для хранения связей
+     */
     protected $_formset = null;
     protected $_children = null;
     protected $_parent = null;
