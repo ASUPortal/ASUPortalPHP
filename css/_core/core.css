@@ -1,0 +1,334 @@
+body {
+    font-family: tahoma;
+    font-size: 12px;
+    padding: 0px;
+    margin: 0px;
+    background: #ffffaa;
+}
+
+.base_wrapper {
+    top: 0px;
+    left: 0px;
+    position: relative;
+    width: auto;
+    margin-left: 10px;
+    margin-right: 10px;
+    background: #ffffff;
+}
+
+.asu_header {
+    position: relative;
+    height: 90px;
+    background: #0000cc;
+    background-image: url("../../_themes/blue/images/head.gif");
+    border-bottom: 3px solid #ffffff;
+    width: 100%;
+}
+
+.asu_header_asu_logo {
+    float: left;
+    background-image: url("../../_themes/blue/images/left_logo_asu2.gif");
+    height: 93px;
+    width: 127px;
+}
+
+.asu_header_ugatu_logo {
+    float: right;
+    background-image: url("../../_themes/blue/images/right_logo.gif");
+    height: 93px;
+    width: 190px;
+}
+
+.asu_header_content_container {
+    margin-left: 152px;
+}
+
+.asu_header_content {
+    text-align: center;
+    color: #ffffff;
+    padding-top: 15px;
+}
+
+.asu_header_content p {
+    padding: 0px;
+    margin: 0px;
+    padding-bottom: 5px;
+}
+
+.asu_auth_info a {
+    color: red;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.asu_body {
+    position: relative;
+}
+
+.asu_left {
+    width: 155px;
+    padding: 5px;
+}
+
+.asu_center_container {
+    margin-left: 210px;
+}
+
+.center_no_menu {
+    margin-left: 55px;
+}
+
+.center_wap {
+    margin-left: 0px;
+}
+
+.asu_hidemenu {
+    width: 45px;
+}
+
+.asu_hidemenu img {
+    cursor: pointer;
+}
+
+.asu_center {
+    padding: 5px;
+    margin-right: 80px;
+}
+
+.asu_right {
+    width: 75px;
+    padding: 5px;
+    overflow: hidden;
+}
+
+.asu_right p {
+    text-align: center;
+}
+
+.asu_right img {
+    border: none;
+}
+
+.asu_footer {
+    position: relative;
+    height: 25px;
+    background: #0000cc;
+    width: 100%;
+    z-index: 0;
+}
+
+.align_left {
+    float: left;
+}
+
+.align_right {
+    float: right;
+}
+
+.tagit-hiddenSelect {
+    display: none;
+}
+
+form p {
+
+}
+
+form p label {
+    width: 200px;
+    display: inline;
+    float: left;
+    font-weight: bold;
+    height: auto;
+}
+
+form p input, form p select {
+    width: 350px;
+}
+
+ul.ul-input {
+    width: 340px;
+    padding: 0px;
+    margin: 0px;
+    border: 1px solid #cccccc;
+}
+
+ul.tagit li.tagit-choice {
+    border: 1px solid #0000ff;
+}
+
+form p textarea {
+    width: 350px;
+    height: 150px;
+}
+
+form p input[type="submit"] {
+    width: 200px;
+}
+
+#asu_auth {
+    position: absolute;
+    display: none;
+    width: 300px;
+    border: 1px solid black;
+    padding: 3px;
+    background: #ffffff;
+    left: 50%;
+    margin-left:-150px;
+    color: #000000;
+    z-index: 1000;
+}
+
+#asu_auth p {
+    clear:both;
+}
+
+#asu_auth input {
+    width: 200px;
+}
+
+#asu_auth label {
+    padding: 0px;
+    font-weight: normal;
+    width: 75px;
+}
+
+#adminMenu {
+    display: block;
+    height: 20px;
+    width: auto;
+    padding: 0px;
+    margin: 0px;
+}
+
+#adminMenu ul {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+#adminMenu ul.level0 li{
+    list-style-type: none;
+    display: block;
+    float: left;
+    padding: 5px;
+    background:  #EFEFFF;
+}
+
+#adminmenu ul li {
+    list-style-type: none;
+    display: block;
+    float: left;
+    padding: 5px;
+    background:  #EFEFFF;
+}
+
+#adminMenu ul li ul{
+    border: 1px solid black;
+    display: none;
+    position: absolute;
+    margin-top: 5px;
+    margin-left: -5px;
+    z-index: 1;
+}
+
+#adminMenu ul li ul li {
+    float: none;
+}
+
+#adminMenu ul li ul:hover,
+#adminMenu ul li ul li:hover {
+    display: block; 
+}
+
+#adminMenu ul li:hover > ul {
+    display: block;
+}
+
+#adminMenu ul.level0 li ul.level1 {
+    border: 1px solid black;
+    display: none;
+    position: absolute;
+    margin-top: 5px;
+    margin-left: -5px;
+}
+#adminMenu ul.level0 li ul.level1 li {
+    float: none;
+}
+
+#adminMenu ul.level0 li ul.level1:hover,
+#adminMenu ul.level0 li ul.level1 li:hover {
+    display: block;
+}
+#adminMenu ul.level0 li:hover > ul.level1 {
+    display: block;
+}
+
+table {
+    font-family: tahoma;
+    font-size: 12px;
+    margin:10px 0pt 15px;
+    width: 100%;
+    text-align: left;
+}
+
+table img {
+	border: none;
+}
+
+table th {
+    background-color: #ffffff;
+    padding: 5px;
+}
+
+table td {
+    padding: 1px;
+}
+
+table tr:nth-child(2n+1) {
+    background: #DFEFFF;
+}
+table tr:nth-child(2n) {
+    background: #99D1FF;
+}
+
+table input {
+    width: auto;
+    height: 20px;
+}
+
+table.noStyle tr {
+    background: none;
+}
+
+table.tableBlank {
+    background: none;
+}
+
+table.tableBlank tr {
+    background: none;
+}
+
+table th.vertical {
+    writing-mode: tb-rl;
+}
+
+.asu_help_block {
+    border: 1px solid #c0c0c0;
+    padding: 5px;
+    padding-left: 45px;
+    background-image: url(../../images/tango/32x32/apps/help-browser.png);
+    background-repeat: no-repeat;
+    background-position: 5px center;
+    min-height: 37px;
+}
+
+#asu_wap_switch {
+    width: 100px;
+    height: 87px;
+    position: relative;
+    left: 50%;
+    margin-left: -50px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    background-image: url(../../_themes/blue/images/wap.gif);
+}

@@ -1,0 +1,491 @@
+
+
+ 
+ 
+ <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <script type="text/javascript">
+ 
+ 
+ 
+ var codesite_token = null;
+ 
+ 
+ var logged_in_user_email = null;
+ 
+ </script>
+ 
+ 
+ <title>Examples - 
+ inlinemultiselect -
+ 
+ Project Hosting on Google Code</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+ 
+ <link type="text/css" rel="stylesheet" href="http://www.gstatic.com/codesite/ph/2429932258724909799/css/ph_core.css">
+ 
+ <link type="text/css" rel="stylesheet" href="http://www.gstatic.com/codesite/ph/2429932258724909799/css/ph_detail.css" >
+ 
+ 
+ 
+ 
+<!--[if IE]>
+ <link type="text/css" rel="stylesheet" href="http://www.gstatic.com/codesite/ph/2429932258724909799/css/d_ie.css" >
+<![endif]-->
+ <style type="text/css">
+ .menuIcon.off { background: no-repeat url(http://www.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 -42px }
+ .menuIcon.on { background: no-repeat url(http://www.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 -28px }
+ .menuIcon.down { background: no-repeat url(http://www.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 0; }
+ .results th a, .results th a:visited { background: url(http://www.gstatic.com/codesite/ph/images/downarrow.gif) no-repeat top right }
+ </style>
+</head>
+<body class="t6">
+ <div id="gaia">
+ 
+ <span>
+ 
+ 
+ <a href="#" id="projects-dropdown" onclick="return false;">My favorites</a>
+ 
+ | <a href="https://www.google.com/accounts/ServiceLogin?service=code&ltmpl=phosting&continue=http%3A%2F%2Fcode.google.com%2Fp%2Finlinemultiselect%2Fwiki%2FExamples&amp;followup=http%3A%2F%2Fcode.google.com%2Fp%2Finlinemultiselect%2Fwiki%2FExamples" onclick="_CS_click('/gb/ph/signin');">Sign in</a>
+ 
+ </span>
+
+ </div>
+ <div class="gbh" style="left: 0pt;"></div>
+ <div class="gbh" style="right: 0pt;"></div>
+ 
+ 
+ <div style="height: 1px"></div>
+<!--[if IE 6]>
+<div style="text-align:center;">
+Support browsers that contribute to open source, try <a href="http://www.firefox.com">Firefox</a> or <a href="http://www.google.com/chrome">Google Chrome</a>.
+</div>
+<![endif]-->
+ <table style="padding:0px; margin: 20px 0px 0px 0px; width:100%" cellpadding="0" cellspacing="0">
+ <tr style="height: 58px;">
+ 
+ <td style="width: 55px; text-align:center;">
+ <a href="/p/inlinemultiselect/">
+ 
+ 
+ 
+ <img src="http://www.gstatic.com/codesite/ph/images/defaultlogo.png"
+ alt="Project Logo">
+ 
+ 
+ 
+ </a>
+ </td>
+ 
+ <td style="padding-left: 0.8em">
+ 
+ <div id="pname" style="margin: 0px 0px -3px 0px">
+ <a href="/p/inlinemultiselect/" style="text-decoration:none; color:#000">inlinemultiselect</a>
+ </div>
+ 
+ <div id="psum">
+ <i><a id="project_summary_link" href="/p/inlinemultiselect/" style="text-decoration:none; color:#000">jQuery plugin which turns a select-multiple form element into a managed inline list</a></i>
+ </div>
+ 
+ </td>
+ <td style="white-space:nowrap; text-align:right">
+ 
+ <form action="/hosting/search">
+ <input size="30" name="q" value="">
+ <input type="submit" name="projectsearch" value="Search projects" >
+ </form>
+ 
+ </tr>
+ </table>
+
+
+
+ 
+<table id="mt" cellspacing="0" cellpadding="0" width="100%" border="0">
+ <tr>
+ <th onclick="if (!cancelBubble) _go('/p/inlinemultiselect/');">
+ <div class="tab inactive">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ <div class="box-inner">
+ <a onclick="cancelBubble=true;" href="/p/inlinemultiselect/">Project&nbsp;Home</a>
+ </div>
+ </div>
+ </th><td>&nbsp;&nbsp;</td>
+ 
+ 
+ 
+ 
+ <th onclick="if (!cancelBubble) _go('/p/inlinemultiselect/downloads/list');">
+ <div class="tab inactive">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ <div class="box-inner">
+ <a onclick="cancelBubble=true;" href="/p/inlinemultiselect/downloads/list">Downloads</a>
+ </div>
+ </div>
+ </th><td>&nbsp;&nbsp;</td>
+ 
+ 
+ 
+ 
+ 
+ <th onclick="if (!cancelBubble) _go('/p/inlinemultiselect/w/list');">
+ <div class="tab active">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ <div class="box-inner">
+ <a onclick="cancelBubble=true;" href="/p/inlinemultiselect/w/list">Wiki</a>
+ </div>
+ </div>
+ </th><td>&nbsp;&nbsp;</td>
+ 
+ 
+ 
+ 
+ 
+ <th onclick="if (!cancelBubble) _go('/p/inlinemultiselect/issues/list');">
+ <div class="tab inactive">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ <div class="box-inner">
+ <a onclick="cancelBubble=true;" href="/p/inlinemultiselect/issues/list">Issues</a>
+ </div>
+ </div>
+ </th><td>&nbsp;&nbsp;</td>
+ 
+ 
+ 
+ 
+ 
+ <th onclick="if (!cancelBubble) _go('/p/inlinemultiselect/source/checkout');">
+ <div class="tab inactive">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ <div class="box-inner">
+ <a onclick="cancelBubble=true;" href="/p/inlinemultiselect/source/checkout">Source</a>
+ </div>
+ </div>
+ </th><td>&nbsp;&nbsp;</td>
+ 
+ 
+ <td width="100%">&nbsp;</td>
+ </tr>
+</table>
+<table cellspacing="0" cellpadding="0" width="100%" align="center" border="0" class="st">
+ <tr>
+ 
+ 
+ 
+ <td>
+ <div class="issueDetail">
+<div class="isf">
+ 
+ <span class="inIssueList"> 
+ <span>Search</span>
+ <form action="/p/inlinemultiselect/w/list" method="GET" style="display:inline">
+ <select id="can" name="can" style="font-size:92%">
+ <option disabled="disabled">Search within:</option>
+ 
+ <option value="1" >&nbsp;All wiki pages</option>
+ <option value="3" >&nbsp;Featured pages</option>
+ <option value="2" selected="selected">&nbsp;Current pages</option>
+ 
+ 
+ <option value="4" >&nbsp;Deprecated pages</option>
+ 
+ </select>
+ <span>for</span>
+ <span id="qq"><input type="text" size="32" id="q" name="q" value="" style="font-size:92%" ></span>
+ 
+ 
+ <input type="submit" value="Search" style="font-size:92%" >
+ </form>
+ </span>
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+</div>
+</div>
+
+ </td>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <td height="4" align="right" valign="top" class="bevel-right">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ </td>
+ </tr>
+</table>
+<script type="text/javascript">
+ var cancelBubble = false;
+ function _go(url) { document.location = url; }
+</script>
+
+
+<div id="maincol"
+ 
+>
+
+ 
+<!-- IE -->
+
+
+
+
+
+
+ <style type="text/css">
+ .artifactcomment, #commentform {
+ margin: .5em 0 0 0;
+ padding: .3em 0 .3em .3em;
+ border-top: 3px solid #c3d9ff;
+ }
+ #commentform { padding-top: 1em; }
+ .delcom { background: #e8e8e8 }
+ .commentcontent { margin: 1em 0;}
+ </style>
+
+
+ <div id="wikicontent">
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+ <tr>
+ 
+ <td class="vt" id="wikimaincol" width="100%">
+ 
+ <div style="float:right; width:18em" id="wikimeta">
+ <div class="pmeta_bubble_bg">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ <div class="box-inner">
+ <table style="padding: 5px">
+ <tr><td colspan="2" style="padding-bottom:5px">Updated <span title="Sun Jun  7 13:24:23 2009">Jun 07, 2009</span>
+ 
+ by <a style="white-space: nowrap" href="/u/bjorsq/">bjorsq</a>
+ </td></tr>
+ 
+ <tr><th class="vt">Labels:</th>
+ <td>
+ 
+ <a href="/p/inlinemultiselect/w/list?q=label:Featured"
+ title="Listed on project home page"
+ >Featured</a>, 
+ 
+ <a href="/p/inlinemultiselect/w/list?q=label:Phase-Implementation"
+ title="Developers&#39; guide"
+ >Phase-Implementation</a>, 
+ 
+ <a href="/p/inlinemultiselect/w/list?q=label:Phase-Deploy"
+ title="How to install and configure the program"
+ >Phase-Deploy</a>
+ 
+ </td>
+ </tr>
+ 
+ 
+ 
+ </table>
+ </div>
+ <div class="round1"></div>
+ <div class="round2"></div>
+ <div class="round4"></div>
+ </div>
+ </div>
+ 
+ <div id="wikiheader" style="margin-bottom:1em">
+ 
+ <span style="font-size:120%;font-weight:bold">Examples</span>
+ &nbsp;
+ 
+ 
+ </div>
+ <ul><li><a href="/p/inlinemultiselect/wiki/Introduction">Introduction</a> </li><li><a href="/p/inlinemultiselect/wiki/Options">Options</a> </li><li><a href="/p/inlinemultiselect/wiki/Styles">Styles</a> </li><li><a href="/p/inlinemultiselect/wiki/Usage">Usage</a> </li><li><strong>Examples</strong> </li></ul><p>
+<style type="text/css">
+.gadget-title {
+  margin-bottom: 2px;
+}
+</style>
+<script src="http://code.gmodules.com/gadgets/js/rpc.js?c=1&container=code"></script>
+<script type="text/javascript">
+function resizeIframeHandler(opt_height) {
+  var elem = document.getElementById(this.f);
+  if (!elem) return;
+  if (!opt_height) {
+    elem.style.height = undefined;
+  }
+  else {
+    opt_height = Math.max(10, opt_height);
+    elem.style.height = opt_height + 'px';
+  }
+}
+gadgets.rpc.register("resize_iframe", resizeIframeHandler);
+
+gadgets.rpc.register('set_title', function(title) {
+ var elem = document.getElementById(this.f + '_title');
+ if (elem) {
+   elem.innerHTML = gadgets.util.escape(title);
+ }
+});
+</script>
+<h2 id="gadget0_title" class="gadget-title"></h2><iframe src="http://www.gmodules.com/gadgets/ifr?url=http%3A%2F%2Finlinemultiselect.googlecode.com%2Fsvn%2Ftrunk%2Fexamples.gadget.xml&amp;parent=http%3A%2F%2Fcode.google.com%2Fhosting&amp;synd=code" id="gadget0" name="gadget0" frameborder="1" width="800" height="400"></iframe> </p>
+ </td> 
+ </tr>
+ </table>
+ </div>
+
+
+ 
+ <br>
+ <div id="commentlist">
+ 
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+<div class="collapse">
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+</div>
+
+ <script type="text/javascript">
+ function delComment(sequence_num, delete_mode) {
+ var f = document.forms["delcom"];
+ f.sequence_num.value = sequence_num;
+ f.mode.value = delete_mode;
+ f.submit();
+ return false;
+ }
+ </script>
+
+
+ </div>
+ 
+ 
+ 
+ 
+ <br>
+ <div class="artifactcomment">
+ <img src="http://www.gstatic.com/codesite/ph/images/triangle.gif"><a href="https://www.google.com/accounts/ServiceLogin?service=code&ltmpl=phosting&continue=http%3A%2F%2Fcode.google.com%2Fp%2Finlinemultiselect%2Fwiki%2FExamples&amp;followup=http%3A%2F%2Fcode.google.com%2Fp%2Finlinemultiselect%2Fwiki%2FExamples"
+ >Sign in</a> to add a comment
+ </div>
+ 
+ 
+
+<form name="delcom" action="../w/delComment.do" method="POST">
+ <input type="hidden" name="sequence_num" value="" >
+ <input type="hidden" name="mode" value="" >
+ <input type="hidden" name="pagename" value="Examples" >
+ <input type="hidden" name="token" value="" >
+</form>
+
+
+
+<script src="http://www.gstatic.com/codesite/ph/2429932258724909799/js/prettify/prettify.js"></script>
+<script type="text/javascript">
+ prettyPrint();
+</script>
+<script type="text/javascript" src="http://www.gstatic.com/codesite/ph/2429932258724909799/js/dit_scripts_20081013.js"></script>
+
+
+
+  
+ <script type="text/javascript" src="http://www.gstatic.com/codesite/ph/2429932258724909799/js/core_scripts_20081103.js"></script>
+ <script type="text/javascript" src="/js/codesite_product_dictionary_ph.pack.04102009.js"></script>
+ 
+ 
+ 
+ 
+ 
+ </div>
+<div id="footer" dir="ltr">
+ 
+ <div class="text">
+ 
+ &copy;2009 Google -
+ <a href="/">Code Home</a> -
+ <a href="/projecthosting/terms.html">Terms of Service</a> -
+ <a href="http://www.google.com/privacy.html">Privacy Policy</a> -
+ <a href="/more/">Site Directory</a> -
+ <a href="/p/support/">Project Hosting Help</a>
+ 
+ </div>
+</div>
+<script type="text/javascript">
+/**
+ * Reports analytics.
+ * It checks for the analytics functionality (window._gat) every 100ms
+ * until the analytics script is fully loaded in order to invoke siteTracker.
+ */
+function _CS_reportAnalytics() {
+ window.setTimeout(function() {
+ if (window._gat) {
+ try {
+ siteTracker = _gat._getTracker(CS_ANALYTICS_ACCOUNT);
+ siteTracker._trackPageview();
+ } catch (e) {}
+ var projectTracker = _gat._getTracker("UA-259284-10");
+projectTracker._initData();
+projectTracker._trackPageview();
+ } else {
+ _CS_reportAnalytics();
+ }
+ }, 100);
+}
+</script>
+
+ 
+ 
+ <div class="hostedBy" style="margin-top: -20px;">
+ <span style="vertical-align: top;">Hosted by</span>
+ <a href="/hosting/">
+ <img src="http://www.gstatic.com/codesite/ph/images/google_code_tiny.png" width="107" height="24" alt="Google Code">
+ </a>
+ </div>
+ 
+ 
+ 
+ 
+
+
+ 
+ </body>
+</html>
+
+

@@ -1,0 +1,163 @@
+.pgLink {
+	border: 1px solid #C2CFDF;
+	font-size: 12px;
+	margin: 0 1px 0 0;
+	padding: 2px 10px 2px 10px;
+	text-decoration: none;
+	font-family:Arial;
+	background-color:#eeeeff;
+	}
+.pgLink a:hover {
+	text-decoration: none;
+	background-color:#2020bd;
+	color:white;
+}
+.pgLink_span a:hover {
+	text-decoration: none;
+	background-color:#2020bd;
+	color:white;
+}
+
+.cascadeSelect_loading {
+	background : Window url('images/autocomplete_indicator.gif') right center no-repeat; 
+	height:16px; width:16px; position:absolute;	}
+.help {
+FONT: bold 14px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR:#FF0000;background-color:#DAEBFE; TEXT-ALIGN: justify ;
+border-style:solid; border-width:1px; border-color:Blue; padding:2px;TEXT-DECORATION:none;
+}
+.warning {
+FONT: bold 11px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #FF0000; TEXT-ALIGN: justify ;
+}
+.main {
+	FONT: bold 17px/15px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: center ;}
+.main A {
+	COLOR: #4444FF; TEXT-DECORATION: none;}
+
+.middle {
+	FONT: bold 14px/15px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: center ;
+}
+.middle A {
+	COLOR: #000000; TEXT-DECORATION: none;
+}
+.middle A:hover {
+	COLOR: #000000; TEXT-DECORATION: none;
+}
+.middle2 {
+	FONT: 13px/15px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: center ;
+}
+.middle_library {
+	FONT: bold 14px/15px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: center ;
+}
+.middle_library A {
+	COLOR: #000099; TEXT-DECORATION: none;
+}
+.middle_library A:hover {
+	COLOR: #c42215; TEXT-DECORATION: none;
+}
+.middle_news {
+	FONT: bold 14px/15px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: left ;
+}
+.middle_lite {
+	FONT: 14px/25px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: left ;
+}
+.middle_lite A {
+	COLOR: #000099; font-weight:normal; TEXT-DECORATION: none; font-size:10pt;
+}
+.middle_lite A:hover {
+	COLOR: #c42215; TEXT-DECORATION: none;
+}
+.lecturers {
+ color:#000000; font-family : arial, sans-serif; font-size : 14px;  margin-left :5px; margin-right :5px; margin-top : 10px;
+}
+.lecturers A {
+	COLOR: #000099; TEXT-DECORATION: none;
+}
+.lecturers A:hover {
+	COLOR: #c42215; TEXT-DECORATION: none;
+}
+.middle_lite_library {
+	FONT: 14px/20px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: left ;
+}
+.middle_lite_library A {
+	COLOR: #000099; TEXT-DECORATION: none;
+}
+.middle_lite_library A:hover {
+	COLOR: #c42215; TEXT-DECORATION: none;
+}
+.middle_lite_other {
+	FONT: 14px/25px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: left ;
+}
+.middle_lite_other A {
+	COLOR: #000000; TEXT-DECORATION: none;
+}
+.middle_lite_other A:hover {
+	COLOR: #000099; TEXT-DECORATION: none;
+}
+.middle_lite_warning {
+	FONT: 14px/25px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #FF0000; TEXT-ALIGN: left ;
+}
+.TEXT {
+	FONT: 11px/15px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: justify ;
+}
+.TEXT A {
+	COLOR: #000099; TEXT-DECORATION: none;
+}
+.TEXT A:hover {
+	COLOR: #c42215; TEXT-DECORATION: none;
+}
+.news {
+	FONT: 11px/13px verdana, sans-serif; VERTICAL-ALIGN: middle; COLOR: #000000; TEXT-ALIGN: justify ; margin-left :5px;
+  margin-right :5px;
+}
+.TEXT_library {
+	FONT: 11px/20px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: center ;
+}
+.button {
+	FONT: 11px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: center ;
+}
+.text2 {
+	FONT: 12px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: left;
+}
+.time {
+color:#000000; font-family : verdana, sans-serif; font-size : 10px; margin-left :5px; margin-top : 1px;
+}
+.title {
+color:#000000; font-family : tahoma, sans-serif; font-size : 12px;  margin-left :5px; margin-right :5px; font-weight : bold; margin-top : 5px;
+}
+.title A {
+	COLOR: #000099; TEXT-DECORATION: none;
+}
+.title A:hover {
+	COLOR: #c42215; TEXT-DECORATION: none;
+}
+.title2 {
+color:#000000; font-family : tahoma, sans-serif; font-size : 12px; margin-top :200px; margin-left :5px; margin-right :5px;
+}
+.menu {
+	FONT: 11px/13px verdana, sans-serif; 	margin-left : 11px;  	margin-right : 5px; margin-bottom : 5px;  	text-indent : -8px;
+}
+.menu A {
+	COLOR: #000099; TEXT-DECORATION: none;
+}
+.menu A:hover {
+	COLOR: #c42215; TEXT-DECORATION: none; }
+.main_menu {
+	FONT: 14px/25px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #ffffff; TEXT-ALIGN: center ;}
+.main_menu A {
+	COLOR: #ffffff; font-weight:bold; TEXT-DECORATION: none; font-size:10pt;
+}
+.main_menu A:hover {
+	COLOR: #c42215; TEXT-DECORATION: none;}
+
+
+.pages {
+	FONT: 11px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: center ;
+}
+.pages A {
+	COLOR: #000099; TEXT-DECORATION: none;
+}
+.pages A:hover {
+	COLOR: #c42215; TEXT-DECORATION: none;
+}
+.success {FONT: bold 11px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #33CC00; TEXT-ALIGN: justify ;}
+.forms_under_border {border-style:solid; border-width:thin; border-color: #ccccff; background-color:#ebeaff;}

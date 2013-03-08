@@ -1,0 +1,12 @@
+.asu_helper {
+    position: fixed;
+    top: 0px;
+    left: 100%;
+    margin-left: -50px;
+    cursor: pointer;
+
+    border: 1px solid red;
+    height: 50px;
+    width: 50px;
+    background: red;
+}

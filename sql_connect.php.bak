@@ -1,0 +1,47 @@
+<?php
+if (!isset($_SESSION)) {session_start();}
+error_reporting(E_ERROR);
+//error_reporting(E_ALL);
+//include "header.php";
+
+$sql_host='localhost';
+$sql_base='demo';
+
+$sql_login='demo_asu';
+$sql_passw='demo_asu';
+$sql_stats_base='demo_stats';
+
+
+if (!isset($files_path)) {$files_path='';}
+require ($files_path.'setup.php');
+
+    if(!mysql_connect($sql_host,$sql_login,$sql_passw))
+     {
+      include $files_path.'header.php';
+	  echo $head.'<div class=main>РќРµ РјРѕРіСѓ СЃРѕРµРґРёРЅРёС‚СЊСЃСЏ СЃ СЃРµСЂРІРµСЂРѕРј Р‘Р°Р·С‹ Р”Р°РЅРЅС‹С…. <font color=red>Р”Р°Р»СЊРЅРµР№С€Р°СЏ СЂР°Р±РѕС‚Р° РЅРµРІРѕР·РјРѕР¶РЅР°.</font></div>';
+      //echo $end1;
+      //include $files_path."display_voting.php";
+      //echo $end2;
+      //echo mysql_error();
+      exit();
+     }
+     
+    if(!mysql_select_db($sql_base))
+     {
+      include $files_path.'header.php';
+	  echo $head.'<div class=main>РќРµ РјРѕРіСѓ РІС‹Р±СЂР°С‚СЊ Р±Р°Р·Сѓ РґР°РЅРЅС‹С… РїРѕСЂС‚Р°Р»Р°. <font color=red>Р”Р°Р»СЊРЅРµР№С€Р°СЏ СЂР°Р±РѕС‚Р° РЅРµРІРѕР·РјРѕР¶РЅР°.</font></div>';
+      //echo $end1;
+      //include ''."display_voting.php";
+      //echo $end2;
+      //echo mysql_error();
+      exit();
+     }
+mysql_query("SET NAMES cp1251");
+mysql_query('SET SQL_LOG_BIN =1');
+
+
+//РЅРµ СЃС‡РёС‚Р°РµРј СЃС‚Р°С‚РёСЃС‚РёРєСѓ Р·Р°РїСЂРѕСЃРѕРІ jQuery
+if (!isset($_GET['hidejq'])) require ($files_path.'stats.php');
+require ($files_path.'funcs_php.php');
+
+?>

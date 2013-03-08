@@ -1,0 +1,162 @@
+body {
+	background-color:#ffffaa; color:#000000; margin-top:0px; margin-bottom:0px; font-family:Arial; font-size:10pt;
+	}
+a,
+.main a,
+.text a,
+.middle_library a,
+.middle_lite_other a,	
+.title a,
+.middle_lite a,
+.middle a,
+.round_table a,
+.lecturers a
+	{color:#000099;text-decoration:none ;
+	}	
+a:hover,
+.main a:hover,
+.text a:hover,
+.middle_library a:hover,
+.middle_lite_other a:hover,	/* документы */
+.title a:hover,
+.middle_lite a:hover,
+.middle a:hover,
+.round_table a:hover,
+.lecturers a:hover,
+.main_menu a:hover
+	{color:#c42215;}	/*  #c42215	*/
+
+.cascadeSelect_loading {
+	background : Window url('../../images/autocomplete_indicator.gif') right center no-repeat; 
+	height:16px; width:16px; position:absolute;
+	}	
+.help {
+	FONT: bold 14px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR:#FF0000;background-color:#DAEBFE; TEXT-ALIGN: justify ;
+	border-style:solid; border-width:1px; border-color:Blue; padding:2px;TEXT-DECORATION:none;
+}
+.main {
+	FONT: bold 17px/15px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: center ;}
+
+.middle {
+	FONT: bold 14px/15px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: center ;
+}
+.middle2 {
+	FONT: 13px/15px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: center ;
+}
+.middle_library {
+	FONT: bold 14px/15px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: center ;
+}
+.middle_lite {
+	FONT: 14px/25px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: left ;
+}
+.lecturers {
+ color:#000000; font-family : arial, sans-serif; font-size : 14px;  margin-left :5px; margin-right :5px; margin-top : 10px;
+}
+.middle_lite_library {
+	FONT: 14px/20px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: left ;
+}
+
+.middle_lite_other {
+	FONT: 14px/25px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: left ;
+}
+
+.text,.round_table,.table_row {
+	FONT: 11px/15px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: justify ;
+}
+.news {
+	FONT: 11px/13px verdana, sans-serif; VERTICAL-ALIGN: middle; COLOR: #000000; TEXT-ALIGN: justify ; margin-left :5px;
+  margin-right :5px;
+}
+
+.title {
+color:#000000; font-family : tahoma, sans-serif; font-size : 12px;  margin-left :5px; margin-right :5px; font-weight : bold; margin-top : 5px;
+}
+.main_menu {
+	FONT: 14px/25px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #ffffff; TEXT-ALIGN: center ;}
+.main_menu A {
+	COLOR: #ffffff; font-weight:bold; TEXT-DECORATION: none; font-size:10pt;
+}
+.success {	/* сообщение об успешной операции	*/
+	FONT: bold 11px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #33CC00; TEXT-ALIGN: justify ;
+	}
+.warning {	/* вывод ошибки */
+	FONT: bold 11px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #FF0000; TEXT-ALIGN: justify ;
+}	
+.light_color_min
+.pgLink,
+.table_row,
+.round_table,
+.Menu2_13 a:hover,
+.Menu2_15 a:hover
+{
+	background-color:#ccccff;	
+}
+tr.row_dark, tr.row_light	/* пометка в таблицах выделения*/
+{
+	FONT: normal 12px/17px Arial; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: left ;
+}
+tr.row_dark {background-color:#ccccff; }	/* выделение строки */
+tr.row_light {background-color:#DAEBFE;}	/* строка без выделения */
+tr.row_dark:hover,tr.row_light:hover, tr.hover {background-color:#ffffaa; }	/*  текущая строка под курсором */
+
+.light_color_max,
+.table_title,
+.Menu2_0,
+.Menu2_2,	/* меню в админ-и   */
+.Menu2_7,
+.Menu2_15,
+.Menu2_0,
+.Menu2_2,	/* меню в админ-и   */
+.Menu2_7,
+.Menu2_6,
+.Menu2_13,
+.Menu2_15,
+.pgLink,
+.forms_under_border	/* цвет подложки формы ввода\правки данных	*/
+{	
+	background-color:#EFEFFF;	
+}
+
+
+.Menu2_13 a:hover,
+.Menu2_15 a:hover,
+.pgLink_span a:hover,
+.pglink_cur {
+	color:white;
+}
+
+.pgLink_span a:hover,
+.pglink_cur
+{	/*  скругленные таблицы банеров в эталоне  */
+	background-color:#2020bd;
+	}
+.baner_img {	/* отступы банеров в эталоне */
+	padding:5px;}
+
+.pgLink,.pglink_cur {
+	border: 1px solid black;
+	font-size: 12px;
+	margin: 0 1px 0 0;
+	padding: 2px 10px 2px 10px;
+	}	
+.fLetter {font-size:18pt;font-family:Arial; font-weight:bold; text-decoration:none;}
+.fLetter_cnt {font-size:8pt;color:#ff0000;}
+.tab_passive {display:none; visibility:hidden;}
+.tab_active {display:; visibility:visible;}
+
+@media all {
+	.middle_big,.time_big ,.text_big,.author_big {
+			FONT-family: Arial, sans-serif;  COLOR: #000000; 
+			}
+	.middle_big {font-size:24pt;TEXT-ALIGN: center ;VERTICAL-ALIGN: top; font-weight:bold;}		
+	.time_big {font-size:16pt;font-weight:bold;TEXT-ALIGN: right ;}
+	.text_big {font-size:20pt;}
+	.author_big {font-size:16pt;}
+}
+.button {background-color:#EFEFFF; border: solid 1px black; padding: 3px;}
+
+.light_blink,.light_blink:hover,.light_blink a:hover {padding:4px; vertical-align:middle;}
+.light_blink:hover,.light_blink a:hover  {background-color:#EFEFFF;}
+.field_update {background-color:yellow;}	/*  подстветка обновления элементов формы  */
+.numb {text-align:right;}	/*  выравнивание числе справа */
+.nowrap {white-space:nowrap; }

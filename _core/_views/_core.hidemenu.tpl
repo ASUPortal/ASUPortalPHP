@@ -1,0 +1,1 @@
+<img src="{$web_root}_themes/blue/images/hideshow.gif" id="asu_menu_hider"/>

@@ -1,0 +1,249 @@
+-- phpMyAdmin SQL Dump
+-- version 3.1.4
+-- http://www.phpmyadmin.net
+--
+-- Хост: localhost
+-- Время создания: Май 10 2009 г., 19:22
+-- Версия сервера: 5.0.45
+-- Версия PHP: 5.2.5
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+--
+-- База данных: `asu_demo`
+--
+
+-- --------------------------------------------------------
+--
+-- Структура таблицы `spr_dolzhnost`
+--
+-- DROP TABLE IF EXISTS `spr_dolzhnost` ;
+
+CREATE TABLE IF NOT EXISTS `spr_dolzhnost` (
+  `id` int(2) NOT NULL,
+  `rate` float NOT NULL default '0' COMMENT 'Балл',
+  `comment` varchar(200) NOT NULL default '',
+  UNIQUE KEY `name` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251 COMMENT='справочник должностей';
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `spr_zvanie` ;
+--
+-- DROP TABLE IF EXISTS `spr_zvanie` ;
+
+CREATE TABLE IF NOT EXISTS `spr_zvanie` (
+  `id` int(2) NOT NULL,
+  `rate` float NOT NULL default '0' COMMENT 'Балл',
+  `comment` varchar(200) NOT NULL default '',
+  UNIQUE KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251 COMMENT='справочник званий';
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `dolzhnost`
+--
+-- DROP TABLE IF EXISTS `dolzhnost` ;
+
+CREATE TABLE IF NOT EXISTS `dolzhnost` (
+  `id` int(4) NOT NULL auto_increment,
+  `id_kadri` int(3) NOT NULL default '0',
+  `id_year` int(3) NOT NULL default '0',
+  `id_dolzhnost` int(3) NOT NULL default '0',
+  `comment` varchar(200) NOT NULL default '',
+  UNIQUE KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251 COMMENT='должность' AUTO_INCREMENT=1 ;
+
+--
+-- Дамп данных таблицы `dolzhnost`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `nauch_met_uch_rab`
+--
+-- DROP TABLE IF EXISTS `nauch_met_uch_rab` ;
+
+CREATE TABLE IF NOT EXISTS `nauch_met_uch_rab` (
+  `id` int(4) NOT NULL auto_increment,
+  `id_kadri` int(3) NOT NULL default '0',
+  `id_year` int(3) NOT NULL default '0',
+  `id_rab` int(3) NOT NULL default '0',
+  `comment` varchar(200) NOT NULL default '',
+  UNIQUE KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251 COMMENT='научно-методическая и учебная ра' AUTO_INCREMENT=1 ;
+
+--
+-- Дамп данных таблицы `nauch_met_uch_rab`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `pchart`
+--
+-- DROP TABLE IF EXISTS `pchart` ;
+
+CREATE TABLE IF NOT EXISTS `pchart` (
+  `zvanie` varchar(100) NOT NULL default '',
+  `dolzhnost` varchar(100) NOT NULL default '',
+  `rabota` varchar(100) NOT NULL default '',
+  `vichet` varchar(100) NOT NULL default '',
+  `comment` varchar(200) NOT NULL default ''
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251 COMMENT='легенда для диаграмм';
+
+--
+-- Дамп данных таблицы `pchart`
+--
+
+INSERT INTO `pchart` (`zvanie`, `dolzhnost`, `rabota`, `vichet`, `comment`) VALUES
+('Звание', 'Должность', 'Работа', 'Вычет', '');
+
+-- --------------------------------------------------------
+
+
+
+--
+-- Структура таблицы `spr_nauch_met_uch_rab`
+--
+-- DROP TABLE IF EXISTS `spr_nauch_met_uch_rab` ;
+
+CREATE TABLE IF NOT EXISTS `spr_nauch_met_uch_rab` (
+  `id` int(3) NOT NULL auto_increment,
+  `name` varchar(100) NOT NULL default '',
+  `rate` float NOT NULL default '0' COMMENT 'Балл',
+  `comment` varchar(200) NOT NULL default '',
+  UNIQUE KEY `id` (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=cp1251 COMMENT='справочник науч-мет. и уч. работ' AUTO_INCREMENT=31 ;
+
+--
+-- Дамп данных таблицы `spr_nauch_met_uch_rab`
+--
+
+INSERT INTO `spr_nauch_met_uch_rab` (`id`, `name`, `rate`, `comment`) VALUES
+(1, 'участие в хоздоговорах (менее 500 тыс. руб. в год)', 0.1, ''),
+(2, 'участие в хоз. договорах ( 500 тыс. руб. в год и более)', 0.25, ''),
+(3, 'руководство магистрами', 0.06, ''),
+(4, 'руководство дипломниками (до 5 чел)', 0.04, ''),
+(5, 'руководство дипломниками (5 чел и более)', 0.1, ''),
+(6, 'руководство аспирантами', 0.1, ''),
+(7, 'регистрация изобретений', 0.2, ''),
+(8, 'работа на 1.4 и более ставок', 0.15, ''),
+(9, 'работа на 1 ставку', 0.05, ''),
+(10, 'работа в штате кафедры в Уфе', 0.25, ''),
+(11, 'работа в штате в филиале', 0.03, ''),
+(12, 'получение премий, званий, стипендий от РФ', 0.15, ''),
+(13, 'получение премий, званий, стипендий от региональных организаций', 0.1, ''),
+(14, 'получение поощрений, званий, стипендий от УГАТУ', 0.03, ''),
+(15, 'получение 1 или более свидетельства о рег. ПО', 0.06, ''),
+(16, 'наличие к.т.н.', 0.15, ''),
+(17, 'наличие звания академика РАН', 0.45, ''),
+(18, 'наличие звания академика', 0.3, ''),
+(19, 'наличие действующих грантов', 0.2, ''),
+(20, 'наличие д.т.н.', 0.2, ''),
+(21, 'издание учебного пособия на эл. носителе', 0.1, ''),
+(22, 'издание учебного пособия или учебника', 0.25, ''),
+(23, 'издание от 2-х до 5 статей', 0.08, ''),
+(24, 'издание монографии', 0.2, ''),
+(25, 'издание методических указаний', 0.06, ''),
+(26, 'Издание более 5 статей', 0.1, ''),
+(27, 'издание 1 статьи', 0.03, ''),
+(28, 'за звание (доцента или профессора)', 0.1, ''),
+(29, 'выпуск рабочей программы', 0.04, ''),
+(30, 'выезд в филиалы', 0.12, '');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `spr_vichet`
+--
+-- DROP TABLE IF EXISTS `spr_vichet` ;
+
+CREATE TABLE IF NOT EXISTS `spr_vichet` (
+  `id` int(3) NOT NULL auto_increment,
+  `name` varchar(100) NOT NULL default '',
+  `rate` float NOT NULL default '0' COMMENT 'Балл',
+  `comment` varchar(200) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=cp1251 COMMENT='справочник вычетов' AUTO_INCREMENT=4 ;
+
+--
+-- Дамп данных таблицы `spr_vichet`
+--
+
+INSERT INTO `spr_vichet` (`id`, `name`, `rate`, `comment`) VALUES
+(1, 'работа менее чем на 0,2 ставки', -0.15, ''),
+(2, 'работа по совместительству', -0.12, ''),
+(3, 'отсутствие изданных статей или тезисов', -0.05, '');
+
+-- --------------------------------------------------------
+
+
+--
+-- Структура таблицы `summa_ballov` ;
+--
+-- DROP TABLE IF EXISTS `summa_ballov` ;
+
+CREATE TABLE IF NOT EXISTS `summa_ballov` (
+  `id` int(3) NOT NULL auto_increment,
+  `id_kadri` int(3) NOT NULL default '0',
+  `id_year` int(3) NOT NULL default '0',
+  `zvanie` float NOT NULL default '0',
+  `dolzhnost` float NOT NULL default '0',
+  `nauch_met_uch_rab` float NOT NULL default '0',
+  `vichet` float NOT NULL default '0',
+  `comment` varchar(200) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251 COMMENT='сумма баллов по всем показателям' AUTO_INCREMENT=1 ;
+
+--
+-- Дамп данных таблицы `summa_ballov`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `biography`;
+--
+-- DROP TABLE IF EXISTS `biography`;
+
+CREATE TABLE IF NOT EXISTS `vichet` (
+  `id` int(4) NOT NULL auto_increment,
+  `id_kadri` int(3) NOT NULL default '0',
+  `id_year` int(3) NOT NULL default '0',
+  `id_vichet` int(3) NOT NULL default '0',
+  `comment` varchar(200) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251 COMMENT='вычет' AUTO_INCREMENT=1 ;
+
+--
+-- Дамп данных таблицы `vichet`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `zvanie_rate`
+--
+-- DROP TABLE IF EXISTS `zvanie_rate`; 
+
+CREATE TABLE IF NOT EXISTS `zvanie_rate` (
+  `id` int(4) NOT NULL auto_increment,
+  `id_kadri` int(3) NOT NULL default '0',
+  `id_year` int(3) NOT NULL default '0',
+  `id_zvanie` int(3) NOT NULL default '0',
+  `comment` varchar(200) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251 COMMENT='звание' AUTO_INCREMENT=1 ;
+
+--
+-- Дамп данных таблицы `zvanie_rate`
+--
+

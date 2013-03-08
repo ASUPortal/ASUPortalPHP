@@ -1,0 +1,70 @@
+div.sdmenu {
+	width: 160px;
+	font-family: Arial, sans-serif;
+	font-size: 12px;
+	padding-bottom: 10px;
+	/*background: url(bottom.gif) no-repeat  right bottom;*/
+	color: #fff;
+}
+div.sdmenu div {
+	background: url(buttons_menu.gif) no-repeat;
+	overflow: hidden;
+}
+div.sdmenu div:first-child {
+	background: url(buttons_menu.gif) no-repeat;
+}
+div.sdmenu div.collapsed {
+	height: 30px;
+}
+div.sdmenu div span.hasChild {
+	display: block;
+	padding: 7px 25px;
+	font-weight: bold;
+	color: white;
+	background:  url(expanded.gif) no-repeat 10px center;
+	cursor: default;
+	/*border-bottom: 1px solid #ddd;*/
+	text-align:center;	
+	
+}
+div.sdmenu div.collapsed span.hasChild {
+	background: url(collapsed.gif) no-repeat 10px center;
+}
+div.sdmenu div a,div.sdmenu div a.hasChild {
+	padding: 5px 10px;	
+	display: block;	
+	color: #000;
+	font-weight:bold;
+	padding:2px;
+	width:80%;
+	padding-left:10px;
+	border-bottom:  1px solid #ddd;
+	text-decoration:none;
+	text-align:left;
+}
+div.sdmenu div a.hasChild {
+	background:  #cecfff;
+	font-weight:normal;
+	
+}
+div.sdmenu div a.current {
+	/*background : #ccc;*/
+	color:#ffcc99;	/*	new	*/
+	text-align:center;
+	height: 25px;
+		 	
+}
+div.sdmenu div a:hover,div.sdmenu div a.noChild:hover {
+	/*background : #066 url(linkarrow.gif) no-repeat right center;*/
+	color: #c42215;
+	text-decoration: none;
+		
+}
+div.sdmenu div span.noChild, div.sdmenu div a.noChild  {
+	color:#fff;
+	height: 25px;
+	/*background: url();/* none;/* url(buttons_menu.gif) no-repeat;*/
+	text-align:center;
+	border-bottom: none;
+	
+	}

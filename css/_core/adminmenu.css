@@ -1,0 +1,70 @@
+#adminMenu {
+    display: block;
+    height: 20px;
+    width: auto;
+    padding: 0px;
+    margin: 0px;
+}
+
+#adminMenu ul {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+#adminMenu ul.level0 li{
+    list-style-type: none;
+    display: block;
+    float: left;
+    padding: 5px;
+    background:  #EFEFFF;
+}
+
+#adminmenu ul li {
+    list-style-type: none;
+    display: block;
+    float: left;
+    padding: 5px;
+    background:  #EFEFFF;
+}
+
+#adminMenu ul li ul{
+    border: 1px solid black;
+    display: none;
+    position: absolute;
+    margin-top: 5px;
+    margin-left: -5px;
+    z-index: 1;
+}
+
+#adminMenu ul li ul li {
+    float: none;
+}
+
+#adminMenu ul li ul:hover,
+#adminMenu ul li ul li:hover {
+    display: block;
+}
+
+#adminMenu ul li:hover > ul {
+    display: block;
+}
+
+#adminMenu ul.level0 li ul.level1 {
+    border: 1px solid black;
+    display: none;
+    position: absolute;
+    margin-top: 5px;
+    margin-left: -5px;
+}
+#adminMenu ul.level0 li ul.level1 li {
+    float: none;
+}
+
+#adminMenu ul.level0 li ul.level1:hover,
+#adminMenu ul.level0 li ul.level1 li:hover {
+    display: block;
+}
+#adminMenu ul.level0 li:hover > ul.level1 {
+    display: block;
+}

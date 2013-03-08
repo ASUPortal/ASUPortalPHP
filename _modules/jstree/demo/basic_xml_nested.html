@@ -1,0 +1,359 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+	<title>jsTree &raquo; Demos</title>
+
+	<script type="text/javascript" src="../lib/jquery.js"></script>
+	<script type="text/javascript" src="../lib/jquery.cookie.js"></script>
+	<script type="text/javascript" src="../lib/jquery.hotkeys.js"></script>
+	<script type="text/javascript" src="../lib/jquery.metadata.js"></script>
+	<script type="text/javascript" src="../lib/sarissa.js"></script>
+	<script type="text/javascript" src="../jquery.tree.js"></script>
+	<script type="text/javascript" src="../plugins/jquery.tree.checkbox.js"></script>
+	<script type="text/javascript" src="../plugins/jquery.tree.contextmenu.js"></script>
+	<script type="text/javascript" src="../plugins/jquery.tree.cookie.js"></script>
+	<script type="text/javascript" src="../plugins/jquery.tree.hotkeys.js"></script>
+	<script type="text/javascript" src="../plugins/jquery.tree.metadata.js"></script>
+	<script type="text/javascript" src="../plugins/jquery.tree.themeroller.js"></script>
+	<script type="text/javascript" src="../plugins/jquery.tree.xml_flat.js"></script>
+	<script type="text/javascript" src="../plugins/jquery.tree.xml_nested.js"></script>
+
+	<link type="text/css" rel="stylesheet" href="syntax/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="syntax/shThemeDefault.css"/>
+	<style type="text/css">
+	html, body { margin:0; padding:0; }
+	body, td, th, pre, code, select, option, input, textarea { font-family:"Trebuchet MS", Sans-serif; font-size:10pt; }
+	#container { width:90%; margin:10px auto; overflow:hidden; }
+	.demo { height:200px; width:300px; float:left; margin:0; border:1px solid gray; font-family:Verdana; font-size:10px; background:white; overflow:auto; }
+	.code { width:490px; float:right; margin:0 0 10px 0; border:1px solid gray; }
+	pre { display:block; }
+	.syntaxhighlighter { margin:0 0 0 0 !important; padding:0 !important; }
+	input { font-size:14px; }
+	</style>
+	<script type="text/javascript" src="syntax/shCore.js"></script>
+	<script type="text/javascript" src="syntax/shBrushJScript.js"></script>
+	<script type="text/javascript" src="syntax/shBrushXml.js"></script>
+	<script type="text/javascript">
+		/*SyntaxHighlighter.config.clipboardSwf = 'syntax/clipboard.swf';
+		$(function () {
+			var h = 0;
+			$("#container .source").each(function () {
+				var code = $(this).html().replace(/</g,'&lt;').replace(/>/g,'&gt;');
+				var div = $('<div class="code"><pre class="brush:' + ( $(this).is("script") ? 'js' : 'xml' ) + ';">' + code + '</pre></div>');
+				$(this).after(div);
+			});
+			SyntaxHighlighter.all();
+		});*/
+	</script>
+</head>
+<body>
+<div id="container" >
+	<h1 class="title">Basic XML nested</h1>
+
+	<p>This example loads the tree from a XML nested file.</p>
+	<script type="text/javascript" class="source">
+	var yourTree= jQuery.tree.create();
+	
+	$(function () { 		
+		yourTree.init("#xml_n",{
+			data : { 
+				type : "xml_nested",
+				opts : {
+					url : "basic_xml_nested_data.xml"					
+				}
+			},
+			plugins : {
+				contextmenu : {
+				//---------------------------	
+items : {
+	create : {
+		label	: "Создать", 
+		icon	: "create",
+		visible	: function (NODE, TREE_OBJ) { 
+			if(NODE.length != 1) return 0; 
+			return TREE_OBJ.check("creatable", NODE); 
+		}, 
+		action	: function (NODE, TREE_OBJ) { 
+			TREE_OBJ.create(false, TREE_OBJ.get_node(NODE[0])); 
+		},
+		separator_after : true
+	},
+	rename : {
+		label	: "Изменить", 
+		icon	: "rename",
+		visible	: function (NODE, TREE_OBJ) { 
+			if(NODE.length != 1) return false; 
+			return TREE_OBJ.check("renameable", NODE); 
+		}, 
+		action	: function (NODE, TREE_OBJ) { 
+			TREE_OBJ.rename(NODE); 
+		} 
+	},
+	remove : {
+		label	: "Удалить",
+		icon	: "remove",
+		visible	: function (NODE, TREE_OBJ) { 
+			var ok = true; 
+			$.each(NODE, function () { 
+				if(TREE_OBJ.check("deletable", this) == false) {
+					ok = false; 
+					return false; 
+				}
+			}); 
+			return ok; 
+		}, 
+		action	: function (NODE, TREE_OBJ) { 
+			$.each(NODE, function () { 
+				TREE_OBJ.remove(this); 
+			}); 
+		} 
+	}
+}				
+				//---------------------------
+				}
+			}
+, 
+       callback      : { 
+            //onselect    : function(NODE,TREE_OBJ) { var link=TREE_OBJ.selected.attr("href"); if (link!=null && link!='') document.location.href=link; }
+	    onselect    : function(NODE,TREE_OBJ) { getAttr(); }
+	    }			
+		})
+	});
+	
+	var opts = {}; 
+	opts.outer_attrib = ["id", "rel", "class", "title", "href", "name"];
+	
+	function get_xml()
+	{
+		//document.getElementById('xmlCode').value=yourTree.get(null,'html',opts);
+		var xmlCode=document.getElementById('xmlCode');
+		if (xmlCode!=null) {
+			xmlCode.value=yourTree.get(null,'xml_nested',opts);
+			xmlCode.style.display='';
+		}
+	}
+	/*function getParamVal(param_name)
+	{	//получение значения параметра по узлу и наименованию
+		if (yourTree.selected==null) {alert('Выберите узел дерева...'); return;}
+		
+		var li_str=yourTree.get(yourTree.selected,'html',opts);
+		
+		var re = new RegExp("<li .*"+param_name+"=\"([^\"]*)\".*</li>","i");
+		var arr = re.exec(li_str);
+		//<LI title="title comment" href2="test.htm" id="pxml_5" class=" last leaf"><A style="" class="clicked" href=""><INS> </INS>Root node 22222</A></LI>
+		var param_val=li_str.replace(re,RegExp.$1);
+		if (li_str==param_val) param_val=''
+		
+		return param_val;
+		//document.getElementById('xmlCode').value=param_val;
+	}*/
+	function showAttr()
+	{
+		if (yourTree.selected==null) {alert('Выберите узел дерева...'); return;}
+		
+		//var title=getParamVal('title');
+		//var link=getParamVal('link');
+		var title=yourTree.selected.attr("title");
+		var link=yourTree.selected.attr("href");
+		var caption=yourTree.get_text(yourTree.selected);
+		
+		document.getElementById('title').value=title;
+		document.getElementById('link').value=link;
+		document.getElementById('caption').value=caption;
+		
+		alert('title='+title+', link='+link+', caption='+caption);
+		
+		//alert(yourTree.get_node(yourTree.selected));
+		
+		document.getElementById('xmlCode').value=$("#xml_n").html();
+		$("#pxml_5").replaceWith('<LI title="title comment222" href2="testGen.htm" id="pxml_5" class=" last leaf"><A style="" class="clicked" href=""><INS> </INS>Generated node</A></LI>');
+		//$("#pxml_5").html('***');
+		//$("#pxml_5").remove();	//удалить узел дерева
+		document.getElementById('xmlCode').value=$("#xml_n").html();
+		//init(yourTree.selected, attributes: { title : "node_identificator", link : "attribute_value" },data: "node_title");
+		
+		
+		alert('text='+$('#caption').text());
+		alert('html='+$('#caption').html());
+		
+		//yourTree.selected.attr("title")='new comment222222222';
+		//yourTree.selected.attr("title");
+		//alert(yourTree.selected.attr('title'));
+		
+	}
+	function saveAttr()	//сохранить данные текущего узла в дереве
+	{
+		if (yourTree.selected==null) {alert('Выберите узел дерева...'); return;}		
+		
+		var title=document.getElementById('title').value;
+		var link=document.getElementById('link').value;
+		var caption=document.getElementById('caption').value;		
+
+		yourTree.selected.attr("title",title);
+		yourTree.selected.attr("link",link);
+		yourTree.selected.attr("name",caption);
+		yourTree.rename(null,caption);		
+
+		hide_show('editCurBtn','show');
+		hide_show('saveCurBtn','hide');
+		hide_show('cancelCurBtn','hide');
+	}
+	function getAttr()	//получить данные текущего узла в дереве
+	{
+		if (yourTree.selected==null) {alert('Выберите узел дерева...'); return;}	
+
+		var title=yourTree.selected.attr("title");
+		var link=yourTree.selected.attr("href");
+		var caption=yourTree.get_text(yourTree.selected);
+		
+		if (title==null) title='';
+		document.getElementById('title').value=title;
+		
+		if (link==null) link='';
+		document.getElementById('link').value=link;
+		
+		if (caption==null) caption='';
+		document.getElementById('caption').value=caption;
+		
+		hide_show('editCurBtn','hide');
+		hide_show('saveCurBtn','show');
+		hide_show('cancelCurBtn','show');
+	}
+
+	function hide_show(id_name,mode)    
+	// id объекта, режим показа {null,'...'}
+	{   //показать-скрыть mode=show|hide
+		
+	    var elem=document.getElementById(id_name);
+	    if (elem!=null) {
+	       if (mode!=null)
+		   switch (mode) {
+		   case 'show' :
+		      elem.style.display='';
+		      break;
+		   case 'hide' :
+		      elem.style.display='none';
+		      break;
+		   case '':
+		       if (elem.style.display=='')  elem.style.display='none';
+		       else elem.style.display=''; 
+		       break;
+		   default :
+			alert('ошибка вызова функции show_hide');
+		    }
+	       else {
+		       if (elem.style.display=='')  elem.style.display='none';
+		       else elem.style.display='';
+	       }
+	       
+
+		}
+	    else {alert('элемент не найден');}   
+	}
+	function cancelAttr()	//отмена сохранения
+	{
+		document.getElementById('title').value='';
+		document.getElementById('link').value='';
+		document.getElementById('caption').value='';
+		
+		hide_show('editCurBtn');
+		hide_show('saveCurBtn');
+		hide_show('cancelCurBtn');
+	}
+	function createChild()	//создание подпункта раздела
+	{
+		var title=document.getElementById('title').value;
+		var link=document.getElementById('link').value;
+		var caption=document.getElementById('caption').value;
+		
+		yourTree.create({ 	data : caption,
+					icon: '../themes/default/throbber.gif', 
+				attributes : {
+					"href" : link,
+					"title": title,
+					"name" : caption
+				} }, yourTree.selected, "inside");
+		
+	}
+	function save_tree()
+	{
+		var xmlDocument = yourTree.get(null,'xml_nested',opts);
+		//alert(xmlDocument);
+		//data: "name=John&location=Boston",
+		//data: xmlDocument,
+		$.ajax({
+		   type: "POST",
+		   url: "../../save_menu_xml.php",
+		   data: 'xml='+xmlDocument,
+		   cache: false,
+		   dataType: "html",
+		   success: function(msg){
+		     alert( "Данные сохранены. ");
+		   }
+		 });
+		
+	}
+	function load_tree()	//загрузка дерева из файла-примера
+	{
+ 		//yourTree=null;
+		//var yourTree= jQuery.tree.create();
+		$("#xml_n").html('');
+		$("#xml_n").tree({ 	
+			data : { 	
+				type : "xml_nested",
+				opts : {
+					url : "Copy of basic_xml_nested_data.xml"					
+				}
+			} 
+		});		
+	}	
+	</script>
+<div style="clear:both;">
+<input type=button value=свернуть onclick="yourTree.close_all();"> &nbsp; 
+<input type=button value=развернуть onclick="yourTree.open_all();"> 	
+</div>
+<div class="demo" id="xml_n" style="height:500px;">
+</div>
+
+<FIELDSET id=item_details>
+<LEGEND>Данные узла</LEGEND>		
+		<input type=text id="caption" value=""> наименование * <br>
+		<input type=text id="link" value=""> ссылка  <br>
+		<input type=text id="title" value=""> комментарий	
+</FIELDSET>
+
+<p style="/*clear:both;*/"></p>	
+<strong style="padding-left:40px;">Операции</strong><br>
+
+<FIELDSET>
+<LEGEND>Раздел</LEGEND>	
+	<INPUT type="button" onclick='var t = $.tree.focused(); if(t.selected) t.create(); else alert("Выберите узел-родитель...");' value="Создать"> 
+	<INPUT type="button" onclick="$.tree.focused().rename();" value="Переименовать"> 
+	<INPUT type="button" onclick="if (confirm('Удалить '+yourTree.get_text(yourTree.selected))) $.tree.focused().remove();" value="Удалить">
+</FIELDSET>	
+	
+<FIELDSET>
+<LEGEND>Пункт меню</LEGEND>	
+	<input id="editCurBtn" type=button value="Изменить" title="Изменить текущий узел" onclick="javascript:getAttr();">
+	<input id="saveCurBtn" style="display:none;" type=button value="Сохранить" title="Сохранить текущий узел" onclick="javascript:saveAttr();">
+	<input id="cancelCurBtn" style="display:none;" type=button value="Отменить" title="Отменить правку текущего узла" onclick="javascript:cancelAttr();">
+	<input type=button value="Создать" title="создать узел в текущем разделе" onclick="javascript:createChild();">
+	<INPUT type="button" onclick="if (confirm('Удалить '+yourTree.get_text(yourTree.selected))) {$.tree.focused().remove();}" value="Удалить">
+</FIELDSET>		
+	<br>
+
+<FIELDSET>
+<LEGEND>Работа со списком</LEGEND>	
+
+
+<input type=button value=Сохранить onclick="javascript:save_tree();" title="Сохранить дерево">
+<input type=button value=Восстановить onclick="javascript:if (confirm('Текущее дерево будет утеряно и загружен образец. Продолжить ?')) load_tree();" title="Восстановить дерево из образца">
+
+<input type=button value=xml onclick="javascript:get_xml();" title="Получить xml-код дерева">	
+</FIELDSET>
+	<br>
+	<textarea id=xmlCode name=xmlCode cols=80 rows=8 style="display:none;"></textarea>
+</div></body></html>
