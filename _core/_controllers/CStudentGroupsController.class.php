@@ -29,6 +29,11 @@ class CStudentGroupsController extends CBaseController {
         /**
          * Фильтры пока никакие не делаю, так как некогда
          */
+        $selectedGroup = null;
+        if (!is_null(CRequest::getFilter("group"))) {
+            $query->condition("st_group.id = ".CRequest::getFilter("group"));
+            $selectedGroup = CStaffManager::getStudentGroup(CRequest::getFilter("group"));
+        }
         /**
          * Финишная выборка
          */
@@ -37,6 +42,15 @@ class CStudentGroupsController extends CBaseController {
             $group = new CStudentGroup($item);
             $groups->add($group->getId(), $group);
         }
+        /**
+         * Подключаем скрипты
+         */
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        /**
+         * Передаем значения в представление
+         */
+        $this->setData("selectedGroup", $selectedGroup);
         $this->setData("groups", $groups);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_student_groups/index.tpl");
@@ -71,5 +85,26 @@ class CStudentGroupsController extends CBaseController {
         $this->setData("group", $group);
         $this->setData("students", $students);
         $this->renderView("_student_groups/edit.tpl");
+    }
+    public function actionSearch() {
+        $res = array();
+        $term = CRequest::getString("term");
+        /**
+         * Ищем группу по названию
+         */
+        $query = new CQuery();
+        $query->select("st_group.id, st_group.name")
+            ->from(TABLE_STUDENT_GROUPS." as st_group")
+            ->condition("LCASE(st_group.name) like '%".mb_strtolower($term)."%'")
+            ->limit(0, 5);
+        foreach ($query->execute()->getItems() as $item) {
+            $res[] = array(
+                "type" => "1",
+                "label" => $item["name"],
+                "value" => $item["name"],
+                "object_id" => $item["id"],
+            );
+        }
+        echo json_encode($res);
     }
 }
