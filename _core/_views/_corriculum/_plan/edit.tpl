@@ -2,7 +2,22 @@
 
 {block name="asu_center"}
 <h2>Редактирование учебного плана</h2>
-{include file="_corriculum/_plan/form.tpl"}
+    <script>
+        jQuery(document).ready(function(){
+            jQuery("#tabs").tabs();
+        });
+    </script>
+
+    {include file="_corriculum/_plan/form.tpl"}
+
+    <div id="tabs">
+        <ul style="height: 30px; ">
+            <li><a href="#practice">Практика</a></li>
+        </ul>
+        <div id="practice">
+            {include file="_corriculum/_plan/subform.practice.tpl"}
+        </div>
+    </div>
 {/block}
 
 {block name="asu_right"}

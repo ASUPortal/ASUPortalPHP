@@ -31,6 +31,16 @@ class CActiveModel extends CModel{
                     $this->setAuthors($table->getDefaultAuthors());
                 }
             }
+        } else {
+            /**
+             * Заполняем публичные свойства объекта данными
+             * из базы данных
+             */
+            foreach($aRecord->getItems() as $key=>$value) {
+                if (property_exists(get_class($this), $key)) {
+                    $this->$key = $value;
+                }
+            }
         }
         $this->_aRecord = $aRecord;
     }
@@ -410,5 +420,17 @@ class CActiveModel extends CModel{
         }
 
         return null;
+    }
+
+    /**
+     * Автоматическая установка всех полей в записи из запроса
+     *
+     * @param array $array
+     */
+    public function setAttributes(array $array) {
+        parent::setAttributes($array);
+        foreach ($array as $key=>$value) {
+            $this->getRecord()->setItemValue($key, $value);
+        }
     }
 }

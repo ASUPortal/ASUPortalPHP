@@ -27,6 +27,9 @@ class CCorriculumsController extends CBaseController {
             $corriculum = new CCorriculum($item);
             $corriculums->add($corriculum->getId(), $corriculum);
         }
+        /**
+         * Передаем данные
+         */
         $this->setData("paginator", $set->getPaginator());
         $this->setData("corriculums", $corriculums);
         $this->renderView("_corriculum/_plan/index.tpl");
@@ -38,6 +41,11 @@ class CCorriculumsController extends CBaseController {
     }
     public function actionEdit() {
         $corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("id"));
+        /**
+         * Подключаем скрипты
+         */
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->setData("corriculum", $corriculum);
         $this->renderView("_corriculum/_plan/edit.tpl");
     }

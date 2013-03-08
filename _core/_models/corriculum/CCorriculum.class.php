@@ -11,6 +11,7 @@ class CCorriculum extends CActiveModel{
     protected $_edForm = null;
     protected $_qualification = null;
     protected $_cycles = null;
+    protected $_practices = null;
 
     protected function relations() {
         return array(
@@ -49,6 +50,14 @@ class CCorriculum extends CActiveModel{
                 "storageCondition" => "corriculum_id = " . $this->id,
                 "managerClass" => "CCorriculumsManager",
                 "managerGetObject" => "getCycle"
+            ),
+            "practices" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_practices",
+                "storageTable" => TABLE_CORRICULUM_PRACTICES,
+                "storageCondition" => "corriculum_id = " . $this->id,
+                "managerClass" => "CCorriculumsManager",
+                "managerGetObject" => "getPractice"
             )
         );
     }

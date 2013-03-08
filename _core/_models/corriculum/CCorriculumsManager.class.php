@@ -12,6 +12,7 @@ class CCorriculumsManager {
     private static $_cacheLabors = null;
     private static $_cacheControls = null;
     private static $_cacheHours = null;
+    private static $_cachePractices = null;
     /**
      * Кэш учебных планов
      * @return CArrayList 
@@ -193,6 +194,11 @@ class CCorriculumsManager {
         }
         return self::$_cacheHours;
     }
+
+    /**
+     * @param $key
+     * @return CCorriculumDisciplineHour
+     */
     public static function getHour($key) {
         if (!self::getCacheHours()->hasElement($key)) {
             $ar = CActiveRecordProvider::getById(TABLE_CORRICULUM_DISCIPLINE_HOURS, $key);
@@ -202,6 +208,35 @@ class CCorriculumsManager {
             }
         }
         return self::getCacheHours()->getItem($key);
+    }
+
+    /**
+     * Кэш практик
+     *
+     * @return CArrayList
+     */
+    private static function getCachePractices() {
+        if (is_null(self::$_cachePractices)) {
+            self::$_cachePractices = new CArrayList();
+        }
+        return self::$_cachePractices;
+    }
+
+    /**
+     * Практика в учебном плане
+     *
+     * @param $key
+     * @return CCorriculumPractice
+     */
+    public static function getPractice($key) {
+        if (!self::getCachePractices()->hasElement($key)) {
+            $ar = CActiveRecordProvider::getById(TABLE_CORRICULUM_PRACTICES, $key);
+            if (!is_null($ar)) {
+                $obj = new CCorriculumPractice($ar);
+                self::getCachePractices()->add($key, $obj);
+            }
+        }
+        return self::getCachePractices()->getItem($key);
     }
 }
 
