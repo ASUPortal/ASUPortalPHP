@@ -19,6 +19,11 @@ class CCorriculumDisciplinesController extends CBaseController {
     }
     public function actionEdit() {
         $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("id"));
+        /**
+         * Подключаем скрипты для няшности
+         */
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("discipline", $discipline);
         $this->renderView("_corriculum/_disciplines/edit.tpl");
     }

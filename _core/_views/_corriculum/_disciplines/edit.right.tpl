@@ -11,3 +11,10 @@
         Удалить
     </center></a>
 </p>
+
+<p>
+    <a href="labors.php?action=add&id={$discipline->getId()}"><center>
+        <img src="{$web_root}images/tango/32x32/actions/list-add.png"><br>
+        Добавить вид нагрузки
+    </center></a>
+</p>

@@ -71,14 +71,29 @@ class CPrintController extends CBaseController {
             /**
              * Это место для экспериментов и написания отладочного кода
              */
-            if (is_null($object->getGroup())) {
+            $value = "";
+            if (is_null($object->group)) {
                 $value = "__________";
-            } elseif (is_null($object->getGroup()->corriculum)) {
+            } elseif (is_null($object->group->corriculum)) {
                 $value = "__________";
-            } elseif (is_null($object->getGroup()->corriculum->direction)) {
+            } elseif (is_null($object->group->corriculum->getCycleByAbbreviatedName("ГСЭ"))) {
                 $value = "__________";
             } else {
-                $value = $object->getGroup()->corriculum->direction->comment;
+                $cycle = $object->group->corriculum->getCycleByAbbreviatedName("ГСЭ");
+                $arr = array();
+                /**
+                 * Собираем дисциплины в таблицу
+                 */
+                foreach ($cycle->disciplines->getItems() as $disc) {
+                    $d = array();
+                    if (!is_null($disc->discipline)) {
+                        $d[0] = $disc->discipline->getValue();
+                    }
+                    $d[1] = $disc->getLaborValue();
+                    $d[2] = "Оценка";
+                    $arr[] = $d;
+                }
+                $value = $arr;
             }
             var_dump($value);
         }

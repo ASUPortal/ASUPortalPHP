@@ -9,7 +9,19 @@
 class CCorriculumDisciplineLabor extends CActiveModel {
     protected $_form = null;
     protected $_type = null;
+    protected $_table = TABLE_CORRICULUM_DISCIPLINE_LABORS;
 
+    /**
+     * Публичные свойства
+     */
+    public $discipline_id = 0;
+    public $value = 0;
+
+    /**
+     * Связи с другими сущностями
+     *
+     * @return array
+     */
     protected function relations() {
         return array(
             "form" => array(
@@ -19,6 +31,7 @@ class CCorriculumDisciplineLabor extends CActiveModel {
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
             ),
+            // вид занятия: лекция, практика и т.п.
             "type" => array(
                 "relationPower" => RELATION_HAS_ONE,
                 "storageProperty" => "_type",
@@ -26,6 +39,12 @@ class CCorriculumDisciplineLabor extends CActiveModel {
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
             ),
+        );
+    }
+    public function attributeLabels() {
+        return array(
+            "type_id" => "Вид занятий",
+            "value" => "Количество часов"
         );
     }
 }
