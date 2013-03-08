@@ -40,7 +40,7 @@
         {CHtml::error("type_id", $field)}
     </p>
 
-    {if $field->children->getCount() > 0}
+    {if CRequest::getString("action") == "edit"}
     <p>
         {CHtml::activeLabel("parent_node", $field)}
         {CHtml::activeDropDownList("parent_node", $field, $parents)}

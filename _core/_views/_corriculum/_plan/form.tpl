@@ -21,6 +21,12 @@
     </p>
 
     <p>
+        {CHtml::activeLabel("qualification_id", $corriculum)}
+        {CHtml::activeDropDownList("qualification_id", $corriculum, CTaxonomyManager::getTaxonomy("corriculum_skill")->getTermsList())}
+        {CHtml::error("qualification_id", $corriculum)}
+    </p>
+
+    <p>
         {CHtml::activeLabel("duration", $corriculum)}
         {CHtml::activeTextField("duration", $corriculum)}
         {CHtml::error("duration", $corriculum)}

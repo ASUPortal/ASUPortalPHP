@@ -12,7 +12,7 @@
 
     <div id="tabs">
         <ul style="height: 30px; ">
-            <li><a href="#practice">Практика</a></li>
+            <li><a href="#practice">Практика и итоговая аттестация</a></li>
         </ul>
         <div id="practice">
             {include file="_corriculum/_plan/subform.practice.tpl"}

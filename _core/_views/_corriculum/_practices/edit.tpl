@@ -6,5 +6,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_corriculum/_practices/add.right.tpl"}
+{include file="_corriculum/_practices/edit.right.tpl"}
 {/block}

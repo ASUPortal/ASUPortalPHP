@@ -66,7 +66,9 @@ class CCorriculum extends CActiveModel{
             "direction_id" => "Направление",
             "basic_education_id" => "Начальное образование",
             "profile_id" => "Специализация",
-            "duration" => "Длительность обучения"
+            "duration" => "Длительность обучения",
+            "qualification_id" => "Квалификация выпускника",
+            "speciality_id" => "Специальность"
         );
     }
 
@@ -84,5 +86,21 @@ class CCorriculum extends CActiveModel{
             }
         }
         return $cycle;
+    }
+
+    /**
+     * Практика по сокращенному имени
+     *
+     * @param $name
+     * @return CCorriculumPractice
+     */
+    public function getPracticeByAbbreviatedName($name) {
+        $p = null;
+        foreach ($this->practices->getItems() as $pr) {
+            if ($pr->alias == $name) {
+                $p = $pr;
+            }
+        }
+        return $p;
     }
 }

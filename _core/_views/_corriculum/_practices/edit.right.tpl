@@ -4,3 +4,10 @@
         Назад
     </center></a>
 </p>
+
+<p>
+    <a href="?action=del&id={$practice->getId()}"><center>
+        <img src="{$web_root}images/tango/32x32/places/user-trash.png"><br>
+        Удалить
+    </center></a>
+</p>

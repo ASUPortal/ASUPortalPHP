@@ -71,6 +71,16 @@ class CPrintController extends CBaseController {
             /**
              * Это место для экспериментов и написания отладочного кода
              */
+            if (is_null($object->getGroup())) {
+                $value = "__________";
+            } elseif (is_null($object->getGroup()->corriculum)) {
+                $value = "__________";
+            } elseif (is_null($object->getGroup()->corriculum->direction)) {
+                $value = "__________";
+            } else {
+                $value = $object->getGroup()->corriculum->direction->comment;
+            }
+            var_dump($value);
         }
         /**
          * Еще один вариант. Надеюсь, этот заработает нормально

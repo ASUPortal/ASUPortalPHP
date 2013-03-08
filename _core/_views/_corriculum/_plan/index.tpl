@@ -22,7 +22,11 @@
                     {if $c->direction == null}
                         -
                     {else}
-                        <a href="?action=view&id={$c->id}">{$c->direction->name}</a>
+                        <a href="?action=view&id={$c->id}">{$c->direction->name}
+                            {if $c->direction->comment !== ""}
+                                ({$c->direction->comment})
+                            {/if}
+                        </a>
                     {/if}
                 </td>
                 <td>
