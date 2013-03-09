@@ -277,6 +277,6 @@ class CExaminationController extends CBaseController {
             }
             $ticket->remove();
         }
-        $this->redirect("?action=index");
+        $this->redirect("?action=my");
     }
 }
