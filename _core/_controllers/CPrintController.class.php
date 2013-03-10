@@ -128,6 +128,10 @@ class CPrintController extends CBaseController {
          */
         $wordTemplate->setDocXML($xml);
         $filename = date("dmY_Hns")."_".$form->template_file;
+        $i = 0;
+        while (file_exists(PRINT_TEMPLATES_DIR.$filename)) {
+            $filename = PRINT_TEMPLATES_DIR.$i."_".$filename;
+        }
         $wordTemplate->save(PRINT_TEMPLATES_DIR.$filename);
         /**
          * Отдаем документ пользователю
