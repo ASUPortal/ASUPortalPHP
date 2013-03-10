@@ -92,12 +92,15 @@
                 jQuery("#progressbar").progressbar({
                     value: attachments.length
                 });
+                /**
+                 * Если все вкладыши отработаны, то сгенерим
+                 * архив и отдадим его пользователю
+                 */
+                if (attachments.length == students.length) {
+                    generateZip(attachments);
+                }
             });
         });
-        /**
-         * Генерируем архивчик
-         */
-        generateZip(attachments);
     }
     function generateZip(attachments) {
         jQuery.ajax({
