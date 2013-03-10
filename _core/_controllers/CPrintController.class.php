@@ -131,6 +131,7 @@ class CPrintController extends CBaseController {
         $i = 0;
         while (file_exists(PRINT_TEMPLATES_DIR.$filename)) {
             $filename = PRINT_TEMPLATES_DIR.$i."_".$filename;
+            $i++;
         }
         $wordTemplate->save(PRINT_TEMPLATES_DIR.$filename);
         /**
