@@ -86,7 +86,7 @@
                     template: template_id,
                     noredirect: "1"
                 },
-                async: true
+                async: false
             }).done(function(data) {
                 attachments[attachments.length] = data.filename;
                 jQuery("#progressbar").progressbar({
