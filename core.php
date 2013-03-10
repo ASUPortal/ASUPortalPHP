@@ -221,6 +221,8 @@
     define("ADMIN_EMAIL", CSettingsManager::getSettingValue("admin_email"));
 
     define("APP_DEBUG", true);
-
+    /**
+     * Путь к библиотекам jQuery на сервере
+     */
     define("JQUERY_UI_JS_PATH", "_core/jquery-ui-1.8.20.custom.min.js");
     define("JQUERY_UI_CSS_PATH", "_core/jUI/jquery-ui-1.8.2.custom.css");
