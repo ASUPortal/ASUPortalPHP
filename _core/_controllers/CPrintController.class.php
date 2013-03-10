@@ -130,7 +130,7 @@ class CPrintController extends CBaseController {
         $filename = date("dmY_Hns")."_".$form->template_file;
         $i = 0;
         while (file_exists(PRINT_TEMPLATES_DIR.$filename)) {
-            $filename = PRINT_TEMPLATES_DIR.$i."_".$filename;
+            $filename = date("dmY_Hns")."_".$i."_".$form->template_file;
             $i++;
         }
         $wordTemplate->save(PRINT_TEMPLATES_DIR.$filename);
