@@ -475,6 +475,24 @@ class CGradebookController extends CBaseController {
             );
         }
         /**
+         * Студенты по номеру зачетки
+         * 0000118
+         */
+        $query = new CQuery();
+        $query->select("distinct(student.id) as id, student.fio as name, student.stud_num as stud_num")
+            ->from(TABLE_STUDENTS_ACTIVITY." as activity")
+            ->innerJoin(TABLE_STUDENTS." as student", "student.id = activity.student_id")
+            ->condition("student.stud_num like '%".$term."%'")
+            ->limit(0, 5);
+        foreach ($query->execute()->getItems() as $item) {
+            $res[] = array(
+                "label" => $item["name"]." (".$item["stud_num"].")",
+                "value" => $item["name"]." (".$item["stud_num"].")",
+                "object_id" => $item["id"],
+                "type" => 4
+            );
+        }
+        /**
          * А еще виды контроля
          */
         $query = new CQuery();
