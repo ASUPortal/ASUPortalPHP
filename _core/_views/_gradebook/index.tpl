@@ -176,7 +176,7 @@
         <td>{$record->getDate()}</td>
         <td>
             {if !is_null($record->discipline)}
-                {$record->discipline->getValue()}
+                <a target="_blank" href="{$web_root}spravochnik_edit.php?item_id={$record->discipline->getId()}&type=edit&sprav_id=10">{$record->discipline->getValue()}</a>
             {/if}
         </td>
         <td>
