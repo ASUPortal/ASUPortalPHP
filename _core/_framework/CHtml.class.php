@@ -539,6 +539,29 @@ class CHtml {
     		echo '</ul>';
     	}
     }
+
+    /**
+     * Подготоваливает к вывод данные для печати группы
+     * записей по указанному шаблону
+     *
+     * @param $template
+     */
+    public static function printGroupOnTemplate($template) {
+        $formset = CPrintManager::getFormset($template);
+        if (!is_null($formset)) {
+            $forms = $formset->activeForms;
+            $variables = $formset->computeTemplateVariables();
+            echo "<ul>";
+            foreach ($forms->getItems() as $form) {
+                echo '<li><a href="#" onclick="printWithTemplate(';
+                echo "'".$variables['manager']."'";
+                echo ", '".$variables['method']."'";
+                echo ", '".$form->getId()."'";
+                echo '); return false;">'.$form->title.'</a></li>';
+            }
+            echo "</ul>";
+        }
+    }
     public static function tableOrder($field, CModel $model = null) {
         if (is_null($model)) {
             return "";

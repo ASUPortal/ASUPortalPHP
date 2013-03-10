@@ -1,29 +1,3 @@
-<script>
-    jQuery(document).ready(function(){
-        jQuery("#year_school_end").datepicker({
-            dateFormat: "yy",
-            showOn: "both",
-            buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
-            buttonImageOnly: true,
-            changeYear: true
-        });
-        jQuery("#year_university_start").datepicker({
-            dateFormat: "yy",
-            showOn: "both",
-            buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
-            buttonImageOnly: true,
-            changeYear: true
-        });
-        jQuery("#year_university_end").datepicker({
-            dateFormat: "yy",
-            showOn: "both",
-            buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
-            buttonImageOnly: true,
-            changeYear: true
-        });
-    });
-</script>
-
 <form action="index.php" method="post">
 {CHtml::hiddenField("action", "save")}
 {CHtml::activeHiddenField("id", $group)}

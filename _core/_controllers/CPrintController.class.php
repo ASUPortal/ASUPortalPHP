@@ -131,8 +131,16 @@ class CPrintController extends CBaseController {
         $wordTemplate->save(PRINT_TEMPLATES_DIR.$filename);
         /**
          * Отдаем документ пользователю
+         * Не отдаем, если у нас тут групповая печать
          */
-        $this->redirect(PRINT_DOCUMENTS_URL.$filename);
+        if (CRequest::getInt("noredirect") == "1") {
+            echo json_encode(array(
+                "filename" => PRINT_TEMPLATES_DIR.$filename,
+                "url" => PRINT_DOCUMENTS_URL.$filename
+            ));
+        } else {
+            $this->redirect(PRINT_DOCUMENTS_URL.$filename);
+        }
     }
     private function processNode(DOMNode $node, CPrintField $field, $object, CPrintForm $form) {
         $doc = $node->ownerDocument;
