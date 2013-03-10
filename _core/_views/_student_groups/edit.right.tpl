@@ -15,11 +15,13 @@
 <p>
     <a href="#" onclick="jQuery('#printDialog').dialog();"><center>
         <img src="{$web_root}images/tango/32x32/devices/printer.png"><br>
-        Печать для всех студентов
+        Печать по шаблону
     </center></a>
 </p>
 
 <div id="printDialog" title="Печать по шаблону" style="display: none;">
+    <b>Печать для всех студентов</b>
+
     {CHtml::printGroupOnTemplate("formset_students")}
 </div>
 
