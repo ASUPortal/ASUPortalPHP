@@ -15,7 +15,7 @@ class CZipController extends CBaseController {
         }
 
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Учебные группы студентов");
+        $this->setPageTitle("Подсистема архивирования");
 
         parent::__construct();
     }
