@@ -28,6 +28,13 @@
             buttonImageOnly: true,
             changeYear: true
         });
+        jQuery("#birth_date").datepicker({
+            dateFormat: "dd.mm.yy",
+            showOn: "both",
+            buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
+            buttonImageOnly: true,
+            changeYear: true
+        });
         jQuery("#tabs").tabs();
         jQuery("#tabs-secondary").tabs();
     });

@@ -33,3 +33,9 @@
     {CHtml::activeTextField("stud_num", $student)}
     {CHtml::error("stud_num", $student)}
 </p>
+
+<p>
+    {CHtml::activeLabel("birth_date", $student)}
+    {CHtml::activeTextField("birth_date", $student, "birth_date")}
+    {CHtml::error("birth_date", $student)}
+</p>

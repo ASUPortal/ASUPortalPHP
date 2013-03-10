@@ -21,9 +21,3 @@
                         {CHtml::activeDropDownList("education_form_end", $student, CTaxonomyManager::getCacheEducationForms()->getItems())}
                         {CHtml::error("education_form_end", $student)}
 </p>
-
-<p>
-{CHtml::activeLabel("education_specialization_id", $student)}
-                        {CHtml::activeDropDownList("education_specialization_id", $student, CTaxonomyManager::getTaxonomy("education_specializations")->getTermsList())}
-                        {CHtml::error("education_specialization_id", $student)}
-</p>

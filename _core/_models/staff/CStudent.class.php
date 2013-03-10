@@ -57,6 +57,7 @@ class CStudent extends CActiveModel {
             "attach_number" => "Номер диплома",
             "attach_regnum" => "Регистрационный номер",
             "attach_regdate" => "Дата выдачи",
+            "birth_date" => "Дата рождения"
         );
     }
     public function relations() {
