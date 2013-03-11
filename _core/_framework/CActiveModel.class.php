@@ -389,9 +389,13 @@ class CActiveModel extends CModel{
                     $condition = $relation['storageCondition'];
                     $managerClass = $relation['managerClass'];
                     $managerGetter = $relation['managerGetObject'];
+                    $managerOrder = null;
+                    if (array_key_exists("managerOrder", $relation)) {
+                        $managerOrder = $relation['managerOrder'];
+                    }
 
                     $this->$private = new CArrayList();
-                    foreach (CActiveRecordProvider::getWithCondition($table, $condition)->getItems() as $item) {
+                    foreach (CActiveRecordProvider::getWithCondition($table, $condition, $managerOrder)->getItems() as $item) {
                         $obj = $managerClass::$managerGetter($item->getId());
                         if (!is_null($obj)) {
                             $this->$private->add($obj->getId(), $obj);

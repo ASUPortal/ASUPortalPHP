@@ -31,7 +31,8 @@ class CCorriculumCycle extends CActiveModel {
                 "storageTable" => TABLE_CORRICULUM_DISCIPLINES,
                 "storageCondition" => "cycle_id=".$this->id,
                 "managerClass" => "CCorriculumsManager",
-                "managerGetObject" => "getDiscipline"
+                "managerGetObject" => "getDiscipline",
+                "managerOrder" => "`ordering` asc"
             ),
             "basicDisciplines" => array(
                 "relationPower" => RELATION_HAS_MANY,
@@ -127,5 +128,24 @@ class CCorriculumCycle extends CActiveModel {
             }
         }
         return $controls;
+    }
+
+    /**
+     * Получить n-ую по счету дисциплину
+     *
+     * @param $number
+     * @return CCorriculumDiscipline
+     */
+    public function getNthDiscipline($number) {
+        $res = null;
+        $i = 1;
+        foreach ($this->disciplines->getItems() as $d) {
+            if ($i == $number) {
+                $res = $d;
+                break;
+            }
+            $i++;
+        }
+        return $res;
     }
 }

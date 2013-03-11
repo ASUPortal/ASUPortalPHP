@@ -50,4 +50,78 @@ class CCorriculumDisciplinesController extends CBaseController {
         $discipline->remove();
         $this->redirect("cycles.php?action=edit&id=".$id);
     }
+    public function actionUp() {
+        $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("id"));
+        /**
+         * Проверим, вдруг это первый запуск и ничего не отсортировано еще
+         */
+        if (is_null($discipline->ordering)) {
+            $cycle = $discipline->cycle;
+            if (!is_null($cycle)) {
+                $i = 1;
+                foreach ($cycle->disciplines->getItems() as $d) {
+                    $d->ordering = $i;
+                    $d->save();
+                    $i++;
+                }
+            }
+        }
+        /**
+         * Двигаем только если текущая не первая
+         */
+        if ($discipline->ordering > 1) {
+            $cycle = $discipline->cycle;
+            if (!is_null($cycle)) {
+                $d = $cycle->getNthDiscipline(($discipline->ordering - 1));
+                if (!is_null($d)) {
+                    $curr = $discipline->ordering;
+                    $d->ordering = $curr;
+                    $discipline->ordering = ($curr - 1);
+                    $discipline->save();
+                    $d->save();
+                }
+            }
+        }
+        /**
+         * Возвращаем обратно
+         */
+        $this->redirect("cycles.php?action=edit&id=".$discipline->cycle_id);
+    }
+    public function actionDown() {
+        $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("id"));
+        /**
+         * Проверим, вдруг это первый запуск и ничего не отсортировано еще
+         */
+        if (is_null($discipline->ordering)) {
+            $cycle = $discipline->cycle;
+            if (!is_null($cycle)) {
+                $i = 1;
+                foreach ($cycle->disciplines->getItems() as $d) {
+                    $d->ordering = $i;
+                    $d->save();
+                    $i++;
+                }
+            }
+        }
+        /**
+         * Двигаем только если текущая не последняя
+         */
+        $cycle = $discipline->cycle;
+        if (!is_null($cycle)) {
+            if ($discipline->ordering < $cycle->disciplines->getCount()) {
+                $curr = $discipline->ordering;
+                $d = $cycle->getNthDiscipline($curr + 1);
+                if (!is_null($d)) {
+                    $d->ordering = $curr;
+                    $discipline->ordering = ($curr + 1);
+                    $discipline->save();
+                    $d->save();
+                }
+            }
+        }
+        /**
+         * Возвращаем обратно
+         */
+        $this->redirect("cycles.php?action=edit&id=".$discipline->cycle_id);
+    }
 }

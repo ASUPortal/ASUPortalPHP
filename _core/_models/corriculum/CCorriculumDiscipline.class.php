@@ -15,6 +15,11 @@ class CCorriculumDiscipline extends CActiveModel {
     protected $_controls = null;
     protected $_hours = null;
 
+    /**
+     * Разнообразные публичные свойства
+     */
+    public $ordering = null;
+
     protected function relations() {
         return array(
             "discipline" => array(
