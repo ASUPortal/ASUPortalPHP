@@ -3,6 +3,18 @@
     {CHtml::activeHiddenField("id", $corriculum)}
 
     <p>
+        {CHtml::activeLabel("title", $corriculum)}
+        {CHtml::activeTextField("title", $corriculum)}
+        {CHtml::error("title", $corriculum)}
+    </p>
+
+    <p>
+        {CHtml::activeLabel("description", $corriculum)}
+        {CHtml::activeTextBox("description", $corriculum)}
+        {CHtml::error("description", $corriculum)}
+    </p>
+
+    <p>
         {CHtml::activeLabel("direction_id", $corriculum)}
         {CHtml::activeDropDownList("direction_id", $corriculum, CTaxonomyManager::getSpecialitiesList())}
         {CHtml::error("direction_id", $corriculum)}

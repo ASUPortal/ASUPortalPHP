@@ -68,8 +68,26 @@ class CCorriculum extends CActiveModel{
             "profile_id" => "Специализация",
             "duration" => "Длительность обучения",
             "qualification_id" => "Квалификация выпускника",
-            "speciality_id" => "Специальность"
+            "speciality_id" => "Специальность",
+            "title" => "Название плана",
+            "description" => "Описание"
         );
+    }
+    public function validationRules() {
+        return array(
+            "required" => array(
+                "title",
+                "duration"
+            ),
+            "selected" => array(
+                "direction_id",
+                "profile_id",
+                "qualification_id"
+            )
+        );
+    }
+    public static function getClassName() {
+        return __CLASS__;
     }
 
     /**

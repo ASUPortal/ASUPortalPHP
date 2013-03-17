@@ -111,7 +111,7 @@ class CModel {
      *
      * @return array
      */
-    protected function validationRules() {
+    public function validationRules() {
         return array();
     }
     /**

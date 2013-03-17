@@ -114,7 +114,19 @@ class CHtml {
             $field .= "[".$multiple_key."]";
         }
         $field .= "[".$name."]";
+        $fieldRequired = false;
+        if (array_key_exists("selected", $model->validationRules())) {
+            $rules = $model->validationRules();
+            $required = $rules["selected"];
+            if (in_array($name, $required)) {
+                $html .= " required";
+                $fieldRequired = true;
+            }
+        }
         self::dropDownList($field, $values, $model->$name, $id, $class, $html);
+        if ($fieldRequired) {
+            self::requiredStar();
+        }
     }
     /**
      * Вывод ссылки
@@ -210,7 +222,19 @@ class CHtml {
             $field .= "[".$multiple_key."]";
         }
         $field .= "[".$name."]";
+        $fieldRequired = false;
+        if (array_key_exists("required", $model->validationRules())) {
+            $rules = $model->validationRules();
+            $required = $rules["required"];
+            if (in_array($name, $required)) {
+                $html .= " required";
+                $fieldRequired = true;
+            }
+        }
         self::textField($field, $model->$name, $id, $class, $html);
+        if ($fieldRequired) {
+            self::requiredStar();
+        }
     }
     public static function activeDateField($name, CModel $model, $format = "%d.%m.%Y", $id = "", $class = "", $html = "") {
         $field = $model::getClassName()."[".$name."]";
@@ -617,5 +641,12 @@ class CHtml {
             <input type="hidden" name="'.$field.'[type][]" value="'.$entry->getType().'">
             ';
         }
+    }
+
+    /**
+     * Звездочка для отметки обязательности поля
+     */
+    private static function requiredStar() {
+        echo '<span class="field_required">*</span>';
     }
 }

@@ -332,3 +332,9 @@ table th.vertical {
     cursor: pointer;
     background-image: url(../../_themes/blue/images/wap.gif);
 }
+
+.field_required {
+    margin-left: 5px;
+    color: red;
+    font-weight: bold;
+}
