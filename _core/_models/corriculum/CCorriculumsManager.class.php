@@ -54,11 +54,15 @@ class CCorriculumsManager {
         $res = array();
         foreach (self::getAllCorriculums()->getItems() as $c) {
             $title = "";
-            if (!is_null($c->direction)) {
-                $title .= $c->direction->getValue();
-            }
-            if (!is_null($c->profile)) {
-                $title .= " (".$c->profile->getValue().")";
+            if ($c->title == "") {
+                if (!is_null($c->direction)) {
+                    $title .= $c->direction->getValue();
+                }
+                if (!is_null($c->profile)) {
+                    $title .= " (".$c->profile->getValue().")";
+                }
+            } else {
+                $title = $c->title; 
             }
             $res[$c->getId()] = $title;
         }
