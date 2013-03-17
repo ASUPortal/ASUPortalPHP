@@ -50,7 +50,7 @@
     </p>
 
     <div style="cursor: pointer;" onclick="ticket.addQuestion(); return false;" id="ticket_questions_adder">
-        <img src="{$web_root}images/tango/22x22/actions/list-add.png">
+        <img src="{$web_root}images/{$icon_theme}/22x22/actions/list-add.png">
         Добавить вопрос
     </div>
 

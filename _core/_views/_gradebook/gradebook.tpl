@@ -18,14 +18,14 @@
     <p>Преподаватель: {if !is_null($gradebook->person)}{$gradebook->person->getName()}{/if}</p>
 
     <p><strong>Легенда</strong></p>
-    <p><img src="{$web_root}images/tango/16x16/apps/system-users.png"> - Присутствие</p>
-    <p><img src="{$web_root}images/tango/16x16/places/start-here.png"> - Отсутствие</p>
-    <p><img src="{$web_root}images/tango/16x16/actions/list-add.png"> - Зачет</p>
-    <p><img src="{$web_root}images/tango/16x16/status/dialog-error.png"> - Не зачет</p>
-    <p><img src="{$web_root}images/tango/16x16/emotes/face-smile.png"> - Выполнено</p>
-    <p><img src="{$web_root}images/tango/16x16/status/printer-error.png"> - Не выполнено</p>
-    <p><img src="{$web_root}images/tango/16x16/mimetypes/application-certificate.png"> - Защита</p>
-    <p><img src="{$web_root}images/tango/16x16/actions/edit-paste.png"> - Отчет</p>
+    <p><img src="{$web_root}images/{$icon_theme}/16x16/apps/system-users.png"> - Присутствие</p>
+    <p><img src="{$web_root}images/{$icon_theme}/16x16/places/start-here.png"> - Отсутствие</p>
+    <p><img src="{$web_root}images/{$icon_theme}/16x16/actions/list-add.png"> - Зачет</p>
+    <p><img src="{$web_root}images/{$icon_theme}/16x16/status/dialog-error.png"> - Не зачет</p>
+    <p><img src="{$web_root}images/{$icon_theme}/16x16/emotes/face-smile.png"> - Выполнено</p>
+    <p><img src="{$web_root}images/{$icon_theme}/16x16/status/printer-error.png"> - Не выполнено</p>
+    <p><img src="{$web_root}images/{$icon_theme}/16x16/mimetypes/application-certificate.png"> - Защита</p>
+    <p><img src="{$web_root}images/{$icon_theme}/16x16/actions/edit-paste.png"> - Отчет</p>
 
     <table cellpadding="2" cellspacing="0" border="1">
         {foreach $gradebook->toGradebookTable()->getItems() as $num=>$row}
@@ -62,23 +62,23 @@
 							{if is_numeric($v)}
 		                        {$v}
 		                    {elseif strtolower($v) == "присутствие"}
-		                        <center><img class="tooltip" title="{$date}, Присутствие" src="{$web_root}images/tango/16x16/apps/system-users.png"></center>
+		                        <center><img class="tooltip" title="{$date}, Присутствие" src="{$web_root}images/{$icon_theme}/16x16/apps/system-users.png"></center>
 		                    {elseif strtolower($v) == "отсутствие"}
-		                        <center><img class="tooltip" title="{$date}, Отсутствие" src="{$web_root}images/tango/16x16/places/start-here.png"></center>
+		                        <center><img class="tooltip" title="{$date}, Отсутствие" src="{$web_root}images/{$icon_theme}/16x16/places/start-here.png"></center>
 		                    {elseif strtolower($v) == "зач"}
-		                        <center><img class="tooltip" title="{$date}, Зачет" src="{$web_root}images/tango/16x16/actions/list-add.png"></center>
+		                        <center><img class="tooltip" title="{$date}, Зачет" src="{$web_root}images/{$icon_theme}/16x16/actions/list-add.png"></center>
 		                    {elseif strtolower($v) == "не зач."}
-		                        <center><img class="tooltip" title="{$date}, Не зачет" src="{$web_root}images/tango/16x16/status/dialog-error.png"></center>
+		                        <center><img class="tooltip" title="{$date}, Не зачет" src="{$web_root}images/{$icon_theme}/16x16/status/dialog-error.png"></center>
 		                    {elseif strtolower($v) == "выполнено"}
-		                        <center><img class="tooltip" title="{$date}, Выполнено" src="{$web_root}images/tango/16x16/emotes/face-smile.png"></center>
+		                        <center><img class="tooltip" title="{$date}, Выполнено" src="{$web_root}images/{$icon_theme}/16x16/emotes/face-smile.png"></center>
 		                    {elseif strtolower($v) == "не выполнено"}
-		                        <center><img class="tooltip" title="{$date}, Не выполнено" src="{$web_root}images/tango/16x16/status/printer-error.png"></center>
+		                        <center><img class="tooltip" title="{$date}, Не выполнено" src="{$web_root}images/{$icon_theme}/16x16/status/printer-error.png"></center>
 		                    {elseif strtolower($v) == "защита"}
-		                        <center><img class="tooltip" title="{$date}, Защита" src="{$web_root}images/tango/16x16/mimetypes/application-certificate.png"></center>
+		                        <center><img class="tooltip" title="{$date}, Защита" src="{$web_root}images/{$icon_theme}/16x16/mimetypes/application-certificate.png"></center>
 		                    {elseif strtolower($v) == "защита работы"}
-								<center><img class="tooltip" title="{$date}, Защита" src="{$web_root}images/tango/16x16/mimetypes/application-certificate.png"></center>
+								<center><img class="tooltip" title="{$date}, Защита" src="{$web_root}images/{$icon_theme}/16x16/mimetypes/application-certificate.png"></center>
 		                    {elseif strtolower($v) == "отчет"}
-		                        <center><img class="tooltip" title="{$date}, Отчет" src="{$web_root}images/tango/16x16/actions/edit-paste.png"></center>
+		                        <center><img class="tooltip" title="{$date}, Отчет" src="{$web_root}images/{$icon_theme}/16x16/actions/edit-paste.png"></center>
 		                    {else}
 		                        {$v}
 		                    {/if}                    	
@@ -87,23 +87,23 @@
 	                    {if is_numeric($col)}
 	                        {$col}
 	                    {elseif strtolower($col) == "присутствие"}
-	                        <center><img class="tooltip" title="{$date}, Присутствие" src="{$web_root}images/tango/16x16/apps/system-users.png"></center>
+	                        <center><img class="tooltip" title="{$date}, Присутствие" src="{$web_root}images/{$icon_theme}/16x16/apps/system-users.png"></center>
 	                    {elseif strtolower($col) == "отсутствие"}
-	                        <center><img class="tooltip" title="{$date}, Отсутствие" src="{$web_root}images/tango/16x16/places/start-here.png"></center>
+	                        <center><img class="tooltip" title="{$date}, Отсутствие" src="{$web_root}images/{$icon_theme}/16x16/places/start-here.png"></center>
 	                    {elseif strtolower($col) == "зач"}
-	                        <center><img class="tooltip" title="{$date}, Зачет" src="{$web_root}images/tango/16x16/actions/list-add.png"></center>
+	                        <center><img class="tooltip" title="{$date}, Зачет" src="{$web_root}images/{$icon_theme}/16x16/actions/list-add.png"></center>
 	                    {elseif strtolower($col) == "не зач."}
-	                        <center><img class="tooltip" title="{$date}, Не зачет" src="{$web_root}images/tango/16x16/status/dialog-error.png"></center>
+	                        <center><img class="tooltip" title="{$date}, Не зачет" src="{$web_root}images/{$icon_theme}/16x16/status/dialog-error.png"></center>
 	                    {elseif strtolower($col) == "выполнено"}
-	                        <center><img class="tooltip" title="{$date}, Выполнено" src="{$web_root}images/tango/16x16/emotes/face-smile.png"></center>
+	                        <center><img class="tooltip" title="{$date}, Выполнено" src="{$web_root}images/{$icon_theme}/16x16/emotes/face-smile.png"></center>
 	                    {elseif strtolower($col) == "не выполнено"}
-	                        <center><img class="tooltip" title="{$date}, Не выполнено" src="{$web_root}images/tango/16x16/status/printer-error.png"></center>
+	                        <center><img class="tooltip" title="{$date}, Не выполнено" src="{$web_root}images/{$icon_theme}/16x16/status/printer-error.png"></center>
 	                    {elseif strtolower($col) == "защита"}
-	                        <center><img class="tooltip" title="{$date}, Защита" src="{$web_root}images/tango/16x16/mimetypes/application-certificate.png"></center>
+	                        <center><img class="tooltip" title="{$date}, Защита" src="{$web_root}images/{$icon_theme}/16x16/mimetypes/application-certificate.png"></center>
 						{elseif strtolower($col) == "защита работы"}
-							<center><img class="tooltip" title="{$date}, Защита" src="{$web_root}images/tango/16x16/mimetypes/application-certificate.png"></center>	                        
+							<center><img class="tooltip" title="{$date}, Защита" src="{$web_root}images/{$icon_theme}/16x16/mimetypes/application-certificate.png"></center>
 	                    {elseif strtolower($col) == "отчет"}
-	                        <center><img class="tooltip" title="{$date}, Отчет" src="{$web_root}images/tango/16x16/actions/edit-paste.png"></center>
+	                        <center><img class="tooltip" title="{$date}, Отчет" src="{$web_root}images/{$icon_theme}/16x16/actions/edit-paste.png"></center>
 	                    {else}
 	                        {$col}
 	                    {/if}

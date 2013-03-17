@@ -2,7 +2,7 @@
 <p>
     <a href="{$web_root}_modules/_dashboard/">
         <center>
-            <img src="{$web_root}images/tango/32x32/apps/preferences-system-session.png"><br>
+            <img src="{$web_root}images/{$icon_theme}/32x32/apps/preferences-system-session.png"><br>
             На рабочий стол
         </center></a>
 </p>
@@ -11,7 +11,7 @@
 <p>
     <a href="index.php?action=add">
         <center>
-            <img src="{$web_root}images/tango/32x32/actions/list-add.png"><br>
+            <img src="{$web_root}images/{$icon_theme}/32x32/actions/list-add.png"><br>
             Добавить
         </center></a>
 </p>

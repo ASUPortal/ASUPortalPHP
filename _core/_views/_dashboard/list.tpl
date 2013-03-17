@@ -18,7 +18,7 @@
 			{if ($item->icon == "")}
 				&nbsp;
 			{else}
-				<center><img src="{$web_root}images/tango/16x16/{$item->icon}"></center>
+				<center><img src="{$web_root}images/{$icon_theme}/16x16/{$item->icon}"></center>
 			{/if}
 		</td>
 		<td><a href="?action=edit&id={$item->id}">{$item->title}</a></td>

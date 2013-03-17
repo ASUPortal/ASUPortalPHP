@@ -172,6 +172,7 @@ class CBaseController {
             $this->getSmarty()->assign("jsInline", $this->getJSInlineIncludes()->getItems());
             $this->getSmarty()->assign("jqInline", $this->getJQInlineIncludes()->getItems());
             $this->getSmarty()->assign("date_pickers", $this->getDatePickers()->getItems());
+            $this->getSmarty()->assign("icon_theme", ICON_THEME);
             $this->getSmarty()->display($view);
         } else {
             $data = $this->getData();

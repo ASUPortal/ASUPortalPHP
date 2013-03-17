@@ -81,6 +81,86 @@ class CCorriculumsController extends CBaseController {
         $this->setData("corriculum", $corriculum);
         $this->renderView("_corriculum/_plan/view.tpl");
     }
+    public function actionCopy() {
+        $corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("id"));
+        /**
+         * Клонируем сам учебный план
+         */
+        $newCorriculum = $corriculum->copy();
+        $newCorriculum->title = "Копия ".$newCorriculum->title;
+        $newCorriculum->save();
+        /**
+         * Клонируем практики учебного плана
+         */
+        foreach ($corriculum->practices->getItems() as $practice) {
+            $newPractice = $practice->copy();
+            $newPractice->corriculum_id = $newCorriculum->getId();
+            $newPractice->save();
+        }
+        /**
+         * Клонируем циклы учебного плана
+         */
+        foreach ($corriculum->cycles->getItems() as $cycle) {
+            $newCycle = $cycle->copy();
+            $newCycle->corriculum_id = $newCorriculum->getId();
+            $newCycle->save();
+            /**
+             * Клонируем дисциплины из циклов
+             */
+            foreach ($cycle->disciplines->getItems() as $discipline) {
+                $newDiscipline = $discipline->copy();
+                $newDiscipline->cycle_id = $newCycle->getId();
+                $newDiscipline->save();
+                /**
+                 * Клонируем нагрузку из дисциплин
+                 */
+                foreach ($discipline->labors->getItems() as $labor) {
+                    $newLabor = $labor->copy();
+                    $newLabor->discipline_id = $newDiscipline->getId();
+                    $newLabor->save();
+                }
+            }
+        }
+        /**
+         * Все, редирект на страницу со списком
+         */
+        $this->redirect("index.php?action=index");
+    }
+    public function actionDelete() {
+        $corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("id"));
+        /**
+         * Удаляем практики из плана
+         */
+        foreach ($corriculum->practices->getItems() as $practice) {
+            $practice->remove();
+        }
+        /**
+         * Удаляем циклы
+         */
+        foreach ($corriculum->cycles->getItems() as $cycle) {
+            /**
+             * Удаляем дисциплины из циклов
+             */
+            foreach ($cycle->disciplines->getItems() as $discipline) {
+                /**
+                 * Удаляем нагрузку из дисциплин
+                 */
+                foreach ($discipline->labors->getItems() as $labor) {
+                    $labor->remove();
+                }
+                $discipline->remove();
+            }
+            $cycle->remove();
+        }
+        /**
+         * Удаляем сам учебный план
+         */
+        $corriculum->remove();
+        /**
+         * Все, редирект на страницу со списком
+         */
+        $this->redirect("index.php?action=index");
+    }
     /*
 
 

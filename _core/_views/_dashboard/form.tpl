@@ -27,7 +27,7 @@
         {CHtml::activeLabel("icon", $item)}
         <select name="CDashboardItem[icon]" id="icon_selector">
             {foreach $icons->getItems() as $file}
-                <option value="{$file}" data-image="{$web_root}images/tango/16x16/{$file}"
+                <option value="{$file}" data-image="{$web_root}images/{$icon_theme}/16x16/{$file}"
                 {if $item->icon == $file}selected{/if}>{$file}</option>
             {/foreach}
         </select>

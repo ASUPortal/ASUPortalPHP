@@ -459,4 +459,21 @@ class CActiveModel extends CModel{
         }
         return $this->_dbTable;
     }
+
+    /**
+     * Копирование текущего объекта и всех значений его полей
+     * кроме ключевого поля id
+     *
+     * @return mixed
+     */
+    public function copy() {
+        $class = get_class($this);
+        $newObj = new $class;
+        foreach ($this->getRecord()->getItems() as $key=>$value) {
+            if ($key !== "id") {
+                $newObj->$key = $value;
+            }
+        }
+        return $newObj;
+    }
 }

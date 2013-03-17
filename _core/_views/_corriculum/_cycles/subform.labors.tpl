@@ -21,12 +21,12 @@
         <td>
             {if ($discipline->ordering > 1)}
                 <a href="disciplines.php?action=up&id={$discipline->getId()}">
-                    <img src="{$web_root}images/tango/16x16/actions/go-up.png" border="0">
+                    <img src="{$web_root}images/{$icon_theme}/16x16/actions/go-up.png" border="0">
                 </a>
             {/if}
             {if ($discipline->ordering < $cycle->disciplines->getCount())}
                 <a href="disciplines.php?action=down&id={$discipline->getId()}">
-                    <img src="{$web_root}images/tango/16x16/actions/go-down.png" border="0">
+                    <img src="{$web_root}images/{$icon_theme}/16x16/actions/go-down.png" border="0">
                 </a>
             {/if}
         </td>

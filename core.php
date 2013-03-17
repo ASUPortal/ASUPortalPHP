@@ -226,3 +226,11 @@
      */
     define("JQUERY_UI_JS_PATH", "_core/jquery-ui-1.8.20.custom.min.js");
     define("JQUERY_UI_CSS_PATH", "_core/jUI/jquery-ui-1.8.2.custom.css");
+    /**
+     * Текущая значковая тема
+     */
+    if (CSettingsManager::getSettingValue("icon_theme") == "") {
+        define("ICON_THEME", "tango");
+    } else {
+        define("ICON_THEME", CSettingsManager::getSettingValue("icon_theme"));
+    }

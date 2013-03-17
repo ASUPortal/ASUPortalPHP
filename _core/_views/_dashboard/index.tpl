@@ -6,7 +6,7 @@
 		<div class="dashboard_item">
 			<div class="item_icon">
 				{if $item->icon !== ""}
-					<img src="{$web_root}images/tango/64x64/{$item->icon}">
+					<img src="{$web_root}images/{$icon_theme}/64x64/{$item->icon}">
 				{/if}
 			</div>
 			<div class="item_content">

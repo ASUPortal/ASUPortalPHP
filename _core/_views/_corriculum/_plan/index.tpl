@@ -7,6 +7,7 @@
         <tr>
             <th>#</th>
             <th>&nbsp;</th>
+            <th>Название</th>
             <th>Направление</th>
             <th>Профиль</th>
             <th>Форма обучения</th>
@@ -19,14 +20,22 @@
                 <td>{counter}</td>
                 <td><a href="#" onclick="if (confirm('Действительно удалить учебный план по направлению {if !is_null($c->direction)}{$c->direction->name}{/if}')) { location.href='?action=delete&id={$c->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
                 <td>
+                    <a href="?action=view&id={$c->id}">
+                        {if ($c->title == "")}
+                            Название не указано
+                        {else}
+                            {$c->title}
+                        {/if}
+                    </a>
+                </td>
+                <td>
                     {if $c->direction == null}
                         -
                     {else}
-                        <a href="?action=view&id={$c->id}">{$c->direction->name}
-                            {if $c->direction->comment !== ""}
-                                ({$c->direction->comment})
-                            {/if}
-                        </a>
+                        {$c->direction->getValue()}
+                        {if $c->direction->comment !== ""}
+                            ({$c->direction->comment})
+                        {/if}
                     {/if}
                 </td>
                 <td>

@@ -19,7 +19,7 @@
             <tr>
                 <td valign="top">&nbsp;</td>
                 <td valign="top">{counter}</td>
-                <td valign="top"><center><img src="{$web_root}images/tango/16x16/apps/system-users.png" align="center"></center></td>
+                <td valign="top"><center><img src="{$web_root}images/{$icon_theme}/16x16/apps/system-users.png" align="center"></center></td>
                 <td valign="top">{$child->name}</td>
             </tr>
         {/foreach}
@@ -27,7 +27,7 @@
             <tr>
                 <td valign="top"><a href="#" onclick="if (confirm('Действительно удалить пользователя {$user->getName()} из группы')) { location.href='?action=delete&id={$user->getId()}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
                 <td valign="top">{counter}</td>
-                <td valign="top"><center><img src="{$web_root}images/tango/16x16/apps/preferences-desktop-theme.png"></center></td>
+                <td valign="top"><center><img src="{$web_root}images/{$icon_theme}/16x16/apps/preferences-desktop-theme.png"></center></td>
                 <td valign="top">{$user->getName()}</td>
             </tr>
         {/foreach}
