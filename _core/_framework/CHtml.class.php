@@ -115,8 +115,8 @@ class CHtml {
         }
         $field .= "[".$name."]";
         $fieldRequired = false;
-        if (array_key_exists("selected", $model->validationRules())) {
-            $rules = $model->validationRules();
+        if (array_key_exists("selected", $model->getValidationRules())) {
+            $rules = $model->getValidationRules();
             $required = $rules["selected"];
             if (in_array($name, $required)) {
                 $html .= " required";
@@ -223,8 +223,8 @@ class CHtml {
         }
         $field .= "[".$name."]";
         $fieldRequired = false;
-        if (array_key_exists("required", $model->validationRules())) {
-            $rules = $model->validationRules();
+        if (array_key_exists("required", $model->getValidationRules())) {
+            $rules = $model->getValidationRules();
             $required = $rules["required"];
             if (in_array($name, $required)) {
                 $html .= " required";

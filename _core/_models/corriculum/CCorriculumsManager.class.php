@@ -62,7 +62,7 @@ class CCorriculumsManager {
                     $title .= " (".$c->profile->getValue().")";
                 }
             } else {
-                $title = $c->title; 
+                $title = $c->title;
             }
             $res[$c->getId()] = $title;
         }

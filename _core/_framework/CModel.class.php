@@ -111,8 +111,15 @@ class CModel {
      *
      * @return array
      */
-    public function validationRules() {
+    protected function validationRules() {
         return array();
+    }
+    /**
+     * Правила валидации для работы с CHtml
+     * @return arrray
+     */
+    public function getValidationRules() {
+	    return $this->validationRules();
     }
     /**
      * Функция валидации данных модели
