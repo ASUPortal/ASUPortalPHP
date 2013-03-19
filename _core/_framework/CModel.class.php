@@ -11,6 +11,7 @@ class CModel {
     protected $_aclControlEnabled = false;
     protected $_readers = null;
     protected $_authors = null;
+    private static $_thisObject = null;
     /**
      * Название класса
      *

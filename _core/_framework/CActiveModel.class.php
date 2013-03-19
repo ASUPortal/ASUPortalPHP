@@ -444,7 +444,9 @@ class CActiveModel extends CModel{
     public function setAttributes(array $array) {
         parent::setAttributes($array);
         foreach ($array as $key=>$value) {
-            $this->getRecord()->setItemValue($key, $value);
+            if ($this->getDbTable()->getFields()->hasElement($key)) {
+                $this->getRecord()->setItemValue($key, $value);
+            }
         }
     }
 

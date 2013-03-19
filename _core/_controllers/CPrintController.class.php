@@ -71,31 +71,21 @@ class CPrintController extends CBaseController {
             /**
              * Это место для экспериментов и написания отладочного кода
              */
-            $projects = array(
-                65 => "Курсовая по проектированию информационных систем",
-                19 => "Курсовая по имитационному моделированию",
-                69 => "Курсовая по РиСПСиИТ",
-                325 => "Курсовая по бухучету",
-                42 => "Курсовая по мировым информационным ресурсам"
-            );
-            $value = array();
-            foreach ($projects as $key=>$project_name) {
-                $mark = "__________";
-                /**
-                 * Ищем курсовую работу по указанной дисциплине
-                 */
-                $query = new CQuery();
-                $query->select("act.id, mark.name as name")
-                    ->from(TABLE_STUDENTS_ACTIVITY." as act")
-                    ->condition("act.student_id = ".$object->getId()." and act.kadri_id = 380 and act.subject_id = ".$key." and act.study_act_id in (43)")
-                    ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
-                    ->order("act.id asc");
-                foreach ($query->execute()->getItems() as $item) {
-                    $mark = $item["name"];
-                }
-                $value[] = array(
-                    $project_name.", ".$mark
-                );
+            $discipline = 66;
+            $value = "";
+            /**
+             * Получаем оценку студента по выбранной дисциплине.
+             * Пока получаем просто последнюю оценку вне зависимости
+             * от формы контроля по дисциплине
+             */
+            $query = new CQuery();
+            $query->select("act.id, mark.name as name")
+                ->from(TABLE_STUDENTS_ACTIVITY." as act")
+                ->condition("act.student_id = ".$object->getId()." and act.kadri_id = 380 and act.subject_id = ".$discipline." and act.study_act_id in (1, 2, 12, 14)")
+                ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
+                ->order("act.id asc");
+            foreach ($query->execute()->getItems() as $item) {
+                $value = $item["name"];
             }
             var_dump($value);
         }

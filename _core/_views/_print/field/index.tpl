@@ -13,6 +13,7 @@
         <th></th>
     </tr>
 
+    {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
     {foreach $fields->getItems() as $field}
         <tr>
             <td valign="top"><a href="#" onclick="if (confirm('Действительно удалить описатель поля {$field->title}')) { location.href='?action=delete&id={$field->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
