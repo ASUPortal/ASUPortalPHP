@@ -34,6 +34,7 @@ class CStaffManager{
     private static $_cacheDiploms = null;
     private static $_cacheDiplomPreviews = null;
     private static $_cacheDiplomPreviewComissions = null;
+    private static $_cacheUsatuOrders = null;
     /**
      * Инициализация всех сотрудников.
      *
@@ -967,5 +968,34 @@ class CStaffManager{
             ->leftJoin(TABLE_PERSON." as person", "comission.secretary_id = person.id")
             ->order("comission.name");
         return $res;
+    }
+
+    /**
+     * Кэш приказов угату
+     *
+     * @return CArrayList
+     */
+    private static function getCacheUsatuOrders() {
+        if (is_null(self::$_cacheUsatuOrders)) {
+            self::$_cacheUsatuOrders = new CArrayList();
+        }
+        return self::$_cacheUsatuOrders;
+    }
+
+    /**
+     * Приказ по УГАТУ
+     *
+     * @param $key
+     * @return COrderUsatu
+     */
+    public static function getUsatuOrder($key) {
+        if (!self::getCacheUsatuOrders()->hasElement($key)) {
+            $ar = CActiveRecordProvider::getById(TABLE_USATU_ORDERS, $key);
+            if (!is_null($ar)) {
+                $order = new COrderUsatu($ar);
+                self::getCacheUsatuOrders()->add($order->getId(), $order);
+            }
+        }
+        return self::getCacheUsatuOrders()->getItem($key);
     }
 }

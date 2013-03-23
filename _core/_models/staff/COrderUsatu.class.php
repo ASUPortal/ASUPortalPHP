@@ -20,4 +20,28 @@ class COrderUsatu extends CActiveModel {
             ),
         );
     }
+    public function attributeLabels() {
+        return array(
+            "orders_type" => "Тип приказа",
+            "date" => "Дата",
+            "num" => "Номер",
+            "comment" => "Комментарий",
+            "text" => "Текст приказа",
+            "title" => "Заголовок приказа",
+            "order_num_date" => "Дата и номер"
+        );
+    }
+    protected function validationRules() {
+        return array(
+            "required" => array(
+                "title",
+                "date",
+                "num",
+                "text"
+            ),
+            "selected" => array(
+                "orders_type"
+            )
+        );
+    }
 }

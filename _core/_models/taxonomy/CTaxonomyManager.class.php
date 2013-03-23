@@ -693,13 +693,43 @@ class CTaxonomyManager {
     public static function getDiplomConfirmation($key) {
         return self::getCacheDiplomConfirmations()->getItem($key);
     }
+
+    /**
+     * Типы приказов УГАТУ и кафедры
+     *
+     * @return CArrayList
+     */
     private static function getCacheUsatuOrderTypes() {
         if (is_null(self::$_cacheUsatyOrderTypes)) {
             self::$_cacheUsatyOrderTypes = new CArrayList();
-
+            foreach (CActiveRecordProvider::getAllFromTable(TABLE_USATU_ORDER_TYPES)->getItems() as $ar) {
+                $type = new CTerm($ar);
+                self::$_cacheUsatyOrderTypes->add($type->getId(), $type);
+            }
         }
+        return self::$_cacheUsatyOrderTypes;
     }
-    public static function getUsatuOrderType($key) {
 
+    /**
+     * Тип приказа УГАТУ/кафедры
+     *
+     * @param $key
+     * @return CTerm
+     */
+    public static function getUsatuOrderType($key) {
+        return self::getCacheUsatuOrderTypes()->getItem($key);
+    }
+
+    /**
+     * Типы приказов для подстановки
+     *
+     * @return array
+     */
+    public static function getUsatuOrderTypesList() {
+        $res = array();
+        foreach (self::getCacheUsatuOrderTypes()->getItems() as $type) {
+            $res[$type->getId()] = $type->getValue();
+        }
+        return $res;
     }
 }
