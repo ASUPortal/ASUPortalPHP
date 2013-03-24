@@ -13,7 +13,7 @@ class COrderUsatuController extends CBaseController {
         }
 
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Управление приказами УГАТУ");
+        $this->setPageTitle("Управление приказами УГАТУ и кафедры");
 
         parent::__construct();
     }
