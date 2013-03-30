@@ -100,41 +100,36 @@ if(isset($_GET['id']))
  }
 else
  {
-  if(!isset($_GET['number']))
-   {
-    $number=1; $start=0;
-   }
-  else
-   {
-    $number=$_GET['number'];$start=$number*5-5;
-   }
-  $res01=mysql_query ('select count(*) from news');
-  $count=mysql_result($res01,0,0);
-  $pages=$count/5;
-  $pages_and=$pages;
-  $pages_and=intval($pages_and);
-  if ($pages_and==$pages)
-   {
-    $pages=$pages_and;
-   }
-  else
-   {
-    $pages=$pages_and+1;
-   }
-  if(($number>$pages) || ($number<1))
-   {
-    $number=$pages;$start=$number*5-5;
-   }
-  $finish=$start+5;
-  if($finish>$count)
-   {
-    $length=$count-$start;
-   }
-  else
-   {
-    $length=5;
-   }
-  $query='select n.*,u.fio,u.id as user_id,k.photo as kadri_photo,b.image as user_photo  
+    if(!isset($_GET['number'])) {
+        $number=1; $start=0;
+    } else {
+        $number=$_GET['number'];$start=$number*5-5;
+    }
+    $res01=mysql_query ('select count(*) from news');
+    $count=mysql_result($res01,0,0);
+    $pages=$count/5;
+    $pages_and=$pages;
+    $pages_and=intval($pages_and);
+    if ($pages_and==$pages) {
+        $pages=$pages_and;
+    } else {
+        $pages=$pages_and+1;
+    }
+    if(($number>$pages) || ($number<1)) {
+        $number=$pages;
+        if ($number == 0) {
+            $start = 0;
+        } else {
+            $start=$number*5-5;
+        }
+    }
+    $finish=$start+5;
+    if($finish>$count) {
+        $length=$count-$start;
+    } else {
+        $length=5;
+    }
+    $query='select n.*,u.fio,u.id as user_id,k.photo as kadri_photo,b.image as user_photo
   	from news n
 	left join users u on u.id=n.user_id_insert 
 	left join kadri k on k.id=u.kadri_id
@@ -142,7 +137,7 @@ else
 	order by n.date_time desc 
 	  limit '.$start.','.$length;
 
-  $res02=mysql_query ($query);
+  $res02=mysql_query ($query) or die(mysql_error());
   echo '<div class="main">'.$pg_title;
 if (isset($_SESSION['auth']) && $_SESSION['auth']==1 /*&& $_SESSION['userType']!='преподаватель'*/) 
 {echo '<a href="admin_news.php?go=1" class=text title="'.$_SESSION['FIO'].'"> добавить  новость</a>';}
