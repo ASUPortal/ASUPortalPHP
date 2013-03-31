@@ -8,7 +8,7 @@
  */
 
 class CNewsItem extends CActiveModel{
-    protected $_TABLE = TABLE_NEWS;
+    protected $_table = TABLE_NEWS;
     protected $_author;
     public function relations() {
         return array(
@@ -18,6 +18,36 @@ class CNewsItem extends CActiveModel{
                 "storageField" => "user_id_insert",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getUser"
+            )
+        );
+    }
+    public function attributeLabels() {
+        return array(
+            "title" => "Заголовок новости",
+            "file" => "Текст новости",
+            "image" => "Прикрепленное фото",
+            "file_attach" => "Вложение",
+            "date_time" => "Дата создания"
+        );
+    }
+    public function validationRules() {
+        return array(
+            "required" => array(
+                "title",
+                "file",
+                "date_time"
+            )
+        );
+    }
+    public function fieldsProperty() {
+        return array(
+            'image' => array(
+                'type'  => FIELD_UPLOADABLE,
+                'upload_dir' => CORE_CWD.CORE_DS."images".CORE_DS."news".CORE_DS
+            ),
+            'file_attach' => array(
+                'type'  => FIELD_UPLOADABLE,
+                'upload_dir' => CORE_CWD.CORE_DS."news".CORE_DS."attachement".CORE_DS
             )
         );
     }
@@ -180,6 +210,7 @@ class CNewsItem extends CActiveModel{
             $result .= '</div>';
             $result .= '<div id="preview_'.$this->getId().'">';
             $result .= mb_substr($s, 0, 200);
+            $result .= '<div style="clear: both; "></div>';
             $result .= '<div class="asu_more" onclick="news_show_full('.$this->getId().');">Подробнее</div>';
             $result .= '</div>';
         } else {

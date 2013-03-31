@@ -64,11 +64,22 @@ class CRecordSet {
      * @return int
      */
     public function getPageSize() {
-        $this->_pageSize = 20;
+        if (is_null($this->_pageSize)) {
+            $this->_pageSize = 20;
+        }
         if (CRequest::getInt("page_size") !== 0) {
             $this->_pageSize = CRequest::getInt("page_size");
         }
         return $this->_pageSize;
+    }
+
+    /**
+     * Установить размер страницы
+     *
+     * @param $size
+     */
+    public function setPageSize($size) {
+        $this->_pageSize = $size;
     }
     /**
      * Номер текущей страницы

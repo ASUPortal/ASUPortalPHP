@@ -29,6 +29,7 @@ class CPublicNewsController extends CBaseController {
     }
     public function actionIndex() {
         $set = new CRecordSet();
+        $set->setPageSize(5);
         $query = new CQuery();
         $query->select("news.*")
             ->from(TABLE_NEWS." as news")

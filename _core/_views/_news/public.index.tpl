@@ -53,9 +53,7 @@
 {/block}
 
 {if (CSession::isAuth())}
-    {if (CSession::getCurrentUser()->hasRole("news_add"))}
-        {block name="asu_right"}
-            {include file="_news/public.index.right.tpl"}
-        {/block}
-    {/if}
+    {block name="asu_right"}
+        {include file="_news/public.index.right.tpl"}
+    {/block}
 {/if}

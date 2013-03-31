@@ -8,14 +8,10 @@
     </p>
 {/if}{/if}
 
-{if (CSession::isAuth())}
-    {if (CSession::getCurrentUser()->hasRole("news_add"))}
-        <p>
-            <a href="{$web_root}_modules/_news/?action=add">
-                <center>
-                    <img src="{$web_root}images/{$icon_theme}/32x32/actions/appointment-new.png"><br>
-                    Добавить новость
-                </center></a>
-        </p>
-    {/if}
-{/if}
+<p>
+    <a href="?action=add">
+        <center>
+            <img src="{$web_root}images/{$icon_theme}/32x32/actions/list-add.png">
+            Добавить
+        </center></a>
+</p>
