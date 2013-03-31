@@ -364,3 +364,13 @@ table th.vertical {
 .asu_right_home_widget {
     margin-bottom: 10px;
 }
+
+.asu_char_select {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.asu_char_select a {
+    text-decoration: none;
+}

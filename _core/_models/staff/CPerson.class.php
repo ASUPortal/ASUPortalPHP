@@ -124,6 +124,13 @@ class CPerson extends CActiveModel{
     public function getName() {
         return (string) $this->getRecord()->getItemValue("fio");
     }
+    public function getDisplayName() {
+        if (!CSettingsManager::getSettingValue("hide_personal_data")) {
+            return $this->getName();
+        } else {
+            return CSettingsManager::getSettingValue("hide_person_data_text");
+        }
+    }
     /**
      * Добавить человека в список подчиненных
      *

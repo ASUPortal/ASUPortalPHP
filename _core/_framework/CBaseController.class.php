@@ -65,7 +65,7 @@ class CBaseController {
         // $this->addCSSInclude("_modules/_help/help.css");
 
         // устанавливаем название страницы по умолчанию
-        $this->setPageTitle("");
+        // $this->setPageTitle("");
 
         $action = "action".$this->_action;
         if (method_exists($this, $action)) {

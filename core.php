@@ -55,6 +55,7 @@
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."acl".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."dashboard".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."configuration".CORE_DS,
+        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."library".CORE_DS,
         SMARTY_DIR,
         PHPMAILER_DIR,
         PRINT_ENGINE_WORD
@@ -191,6 +192,8 @@
     define("TABLE_USATU_ORDERS", "orders_dep");
     define("TABLE_USATU_ORDER_TYPES", "orders_dep_type");
     define("TABLE_NEWS", "news");
+    define("TABLE_LIBRARY_DOCUMENTS", "documents");
+    define("TABLE_LIBRARY_FILES", "files");
 
     // суффиксы таблиц доступа
     define("ACL_ENTRIES", "_access_entries");
