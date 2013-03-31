@@ -46,7 +46,7 @@ class CPublicLibraryController extends CBaseController{
          * Если есть пагинация, то тоже не стоит показывать
          * последние файлы
          */
-        if (!is_null(CRequest::getInt("page"))) {
+        if (CRequest::getInt("page") !== 0) {
             $showLatest = false;
         }
         /**
