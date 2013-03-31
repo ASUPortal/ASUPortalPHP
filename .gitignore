@@ -3,5 +3,5 @@ _core/_external/smarty/compile/*
 *.odt
 sql_connect_credentials.php
 .idea
-
 *.zip
+_core/_cache/*

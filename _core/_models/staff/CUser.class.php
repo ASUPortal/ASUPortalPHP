@@ -46,6 +46,24 @@ class CUser extends CActiveModel {
         }
         return $this->_roles;
     }
+
+    /**
+     * Проверяем, обладает ли пользователь указанной ролью.
+     *
+     * @param $roleToFind
+     * @return bool
+     */
+    public function hasRole($roleToFind) {
+        $hasRole = false;
+        foreach ($this->getRoles()->getItems() as $role) {
+            if (!is_null($role->alias)) {
+                if (mb_strtoupper($role->alias) == mb_strtoupper($roleToFind)) {
+                    $hasRole = true;
+                }
+            }
+        }
+        return $hasRole;
+    }
     /**
      * Группы, в которых пользователь состоит
      *

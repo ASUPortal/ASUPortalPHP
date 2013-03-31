@@ -338,3 +338,11 @@ table th.vertical {
     color: red;
     font-weight: bold;
 }
+
+.asu_more {
+    border: 1px solid #000000;
+    padding: 3px;
+    margin-top: 5px;
+    background: #eeeeee;
+    cursor: pointer;
+}

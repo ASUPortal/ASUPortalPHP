@@ -46,6 +46,7 @@
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."staff".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."taxonomy".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."calendar".CORE_DS,
+        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."news".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."state_examination".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."rating".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."examination".CORE_DS,
@@ -189,6 +190,7 @@
     define("TABLE_GENDERS", "pol");
     define("TABLE_USATU_ORDERS", "orders_dep");
     define("TABLE_USATU_ORDER_TYPES", "orders_dep_type");
+    define("TABLE_NEWS", "news");
 
     // суффиксы таблиц доступа
     define("ACL_ENTRIES", "_access_entries");
@@ -234,3 +236,11 @@
     } else {
         define("ICON_THEME", CSettingsManager::getSettingValue("icon_theme"));
     }
+    /**
+     * Адрес подсистемы масштабирования изображений
+     */
+    define("IMAGE_RESIZER_URL", WEB_ROOT."_modules/_thumbnails/index.php");
+    /**
+     * Роли пользователей
+     */
+    define("ROLE_NEWS_ADD", "news_add");
