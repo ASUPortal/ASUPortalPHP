@@ -52,8 +52,8 @@
     {/if}
 {/block}
 
-{if (CSession::isAuth())}
-    {block name="asu_right"}
+{block name="asu_right"}
+    {if (CSession::isAuth())}
         {include file="_news/public.index.right.tpl"}
-    {/block}
-{/if}
+    {/if}
+{/block}

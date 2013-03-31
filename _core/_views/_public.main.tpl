@@ -84,12 +84,15 @@
             {else}
             <div class="asu_center_container center_wap" id="asu_center_container">
                 {/if}
-                <div class="asu_right align_right">
+                <div class="asu_right align_right asu_right_home">
                     {block name="asu_right"}
+                    {/block}
+                    {block name="asu_right_default_widgets"}
+                        {include file="_public.right.tpl"}
                     {/block}
                 </div>
 
-                <div class="asu_center">
+                <div class="asu_center asu_center_home">
                     {if (CSession::isAuth())}
                         {if (CSession::getCurrentUser()->getStatus() == "преподаватель")}
                             {include file="_menumanager/menu.adminMenu.tpl"}

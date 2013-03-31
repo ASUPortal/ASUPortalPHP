@@ -346,3 +346,21 @@ table th.vertical {
     background: #eeeeee;
     cursor: pointer;
 }
+
+.asu_center_home {
+    margin-right: 205px;
+}
+
+.asu_right_home {
+    width: 200px;
+}
+
+.asu_right_home_block {
+    width: 95px;
+    float: left;
+    margin-bottom: 10px;
+}
+
+.asu_right_home_widget {
+    margin-bottom: 10px;
+}
