@@ -37,6 +37,7 @@ class CGrantsController extends CBaseController{
             $grants->add($grant->getId(), $grant);
         }
         $this->setData("grants", $grants);
+        $this->setData("paginator", $set->getPaginator());
         $this->renderView("_grants/index.tpl");
     }
     public function actionAdd() {

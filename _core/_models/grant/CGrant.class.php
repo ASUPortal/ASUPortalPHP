@@ -9,4 +9,10 @@
 
 class CGrant extends CActiveModel{
     protected $_table = TABLE_GRANTS;
+    public function attributeLabels() {
+        return array(
+            "title" => "Название",
+            "comment" => "Комментарий"
+        );
+    }
 }
