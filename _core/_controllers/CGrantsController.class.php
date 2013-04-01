@@ -25,16 +25,45 @@ class CGrantsController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-
+        $set = new CRecordSet();
+        $query = new CQuery();
+        $query->select("grant.*")
+            ->from(TABLE_GRANTS." as grant")
+            ->order("grant.id desc");
+        $set->setQuery($query);
+        $grants = new CArrayList();
+        foreach ($set->getPaginated()->getItems() as $ar) {
+            $grant = new CGrant($ar);
+            $grants->add($grant->getId(), $grant);
+        }
+        $this->setData("grants", $grants);
+        $this->renderView("_grants/index.tpl");
     }
     public function actionAdd() {
-
+        $grant = new CGrant();
+        $this->setData("grant", $grant);
+        $this->renderView("_grants/add.tpl");
     }
     public function actionEdit() {
-
+        $grant = CGrantManager::getGrant(CRequest::getInt("id"));
+        $this->setData("grant", $grant);
+        $this->renderView("_grants/edit.tpl");
     }
     public function actionDelete() {
-
+        $grant = CGrantManager::getGrant(CRequest::getInt("id"));
+        $grant->remove();
+        $this->redirect("?action=index");
+    }
+    public function actionSave() {
+        $grant = new CGrant();
+        $grant->setAttributes(CRequest::getArray($grant::getClassName()));
+        if ($grant->validate()) {
+            $grant->save();
+            $this->redirect("?action=index");
+            return true;
+        }
+        $this->setData("grant", $grant);
+        $this->renderView("_grants/edit.tpl");
     }
     public function actionSearch() {
 

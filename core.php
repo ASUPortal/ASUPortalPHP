@@ -56,6 +56,7 @@
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."dashboard".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."configuration".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."library".CORE_DS,
+        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."grant".CORE_DS,
         SMARTY_DIR,
         PHPMAILER_DIR,
         PRINT_ENGINE_WORD
@@ -194,6 +195,7 @@
     define("TABLE_NEWS", "news");
     define("TABLE_LIBRARY_DOCUMENTS", "documents");
     define("TABLE_LIBRARY_FILES", "files");
+    define("TABLE_GRANTS", "grants");
 
     // суффиксы таблиц доступа
     define("ACL_ENTRIES", "_access_entries");
