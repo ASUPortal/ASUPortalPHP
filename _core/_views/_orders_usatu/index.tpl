@@ -44,7 +44,10 @@
         <td>
             <a href="?action=edit&id={$order->getId()}">№{$order->num} от {$order->date}</a>
         </td>
-        <td>{$order->title}</td>
+        <td>
+            <p><b>{$order->title}</b></p>
+            <p>{$order->text}</p>
+        </td>
         <td>{$order->comment}</td>
     </tr>
     {/foreach}
