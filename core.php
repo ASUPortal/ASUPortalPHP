@@ -250,3 +250,7 @@
      * Роли пользователей
      */
     define("ROLE_NEWS_ADD", "news_add");
+    /**
+     * Адрес страницы авторизации
+     */
+    define("NO_ACCESS_URL", WEB_ROOT."/p_administration.php");
