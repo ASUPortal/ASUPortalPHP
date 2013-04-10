@@ -196,6 +196,7 @@
     define("TABLE_LIBRARY_DOCUMENTS", "documents");
     define("TABLE_LIBRARY_FILES", "files");
     define("TABLE_GRANTS", "grants");
+    define("TABLE_TAXONOMIES_LEGACY", "sprav_links");
 
     // суффиксы таблиц доступа
     define("ACL_ENTRIES", "_access_entries");

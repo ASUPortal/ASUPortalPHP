@@ -25,7 +25,13 @@ class CTaxonomyController extends CBaseController {
     public function actionIndex(){
         $taxonomy = CTaxonomyManager::getTaxonomy(CRequest::getInt("id"));
         if (is_null($taxonomy)) {
-            $this->setData("taxonomies", CTaxonomyManager::getTaxonomiesObjectList());
+            $taxonomies = CTaxonomyManager::getTaxonomiesObjectList();
+            /**
+             * Получаем список унаследованных таксономий
+             */
+            $legacy = CTaxonomyManager::getLegacyTaxonomiesObjectsList();
+            $this->setData("legacy", $legacy);
+            $this->setData("taxonomies", $taxonomies);
             $this->renderView("_taxonomy/list.tpl");
         } else {
             $this->addJQInlineInclude('

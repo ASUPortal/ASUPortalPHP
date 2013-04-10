@@ -33,6 +33,7 @@ class CTaxonomyManager {
     private static $_cacheLanguages = null;
     private static $_cacheDiplomConfirmations = null;
     private static $_cachePracticePlaces = null;
+    private static $_cacheLegacyTaxonomies = null;
     /**
      * Кэш должностей
      *
@@ -731,5 +732,30 @@ class CTaxonomyManager {
             $res[$type->getId()] = $type->getValue();
         }
         return $res;
+    }
+
+    /**
+     * Кэш унаследованных таксономий
+     *
+     * @return CArrayList
+     */
+    private static function getCacheLegacyTaxonomies() {
+        if (is_null(self::$_cacheLegacyTaxonomies)) {
+            self::$_cacheLegacyTaxonomies = new CArrayList();
+            foreach (CActiveRecordProvider::getAllFromTable(TABLE_TAXONOMIES_LEGACY, "comment asc")->getItems() as $ar) {
+                $legacy = new CTaxonomyLegacy($ar);
+                self::$_cacheLegacyTaxonomies->add($legacy->getId(), $legacy);
+            }
+        }
+        return self::$_cacheLegacyTaxonomies;
+    }
+
+    /**
+     * Все унаследованные таксономии
+     *
+     * @return CArrayList
+     */
+    public static function getLegacyTaxonomiesObjectsList() {
+        return self::getCacheLegacyTaxonomies();
     }
 }

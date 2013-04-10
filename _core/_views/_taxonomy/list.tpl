@@ -18,6 +18,14 @@
             <td>{$taxonomy->getTerms()->getCount()}</td>
         </tr>
     {/foreach}
+    {foreach $legacy->getItems() as $taxonomy}
+        <tr>
+            <td></td>
+            <td>{counter}</td>
+            <td><a href="?action=legacy&id={$taxonomy->getId()}">{$taxonomy->getName()}</a></td>
+            <td> - </td>
+        </tr>
+    {/foreach}
 </table>
 {/block}
 
