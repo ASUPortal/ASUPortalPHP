@@ -27,9 +27,9 @@ class CGrantsController extends CBaseController{
     public function actionIndex() {
         $set = new CRecordSet();
         $query = new CQuery();
-        $query->select("grant.*")
-            ->from(TABLE_GRANTS." as grant")
-            ->order("grant.id desc");
+        $query->select("gr.*")
+            ->from(TABLE_GRANTS." as gr")
+            ->order("gr.id desc");
         $set->setQuery($query);
         $grants = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
