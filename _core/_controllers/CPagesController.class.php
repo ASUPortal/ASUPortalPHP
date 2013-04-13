@@ -30,7 +30,7 @@ class CPagesController extends CBaseController{
         $set->setQuery($query);
         $query->select("page.*")
             ->from(TABLE_PAGES." as page");
-        if (!CSession::getCurrentUser()->hasRole("pages_admin")) {
+        if (!CSession::getCurrentUser()->hasRole(ROLE_PAGES_ADMIN)) {
             $query->condition("page.user_id_insert = ".CSession::getCurrentUser()->getId());
         }
         $pages = new CArrayList();

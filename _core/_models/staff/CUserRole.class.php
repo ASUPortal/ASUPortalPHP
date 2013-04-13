@@ -37,7 +37,6 @@ class CUserRole extends CActiveModel {
             "required" => array(
                 "name",
                 "alias",
-                "url"
             )
         );
     }

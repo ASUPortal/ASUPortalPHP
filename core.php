@@ -257,3 +257,9 @@
      * Адрес страницы авторизации
      */
     define("NO_ACCESS_URL", WEB_ROOT."/p_administration.php");
+    /**
+     * Псевдонимы ролей пользователей
+     *
+     * ROLE_PAGES_ADMIN - администратор пользовательских страниц
+     */
+    define("ROLE_PAGES_ADMIN", "pages_admin");
