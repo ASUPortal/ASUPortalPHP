@@ -34,6 +34,7 @@ class CTaxonomyManager {
     private static $_cacheDiplomConfirmations = null;
     private static $_cachePracticePlaces = null;
     private static $_cacheLegacyTaxonomies = null;
+    private static $_cacheLegacyTerms = null;
     /**
      * Кэш должностей
      *
@@ -755,7 +756,57 @@ class CTaxonomyManager {
      *
      * @return CArrayList
      */
-    public static function getLegacyTaxonomiesObjectsList() {
+    public static function getLegacyTaxonomiesObjects() {
         return self::getCacheLegacyTaxonomies();
+    }
+
+    /**
+     * @return array
+     */
+    public static function getLegacyTaxonomiesObjectsList() {
+        $res = array();
+        foreach (self::getLegacyTaxonomiesObjects()->getItems() as $taxonomy) {
+            $res[$taxonomy->getId()] = $taxonomy->getName();
+        }
+        return $res;
+    }
+
+    /**
+     * Унаследованная таксономию по ключу
+     *
+     * @param $id
+     * @return CTaxonomyLegacy
+     */
+    public static function getLegacyTaxonomy($id) {
+        return self::getCacheLegacyTaxonomies()->getItem($id);
+    }
+
+    /**
+     * Кэш терминов
+     *
+     * @return CArrayList|null
+     */
+    private static function getCacheLegacyTerms() {
+        if (is_null(self::$_cacheLegacyTerms)) {
+            self::$_cacheLegacyTerms = new CArrayList();
+        }
+        return self::$_cacheLegacyTerms;
+    }
+
+    /**
+     * Получить термин из унаследованной таксономии
+     *
+     * @param $termId
+     * @param $taxonomyId
+     * @return CTerm
+     */
+    public static function getLegacyTerm($termId, $taxonomyId) {
+        if (!self::getCacheLegacyTerms()->hasElement($termId."_".$taxonomyId)) {
+            $taxonomy = self::getLegacyTaxonomy($taxonomyId);
+            foreach ($taxonomy->getTerms()->getItems() as $term) {
+                self::getCacheLegacyTerms()->add($term->getId()."_".$taxonomy->getId(), $term);
+            }
+        }
+        return self::getCacheLegacyTerms()->getItem($termId."_".$taxonomyId);
     }
 }

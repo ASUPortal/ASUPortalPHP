@@ -29,7 +29,7 @@ class CTaxonomyController extends CBaseController {
             /**
              * Получаем список унаследованных таксономий
              */
-            $legacy = CTaxonomyManager::getLegacyTaxonomiesObjectsList();
+            $legacy = CTaxonomyManager::getLegacyTaxonomiesObjects();
             $this->setData("legacy", $legacy);
             $this->setData("taxonomies", $taxonomies);
             $this->renderView("_taxonomy/list.tpl");
@@ -120,5 +120,26 @@ class CTaxonomyController extends CBaseController {
         }
         $this->setData("term", $term);
         $this->renderView("_taxonomy/editTerm.tpl");
+    }
+
+    /**
+     * Просмотр таксономии из унаследованного справочника
+     */
+    public function actionLegacy() {
+        $this->addJQInlineInclude('
+                $("#taxonomy_id").change(function(){
+                    if ($("#taxonomy_id").val() != 0) {
+                        window.location.href = "?action=legacy&id=" + $("#taxonomy_id").val();
+                    }
+                });
+            ');
+        $taxonomy = CTaxonomyManager::getLegacyTaxonomy(CRequest::getInt("id"));
+        $this->setData("taxonomy", $taxonomy);
+        $this->renderView("_taxonomy/legacy.tpl");
+    }
+    public function actionEditLegacyTerm() {
+        $term = CTaxonomyManager::getLegacyTerm(CRequest::getInt("id"), CRequest::getInt("taxonomy_id"));
+        $this->setData("term", $term);
+        $this->renderView("_taxonomy/legacyEdit.tpl");
     }
 }

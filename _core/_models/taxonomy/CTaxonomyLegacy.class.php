@@ -30,6 +30,7 @@ class CTaxonomyLegacy extends CTaxonomy{
             $this->_cacheTerms = new CArrayList();
             foreach (CActiveRecordProvider::getAllFromTable($this->getTableName())->getItems() as $ar) {
                 $term = new CTerm($ar);
+                $term->setTable($this->getTableName());
                 $this->_cacheTerms->add($term->getId(), $term);
             }
         }
