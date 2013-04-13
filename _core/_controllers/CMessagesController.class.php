@@ -19,54 +19,97 @@ class CMessagesController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
-        $messages = new CRecordSet();
         /**
-         * В зависимости от того, какая у пользователя открыта закладка,
-         * ту папку и листаем. Дефолтная - входящие
+         * Считаем, что по умолчанию пользователь хочет
+         * посмотреть свои входящие
          */
-        $folder = "in";
-        if (CRequest::getString("folder") !== "") {
-            $folder = CRequest::getString("folder");
+        $this->actionInbox();
+    }
+    public function actionInbox() {
+        $set = new CRecordSet();
+        $query = new CQuery();
+        $set->setQuery($query);
+        $query->select("mail.*")
+            ->from(TABLE_MESSAGES." as mail")
+            ->condition("mail.to_user_id = ".CSession::getCurrentUser()->getId())
+            ->order("mail.date_send desc");
+        $messages = new CArrayList();
+        foreach ($set->getPaginated()->getItems() as $ar) {
+            $mail = new CMessage($ar);
+            $messages->add($mail->getId(), $mail);
         }
-        /**
-         * Запрос от открытой вкладки пагинируем нужные записи
-         */
-        if ($folder = "in") {
-            $inQuery = new CQuery();
-            $inQuery->select("mail.*")
-                ->from(TABLE_MESSAGES." as mail")
-                ->condition("to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'");
-            $messages->setQuery($inQuery);
-        } elseif ($folder = "out") {
-            $outQuery = new CQuery();
-            $outQuery->select("mail.*")
-                ->from(TABLE_MESSAGES." as mail")
-                ->condition("from_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'out'");
-            $messages->setQuery($outQuery);
-        } elseif ($folder = "draft") {
-            $draftQuery = new CQuery();
-            $draftQuery->select("mail.*")
-                ->from(TABLE_MESSAGES." as mail")
-                ->condition("from_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'draft'");
-            $messages->setQuery($draftQuery);
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->addCSSInclude("_modules/_redactor/redactor.css");
+        $this->addJSInclude("_modules/_redactor/redactor.min.js");
+        $message = new CMessage();
+        $message->from_user_id = CSession::getCurrentUser()->getId();
+        $this->setData("message", $message);
+        $this->setData("messages", $messages);
+        $this->setData("paginator", $set->getPaginator());
+        $this->renderView("_messages/inbox.tpl");
+    }
+    public function actionOutbox() {
+        $set = new CRecordSet();
+        $query = new CQuery();
+        $set->setQuery($query);
+        $query->select("mail.*")
+            ->from(TABLE_MESSAGES." as mail")
+            ->condition("mail.from_user_id = ".CSession::getCurrentUser()->getId())
+            ->order("mail.date_send desc");
+        $messages = new CArrayList();
+        foreach ($set->getPaginated()->getItems() as $ar) {
+            $mail = new CMessage($ar);
+            $messages->add($mail->getId(), $mail);
         }
-        /**
-         * Получаем реальные сообщения
-         */
-        $mails = new CArrayList();
-        foreach ($messages->getPaginated()->getItems() as $record) {
-            $mail = new CMessage(new CActiveRecord($record));
-            $mails->add($mail->getId(), $mail);
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->addCSSInclude("_modules/_redactor/redactor.css");
+        $this->addJSInclude("_modules/_redactor/redactor.min.js");
+        $message = new CMessage();
+        $message->from_user_id = CSession::getCurrentUser()->getId();
+        $this->setData("message", $message);
+        $this->setData("messages", $messages);
+        $this->setData("paginator", $set->getPaginator());
+        $this->renderView("_messages/outbox.tpl");
+    }
+    public function actionView() {
+        $mail = CStaffManager::getMessage(CRequest::getInt("id"));
+        $isMy = false;
+        if (!is_null($mail->getSender())) {
+            if ($mail->getSender()->getId() == CSession::getCurrentPerson()->getId()) {
+                $isMy = true;
+            }
         }
-        /**
-         * Все отдаем в рисовалку
-         */
-        $this->setData("folder", $folder);
-        $this->setData("messages", $mails);
-        $this->setData("paginator", $messages->getPaginator());
-        /**
-         * Рисуем
-         */
-        $this->renderView("_messages/index.tpl");
+        if (!is_null($mail->getRecipient())) {
+            if ($mail->getRecipient()->getId() == CSession::getCurrentPerson()->getId()) {
+                $isMy = true;
+            }
+        }
+        if (!$isMy) {
+            exit;
+        }
+        if (!$mail->isRead()) {
+            if (!is_null($mail->getRecipient())) {
+                if ($mail->getRecipient()->getId() == CSession::getCurrentPerson()->getId()) {
+                    $mail->read_status = 1;
+                    $mail->save();
+                }
+            }
+        }
+        $this->setData("mail", $mail);
+        $this->renderView("_messages/view.tpl");
+    }
+    public function actionSend() {
+        $mail = new CMessage();
+        $mail->setAttributes(CRequest::getArray($mail::getClassName()));
+        $mail->date_send = date("Y-m-d H:i:s");
+        if ($mail->validate()) {
+            $mail->save();
+            $this->redirect("?action=outbox#tab-outbox");
+            return true;
+        }
+        $this->setData("message", $mail);
+        $this->renderView("_messages/edit.tpl");
     }
 }

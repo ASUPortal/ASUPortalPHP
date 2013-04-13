@@ -5,3 +5,4 @@ sql_connect_credentials.php
 .idea
 *.zip
 _core/_cache/*
+f_mails/*
