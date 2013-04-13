@@ -29,7 +29,9 @@ class CPublicPagesController extends CBaseController{
     }
     public function actionView() {
         $page = CPageManager::getPage(CRequest::getInt("id"));
-        $this->setData("page", $page);
-        $this->renderView("_pages/public.view.tpl");
+        if (!is_null($page)) {
+            $this->setData("page", $page);
+            $this->renderView("_pages/public.view.tpl");
+        }
     }
 }
