@@ -519,7 +519,7 @@ class CStaffManager{
             self::$_cacheRoles = new CArrayList();
             // инициализируем все сразу, иначе там 100500 запросов делается на
             // каждого пользователя, а это совсем не комильфо
-            foreach (CActiveRecordProvider::getAllFromTable(TABLE_USER_ROLES)->getItems() as $ar) {
+            foreach (CActiveRecordProvider::getAllFromTable(TABLE_USER_ROLES, "name asc")->getItems() as $ar) {
                 $role = new CUserRole($ar);
                 self::$_cacheRoles->add($role->getId(), $role);
             }

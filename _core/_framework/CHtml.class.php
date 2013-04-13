@@ -109,9 +109,24 @@ class CHtml {
      * @param string $html
      */
     public static function activeDropDownList($name, CModel $model, $values, $id = "", $class = "", $html = "", $multiple_key = "") {
+        /**
+         * Безумно полезная штука для работы со связанными
+         * моделями. Если в названии поля есть скобки, то производится
+         * разбор вида подмодель[ее поле]
+         */
+        $submodelName = "";
+        if (strpos($name, "[") !== false) {
+            $submodelName = substr($name, 0, strpos($name, "["));
+            $name = substr($name, strpos($name, "[") + 1);
+            $name = substr($name, 0, strlen($name) - 1);
+            $model = $model->$submodelName;
+        }
         $field = $model::getClassName();
         if ($multiple_key !== "") {
             $field .= "[".$multiple_key."]";
+        }
+        if ($submodelName !== "") {
+            $field .= "[".$submodelName."]";
         }
         $field .= "[".$name."]";
         $fieldRequired = false;
@@ -173,9 +188,24 @@ class CHtml {
      * @param CActiveModel $model
      */
     public static function activeHiddenField($name, CModel $model, $multiple_key = "") {
+        /**
+         * Безумно полезная штука для работы со связанными
+         * моделями. Если в названии поля есть скобки, то производится
+         * разбор вида подмодель[ее поле]
+         */
+        $submodelName = "";
+        if (strpos($name, "[") !== false) {
+            $submodelName = substr($name, 0, strpos($name, "["));
+            $name = substr($name, strpos($name, "[") + 1);
+            $name = substr($name, 0, strlen($name) - 1);
+            $model = $model->$submodelName;
+        }
         $field = $model::getClassName();
         if ($multiple_key !== "") {
             $field .= "[".$multiple_key."]";
+        }
+        if ($submodelName !== "") {
+            $field .= "[".$submodelName."]";
         }
         $field .= "[".$name."]";
         self::hiddenField($field, $model->$name);
@@ -217,9 +247,24 @@ class CHtml {
      * @param string $html
      */
     public static function activeTextField($name, CModel $model, $id = "", $class = "", $html = "", $multiple_key = "") {
+        /**
+         * Безумно полезная штука для работы со связанными
+         * моделями. Если в названии поля есть скобки, то производится
+         * разбор вида подмодель[ее поле]
+         */
+        $submodelName = "";
+        if (strpos($name, "[") !== false) {
+            $submodelName = substr($name, 0, strpos($name, "["));
+            $name = substr($name, strpos($name, "[") + 1);
+            $name = substr($name, 0, strlen($name) - 1);
+            $model = $model->$submodelName;
+        }
         $field = $model::getClassName();
         if ($multiple_key !== "") {
             $field .= "[".$multiple_key."]";
+        }
+        if ($submodelName !== "") {
+            $field .= "[".$submodelName."]";
         }
         $field .= "[".$name."]";
         $fieldRequired = false;
@@ -269,6 +314,25 @@ class CHtml {
             </script>';
     }
     public static function activeTextBox($name, CModel $model, $id = "", $class = "", $html = "", $multiple_key = "") {
+        /**
+         * Безумно полезная штука для работы со связанными
+         * моделями. Если в названии поля есть скобки, то производится
+         * разбор вида подмодель[ее поле]
+         */
+        $submodelName = "";
+        if (strpos($name, "[") !== false) {
+            $submodelName = substr($name, 0, strpos($name, "["));
+            $name = substr($name, strpos($name, "[") + 1);
+            $name = substr($name, 0, strlen($name) - 1);
+            $model = $model->$submodelName;
+        }
+        $field = $model::getClassName();
+        if ($multiple_key !== "") {
+            $field .= "[".$multiple_key."]";
+        }
+        if ($submodelName !== "") {
+            $field .= "[".$submodelName."]";
+        }
         $field = $model::getClassName();
         if ($multiple_key !== "") {
             $field .= "[".$multiple_key."]";
@@ -320,6 +384,17 @@ class CHtml {
      * @param CActiveModel $model
      */
     public static function activeLabel($name, CModel $model) {
+        /**
+         * Безумно полезная штука для работы со связанными
+         * моделями. Если в названии поля есть скобки, то производится
+         * разбор вида подмодель[ее поле]
+         */
+        if (strpos($name, "[") !== false) {
+            $modelName = substr($name, 0, strpos($name, "["));
+            $name = substr($name, strpos($name, "[") + 1);
+            $name = substr($name, 0, strlen($name) - 1);
+            $model = $model->$modelName;
+        }
         if (array_key_exists($name, $model->attributeLabels())) {
             $labels = $model->attributeLabels();
             $field = $model::getClassName()."[".$name."]";
@@ -389,8 +464,24 @@ class CHtml {
         echo '<input type="checkbox" name="'.$name.'" '.$checked.' '.$inline.'>';
     }
     public static function activeCheckBoxGroup($name, CModel $model, $values = null) {
+        /**
+         * Безумно полезная штука для работы со связанными
+         * моделями. Если в названии поля есть скобки, то производится
+         * разбор вида подмодель[ее поле]
+         */
+        $submodelName = "";
+        if (strpos($name, "[") !== false) {
+            $submodelName = substr($name, 0, strpos($name, "["));
+            $name = substr($name, strpos($name, "[") + 1);
+            $name = substr($name, 0, strlen($name) - 1);
+            $model = $model->$submodelName;
+        }
         foreach ($values as $key=>$value) {
-            $inputName = $model::getClassName()."[".$name."][]";
+            $inputName = $model::getClassName();
+            if ($submodelName !== "") {
+                $inputName .= "[".$submodelName."]";
+            }
+            $inputName .= "[".$name."][]";
             echo '<input type="checkbox" name="'.$inputName.'"';
             if (is_array($model->$name)) {
                 if (array_key_exists($key, $model->$name)) {
@@ -406,7 +497,8 @@ class CHtml {
                     }
                 }
             } else {
-                die("Какой-то неподдерживаемый тип данных для построение списка ".get_class($model->$name));
+                echo ("Какой-то неподдерживаемый тип данных для построение списка ".get_class($model->$name));
+                exit;
             }
             echo ' value="'.$key.'">'.$value.'<br>';
         }
