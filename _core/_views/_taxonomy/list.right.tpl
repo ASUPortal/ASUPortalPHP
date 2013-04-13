@@ -14,3 +14,10 @@
         Добавить таксономию
     </center></a>
 </p>
+
+<p>
+    <a href="?action=addLegacyTaxonomy"><center>
+        <img src="{$web_root}images/{$icon_theme}/32x32/actions/document-save-as.png">
+        Зарегистрировать унаследованную таксономию
+    </center></a>
+</p>

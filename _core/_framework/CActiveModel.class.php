@@ -305,16 +305,17 @@ class CActiveModel extends CModel{
         // просто setItemValue() вызываем только в случае
         // простых типов данных
         if (!is_object($value)) {
-            $this->getRecord()->setItemValue($name, $value);
-
-            if (!array_key_exists($name, $this->getRecord()->getItems())) {
-                $trace = debug_backtrace();
-                trigger_error(
-                    'Неопределенное свойство в __set(): ' . $name .
-                        ' в файле ' . $trace[0]['file'] .
-                        ' на строке ' . $trace[0]['line'],
-                    E_USER_NOTICE);
-                return null;
+            if ($this->getDbTable()->getFields()->hasElement($name)) {
+                $this->getRecord()->setItemValue($name, $value);
+                if (!array_key_exists($name, $this->getRecord()->getItems())) {
+                    $trace = debug_backtrace();
+                    trigger_error(
+                        'Неопределенное свойство в __set(): ' . $name .
+                            ' в файле ' . $trace[0]['file'] .
+                            ' на строке ' . $trace[0]['line'],
+                        E_USER_NOTICE);
+                    return null;
+                }
             }
         } else {
             // пришел объект

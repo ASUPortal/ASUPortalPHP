@@ -298,7 +298,7 @@ class CTaxonomyManager {
     public static function getCacheTaxonomy() {
         if (is_null(self::$_cacheTaxonomy)) {
             self::$_cacheTaxonomy = new CArrayList();
-            foreach (CActiveRecordProvider::getAllFromTable(TABLE_TAXONOMY)->getItems() as $item) {
+            foreach (CActiveRecordProvider::getAllFromTable(TABLE_TAXONOMY, "name asc")->getItems() as $item) {
                 $taxonomy = new CTaxonomy($item);
                 self::$_cacheTaxonomy->add($taxonomy->getAlias(), $taxonomy);
                 self::$_cacheTaxonomy->add($taxonomy->getId(), $taxonomy);
@@ -746,6 +746,7 @@ class CTaxonomyManager {
             foreach (CActiveRecordProvider::getAllFromTable(TABLE_TAXONOMIES_LEGACY, "comment asc")->getItems() as $ar) {
                 $legacy = new CTaxonomyLegacy($ar);
                 self::$_cacheLegacyTaxonomies->add($legacy->getId(), $legacy);
+                self::$_cacheLegacyTaxonomies->add($legacy->getAlias(), $legacy);
             }
         }
         return self::$_cacheLegacyTaxonomies;
@@ -757,7 +758,11 @@ class CTaxonomyManager {
      * @return CArrayList
      */
     public static function getLegacyTaxonomiesObjects() {
-        return self::getCacheLegacyTaxonomies();
+        $res = new CArrayList();
+        foreach (self::getCacheLegacyTaxonomies()->getItems() as $t) {
+            $res->add($t->getId(), $t);
+        }
+        return $res;
     }
 
     /**

@@ -9,6 +9,7 @@
         <th align="center">№</th>
         <th align="center">Название</th>
         <th align="center">Терминов в таксономии</th>
+        <th>Псевдоним</th>
     </tr>
     {foreach $taxonomies->getItems() as $taxonomy}
         <tr>
@@ -16,14 +17,16 @@
             <td>{counter}</td>
             <td><a href="?action=index&id={$taxonomy->id}">{$taxonomy->getName()}</a></td>
             <td>{$taxonomy->getTerms()->getCount()}</td>
+            <td>{$taxonomy->getAlias()}</td>
         </tr>
     {/foreach}
     {foreach $legacy->getItems() as $taxonomy}
         <tr>
-            <td></td>
+            <td><a href="?action=deleteLegacyTaxonomy&id={$taxonomy->id}" onclick="if (!confirm('Вы действительно хотите удалить таксономию {$taxonomy->getName()}?')){ return false }"><img src="{$web_root}images/todelete.png"></a></td>
             <td>{counter}</td>
             <td><a href="?action=legacy&id={$taxonomy->getId()}">{$taxonomy->getName()}</a></td>
             <td> - </td>
+            <td>{$taxonomy->getAlias()}</td>
         </tr>
     {/foreach}
 </table>

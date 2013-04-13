@@ -11,6 +11,13 @@
 class CTaxonomy extends CActiveModel {
     protected $_table = TABLE_TAXONOMY;
     protected $_cacheTerms = null;
+    public function attributeLabels() {
+        return array(
+            "name" => "Название",
+            "alias" => "Псевдоним",
+            "terms" => "Термины для добавления (по одному на строке)"
+        );
+    }
     /**
      * Кэш терминов словаря
      *
