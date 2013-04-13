@@ -767,9 +767,9 @@ class CStaffManager{
     public static function getBirthdaysThisWeek() {
         if (is_null(self::$_bDaysThisWeek)) {
             self::$_bDaysThisWeek = new CArrayList();
-            $start = date("d.m.Y", strtotime("this week"))."<br>";
+            $start = date("d.m.Y", strtotime("this week"));
             $end = date("d.m.Y", strtotime("this week +6 days"));
-            $condition = 'STR_TO_DATE(CONCAT(LEFT(date_rogd, 5), "2012"), "%d.%m.%Y") BETWEEN STR_TO_DATE("17.12.2012", "%d.%m.%Y") AND STR_TO_DATE("23.12.2012", "%d.%m.%Y")';
+            $condition = 'STR_TO_DATE(CONCAT(LEFT(date_rogd, 5), "'.date("Y").'"), "%d.%m.%Y") BETWEEN STR_TO_DATE("'.$start.'", "%d.%m.%Y") AND STR_TO_DATE("'.$end.'", "%d.%m.%Y")';
             foreach (CActiveRecordProvider::getWithCondition(TABLE_PERSON, $condition)->getItems() as $item) {
                 $person = new CPerson($item);
                 self::$_bDaysThisWeek->add($person->getId(), $person);
