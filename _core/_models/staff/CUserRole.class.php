@@ -9,6 +9,7 @@
 class CUserRole extends CActiveModel {
     protected $_table = TABLE_USER_ROLES;
     protected $_menu = null;
+    public $hidden = 0;
     public function getName() {
         return $this->getRecord()->getItemValue("name");
     }
@@ -27,7 +28,8 @@ class CUserRole extends CActiveModel {
             "alias" => "Псевдоним задачи",
             "url" => "Адрес",
             "menu_name_id" => "Группа меню",
-            "comment" => "Комментарий"
+            "comment" => "Комментарий",
+            "hidden" => "Не показывать в списке задач"
         );
     }
     public function validationRules() {
@@ -35,7 +37,6 @@ class CUserRole extends CActiveModel {
             "required" => array(
                 "name",
                 "alias",
-                "url"
             )
         );
     }
