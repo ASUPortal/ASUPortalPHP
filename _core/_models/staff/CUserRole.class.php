@@ -15,12 +15,40 @@ class CUserRole extends CActiveModel {
     public function relations() {
         return array(
             "menu" => array(
-                "relationPower" => RELATION_HAS_ONE,
+                "relationPower" => RELATION_COMPUTED,
                 "storageProperty" => "_menu",
-                "storageField" => "menu_name_id",
-                "managerClass" => "CTaxonomyManager",
-                "managerGetObject" => "getTitle"
+                "relationFunction" => "getMenu"
             )
         );
+    }
+    public function attributeLabels() {
+        return array(
+            "name" => "Название задачи",
+            "alias" => "Псевдоним задачи",
+            "url" => "Адрес",
+            "menu_name_id" => "Группа меню",
+            "comment" => "Комментарий"
+        );
+    }
+    public function validationRules() {
+        return array(
+            "required" => array(
+                "name",
+                "alias",
+                "url"
+            )
+        );
+    }
+
+    /**
+     * Пункт меню, к которому привязана задача
+     *
+     * @return CTerm
+     */
+    public function getMenu() {
+        if (is_null($this->_menu)) {
+            $this->_menu = CTaxonomyManager::getLegacyTerm($this->menu_name_id, "task_menu_names");
+        }
+        return $this->_menu;
     }
 }

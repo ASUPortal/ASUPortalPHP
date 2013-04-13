@@ -24,7 +24,9 @@
             <td>{$task->alias}</td>
             <td>{$task->url}</td>
             <td>
-
+                {if !is_null($task->menu)}
+                    {$task->getMenu()->getValue()}
+                {/if}
             </td>
             <td>{$task->comment}</td>
         </tr>

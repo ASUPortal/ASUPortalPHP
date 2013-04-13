@@ -809,7 +809,7 @@ class CTaxonomyManager {
         if (!self::getCacheLegacyTerms()->hasElement($termId."_".$taxonomyId)) {
             $taxonomy = self::getLegacyTaxonomy($taxonomyId);
             foreach ($taxonomy->getTerms()->getItems() as $term) {
-                self::getCacheLegacyTerms()->add($term->getId()."_".$taxonomy->getId(), $term);
+                self::getCacheLegacyTerms()->add($term->getId()."_".$taxonomyId, $term);
             }
         }
         return self::getCacheLegacyTerms()->getItem($termId."_".$taxonomyId);
