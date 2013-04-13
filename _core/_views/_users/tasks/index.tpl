@@ -1,7 +1,7 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-<h2>Задачи портала</h2>
+<h2>Задачи пользователей на портале</h2>
 
     {CHtml::helpForCurrentPage()}
 
