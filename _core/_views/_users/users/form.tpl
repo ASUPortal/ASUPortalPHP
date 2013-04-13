@@ -1,10 +1,6 @@
 <script>
     jQuery(document).ready(function(){
         jQuery("#tabs").tabs();
-        /**
-         * Нужно заблокировать роли, полученные от участия
-         * в группах
-         */
     });
 </script>
 

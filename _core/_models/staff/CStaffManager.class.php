@@ -604,6 +604,19 @@ class CStaffManager{
         }
         return self::getCacheUsers();
     }
+
+    /**
+     * Все пользователи в виде списка для подстановки
+     *
+     * @return array
+     */
+    public static function getAllUsersList() {
+        $res = array();
+        foreach (self::getAllUsers()->getItems() as $user) {
+            $res[$user->getId()] = $user->getName();
+        }
+        return $res;
+    }
     /**
      * Получить приказ по идентификатору или номеру
      *
