@@ -21,6 +21,12 @@
     </p>
 
     <p>
+        {CHtml::activeLabel("hidden", $task)}
+        {CHtml::activeCheckBox("hidden", $task)}
+        {CHtml::error("hidden", $task)}
+    </p>
+
+    <p>
         {CHtml::activeLabel("menu_name_id", $task)}
         {CHtml::activeDropDownList("menu_name_id", $task, CTaxonomyManager::getLegacyTaxonomy("task_menu_names")->getTermsList())}
         {CHtml::error("menu_name_id", $task)}
