@@ -76,7 +76,7 @@ class CTerm extends CActiveModel{
                 return $this->getRecord()->getItemValue("name");
                 break;
             case TABLE_TAXONOMY_TERMS:
-                return $this->getRecord()->getItemValue("name");
+                return $this->getRecord()->getItemValue("alias");
                 break;
         }
     }

@@ -1,19 +1,23 @@
 <form action="index.php" method="post">
     {CHtml::hiddenField("action", "saveTaxonomy")}
+    {CHtml::activeHiddenField("id", $taxonomy)}
 
     <p>
-        {CHtml::label("Название таксономии", "name")}
-        {CHtml::textField("name")}
+        {CHtml::activeLabel("name", $taxonomy)}
+        {CHtml::activeTextField("name", $taxonomy)}
+        {CHtml::error("name", $taxonomy)}
     </p>
 
     <p>
-        {CHtml::label("Псевдоним таксономии", "alias")}
-        {CHtml::textField("alias")}
+        {CHtml::activeLabel("alias", $taxonomy)}
+        {CHtml::activeTextField("alias", $taxonomy)}
+        {CHtml::error("alias", $taxonomy)}
     </p>
 
     <p>
-        {CHtml::label("Термины (через точку с запятой)", "terms")}
-        {CHtml::textBox("terms")}
+        {CHtml::activeLabel("terms", $taxonomy)}
+        {CHtml::activeTextBox("terms", $taxonomy)}
+        {CHtml::error("terms", $taxonomy)}
     </p>
 
         <p>

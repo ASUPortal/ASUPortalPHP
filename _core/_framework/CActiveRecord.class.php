@@ -153,4 +153,15 @@ class CActiveRecord {
         ->condition($this->getPk()."=".$this->getId())
         ->execute();
     }
+
+    /**
+     * Удалить значение поля из записи
+     *
+     * @param $name
+     */
+    public function unsetItem($name) {
+        if (array_key_exists($name, $this->getItems())) {
+            unset($this->_items[$name]);
+        }
+    }
 }

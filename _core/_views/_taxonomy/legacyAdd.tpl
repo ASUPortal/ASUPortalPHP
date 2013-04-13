@@ -3,9 +3,9 @@
 {block name="asu_center"}
     <h2>Добавление термина таксономии</h2>
 
-    {include file="_taxonomy/legacyForm.tpl"}
+    {include file="_taxonomy/form.legacy.term.tpl"}
 {/block}
 
 {block name="asu_right"}
-    {include file="_taxonomy/add.right.tpl"}
+
 {/block}
