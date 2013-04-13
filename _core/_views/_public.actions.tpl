@@ -20,3 +20,15 @@
         </div>
     {/if}
 {/if}
+
+{if (CSession::isAuth())}
+    {if (CSession::getCurrentUser()->hasRole("pages_add"))}
+        <div class="asu_right_home_block">
+            <a href="{$web_root}_modules/_news/?action=add">
+                <center>
+                    <img src="{$web_root}images/{$icon_theme}/32x32/actions/appointment-new.png"><br>
+                    Мои страницы
+                </center></a>
+        </div>
+    {/if}
+{/if}

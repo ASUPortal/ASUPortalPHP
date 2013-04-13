@@ -57,6 +57,7 @@
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."configuration".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."library".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."grant".CORE_DS,
+        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."page".CORE_DS,
         SMARTY_DIR,
         PHPMAILER_DIR,
         PRINT_ENGINE_WORD
@@ -197,6 +198,7 @@
     define("TABLE_LIBRARY_FILES", "files");
     define("TABLE_GRANTS", "grants");
     define("TABLE_TAXONOMIES_LEGACY", "sprav_links");
+    define("TABLE_PAGES", "pg_uploads");
 
     // суффиксы таблиц доступа
     define("ACL_ENTRIES", "_access_entries");
