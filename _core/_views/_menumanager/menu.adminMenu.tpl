@@ -6,10 +6,12 @@
                 <a href="{$entry->getLink()|htmlspecialchars}"><strong>{$entry->getName()|htmlspecialchars}</strong></a> ({$entry->getChilds()->getCount()})
                 {call name=menuItemsAsListWithCount data=$entry->getChilds()->getItems() level=$level+1}
             </li>
-            {else}
+        {else}
+            {if $level > 0 || $entry->getId() == 200000}
             <li>
                 <a href="{$entry->getLink()|htmlspecialchars}"><strong>{$entry->getName()|htmlspecialchars}</strong></a>
             </li>
+            {/if}
         {/if}
     {/foreach}
 </ul>
