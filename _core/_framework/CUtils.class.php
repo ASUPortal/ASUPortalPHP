@@ -248,4 +248,27 @@ class CUtils {
         $res .= " ".date("Y", $stamp);
         return $res;
     }
+
+    /**
+     * Отправка сообщений phpMailer-ом
+     *
+     * @param $toEmail
+     * @param $messageTitle
+     * @param $messageBody
+     */
+    public static function sendEmail($toEmail, $messageTitle, $messageBody) {
+        $mailer = new PHPMailer();
+        $mailer->SetFrom(MAIL_SMTP_FROM);
+        $mailer->Subject($messageTitle);
+        $mailer->MsgHTML($messageBody);
+        $mailer->AddAddress($toEmail);
+        if (MAIL_SMTP_ENABLED) {
+            $mailer->IsSMTP();
+            $mailer->Host = MAIL_SMTP_HOST;
+            $mailer->SMTPAuth = MAIL_SMTP_AUTH;
+            $mailer->Username = MAIL_SMTP_USER;
+            $mailer->Password = MAIL_SMTP_PASS;
+        }
+        $mailer->Send();
+    }
 }

@@ -54,6 +54,15 @@
     $moodlePath = CSettingsManager::getSettingValue("moodlePath");
     $useIntegManager = CSettingsManager::getSettingValue("useIntegManager");
     $use_benchmark = CSettingsManager::getSettingValue("use_benchmark");
+    /**
+     * Отправка сообщений через SMTP
+     */
+    define("MAIL_SMTP_ENABLED", CSettingsManager::getSettingValue("smtp_enabled"));
+    define("MAIL_SMTP_HOST", CSettingsManager::getSettingValue("smtp_host"));
+    define("MAIL_SMTP_USER", CSettingsManager::getSettingValue("smtp_user"));
+    define("MAIL_SMTP_PASS", CSettingsManager::getSettingValue("smtp_pass"));
+    define("MAIL_SMTP_AUTH", CSettingsManager::getSettingValue("smtp_auth"));
+    define("MAIL_SMTP_FROM", CSettingsManager::getSettingValue("smtp_from"));
 
 /**
  * //------------------------  интеграция с модулями

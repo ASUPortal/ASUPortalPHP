@@ -106,6 +106,17 @@ class CMessagesController extends CBaseController {
         $mail->date_send = date("Y-m-d H:i:s");
         if ($mail->validate()) {
             $mail->save();
+            // если пользователь-получатель подписан на сообщения, то
+            // отправляем их почтой
+            if (!is_null($mail->getRecipient())) {
+                if (!is_null($mail->getRecipient()->getUser())) {
+                    if (!is_null($mail->getRecipient()->getUser()->getSubscription())) {
+                        if ($mail->getRecipient()->e_mail !== "") {
+                            CUtils::sendEmail($mail->getRecipient()->e_mail, $mail->getTheme(), $mail->getBody());
+                        }
+                    }
+                }
+            }
             $this->redirect("?action=outbox#tab-outbox");
             return true;
         }
