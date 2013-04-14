@@ -44,7 +44,6 @@ function checkForNewMessages() {
              */
             jQuery.sticky("<div>" +
                 "<a href='" + web_root + "_modules/_mail/'>" +
-                "<img align='right' src='" + web_root + "images/tango/32x32/apps/internet-mail.png'>" +
                 "У Вас новое сообщение" +
                 "</a>" +
                 "<div style='clear: both; '></div>" +
