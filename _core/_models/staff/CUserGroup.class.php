@@ -104,7 +104,7 @@ class CUserGroup extends CActiveModel {
             $this->_members = new CArrayList();
             if (!is_null($this->getId())) {
                 foreach ($this->users->getItems() as $user) {
-                    $this->_members->add($this->_members->getCount(), $user);
+                    $this->_members->add($user->getId(), $user);
                 }
                 /*
                 foreach ($this->childGroups->getItems() as $group) {
