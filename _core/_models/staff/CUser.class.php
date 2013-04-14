@@ -15,6 +15,7 @@ class CUser extends CActiveModel {
     protected $_groups = null;
     private $_settings = null;
     private $_unreadMessages = null;
+    protected $_subscription = null;
     public function attributeLabels() {
         return array(
             "FIO" => "ФИО",
@@ -186,5 +187,19 @@ class CUser extends CActiveModel {
          * Удаляем самого пользователя
          */
         parent::remove();
+    }
+
+    /**
+     * Подписка на сообщения электронной почты
+     *
+     * @return CSubscription
+     */
+    public function getSubscription() {
+        if (is_null($this->_subscription)) {
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_SUBSCRIPTIONS, "user_id=".$this->getId())->getItems() as $ar) {
+                $this->_subscription = new CSubscription($ar);
+            }
+        }
+        return $this->_subscription;
     }
 }

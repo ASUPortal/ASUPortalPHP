@@ -112,4 +112,48 @@ class CMessagesController extends CBaseController {
         $this->setData("message", $mail);
         $this->renderView("_messages/edit.tpl");
     }
+    public function actionSubscribe() {
+        $val = CRequest::getString("value");
+        // сначала удаляем
+        if (!is_null(CSession::getCurrentUser()->getSubscription())) {
+            CSession::getCurrentUser()->getSubscription()->remove();
+        }
+        // теперь создадим, если нужно
+        if ($val == "true") {
+            $s = new CSubscription();
+            $s->user_id = CSession::getCurrentUser()->getId();
+            $s->save();
+        }
+    }
+    public function actionCheckMail() {
+        $res = array();
+        $messages = CSession::getCurrentUser()->getUnreadMessages();
+        $res["unread"] = $messages->getCount();
+        echo json_encode($res);
+    }
+    public function actionReply() {
+        $mail = CStaffManager::getMessage(CRequest::getInt("id"));
+        $mail->mail_title = "В ответ на: ".$mail->mail_title;
+        $mail->mail_text = "<p>&nbsp;</p><hr>".$mail->mail_text;
+        $mail->to_user_id = $mail->from_user_id;
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->addCSSInclude("_modules/_redactor/redactor.css");
+        $this->addJSInclude("_modules/_redactor/redactor.min.js");
+        $this->setData("message", $mail);
+        $this->renderView("_messages/edit.tpl");
+    }
+    public function actionForward() {
+        $mail = CStaffManager::getMessage(CRequest::getInt("id"));
+        $mail->mail_title = "Пересылка: ".$mail->mail_title;
+        $mail->mail_text = "<p>&nbsp;</p><hr>".$mail->mail_text;
+        $mail->to_user_id = null;
+        $mail->from_user_id = CSession::getCurrentUser()->getId();
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->addCSSInclude("_modules/_redactor/redactor.css");
+        $this->addJSInclude("_modules/_redactor/redactor.min.js");
+        $this->setData("message", $mail);
+        $this->renderView("_messages/edit.tpl");
+    }
 }

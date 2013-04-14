@@ -30,6 +30,14 @@ class CMessage extends CActiveModel {
         );
     }
 
+    public function attributeLabels() {
+        return array(
+            "mail_title" => "Заголовок сообщения",
+            "to_user_id" => "Кому",
+            "file_name" => "Вложение"
+        );
+    }
+
     /**
      * @return mixed|null
      */

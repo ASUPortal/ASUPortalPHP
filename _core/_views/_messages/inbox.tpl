@@ -9,6 +9,8 @@
 
     <h2>Мои входящие сообщения</h2>
 
+    {include file="_messages/subform.subscription.tpl"}
+
     <div id="tabs">
         <ul style="height: 30px; ">
             <li><a href="#tab-inbox">Входящие</a></li>
@@ -58,7 +60,7 @@
                         </tr>
                     {/foreach}
                 </table>
-                {CHtml::paginator($paginator, "?action=inbox#tab-inbox")}
+                {CHtml::paginator($paginator, "?action=inbox")}
             {/if}
         </div>
         <div id="tab-outbox">

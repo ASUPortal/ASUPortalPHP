@@ -41,6 +41,9 @@ class CBaseController {
         $this->addJSInclude("_core/core.js");
         $this->setData("wap_mode", false);
         $this->setData("no_wap_link", CUtils::getNoWapLink());
+        // подключение системы уведомлений
+        $this->addJSInclude("_modules/_messages/sticky.full.js");
+        $this->addCSSInclude("_modules/_messages/sticky.full.css");
         // выключение режима wap
         if (array_key_exists("nowap", $_GET)) {
             if (array_key_exists("wap_mode", $_COOKIE)) {
@@ -59,10 +62,20 @@ class CBaseController {
         // фиксы для IE
         $this->addJSIEOnly(8, "_core/iefix8.js");
 
-        // подключаем личного помощника
-        // может, в следующей версии
-        // $this->addJSInclude("_modules/_help/help.js");
-        // $this->addCSSInclude("_modules/_help/help.css");
+        /**
+         * Пришло время помощника =)
+         * Если у пользователя включена проверка ящика,
+         * то подключаем скрипт проверки
+         */
+        if (!is_null(CSession::getCurrentUser())) {
+            if (!is_null(CSession::getCurrentUser()->getPersonalSettings())) {
+                $settings = CSession::getCurrentUser()->getPersonalSettings();
+                if ($settings->isCheckMessages()) {
+                    $this->addJSInclude("_modules/_messages/checker.js");
+                }
+            }
+        }
+
 
         // устанавливаем название страницы по умолчанию
         // $this->setPageTitle("");
