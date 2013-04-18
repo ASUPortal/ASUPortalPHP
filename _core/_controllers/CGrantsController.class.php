@@ -96,7 +96,27 @@ class CGrantsController extends CBaseController{
     public function actionFileUpload() {
         $grant = new CGrant();
         $grant->setAttributes(CRequest::getArray($grant::getClassName()));
-        var_dump($grant);
+        /**
+         * На самом деле с самим грантом мы делать ничего
+         * не будем, а создадим вложение
+         */
+        $attach = new CGrantAttachment();
+        $attach->grant_id = $grant->getId();
+        $attach->filename = $grant->upload;
+        $attach->author_id = CSession::getCurrentPerson()->getId();
+        $attach->attach_name = $grant->upload_filename;
+        $attach->save();
+        /**
+         * Если загружать сразу несколько файлов, то
+         * иногда возникают какие-то косяки
+         */
+
+    }
+    public function actionGetAttachmentsSubform() {
+        $form = new CGrantForm();
+        $form->grant = CGrantManager::getGrant(CRequest::getInt("id"));
+        $this->setData("form", $form);
+        $this->renderView("_grants/subform.attachments.tpl");
     }
     public function actionSearch() {
 

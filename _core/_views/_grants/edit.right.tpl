@@ -16,21 +16,47 @@
 
 <script>
     function uploadFile() {
-        jQuery("<div>").dialog({
-            modal: true,
-            title: "Загрузка файлов",
-            open: function(){
-                jQuery(this).load(web_root + "_modules/_grants/?action=getuploadform&id={$form->grant->getId()}", function(){
-                    /**
-                     * В этот момент форма подгрузилась,
-                     * навешиваем на нее события
-                     */
-                    jQuery("#fileupload").ajaxForm({
-                        url: web_root + "_modules/_grants/"
+        var dialog = jQuery("#uploadDialog");
+        /**
+         * Не загружаем диалог 20 раз
+         */
+        if (dialog.length > 0) {
+            jQuery("#uploadDialog").dialog("open");
+        } else {
+            jQuery('<div id="uploadDialog">').dialog({
+                modal: true,
+                title: "Загрузка файлов",
+                width: 390,
+                height: 200,
+                open: function(){
+                    jQuery(this).load(web_root + "_modules/_grants/?action=getuploadform&id={$form->grant->getId()}", function(){
+                        /**
+                         * В этот момент форма подгрузилась,
+                         * навешиваем на нее события
+                         */
+                        jQuery("#fileupload").ajaxForm({
+                            url: web_root + "_modules/_grants/",
+                            beforeSubmit: function(){
+                                /**
+                                 * Перед началом загрузки показываем прогрессор
+                                 */
+                                jQuery("#attachmentsSubform").html('<img src="' + web_root + 'images/loading.gif">');
+                            },
+                            success: function(){
+                                /**
+                                 * После окончания загрузки закрываем диалог
+                                 */
+                                jQuery("#uploadDialog").dialog("close");
+                                /**
+                                 * И обновляем сабформу с вложениями
+                                 */
+                                jQuery("#attachmentsSubform").load(web_root + "_modules/_grants/?action=getAttachmentsSubform&id={$form->grant->getId()}");
+                            }
+                        });
                     });
-                });
-            }
-        });
+                }
+            });
+        }
         return false;
     }
 </script>

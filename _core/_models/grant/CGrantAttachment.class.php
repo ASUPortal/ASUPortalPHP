@@ -7,6 +7,18 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class CGrantAttachment extends CActiveRecord {
+class CGrantAttachment extends CActiveModel {
     protected $_table = TABLE_GRANT_ATTACHMENTS;
+    protected $_author = null;
+    public function relations() {
+        return array(
+            "author" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_author",
+                "storageField" => "author_id",
+                "managerClass" => "CStaffManager",
+                "managerGetObject" => "getPerson"
+            )
+        );
+    }
 }

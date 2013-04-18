@@ -50,7 +50,7 @@ class CGrantManager {
      * @param $key
      * @return CGrantAttachment
      */
-    public function getAttachment($key) {
+    public static function getAttachment($key) {
         if (!self::getCacheAttachments()->hasElement($key)) {
             $ar = CActiveRecordProvider::getById(TABLE_GRANT_ATTACHMENTS, $key);
             if (!is_null($ar)) {

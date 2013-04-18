@@ -11,13 +11,16 @@ class CGrant extends CActiveModel{
     protected $_table = TABLE_GRANTS;
     protected $_members = null;
     protected $_attachments = null;
+    public $upload;
+    public $upload_filename;
     public function attributeLabels() {
         return array(
             "title" => "Название",
             "comment" => "Комментарий",
             "date_start" => "Дата начала",
             "date_end" => "Дата окончания",
-            "organizer" => "Организатор"
+            "organizer" => "Организатор",
+            "upload_filename" => "Название файла"
         );
     }
     public function validationRules() {

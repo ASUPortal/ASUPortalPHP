@@ -6,3 +6,4 @@ sql_connect_credentials.php
 *.zip
 _core/_cache/*
 f_mails/*
+library/grants/*

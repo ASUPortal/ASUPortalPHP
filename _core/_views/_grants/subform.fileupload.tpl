@@ -3,6 +3,11 @@
     {CHtml::activeHiddenField("id", $grant)}
 
     <p>
+        {CHtml::activeLabel("upload_filename", $grant)}
+        {CHtml::activeTextField("upload_filename", $grant, "", "", "required")}
+    </p>
+
+    <p>
         {CHtml::activeUpload("upload", $grant)}
     </p>
 
