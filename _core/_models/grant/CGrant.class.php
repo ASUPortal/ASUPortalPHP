@@ -10,6 +10,7 @@
 class CGrant extends CActiveModel{
     protected $_table = TABLE_GRANTS;
     protected $_members = null;
+    protected $_attachments = null;
     public function attributeLabels() {
         return array(
             "title" => "Название",
@@ -37,6 +38,22 @@ class CGrant extends CActiveModel{
                 "rightKey" => "person_id",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPerson"
+            ),
+            "attachments" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_attachments",
+                "storageTable" => TABLE_GRANT_ATTACHMENTS,
+                "storageCondition" => "grant_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "managerClass" => "CGrantManager",
+                "managerGetObject" => "getAttachment"
+            )
+        );
+    }
+    public function fieldsProperty() {
+        return array(
+            "upload" => array(
+                "type" => FIELD_UPLOADABLE,
+                "upload_dir" => CORE_CWD.CORE_DS.'library'.CORE_DS.'grants'.CORE_DS
             )
         );
     }

@@ -49,6 +49,21 @@ class CModel {
                     if ($_FILES[$this::getClassName()]['tmp_name'][$field] !== "") {
                         $fileName = CUtils::toTranslit($_FILES[$this::getClassName()]['name'][$field]);
                         $fileName = date("dmY_His")."_".$fileName;
+                        /**
+                         * Проверяем, что upload_dir существует
+                         * Если его нет, то создадим
+                         */
+                        $uploadDir = $property["upload_dir"];
+                        $uploadDir = explode(CORE_DS, $uploadDir);
+                        $checkPath = CORE_DS;
+                        foreach ($uploadDir as $path) {
+                            if ($path !== "") {
+                                $checkPath .= $path.CORE_DS;
+                                if (!file_exists($checkPath)) {
+                                    mkdir($checkPath, 0777);
+                                }
+                            }
+                        }
                         while (file_exists($property['upload_dir'].$fileName)) {
                             $fileName = date("dmY_His")."_".$fileName;
                         }

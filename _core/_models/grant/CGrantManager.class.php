@@ -9,6 +9,7 @@
 
 class CGrantManager {
     private static $_cacheGrants = null;
+    private static $_cacheAttachments = null;
 
     /**
      * @return CArrayList|null
@@ -18,6 +19,16 @@ class CGrantManager {
             self::$_cacheGrants = new CArrayList();
         }
         return self::$_cacheGrants;
+    }
+
+    /**
+     * @return CArrayList|null
+     */
+    private static function getCacheAttachments() {
+        if (is_null(self::$_cacheAttachments)) {
+            self::$_cacheAttachments = new CArrayList();
+        }
+        return self::$_cacheAttachments;
     }
 
     /**
@@ -33,5 +44,20 @@ class CGrantManager {
             }
         }
         return self::getCacheGrants()->getItem($key);
+    }
+
+    /**
+     * @param $key
+     * @return CGrantAttachment
+     */
+    public function getAttachment($key) {
+        if (!self::getCacheAttachments()->hasElement($key)) {
+            $ar = CActiveRecordProvider::getById(TABLE_GRANT_ATTACHMENTS, $key);
+            if (!is_null($ar)) {
+                $attach = new CGrantAttachment($ar);
+                self::getCacheAttachments()->add($attach->getId(), $attach);
+            }
+        }
+        return self::getCacheAttachments()->getItem($key);
     }
 }

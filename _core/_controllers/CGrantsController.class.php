@@ -36,8 +36,8 @@ class CGrantsController extends CBaseController{
          * он участник
          */
         if (!CSession::getCurrentUser()->hasRole(ROLE_GRANTS_ADMIN)) {
-            $query->innerJoin(TABLE_GRANT_MEMBERS." as m", "m.grant_id = gr.id and person_id=".CSession::getCurrentPerson()->getId());
-            $query->condition("gr.author_id=".CSession::getCurrentPerson()->getId());
+            $query->leftJoin(TABLE_GRANT_MEMBERS." as m", "m.grant_id = gr.id");
+            $query->condition("gr.author_id=".CSession::getCurrentPerson()->getId()." OR m.person_id=".CSession::getCurrentPerson()->getId());
         }
         $set->setQuery($query);
         $grants = new CArrayList();
@@ -56,6 +56,7 @@ class CGrantsController extends CBaseController{
         $grant->author_id = CSession::getCurrentPerson()->getId();
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->addJSInclude("_core/jquery.form.js");
         $this->setData("form", $form);
         $this->renderView("_grants/add.tpl");
     }
@@ -65,6 +66,7 @@ class CGrantsController extends CBaseController{
         $form->grant = $grant;
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->addJSInclude("_core/jquery.form.js");
         $this->setData("form", $form);
         $this->renderView("_grants/edit.tpl");
     }
@@ -85,6 +87,16 @@ class CGrantsController extends CBaseController{
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("form", $form);
         $this->renderView("_grants/edit.tpl");
+    }
+    public function actionGetUploadForm() {
+        $grant = CGrantManager::getGrant(CRequest::getInt("id"));
+        $this->setData("grant", $grant);
+        $this->renderView("_grants/subform.fileupload.tpl");
+    }
+    public function actionFileUpload() {
+        $grant = new CGrant();
+        $grant->setAttributes(CRequest::getArray($grant::getClassName()));
+        var_dump($grant);
     }
     public function actionSearch() {
 

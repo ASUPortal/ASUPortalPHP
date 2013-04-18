@@ -297,6 +297,10 @@ class CQuery {
         }
         return $this->_innerJoin;
     }
+
+    /**
+     * @return array
+     */
     public function getLeftJoins() {
         if (is_null($this->_leftJoin)) {
             $this->_leftJoin = array();

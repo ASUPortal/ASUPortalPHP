@@ -125,6 +125,9 @@ class CRecordSet {
             foreach ($this->getQuery()->getInnerJoins()->getItems() as $key=>$value) {
                 $query->innerJoin($key, $value);
             }
+            foreach ($this->getQuery()->getLeftJoins() as $key=>$value) {
+                $query->leftJoin($key, $value);
+            }
             $arr = $query->execute();
             if ($arr->getCount() > 0) {
                 $item = $arr->getFirstItem();
