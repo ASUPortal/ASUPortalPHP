@@ -9,6 +9,8 @@
 
 class CUserForm extends CFormModel{
     public $user;
+    public $changePassword = 0;
+    public $newPassword = "";
     public function attributeLabels() {
         return array(
             "changePassword" => "Изменить пароль",
@@ -38,6 +40,11 @@ class CUserForm extends CFormModel{
         }
         $userObj = new CUser();
         $userObj->setAttributes($user);
+        if ($this->changePassword == 1) {
+            if ($this->newPassword !== "") {
+                $userObj->password = md5($this->newPassword);
+            }
+        }
         $userObj->save();
         /**
          * Удаляем старые упоминания о группах, в которых

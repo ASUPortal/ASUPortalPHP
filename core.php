@@ -198,6 +198,7 @@
     define("TABLE_LIBRARY_DOCUMENTS", "documents");
     define("TABLE_LIBRARY_FILES", "files");
     define("TABLE_GRANTS", "grants");
+    define("TABLE_GRANT_MEMBERS", "grant_members");
     define("TABLE_TAXONOMIES_LEGACY", "sprav_links");
     define("TABLE_PAGES", "pg_uploads");
     define("TABLE_SUBSCRIPTIONS", "subscriptions");
@@ -265,3 +266,4 @@
      * ROLE_PAGES_ADMIN - администратор пользовательских страниц
      */
     define("ROLE_PAGES_ADMIN", "pages_admin");
+    define("ROLE_GRANTS_ADMIN", "grants_admin");

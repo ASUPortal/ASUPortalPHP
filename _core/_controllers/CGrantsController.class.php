@@ -30,6 +30,15 @@ class CGrantsController extends CBaseController{
         $query->select("gr.*")
             ->from(TABLE_GRANTS." as gr")
             ->order("gr.id desc");
+        /**
+         * Если пользователь не админ грантов, то
+         * видит только свои и те, в которых
+         * он участник
+         */
+        if (!CSession::getCurrentUser()->hasRole(ROLE_GRANTS_ADMIN)) {
+            $query->innerJoin(TABLE_GRANT_MEMBERS." as m", "m.grant_id = gr.id and person_id=".CSession::getCurrentPerson()->getId());
+            $query->condition("gr.author_id=".CSession::getCurrentPerson()->getId());
+        }
         $set->setQuery($query);
         $grants = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
@@ -41,13 +50,22 @@ class CGrantsController extends CBaseController{
         $this->renderView("_grants/index.tpl");
     }
     public function actionAdd() {
+        $form = new CGrantForm();
         $grant = new CGrant();
-        $this->setData("grant", $grant);
+        $form->grant = $grant;
+        $grant->author_id = CSession::getCurrentPerson()->getId();
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->setData("form", $form);
         $this->renderView("_grants/add.tpl");
     }
     public function actionEdit() {
         $grant = CGrantManager::getGrant(CRequest::getInt("id"));
-        $this->setData("grant", $grant);
+        $form = new CGrantForm();
+        $form->grant = $grant;
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->setData("form", $form);
         $this->renderView("_grants/edit.tpl");
     }
     public function actionDelete() {
@@ -56,14 +74,16 @@ class CGrantsController extends CBaseController{
         $this->redirect("?action=index");
     }
     public function actionSave() {
-        $grant = new CGrant();
-        $grant->setAttributes(CRequest::getArray($grant::getClassName()));
-        if ($grant->validate()) {
-            $grant->save();
+        $form = new CGrantForm();
+        $form->setAttributes(CRequest::getArray($form::getClassName()));
+        if ($form->validate()) {
+            $form->save();
             $this->redirect("?action=index");
             return true;
         }
-        $this->setData("grant", $grant);
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->setData("form", $form);
         $this->renderView("_grants/edit.tpl");
     }
     public function actionSearch() {

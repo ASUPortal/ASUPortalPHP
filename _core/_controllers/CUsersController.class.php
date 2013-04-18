@@ -132,6 +132,7 @@ class CUsersController extends CBaseController{
         foreach (CStaffManager::getAllUserGroups()->getItems() as $group) {
             $groups[$group->getId()] = $group->comment;
         }
+        $user = $form->user;
         /**
          * Получаем список ролей, полученных от участия
          * в группах
