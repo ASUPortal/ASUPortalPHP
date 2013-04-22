@@ -250,6 +250,31 @@ class CUtils {
     }
 
     /**
+     * Вернуть название месяца по номеру
+     *
+     * @param $monthNum
+     * @return mixed
+     */
+    public static function getMonthAsWord($monthNum) {
+        $monthNum = str_pad($monthNum, 2, "0");
+        $months = array(
+            "01" => "января",
+            "02" => "февраля",
+            "03" => "марта",
+            "04" => "апреля",
+            "05" => "мая",
+            "06" => "июня",
+            "07" => "июля",
+            "08" => "августа",
+            "09" => "сентября",
+            "10" => "октября",
+            "11" => "ноября",
+            "12" => "декабря"
+        );
+        return $months[$monthNum];
+    }
+
+    /**
      * Отправка сообщений phpMailer-ом
      *
      * @param $toEmail

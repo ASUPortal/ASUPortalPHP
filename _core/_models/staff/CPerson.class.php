@@ -443,4 +443,17 @@ class CPerson extends CActiveModel{
         }
         return $result;
     }
+
+    /**
+     * Дата рождения
+     *
+     * @return string
+     */
+    public function getBirthday() {
+        if ($this->date_rogd == "") {
+            return "";
+        }
+        $date = strtotime($this->date_rogd);
+        return date("d", $date)." ".CUtils::getMonthAsWord(date("m", $date));
+    }
 }
