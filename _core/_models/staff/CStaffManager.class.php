@@ -768,7 +768,7 @@ class CStaffManager{
         if (is_null(self::$_bDaysThisWeek)) {
             self::$_bDaysThisWeek = new CArrayList();
     		$start = date("Y-m-d", strtotime("this week"));
-			$end = date("d.m.Y", strtotime("this week +7 days"));
+			$end = date("Y-m-d", strtotime("this week +7 days"));
 			$condition = 'STR_TO_DATE(CONCAT(LEFT(date_rogd, 6), "'.date("Y").'"), "%d.%m.%Y") BETWEEN "'.$start.'" AND "'.$end.'"';
             foreach (CActiveRecordProvider::getWithCondition(TABLE_PERSON, $condition)->getItems() as $item) {
                 $person = new CPerson($item);
