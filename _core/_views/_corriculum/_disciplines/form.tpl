@@ -10,6 +10,12 @@
     </p>
 
     <p>
+        {CHtml::activeLabel("ordering", $discipline)}
+        {CHtml::activeTextField("ordering", $discipline)}
+        {CHtml::error("ordering", $discipline)}
+    </p>
+
+    <p>
         {CHtml::submit("Сохранить")}
     </p>
 </form>

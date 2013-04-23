@@ -72,7 +72,8 @@ class CCorriculumDiscipline extends CActiveModel {
     }
     public function attributeLabels() {
         return array(
-            "discipline_id" => "Дисциплина"
+            "discipline_id" => "Дисциплина",
+            "ordering" => "Порядок в списке"
         );
     }
     /**

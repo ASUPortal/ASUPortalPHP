@@ -35,6 +35,7 @@ class CStudent extends CActiveModel {
     public function attributeLabels() {
         return array(
             "fio" => "ФИО",
+            "fio_rp" => "ФИО родительный падеж",
             "group_id" => "Группа",
             "bud_contract" => "Форма обучения",
             "telephone" => "Телефон",

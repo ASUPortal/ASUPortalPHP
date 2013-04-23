@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 class CUserGroup extends CActiveModel {
-    private $_roles = null;
+    protected $_roles = null;
     protected $_table = TABLE_USER_GROUPS;
     protected $_childGroups = null;
     protected $_users = null;
@@ -43,11 +43,27 @@ class CUserGroup extends CActiveModel {
                 "relationPower" => RELATION_COMPUTED,
                 "storageProperty" => "_aclRelations",
                 "relationFunction" => "getACLRelations"
+            ),
+            "roles" => array(
+                "relationPower" => RELATION_COMPUTED,
+                "storageProperty" => "_roles",
+                "relationFunction" => "getRoles"
             )
         );
     }
-    public static function getClassName() {
-        return __CLASS__;
+    public function attributeLabels() {
+        return array(
+            "comment" => "Название группы",
+            "name" => "Псевдоним"
+        );
+    }
+    public function validationRules() {
+        return array(
+            "required" => array(
+                "name",
+                "comment"
+            )
+        );
     }
     /**
      * Роли, которые связаны с данной группой
@@ -57,10 +73,12 @@ class CUserGroup extends CActiveModel {
     public function getRoles() {
         if (is_null($this->_roles)) {
             $this->_roles = new CArrayList();
-            foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_GROUP_HAS_ROLES, "user_group_id=".$this->getId())->getItems() as $ar) {
-                $role = CStaffManager::getUserRole($ar->getItemValue("task_id"));
-                if (!is_null($role)) {
-                    $this->_roles->add($role->getId(), $role);
+            if (!is_null($this->getId())) {
+                foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_GROUP_HAS_ROLES, "user_group_id=".$this->getId())->getItems() as $ar) {
+                    $role = CStaffManager::getUserRole($ar->getItemValue("task_id"));
+                    if (!is_null($role)) {
+                        $this->_roles->add($role->getId(), $role);
+                    }
                 }
             }
         }
@@ -84,11 +102,15 @@ class CUserGroup extends CActiveModel {
     public function getMembers() {
         if (is_null($this->_members)) {
             $this->_members = new CArrayList();
-            foreach ($this->users->getItems() as $user) {
-                $this->_members->add($this->_members->getCount(), $user);
-            }
-            foreach ($this->childGroups->getItems() as $group) {
-                $this->_members->add($this->_members->getCount(), $group);
+            if (!is_null($this->getId())) {
+                foreach ($this->users->getItems() as $user) {
+                    $this->_members->add($user->getId(), $user);
+                }
+                /*
+                foreach ($this->childGroups->getItems() as $group) {
+                    $this->_members->add($this->_members->getCount(), $group);
+                }
+                */
             }
         }
         return $this->_members;
@@ -141,5 +163,18 @@ class CUserGroup extends CActiveModel {
             }
         }
         return $this->_allUsers;
+    }
+
+    /**
+     * Удаление группы вместе с потрохами
+     */
+    public function remove() {
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_GROUP_HAS_ROLES, "user_group_id = ".$this->getId())->getItems() as $ar) {
+            $ar->remove();
+        }
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_IN_GROUPS, "group_id = ".$this->getId())->getItems() as $ar) {
+            $ar->remove();
+        }
+        parent::remove();
     }
 }

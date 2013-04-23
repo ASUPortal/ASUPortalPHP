@@ -7,4 +7,3 @@ require_once("../../core.php");
 mysql_query("SET NAMES UTF8");
 
 $controller = new CTaxonomyController();
-?>

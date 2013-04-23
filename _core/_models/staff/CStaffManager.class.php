@@ -34,6 +34,7 @@ class CStaffManager{
     private static $_cacheDiploms = null;
     private static $_cacheDiplomPreviews = null;
     private static $_cacheDiplomPreviewComissions = null;
+    private static $_cacheUsatuOrders = null;
     /**
      * Инициализация всех сотрудников.
      *
@@ -518,7 +519,7 @@ class CStaffManager{
             self::$_cacheRoles = new CArrayList();
             // инициализируем все сразу, иначе там 100500 запросов делается на
             // каждого пользователя, а это совсем не комильфо
-            foreach (CActiveRecordProvider::getAllFromTable(TABLE_USER_ROLES)->getItems() as $ar) {
+            foreach (CActiveRecordProvider::getAllFromTable(TABLE_USER_ROLES, "name asc")->getItems() as $ar) {
                 $role = new CUserRole($ar);
                 self::$_cacheRoles->add($role->getId(), $role);
             }
@@ -602,6 +603,19 @@ class CStaffManager{
             }
         }
         return self::getCacheUsers();
+    }
+
+    /**
+     * Все пользователи в виде списка для подстановки
+     *
+     * @return array
+     */
+    public static function getAllUsersList() {
+        $res = array();
+        foreach (self::getAllUsers()->getItems() as $user) {
+            $res[$user->getId()] = $user->getName();
+        }
+        return $res;
     }
     /**
      * Получить приказ по идентификатору или номеру
@@ -753,9 +767,9 @@ class CStaffManager{
     public static function getBirthdaysThisWeek() {
         if (is_null(self::$_bDaysThisWeek)) {
             self::$_bDaysThisWeek = new CArrayList();
-            $start = date("d.m.Y", strtotime("this week"))."<br>";
-            $end = date("d.m.Y", strtotime("this week +6 days"));
-            $condition = 'STR_TO_DATE(CONCAT(LEFT(date_rogd, 5), "2012"), "%d.%m.%Y") BETWEEN STR_TO_DATE("17.12.2012", "%d.%m.%Y") AND STR_TO_DATE("23.12.2012", "%d.%m.%Y")';
+    		$start = date("Y-m-d", strtotime("this week"));
+			$end = date("Y-m-d", strtotime("this week +7 days"));
+			$condition = 'STR_TO_DATE(CONCAT(LEFT(date_rogd, 6), "'.date("Y").'"), "%d.%m.%Y") BETWEEN "'.$start.'" AND "'.$end.'"';
             foreach (CActiveRecordProvider::getWithCondition(TABLE_PERSON, $condition)->getItems() as $item) {
                 $person = new CPerson($item);
                 self::$_bDaysThisWeek->add($person->getId(), $person);
@@ -967,5 +981,34 @@ class CStaffManager{
             ->leftJoin(TABLE_PERSON." as person", "comission.secretary_id = person.id")
             ->order("comission.name");
         return $res;
+    }
+
+    /**
+     * Кэш приказов угату
+     *
+     * @return CArrayList
+     */
+    private static function getCacheUsatuOrders() {
+        if (is_null(self::$_cacheUsatuOrders)) {
+            self::$_cacheUsatuOrders = new CArrayList();
+        }
+        return self::$_cacheUsatuOrders;
+    }
+
+    /**
+     * Приказ по УГАТУ
+     *
+     * @param $key
+     * @return COrderUsatu
+     */
+    public static function getUsatuOrder($key) {
+        if (!self::getCacheUsatuOrders()->hasElement($key)) {
+            $ar = CActiveRecordProvider::getById(TABLE_USATU_ORDERS, $key);
+            if (!is_null($ar)) {
+                $order = new COrderUsatu($ar);
+                self::getCacheUsatuOrders()->add($order->getId(), $order);
+            }
+        }
+        return self::getCacheUsatuOrders()->getItem($key);
     }
 }

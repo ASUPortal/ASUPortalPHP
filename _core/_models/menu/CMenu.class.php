@@ -126,15 +126,31 @@ class CMenu extends CActiveModel {
     public function getMenuPublishedItemsInHierarchy() {
         if (is_null($this->_itemsPublishedHierarchy)) {
             $this->_itemsPublishedHierarchy = new CArrayList();
-            foreach ($this->getMenuPublishedItems()->getItems() as $i) {
-                $i->initChilds();
-                if ($i->getParentId() != 0) {
-                    $parent = $this->getMenuPublishedItems()->getItem($i->getParentId());
-                    if (!is_null($parent)) {
-                        $parent->getChilds()->add($i->getId(), $i);
+            if ($this->alias == "admin_menu") {
+                foreach ($this->getMenuPublishedItems()->getItems() as $i) {
+                    $i->initChilds();
+                    if ($i->getParentId() != 0) {
+                        $parent = $this->getMenuPublishedItems()->getItem($i->getParentId());
+                        if (!is_null($parent)) {
+                            if (CSession::getCurrentUser()->getRoles()->hasElement($i->getId()) || $i->getId() > 200000) {
+                                $parent->getChilds()->add($i->getId(), $i);
+                            }
+                        }
+                    } else {
+                        $this->_itemsPublishedHierarchy->add($i->getId(), $i);
                     }
-                } else {
-                    $this->_itemsPublishedHierarchy->add($i->getId(), $i);
+                }
+            } else {
+                foreach ($this->getMenuPublishedItems()->getItems() as $i) {
+                    $i->initChilds();
+                    if ($i->getParentId() != 0) {
+                        $parent = $this->getMenuPublishedItems()->getItem($i->getParentId());
+                        if (!is_null($parent)) {
+                            $parent->getChilds()->add($i->getId(), $i);
+                        }
+                    } else {
+                        $this->_itemsPublishedHierarchy->add($i->getId(), $i);
+                    }
                 }
             }
         }

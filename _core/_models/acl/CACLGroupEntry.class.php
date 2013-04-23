@@ -3,7 +3,7 @@
  * Created by JetBrains PhpStorm.
  * User: aleksandr
  * Date: 04.01.13
- * Time: 16:30
+ * Time: 16:30        333
  * To change this template use File | Settings | File Templates.
  */
 class CACLGroupEntry extends CActiveModel {

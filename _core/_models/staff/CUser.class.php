@@ -9,11 +9,37 @@
  * Пользователь приложения
  */
 class CUser extends CActiveModel {
+    protected $_table = TABLE_USERS;
     private $_person = null;
-    private $_roles = null;
-    private $_groups = null;
+    protected $_roles = null;
+    protected $_groups = null;
     private $_settings = null;
     private $_unreadMessages = null;
+    protected $_subscription = null;
+    public function attributeLabels() {
+        return array(
+            "FIO" => "ФИО",
+            "FIO_short" => "ФИО (краткое)",
+            "login" => "Логин",
+            "kadri_id" => "Сотрудник кафедры",
+            "comment" => "Комментарий",
+            "groups" => "Группы"
+        );
+    }
+    public function relations() {
+        return array(
+            "groups" => array(
+                "relationPower" => RELATION_COMPUTED,
+                "storageProperty" => "_groups",
+                "relationFunction" => "getGroups"
+            ),
+            "roles" => array(
+                "relationPower" => RELATION_COMPUTED,
+                "storageProperty" => "_roles",
+                "relationFunction" => "getRoles"
+            )
+        );
+    }
     /**
      * Статус пользователя
      *
@@ -37,14 +63,34 @@ class CUser extends CActiveModel {
                 }
             }
             // теперь смотрим, какие личные права он имеет
-            foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_HAS_ROLES, "user_id=".$this->getId())->getItems() as $ar) {
-                $role = CStaffManager::getUserRole($ar->getItemValue("task_id"));
-                if (!is_null($role)) {
-                    $this->_roles->add($role->getId(), $role);
+            if (!is_null($this->getId())) {
+                foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_HAS_ROLES, "user_id=".$this->getId())->getItems() as $ar) {
+                    $role = CStaffManager::getUserRole($ar->getItemValue("task_id"));
+                    if (!is_null($role)) {
+                        $this->_roles->add($role->getId(), $role);
+                    }
                 }
             }
         }
         return $this->_roles;
+    }
+
+    /**
+     * Проверяем, обладает ли пользователь указанной ролью.
+     *
+     * @param $roleToFind
+     * @return bool
+     */
+    public function hasRole($roleToFind) {
+        $hasRole = false;
+        foreach ($this->getRoles()->getItems() as $role) {
+            if (!is_null($role->alias)) {
+                if (mb_strtoupper($role->alias) == mb_strtoupper($roleToFind)) {
+                    $hasRole = true;
+                }
+            }
+        }
+        return $hasRole;
     }
     /**
      * Группы, в которых пользователь состоит
@@ -54,10 +100,12 @@ class CUser extends CActiveModel {
     public function getGroups() {
         if (is_null($this->_groups)) {
             $this->_groups = new CArrayList();
-            foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_IN_GROUPS, "user_id=".$this->getId())->getItems() as $ar) {
-                $group = CStaffManager::getUserGroup($ar->getItemValue("group_id"));
-                if (!is_null($group)) {
-                    $this->_groups->add($group->getId(), $group);
+            if (!is_null($this->getId())) {
+                foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_IN_GROUPS, "user_id=".$this->getId())->getItems() as $ar) {
+                    $group = CStaffManager::getUserGroup($ar->getItemValue("group_id"));
+                    if (!is_null($group)) {
+                        $this->_groups->add($group->getId(), $group);
+                    }
                 }
             }
         }
@@ -121,5 +169,37 @@ class CUser extends CActiveModel {
      */
     public function getType() {
         return 1;
+    }
+    public function remove() {
+        /**
+         * Удаляем записи о том, где пользователь состоял
+         */
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_IN_GROUPS, "user_id = ".$this->getId())->getItems() as $ar) {
+            $ar->remove();
+        }
+        /**
+         * Удаляем личные права
+         */
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_HAS_ROLES, "user_id = ".$this->getId())->getItems() as $ar) {
+            $ar->remove();
+        }
+        /**
+         * Удаляем самого пользователя
+         */
+        parent::remove();
+    }
+
+    /**
+     * Подписка на сообщения электронной почты
+     *
+     * @return CSubscription
+     */
+    public function getSubscription() {
+        if (is_null($this->_subscription)) {
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_SUBSCRIPTIONS, "user_id=".$this->getId())->getItems() as $ar) {
+                $this->_subscription = new CSubscription($ar);
+            }
+        }
+        return $this->_subscription;
     }
 }

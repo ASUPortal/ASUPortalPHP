@@ -33,6 +33,8 @@ class CTaxonomyManager {
     private static $_cacheLanguages = null;
     private static $_cacheDiplomConfirmations = null;
     private static $_cachePracticePlaces = null;
+    private static $_cacheLegacyTaxonomies = null;
+    private static $_cacheLegacyTerms = null;
     /**
      * Кэш должностей
      *
@@ -296,7 +298,7 @@ class CTaxonomyManager {
     public static function getCacheTaxonomy() {
         if (is_null(self::$_cacheTaxonomy)) {
             self::$_cacheTaxonomy = new CArrayList();
-            foreach (CActiveRecordProvider::getAllFromTable(TABLE_TAXONOMY)->getItems() as $item) {
+            foreach (CActiveRecordProvider::getAllFromTable(TABLE_TAXONOMY, "name asc")->getItems() as $item) {
                 $taxonomy = new CTaxonomy($item);
                 self::$_cacheTaxonomy->add($taxonomy->getAlias(), $taxonomy);
                 self::$_cacheTaxonomy->add($taxonomy->getId(), $taxonomy);
@@ -359,6 +361,19 @@ class CTaxonomyManager {
             return self::getCacheTypes()->getItem($id);
         }
         return null;
+    }
+
+    /**
+     * Типы участия на кафедре
+     *
+     * @return array
+     */
+    public static function getTypesList() {
+        $result = array();
+        foreach (self::getCacheTypes()->getItems() as $type) {
+            $result[$type->getId()] = $type->getValue();
+        }
+        return $result;
     }
     /**
      * Объект таксономии по псевдониму или id
@@ -693,13 +708,123 @@ class CTaxonomyManager {
     public static function getDiplomConfirmation($key) {
         return self::getCacheDiplomConfirmations()->getItem($key);
     }
+
+    /**
+     * Типы приказов УГАТУ и кафедры
+     *
+     * @return CArrayList
+     */
     private static function getCacheUsatuOrderTypes() {
         if (is_null(self::$_cacheUsatyOrderTypes)) {
             self::$_cacheUsatyOrderTypes = new CArrayList();
-
+            foreach (CActiveRecordProvider::getAllFromTable(TABLE_USATU_ORDER_TYPES)->getItems() as $ar) {
+                $type = new CTerm($ar);
+                self::$_cacheUsatyOrderTypes->add($type->getId(), $type);
+            }
         }
+        return self::$_cacheUsatyOrderTypes;
     }
-    public static function getUsatuOrderType($key) {
 
+    /**
+     * Тип приказа УГАТУ/кафедры
+     *
+     * @param $key
+     * @return CTerm
+     */
+    public static function getUsatuOrderType($key) {
+        return self::getCacheUsatuOrderTypes()->getItem($key);
+    }
+
+    /**
+     * Типы приказов для подстановки
+     *
+     * @return array
+     */
+    public static function getUsatuOrderTypesList() {
+        $res = array();
+        foreach (self::getCacheUsatuOrderTypes()->getItems() as $type) {
+            $res[$type->getId()] = $type->getValue();
+        }
+        return $res;
+    }
+
+    /**
+     * Кэш унаследованных таксономий
+     *
+     * @return CArrayList
+     */
+    private static function getCacheLegacyTaxonomies() {
+        if (is_null(self::$_cacheLegacyTaxonomies)) {
+            self::$_cacheLegacyTaxonomies = new CArrayList();
+            foreach (CActiveRecordProvider::getAllFromTable(TABLE_TAXONOMIES_LEGACY, "comment asc")->getItems() as $ar) {
+                $legacy = new CTaxonomyLegacy($ar);
+                self::$_cacheLegacyTaxonomies->add($legacy->getId(), $legacy);
+                self::$_cacheLegacyTaxonomies->add($legacy->getAlias(), $legacy);
+            }
+        }
+        return self::$_cacheLegacyTaxonomies;
+    }
+
+    /**
+     * Все унаследованные таксономии
+     *
+     * @return CArrayList
+     */
+    public static function getLegacyTaxonomiesObjects() {
+        $res = new CArrayList();
+        foreach (self::getCacheLegacyTaxonomies()->getItems() as $t) {
+            $res->add($t->getId(), $t);
+        }
+        return $res;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getLegacyTaxonomiesObjectsList() {
+        $res = array();
+        foreach (self::getLegacyTaxonomiesObjects()->getItems() as $taxonomy) {
+            $res[$taxonomy->getId()] = $taxonomy->getName();
+        }
+        return $res;
+    }
+
+    /**
+     * Унаследованная таксономию по ключу
+     *
+     * @param $id
+     * @return CTaxonomyLegacy
+     */
+    public static function getLegacyTaxonomy($id) {
+        return self::getCacheLegacyTaxonomies()->getItem($id);
+    }
+
+    /**
+     * Кэш терминов
+     *
+     * @return CArrayList|null
+     */
+    private static function getCacheLegacyTerms() {
+        if (is_null(self::$_cacheLegacyTerms)) {
+            self::$_cacheLegacyTerms = new CArrayList();
+        }
+        return self::$_cacheLegacyTerms;
+    }
+
+    /**
+     * Получить термин из унаследованной таксономии
+     *
+     * @param $termId
+     * @param $taxonomyId
+     * @return CTerm
+     */
+    public static function getLegacyTerm($termId, $taxonomyId) {
+        if (!self::getCacheLegacyTerms()->hasElement($termId."_".$taxonomyId)) {
+            $taxonomy = self::getLegacyTaxonomy($taxonomyId);
+            foreach ($taxonomy->getTerms()->getItems() as $term) {
+                self::getCacheLegacyTerms()->add($term->getId()."_".$taxonomyId, $term);
+            }
+        }
+        return self::getCacheLegacyTerms()->getItem($termId."_".$taxonomyId);
     }
 }

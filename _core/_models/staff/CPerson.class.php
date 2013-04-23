@@ -17,7 +17,7 @@ class CPerson extends CActiveModel{
     private $_role = null;
     private $_resource = null;
     private $_manager = null;
-    private $_types = null;
+    protected $_types = null;
     protected $_orders = null;
     protected $_ratingIndexesValues = null;
     protected $_publications = null;
@@ -67,6 +67,11 @@ class CPerson extends CActiveModel{
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getDegree"
             ),
+            "types" => array(
+                "relationPower" => RELATION_COMPUTED,
+                "storageProperty" => "_types",
+                "relationFunction" => "getTypes"
+            )
         );
     }
     /**
@@ -123,6 +128,13 @@ class CPerson extends CActiveModel{
      */
     public function getName() {
         return (string) $this->getRecord()->getItemValue("fio");
+    }
+    public function getDisplayName() {
+        if (!CSettingsManager::getSettingValue("hide_personal_data")) {
+            return $this->getName();
+        } else {
+            return CSettingsManager::getSettingValue("hide_person_data_text");
+        }
     }
     /**
      * Добавить человека в список подчиненных
@@ -435,5 +447,18 @@ class CPerson extends CActiveModel{
             $result += $order->rate;
         }
         return $result;
+    }
+
+    /**
+     * Дата рождения
+     *
+     * @return string
+     */
+    public function getBirthday() {
+        if ($this->date_rogd == "") {
+            return "";
+        }
+        $date = strtotime($this->date_rogd);
+        return date("d", $date)." ".CUtils::getMonthAsWord(date("m", $date));
     }
 }

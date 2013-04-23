@@ -33,9 +33,6 @@ class CCorriculumCyclesController extends CBaseController {
                 $labors->add($labor->type_id, $labor);
             }
         }
-        /**
-         * Передаем все представлению
-         */
         $this->setData("labors", $labors);
         $this->setData("cycle", $cycle);
         $this->renderView("_corriculum/_cycles/edit.tpl");

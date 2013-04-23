@@ -26,16 +26,17 @@ class CDashboardController extends CBaseController {
                 if (CStaffManager::getBirthdaysThisWeek()->getCount() > 0) {
                     $cnt = 0;
                     $item = new CDashboardItem();
+                    $item->id = "birthdays";
                     $item->title = "Дни рождения";
                     $item->icon = "mimetypes/text-x-java.png";
                     $items->add("_".$items->getCount(), $item);
                     foreach (CStaffManager::getBirthdaysThisWeek()->getItems() as $person) {
                         $child = new CDashboardItem();
                         $child->id = "person_".$person->getId();
-                        $child->title = $person->getName();
+                        $child->title = $person->getName()." (".$person->getBirthday().")";
                         $item->addChild($child);
                         $cnt++;
-                        if ($cnt == 3) {
+                        if ($cnt == 2) {
                             $child = new CDashboardItem();
                             $child->id = "person_q";
                             $child->title = "Всего ".CStaffManager::getBirthdaysThisWeek()->getCount();
@@ -44,6 +45,13 @@ class CDashboardController extends CBaseController {
                         }
                     }
                 }
+                /**
+                 * Подключаем скрипт показа всех дней рождения
+                 * в диалоговом окне
+                 */
+                $this->addJSInclude(JQUERY_UI_JS_PATH);
+                $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+                $this->addJSInclude("_modules/_dashboard/script.js");
             }
             /**
              * Показываем сообщения
@@ -143,6 +151,7 @@ class CDashboardController extends CBaseController {
 			}
 		}
         $icons = new CArrayList();
+        $iconSources = new CArrayList();
         $dirs = array(
             "actions",
             "apps",
@@ -158,10 +167,25 @@ class CDashboardController extends CBaseController {
             if ($h = opendir(CORE_CWD."/images/tango/16x16/".$dir."/")) {
                 while ($file = readdir($h)) {
                     if (strpos($file, ".png")) {
-                        $icons->add($dir."/".$file, $dir."/".$file);
+                        $iconSources->add($dir."/".$file, $dir."/".$file);
                     }
                 }
                 closedir($h);
+            }
+        }
+        /**
+         * Теперь исключаем те, которых нет в фаензе
+         */
+        foreach ($dirs as $dir) {
+            if (file_exists(CORE_CWD."/images/faenza/64x64/".$dir)) {
+                if ($h = opendir(CORE_CWD."/images/faenza/64x64/".$dir."/")) {
+                    while ($file = readdir($h)) {
+                        if ($iconSources->hasElement($dir."/".$file)) {
+                            $icons->add($dir."/".$file, $dir."/".$file);
+                        }
+                    }
+                    closedir($h);
+                }
             }
         }
         $item = CDashboardManager::getDashboardItem(CRequest::getInt("id"));
@@ -197,4 +221,12 @@ class CDashboardController extends CBaseController {
 		$item->remove();
 		$this->redirect("?action=list");
 	}
+
+    /**
+     * Показываем окошко с ближайшими днями рождения
+     */
+    public function actionShowBirthdayDialog() {
+        $this->setData("persons", CStaffManager::getBirthdaysThisWeek());
+        $this->renderView("_dashboard/subform.birthdays.tpl");
+    }
 }

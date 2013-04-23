@@ -10,13 +10,20 @@
  */
 class CTaxonomy extends CActiveModel {
     protected $_table = TABLE_TAXONOMY;
-    private $_cacheTerms = null;
+    protected $_cacheTerms = null;
+    public function attributeLabels() {
+        return array(
+            "name" => "Название",
+            "alias" => "Псевдоним",
+            "terms" => "Термины для добавления (по одному на строке)"
+        );
+    }
     /**
      * Кэш терминов словаря
      *
      * @return CArrayList
      */
-    private function getCacheTerms() {
+    protected function getCacheTerms() {
         if (is_null($this->_cacheTerms)) {
             $this->_cacheTerms = new CArrayList();
             foreach (CActiveRecordProvider::getWithCondition(TABLE_TAXONOMY_TERMS, "taxonomy_id=".$this->getId())->getItems() as $item) {

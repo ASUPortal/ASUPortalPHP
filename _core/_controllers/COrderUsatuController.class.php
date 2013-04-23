@@ -13,16 +13,16 @@ class COrderUsatuController extends CBaseController {
         }
 
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Управление приказами УГАТУ");
+        $this->setPageTitle("Управление приказами УГАТУ и кафедры");
 
         parent::__construct();
     }
     public function actionIndex() {
         $set = new CRecordSet();
         $query = new CQuery();
-        $query->select("order.*")
-            ->from(TABLE_USATU_ORDERS)
-            ->order("order.id desc");
+        $query->select("usatu_order.*")
+            ->from(TABLE_USATU_ORDERS." as usatu_order")
+            ->order("usatu_order.id desc");
         $set->setQuery($query);
         /**
          * Сортировка приказов в различных направлениях
@@ -32,14 +32,14 @@ class COrderUsatuController extends CBaseController {
             $direction = CRequest::getString("direction");
         }
         if (CRequest::getString("order") == "date") {
-            $query->order("order.date ".$direction);
+            $query->order("usatu_order.date ".$direction);
         } elseif (CRequest::getString("order") == "number") {
-            $query->order("order.num ".$direction);
+            $query->order("usatu_order.num ".$direction);
         } elseif (CRequest::getString("order") == "type") {
-            $query->leftJoin(TABLE_USATU_ORDER_TYPES." as order_type", "order_type.id = order.orders_type");
+            $query->leftJoin(TABLE_USATU_ORDER_TYPES." as order_type", "order_type.id = usatu_order.orders_type");
             $query->order("order_type.name ".$direction);
         } elseif (CRequest::getString("order") == "title") {
-            $query->order("order.title ".$direction);
+            $query->order("usatu_order.title ".$direction);
         }
         /**
          * Фильтрация приказов
@@ -53,9 +53,44 @@ class COrderUsatuController extends CBaseController {
             $orders->add($order->getId(), $order);
         }
         $this->setData("orders", $orders);
-        $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-        $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_orders_usatu/index.tpl");
+    }
+    public function actionEdit() {
+        $order = CStaffManager::getUsatuOrder(CRequest::getInt("id"));
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->setData("order", $order);
+        $this->renderView("_orders_usatu/edit.tpl");
+    }
+    public function actionAdd() {
+        $order = new COrderUsatu();
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->setData("order", $order);
+        $this->renderView("_orders_usatu/add.tpl");
+    }
+    public function actionSave() {
+        $order = new COrderUsatu();
+        $order->setAttributes(CRequest::getArray($order::getClassName()));
+        if ($order->validate()) {
+            $order->save();
+            $this->redirect("?action=index");
+            return true;
+        }
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->setData("order", $order);
+        $this->renderView("_orders_usatu/add.tpl");
+    }
+    public function actionDelete() {
+        $order = CStaffManager::getUsatuOrder(CRequest::getInt("id"));
+        $order->remove();
+        $this->redirect("?action=index");
+    }
+    public function actionSearch() {
+
     }
 }

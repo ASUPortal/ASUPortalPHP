@@ -165,7 +165,7 @@ class CMenuManager {
             $arr = array();
             $arr['id'] = 200001;
             $arr['title'] = "Справочники все";
-            $arr['anchor'] = "spravochnik.php";
+            $arr['anchor'] = "_modules/_taxonomy/";
             $arr['menu_id'] = $menu->getId();
             $arr['parent_id'] = 100003;
             $menuItem = new CMenuItem(new CActiveRecord($arr));

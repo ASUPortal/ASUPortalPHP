@@ -5,6 +5,12 @@
 </p>
 
 <p>
+    {CHtml::activeLabel("fio_rp", $student)}
+    {CHtml::activeTextField("fio_rp", $student)}
+    {CHtml::error("fio_rp", $student)}
+</p>
+
+<p>
     {CHtml::activeLabel("gender_id", $student)}
     {CHtml::activeDropDownList("gender_id", $student, CTaxonomyManager::getGendersList())}
     {CHtml::error("gender_id", $student)}

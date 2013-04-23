@@ -248,4 +248,52 @@ class CUtils {
         $res .= " ".date("Y", $stamp);
         return $res;
     }
+
+    /**
+     * Вернуть название месяца по номеру
+     *
+     * @param $monthNum
+     * @return mixed
+     */
+    public static function getMonthAsWord($monthNum) {
+        $monthNum = str_pad($monthNum, 2, "0");
+        $months = array(
+            "01" => "января",
+            "02" => "февраля",
+            "03" => "марта",
+            "04" => "апреля",
+            "05" => "мая",
+            "06" => "июня",
+            "07" => "июля",
+            "08" => "августа",
+            "09" => "сентября",
+            "10" => "октября",
+            "11" => "ноября",
+            "12" => "декабря"
+        );
+        return $months[$monthNum];
+    }
+
+    /**
+     * Отправка сообщений phpMailer-ом
+     *
+     * @param $toEmail
+     * @param $messageTitle
+     * @param $messageBody
+     */
+    public static function sendEmail($toEmail, $messageTitle, $messageBody) {
+        $mailer = new PHPMailer();
+        $mailer->SetFrom(MAIL_SMTP_FROM);
+        $mailer->Subject($messageTitle);
+        $mailer->MsgHTML($messageBody);
+        $mailer->AddAddress($toEmail);
+        if (MAIL_SMTP_ENABLED) {
+            $mailer->IsSMTP();
+            $mailer->Host = MAIL_SMTP_HOST;
+            $mailer->SMTPAuth = MAIL_SMTP_AUTH;
+            $mailer->Username = MAIL_SMTP_USER;
+            $mailer->Password = MAIL_SMTP_PASS;
+        }
+        $mailer->Send();
+    }
 }

@@ -64,11 +64,22 @@ class CRecordSet {
      * @return int
      */
     public function getPageSize() {
-        $this->_pageSize = 20;
+        if (is_null($this->_pageSize)) {
+            $this->_pageSize = 20;
+        }
         if (CRequest::getInt("page_size") !== 0) {
             $this->_pageSize = CRequest::getInt("page_size");
         }
         return $this->_pageSize;
+    }
+
+    /**
+     * Установить размер страницы
+     *
+     * @param $size
+     */
+    public function setPageSize($size) {
+        $this->_pageSize = $size;
     }
     /**
      * Номер текущей страницы
@@ -104,12 +115,19 @@ class CRecordSet {
             return $this->getCount();
         } else {
             $query = new CQuery();
-            $query->select("count(".$this->getTableAlias().".id) as cnt")
-                ->from($this->getQuery()->getTable())
-                ->condition($this->getQuery()->getCondition());
-                foreach ($this->getQuery()->getInnerJoins()->getItems() as $key=>$value) {
-                    $query->innerJoin($key, $value);
-                }
+            if (mb_strpos(mb_strtolower($this->getQuery()->getFields()), "distinct") === false) {
+                $query->select("count(".$this->getTableAlias().".id) as cnt");
+            } else {
+                $query->select("count(distinct ".$this->getTableAlias().".id) as cnt");
+            }
+            $query->from($this->getQuery()->getTable())
+            ->condition($this->getQuery()->getCondition());
+            foreach ($this->getQuery()->getInnerJoins()->getItems() as $key=>$value) {
+                $query->innerJoin($key, $value);
+            }
+            foreach ($this->getQuery()->getLeftJoins() as $key=>$value) {
+                $query->leftJoin($key, $value);
+            }
             $arr = $query->execute();
             if ($arr->getCount() > 0) {
                 $item = $arr->getFirstItem();

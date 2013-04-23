@@ -28,6 +28,7 @@ class CQuery {
     private $_order = null;
     private $_limit = null;
     private $_limitStart = null;
+    private $_group = null;
 
     /**
      * Конструктор.
@@ -95,7 +96,7 @@ class CQuery {
     private function getQueryType() {
         return $this->_type;
     }
-    private function getFields() {
+    public function getFields() {
         return implode(", ", $this->_fields);
     }
     /**
@@ -118,6 +119,9 @@ class CQuery {
         if(!is_null($this->_condition)) {
             $q .=
             "WHERE ".$this->_condition;
+        }
+        if (!is_null($this->_group)) {
+            $q .= "GROUP BY ".$this->_group." ";
         }
         if (!is_null($this->_order)) {
             $q .= " ORDER BY ".$this->_order." ";
@@ -293,6 +297,10 @@ class CQuery {
         }
         return $this->_innerJoin;
     }
+
+    /**
+     * @return array
+     */
     public function getLeftJoins() {
         if (is_null($this->_leftJoin)) {
             $this->_leftJoin = array();
@@ -301,6 +309,11 @@ class CQuery {
     }
     public function order ($by) {
         $this->_order = $by;
+        return $this;
+    }
+    public function group($by) {
+        $this->_group = $by;
+        return $this;
     }
 
     /**

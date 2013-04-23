@@ -44,20 +44,20 @@ class CPaginator {
         $end = $this->getPagesCount();
         if ($this->getCurrentPageNumber() > 5) {
             $start = $this->getCurrentPageNumber() - 5;
-            $res["Первая"] = $action."&page=1";
+            $res["Первая"] = $action."&page=1&page_size=".$this->getRecordSet()->getPageSize();
             if ($this->getCurrentPageNumber() !== 1) {
-                $res["<<"] = $action."&page=".($this->getCurrentPageNumber() - 1);
+                $res["<<"] = $action."&page=".($this->getCurrentPageNumber() - 1)."&page_size=".$this->getRecordSet()->getPageSize();
             }
         }
         if ($end - $this->getCurrentPageNumber() > 5) {
             $end = $this->getCurrentPageNumber() + 5;
         }
         for ($i = $start; $i <= $end; $i++) {
-            $res[$i] = $action."&page=".$i;
+            $res[$i] = $action."&page=".$i."&page_size=".$this->getRecordSet()->getPageSize();
         }
         if ($end != $this->getCurrentPageNumber()) {
-            $res[">>"] = $action."&page=".($this->getCurrentPageNumber() + 1);
-            $res["Последняя"] = $action."&page=".$this->getPagesCount();
+            $res[">>"] = $action."&page=".($this->getCurrentPageNumber() + 1)."&page_size=".$this->getRecordSet()->getPageSize();
+            $res["Последняя"] = $action."&page=".$this->getPagesCount()."&page_size=".$this->getRecordSet()->getPageSize();
         }
         return $res;
     }

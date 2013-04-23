@@ -3,7 +3,7 @@
 {block name="asu_center"}
 <div id="dashboard">
 	{foreach $items->getItems() as $item}
-		<div class="dashboard_item">
+		<div class="dashboard_item item-{$item->getId()}">
 			<div class="item_icon">
 				{if $item->icon !== ""}
 					<img src="{$web_root}images/{$icon_theme}/64x64/{$item->icon}">

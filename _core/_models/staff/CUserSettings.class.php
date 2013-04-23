@@ -29,4 +29,7 @@ class CUserSettings extends CActiveModel {
     public function isShowMessages() {
         return $this->dashboard_show_messages == 1;
     }
+    public function isCheckMessages() {
+        return $this->dashboard_check_messages == 1;
+    }
 }
