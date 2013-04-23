@@ -17,7 +17,7 @@ class CPerson extends CActiveModel{
     private $_role = null;
     private $_resource = null;
     private $_manager = null;
-    private $_types = null;
+    protected $_types = null;
     protected $_orders = null;
     protected $_ratingIndexesValues = null;
     protected $_publications = null;
@@ -67,6 +67,11 @@ class CPerson extends CActiveModel{
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getDegree"
             ),
+            "types" => array(
+                "relationPower" => RELATION_COMPUTED,
+                "storageProperty" => "_types",
+                "relationFunction" => "getTypes"
+            )
         );
     }
     /**

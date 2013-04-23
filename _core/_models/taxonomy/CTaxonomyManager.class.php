@@ -362,6 +362,19 @@ class CTaxonomyManager {
         }
         return null;
     }
+
+    /**
+     * Типы участия на кафедре
+     *
+     * @return array
+     */
+    public static function getTypesList() {
+        $result = array();
+        foreach (self::getCacheTypes()->getItems() as $type) {
+            $result[$type->getId()] = $type->getValue();
+        }
+        return $result;
+    }
     /**
      * Объект таксономии по псевдониму или id
      *
