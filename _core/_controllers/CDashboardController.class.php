@@ -111,6 +111,7 @@ class CDashboardController extends CBaseController {
 			}
 		}
         $icons = new CArrayList();
+        $iconSources = new CArrayList();
         $dirs = array(
             "actions",
             "apps",
@@ -126,10 +127,25 @@ class CDashboardController extends CBaseController {
             if ($h = opendir(CORE_CWD."/images/tango/16x16/".$dir."/")) {
                 while ($file = readdir($h)) {
                     if (strpos($file, ".png")) {
-                        $icons->add($dir."/".$file, $dir."/".$file);
+                        $iconSources->add($dir."/".$file, $dir."/".$file);
                     }
                 }
                 closedir($h);
+            }
+        }
+        /**
+         * Теперь исключаем те, которых нет в фаензе
+         */
+        foreach ($dirs as $dir) {
+            if (file_exists(CORE_CWD."/images/tango/64x64/".$dir)) {
+                if ($h = opendir(CORE_CWD."/images/tango/64x64/".$dir."/")) {
+                    while ($file = readdir($h)) {
+                        if ($iconSources->hasElement($dir."/".$file)) {
+                            $icons->add($dir."/".$file, $dir."/".$file);
+                        }
+                    }
+                    closedir($h);
+                }
             }
         }
         $item = new CDashboardItem();
@@ -177,8 +193,8 @@ class CDashboardController extends CBaseController {
          * Теперь исключаем те, которых нет в фаензе
          */
         foreach ($dirs as $dir) {
-            if (file_exists(CORE_CWD."/images/faenza/64x64/".$dir)) {
-                if ($h = opendir(CORE_CWD."/images/faenza/64x64/".$dir."/")) {
+            if (file_exists(CORE_CWD."/images/tango/64x64/".$dir)) {
+                if ($h = opendir(CORE_CWD."/images/tango/64x64/".$dir."/")) {
                     while ($file = readdir($h)) {
                         if ($iconSources->hasElement($dir."/".$file)) {
                             $icons->add($dir."/".$file, $dir."/".$file);
