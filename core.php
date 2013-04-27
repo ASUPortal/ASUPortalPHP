@@ -204,6 +204,7 @@
     define("TABLE_PAGES", "pg_uploads");
     define("TABLE_SUBSCRIPTIONS", "subscriptions");
     define("TABLE_PERSON_CHILDREN", "kadri_childs");
+    define("TABLE_PERSON_BY_TYPES", "kadri_in_ptypes");
 
     // суффиксы таблиц доступа
     define("ACL_ENTRIES", "_access_entries");
