@@ -83,6 +83,33 @@ class CPerson extends CActiveModel{
             )
         );
     }
+    public function attributeLabels() {
+        return array(
+            "types" => "Тип участия на кафедре",
+            "to_tabel" => "Учитывать в табеле",
+            "is_slave" => "Совместитель",
+            "manager_id" => "Руководитель",
+            "department_role_id" => "Роль на кафедре",
+            "fio" => "ФИО полностью",
+            "fio_short" => "ФИО кратко",
+            "pol" => "Пол",
+            "date_rogd" => "Дата рождения",
+            "birth_place" => "Место рождения",
+            "nation" => "Национальность",
+            'social' => "Социальное происхождение",
+            "family_status" => "Семейное положение",
+            "INN" => "ИНН",
+            "insurance_num" => "Страховой номер",
+            "passp_seria" => "Паспорт серия",
+            "passp_nomer" => "Паспорт номер",
+            "passp_place" => "Кем выдан",
+            "language1" => "Иностранный язык",
+            "work_place" => "Основное место работы (для совместителей)",
+            "dolgnost" => "Должность",
+            "zvanie" => "Звание",
+            "stepen" => "Ученая степень"
+        );
+    }
     /**
      * Есть ли приказ, который в настоящее время действует
      *

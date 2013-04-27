@@ -35,6 +35,20 @@ class CStaffController extends CBaseController{
             ->from(TABLE_PERSON." as person")
             ->order("person.fio asc");
         /**
+         * Сортировки
+         */
+        $direction = "asc";
+        if (CRequest::getString("direction") !== "") {
+            $direction = CRequest::getString("direction");
+        }
+        if (CRequest::getString("order") == "types") {
+            $query->innerJoin(TABLE_PERSON_BY_TYPES." as pt1", "pt1.kadri_id = person.id")
+                ->innerJoin(TABLE_TYPES." as type1", "type1.id = pt1.person_type_id")
+                ->order("type1.name ".$direction);
+        } elseif (CRequest::getString("order") == "fio") {
+            $query->order("person.fio ".$direction);
+        }
+        /**
          *
          */
         $selectedPerson = null;

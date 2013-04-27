@@ -2,6 +2,13 @@
     jQuery(document).ready(function(){
         jQuery("#tabs").tabs();
         jQuery("#tabs-common").tabs();
+        jQuery("#date_rogd").datepicker({
+            dateFormat: "dd.mm.yy",
+            showOn: "both",
+            buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
+            buttonImageOnly: true,
+            changeYear: true
+        });
     });
 </script>
 
