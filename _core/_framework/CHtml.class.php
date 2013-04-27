@@ -524,6 +524,18 @@ class CHtml {
         }
     }
     public static function activeCheckBox($name, CModel $model, $id = "", $class = "", $html = "") {
+        /**
+         * Безумно полезная штука для работы со связанными
+         * моделями. Если в названии поля есть скобки, то производится
+         * разбор вида подмодель[ее поле]
+         */
+        $submodelName = "";
+        if (strpos($name, "[") !== false) {
+            $submodelName = substr($name, 0, strpos($name, "["));
+            $name = substr($name, strpos($name, "[") + 1);
+            $name = substr($name, 0, strlen($name) - 1);
+            $model = $model->$submodelName;
+        }
         if ($model->$name == true) {
             $name = $model::getClassName()."[".$name."]";
             self::checkBox($name, "1", true, $id, $class, $html);

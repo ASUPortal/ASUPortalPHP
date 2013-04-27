@@ -35,6 +35,7 @@ class CStaffManager{
     private static $_cacheDiplomPreviews = null;
     private static $_cacheDiplomPreviewComissions = null;
     private static $_cacheUsatuOrders = null;
+    private static $_cachePersonChildren = null;
     /**
      * Инициализация всех сотрудников.
      *
@@ -1010,5 +1011,30 @@ class CStaffManager{
             }
         }
         return self::getCacheUsatuOrders()->getItem($key);
+    }
+
+    /**
+     * @return CArrayList|null
+     */
+    private static function getCachePersonChildren() {
+        if (is_null(self::$_cachePersonChildren)) {
+            self::$_cachePersonChildren = new CArrayList();
+        }
+        return self::$_cachePersonChildren;
+    }
+
+    /**
+     * @param $key
+     * @return CPersonChild
+     */
+    public static function getPersonChild($key) {
+        if (!self::getCachePersonChildren()->hasElement($key)) {
+            $ar = CActiveRecordProvider::getById(TABLE_PERSON_CHILDREN, $key);
+            if (!is_null($ar)) {
+                $child = new CPersonChild($ar);
+                self::getCachePersonChildren()->add($child->getId(), $child);
+            }
+        }
+        return self::getCachePersonChildren()->getItem($key);
     }
 }

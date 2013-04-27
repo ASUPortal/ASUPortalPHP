@@ -23,6 +23,7 @@ class CPerson extends CActiveModel{
     protected $_publications = null;
     protected $_title = null;
     protected $_degrees = null;
+    protected $_children = null;
 
     protected function relations() {
         return array(
@@ -71,6 +72,14 @@ class CPerson extends CActiveModel{
                 "relationPower" => RELATION_COMPUTED,
                 "storageProperty" => "_types",
                 "relationFunction" => "getTypes"
+            ),
+            "children" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_children",
+                "storageTable" => TABLE_PERSON_CHILDREN,
+                "storageCondition" => "kadri_id = " . $this->id,
+                "managerClass" => "CStaffManager",
+                "managerGetObject" => "getPersonChild"
             )
         );
     }

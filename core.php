@@ -203,6 +203,7 @@
     define("TABLE_TAXONOMIES_LEGACY", "sprav_links");
     define("TABLE_PAGES", "pg_uploads");
     define("TABLE_SUBSCRIPTIONS", "subscriptions");
+    define("TABLE_PERSON_CHILDREN", "kadri_childs");
 
     // суффиксы таблиц доступа
     define("ACL_ENTRIES", "_access_entries");
