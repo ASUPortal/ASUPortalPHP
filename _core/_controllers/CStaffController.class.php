@@ -395,21 +395,48 @@ class CStaffController extends CBaseController{
         $fields = array(
             "passp_seria",
             "passp_nomer",
-            "passp_place",
-            "passp_date"
+            "date_rogd",
+            "INN",
+            "insurance_num",
+            "add_work",
+            "tel_work",
+            "add_home",
+            "tel_home",
+            "e_mail",
+            "site",
+            "ekspert_spec",
+            "ekspert_kluch_slova",
+            "nagradi",
+            "primech",
+            "add_contact"
         );
         $query = new CQuery();
-        $query->select("person.id as id, person.fio as name")
+        $query->select("person.*")
             ->from(TABLE_PERSON." as person")
             ->condition("MATCH (".implode($fields, ", ").") AGAINST ('".$term."')")
             ->limit(0, 5);
-        foreach ($query->execute()->getItems() as $item) {
-            $res[] = array(
-                "label" => $item["name"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
-                "filter" => "person"
-            );
+        $objects = new CArrayList();
+        foreach ($query->execute()->getItems() as $ar) {
+            $person = new CPerson(new CActiveRecord($ar));
+            $objects->add($person->getId(), $person);
+        }
+        foreach ($objects->getItems() as $person) {
+            foreach ($fields as $field) {
+                if (strpos($person->$field, $term) !== false) {
+                    $labels = $person->attributeLabels();
+                    if (array_key_exists($field, $labels)) {
+                        $label = $labels[$field];
+                    } else {
+                        $label = $field;
+                    }
+                    $res[] = array(
+                        "label" => $person->getName()." (".$label.": ".$person->$field.")",
+                        "value" => $person->getName()." (".$label.": ".$person->$field.")",
+                        "object_id" => $person->getId(),
+                        "filter" => "person"
+                    );
+                }
+            }
         }
         echo json_encode($res);
     }
