@@ -1015,6 +1015,20 @@ class CStaffManager{
     }
 
     /**
+     * Приказы для ГАК
+     *
+     * @return array
+     */
+    public static function getUsatuSEBOrdersList() {
+        $result = array();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_USATU_ORDERS, "order_for_seb = 1")->getItems() as $ar) {
+            $order = new COrderUsatu($ar);
+            $result[$order->getId()] = $order->getName();
+        }
+        return $result;
+    }
+
+    /**
      * @return CArrayList|null
      */
     private static function getCachePersonChildren() {

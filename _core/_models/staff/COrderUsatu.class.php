@@ -9,6 +9,9 @@
 class COrderUsatu extends CActiveModel {
     protected $_table = TABLE_USATU_ORDERS;
     protected $_type = null;
+
+    public $order_for_seb = 0;
+
     protected function relations() {
         return array(
             "type" => array(
@@ -28,7 +31,8 @@ class COrderUsatu extends CActiveModel {
             "comment" => "Комментарий",
             "text" => "Текст приказа",
             "title" => "Заголовок приказа",
-            "order_num_date" => "Дата и номер"
+            "order_num_date" => "Дата и номер",
+            "order_for_seb" => "Приказ по ГАК"
         );
     }
     protected function validationRules() {
@@ -43,5 +47,8 @@ class COrderUsatu extends CActiveModel {
                 "orders_type"
             )
         );
+    }
+    public function getName() {
+        return "№".$this->num." от ".date("d.m.Y", strtotime($this->date));
     }
 }

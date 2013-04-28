@@ -28,6 +28,12 @@
     </p>
 
     <p>
+        {CHtml::activeLabel("order_for_seb", $order)}
+        {CHtml::activeCheckBox("order_for_seb", $order)}
+        {CHtml::error("order_for_seb", $order)}
+    </p>
+
+    <p>
         {CHtml::activeLabel("order_num_date", $order)}
         № {CHtml::activeTextField("num", $order, "", "", 'style="width: 100px;"')}
         {CHtml::error("num", $order)}

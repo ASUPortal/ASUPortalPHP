@@ -44,6 +44,11 @@ class COrderUsatuController extends CBaseController {
         /**
          * Фильтрация приказов
          */
+        $selectedOrder = null;
+        if (!is_null(CRequest::getFilter("order"))) {
+            $query->condition("usatu_order.id = ".CRequest::getFilter("order"));
+            $selectedOrder = CStaffManager::getUsatuOrder(CRequest::getFilter("order"));
+        }
         /**
          * Выборка приказов
          */
@@ -52,6 +57,7 @@ class COrderUsatuController extends CBaseController {
             $order = new COrderUsatu($item);
             $orders->add($order->getId(), $order);
         }
+        $this->setData("selectedOrder", $selectedOrder);
         $this->setData("orders", $orders);
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
@@ -91,6 +97,46 @@ class COrderUsatuController extends CBaseController {
         $this->redirect("?action=index");
     }
     public function actionSearch() {
-
+        $res = array();
+        $term = CRequest::getString("term");
+        /**
+         * Полнотекстовый поиск по текстовым полям
+         */
+        $fields = array(
+            "date",
+            "num",
+            "title",
+            "text",
+            "comment"
+        );
+        $query = new CQuery();
+        $query->select("o.*")
+            ->from(TABLE_USATU_ORDERS." as o")
+            ->condition("MATCH (".implode($fields, ", ").") AGAINST ('".$term."')")
+            ->limit(0, 5);
+        $objects = new CArrayList();
+        foreach ($query->execute()->getItems() as $ar) {
+            $object = new COrderUsatu(new CActiveRecord($ar));
+            $objects->add($object->getId(), $object);
+        }
+        foreach ($objects->getItems() as $object) {
+            foreach ($fields as $field) {
+                if (strpos($object->$field, $term) !== false) {
+                    $labels = $object->attributeLabels();
+                    if (array_key_exists($field, $labels)) {
+                        $label = $labels[$field];
+                    } else {
+                        $label = $field;
+                    }
+                    $res[] = array(
+                        "label" => $object->getName()." (".$label.": ".$object->$field.")",
+                        "value" => $object->getName()." (".$label.": ".$object->$field.")",
+                        "object_id" => $object->getId(),
+                        "filter" => "order"
+                    );
+                }
+            }
+        }
+        echo json_encode($res);
     }
 }
