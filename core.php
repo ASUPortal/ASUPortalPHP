@@ -48,6 +48,7 @@
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."calendar".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."news".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."state_examination".CORE_DS,
+        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."state_attestation".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."rating".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."examination".CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."print".CORE_DS,
@@ -207,6 +208,9 @@
     define("TABLE_PERSON_BY_TYPES", "kadri_in_ptypes");
     define("TABLE_PERSON_DIPLOMS", "obrazov");
     define("TABLE_PERSON_COURCES", "courses");
+    define("TABLE_SAB_COMMISSIONS", "sab_commission");
+    define("TABLE_SAB_COMMISSION_MEMBERS", "sab_commission_members");
+    define("TABLE_SAB_COMMISSION_DIPLOMS", "sab_commission_diploms");
 
     // суффиксы таблиц доступа
     define("ACL_ENTRIES", "_access_entries");
