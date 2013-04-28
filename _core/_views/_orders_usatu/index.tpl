@@ -67,7 +67,7 @@
              * Добавляем автопоиск
              */
             jQuery("#search").autocomplete({
-                source: web_root + "_modules/_staff/index.php?action=search",
+                source: web_root + "_modules/_orders_usatu/index.php?action=search",
                 minLength: 2,
                 select: function(event, ui) {
                     window.location.href= "?action=index&filter=" + ui.item.filter + ":" + ui.item.object_id;

@@ -387,7 +387,7 @@ function do_filter_if_enter_press(e)
 </select> <?php echo sprav_edit_link('study_marks');?>
 	 </td>
 	 <td style="padding-left:40px;">
-	 Номер ГАК <br/>
+	 Номер ГЭК <br/>
 	 <input type=text maxlength=10 size=15 name="gak_num" value="<?php echo getFormItemValue('gak_num'); ?>">
 	 <td>
 	 </td>

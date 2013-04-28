@@ -28,11 +28,10 @@ class CSABCommission extends CActiveModel {
                 "managerGetObject" => "getPerson"
             ),
             "diploms" => array(
-                "relationPower" => RELATION_MANY_TO_MANY,
+                "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_diploms",
-                "joinTable" => TABLE_SAB_COMMISSION_DIPLOMS,
-                "leftCondition" => "commission_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
-                "rightKey" => "diplom_id",
+                "storageTable" => TABLE_DIPLOMS,
+                "storageCondition" => "gak_num = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getDiplom"
             ),

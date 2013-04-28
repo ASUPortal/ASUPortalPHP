@@ -137,18 +137,17 @@ class CSABComissionController extends CBaseController {
         $this->renderView("_state_attestation/subform.students.tpl");
     }
     public function actionAddDiplom() {
-        $ar = new CActiveRecord(array(
-            "id" => null,
-            "commission_id" => CRequest::getInt("commission_id"),
-            "diplom_id" => CRequest::getInt("diplom_id")
-        ));
-        $ar->setTable(TABLE_SAB_COMMISSION_DIPLOMS);
-        $ar->insert();
+        $diplom = CStaffManager::getDiplom(CRequest::getInt("diplom_id"));
+        if (!is_null($diplom)) {
+            $diplom->gak_num = CRequest::getInt("commission_id");
+            $diplom->save();
+        }
     }
     public function actionRemoveDiplom() {
-        var_dump("commission_id = ".CRequest::getInt("commission_id")." AND diplom_id = ".CRequest::getInt("diplom_id"));
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_SAB_COMMISSION_DIPLOMS, "commission_id = ".CRequest::getInt("commission_id")." AND diplom_id = ".CRequest::getInt("diplom_id"))->getItems() as $ar) {
-            $ar->remove();
+        $diplom = CStaffManager::getDiplom(CRequest::getInt("diplom_id"));
+        if (!is_null($diplom)) {
+            $diplom->gak_num = 0;
+            $diplom->save();
         }
     }
 }
