@@ -333,10 +333,6 @@ class CHtml {
         if ($submodelName !== "") {
             $field .= "[".$submodelName."]";
         }
-        $field = $model::getClassName();
-        if ($multiple_key !== "") {
-            $field .= "[".$multiple_key."]";
-        }
         $field .= "[".$name."]";
         self::textBox($field, $model->$name, $id, $class, $html);
     }

@@ -11,6 +11,7 @@
 
 
 class CPerson extends CActiveModel{
+    protected $_table = TABLE_PERSON;
     private $_subordinators = null;
     private $_post = null;
     private $_user = null;
