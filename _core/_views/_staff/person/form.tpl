@@ -2,7 +2,6 @@
     jQuery(document).ready(function(){
         jQuery("#tabs").tabs();
         jQuery("#tabs-common").tabs();
-        jQuery("#tabs-education").tabs();
         jQuery("#date_rogd").datepicker({
             dateFormat: "dd.mm.yy",
             showOn: "both",

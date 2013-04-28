@@ -24,6 +24,10 @@ class CPerson extends CActiveModel{
     protected $_title = null;
     protected $_degrees = null;
     protected $_children = null;
+    protected $_diploms = null;
+    protected $_cources = null;
+    protected $_phdpapers = null;
+    protected $_doctorpapers = null;
 
     protected function relations() {
         return array(
@@ -80,6 +84,38 @@ class CPerson extends CActiveModel{
                 "storageCondition" => "kadri_id = " . $this->id,
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPersonChild"
+            ),
+            "diploms" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_diploms",
+                "storageTable" => TABLE_PERSON_DIPLOMS,
+                "storageCondition" => "kadri_id = " . $this->id,
+                "managerClass" => "CStaffManager",
+                "managerGetObject" => "getPersonDiplom"
+            ),
+            "cources" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_cources",
+                "storageTable" => TABLE_PERSON_COURCES,
+                "storageCondition" => "kadri_id = " . $this->id,
+                "managerClass" => "CStaffManager",
+                "managerGetObject" => "getPersonCourse"
+            ),
+            "phdpapers" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_phdpapers",
+                "storageTable" => TABLE_PERSON_DISSER,
+                "storageCondition" => "kadri_id = " . $this->id." AND disser_type='кандидат'",
+                "managerClass" => "CStaffManager",
+                "managerGetObject" => "getPersonPHDPaper"
+            ),
+            "doctorpapers" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_doctorpapers",
+                "storageTable" => TABLE_PERSON_DISSER,
+                "storageCondition" => "kadri_id = " . $this->id." AND disser_type='доктор'",
+                "managerClass" => "CStaffManager",
+                "managerGetObject" => "getPersonDoctorPaper"
             )
         );
     }

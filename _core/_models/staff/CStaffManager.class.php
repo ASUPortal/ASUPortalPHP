@@ -36,6 +36,7 @@ class CStaffManager{
     private static $_cacheDiplomPreviewComissions = null;
     private static $_cacheUsatuOrders = null;
     private static $_cachePersonChildren = null;
+    private static $_cachePersonDiploms = null;
     /**
      * Инициализация всех сотрудников.
      *
@@ -1036,5 +1037,69 @@ class CStaffManager{
             }
         }
         return self::getCachePersonChildren()->getItem($key);
+    }
+
+    /**
+     * @return CArrayList|null
+     */
+    private static function getCachePersonDiploms() {
+        if (is_null(self::$_cachePersonDiploms)) {
+            self::$_cachePersonDiploms = new CArrayList();
+        }
+        return self::$_cachePersonDiploms;
+    }
+
+    /**
+     * @param $key
+     * @return CPersonDiplom
+     */
+    public static function getPersonDiplom($key) {
+        if (!self::getCachePersonDiploms()->hasElement($key)) {
+            $ar = CActiveRecordProvider::getById(TABLE_PERSON_DIPLOMS, $key);
+            if (!is_null($ar)) {
+                $child = new CPersonDiplom($ar);
+                self::getCachePersonDiploms()->add($child->getId(), $child);
+            }
+        }
+        return self::getCachePersonDiploms()->getItem($key);
+    }
+
+    /**
+     * @param $key
+     * @return CPersonCourse|null
+     */
+    public static function getPersonCourse($key) {
+        $course = null;
+        $ar = CActiveRecordProvider::getById(TABLE_PERSON_COURCES, $key);
+        if (!is_null($ar)) {
+            $course = new CPersonCourse($ar);
+        }
+        return $course;
+    }
+
+    /**
+     * @param $key
+     * @return CPersonPHDPaper|null
+     */
+    public static function getPersonPHDPaper($key) {
+        $paper = null;
+        $ar = CActiveRecordProvider::getById(TABLE_PERSON_DISSER, $key);
+        if (!is_null($ar)) {
+            $paper = new CPersonPHDPaper($ar);
+        }
+        return $paper;
+    }
+
+    /**
+     * @param $key
+     * @return CPersonDoctorPaper|null
+     */
+    public static function getPersonDoctorPaper($key) {
+        $paper = null;
+        $ar = CActiveRecordProvider::getById(TABLE_PERSON_DISSER, $key);
+        if (!is_null($ar)) {
+            $paper = new CPersonDoctorPaper($ar);
+        }
+        return $paper;
     }
 }

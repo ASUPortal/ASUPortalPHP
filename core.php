@@ -205,6 +205,8 @@
     define("TABLE_SUBSCRIPTIONS", "subscriptions");
     define("TABLE_PERSON_CHILDREN", "kadri_childs");
     define("TABLE_PERSON_BY_TYPES", "kadri_in_ptypes");
+    define("TABLE_PERSON_DIPLOMS", "obrazov");
+    define("TABLE_PERSON_COURCES", "courses");
 
     // суффиксы таблиц доступа
     define("ACL_ENTRIES", "_access_entries");
