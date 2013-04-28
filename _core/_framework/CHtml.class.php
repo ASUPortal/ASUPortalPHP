@@ -10,6 +10,7 @@
  */
 class CHtml {
     private static $_calendarInit = false;
+    private static $_multiselectInit = false;
     public static function button($value, $onClick = "") {
         echo '<input type="button" value="'.$value.'" onclick="'.$onClick.'">';
     }
@@ -544,6 +545,61 @@ class CHtml {
         if ($model->getValidationErrors()->hasElement($name)) {
             echo "<p>".$model->getValidationErrors()->getItem($name)."</p>";
         }
+    }
+    public static function activeMultiSelect($name, CModel $model, $values = array()) {
+        /**
+         * Безумно полезная штука для работы со связанными
+         * моделями. Если в названии поля есть скобки, то производится
+         * разбор вида подмодель[ее поле]
+         */
+        $submodelName = "";
+        if (strpos($name, "[") !== false) {
+            $submodelName = substr($name, 0, strpos($name, "["));
+            $name = substr($name, strpos($name, "[") + 1);
+            $name = substr($name, 0, strlen($name) - 1);
+            $model = $model->$submodelName;
+        }
+        $field = $model::getClassName();
+        if ($submodelName !== "") {
+            $field .= "[".$submodelName."]";
+        }
+        $field .= "[".$name."][]";
+        // дописываем скрипт для мультивыбора
+        if (!self::$_multiselectInit) {
+            echo '
+            <script>
+                jQuery(document).ready(function(){
+                    jQuery(".multiselectClonable").change(function(){
+                        var current = jQuery(this);
+                        var span = jQuery(current).parent();
+                        var parent = jQuery(span).parent();
+                        // клонируем текущий элемент
+                        jQuery(span).clone(true).appendTo(parent);
+                        // у текущего элемента активируем удалялку и снимаем класс клонирования
+                        var img = jQuery(span).find("img")[0];
+                        jQuery(img).css("display", "");
+                        jQuery(current).removeClass("multiselectClonable");
+                        jQuery(current).unbind("change");
+                    });
+                });
+            </script>
+            ';
+            self::$_multiselectInit = true;
+        }
+        echo '<div style="margin-left: 200px; ">';
+        foreach ($model->$name->getItems() as $f) {
+            // отрисовываем поле со значением
+            echo '<span>';
+            self::dropDownList($field, $values, $f->getId());
+            echo '&nbsp;&nbsp; <img src="'.WEB_ROOT.'images/design/mn.gif" style="cursor: pointer; " onclick="jQuery(this).parent().remove(); return false;" />';
+            echo '<br /></span>';
+        }
+        // добавляем последний невыбранным
+        echo '<span>';
+        self::dropDownList($field, $values, null, "", "multiselectClonable");
+        echo '&nbsp;&nbsp; <img src="'.WEB_ROOT.'images/design/mn.gif" style="cursor: pointer; display: none; " onclick="jQuery(this).parent().remove(); return false;" />';
+        echo '<br /></span>';
+        echo '</div>';
     }
     public static function activeSelect($name, CModel $model, $values = array(), $isMultiple = false, $size = 5, $id = "") {
         echo '<select name="'.$model::getClassName().'['.$name.'][]" size="'.$size.'" ';

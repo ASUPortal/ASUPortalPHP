@@ -1,6 +1,6 @@
 <p>
     {CHtml::activeLabel("person[types]", $form)}
-    {CHtml::activeCheckBoxGroup("person[types]", $form, CTaxonomyManager::getTypesList())}
+    {CHtml::activeMultiSelect("person[types]", $form, CTaxonomyManager::getTypesList())}
     {CHtml::error("person[types]", $form)}
 </p>
 
