@@ -60,3 +60,11 @@
         return false;
     }
 </script>
+
+<p>
+    <a href="events.php?action=add&grant_id={$form->grant->getId()}">
+        <center>
+            <img src="{$web_root}images/{$icon_theme}/32x32/actions/appointment-new.png"><br>
+            Добавить мероприятие
+        </center></a>
+</p>
