@@ -388,7 +388,12 @@ function do_filter_if_enter_press(e)
 	 </td>
 	 <td style="padding-left:40px;">
 	 Номер ГЭК <br/>
-	 <input type=text maxlength=10 size=15 name="gak_num" value="<?php echo getFormItemValue('gak_num'); ?>">
+         <select name="gak_num">
+             <?php
+             $query = "select id, title from sab_commission where year_id = ".CUtils::getCurrentYear()->getId()." order by title asc";
+             echo getFrom_ListItemValue($query, "id", "title", "gak_num");
+             ?>
+         </select>
 	 <td>
 	 </td>
 	 </tr>

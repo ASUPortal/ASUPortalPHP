@@ -23,13 +23,15 @@ class CSABCommissionForm extends CFormModel {
             $ar->remove();
         }
         foreach ($members as $m) {
-            $ar = new CActiveRecord(array(
-                "commission_id" => $commObj->getId(),
-                "person_id" => $m,
-                "id" => null
-            ));
-            $ar->setTable(TABLE_SAB_COMMISSION_MEMBERS);
-            $ar->insert();
+            if ($m !== 0) {
+                $ar = new CActiveRecord(array(
+                    "commission_id" => $commObj->getId(),
+                    "person_id" => $m,
+                    "id" => null
+                ));
+                $ar->setTable(TABLE_SAB_COMMISSION_MEMBERS);
+                $ar->insert();
+            }
         }
     }
 }
