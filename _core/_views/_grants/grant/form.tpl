@@ -16,16 +16,16 @@
             <li><a href="#tab-members">Участники</a></li>
         </ul>
         <div id="tab-common">
-            {include file="_grants/subform.common.tpl"}
+            {include file="_grants/grant/subform.common.tpl"}
         </div>
         <div id="tab-events">
-            {include file="_grants/subform.events.tpl"}
+            {include file="_grants/grant/subform.events.tpl"}
         </div>
         <div id="tab-attachments">
-            {include file="_grants/subform.attachments.tpl"}
+            {include file="_grants/grant/subform.attachments.tpl"}
         </div>
         <div id="tab-members">
-            {include file="_grants/subform.members.tpl"}
+            {include file="_grants/grant/subform.members.tpl"}
         </div>
     </div>
 

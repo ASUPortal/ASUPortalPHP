@@ -3,9 +3,9 @@
 {block name="asu_center"}
     <h2>Добавление гранта</h2>
 
-    {include file="_grants/form.tpl"}
+    {include file="_grants/grant/form.tpl"}
 {/block}
 
 {block name="asu_right"}
-    {include file="_grants/add.right.tpl"}
+    {include file="_grants/grant/add.right.tpl"}
 {/block}

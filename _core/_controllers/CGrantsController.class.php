@@ -47,7 +47,7 @@ class CGrantsController extends CBaseController{
         }
         $this->setData("grants", $grants);
         $this->setData("paginator", $set->getPaginator());
-        $this->renderView("_grants/index.tpl");
+        $this->renderView("_grants/grant/index.tpl");
     }
     public function actionAdd() {
         $form = new CGrantForm();
@@ -58,7 +58,7 @@ class CGrantsController extends CBaseController{
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->addJSInclude("_core/jquery.form.js");
         $this->setData("form", $form);
-        $this->renderView("_grants/add.tpl");
+        $this->renderView("_grants/grant/add.tpl");
     }
     public function actionEdit() {
         $grant = CGrantManager::getGrant(CRequest::getInt("id"));
@@ -68,7 +68,7 @@ class CGrantsController extends CBaseController{
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->addJSInclude("_core/jquery.form.js");
         $this->setData("form", $form);
-        $this->renderView("_grants/edit.tpl");
+        $this->renderView("_grants/grant/edit.tpl");
     }
     public function actionDelete() {
         $grant = CGrantManager::getGrant(CRequest::getInt("id"));
@@ -86,12 +86,12 @@ class CGrantsController extends CBaseController{
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("form", $form);
-        $this->renderView("_grants/edit.tpl");
+        $this->renderView("_grants/grant/edit.tpl");
     }
     public function actionGetUploadForm() {
         $grant = CGrantManager::getGrant(CRequest::getInt("id"));
         $this->setData("grant", $grant);
-        $this->renderView("_grants/subform.fileupload.tpl");
+        $this->renderView("_grants/grant/subform.fileupload.tpl");
     }
     public function actionFileUpload() {
         $grant = new CGrant();
@@ -116,7 +116,7 @@ class CGrantsController extends CBaseController{
         $form = new CGrantForm();
         $form->grant = CGrantManager::getGrant(CRequest::getInt("id"));
         $this->setData("form", $form);
-        $this->renderView("_grants/subform.attachments.tpl");
+        $this->renderView("_grants/grant/subform.attachments.tpl");
     }
     public function actionSearch() {
 

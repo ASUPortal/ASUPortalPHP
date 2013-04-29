@@ -60,4 +60,17 @@ class CGrantManager {
         }
         return self::getCacheAttachments()->getItem($key);
     }
+
+    /**
+     * @param $key
+     * @return CGrantEvent|null
+     */
+    public static function getEvent($key) {
+        $event = null;
+        $ar = CActiveRecordProvider::getById(TABLE_GRANT_EVENTS, $key);
+        if (!is_null($ar)) {
+            $event = new CGrantEvent($ar);
+        }
+        return$event;
+    }
 }

@@ -201,6 +201,7 @@
     define("TABLE_GRANTS", "grants");
     define("TABLE_GRANT_MEMBERS", "grant_members");
     define("TABLE_GRANT_ATTACHMENTS", "grant_attachments");
+    define("TABLE_GRANT_EVENTS", "grant_events");
     define("TABLE_TAXONOMIES_LEGACY", "sprav_links");
     define("TABLE_PAGES", "pg_uploads");
     define("TABLE_SUBSCRIPTIONS", "subscriptions");
