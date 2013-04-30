@@ -10,6 +10,25 @@
 class CGrantEvent extends CActiveModel {
     protected $_table = TABLE_GRANT_EVENTS;
 
+    public function attributeLabels() {
+        return array(
+            "title" => "Название мероприятия",
+            "date_start" => "Дата начала",
+            "date_end" => "Дата окончания",
+            "address" => "Адрес",
+            "type_id" => "Тип"
+        );
+    }
+
+    public function validationRules() {
+        return array(
+            "required" => array(
+                "title",
+                "date_start"
+            )
+        );
+    }
+
     /**
      * @return string
      */

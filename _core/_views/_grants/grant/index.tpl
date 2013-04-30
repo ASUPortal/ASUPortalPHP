@@ -34,5 +34,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_grants/index.right.tpl"}
+    {include file="_grants/grant/index.right.tpl"}
 {/block}

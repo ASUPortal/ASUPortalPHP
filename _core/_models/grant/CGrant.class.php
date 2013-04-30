@@ -21,7 +21,8 @@ class CGrant extends CActiveModel{
             "date_start" => "Дата начала",
             "date_end" => "Дата окончания",
             "organizer" => "Организатор",
-            "upload_filename" => "Название файла"
+            "upload_filename" => "Название файла",
+            "members" => "Участники"
         );
     }
     public function validationRules() {

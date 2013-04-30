@@ -27,11 +27,15 @@ class CGrantEventsController extends CBaseController{
     public function actionAdd() {
         $event = new CGrantEvent();
         $event->grant_id = CRequest::getInt("grant_id");
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("event", $event);
         $this->renderView("_grants/event/add.tpl");
     }
     public function actionEdit() {
         $event = CGrantManager::getEvent(CRequest::getInt("id"));
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("event", $event);
         $this->renderView("_grants/event/edit.tpl");
     }
@@ -43,6 +47,8 @@ class CGrantEventsController extends CBaseController{
             $this->redirect("index.php?action=edit&id=".$event->grant_id);
             return true;
         }
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("event", $event);
         $this->renderView("_grants/event/edit.tpl");
     }
