@@ -12,6 +12,7 @@ class CGrant extends CActiveModel{
     protected $_members = null;
     protected $_attachments = null;
     protected $_events = null;
+    protected $_outgoes = null;
     public $upload;
     public $upload_filename;
     public function attributeLabels() {
@@ -22,7 +23,11 @@ class CGrant extends CActiveModel{
             "date_end" => "Дата окончания",
             "organizer" => "Организатор",
             "upload_filename" => "Название файла",
-            "members" => "Участники"
+            "members" => "Участники",
+            "finances_total" => "Общая сумма",
+            "finances_by_period" => "Сумма в период",
+            "finances_period_type_id" => "Период",
+            "finances_accepted" => "Всего получено",
         );
     }
     public function validationRules() {
@@ -59,6 +64,14 @@ class CGrant extends CActiveModel{
                 "storageCondition" => "grant_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CGrantManager",
                 "managerGetObject" => "getEvent"
+            ),
+            "outgoes" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_outgoes",
+                "storageTable" => TABLE_GRANT_OUTGOES,
+                "storageCondition" => "grant_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "managerClass" => "CGrantManager",
+                "managerGetObject" => "getOutgo"
             )
         );
     }

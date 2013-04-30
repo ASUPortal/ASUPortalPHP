@@ -11,12 +11,16 @@
     <div id="tabs">
         <ul style="height: 30px; ">
             <li><a href="#tab-common">Общая информация</a></li>
+            <li><a href="#tab-finances">Финансирование</a></li>
             <li><a href="#tab-events">Мероприятия</a></li>
             <li><a href="#tab-attachments">Документы</a></li>
             <li><a href="#tab-members">Участники</a></li>
         </ul>
         <div id="tab-common">
             {include file="_grants/grant/subform.common.tpl"}
+        </div>
+        <div id="tab-finances">
+            {include file="_grants/grant/subform.finances.tpl"}
         </div>
         <div id="tab-events">
             {include file="_grants/grant/subform.events.tpl"}

@@ -71,6 +71,19 @@ class CGrantManager {
         if (!is_null($ar)) {
             $event = new CGrantEvent($ar);
         }
-        return$event;
+        return $event;
+    }
+
+    /**
+     * @param $key
+     * @return CGrantOutgo|null
+     */
+    public static function getOutgo($key) {
+        $outgo = null;
+        $ar = CActiveRecordProvider::getById(TABLE_GRANT_OUTGOES, $key);
+        if (!is_null($ar)) {
+            $outgo = new CGrantOutgo($ar);
+        }
+        return $outgo;
     }
 }
