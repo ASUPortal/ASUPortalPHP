@@ -15,7 +15,7 @@ class CPrintController extends CBaseController {
         }
 
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Управление приказами");
+        $this->setPageTitle("Управление печатью по шаблону");
 
         parent::__construct();
     }
@@ -71,23 +71,170 @@ class CPrintController extends CBaseController {
             /**
              * Это место для экспериментов и написания отладочного кода
              */
-            $discipline = 66;
-            $value = "";
+            $value = array();
             /**
-             * Получаем оценку студента по выбранной дисциплине.
-             * Пока получаем просто последнюю оценку вне зависимости
-             * от формы контроля по дисциплине
+             * Получаем все дипломы, которые защищаются в выбранной
+             * комиссии
              */
-            $query = new CQuery();
-            $query->select("act.id, mark.name as name")
-                ->from(TABLE_STUDENTS_ACTIVITY." as act")
-                ->condition("act.student_id = ".$object->getId()." and act.kadri_id = 380 and act.subject_id = ".$discipline." and act.study_act_id in (1, 2, 12, 14)")
-                ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
-                ->order("act.id asc");
-            foreach ($query->execute()->getItems() as $item) {
-                $value = $item["name"];
+            $diploms = new CArrayList();
+            foreach ($object->diploms->getItems() as $diplom) {
+                $diploms->add($diplom->getId(), $diplom);
             }
-            var_dump($value);
+            /**
+             * Считаем, сколько среди них студентов контрактников,
+             * сколько бюджетников
+             */
+            $types = array(
+                0 => 0,
+                1 => 0
+            );
+            foreach ($diploms->getItems() as $diplom) {
+                if (!is_null($diplom->student)) {
+                    if ($diplom->bud_contract == "") {
+                        $types[0] = $types[0] + 1;
+                    } elseif ($diplom->bud_contract == 1) {
+                        $types[0] = $types[0] + 1;
+                    } elseif ($diplom->bud_contract == 2) {
+                        $types[1] = $types[1] + 1;
+                    }
+                }
+            }
+            /**
+             * Теперь собираем всех членов комиссии в один массив.
+             * Сначала берем председателя, потом членов
+             */
+            $members = new CArrayList();
+            if (!is_null($object->manager)) {
+                $member = $object->manager;
+                $members->add($member->getId(), $member);
+            }
+            foreach ($object->members->getItems() as $member) {
+                $members->add($member->getId(), $member);
+            }
+            /**
+             * Теперь идем по всем членам комиссии и выводим
+             * сколько они заслушали дипломов.
+             *
+             * Переменную назовем как в прошлой форме чтобы не
+             * переделывать все
+             */
+            $reviewerIndex = 0;
+            foreach ($members->getItems() as $reviewer) {
+                $reviewerIndex++;
+                $isFirst = true;
+                foreach ($types as $typeId=>$type) {
+                    $dataRow = array();
+                    /**
+                     * Для начала заполним результирующий массив пустыми строками
+                     */
+                    for ($i = 0; $i <= 7; $i++) {
+                        $dataRow[$i] = "";
+                    }
+                    /**
+                     * Если это первая строка, то выводим инфу по рецензенту
+                     * и диплому. В противном случае, только по диплому
+                     */
+                    if ($isFirst) {
+                        $isFirst = false;
+                        /**
+                         * Вся информация по рецензенту или руководителю
+                         *
+                         * Номер рецензента
+                         */
+                        $dataRow[0] = $reviewerIndex;
+                        /**
+                         * ФИО, ученая степень, звание
+                         */
+                        $dataRow[1] = "";
+                        $nv = "";
+                        $nv = $reviewer->getName();
+                        /**
+                         * Степень
+                         */
+                        if (!is_null($reviewer->degree)) {
+                            $nv .= ", ".$reviewer->degree->getValue();
+                        }
+                        /**
+                         * Звание
+                         */
+                        if (!is_null($reviewer->title)) {
+                            $nv .= ", ".$reviewer->title->getValue();
+                        }
+                        $dataRow[1] = $nv;
+                        /**
+                         * Дата рождения
+                         */
+                        $dataRow[2] = "";
+                        if ($reviewer->date_rogd != "") {
+                            $dataRow[2] = date("d.m.Y", strtotime($reviewer->date_rogd));
+                        }
+                        /**
+                         * Паспортные данные
+                         * номер, серия, кем и когда выдан
+                         * ИНН, СНИЛС
+                         */
+                        $nv = "";
+                        if ($reviewer->passp_seria != "") {
+                            $nv = $reviewer->passp_seria;
+                        }
+                        if ($reviewer->passp_nomer != "") {
+                            if ($nv == "") {
+                                $nv = $reviewer->passp_nomer;
+                            } else {
+                                $nv .= " ".$reviewer->passp_nomer;
+                            }
+                        }
+                        if ($reviewer->passp_place != "") {
+                            if ($nv == "") {
+                                $nv = "выдан ".$reviewer->passp_place;
+                            } else {
+                                $nv .= " выдан ".$reviewer->passp_place;
+                            }
+                        }
+                        if ($reviewer->INN != "") {
+                            if ($nv == "") {
+                                $nv = $reviewer->INN;
+                            } else {
+                                $nv .= ", ".$reviewer->INN;
+                            }
+                        }
+                        if ($reviewer->insurance_num != "") {
+                            if ($nv == "") {
+                                $nv = $reviewer->insurance_num;
+                            } else {
+                                $nv .= ", ".$reviewer->insurance_num;
+                            }
+                        }
+                        $dataRow[3] = $nv;
+                        /**
+                         * Полный домашний адрес
+                         */
+                        $dataRow[4] = $reviewer->add_home;
+                        /**
+                         * Номер и дата приказа
+                         */
+                        $dataRow[5] = "";
+                        if (!is_null($reviewer->orderSAB)) {
+                            $order = $reviewer->orderSAB;
+                            $dataRow[5] = $order->getName();
+                        }
+                    }
+                    /**
+                     * Выводим количество и часы
+                     */
+                    $nv = $type;
+                    if ($typeId == 0) {
+                        $nv .= " (Б)";
+                    } else {
+                        $nv .= " (К)";
+                    }
+                    $dataRow[6] = $nv;
+                    $dataRow[7] = 5 * $type;
+                    $value[] = $dataRow;
+                }
+            }
+            $this->debugTable($value);
+            //var_dump($value);
         }
         /**
          * Еще один вариант. Надеюсь, этот заработает нормально
@@ -407,5 +554,22 @@ class CPrintController extends CBaseController {
             }
         }
         return $res;
+    }
+
+    /**
+     * Печать таблицы для отладки
+     *
+     * @param array $value
+     */
+    private function debugTable($value = array()) {
+        echo '<table width="100%" cellpadding="2" cellspacing="0" border="1">';
+        foreach ($value as $row) {
+            echo '<tr>';
+            foreach ($row as $cell) {
+                echo '<td>'.$cell.'</td>';
+            }
+            echo '</tr>';
+        }
+        echo '</table>';
     }
 }

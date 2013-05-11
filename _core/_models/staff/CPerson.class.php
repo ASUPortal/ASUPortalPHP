@@ -29,6 +29,8 @@ class CPerson extends CActiveModel{
     protected $_cources = null;
     protected $_phdpapers = null;
     protected $_doctorpapers = null;
+    protected $_degree = null;
+    protected $_order_sab = null;
 
     protected function relations() {
         return array(
@@ -64,6 +66,20 @@ class CPerson extends CActiveModel{
                 "storageField" => "zvanie",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTitle"
+            ),
+            "orderSAB" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_order_sab",
+                "storageField" => "order_sab_id",
+                "managerClass" => "CStaffManager",
+                "managerGetObject" => "getUsatuOrder"
+            ),
+            "degree" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_degree",
+                "storageField" => "stepen",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getDegree"
             ),
             "degrees" => array(
                 "relationPower" => RELATION_HAS_MANY,
