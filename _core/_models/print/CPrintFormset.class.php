@@ -12,6 +12,16 @@ class CPrintFormset extends CActiveModel{
     protected $_fields = null;
     protected $_activeForms = null;
 
+    public function attributeLabels() {
+        return array(
+            "title" => "Название",
+            "alias" => "Псевдоним набора",
+            "description" => "Описание",
+            "context_evaluate" => "Настройки контекста",
+            "context_variables" => "Переменные контекста"
+        );
+    }
+
     public static function getClassName() {
         return __CLASS__;
     }
