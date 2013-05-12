@@ -24,9 +24,15 @@
 </p>
 
 <p>
-    {CHtml::activeLabel("grant[organizer]", $form)}
-    {CHtml::activeTextField("grant[organizer]", $form)}
-    {CHtml::error("grant[organizer]", $form)}
+    {CHtml::activeLabel("grant[number]", $form)}
+    {CHtml::activeTextField("grant[number]", $form)}
+    {CHtml::error("grant[number]", $form)}
+</p>
+
+<p>
+    {CHtml::activeLabel("grant[comment]", $form)}
+    {CHtml::activeTextBox("grant[comment]", $form)}
+    {CHtml::error("grant[comment]", $form)}
 </p>
 
 <p>
@@ -42,7 +48,7 @@
 </p>
 
 <p>
-    {CHtml::activeLabel("grant[comment]", $form)}
-    {CHtml::activeTextBox("grant[comment]", $form)}
-    {CHtml::error("grant[comment]", $form)}
+    {CHtml::activeLabel("grant[manager_id]", $form)}
+    {CHtml::activeDropDownList("grant[manager_id]", $form, CStaffManager::getPersonsList())}
+    {CHtml::error("manager_id[date_end]", $form)}
 </p>

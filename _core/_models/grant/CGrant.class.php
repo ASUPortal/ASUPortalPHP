@@ -12,7 +12,7 @@ class CGrant extends CActiveModel{
     protected $_members = null;
     protected $_attachments = null;
     protected $_events = null;
-    protected $_outgoes = null;
+    protected $_periods = null;
     public $upload;
     public $upload_filename;
     public function attributeLabels() {
@@ -34,7 +34,7 @@ class CGrant extends CActiveModel{
         return array(
             "required" => array(
                 "title",
-                "organizer"
+                "number"
             )
         );
     }
@@ -65,13 +65,13 @@ class CGrant extends CActiveModel{
                 "managerClass" => "CGrantManager",
                 "managerGetObject" => "getEvent"
             ),
-            "outgoes" => array(
+            "periods" => array(
                 "relationPower" => RELATION_HAS_MANY,
-                "storageProperty" => "_outgoes",
-                "storageTable" => TABLE_GRANT_OUTGOES,
+                "storageProperty" => "_periods",
+                "storageTable" => TABLE_GRANT_PERIODS,
                 "storageCondition" => "grant_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CGrantManager",
-                "managerGetObject" => "getOutgo"
+                "managerGetObject" => "getPeriod"
             )
         );
     }

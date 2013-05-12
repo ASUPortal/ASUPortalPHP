@@ -70,9 +70,9 @@
 </p>
 
 <p>
-    <a href="outgoes.php?action=add&grant_id={$form->grant->getId()}">
+    <a href="periods.php?action=add&grant_id={$form->grant->getId()}">
         <center>
             <img src="{$web_root}images/{$icon_theme}/32x32/actions/edit-paste.png"><br>
-            Добавить расход
+            Добавить период
         </center></a>
 </p>

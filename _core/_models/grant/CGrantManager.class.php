@@ -86,4 +86,17 @@ class CGrantManager {
         }
         return $outgo;
     }
+
+    /**
+     * @param $key
+     * @return CGrantPeriod|null
+     */
+    public static function getPeriod($key) {
+        $period = null;
+        $ar = CActiveRecordProvider::getById(TABLE_GRANT_PERIODS, $key);
+        if (!is_null($ar)) {
+            $period = new CGrantPeriod($ar);
+        }
+        return $period;
+    }
 }
