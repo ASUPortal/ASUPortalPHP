@@ -21,12 +21,13 @@ class CGrant extends CActiveModel{
             "comment" => "Комментарий",
             "date_start" => "Дата начала",
             "date_end" => "Дата окончания",
-            "organizer" => "Организатор",
             "upload_filename" => "Название файла",
             "members" => "Участники",
+            "number" => "Номер",
+            "manager_id" => "Руководитель",
             "finances_total" => "Общая сумма",
-            "finances_by_period" => "Сумма в период",
-            "finances_period_type_id" => "Период",
+            "finances_source" => "Источник финансирования",
+            "finances_planned" => "Плановая сумма",
             "finances_accepted" => "Всего получено",
         );
     }
