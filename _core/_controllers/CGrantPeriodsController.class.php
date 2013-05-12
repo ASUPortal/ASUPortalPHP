@@ -20,7 +20,7 @@ class CGrantPeriodsController extends CBaseController{
         }
 
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Мероприятия");
+        $this->setPageTitle("Периоды");
 
         parent::__construct();
     }

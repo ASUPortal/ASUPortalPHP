@@ -9,6 +9,7 @@
 
 class CGrantPeriod extends CActiveModel{
     protected $_table = TABLE_GRANT_PERIODS;
+    protected $_money = null;
     public function attributeLabels() {
         return array(
             "title" => "Название",
@@ -23,5 +24,35 @@ class CGrantPeriod extends CActiveModel{
                 "title"
             )
         );
+    }
+    public function relations() {
+        return array(
+            "money" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_money",
+                "storageTable" => TABLE_GRANT_MONEY,
+                "storageCondition" => "period_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "managerClass" => "CGrantManager",
+                "managerGetObject" => "getMoney"
+            )
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getPeriod() {
+        $nv = "";
+        if ($this->date_start !== "") {
+            $nv = "с ".date("d.m.Y", strtotime($this->date_start));
+        }
+        if ($this->date_end !== "") {
+            if ($nv == "") {
+                $nv = "по ".date("d.m.Y", strtotime($this->date_end));
+            } else {
+                $nv .= " по ".date("d.m.Y", strtotime($this->date_end));
+            }
+        }
+        return $nv;
     }
 }

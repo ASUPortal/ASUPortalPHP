@@ -76,19 +76,6 @@ class CGrantManager {
 
     /**
      * @param $key
-     * @return CGrantOutgo|null
-     */
-    public static function getOutgo($key) {
-        $outgo = null;
-        $ar = CActiveRecordProvider::getById(TABLE_GRANT_OUTGOES, $key);
-        if (!is_null($ar)) {
-            $outgo = new CGrantOutgo($ar);
-        }
-        return $outgo;
-    }
-
-    /**
-     * @param $key
      * @return CGrantPeriod|null
      */
     public static function getPeriod($key) {
@@ -98,5 +85,18 @@ class CGrantManager {
             $period = new CGrantPeriod($ar);
         }
         return $period;
+    }
+
+    /**
+     * @param $key
+     * @return CGrantMoney|null
+     */
+    public static function getMoney($key) {
+        $money = null;
+        $ar = CActiveRecordProvider::getById(TABLE_GRANT_MONEY, $key);
+        if (!is_null($ar)) {
+            $money = new CGrantMoney($ar);
+        }
+        return $money;
     }
 }
