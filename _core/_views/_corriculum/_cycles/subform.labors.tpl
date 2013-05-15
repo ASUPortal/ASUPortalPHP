@@ -1,3 +1,33 @@
+{function name=print_discipline_row level=0}
+    <tr>
+        <td align="center">
+            {$discipline->ordering}
+        </td>
+        <td>{counter}</td>
+        <td><a href="#" onclick="if (confirm('Действительно удалить дисциплину {if !is_null($discipline->discipline)}{$discipline->discipline->getValue()}{/if}')) { location.href='disciplines.php?action=del&id={$discipline->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+        <td>
+            {if !is_null($discipline->discipline)}
+                {for $i=1 to $level}
+                    &nbsp;&nbsp;
+                {/for}
+                <a href="disciplines.php?action=edit&id={$discipline->getId()}">{$discipline->discipline->getValue()}</a>
+            {/if}
+        </td>
+        <td>
+            {$discipline->getLaborValue()}
+        </td>
+        {foreach $labors->getItems() as $key=>$value}
+        <td>
+            {if !is_null($discipline->getLaborByType($key))}
+                {$discipline->getLaborByType($key)->value}
+            {else}
+                &nbsp;
+            {/if}
+        </td>
+        {/foreach}
+    </tr>
+{/function}
+
 <table width="100%" cellpadding="2" cellspacing="0" border="1">
     <tr>
         <th rowspan="2">&nbsp;</th>
@@ -17,29 +47,9 @@
         {/foreach}
     </tr>
     {foreach $cycle->disciplines->getItems() as $discipline}
-    <tr>
-        <td align="center">
-            {$discipline->ordering}
-        </td>
-        <td>{counter}</td>
-        <td><a href="#" onclick="if (confirm('Действительно удалить дисциплину {if !is_null($discipline->discipline)}{$discipline->discipline->getValue()}{/if}')) { location.href='disciplines.php?action=del&id={$discipline->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
-        <td>
-            {if !is_null($discipline->discipline)}
-                <a href="disciplines.php?action=edit&id={$discipline->getId()}">{$discipline->discipline->getValue()}</a>
-            {/if}
-        </td>
-        <td>
-            {$discipline->getLaborValue()}
-        </td>
-        {foreach $labors->getItems() as $key=>$value}
-        <td>
-            {if !is_null($discipline->getLaborByType($key))}
-                {$discipline->getLaborByType($key)->value}
-            {else}
-                &nbsp;
-            {/if}
-        </td>
-        {/foreach}
-    </tr>
+        {print_discipline_row discipline=$discipline level=0}
+            {foreach $discipline->children->getItems() as $child}
+                {print_discipline_row discipline=$child level=1}
+            {/foreach}
     {/foreach}
 </table>

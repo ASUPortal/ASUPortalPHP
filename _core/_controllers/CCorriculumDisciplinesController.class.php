@@ -24,12 +24,14 @@ class CCorriculumDisciplinesController extends CBaseController {
          */
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->setData("cycle", $discipline->cycle);
         $this->setData("discipline", $discipline);
         $this->renderView("_corriculum/_disciplines/edit.tpl");
     }
     public function actionAdd() {
         $discipline = new CCorriculumDiscipline();
         $discipline->cycle_id = CRequest::getInt("id");
+        $this->setData("cycle", CCorriculumsManager::getCycle(CRequest::getInt("id")));
         $this->setData("discipline", $discipline);
         $this->renderView("_corriculum/_disciplines/add.tpl");
     }
@@ -41,6 +43,7 @@ class CCorriculumDisciplinesController extends CBaseController {
             $this->redirect("cycles.php?action=edit&id=".$discipline->cycle_id);
             return true;
         }
+        $this->setData("cycle", $discipline->cycle);
         $this->setData("discipline", $discipline);
         $this->renderView("_corriculum/_disciplines/add.tpl");
     }

@@ -10,6 +10,12 @@
     </p>
 
     <p>
+        {CHtml::activeLabel("parent_id", $discipline)}
+        {CHtml::activeDropDownList("parent_id", $discipline, $cycle->getDisciplinesList())}
+        {CHtml::error("parent_id", $discipline)}
+    </p>
+
+    <p>
         {CHtml::activeLabel("ordering", $discipline)}
         {CHtml::activeTextField("ordering", $discipline)}
         {CHtml::error("ordering", $discipline)}

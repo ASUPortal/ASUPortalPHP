@@ -42,7 +42,8 @@ class CCorriculumDiscipline extends CActiveModel {
                 "storageTable" => TABLE_CORRICULUM_DISCIPLINES,
                 "storageCondition" => "parent_id=".$this->id,
                 "managerClass" => "CCorriculumsManager",
-                "managerGetObject" => "getDiscipline"
+                "managerGetObject" => "getDiscipline",
+                "managerOrder" => "`ordering` asc"
             ),
             "labors" => array(
                 "relationPower" => RELATION_HAS_MANY,
@@ -73,7 +74,8 @@ class CCorriculumDiscipline extends CActiveModel {
     public function attributeLabels() {
         return array(
             "discipline_id" => "Дисциплина",
-            "ordering" => "Порядок в списке"
+            "ordering" => "Порядок в списке",
+            "parent_id" => "Родительская дисциплина"
         );
     }
     /**

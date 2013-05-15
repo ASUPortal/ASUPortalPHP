@@ -71,7 +71,7 @@ class CPrintController extends CBaseController {
             /**
              * Это место для экспериментов и написания отладочного кода
              */
-            $value = array();
+            $value = "";
             var_dump($value);
         }
         /**
@@ -291,23 +291,19 @@ class CPrintController extends CBaseController {
                  * он там стоял для того, чтобы указывать на начало
                  * блока групповых описателей
                  */
-                foreach ($childNodes as $key=>$descriptors) {
+                foreach ($childNodes as $key=>$node) {
                     if ($key == $field->alias) {
                         unset($childNodes[$key]);
-                        foreach ($descriptors as $node) {
-                            $node->parentNode->removeChild($node);
-                        }
+                        $node->parentNode->removeChild($node);
                     }
                 }
                 /**
                  * Теперь вычисляем каждый описатель
                  */
-                foreach ($childNodes as $fieldName=>$descriptors) {
+                foreach ($childNodes as $fieldName=>$node) {
                     if (!is_null($form->formset->getFieldByName($fieldName))) {
                         $childField = $form->formset->getFieldByName($fieldName);
-                        foreach ($descriptors as $node) {
-                            $this->processNode($node, $childField, $item, $form);
-                        }
+                        $this->processNode($node, $childField, $item, $form);
                     }
                 }
                 $debug[1] = $doc->saveXML($newNode);
@@ -384,12 +380,8 @@ class CPrintController extends CBaseController {
             /**
              * Поищем на текущем уровне
              */
-            $descriptors = array();
-            if (array_key_exists($child->textContent, $res)) {
-                $descriptors = $res[$child->textContent];
-            }
             if ($child->localName == $name) {
-                $descriptors[] = $child;
+                $res[$node->textContent] = $child;
             }
             /**
              * Поищем на уровне ниже
@@ -397,10 +389,9 @@ class CPrintController extends CBaseController {
             if ($child->hasChildNodes()) {
                 $new = $this->getElementsByName($child, $name);
                 foreach ($new as $item) {
-                    $descriptors[] = $item;
+                    $res[$item->textContent] = $item;
                 }
             }
-            $res[$item->textContent] = $descriptors;
         }
         return $res;
     }
