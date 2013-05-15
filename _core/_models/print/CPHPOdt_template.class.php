@@ -69,7 +69,16 @@ class CPHPOdt_template extends CAbstractDocumentTemplate{
         $fields = array();
         $nodes = $this->getXMLDocument()->getElementsByTagNameNS("urn:oasis:names:tc:opendocument:xmlns:text:1.0", "user-field-get");
         foreach ($nodes as $node) {
-            $fields[$node->textContent] = $node;
+            /**
+             * А ведь в документе может быть несколько одинаковых
+             * описателей. Складываем все в массив
+             */
+            $descriptors = array();
+            if (array_key_exists($node->textContent, $fields)) {
+                $descriptors = $fields[$node->textContent];
+            }
+            $descriptors[] = $node;
+            $fields[$node->textContent] = $descriptors;
         }
         return $fields;
     }

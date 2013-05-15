@@ -7,3 +7,4 @@ sql_connect_credentials.php
 _core/_cache/*
 f_mails/*
 library/grants/*
+images/editor_uploaded/*

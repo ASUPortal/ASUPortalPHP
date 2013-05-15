@@ -57,6 +57,8 @@ class CGrantsController extends CBaseController{
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->addJSInclude("_core/jquery.form.js");
+        $this->addCSSInclude("_modules/_redactor/redactor.css");
+        $this->addJSInclude("_modules/_redactor/redactor.min.js");
         $this->setData("form", $form);
         $this->renderView("_grants/grant/add.tpl");
     }
@@ -67,6 +69,8 @@ class CGrantsController extends CBaseController{
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->addJSInclude("_core/jquery.form.js");
+        $this->addCSSInclude("_modules/_redactor/redactor.css");
+        $this->addJSInclude("_modules/_redactor/redactor.min.js");
         $this->setData("form", $form);
         $this->renderView("_grants/grant/edit.tpl");
     }
@@ -85,6 +89,8 @@ class CGrantsController extends CBaseController{
         }
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->addCSSInclude("_modules/_redactor/redactor.css");
+        $this->addJSInclude("_modules/_redactor/redactor.min.js");
         $this->setData("form", $form);
         $this->renderView("_grants/grant/edit.tpl");
     }

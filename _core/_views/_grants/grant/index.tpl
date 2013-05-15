@@ -11,7 +11,7 @@
                 <th>#</th>
                 <th>&nbsp;</th>
                 <th>{CHtml::tableOrder("title", $grants->getFirstItem())}</th>
-                <th>{CHtml::tableOrder("organizer", $grants->getFirstItem())}</th>
+                <th>{CHtml::tableOrder("comment", $grants->getFirstItem())}</th>
             </tr>
             {foreach $grants->getItems() as $grant}
                 <tr>
@@ -24,7 +24,7 @@
                                 {$grant->title}
                             {/if}
                         </a></td>
-                    <td>{$grant->organizer}</td>
+                    <td>{$grant->comment}</td>
                 </tr>
             {/foreach}
         </table>

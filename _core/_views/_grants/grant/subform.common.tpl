@@ -14,6 +14,11 @@
             buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
             buttonImageOnly: true
         });
+        jQuery(document).ready(function(){
+            jQuery("#description").redactor({
+                imageUpload: '{$web_root}_modules/_redactor/image_upload.php'
+            });
+        });
     });
 </script>
 
@@ -50,5 +55,10 @@
 <p>
     {CHtml::activeLabel("grant[manager_id]", $form)}
     {CHtml::activeDropDownList("grant[manager_id]", $form, CStaffManager::getPersonsList())}
-    {CHtml::error("manager_id[date_end]", $form)}
+    {CHtml::error("grant[date_end]", $form)}
+</p>
+
+<p>
+    {CHtml::activeTextBox("grant[description]", $form, "description")}
+    {CHtml::error("grant[description]", $form)}
 </p>

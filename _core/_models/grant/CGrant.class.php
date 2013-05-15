@@ -18,7 +18,7 @@ class CGrant extends CActiveModel{
     public function attributeLabels() {
         return array(
             "title" => "Название",
-            "comment" => "Комментарий",
+            "comment" => "Аннотация",
             "date_start" => "Дата начала",
             "date_end" => "Дата окончания",
             "upload_filename" => "Название файла",

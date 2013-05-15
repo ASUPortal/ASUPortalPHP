@@ -72,174 +72,12 @@ class CPrintController extends CBaseController {
              * Это место для экспериментов и написания отладочного кода
              */
             $value = array();
-            /**
-             * Получаем все дипломы, которые защищаются в выбранной
-             * комиссии
-             */
-            $diploms = new CArrayList();
-            foreach ($object->diploms->getItems() as $diplom) {
-                $diploms->add($diplom->getId(), $diplom);
-            }
-            /**
-             * Считаем, сколько среди них студентов контрактников,
-             * сколько бюджетников
-             */
-            $types = array(
-                0 => 0,
-                1 => 0
-            );
-            foreach ($diploms->getItems() as $diplom) {
-                if (!is_null($diplom->student)) {
-                    if ($diplom->bud_contract == "") {
-                        $types[0] = $types[0] + 1;
-                    } elseif ($diplom->bud_contract == 1) {
-                        $types[0] = $types[0] + 1;
-                    } elseif ($diplom->bud_contract == 2) {
-                        $types[1] = $types[1] + 1;
-                    }
-                }
-            }
-            /**
-             * Теперь собираем всех членов комиссии в один массив.
-             * Сначала берем председателя, потом членов
-             */
-            $members = new CArrayList();
-            if (!is_null($object->manager)) {
-                $member = $object->manager;
-                $members->add($member->getId(), $member);
-            }
-            foreach ($object->members->getItems() as $member) {
-                $members->add($member->getId(), $member);
-            }
-            /**
-             * Теперь идем по всем членам комиссии и выводим
-             * сколько они заслушали дипломов.
-             *
-             * Переменную назовем как в прошлой форме чтобы не
-             * переделывать все
-             */
-            $reviewerIndex = 0;
-            foreach ($members->getItems() as $reviewer) {
-                $reviewerIndex++;
-                $isFirst = true;
-                foreach ($types as $typeId=>$type) {
-                    $dataRow = array();
-                    /**
-                     * Для начала заполним результирующий массив пустыми строками
-                     */
-                    for ($i = 0; $i <= 7; $i++) {
-                        $dataRow[$i] = "";
-                    }
-                    /**
-                     * Если это первая строка, то выводим инфу по рецензенту
-                     * и диплому. В противном случае, только по диплому
-                     */
-                    if ($isFirst) {
-                        $isFirst = false;
-                        /**
-                         * Вся информация по рецензенту или руководителю
-                         *
-                         * Номер рецензента
-                         */
-                        $dataRow[0] = $reviewerIndex;
-                        /**
-                         * ФИО, ученая степень, звание
-                         */
-                        $dataRow[1] = "";
-                        $nv = "";
-                        $nv = $reviewer->getName();
-                        /**
-                         * Степень
-                         */
-                        if (!is_null($reviewer->degree)) {
-                            $nv .= ", ".$reviewer->degree->getValue();
-                        }
-                        /**
-                         * Звание
-                         */
-                        if (!is_null($reviewer->title)) {
-                            $nv .= ", ".$reviewer->title->getValue();
-                        }
-                        $dataRow[1] = $nv;
-                        /**
-                         * Дата рождения
-                         */
-                        $dataRow[2] = "";
-                        if ($reviewer->date_rogd != "") {
-                            $dataRow[2] = date("d.m.Y", strtotime($reviewer->date_rogd));
-                        }
-                        /**
-                         * Паспортные данные
-                         * номер, серия, кем и когда выдан
-                         * ИНН, СНИЛС
-                         */
-                        $nv = "";
-                        if ($reviewer->passp_seria != "") {
-                            $nv = $reviewer->passp_seria;
-                        }
-                        if ($reviewer->passp_nomer != "") {
-                            if ($nv == "") {
-                                $nv = $reviewer->passp_nomer;
-                            } else {
-                                $nv .= " ".$reviewer->passp_nomer;
-                            }
-                        }
-                        if ($reviewer->passp_place != "") {
-                            if ($nv == "") {
-                                $nv = "выдан ".$reviewer->passp_place;
-                            } else {
-                                $nv .= " выдан ".$reviewer->passp_place;
-                            }
-                        }
-                        if ($reviewer->INN != "") {
-                            if ($nv == "") {
-                                $nv = $reviewer->INN;
-                            } else {
-                                $nv .= ", ".$reviewer->INN;
-                            }
-                        }
-                        if ($reviewer->insurance_num != "") {
-                            if ($nv == "") {
-                                $nv = $reviewer->insurance_num;
-                            } else {
-                                $nv .= ", ".$reviewer->insurance_num;
-                            }
-                        }
-                        $dataRow[3] = $nv;
-                        /**
-                         * Полный домашний адрес
-                         */
-                        $dataRow[4] = $reviewer->add_home;
-                        /**
-                         * Номер и дата приказа
-                         */
-                        $dataRow[5] = "";
-                        if (!is_null($reviewer->orderSAB)) {
-                            $order = $reviewer->orderSAB;
-                            $dataRow[5] = $order->getName();
-                        }
-                    }
-                    /**
-                     * Выводим количество и часы
-                     */
-                    $nv = $type;
-                    if ($typeId == 0) {
-                        $nv .= " (Б)";
-                    } else {
-                        $nv .= " (К)";
-                    }
-                    $dataRow[6] = $nv;
-                    $dataRow[7] = 5 * $type;
-                    $value[] = $dataRow;
-                }
-            }
-            $this->debugTable($value);
-            //var_dump($value);
+            var_dump($value);
         }
         /**
          * Еще один вариант. Надеюсь, этот заработает нормально
          */
-        foreach ($fieldsFromTemplate as $fieldName=>$node) {
+        foreach ($fieldsFromTemplate as $fieldName=>$descriptors) {
             /**
              * Если поле из шаблона есть в наборе полей,
              * то вычисляем его. Перед вычислением проверяем,
@@ -250,7 +88,9 @@ class CPrintController extends CBaseController {
             if (!is_null($form->formset->getFieldByName($fieldName))) {
                 $field = $form->formset->getFieldByName($fieldName);
                 if (is_null($field->parent)) {
-                    $xml = $this->processNode($node, $field, $object, $form);
+                    foreach ($descriptors as $node) {
+                        $xml = $this->processNode($node, $field, $object, $form);
+                    }
                 }
             }
         }
@@ -451,19 +291,23 @@ class CPrintController extends CBaseController {
                  * он там стоял для того, чтобы указывать на начало
                  * блока групповых описателей
                  */
-                foreach ($childNodes as $key=>$node) {
+                foreach ($childNodes as $key=>$descriptors) {
                     if ($key == $field->alias) {
                         unset($childNodes[$key]);
-                        $node->parentNode->removeChild($node);
+                        foreach ($descriptors as $node) {
+                            $node->parentNode->removeChild($node);
+                        }
                     }
                 }
                 /**
                  * Теперь вычисляем каждый описатель
                  */
-                foreach ($childNodes as $fieldName=>$node) {
+                foreach ($childNodes as $fieldName=>$descriptors) {
                     if (!is_null($form->formset->getFieldByName($fieldName))) {
                         $childField = $form->formset->getFieldByName($fieldName);
-                        $this->processNode($node, $childField, $item, $form);
+                        foreach ($descriptors as $node) {
+                            $this->processNode($node, $childField, $item, $form);
+                        }
                     }
                 }
                 $debug[1] = $doc->saveXML($newNode);
@@ -540,8 +384,12 @@ class CPrintController extends CBaseController {
             /**
              * Поищем на текущем уровне
              */
+            $descriptors = array();
+            if (array_key_exists($child->textContent, $res)) {
+                $descriptors = $res[$child->textContent];
+            }
             if ($child->localName == $name) {
-                $res[$child->textContent] = $child;
+                $descriptors[] = $child;
             }
             /**
              * Поищем на уровне ниже
@@ -549,9 +397,10 @@ class CPrintController extends CBaseController {
             if ($child->hasChildNodes()) {
                 $new = $this->getElementsByName($child, $name);
                 foreach ($new as $item) {
-                    $res[$item->textContent] = $item;
+                    $descriptors[] = $item;
                 }
             }
+            $res[$item->textContent] = $descriptors;
         }
         return $res;
     }
