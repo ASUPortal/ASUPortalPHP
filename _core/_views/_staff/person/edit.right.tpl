@@ -11,3 +11,10 @@
             Добавить ребенка
         </center></a>
 </p>
+
+<p>
+    <a href="orderssab.php?action=add&id={$form->person->getId()}"><center>
+            <img src="{$web_root}images/{$icon_theme}/32x32/actions/bookmark-new.png"><br>
+            Добавить приказ ГЭК
+        </center></a>
+</p>

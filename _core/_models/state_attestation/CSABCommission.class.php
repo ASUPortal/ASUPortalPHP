@@ -65,7 +65,8 @@ class CSABCommission extends CActiveModel {
             "year_id" => "Учебный год",
             "secretar_id" => "Секретарь",
             "manager_id" => "Председатель комиссии",
-            "members" => "Члены комиссии"
+            "members" => "Члены комиссии",
+            "order_id" => "Приказ по комиссии"
         );
     }
     public function validationRules() {
@@ -80,5 +81,34 @@ class CSABCommission extends CActiveModel {
             $ar->remove();
         }
         parent::remove();
+    }
+    public function save() {
+        parent::save();
+        /**
+         * У сотрудников, которых нет приказов по
+         * ГАК в году комиссии автоматически устанавливается
+         * приказ от комиссии
+         */
+        if ($this->order_id !== 0) {
+            $persons = new CArrayList();
+            foreach ($this->members->getItems() as $person) {
+                $persons->add($person->getId(), $person);
+            }
+            if (!is_null($this->manager)) {
+                $persons->add($this->manager->getId(), $this->manager);
+            }
+            foreach ($persons->getItems() as $person) {
+                if (is_null($person->getSABOrderByYear($this->year))) {
+                    $ar = new CActiveRecord(array(
+                        "id" => null,
+                        "person_id" => $person->getId(),
+                        "year_id" => $this->year->getId(),
+                        "order_id" => $this->order_id
+                    ));
+                    $ar->setTable(TABLE_SAB_PERSON_ORDERS);
+                    $ar->insert();
+                }
+            }
+        }
     }
 }

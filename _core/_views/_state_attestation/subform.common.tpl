@@ -23,6 +23,12 @@
 </p>
 
 <p>
+    {CHtml::activeLabel("commission[order_id]", $form)}
+    {CHtml::activeDropDownList("commission[order_id]", $form, CStaffManager::getUsatuSEBOrdersList())}
+    {CHtml::error("commission[order_id]", $form)}
+</p>
+
+<p>
     {CHtml::activeLabel("commission[manager_id]", $form)}
     {CHtml::activeDropDownList("commission[manager_id]", $form, CStaffManager::getPersonsList())}
     {CHtml::error("commission[manager_id]", $form)}

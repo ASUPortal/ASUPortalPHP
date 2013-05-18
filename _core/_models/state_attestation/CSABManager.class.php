@@ -20,4 +20,17 @@ class CSABManager {
         }
         return $commission;
     }
+
+    /**
+     * @param $key
+     * @return CSABPersonOrder|null
+     */
+    public static function getSABPersonOrder($key) {
+        $order = null;
+        $ar = CActiveRecordProvider::getById(TABLE_SAB_PERSON_ORDERS, $key);
+        if (!is_null($ar)) {
+            $order = new CSABPersonOrder($ar);
+        }
+        return $order;
+    }
 }

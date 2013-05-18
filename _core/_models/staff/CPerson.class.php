@@ -30,7 +30,7 @@ class CPerson extends CActiveModel{
     protected $_phdpapers = null;
     protected $_doctorpapers = null;
     protected $_degree = null;
-    protected $_order_sab = null;
+    protected $_orders_sab = null;
 
     protected function relations() {
         return array(
@@ -67,12 +67,13 @@ class CPerson extends CActiveModel{
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTitle"
             ),
-            "orderSAB" => array(
-                "relationPower" => RELATION_HAS_ONE,
-                "storageProperty" => "_order_sab",
-                "storageField" => "order_sab_id",
-                "managerClass" => "CStaffManager",
-                "managerGetObject" => "getUsatuOrder"
+            "ordersSAB" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_orders_sab",
+                "storageTable" => TABLE_SAB_PERSON_ORDERS,
+                "storageCondition" => "person_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "managerClass" => "CSABManager",
+                "managerGetObject" => "getSABPersonOrder"
             ),
             "degree" => array(
                 "relationPower" => RELATION_HAS_ONE,
@@ -567,5 +568,18 @@ class CPerson extends CActiveModel{
         }
         $date = strtotime($this->date_rogd);
         return date("d", $date)." ".CUtils::getMonthAsWord(date("m", $date));
+    }
+
+    /**
+     * @param CTerm $year
+     * @return CSABPersonOrder
+     */
+    public function getSABOrderByYear(CTerm $year) {
+        foreach ($this->ordersSAB->getItems() as $order) {
+            if ($year->getId() == $order->year_id) {
+                return $order;
+            }
+        }
+        return null;
     }
 }
