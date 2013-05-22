@@ -39,6 +39,8 @@ class CDiplomsController extends CBaseController {
         $diplom = new CDiplom();
         $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
         $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
+        $this->addJSInclude("_core/jquery.ui.timepicker.js");
+        $this->addCSSInclude("_core/jquery.ui.timepicker.css");
         $this->setData("diplom", $diplom);
         $this->renderView("_diploms/add.tpl");
     }
@@ -48,6 +50,8 @@ class CDiplomsController extends CBaseController {
         $diplom->date_act = date("d.m.Y", strtotime($diplom->date_act));
         $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
         $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
+        $this->addJSInclude("_core/jquery.ui.timepicker.js");
+        $this->addCSSInclude("_core/jquery.ui.timepicker.css");
         $this->setData("diplom", $diplom);
         $this->renderView("_diploms/edit.tpl");
     }
@@ -63,6 +67,8 @@ class CDiplomsController extends CBaseController {
         }
         $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
         $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
+        $this->addJSInclude("_core/jquery.ui.timepicker.js");
+        $this->addCSSInclude("_core/jquery.ui.timepicker.css");
         // сконвертим дату из MySQL date в нормальную дату
         $diplom->date_act = date("d.m.Y", strtotime($diplom->date_act));
         $this->setData("diplom", $diplom);

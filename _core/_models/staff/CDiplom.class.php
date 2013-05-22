@@ -17,6 +17,10 @@ class CDiplom extends CActiveModel {
     protected $_confirmation = null;
     protected $_practPlace = null;
     protected $_reviewer = null;
+    protected $_commission = null;
+
+    public $aspire_recomendation = 0;
+
     protected function relations() {
         return array(
             "mark" => array(
@@ -80,6 +84,13 @@ class CDiplom extends CActiveModel {
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPerson"
             ),
+            "commission" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_commission",
+                "storageField" => "gak_num",
+                "managerClass" => "CSABManager",
+                "managerGetObject" => "getCommission"
+            )
         );
     }
     public function attributeLabels() {
@@ -97,12 +108,17 @@ class CDiplom extends CActiveModel {
             "protocol_2aspir_id" => "Протокол рекомендации в асипрантуру",
             "recenz_id" => "Рецензент",
             "study_mark" => "Оценка",
-            "gak_num" => "Номер ГАК",
+            "gak_num" => "Номер ГЭК",
             "comment" => "Комментарий",
             "diplom_number" => "Номер диплома",
             "diplom_regnum" => "Регистрационный номер",
-            "diplom_regdate" => "Дата решения ГАК",
-            "diplom_issuedate" => "Дата выдачи"
+            "diplom_regdate" => "Дата решения ГЭК",
+            "diplom_issuedate" => "Дата выдачи",
+            "session_start" => "Время начала защиты",
+            "session_end" => "Время окончания защиты",
+            "pages_diplom" => "Страниц в пояснительной записке",
+            "pages_attach" => "Страниц чертежей (таблиц)",
+            "aspire_recomendation" => "Рекомендован в аспирантуру"
         );
     }
 
@@ -145,5 +161,8 @@ class CDiplom extends CActiveModel {
             }
         }
         return $last;
+    }
+    public function isPerfect() {
+        return false;
     }
 }

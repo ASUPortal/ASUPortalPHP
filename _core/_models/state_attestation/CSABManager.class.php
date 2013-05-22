@@ -33,4 +33,22 @@ class CSABManager {
         }
         return $order;
     }
+
+    /**
+     * @return array
+     */
+    public static function getCommissionsList() {
+        $result = array();
+        $query = new CQuery();
+        $query->select("c.*")
+            ->from(TABLE_SAB_COMMISSIONS." as c")
+            ->innerJoin(TABLE_YEARS." as y", "c.year_id = y.id")
+            ->order("y.name desc");
+        foreach ($query->execute()->getItems() as $ar) {
+            $commission = new CSABCommission(new CActiveRecord($ar));
+            $nv = $commission->title." (".$commission->year->getValue().")";
+            $result[$commission->getId()] = $nv;
+        }
+        return $result;
+    }
 }

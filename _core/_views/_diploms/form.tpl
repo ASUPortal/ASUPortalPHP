@@ -12,22 +12,14 @@
 
     <div id="tabs">
         <ul style="height: 30px; ">
-            <li><a href="#common">Тема диплома</a></li>
-            <li><a href="#review">Предзащита</a></li>
-            <li><a href="#graduate">Защита</a></li>
-            <li><a href="#attach">Вкладыш</a></li>
+            <li><a href="#before">До защиты</a></li>
+            <li><a href="#after">После защиты</a></li>
         </ul>
-        <div id="common">
-            {include file="_diploms/subform.common.tpl"}
+        <div id="before">
+            {include file="_diploms/subform.before.tpl"}
         </div>
-        <div id="review">
-            {include file="_diploms/subform.review.tpl"}
-        </div>
-        <div id="graduate">
-            {include file="_diploms/subform.graduate.tpl"}
-        </div>
-        <div id="attach">
-            {include file="_diploms/subform.attach.tpl"}
+        <div id="after">
+            {include file="_diploms/subform.after.tpl"}
         </div>
     </div>
 
