@@ -37,10 +37,30 @@ class CDiplomsController extends CBaseController {
     }
     public function actionAdd() {
         $diplom = new CDiplom();
+        $commissions = array();
+        foreach (CSABManager::getCommissionsList() as $id=>$c) {
+            $commission = CSABManager::getCommission($id);
+            $nv = $commission->title;
+            if (!is_null($commission->manager)) {
+                $nv .= " ".$commission->manager->getName();
+            }
+            if (!is_null($commission->secretar)) {
+                $nv .= " (".$commission->secretar->getName().")";
+            }
+            $cnt = 0;
+            foreach ($commission->diploms->getItems() as $d) {
+                if (strtotime($diplom->date_act) == strtotime($d->date_act)) {
+                    $cnt++;
+                }
+            }
+            $nv .= " ".$cnt;
+            $commissions[$commission->getId()] = $nv;
+        }
         $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
         $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
         $this->addJSInclude("_core/jquery.ui.timepicker.js");
         $this->addCSSInclude("_core/jquery.ui.timepicker.css");
+        $this->setData("commissions", $commissions);
         $this->setData("diplom", $diplom);
         $this->renderView("_diploms/add.tpl");
     }
