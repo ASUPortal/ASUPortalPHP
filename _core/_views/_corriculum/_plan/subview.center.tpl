@@ -2,7 +2,19 @@
     <tr>
         <td>{$cycle->title_abbreviated}</td>
         <td>&nbsp;</td>
-        <td>{counter}</td>
+        <td>
+            {if !is_null($discipline->cycle)}
+                {$discipline->cycle->number}.
+            {/if}
+            {if $discipline->parent_id !== "0"}
+                {if !is_null($discipline->parent)}
+                    {$discipline->parent->ordering}
+                {/if}
+                .{$discipline->ordering}
+            {else}
+                {$discipline->ordering}
+            {/if}
+        </td>
         <td>
             {if !is_null($discipline->discipline)}
                 {for $i=1 to $level}

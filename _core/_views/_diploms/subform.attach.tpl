@@ -28,12 +28,6 @@
 </p>
 
 <p>
-    {CHtml::activeLabel("diplom_regdate", $diplom)}
-    {CHtml::activeTextField("diplom_regdate", $diplom, "diplom_regdate")}
-    {CHtml::error("diplom_regdate", $diplom)}
-</p>
-
-<p>
     {CHtml::activeLabel("diplom_issuedate", $diplom)}
     {CHtml::activeTextField("diplom_issuedate", $diplom, "diplom_issuedate")}
     {CHtml::error("diplom_issuedate", $diplom)}

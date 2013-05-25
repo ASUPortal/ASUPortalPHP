@@ -14,12 +14,16 @@
         <ul style="height: 30px; ">
             <li><a href="#before">До защиты</a></li>
             <li><a href="#after">После защиты</a></li>
+            <li><a href="#attach">Вкладыш</a></li>
         </ul>
         <div id="before">
             {include file="_diploms/subform.before.tpl"}
         </div>
         <div id="after">
             {include file="_diploms/subform.after.tpl"}
+        </div>
+        <div id="attach">
+            {include file="_diploms/subform.attach.tpl"}
         </div>
     </div>
 

@@ -76,7 +76,7 @@ class CHtml {
                 $values[0] = "- Выберите из списка (".count($values).") -";
             }
         }
-        echo '<select name="'.$name.'" '.$inline.'>';
+        echo '<select data-dojo-type="dijit/form/Select" style="width: 30em;  " name="'.$name.'" '.$inline.'>';
         // часто выбор делается из словаря, так что преобразуем объекты CTerm к строке
         foreach ($values as $key=>$value) {
             if (is_object($value)) {
@@ -89,11 +89,11 @@ class CHtml {
             $checked = "";
             if (is_null($selected)) {
                 if ($key == 0) {
-                    $checked = "selected";
+                    $checked = 'selected="selected"';
                 }
             } elseif ($selected != "") {
                 if ($key == $selected) {
-                    $checked = "selected";
+                    $checked = 'selected="selected"';
                 }
             }
             echo '<option '.$checked.' value="'.$key.'">'.$value.'</option>';
@@ -235,7 +235,7 @@ class CHtml {
         if ($html != "") {
             $inline .= $html;
         }
-        echo '<input type="text" name="'.$name.'" value="'.htmlspecialchars($value).'" '.$inline.'>';
+        echo '<input data-dojo-type="dijit/form/TextBox" style="width: 30em; " type="text" name="'.$name.'" value="'.htmlspecialchars($value).'" '.$inline.'>';
     }
     /**
      * Активное текстовое поле
@@ -408,7 +408,7 @@ class CHtml {
      * @param $value
      */
     public static function submit($value) {
-        echo '<input type="submit" value="'.$value.'">';
+        echo '<input type="submit" data-dojo-type="dijit/form/Button" label="'.$value.'" type="submit" value="'.$value.'">';
     }
     /**
      * Большое поле для ввода
@@ -434,7 +434,7 @@ class CHtml {
         if ($html != "") {
             $inline .= $html;
         }
-        echo '<textarea name="'.$name.'" '.$inline.'>'.$value.'</textarea>';
+        echo '<textarea data-dojo-type="dijit/form/Textarea" style="width: 30em; height: 150px; " name="'.$name.'" '.$inline.'>'.$value.'</textarea>';
     }
     public static function checkBox($name, $value, $checked = false, $id = "", $class = "", $html = "") {
         if ($id == "") {

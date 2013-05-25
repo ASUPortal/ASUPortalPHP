@@ -3,7 +3,19 @@
         <td align="center">
             {$discipline->ordering}
         </td>
-        <td>{counter}</td>
+        <td>
+            {if !is_null($discipline->cycle)}
+                {$discipline->cycle->number}.
+            {/if}
+            {if $discipline->parent_id !== "0"}
+                {if !is_null($discipline->parent)}
+                    {$discipline->parent->ordering}
+                {/if}
+                .{$discipline->ordering}
+            {else}
+                {$discipline->ordering}
+            {/if}
+        </td>
         <td><a href="#" onclick="if (confirm('Действительно удалить дисциплину {if !is_null($discipline->discipline)}{$discipline->discipline->getValue()}{/if}')) { location.href='disciplines.php?action=del&id={$discipline->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
         <td>
             {if !is_null($discipline->discipline)}

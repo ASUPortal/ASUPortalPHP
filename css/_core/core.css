@@ -142,7 +142,8 @@ form p label {
 }
 
 form p input, form p select {
-    width: 350px;
+    /* width: 350px; */
+    width: 30em;
 }
 
 ul.ul-input {

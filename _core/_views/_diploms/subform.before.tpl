@@ -68,7 +68,7 @@
 
 <p>
     {CHtml::activeLabel("gak_num", $diplom)}
-    {CHtml::activeDropDownList("gak_num", $diplom, CSABManager::getCommissionsList())}
+    {CHtml::activeDropDownList("gak_num", $diplom, $commissions)}
     {CHtml::error("gak_num", $diplom)}
 </p>
 
@@ -76,6 +76,18 @@
     {CHtml::activeLabel("date_act", $diplom)}
     {CHtml::activeTextField("date_act", $diplom, "date_act")}
     {CHtml::error("date_act", $diplom)}
+</p>
+
+<p>
+    {CHtml::activeLabel("pages_diplom", $diplom)}
+    {CHtml::activeTextField("pages_diplom", $diplom)}
+    {CHtml::error("pages_diplom", $diplom)}
+</p>
+
+<p>
+    {CHtml::activeLabel("pages_attach", $diplom)}
+    {CHtml::activeTextField("pages_attach", $diplom)}
+    {CHtml::error("pages_attach", $diplom)}
 </p>
 
 <p>

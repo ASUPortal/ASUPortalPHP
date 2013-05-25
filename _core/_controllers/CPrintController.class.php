@@ -71,26 +71,74 @@ class CPrintController extends CBaseController {
             /**
              * Это место для экспериментов и написания отладочного кода
              */
-            $value = array();
-            $commission = $object->commission;
-            if (!is_null($commission)) {
-                $isFirst = true;
-                foreach ($commission->members->getItems() as $person) {
-                    if ($isFirst) {
-                        $value[] = array(
-                            "Члены экзаменационной комиссии",
-                            "",
-                            $person->getName()
-                        );
-                        $isFirst = false;
-                    } else {
-                        $value[] = array(
-                            "",
-                            "",
-                            $person->getName()
-                        );
+            $cycleName = "ЕН";
+            $value = "";
+            if (is_null($object->group)) {
+                $value = "__________";
+            } elseif (is_null($object->group->corriculum)) {
+                $value = "__________";
+            } elseif (is_null($object->group->corriculum->getCycleByAbbreviatedName($cycleName))) {
+                $value = "__________";
+            } else {
+                $cycle = $object->group->corriculum->getCycleByAbbreviatedName($cycleName);
+                $arr = array();
+                /**
+                 * Собираем дисциплины в таблицу
+                 */
+                $disciplineNumber = 0;
+                foreach ($cycle->disciplines->getItems() as $disc) {
+                    $d = array();
+                    $disciplineNumber++;
+                    if (!is_null($disc->discipline)) {
+                        $d[0] = $cycle->number.".".$disciplineNumber;
+                        $d[1] = $disc->discipline->getValue();
+                    }
+                    $d[2] = $disc->getLaborValue();
+                    $d[3] = "";
+                    /**
+                     * Получаем оценку студента по выбранной дисциплине.
+                     * Пока получаем просто последнюю оценку вне зависимости
+                     * от формы контроля по дисциплине
+                     */
+                    $query = new CQuery();
+                    $query->select("act.id, mark.name as name")
+                        ->from(TABLE_STUDENTS_ACTIVITY." as act")
+                        ->condition("act.student_id = ".$object->getId()." and act.kadri_id = 380 and act.subject_id = ".$disc->discipline->getId()." and act.study_act_id in (1, 2, 12, 14)")
+                        ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
+                        ->order("act.id asc");
+                    foreach ($query->execute()->getItems() as $item) {
+                        $d[3] = $item["name"];
+                    }
+                    $arr[] = $d;
+                    /**
+                     * Дочерние дисциплины
+                     */
+                    foreach ($disc->children->getItems() as $child) {
+                        $d = array();
+                        if (!is_null($child->discipline)) {
+                            $d[0] = "";
+                            $d[1] = " - ".$child->discipline->getValue();
+                        }
+                        $d[2] = $child->getLaborValue();
+                        $d[3] = "";
+                        /**
+                         * Получаем оценку студента по выбранной дисциплине.
+                         * Пока получаем просто последнюю оценку вне зависимости
+                         * от формы контроля по дисциплине
+                         */
+                        $query = new CQuery();
+                        $query->select("act.id, mark.name as name")
+                            ->from(TABLE_STUDENTS_ACTIVITY." as act")
+                            ->condition("act.student_id = ".$object->getId()." and act.kadri_id = 380 and act.subject_id = ".$child->discipline->getId()." and act.study_act_id in (1, 2, 12, 14)")
+                            ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
+                            ->order("act.id asc");
+                        foreach ($query->execute()->getItems() as $item) {
+                            $d[3] = $item["name"];
+                        }
+                        $arr[] = $d;
                     }
                 }
+                $value = $arr;
             }
             $this->debugTable($value);
         }

@@ -17,7 +17,11 @@
             {include file="_state_attestation/subform.common.tpl"}
         </div>
         <div id="tab-students">
-            {include file="_state_attestation/subform.students.tpl"}
+            {if is_null($form->commission->getId())}
+                Сохранить комиссию перед добавлением студентов
+            {else}
+                {include file="_state_attestation/subform.students.tpl"}
+            {/if}
         </div>
     </div>
 

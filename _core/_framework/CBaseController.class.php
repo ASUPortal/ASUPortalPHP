@@ -21,6 +21,7 @@ class CBaseController {
     private $_jqInline = null;
     private $_datePickers = null;
     private $_jsIEOnly = null;
+    private $_cssAbs = null;
 
     /**
      * Конструктор базового класса. Определяет, какой метод
@@ -75,10 +76,11 @@ class CBaseController {
                 }
             }
         }
-
-
-        // устанавливаем название страницы по умолчанию
-        // $this->setPageTitle("");
+        /**
+         * Почему я не сделал этого сразу?
+         */
+        $this->setData("_dojo_path", CSettingsManager::getSettingValue("dojo_js_path"));
+        $this->setData("_dojo_theme", CSettingsManager::getSettingValue("dojo_css_theme"));
 
         $action = "action".$this->_action;
         if (method_exists($this, $action)) {
@@ -116,13 +118,27 @@ class CBaseController {
         }
         return $this->_css;
     }
+
     /**
-     * Подключает CSS-файл
-     *
      * @param $css
+     * @param $absPath
      */
-    public function addCSSInclude($css) {
-        $this->getCSSIncludes()->add($css, $css);
+    public function addCSSInclude($css, $absPath = false) {
+        if (!$absPath) {
+            $this->getCSSIncludes()->add($css, $css);
+        } else {
+            $this->getCSSAbsIncludes()->add($css, $css);
+        }
+    }
+
+    /**
+     * @return CArrayList|null
+     */
+    private function getCSSAbsIncludes() {
+        if (is_null($this->_cssAbs)) {
+            $this->_cssAbs = new CArrayList();
+        }
+        return $this->_cssAbs;
     }
     /**
      * Лист подключаемых текстов JS
@@ -186,6 +202,7 @@ class CBaseController {
             $this->getSmarty()->assign("jqInline", $this->getJQInlineIncludes()->getItems());
             $this->getSmarty()->assign("date_pickers", $this->getDatePickers()->getItems());
             $this->getSmarty()->assign("icon_theme", ICON_THEME);
+            $this->getSmarty()->assign("css_abs", $this->getCSSAbsIncludes()->getItems());
             $this->getSmarty()->display($view);
         } else {
             $data = $this->getData();

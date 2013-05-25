@@ -36,18 +36,6 @@
 </p>
 
 <p>
-    {CHtml::activeLabel("pages_diplom", $diplom)}
-    {CHtml::activeTextField("pages_diplom", $diplom)}
-    {CHtml::error("pages_diplom", $diplom)}
-</p>
-
-<p>
-    {CHtml::activeLabel("pages_attach", $diplom)}
-    {CHtml::activeTextField("pages_attach", $diplom)}
-    {CHtml::error("pages_attach", $diplom)}
-</p>
-
-<p>
     {CHtml::activeLabel("aspire_recomendation", $diplom)}
     {CHtml::activeCheckBox("aspire_recomendation", $diplom)}
     {CHtml::error("aspire_recomendation", $diplom)}
