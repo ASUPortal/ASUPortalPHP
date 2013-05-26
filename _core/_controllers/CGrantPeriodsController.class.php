@@ -36,7 +36,7 @@ class CGrantPeriodsController extends CBaseController{
         $perid = CGrantManager::getPeriod(CRequest::getInt("id"));
         $grant_id = $perid->grant_id;
         $perid->remove();
-        $this->redirect("index.php?action=edit&id=".$grant_id);
+        $this->redirect("admin.php?action=edit&id=".$grant_id);
     }
     public function actionEdit() {
         $period = CGrantManager::getPeriod(CRequest::getInt("id"));
@@ -50,7 +50,7 @@ class CGrantPeriodsController extends CBaseController{
         $period->setAttributes(CRequest::getArray($period::getClassName()));
         if ($period->validate()) {
             $period->save();
-            $this->redirect("index.php?action=edit&id=".$period->grant_id);
+            $this->redirect("admin.php?action=edit&id=".$period->grant_id);
             return true;
         }
         $this->addJSInclude(JQUERY_UI_JS_PATH);

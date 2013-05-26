@@ -77,14 +77,14 @@ class CGrantsController extends CBaseController{
     public function actionDelete() {
         $grant = CGrantManager::getGrant(CRequest::getInt("id"));
         $grant->remove();
-        $this->redirect("?action=index");
+        $this->redirect("admin.php?action=index");
     }
     public function actionSave() {
         $form = new CGrantForm();
         $form->setAttributes(CRequest::getArray($form::getClassName()));
         if ($form->validate()) {
             $form->save();
-            $this->redirect("?action=index");
+            $this->redirect("admin.php?action=index");
             return true;
         }
         $this->addJSInclude(JQUERY_UI_JS_PATH);

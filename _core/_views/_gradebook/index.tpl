@@ -35,52 +35,54 @@
         action = action + actions.join("_");
         window.location.href = action;
     }
+    dojo.ready(function(){
+        dojo.connect(dijit.byId("person"), "onChange", function(){
+            window.location.href = "?action=index&filter=person:" + this.value;
+                    {if !is_null($selectedGroup)}
+                    + "_group:{$selectedGroup}"
+                    {/if}
+                    {if !is_null($selectedDiscipline)}
+                    + "_discipline:{$selectedDiscipline}"
+                    {/if}
+                    {if !is_null($selectedControl)}
+                    + "_control:{$selectedControl->getId()}"
+                    {/if}
+                    {if !is_null($selectedStudent)}
+                    + "_student:{$selectedStudent->getId()}"
+            {/if};
+        });
+        dojo.connect(dijit.byId("group"), "onChange", function(){
+            window.location.href = "?action=index&filter=group:" + this.value
+                    {if !is_null($selectedPerson)}
+                    + "_person:{$selectedPerson}"
+                    {/if}
+                    {if !is_null($selectedDiscipline)}
+                    + "_discipline:{$selectedDiscipline}"
+                    {/if}
+                    {if !is_null($selectedControl)}
+                    + "_control:{$selectedControl->getId()}"
+                    {/if}
+                    {if !is_null($selectedStudent)}
+                    + "_student:{$selectedStudent->getId()}"
+            {/if};
+        });
+        dojo.connect(dijit.byId("discipline"), "onChange", function(){
+            window.location.href = "?action=index&filter=discipline:" + this.value
+                    {if !is_null($selectedPerson)}
+                    + "_person:{$selectedPerson}"
+                    {/if}
+                    {if !is_null($selectedGroup)}
+                    + "_group:{$selectedGroup}"
+                    {/if}
+                    {if !is_null($selectedControl)}
+                    + "_control:{$selectedControl->getId()}"
+                    {/if}
+                    {if !is_null($selectedStudent)}
+                    + "_student:{$selectedStudent->getId()}"
+            {/if};
+        });
+    });
     jQuery(document).ready(function(){
-        jQuery("#person").change(function(){
-            window.location.href = "?action=index&filter=person:" + jQuery(this).val()
-            {if !is_null($selectedGroup)}
-                + "_group:{$selectedGroup}"
-            {/if}
-            {if !is_null($selectedDiscipline)}
-                + "_discipline:{$selectedDiscipline}"
-            {/if}
-            {if !is_null($selectedControl)}
-                + "_control:{$selectedControl->getId()}"
-            {/if}
-            {if !is_null($selectedStudent)}
-                + "_student:{$selectedStudent->getId()}"
-            {/if};
-        });
-        jQuery("#group").change(function(){
-            window.location.href = "?action=index&filter=group:" + jQuery(this).val()
-            {if !is_null($selectedPerson)}
-                + "_person:{$selectedPerson}"
-            {/if}
-            {if !is_null($selectedDiscipline)}
-                + "_discipline:{$selectedDiscipline}"
-            {/if}
-            {if !is_null($selectedControl)}
-                + "_control:{$selectedControl->getId()}"
-            {/if}
-            {if !is_null($selectedStudent)}
-                + "_student:{$selectedStudent->getId()}"
-            {/if};
-        });
-        jQuery("#discipline").change(function(){
-            window.location.href = "?action=index&filter=discipline:" + jQuery(this).val()
-            {if !is_null($selectedPerson)}
-                + "_person:{$selectedPerson}"
-            {/if}
-            {if !is_null($selectedGroup)}
-                + "_group:{$selectedGroup}"
-            {/if}
-            {if !is_null($selectedControl)}
-                + "_control:{$selectedControl->getId()}"
-            {/if}
-            {if !is_null($selectedStudent)}
-                + "_student:{$selectedStudent->getId()}"
-            {/if};
-        });
         jQuery("#search").autocomplete({
             source: web_root + "_modules/_gradebook/?action=search",
             minLength: 2,

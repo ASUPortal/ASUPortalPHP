@@ -1,20 +1,3 @@
-<script>
-    jQuery(document).ready(function(){
-        jQuery("#date_start").datepicker({
-            dateFormat: "dd.mm.yy",
-            showOn: "both",
-            buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
-            buttonImageOnly: true
-        });
-        jQuery("#date_end").datepicker({
-            dateFormat: "dd.mm.yy",
-            showOn: "both",
-            buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
-            buttonImageOnly: true
-        });
-    });
-</script>
-
 <form action="events.php" method="post" enctype="multipart/form-data">
     {CHtml::activeHiddenField("id", $event)}
     {CHtml::activeHiddenField("grant_id", $event)}
@@ -28,13 +11,13 @@
 
     <p>
         {CHtml::activeLabel("date_start", $event)}
-        {CHtml::activeTextField("date_start", $event, "date_start")}
+        {CHtml::activeDateField("date_start", $event, "date_start")}
         {CHtml::error("date_start", $event)}
     </p>
 
     <p>
         {CHtml::activeLabel("date_end", $event)}
-        {CHtml::activeTextField("date_end", $event, "date_end")}
+        {CHtml::activeDateField("date_end", $event, "date_end")}
         {CHtml::error("date_end", $event)}
     </p>
 

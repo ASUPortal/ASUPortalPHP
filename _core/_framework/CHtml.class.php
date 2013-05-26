@@ -282,37 +282,110 @@ class CHtml {
             self::requiredStar();
         }
     }
-    public static function activeDateField($name, CModel $model, $format = "%d.%m.%Y", $id = "", $class = "", $html = "") {
-        $field = $model::getClassName()."[".$name."]";
+    public static function activeTimeField($name, CModel $model, $format = "%d.%m.%Y", $id = "", $class = "", $html = "", $multiple_key = "") {
+        /**
+         * Безумно полезная штука для работы со связанными
+         * моделями. Если в названии поля есть скобки, то производится
+         * разбор вида подмодель[ее поле]
+         */
+        $submodelName = "";
+        if (strpos($name, "[") !== false) {
+            $submodelName = substr($name, 0, strpos($name, "["));
+            $name = substr($name, strpos($name, "[") + 1);
+            $name = substr($name, 0, strlen($name) - 1);
+            $model = $model->$submodelName;
+        }
+        $field = $model::getClassName();
+        if ($multiple_key !== "") {
+            $field .= "[".$multiple_key."]";
+        }
+        if ($submodelName !== "") {
+            $field .= "[".$submodelName."]";
+        }
+        $field .= "[".$name."]";
         if ($id == "") {
-            $id = $field;
+            $id = $name;
         }
-        if ($format == "") {
-            $format = "%d.%m.%Y";
+        $inline = "";
+        if ($id != "") {
+            $inline .= ' id="'.$id.'"';
         }
-        $id = str_replace("[", "_", $id);
-        $id = str_replace("]", "_", $id);
-        self::textField($field, $model->$name, $id, $class, $html);
-        if (!self::$_calendarInit) {
-            self::$_calendarInit = true;
-            echo '
-            <script type="text/javascript" src="'.WEB_ROOT.'scripts/calendar.js"></script>
-            <script type="text/javascript" src="'.WEB_ROOT.'scripts/calendar-setup.js"></script>
-            <script type="text/javascript" src="'.WEB_ROOT.'scripts/lang/calendar-ru_win_.js"></script>
-            <link rel="stylesheet" type="text/css" media="all" href="'.WEB_ROOT.'css/calendar-win2k-asu.css" title="win2k-cold-1" />';
+        if ($class != "") {
+            $inline .= ' class="'.$class.'"';
         }
-        echo '
-        <button type="reset" id="'.$id.'_select">...</button>
-            <script type="text/javascript">
-                Calendar.setup({
-                    inputField     :    "'.$id.'",      // id of the input field
-                    ifFormat       :    "'.$format.'",       // format of the input field "%m/%d/%Y %I:%M %p"
-                    showsTime      :    false,            // will display a time selector
-                    button         :    "'.$id.'_select",   // trigger for the calendar (button ID)
-                    singleClick    :    true,           // double-click mode false
-                    step           :    1                // show all years in drop-down boxes (instead of every other year as default)
-                });
-            </script>';
+        if ($html != "") {
+            $inline .= $html;
+        }
+        echo '<input data-dojo-props="hasDownArrow: false, autoWidth: false" data-dojo-type="dijit/form/TimeTextBox" style="width: 30em; " type="text" name="'.$field.'" value="'.htmlspecialchars($model->$name).'" '.$inline.'>';
+    }
+    public static function activeDateField($name, CModel $model, $format = "%d.%m.%Y", $id = "", $class = "", $html = "", $multiple_key = "") {
+        /**
+         * Безумно полезная штука для работы со связанными
+         * моделями. Если в названии поля есть скобки, то производится
+         * разбор вида подмодель[ее поле]
+         */
+        $submodelName = "";
+        if (strpos($name, "[") !== false) {
+            $submodelName = substr($name, 0, strpos($name, "["));
+            $name = substr($name, strpos($name, "[") + 1);
+            $name = substr($name, 0, strlen($name) - 1);
+            $model = $model->$submodelName;
+        }
+        $field = $model::getClassName();
+        if ($multiple_key !== "") {
+            $field .= "[".$multiple_key."]";
+        }
+        if ($submodelName !== "") {
+            $field .= "[".$submodelName."]";
+        }
+        $field .= "[".$name."]";
+        if ($id == "") {
+            $id = $name;
+        }
+        $inline = "";
+        if ($id != "") {
+            $inline .= ' id="'.$id.'"';
+        }
+        if ($class != "") {
+            $inline .= ' class="'.$class.'"';
+        }
+        if ($html != "") {
+            $inline .= $html;
+        }
+        echo '<input data-dojo-props="hasDownArrow: false, autoWidth: false" data-dojo-type="dijit/form/DateTextBox" style="width: 30em; " type="text" name="'.$field.'" value="'.htmlspecialchars($model->$name).'" '.$inline.'>';
+    }
+    public static function activeEditor($name, CModel $model, $id = "", $class = "", $html = "") {
+        /**
+         * Безумно полезная штука для работы со связанными
+         * моделями. Если в названии поля есть скобки, то производится
+         * разбор вида подмодель[ее поле]
+         */
+        $submodelName = "";
+        if (strpos($name, "[") !== false) {
+            $submodelName = substr($name, 0, strpos($name, "["));
+            $name = substr($name, strpos($name, "[") + 1);
+            $name = substr($name, 0, strlen($name) - 1);
+            $model = $model->$submodelName;
+        }
+        $field = $model::getClassName();
+        if ($submodelName !== "") {
+            $field .= "[".$submodelName."]";
+        }
+        $field .= "[".$name."]";
+        if ($id == "") {
+            $id = $name;
+        }
+        $inline = "";
+        if ($id != "") {
+            $inline .= ' id="'.$id.'"';
+        }
+        if ($class != "") {
+            $inline .= ' class="'.$class.'"';
+        }
+        if ($html != "") {
+            $inline .= $html;
+        }
+        echo '<textarea data-dojo-type="dijit/Editor" style="width: 362px; height: 150px; " name="'.$name.'" '.$inline.'>'.$model->$name.'</textarea>';
     }
     public static function activeTextBox($name, CModel $model, $id = "", $class = "", $html = "", $multiple_key = "") {
         /**
@@ -458,7 +531,7 @@ class CHtml {
         } else {
             $checked = "";
         }
-        echo '<input type="checkbox" name="'.$name.'" '.$checked.' '.$inline.'>';
+        echo '<input data-dojo-type="dijit/form/CheckBox" type="checkbox" name="'.$name.'" '.$checked.' '.$inline.'>';
     }
     public static function activeCheckBoxGroup($name, CModel $model, $values = null) {
         /**

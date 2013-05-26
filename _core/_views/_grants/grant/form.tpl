@@ -1,34 +1,21 @@
-<script>
-    jQuery(document).ready(function(){
-        jQuery("#tabs").tabs();
-    });
-</script>
-
-<form action="index.php" method="post" enctype="multipart/form-data">
+<form action="admin.php" method="post" enctype="multipart/form-data">
     {CHtml::activeHiddenField("grant[id]", $form)}
     {CHtml::hiddenField("action", "save")}
 
-    <div id="tabs">
-        <ul style="height: 30px; ">
-            <li><a href="#tab-common">Общая информация</a></li>
-            <li><a href="#tab-finances">Финансирование</a></li>
-            <li><a href="#tab-events">Мероприятия</a></li>
-            <li><a href="#tab-attachments">Документы</a></li>
-            <li><a href="#tab-members">Участники</a></li>
-        </ul>
-        <div id="tab-common">
+    <div data-dojo-type="dijit/layout/TabContainer" doLayout="false">
+        <div data-dojo-type="dijit/layout/ContentPane" title="Общая информация">
             {include file="_grants/grant/subform.common.tpl"}
         </div>
-        <div id="tab-finances">
+        <div data-dojo-type="dijit/layout/ContentPane" title="Финансирование">
             {include file="_grants/grant/subform.finances.tpl"}
         </div>
-        <div id="tab-events">
+        <div data-dojo-type="dijit/layout/ContentPane" title="Мероприятия">
             {include file="_grants/grant/subform.events.tpl"}
         </div>
-        <div id="tab-attachments">
+        <div data-dojo-type="dijit/layout/ContentPane" title="Документы">
             {include file="_grants/grant/subform.attachments.tpl"}
         </div>
-        <div id="tab-members">
+        <div data-dojo-type="dijit/layout/ContentPane" title="Участники">
             {include file="_grants/grant/subform.members.tpl"}
         </div>
     </div>
