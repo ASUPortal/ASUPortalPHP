@@ -22,6 +22,7 @@ class CBaseController {
     private $_datePickers = null;
     private $_jsIEOnly = null;
     private $_cssAbs = null;
+    protected $_useDojo = false;
 
     /**
      * Конструктор базового класса. Определяет, какой метод
@@ -79,8 +80,10 @@ class CBaseController {
         /**
          * Почему я не сделал этого сразу?
          */
+        define("USE_DOJO", $this->_useDojo);
         $this->setData("_dojo_path", CSettingsManager::getSettingValue("dojo_js_path"));
         $this->setData("_dojo_theme", CSettingsManager::getSettingValue("dojo_css_theme"));
+        $this->setData("_dojo_enabled", USE_DOJO);
 
         $action = "action".$this->_action;
         if (method_exists($this, $action)) {

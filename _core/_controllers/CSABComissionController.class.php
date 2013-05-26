@@ -19,6 +19,7 @@ class CSABComissionController extends CBaseController {
             }
         }
 
+        $this->_useDojo = true;
         $this->_smartyEnabled = true;
         $this->setPageTitle("Комиссии ГАК");
 
