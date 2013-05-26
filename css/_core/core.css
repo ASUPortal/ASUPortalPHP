@@ -292,6 +292,10 @@ table tr:nth-child(2n) {
     background: #99D1FF;
 }
 
+table.dijit tr {
+    background: none;
+}
+
 table input {
     width: auto;
     height: 20px;

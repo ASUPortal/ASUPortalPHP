@@ -434,7 +434,7 @@ class CHtml {
         if ($html != "") {
             $inline .= $html;
         }
-        echo '<textarea data-dojo-type="dijit/form/Textarea" style="width: 30em; height: 150px; " name="'.$name.'" '.$inline.'>'.$value.'</textarea>';
+        echo '<textarea data-dojo-type="dijit/form/Textarea" style="width: 362px; height: 150px; " name="'.$name.'" '.$inline.'>'.$value.'</textarea>';
     }
     public static function checkBox($name, $value, $checked = false, $id = "", $class = "", $html = "") {
         if ($id == "") {
@@ -564,41 +564,43 @@ class CHtml {
             $field .= "[".$submodelName."]";
         }
         $field .= "[".$name."][]";
-        // дописываем скрипт для мультивыбора
-        if (!self::$_multiselectInit) {
-            echo '
-            <script>
-                jQuery(document).ready(function(){
-                    jQuery(".multiselectClonable").change(function(){
-                        var current = jQuery(this);
-                        var span = jQuery(current).parent();
-                        var parent = jQuery(span).parent();
-                        // клонируем текущий элемент
-                        jQuery(span).clone(true).appendTo(parent);
-                        // у текущего элемента активируем удалялку и снимаем класс клонирования
-                        var img = jQuery(span).find("img")[0];
-                        jQuery(img).css("display", "");
-                        jQuery(current).removeClass("multiselectClonable");
-                        jQuery(current).unbind("change");
-                    });
-                });
-            </script>
-            ';
-            self::$_multiselectInit = true;
+        /**
+         * Новая версия на dojo asu/asuMultiSelect
+         *
+         * Состоит из двух частей - выбиралки из списка и
+         * списка выбранных значений
+         */
+        echo '<script>
+            require(["asu/asuMultiSelect"]);
+        </script>';
+        echo '<div data-dojo-type="asu.asuMultiSelect" data-dojo-props="fieldName: \''.$field.'\'">';
+        /**
+         * Список со значениями для поиска
+         */
+        echo '<tr><td colspan="2">';
+        echo '<select id="_selector" style="width: 30em; ">';
+        foreach ($values as $key=>$value) {
+            echo '<option value="'.$key.'">'.$value.'</option>';
         }
-        echo '<div style="margin-left: 200px; ">';
+        echo '</select>';
+        /**
+         * Список выбранных значений
+         */
+        echo '<select id="_display" multiple size="6" style="width: 30em; margin-left: 200px; ">';
         foreach ($model->$name->getItems() as $f) {
-            // отрисовываем поле со значением
-            echo '<span>';
-            self::dropDownList($field, $values, $f->getId());
-            echo '&nbsp;&nbsp; <img src="'.WEB_ROOT.'images/design/mn.gif" style="cursor: pointer; " onclick="jQuery(this).parent().remove(); return false;" />';
-            echo '<br /></span>';
+            echo '<option value="'.$f->getId().'">'.$f->getName().'</option>';
         }
-        // добавляем последний невыбранным
-        echo '<span>';
-        self::dropDownList($field, $values, null, "", "multiselectClonable");
-        echo '&nbsp;&nbsp; <img src="'.WEB_ROOT.'images/design/mn.gif" style="cursor: pointer; display: none; " onclick="jQuery(this).parent().remove(); return false;" />';
-        echo '<br /></span>';
+        echo '</select>';
+        /**
+         * Удалялка
+         */
+        echo '<span id="_deleter" style="cursor: pointer; "><img src="'.WEB_ROOT.'images/todelete.png"></span>';
+        /**
+         * Список значений, которые будут отданы на сервер
+         */
+        foreach ($model->$name->getItems() as $f) {
+            echo '<input type="hidden" name="'.$field.'" value="'.$f->getId().'">';
+        }
         echo '</div>';
     }
     public static function activeSelect($name, CModel $model, $values = array(), $isMultiple = false, $size = 5, $id = "") {
