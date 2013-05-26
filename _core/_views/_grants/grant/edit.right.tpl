@@ -1,5 +1,5 @@
 <p>
-    <a href="admin.php?action=index">
+    <a href="?action=index">
         <center>
             <img src="{$web_root}images/{$icon_theme}/32x32/actions/edit-undo.png"><br>
             Все гранты
@@ -29,7 +29,7 @@
                 width: 390,
                 height: 200,
                 open: function(){
-                    jQuery(this).load(web_root + "_modules/_grants/admin.php?action=getuploadform&id={$form->grant->getId()}", function(){
+                    jQuery(this).load(web_root + "_modules/_grants/?action=getuploadform&id={$form->grant->getId()}", function(){
                         /**
                          * В этот момент форма подгрузилась,
                          * навешиваем на нее события
@@ -50,7 +50,7 @@
                                 /**
                                  * И обновляем сабформу с вложениями
                                  */
-                                jQuery("#attachmentsSubform").load(web_root + "_modules/_grants/admin.php?action=getAttachmentsSubform&id={$form->grant->getId()}");
+                                jQuery("#attachmentsSubform").load(web_root + "_modules/_grants/?action=getAttachmentsSubform&id={$form->grant->getId()}");
                             }
                         });
                     });

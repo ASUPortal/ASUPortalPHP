@@ -1,3 +1,14 @@
+<script>
+    jQuery(document).ready(function(){
+        jQuery("#date_act").datepicker({
+            dateFormat: "dd.mm.yy",
+            showOn: "both",
+            buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
+            buttonImageOnly: true
+        });
+    });
+</script>
+
 <p>
     {CHtml::activeLabel("kadri_id", $diplom)}
     {CHtml::activeDropDownList("kadri_id", $diplom, CStaffManager::getPersonsList())}
@@ -63,7 +74,7 @@
 
 <p>
     {CHtml::activeLabel("date_act", $diplom)}
-    {CHtml::activeDateField("date_act", $diplom, "date_act")}
+    {CHtml::activeTextField("date_act", $diplom, "date_act")}
     {CHtml::error("date_act", $diplom)}
 </p>
 

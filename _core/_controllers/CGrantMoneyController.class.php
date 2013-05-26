@@ -41,14 +41,14 @@ class CGrantMoneyController extends CBaseController{
         $money = CGrantManager::getMoney(CRequest::getInt("id"));
         $grant_id = $money->period->grant_id;
         $money->remove();
-        $this->redirect("admin.php?action=edit&id=".$grant_id);
+        $this->redirect("index.php?action=edit&id=".$grant_id);
     }
     public function actionSave() {
         $money = new CGrantMoney();
         $money->setAttributes(CRequest::getArray($money::getClassName()));
         if ($money->validate()) {
             $money->save();
-            $this->redirect("admin.php?action=edit&id=".$money->period->grant_id);
+            $this->redirect("index.php?action=edit&id=".$money->period->grant_id);
             return true;
         }
         $this->setData("money", $money);

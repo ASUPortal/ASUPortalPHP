@@ -15,7 +15,6 @@ class CGrant extends CActiveModel{
     protected $_periods = null;
     public $upload;
     public $upload_filename;
-    public $public = 0;
     public function attributeLabels() {
         return array(
             "title" => "Название",
@@ -30,7 +29,6 @@ class CGrant extends CActiveModel{
             "finances_source" => "Источник финансирования",
             "finances_planned" => "Плановая сумма",
             "finances_accepted" => "Всего получено",
-            "public" => "Опубликован"
         );
     }
     public function validationRules() {

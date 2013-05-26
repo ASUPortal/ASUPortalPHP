@@ -1,17 +1,28 @@
+<script>
+    jQuery(document).ready(function(){
+        jQuery("#tabs").tabs();
+    });
+</script>
+
 <form action="index.php" method="post">
 {CHtml::hiddenField("action", "save")}
 {CHtml::activeHiddenField("id", $diplom)}
 
     <p>{CHtml::errorSummary($diplom)}</p>
 
-    <div data-dojo-type="dijit/layout/TabContainer" doLayout="false">
-        <div data-dojo-type="dijit/layout/ContentPane" title="До защиты">
+    <div id="tabs">
+        <ul style="height: 30px; ">
+            <li><a href="#before">До защиты</a></li>
+            <li><a href="#after">После защиты</a></li>
+            <li><a href="#attach">Вкладыш</a></li>
+        </ul>
+        <div id="before">
             {include file="_diploms/subform.before.tpl"}
         </div>
-        <div data-dojo-type="dijit/layout/ContentPane" title="После защиты">
+        <div id="after">
             {include file="_diploms/subform.after.tpl"}
         </div>
-        <div data-dojo-type="dijit/layout/ContentPane" title="Вкладыш">
+        <div id="attach">
             {include file="_diploms/subform.attach.tpl"}
         </div>
     </div>

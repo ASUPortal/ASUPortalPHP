@@ -1,27 +1,11 @@
 <script>
-    require(["dojo/request/xhr"]);
-    dojo.ready(function(){
-        dojo.connect(dijit.byId("group_id"), "onChange", function(){
-            var url = web_root + "_modules/_json_service";
-            var xhrParams = {
-                handleAs: "json",
-                data: {
-                    controller: "staff",
-                    action: "getStudentsByGroup",
-                    group: this.value
-                },
-                preventCache: true,
-                method: "POST"
-            };
-            //dojo.xhr(url, xhrParams);
-            dojo.xhr.post(url, {
-                handleAs: "json",
-                preventCache: true,
-                method: "POST"
-            });
-        });
-    });
     jQuery(document).ready(function(){
+        jQuery("#date_act").datepicker({
+            dateFormat: "dd.mm.yy",
+            showOn: "button",
+            buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
+            buttonImageOnly: true
+        });
         jQuery("#group_id").change(function(){
             jQuery.getJSON(
                 web_root + "_modules/_json_service",
@@ -56,7 +40,7 @@
 
     <p>
         {CHtml::activeLabel("date_act", $activity)}
-        {CHtml::activeDateField("date_act", $activity, "date_act")}
+        {CHtml::activeTextField("date_act", $activity, "date_act")}
         {CHtml::error("date_act", $activity)}
     </p>
 
