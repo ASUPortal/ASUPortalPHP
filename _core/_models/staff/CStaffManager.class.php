@@ -942,7 +942,11 @@ class CStaffManager{
     public static function getAllStudentsThisYearList() {
         $res = array();
         foreach (self::getAllStudentsThisYear()->getItems() as $student) {
-            $res[$student->getId()] = $student->getName();
+            $nv = $student->getName();
+            if (!is_null($student->getGroup())) {
+                $nv .= " (".$student->getGroup()->getName().")";
+            }
+            $res[$student->getId()] = $nv;
         }
         return $res;
     }

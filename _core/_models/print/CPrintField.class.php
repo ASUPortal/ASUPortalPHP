@@ -99,16 +99,29 @@ class CPrintField extends CActiveModel {
                 return $value;
             }
         } elseif ($this->type_id == "2") {
-            $value = array();
-            eval($this->value_evaluate);
-            if (is_string($value)) {
-                $value = array(
-                    array(
-                        $value
-                    )
-                );
+            if ($isChild) {
+                $childValue = array();
+                eval($this->value_evaluate);
+                if (is_string($childValue)) {
+                    $childValue = array(
+                        array(
+                            $childValue
+                        )
+                    );
+                }
+                return $childValue;
+            } else {
+                $value = array();
+                eval($this->value_evaluate);
+                if (is_string($value)) {
+                    $value = array(
+                        array(
+                            $value
+                        )
+                    );
+                }
+                return $value;
             }
-            return $value;
         }
     }
 }

@@ -547,8 +547,11 @@ $res=mysql_query($query.' order by '.$sort.' '.$stype.' limit '.(($page-1)*$pgVa
 //echo $query;
 
 if (!isset($_GET['save']) && !isset($_GET['print']) && $write_mode) {
-	echo '<p class="notinfo"><a href="?type=add&'.$_SERVER["QUERY_STRING"].'"> Добавить</a><p>';
-if ($filt_str_display!='') {echo '<div class=text><img src="images/filter.gif" alt="фильтр" border=0>включена фильтрация по: <b style="color:#FF0000;">'.$filt_str_display.'</b> &nbsp; &nbsp; сбросить фильтр<a class=button href="?'.reset_param_name_ARR($query_string,array('kadri_id','page','q','notconfirm')).'" title="сбросить фильтр"><img src="images/del_multi_filter.gif" alt="сбросить фильтр" border=0></a></div>';}
+	//echo '<p class="notinfo"><a href="?type=add&'.$_SERVER["QUERY_STRING"].'"> Добавить</a><p>';
+    echo '<p class="notinfo"><a href="'.WEB_ROOT.'_modules/_diploms/?action=add"> Добавить</a><p>';
+    if ($filt_str_display!='') {
+        echo '<div class=text><img src="images/filter.gif" alt="фильтр" border=0>включена фильтрация по: <b style="color:#FF0000;">'.$filt_str_display.'</b> &nbsp; &nbsp; сбросить фильтр<a class=button href="?'.reset_param_name_ARR($query_string,array('kadri_id','page','q','notconfirm')).'" title="сбросить фильтр"><img src="images/del_multi_filter.gif" alt="сбросить фильтр" border=0></a></div>';
+    }
 }
 	if (mysql_num_rows($res)==0) {
 	 
@@ -649,7 +652,7 @@ $add_string=reset_param_name($query_string,'sort');
 			<td align="center" > 
 		  	<a href="javascript:del_confirm_act(\''.f_ro(substr($tmpval['dipl_name'],0,50)).'...\',\'?item_id='.$tmpval['id'].'&type=del&'.reset_param_name_ARR($query_string,array('item_id','type')).'\');" title="Удалить">
 			<img src="images/todelete.png" alt="Удалить" border="0"></a>&nbsp;&nbsp;&nbsp;
-			<a href="?item_id='.$tmpval['id'].'&type=edit&'.reset_param_name_ARR($query_string,array('item_id','type')).'" title="Правка">
+			<a href="'.WEB_ROOT.'_modules/_diploms/?action=edit&id='.$tmpval["id"].'" title="Правка">
 			<img src="images/toupdate.png" alt="Правка" border="0"></a></td>';}
 		$i++;
 		echo '<td>&nbsp;'.($i+($page-1)*$pgVals).'</td>';

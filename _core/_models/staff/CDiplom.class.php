@@ -118,7 +118,8 @@ class CDiplom extends CActiveModel {
             "session_end" => "Время окончания защиты",
             "pages_diplom" => "Страниц в пояснительной записке",
             "pages_attach" => "Страниц чертежей (таблиц)",
-            "aspire_recomendation" => "Рекомендован в аспирантуру"
+            "aspire_recomendation" => "Рекомендован в аспирантуру",
+            "average_mark" => "Средний балл"
         );
     }
 

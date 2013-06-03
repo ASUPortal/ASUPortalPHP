@@ -1,13 +1,13 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-<h2>Добавление специальности</h2>
+    <h2>Добавление дипломной темы</h2>
 
     {CHtml::helpForCurrentPage()}
 
-    {include file="_specialities/form.tpl"}
+    {include file="_diploms/form.tpl"}
 {/block}
 
 {block name="asu_right"}
-{include file="_specialities/add.right.tpl"}
+{include file="_diploms/add.right.tpl"}
 {/block}

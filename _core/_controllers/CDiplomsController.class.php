@@ -56,6 +56,8 @@ class CDiplomsController extends CBaseController {
             $nv .= " ".$cnt;
             $commissions[$commission->getId()] = $nv;
         }
+        $students = CStaffManager::getAllStudentsThisYearList();
+        $this->setData("students", $students);
         $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
         $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
         $this->addJSInclude("_core/jquery.ui.timepicker.js");
@@ -87,6 +89,18 @@ class CDiplomsController extends CBaseController {
             $nv .= " ".$cnt;
             $commissions[$commission->getId()] = $nv;
         }
+        $students = CStaffManager::getAllStudentsThisYearList();
+        if (!array_key_exists($diplom->student_id, $students)) {
+            $student = CStaffManager::getStudent($diplom->student_id);
+            if (!is_null($student)) {
+                $nv = $student->getName();
+                if (!is_null($student->getGroup())) {
+                    $nv .= " (".$student->getGroup()->getName().")";
+                }
+                $students[$student->getId()] = $nv;
+            }
+        }
+        $this->setData("students", $students);
         $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
         $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
         $this->addJSInclude("_core/jquery.ui.timepicker.js");
@@ -102,7 +116,8 @@ class CDiplomsController extends CBaseController {
             // дату нужно сконвертить в MySQL date
             $diplom->date_act = date("Y-m-d", strtotime($diplom->date_act));
             $diplom->save();
-            $this->redirect("?action=index");
+            //$this->redirect("?action=index");
+            $this->redirect(WEB_ROOT."diploms_view.php");
             return true;
         }
         $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");

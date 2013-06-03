@@ -20,7 +20,7 @@
 
 <p>
     {CHtml::activeLabel("student_id", $diplom)}
-    {CHtml::activeDropDownList("student_id", $diplom, CStaffManager::getAllStudentsThisYearList())}
+    {CHtml::activeDropDownList("student_id", $diplom, $students)}
     <span><a href="{$web_root}_modules/_students/" target="_blank">
             <img src="{$web_root}images/toupdate.png">
         </a></span>
@@ -88,6 +88,12 @@
     {CHtml::activeLabel("pages_attach", $diplom)}
     {CHtml::activeTextField("pages_attach", $diplom)}
     {CHtml::error("pages_attach", $diplom)}
+</p>
+
+<p>
+    {CHtml::activeLabel("average_mark", $diplom)}
+    {CHtml::activeTextField("average_mark", $diplom)}
+    {CHtml::error("average_mark", $diplom)}
 </p>
 
 <p>
