@@ -226,6 +226,8 @@
 
     // Типы участия на кафедре
     define("TYPE_PPS", "профессорско-преподавательский состав");
+    define("TYPE_REVIEWER", "рецензент");
+    define("TYPE_REVIEWER_ARCHIVE", "архив рецензент");
     define("USER_TYPE_ADMIN", "администратор");
 
     // типы связей

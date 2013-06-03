@@ -70,7 +70,8 @@ class CCorriculum extends CActiveModel{
             "qualification_id" => "Квалификация выпускника",
             "speciality_id" => "Специальность",
             "title" => "Название плана",
-            "description" => "Описание"
+            "description" => "Описание",
+            "final_exam_title" => "Название итогового экзамена"
         );
     }
     public function validationRules() {

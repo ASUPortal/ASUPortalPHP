@@ -60,7 +60,7 @@
             {include file="_students/subform.basic_education.tpl"}
         </div>
         <div id="tab-secondary-education">
-            {include file="_students/subform.secondary_education.tpl"}
+            {include file="_students/subform.secondary_education.education.tpl"}
         </div>
         <div id="tab-work">
             {include file="_students/subform.work.tpl"}

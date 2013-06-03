@@ -57,6 +57,8 @@ class CDiplomsController extends CBaseController {
             $commissions[$commission->getId()] = $nv;
         }
         $students = CStaffManager::getAllStudentsThisYearList();
+        $reviewers = CStaffManager::getPersonsListWithType(TYPE_REVIEWER);
+        $this->setData("reviewers", $reviewers);
         $this->setData("students", $students);
         $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
         $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
@@ -100,6 +102,14 @@ class CDiplomsController extends CBaseController {
                 $students[$student->getId()] = $nv;
             }
         }
+        $reviewers = CStaffManager::getPersonsListWithType(TYPE_REVIEWER);
+        if (!array_key_exists($diplom->recenz_id, $reviewers)) {
+            $reviewer = CStaffManager::getPerson($diplom->recenz_id);
+            if (!is_null($reviewer)) {
+                $reviewers[$reviewer->getId()] = $reviewer->getName();
+            }
+        }
+        $this->setData("reviewers", $reviewers);
         $this->setData("students", $students);
         $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
         $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
@@ -120,6 +130,26 @@ class CDiplomsController extends CBaseController {
             $this->redirect(WEB_ROOT."diploms_view.php");
             return true;
         }
+        $students = CStaffManager::getAllStudentsThisYearList();
+        if (!array_key_exists($diplom->student_id, $students)) {
+            $student = CStaffManager::getStudent($diplom->student_id);
+            if (!is_null($student)) {
+                $nv = $student->getName();
+                if (!is_null($student->getGroup())) {
+                    $nv .= " (".$student->getGroup()->getName().")";
+                }
+                $students[$student->getId()] = $nv;
+            }
+        }
+        $reviewers = CStaffManager::getPersonsListWithType(TYPE_REVIEWER);
+        if (!array_key_exists($diplom->recenz_id, $reviewers)) {
+            $reviewer = CStaffManager::getPerson($diplom->recenz_id);
+            if (!is_null($reviewer)) {
+                $reviewers[$reviewer->getId()] = $reviewer->getName();
+            }
+        }
+        $this->setData("reviewers", $reviewers);
+        $this->setData("students", $students);
         $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
         $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
         $this->addJSInclude("_core/jquery.ui.timepicker.js");

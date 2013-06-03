@@ -59,7 +59,7 @@
 
 <p>
     {CHtml::activeLabel("recenz_id", $diplom)}
-    {CHtml::activeDropDownList("recenz_id", $diplom, CStaffManager::getPersonsList())}
+    {CHtml::activeDropDownList("recenz_id", $diplom, $reviewers)}
     <span><a href="{$web_root}_modules/_staff/" target="_blank">
             <img src="{$web_root}images/toupdate.png">
         </a></span>

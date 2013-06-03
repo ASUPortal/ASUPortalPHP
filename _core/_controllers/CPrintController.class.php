@@ -71,35 +71,71 @@ class CPrintController extends CBaseController {
             /**
              * Это место для экспериментов и написания отладочного кода
              */
-            $childValue = array();
-            /**
-             * Повторно получаем диплом
-             */
-            $basic_diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
-            $commission = $basic_diplom->commission;
-            if (!is_null($commission)) {
-                $number = 0;
-                $person = $commission->manager;
-                if (!is_null($person)) {
-                    $number++;
-                    $childValue[] = array(
-                        $number,
-                        $person->getName(),
-                        "",
-                        ""
-                    );
+            $cycleName = "ЕН";
+            $value = array();
+            if (is_null($object->group)) {
+                $value = array();
+            } elseif (is_null($object->group->corriculum)) {
+                $value = array();
+            } elseif (is_null($object->group->corriculum->getCycleByAbbreviatedName($cycleName))) {
+                $value = "__________";
+            } else {
+                $cycle = $object->group->corriculum->getCycleByAbbreviatedName($cycleName);
+                $arr = array();
+                /**
+                 * Собираем дисциплины в таблицу
+                 */
+                foreach ($cycle->disciplines->getItems() as $disc) {
+                    $d = array();
+                    if (!is_null($disc->discipline)) {
+                        $d[0] = $cycle->number.".".$disc->ordering;
+                    }
+                    $d[1] = $disc->discipline->getValue();
+                    $d[2] = $disc->getLaborValue();
+                    $d[3] = "";
+                    /**
+                     * Получаем оценку студента по выбранной дисциплине.
+                     * Пока получаем просто последнюю оценку вне зависимости
+                     * от формы контроля по дисциплине
+                     */
+                    $query = new CQuery();
+                    $query->select("act.id, mark.name as name")
+                        ->from(TABLE_STUDENTS_ACTIVITY." as act")
+                        ->condition("act.student_id = ".$object->getId()." and act.kadri_id = 380 and act.subject_id = ".$disc->discipline->getId()." and act.study_act_id in (1, 2, 12, 14)")
+                        ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
+                        ->order("act.id asc");
+                    foreach ($query->execute()->getItems() as $item) {
+                        $d[3] = $item["name"];
+                    }
+                    $arr[] = $d;
+                    foreach ($disc->children->getItems() as $discChild) {
+                        $d = array();
+                        if (!is_null($discChild->discipline)) {
+                            $d[0] = $cycle->number.".".$disc->ordering.".".$discChild->ordering;
+                        }
+                        $d[1] = $discChild->discipline->getValue();
+                        $d[2] = $discChild->getLaborValue();
+                        $d[3] = "";
+                        /**
+                         * Получаем оценку студента по выбранной дисциплине.
+                         * Пока получаем просто последнюю оценку вне зависимости
+                         * от формы контроля по дисциплине
+                         */
+                        $query = new CQuery();
+                        $query->select("act.id, mark.name as name")
+                            ->from(TABLE_STUDENTS_ACTIVITY." as act")
+                            ->condition("act.student_id = ".$object->getId()." and act.kadri_id = 380 and act.subject_id = ".$discChild->discipline->getId()." and act.study_act_id in (1, 2, 12, 14)")
+                            ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
+                            ->order("act.id asc");
+                        foreach ($query->execute()->getItems() as $item) {
+                            $d[3] = $item["name"];
+                        }
+                        $arr[] = $d;
+                    }
                 }
-                foreach ($commission->members->getItems() as $person) {
-                    $number++;
-                    $childValue[] = array(
-                        $number,
-                        $person->getName(),
-                        "",
-                        ""
-                    );
-                }
+                $value = $arr;
             }
-            $this->debugTable($childValue);
+            $this->debugTable($value);
         }
         /**
          * Еще один вариант. Надеюсь, этот заработает нормально

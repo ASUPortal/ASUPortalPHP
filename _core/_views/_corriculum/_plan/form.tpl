@@ -45,6 +45,12 @@
     </p>
 
     <p>
+        {CHtml::activeLabel("final_exam_title", $corriculum)}
+        {CHtml::activeTextField("final_exam_title", $corriculum)}
+        {CHtml::error("final_exam_title", $corriculum)}
+    </p>
+
+    <p>
         {CHtml::submit("Сохранить")}
     </p>
 </form>
