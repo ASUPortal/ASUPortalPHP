@@ -1,4 +1,5 @@
 <?php
+// это комментарий для проверки работы гита
 include ('authorisation.php');
 
 $pg_title='О системе';
