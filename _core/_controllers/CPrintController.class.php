@@ -71,71 +71,6 @@ class CPrintController extends CBaseController {
             /**
              * Это место для экспериментов и написания отладочного кода
              */
-            $cycleName = "ЕН";
-            $value = array();
-            if (is_null($object->group)) {
-                $value = array();
-            } elseif (is_null($object->group->corriculum)) {
-                $value = array();
-            } elseif (is_null($object->group->corriculum->getCycleByAbbreviatedName($cycleName))) {
-                $value = "__________";
-            } else {
-                $cycle = $object->group->corriculum->getCycleByAbbreviatedName($cycleName);
-                $arr = array();
-                /**
-                 * Собираем дисциплины в таблицу
-                 */
-                foreach ($cycle->disciplines->getItems() as $disc) {
-                    $d = array();
-                    if (!is_null($disc->discipline)) {
-                        $d[0] = $cycle->number.".".$disc->ordering;
-                    }
-                    $d[1] = $disc->discipline->getValue();
-                    $d[2] = $disc->getLaborValue();
-                    $d[3] = "";
-                    /**
-                     * Получаем оценку студента по выбранной дисциплине.
-                     * Пока получаем просто последнюю оценку вне зависимости
-                     * от формы контроля по дисциплине
-                     */
-                    $query = new CQuery();
-                    $query->select("act.id, mark.name as name")
-                        ->from(TABLE_STUDENTS_ACTIVITY." as act")
-                        ->condition("act.student_id = ".$object->getId()." and act.kadri_id = 380 and act.subject_id = ".$disc->discipline->getId()." and act.study_act_id in (1, 2, 12, 14)")
-                        ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
-                        ->order("act.id asc");
-                    foreach ($query->execute()->getItems() as $item) {
-                        $d[3] = $item["name"];
-                    }
-                    $arr[] = $d;
-                    foreach ($disc->children->getItems() as $discChild) {
-                        $d = array();
-                        if (!is_null($discChild->discipline)) {
-                            $d[0] = $cycle->number.".".$disc->ordering.".".$discChild->ordering;
-                        }
-                        $d[1] = $discChild->discipline->getValue();
-                        $d[2] = $discChild->getLaborValue();
-                        $d[3] = "";
-                        /**
-                         * Получаем оценку студента по выбранной дисциплине.
-                         * Пока получаем просто последнюю оценку вне зависимости
-                         * от формы контроля по дисциплине
-                         */
-                        $query = new CQuery();
-                        $query->select("act.id, mark.name as name")
-                            ->from(TABLE_STUDENTS_ACTIVITY." as act")
-                            ->condition("act.student_id = ".$object->getId()." and act.kadri_id = 380 and act.subject_id = ".$discChild->discipline->getId()." and act.study_act_id in (1, 2, 12, 14)")
-                            ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
-                            ->order("act.id asc");
-                        foreach ($query->execute()->getItems() as $item) {
-                            $d[3] = $item["name"];
-                        }
-                        $arr[] = $d;
-                    }
-                }
-                $value = $arr;
-            }
-            $this->debugTable($value);
         }
         /**
          * Еще один вариант. Надеюсь, этот заработает нормально
@@ -157,6 +92,33 @@ class CPrintController extends CBaseController {
                 }
             }
         }
+        $wordTemplate->setDocXML($xml);
+        /**
+         * Теперь стили, они отдельно обрабатываются
+         */
+        $fieldsFromTemplate = $wordTemplate->getStyleFields();
+        if ($this->_isDebug) {
+        	var_dump(array_keys($fieldsFromTemplate));
+        }        
+        $xml = "";
+        foreach ($fieldsFromTemplate as $fieldName=>$descriptors) {
+        	/**
+        	 * Если поле из шаблона есть в наборе полей,
+        	 * то вычисляем его. Перед вычислением проверяем,
+        	 * есть ли привязанные к нему дочерние описатели. Если дочерние
+        	 * описатели есть, то не вычисляем, так как вычислением дочерних
+        	 * будет заниматься родительский
+        	 */
+        	if (!is_null($form->formset->getFieldByName($fieldName))) {
+        		$field = $form->formset->getFieldByName($fieldName);
+        		if (is_null($field->parent)) {
+        			foreach ($descriptors as $node) {
+        				$xml = $this->processNode($node, $field, $object, $form);
+        			}
+        		}
+        	}
+        }   
+        $wordTemplate->setStyleXML($xml);     
         /**
          * При отладке не выгружаем обратно документ
          */
@@ -166,7 +128,6 @@ class CPrintController extends CBaseController {
         /**
          * Сохраняем документ
          */
-        $wordTemplate->setDocXML($xml);
         $filename = date("dmY_Hns")."_".$form->template_file;
         $i = 0;
         while (file_exists(PRINT_TEMPLATES_DIR.$filename)) {

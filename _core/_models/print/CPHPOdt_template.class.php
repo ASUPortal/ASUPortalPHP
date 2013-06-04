@@ -8,7 +8,9 @@
  */
 class CPHPOdt_template extends CAbstractDocumentTemplate{
     private $_documentXML = null;
+    private $_styleXML = null;
     private $_xmlDocument = null;
+    private $_xmlStyle = null;
 
     public function __construct($file) {
         $path = dirname($file);
@@ -20,6 +22,7 @@ class CPHPOdt_template extends CAbstractDocumentTemplate{
         $this->_objZip->open($this->_tempFileName);
 
         $this->_documentXML = $this->_objZip->getFromName('content.xml');
+        $this->_styleXML = $this->_objZip->getFromName('styles.xml');
     }
 
     function setValue($field, $value)
@@ -33,6 +36,7 @@ class CPHPOdt_template extends CAbstractDocumentTemplate{
         }
 
         $this->_objZip->addFromString('content.xml', $this->_documentXML);
+        $this->_objZip->addFromString('styles.xml', $this->_styleXML);
 
         // Close zip file
         if($this->_objZip->close() === false) {
@@ -50,6 +54,14 @@ class CPHPOdt_template extends CAbstractDocumentTemplate{
     public function setDocXML($xmlString) {
         $this->_documentXML = $xmlString;
     }
+    /**
+     * Содержимое стилей в виде строки
+     * 
+     * @param unknown $xmlString
+     */
+    public function setStyleXML($xmlString) {
+    	$this->_styleXML = $xmlString;
+    }
 
     /**
      * Текст xml-документа, который лежит в основе
@@ -58,6 +70,36 @@ class CPHPOdt_template extends CAbstractDocumentTemplate{
      */
     function getDocXML() {
         return $this->_documentXML;
+    }
+    /**
+     * Текст xml-стиля
+     * 
+     * @return <unknown, mixed>
+     */
+    public function getStyleXML() {
+    	return $this->_styleXML;
+    }
+    /**
+     * Все поля из файла стилей
+     * 
+     * @return array
+     */
+    function getStyleFields() {
+    	$fields = array();
+    	$nodes = $this->getXMLStyle()->getElementsByTagNameNS("urn:oasis:names:tc:opendocument:xmlns:text:1.0", "user-field-get");
+    	foreach ($nodes as $node) {
+    		/**
+    		 * А ведь в документе может быть несколько одинаковых
+    		 * описателей. Складываем все в массив
+    		 */
+    		$descriptors = array();
+    		if (array_key_exists($node->textContent, $fields)) {
+    			$descriptors = $fields[$node->textContent];
+    		}
+    		$descriptors[] = $node;
+    		$fields[$node->textContent] = $descriptors;
+    	}
+    	return $fields;    	
     }
 
     /**
@@ -95,5 +137,18 @@ class CPHPOdt_template extends CAbstractDocumentTemplate{
             $this->_xmlDocument = $doc;
         }
         return $this->_xmlDocument;
+    }
+    /**
+     * XML стиля в виде объекта DOMDocument
+     * 
+     * @return DOMDocument|null
+     */
+    private function getXMLStyle() {
+    	if (is_null($this->_xmlStyle)) {
+    		$doc = new DOMDocument();
+    		$doc->loadXML($this->getStyleXML());
+    		$this->_xmlStyle = $doc;    		
+    	}
+    	return $this->_xmlStyle;
     }
 }

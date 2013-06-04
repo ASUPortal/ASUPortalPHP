@@ -1,5 +1,5 @@
 <?php
-//
+//  
 //интеграция с Coppermine Photogallery через ajax-авторизацию, подробнее в sso_moodle.php
 function getIntegStatus($slave_system_id)   // вывод статуса интеграции приложения
 {
