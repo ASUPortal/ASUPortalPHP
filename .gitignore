@@ -13,3 +13,4 @@ images/editor_uploaded/*
 .buildpath
 .project
 .settings
+_modules/docs_tpl/*
