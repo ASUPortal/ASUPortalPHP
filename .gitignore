@@ -8,3 +8,8 @@ _core/_cache/*
 f_mails/*
 library/grants/*
 images/editor_uploaded/*
+/library
+/user_pages
+.buildpath
+.project
+.settings
