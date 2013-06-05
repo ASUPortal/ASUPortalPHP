@@ -91,6 +91,9 @@ class CDiplomsController extends CBaseController {
             $nv .= " ".$cnt;
             $commissions[$commission->getId()] = $nv;
         }
+        if (!array_key_exists($diplom->gak_num, $commissions)) {
+        	$diplom->gak_num = null;
+        }
         $students = CStaffManager::getAllStudentsThisYearList();
         if (!array_key_exists($diplom->student_id, $students)) {
             $student = CStaffManager::getStudent($diplom->student_id);

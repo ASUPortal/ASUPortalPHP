@@ -49,6 +49,18 @@
         {CHtml::activeTextField("final_exam_title", $corriculum)}
         {CHtml::error("final_exam_title", $corriculum)}
     </p>
+    
+    <p>
+        {CHtml::activeLabel("load_classroom", $corriculum)}
+        {CHtml::activeTextField("load_classroom", $corriculum)}
+        {CHtml::error("load_classroom", $corriculum)}
+    </p>
+    
+    <p>
+        {CHtml::activeLabel("load_total", $corriculum)}
+        {CHtml::activeTextField("load_total", $corriculum)}
+        {CHtml::error("load_total", $corriculum)}
+    </p>
 
     <p>
         {CHtml::submit("Сохранить")}

@@ -71,7 +71,9 @@ class CCorriculum extends CActiveModel{
             "speciality_id" => "Специальность",
             "title" => "Название плана",
             "description" => "Описание",
-            "final_exam_title" => "Название итогового экзамена"
+            "final_exam_title" => "Название итогового экзамена",
+        	"load_classroom" => "Аудиторная нагрузка",
+        	"load_total" => "Общая нагрузка"
         );
     }
     public function validationRules() {
