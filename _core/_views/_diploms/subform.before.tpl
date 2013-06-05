@@ -7,7 +7,20 @@
             buttonImageOnly: true
         });
     });
+    {if !is_null($diplom->getId())}
+    jQuery.ajax({
+    	url: web_root + "_modules/_diploms",
+    	data: {
+    		action: "getAverageMark",
+    		id: {$diplom->getId()}
+    	}
+    }).done(function(data){
+    	jQuery("#average_mark").html(data);
+    });
+    {/if}
 </script>
+
+<div id="average_mark" style="color: red; font-size: 150px; position: absolute; right: 5px; "></div>
 
 <p>
     {CHtml::activeLabel("kadri_id", $diplom)}

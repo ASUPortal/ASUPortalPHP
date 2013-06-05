@@ -121,7 +121,7 @@
             <td>{$student->telephone}</td>
             <td>
                 {foreach $student->diploms->getItems() as $diplom}
-                    <p><a href="{$web_root}diploms_view.php?item_id={$diplom->getId()}&type=edit">{$diplom->dipl_name}</a></p>
+                    <p><a href="{$web_root}_modules/_diploms/?action=edit&id={$diplom->getId()}">{$diplom->dipl_name}</a></p>
                 {/foreach}
             </td>
             <td>{$student->comment}</td>
