@@ -185,7 +185,9 @@ class CDiplomsController extends CBaseController {
     					$mark += 2;
     				}
     			}
-    			$mark = round(($mark / ($items->getCount())), 2);
+    			if ($items->getCount() > 0) {
+    				$mark = round(($mark / ($items->getCount())), 2);
+    			}
     		}
     	}
     	if ($mark !== 0) {
