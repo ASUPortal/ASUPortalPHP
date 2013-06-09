@@ -1,3 +1,21 @@
+<script>
+	jQuery(document).ready(function(){
+	{if !is_null($student->getId())}
+	    jQuery.ajax({
+    		url: web_root + "_modules/_students",
+    		data: {
+   	 			action: "getCorriculumHoursTotal",
+    			id: {$student->getId()}
+    		}
+    	}).done(function(data){
+    		jQuery("#hours_total").html(data);
+    	});
+	{/if}
+	});
+</script>
+
+<div id="hours_total" style="color: red; font-size: 150px; position: absolute; right: 5px; "></div>
+
 <p>
     {CHtml::activeLabel("fio", $student)}
     {CHtml::activeTextField("fio", $student)}

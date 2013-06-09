@@ -70,6 +70,7 @@
             <th>{CHtml::tableOrder("head_student_id", $groups->getFirstItem())}</th>
             <th>{CHtml::tableOrder("year_id", $groups->getFirstItem())}</th>
             <th>{CHtml::tableOrder("curator_id", $groups->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("corriculum_id", $groups->getFirstItem())}</th>
             <th>Комментарий</th>
         </tr>
         {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
@@ -98,6 +99,13 @@
                     {if !is_null($group->curator)}
                         {$group->curator->getName()}
                     {/if}
+                </td>
+                <td>
+                	{if !is_null($group->corriculum)}
+                		<a href="{$web_root}_modules/_corriculum/?action=view&id={$group->corriculum->getId()}">
+                			{$group->corriculum->title}
+                		</a>
+                	{/if}
                 </td>
                 <td>{$group->comment}</td>
             </tr>

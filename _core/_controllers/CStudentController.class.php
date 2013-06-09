@@ -299,4 +299,19 @@ class CStudentController extends CBaseController {
         $this->setData("results", $res);
         $this->renderView("_students/imported.tpl");
     }
+    public function actionGetCorriculumHoursTotal() {
+    	$hours = 0;
+    	$student = CStaffManager::getStudent(CRequest::getInt("id"));
+    	if (!is_null($student)) {
+    		$corriculum = $student->getCorriculum();
+    		if (!is_null($corriculum)) {
+    			foreach ($corriculum->cycles->getItems() as $cycle) {
+    				foreach ($cycle->disciplines->getItems() as $disc) {
+    					$hours += $disc->getLaborValue();
+    				}
+    			}
+    		}
+    	}
+    	echo $hours;
+    }
 }

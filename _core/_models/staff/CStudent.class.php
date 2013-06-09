@@ -32,6 +32,7 @@ class CStudent extends CActiveModel {
     protected $_markInternship = null;
     protected $_markUndergraduate = null;
     protected $_complexExamMark = null;
+    private $_corriculum = null;
     public function attributeLabels() {
         return array(
             "fio" => "ФИО",
@@ -177,5 +178,20 @@ class CStudent extends CActiveModel {
         } else {
             return "";
         }
+    }
+    /**
+     * Учебный план, по которому обуается студент
+     * В перспективе может быть личным учебным планом для студента
+     * 
+     * @return CCorriculum
+     */
+    public function getCorriculum() {
+    	if (is_null($this->_corriculum)) {
+    		if (!is_null($this->getGroup())) {
+    			$group = $this->getGroup();
+    			$this->_corriculum = $group->corriculum;
+    		}
+    	}
+    	return $this->_corriculum;
     }
 }
