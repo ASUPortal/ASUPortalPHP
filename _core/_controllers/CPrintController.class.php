@@ -23,7 +23,7 @@ class CPrintController extends CBaseController {
         $this->renderView("_print/index.tpl");
     }
     public function actionPrint() {
-    	/**
+        /**
     	 * Получаем обратно параметры контекста из запроса.
     	 * Мы получаем:
     	 * 1. Класс менеджера
@@ -118,6 +118,9 @@ class CPrintController extends CBaseController {
         		}
         	}
         }   
+		if (count($fieldsFromTemplate) == 0) {
+			$xml = $wordTemplate->getStyleXML();
+		}
         $wordTemplate->setStyleXML($xml);     
         /**
          * При отладке не выгружаем обратно документ
