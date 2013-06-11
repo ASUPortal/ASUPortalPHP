@@ -111,4 +111,16 @@ class CSABCommission extends CActiveModel {
             }
         }
     }
+    public function getDiplomsListByDate() {
+		$result = array();
+		foreach ($this->diploms->getItems() as $diplom) {
+			$byDay = array();
+			if (array_key_exists($diplom->date_act, $result)) {
+				$byDay = $result[$diplom->date_act];
+			}
+			$byDay[] = $diplom;
+			$result[$diplom->date_act] = $byDay;
+		}
+		return $result;
+	}
 }
