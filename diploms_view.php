@@ -518,7 +518,7 @@ if (isset($_GET['gr_act']) && isset($_POST['diplom_confirm']))	{
 
 //выборка для показа списочной таблицы записей
 
-$query='SELECT dc.name as dc_name,diploms.dipl_name,pp.name as pract_place,'.
+$query='SELECT dc.name as dc_name,diploms.dipl_name,pp.name as pract_place, commission.title as commission_title, '.
 	 ($kadri_id==0?'kadri.fio as kadri_fio,':'').
 	 'students.fio as student_fio,study_groups.name as group_name,dp.date_preview,diploms.date_act,language.name as foreign_lang,diploms.protocol_2aspir_id,k2.fio_short as rez_fio,study_marks.name_short as study_mark, diploms.gak_num,
 kadri.id as kadri_id,diploms.comment,diploms.id,students.id as student_id,users.id as user_id,recenz_id,diploms.recenz,dc.color_mark as dc_color_mark        
@@ -533,6 +533,9 @@ kadri.id as kadri_id,diploms.comment,diploms.id,students.id as student_id,users.
 		left join diplom_confirms dc on dc.id=diploms.diplom_confirm
 		left join  (select student_id,max(date_preview) as date_preview from diplom_previews group by student_id) dp
 		  on dp.student_id=diploms.student_id
+		  
+		left join sab_commission as commission on
+			commission.id = diploms.gak_num
 		';
 
 if (isset($kadri_id) & $kadri_id!=0) 
@@ -701,7 +704,8 @@ $add_string=reset_param_name($query_string,'sort');
 		echo '<td>&nbsp;'.$recenz.'</td>';
 
 		echo '<td>&nbsp;'.$tmpval['study_mark'].'</td>';
-		echo '<td>&nbsp;'.$tmpval['gak_num'].'</td>';
+		//echo '<td>&nbsp;'.$tmpval['gak_num'].'</td>';
+		echo '<td><a href="'.WEB_ROOT.'_modules/_state_attestation/?action=edit&id='.$tmpval['gak_num'].'">'.$tmpval['commission_title'].'</a>&nbsp;</td>';
 
 		if (!isset($_GET['save']) && !isset($_GET['print'])) {
 		 	echo '<td class="notinfo">&nbsp;'.color_mark($q,$tmpval['comment']).'</td>';}
