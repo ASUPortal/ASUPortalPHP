@@ -307,7 +307,16 @@ class CStudentController extends CBaseController {
     		if (!is_null($corriculum)) {
     			foreach ($corriculum->cycles->getItems() as $cycle) {
     				foreach ($cycle->disciplines->getItems() as $disc) {
-    					$hours += $disc->getLaborValue();
+    					// здесь нужно проверить, что у студента по этой дисциплине есть оценка
+    					$query = new CQuery();
+    					$query->select("act.id, mark.name as name")
+    					->from(TABLE_STUDENTS_ACTIVITY." as act")
+    					->condition("act.student_id = ".$student->getId()." and act.kadri_id = 380 and act.subject_id = ".$disc->discipline->getId()." and act.study_act_id in (1, 2, 12, 14)")
+    					->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
+    					->order("act.id asc");
+    					if ($query->execute()->getCount() > 0) {
+    						$hours += $disc->getLaborValue();
+    					}
     				}
     			}
     		}

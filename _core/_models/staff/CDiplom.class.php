@@ -18,6 +18,7 @@ class CDiplom extends CActiveModel {
     protected $_practPlace = null;
     protected $_reviewer = null;
     protected $_commission = null;
+    private $_averageMark = null;
 
     public $aspire_recomendation = 0;
 
@@ -163,7 +164,49 @@ class CDiplom extends CActiveModel {
         }
         return $last;
     }
+    public function getAverageMarkComputed() {
+    	if (is_null($this->_averageMark)) {
+    		$this->_averageMark = 0;
+    		$student = $this->student;
+    		if (!is_null($student)) {
+    			$query = new CQuery();
+    			$query->select("n.*")
+    			->from(TABLE_STUDENTS_ACTIVITY." as m")
+    			->innerJoin(TABLE_MARKS." as n", "m.study_mark = n.id")
+    			->condition("student_id = ".$student->getId()." AND study_mark in (1, 2, 3, 4) AND kadri_id = 380");
+    			$items = $query->execute();
+    			foreach ($items->getItems() as $item) {
+    				if (mb_strtolower($item["name"]) == "удовлетворительно") {
+    					$this->_averageMark += 3;
+    				} elseif (mb_strtolower($item["name"]) == "хорошо") {
+    					$this->_averageMark += 4;
+    				} elseif (mb_strtolower($item["name"]) == "отлично") {
+    					$this->_averageMark += 5;
+    				} elseif (mb_strtolower($item["name"]) == "неудовлетворительно") {
+    					$this->_averageMark += 2;
+    				}
+    			}
+    			if ($items->getCount() > 0) {
+    				$this->_averageMark = round(($this->_averageMark / ($items->getCount())), 2);
+    			}
+    		}    		
+    	}
+    	return $this->_averageMark;
+    }
     public function isPerfect() {
-        return false;
+        $result = false;
+        $averageMark = 0;
+        if (!is_null($this->average_mark)) {
+        	$averageMark = $this->average_mark;
+        } else {
+        	$averageMark = $this->getAverageMarkComputed();
+        }
+        $mark = $this->mark;
+        if (!is_null($mark)) {
+        	if (mb_strtolower($mark->name) == "отлично" && $averageMark >= 4.75) {
+        		$result = true;
+        	}
+        }
+        return $result;
     }
 }

@@ -71,6 +71,24 @@ class CPrintController extends CBaseController {
             /**
              * Это место для экспериментов и написания отладочного кода
              */
+            $value = "";
+            $commission = $object->commission;
+            if (!is_null($commission)) {
+            	$students = array();
+            	foreach ($commission->diploms->getItems() as $diplom) {
+            		if (strtotime($diplom->date_act) == strtotime($object->date_act)) {
+            			if ($diplom->isPerfect()) {
+            				$student = $diplom->student;
+            				if (!is_null($student)) {
+            					$students[] = $student->getName();
+            				}
+            			}
+            		}
+            	}
+            	sort($students);
+            	$value = implode(", ", $students);
+            }
+            var_dump($value);            
         }
         /**
          * Еще один вариант. Надеюсь, этот заработает нормально

@@ -166,29 +166,7 @@ class CDiplomsController extends CBaseController {
     	$mark = 0;
     	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
     	if (!is_null($diplom)) {
-    		$student = $diplom->student;
-    		if (!is_null($student)) {
-    			$query = new CQuery();
-    			$query->select("n.*")
-    			->from(TABLE_STUDENTS_ACTIVITY." as m")
-    			->innerJoin(TABLE_MARKS." as n", "m.study_mark = n.id")
-    			->condition("student_id = ".$student->getId()." AND study_mark in (1, 2, 3, 4) AND kadri_id = 380");
-    			$items = $query->execute();
-    			foreach ($items->getItems() as $item) {
-    				if (mb_strtolower($item["name"]) == "удовлетворительно") {
-    					$mark += 3;
-    				} elseif (mb_strtolower($item["name"]) == "хорошо") {
-    					$mark += 4;
-    				} elseif (mb_strtolower($item["name"]) == "отлично") {
-    					$mark += 5;
-    				} elseif (mb_strtolower($item["name"]) == "неудовлетворительно") {
-    					$mark += 2;
-    				}
-    			}
-    			if ($items->getCount() > 0) {
-    				$mark = round(($mark / ($items->getCount())), 2);
-    			}
-    		}
+    		$mark = $diplom->getAverageMarkComputed();
     	}
     	if ($mark !== 0) {
     		echo $mark;
