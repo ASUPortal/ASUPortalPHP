@@ -58,6 +58,9 @@
     </tr>
 </table>
 
+{foreach $form->commission->getDiplomsListByDate() as $date=>$diploms}
+    <h2>{$date|date_format:"%d.%m.%Y"}</h2>
+
 <table border="1" cellpadding="2" cellspacing="0">
     <tr>
         <th></th>
@@ -65,7 +68,7 @@
         <th>Студент</th>
         <th>Тема диплома</th>
     </tr>
-    {foreach $form->commission->diploms->getItems() as $diplom}
+    {foreach $diploms as $diplom}
         <tr>
             <td><a href="#" onclick="if (confirm('Действительно удалить диплом {$diplom->dipl_name}')) { removeDiplom({$diplom->getId()}); }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
             <td>{counter}</td>
@@ -74,8 +77,12 @@
                     {$diplom->student->getName()}
                 {/if}
             </td>
-            <td>{$diplom->dipl_name}</td>
+            <td>
+				<a href="{$web_root}_modules/_diploms/?action=edit&id={$diplom->getId()}">{$diplom->dipl_name}</a>
+			</td>
         </tr>
     {/foreach}
-</table>
+</table>	
+{/foreach}
+
 </div>
