@@ -13,7 +13,7 @@ class CPrintFieldController extends CBaseController {
         }
 
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Управление приказами");
+        $this->setPageTitle("Управление полями печати");
 
         parent::__construct();
     }

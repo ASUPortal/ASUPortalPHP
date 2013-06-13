@@ -72,21 +72,33 @@ class CPrintController extends CBaseController {
              * Это место для экспериментов и написания отладочного кода
              */
             $value = "";
-            $commission = $object->commission;
-            if (!is_null($commission)) {
-            	$students = array();
-            	foreach ($commission->diploms->getItems() as $diplom) {
-            		if (strtotime($diplom->date_act) == strtotime($object->date_act)) {
-            			if ($diplom->isPerfect()) {
-            				$student = $diplom->student;
-            				if (!is_null($student)) {
-            					$students[] = $student->getName();
-            				}
-            			}
-            		}
-            	}
-            	sort($students);
-            	$value = implode(", ", $students);
+            /**
+             * Параметры в формате
+             * id специальности => id набора билетов
+             */
+            $params = array(
+                2 => 1371125759
+            );
+            $student = $object->student;
+            if (!is_null($student)) {
+                $corriculum = $student->getCorriculum();
+                if (!is_null($corriculum)) {
+                    $direction = $corriculum->direction;
+                    if (!is_null($direction)) {
+                        if (array_key_exists($direction->getId(), $params)) {
+                            $questionSet = $params[$direction->getId()];
+                            $questions = CExamManager::getTicketsBySession($questionSet);
+                            if ($questions->getCount() > 0) {
+                                $text = array();
+                                $ticket = $questions->getShuffled()->getFirstItem();
+                                foreach ($ticket->questions->getItems() as $q) {
+                                    $text[] = $q->text;
+                                }
+                                $value = implode(" ", $text);
+                            }
+                        }
+                    }
+                }
             }
             var_dump($value);            
         }

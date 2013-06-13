@@ -196,11 +196,12 @@ class CDiplom extends CActiveModel {
     public function isPerfect() {
         $result = false;
         $averageMark = 0;
-        if (!is_null($this->average_mark)) {
+        if ($this->average_mark != "") {
         	$averageMark = $this->average_mark;
         } else {
         	$averageMark = $this->getAverageMarkComputed();
         }
+        $averageMark = str_replace(",", ".", $averageMark);
         $mark = $this->mark;
         if (!is_null($mark)) {
         	if (mb_strtolower($mark->name) == "отлично" && $averageMark >= 4.75) {
