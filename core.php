@@ -215,6 +215,7 @@
     define("TABLE_SAB_COMMISSION_MEMBERS", "sab_commission_members");
     define("TABLE_SAB_COMMISSION_DIPLOMS", "sab_commission_diploms");
     define("TABLE_SAB_PERSON_ORDERS", "sab_person_orders");
+    define("TABLE_RATES", "pl_rates");
 
     // суффиксы таблиц доступа
     define("ACL_ENTRIES", "_access_entries");
