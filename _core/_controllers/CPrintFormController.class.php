@@ -13,7 +13,7 @@ class CPrintFormController extends CBaseController {
         }
 
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Управление приказами");
+        $this->setPageTitle("Управление шаблонами документов");
 
         parent::__construct();
     }

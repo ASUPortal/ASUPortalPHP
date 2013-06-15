@@ -52,7 +52,7 @@ class CRatesManager {
                 ->from(TABLE_RATES." as r")
                 ->condition("r.year_id = ".$year->getId()." AND r.alias='".$alias."'");
             foreach ($q->execute()->getItems() as $ar) {
-                $rate = new CRate($ar);
+                $rate = new CRate(new CActiveRecord($ar));
                 self::addToCache($rate);
             }
         }

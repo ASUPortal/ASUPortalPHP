@@ -71,36 +71,199 @@ class CPrintController extends CBaseController {
             /**
              * Это место для экспериментов и написания отладочного кода
              */
-            $value = "";
+            $value = array();
             /**
-             * Параметры в формате
-             * id специальности => id набора билетов
+             * Получаем все дипломы, которые защищаются в выбранной
+             * комиссии
              */
-            $params = array(
-                2 => 1371125759
+            $diploms = new CArrayList();
+            foreach ($object->diploms->getItems() as $diplom) {
+                $diploms->add($diplom->getId(), $diplom);
+            }
+            /**
+             * Считаем, сколько среди них студентов контрактников,
+             * сколько бюджетников
+             */
+            $types = array(
+                0 => 0,
+                1 => 0
             );
-            $student = $object->student;
-            if (!is_null($student)) {
-                $corriculum = $student->getCorriculum();
-                if (!is_null($corriculum)) {
-                    $direction = $corriculum->direction;
-                    if (!is_null($direction)) {
-                        if (array_key_exists($direction->getId(), $params)) {
-                            $questionSet = $params[$direction->getId()];
-                            $questions = CExamManager::getTicketsBySession($questionSet);
-                            if ($questions->getCount() > 0) {
-                                $text = array();
-                                $ticket = $questions->getShuffled()->getFirstItem();
-                                foreach ($ticket->questions->getItems() as $q) {
-                                    $text[] = $q->text;
-                                }
-                                $value = implode(" ", $text);
-                            }
-                        }
+            foreach ($diploms->getItems() as $diplom) {
+                if (!is_null($diplom->student)) {
+                    if ($diplom->bud_contract == "") {
+                        $types[0] = $types[0] + 1;
+                    } elseif ($diplom->bud_contract == 1) {
+                        $types[0] = $types[0] + 1;
+                    } elseif ($diplom->bud_contract == 2) {
+                        $types[1] = $types[1] + 1;
                     }
                 }
             }
-            var_dump($value);            
+            /**
+             * Теперь собираем всех членов комиссии в один массив.
+             * Сначала берем председателя, потом членов
+             */
+            $members = new CArrayList();
+            if (!is_null($object->manager)) {
+                $member = $object->manager;
+                $members->add($member->getId(), $member);
+            }
+            foreach ($object->members->getItems() as $member) {
+                $members->add($member->getId(), $member);
+            }
+            /**
+             * Теперь идем по всем членам комиссии и выводим
+             * сколько они заслушали дипломов.
+             *
+             * Переменную назовем как в прошлой форме чтобы не
+             * переделывать все
+             */
+            $reviewerIndex = 0;
+            foreach ($members->getItems() as $reviewer) {
+                $reviewerIndex++;
+                $isFirst = true;
+                foreach ($types as $typeId=>$type) {
+                    $dataRow = array();
+                    /**
+                     * Для начала заполним результирующий массив пустыми строками
+                     */
+                    for ($i = 0; $i <= 7; $i++) {
+                        $dataRow[$i] = "";
+                    }
+                    /**
+                     * Если это первая строка, то выводим инфу по рецензенту
+                     * и диплому. В противном случае, только по диплому
+                     */
+                    if ($isFirst) {
+                        $isFirst = false;
+                        /**
+                         * Вся информация по рецензенту или руководителю
+                         *
+                         * Номер рецензента
+                         */
+                        $dataRow[0] = "";
+                        /**
+                         * ФИО, ученая степень, звание
+                         */
+                        $dataRow[1] = "";
+                        $nv = "";
+                        $nv = $reviewer->getName();
+                        /**
+                         * Степень
+                         */
+                        if (!is_null($reviewer->degree)) {
+                            $nv .= ", ".$reviewer->degree->getValue();
+                        }
+                        /**
+                         * Звание
+                         */
+                        if (!is_null($reviewer->title)) {
+                            $nv .= ", ".$reviewer->title->getValue();
+                        }
+                        $dataRow[1] = $nv;
+                        /**
+                         * Дата рождения
+                         */
+                        $dataRow[2] = "";
+                        if ($reviewer->date_rogd != "") {
+                            $dataRow[2] = date("d.m.Y", strtotime($reviewer->date_rogd));
+                        }
+                        /**
+                         * Паспортные данные
+                         * номер, серия, кем и когда выдан
+                         * ИНН, СНИЛС
+                         */
+                        $nv = "";
+                        if ($reviewer->passp_seria != "") {
+                            $nv = $reviewer->passp_seria;
+                        }
+                        if ($reviewer->passp_nomer != "") {
+                            if ($nv == "") {
+                                $nv = $reviewer->passp_nomer;
+                            } else {
+                                $nv .= " ".$reviewer->passp_nomer;
+                            }
+                        }
+                        if ($reviewer->passp_place != "") {
+                            if ($nv == "") {
+                                $nv = "выдан ".$reviewer->passp_place;
+                            } else {
+                                $nv .= " выдан ".$reviewer->passp_place;
+                            }
+                        }
+                        if ($reviewer->INN != "") {
+                            if ($nv == "") {
+                                $nv = $reviewer->INN;
+                            } else {
+                                $nv .= ", ".$reviewer->INN;
+                            }
+                        }
+                        if ($reviewer->insurance_num != "") {
+                            if ($nv == "") {
+                                $nv = $reviewer->insurance_num;
+                            } else {
+                                $nv .= ", ".$reviewer->insurance_num;
+                            }
+                        }
+                        $dataRow[3] = $nv;
+                        /**
+                         * Полный домашний адрес
+                         */
+                        $dataRow[4] = $reviewer->add_home;
+                        /**
+                         * Номер и дата приказа
+                         */
+                        $dataRow[5] = "";
+                        if (!is_null($object->year)) {
+                            if (!is_null($reviewer->getSABOrderByYear($object->year))) {
+                                $order = $reviewer->getSABOrderByYear($object->year);
+                                if (!is_null($order)) {
+                                    if (!is_null($order->order)) {
+                                        $dataRow[5] = $order->order->getName();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    /**
+                     * Выводим количество и часы
+                     */
+                    $nv = $type;
+                    if ($typeId == 0) {
+                        $nv .= " (Б)";
+                    } else {
+                        $nv .= " (К)";
+                    }
+                    $dataRow[6] = $nv;
+                    $rate = 0;
+                    if (!is_null($object->year)) {
+                        /**
+                         * Разные ставки для члена ГАК и председателя
+                         */
+                        if (!is_null($object->manager)) {
+                            if ($reviewer->getId() == $object->manager->getId()) {
+                                $rateObj = CRatesManager::getRateByAliasAndYear($object->year, "sab_manager");
+                                if (!is_null($rateObj)) {
+                                    $rate = $rateObj->value;
+                                }
+                            } else {
+                                $rateObj = CRatesManager::getRateByAliasAndYear($object->year, "sab_member");
+                                if (!is_null($rateObj)) {
+                                    $rate = $rateObj->value;
+                                }
+                            }
+                        } else {
+                            $rateObj = CRatesManager::getRateByAliasAndYear($object->year, "sab_member");
+                            if (!is_null($rateObj)) {
+                                $rate = $rateObj->value;
+                            }
+                        }
+                    }
+                    $dataRow[7] = $rate * $type;
+                    $value[] = $dataRow;
+                }
+            }
+            $this->debugTable($value);
         }
         /**
          * Еще один вариант. Надеюсь, этот заработает нормально
