@@ -1,16 +1,19 @@
 <?php
 include ('authorisation.php');
 
-if (isset($_GET['type']) && $_GET['type']=='del' && intval($_GET['item_id'])>0 && $write_mode)
-{
+/**
+ * Удаление. Убрать из списка ссылку на этот метод, удалить его потом
+ */
+if (isset($_GET['type']) && $_GET['type']=='del' && intval($_GET['item_id'])>0 && $write_mode) {
 	 $query='delete from diploms where id="'.intval($_GET['item_id']).'"';	
 	 $res=mysql_query($query);	
 	 header('Location:'.$curpage.'?'.reset_param_name_ARR($_SERVER['QUERY_STRING'],array('type','item_id')));
 }
 
 
-if (!$view_all_mode && (!isset($_GET['kadri_id']) || $_GET['kadri_id']!=$_SESSION['kadri_id'])) 
-	{header('Location:?kadri_id='.intval($_SESSION['kadri_id']).'');}
+if (!$view_all_mode && (!isset($_GET['kadri_id']) || $_GET['kadri_id']!=$_SESSION['kadri_id'])) {
+    header('Location:?kadri_id='.intval($_SESSION['kadri_id']).'');
+}
 
 
 include ('master_page_short.php');
@@ -164,8 +167,7 @@ if ($res_all=mysql_query($query_all) and mysql_numrows($res_all)>0) {
 
 //добавление темы
 
-if (isset($_POST['kadri_id']) && $write_mode)
-{
+if (isset($_POST['kadri_id']) && $write_mode) {
 	if (($_POST['student_id']!=0 || $_POST['student_fio']!='') & $_POST['dipl_name']!="" && $_POST['pract_place_id']!="0") 
 	{
 		 $onEditRemain_text='';
@@ -436,30 +438,31 @@ c рецензент вне списка <a class=help title="автозапол
 <?php
 }
 
-else 
-	{	
-	if (!isset($_GET['archiv'])) {	
-		
+else {
+	if (!isset($_GET['archiv'])) {
 		$query_='select count(*) from `diploms` where 1 and (date_act<"'.$def_settings['date_start'].'") ';
-		if ($kadri_id>0) {$query_.=' and `diploms`.`kadri_id`="'.$kadri_id.'"';}
+		if ($kadri_id>0) {
+            $query_.=' and `diploms`.`kadri_id`="'.$kadri_id.'"';
+        }
 		$archiv_cnt=intval(getScalarVal($query_),10);
 		
 		echo '<a href="?'.$query_string.'&archiv" title="защиты прошлых учебных лет">архив: '.$archiv_cnt.'</a><br>';
-	}
-	else {
+	} else {
 		$query_='select count(*) from `diploms` where 1 and (date_act>="'.$def_settings['date_start'].'" or date_act is NULL) ';
-		if ($kadri_id>0) {$query_.=' and `diploms`.`kadri_id`="'.$kadri_id.'"';}
+		if ($kadri_id>0) {
+            $query_.=' and `diploms`.`kadri_id`="'.$kadri_id.'"';
+        }
 		$cur_cnt=intval(getScalarVal($query_),10);
- 		echo '<a href="?'.reset_param_name(reset_param_name($query_string,'archiv'),'page').'" title="защиты прошлых учебных лет">дипломные проекты текущего учебного года: '.$cur_cnt.'</a><br>';}
-
-
-
-$archiv_query=' and (date_act>="'.$def_settings['date_start'].'" or date_act is NULL)';
-if (isset($_GET['archiv'])) {$archiv_query=' and (date_act<"'.$def_settings['date_start'].'" )';}
-
-$search_query='';
-if ($q!='') {echo '<div>Поиск: <b><u>'.$q.'</u></b></div><br>';
-$search_query=' and (convert(diploms.dipl_name USING utf8) like "%'.$q.'%" or 
+ 		echo '<a href="?'.reset_param_name(reset_param_name($query_string,'archiv'),'page').'" title="защиты прошлых учебных лет">дипломные проекты текущего учебного года: '.$cur_cnt.'</a><br>';
+    }
+    $archiv_query=' and (date_act>="'.$def_settings['date_start'].'" or date_act is NULL)';
+    if (isset($_GET['archiv'])) {
+        $archiv_query=' and (date_act<"'.$def_settings['date_start'].'" )';
+    }
+    $search_query='';
+    if ($q!='') {
+        echo '<div>Поиск: <b><u>'.$q.'</u></b></div><br>';
+        $search_query=' and (convert(diploms.dipl_name USING utf8) like "%'.$q.'%" or
 					convert(pp.name USING utf8) like "%'.$q.'%" or 
 					convert(students.fio USING utf8) like "%'.$q.'%" or '.
 					($kadri_id==0?'convert(kadri.fio USING utf8) like "%'.$q.'%" or ':' ').
@@ -468,67 +471,111 @@ $search_query=' and (convert(diploms.dipl_name USING utf8) like "%'.$q.'%" or
 					diploms.date_act like "%'.DateTimeCustomConvert($q,'d','rus2mysql').'%" or 
 					dp.date_preview like "%'.DateTimeCustomConvert($q,'d','rus2mysql').'%" or
 					convert(diploms.gak_num USING utf8) like "%'.$q.'%" or 
-					convert(diploms.comment USING utf8) like "%'.$q.'%")';}
+					convert(diploms.comment USING utf8) like "%'.$q.'%")';
+    }
 
-	$table_headers=array(
-		1=>array('утв.','10'),
-		array('тема','200'),
-		array('место практики','10')
-		);
+	$table_headers = array(
+		1 => array(
+            'утв.','10'
+        ),
+		array(
+            'тема','200'
+        ),
+		array(
+            'место практики','10')
+	);
 		
-	 if ($kadri_id==0)
-		array_push($table_headers, array('преподаватель','100'));
+    if ($kadri_id==0) {
+        array_push($table_headers, array('преподаватель','100'));
+    }
 		  
-		array_push($table_headers, 
-		  array('студент','100'),
-		  array('уч.группа','50'),
-		  array('пред. защита','50'),
-		  array('дата защиты','50'),
-		  array('ин/яз.','20'),
-		  array('аспир.','20'),
-		  array('рец.','20'),
-		  array('оц.','20'),
-		  array('№ГАК','20')
-		);
+    array_push($table_headers,
+        array(
+            'студент','100'
+        ),
+        array(
+            'уч.группа','50'
+        ),
+        array(
+            'пред. защита','50'
+        ),
+        array(
+            'дата защиты','50'
+        ),
+        array(
+            'ин/яз.','20'
+        ),
+        array(
+            'аспир.','20'
+        ),
+        array(
+            'рец.','20'
+        ),
+        array(
+            'оц.','20'
+        ),
+        array(
+            '№ГАК','20'
+        )
+	);
 
-$def_sort=1;
-if ($sort<1 && $sort>=cont($table_headers))  {$sort=$def_sort;}
+    $def_sort=1;
+    if ($sort<1 && $sort>=cont($table_headers)) {
+        $sort=$def_sort;
+    }
  
 //	-----------------------групповые операции начало------------------------------
 
-if (isset($_GET['gr_act']) && isset($_POST['diplom_confirm']))	{
-	 $diplom_confirm=intval($_POST['diplom_confirm']);
-				
-	 $err=false;
+    if (isset($_GET['gr_act']) && isset($_POST['diplom_confirm']))	{
+        $diplom_confirm=intval($_POST['diplom_confirm']);
+        $err=false;
 
-	 while (list($key, $value) = each ($_POST)) {
-		 if 	  (strstr($key,"checkbox_tab_item_")) {
-			   $act_item_id=intval(preg_replace("/\D/","",$key));			  
-		   $query_gr_act='update diploms set diplom_confirm='.$diplom_confirm.' where id='.$act_item_id.' limit 1';
+        while (list($key, $value) = each ($_POST)) {
+            if (strstr($key,"checkbox_tab_item_")) {
+                $act_item_id=intval(preg_replace("/\D/","",$key));
+                $query_gr_act='update diploms set diplom_confirm='.$diplom_confirm.' where id='.$act_item_id.' limit 1';
 		    
-		   if (! ($res=mysql_query($query_gr_act)) ) {$err=true;echo '<div class=warning> ошибка группового обновления записи id='.$act_item_id.'</div>';}
-	  
-		  }
-	 }
+                if (!($res=mysql_query($query_gr_act))) {
+                    $err=true;
+                    echo '<div class=warning> ошибка группового обновления записи id='.$act_item_id.'</div>';
+                }
+            }
+        }
 
-	 if ($err==true)	{echo '<div class=warning> Произошли ошибки при выполнении массовой операции </div>';}
-	 else {echo '<div class=success> Выполнение массовой операции успешно</div>';}
-					}
+        if ($err==true)	{
+            echo '<div class=warning> Произошли ошибки при выполнении массовой операции </div>';
+        } else {
+            echo '<div class=success> Выполнение массовой операции успешно</div>';
+        }
+    }
 //	-----------------------групповые операции конец------------------------------
 
 //выборка для показа списочной таблицы записей
 
-$query='SELECT dc.name as dc_name,diploms.dipl_name,pp.name as pract_place, commission.title as commission_title, '.
-	 ($kadri_id==0?'kadri.fio as kadri_fio,':'').
-	 'students.fio as student_fio,study_groups.name as group_name,dp.date_preview,diploms.date_act,language.name as foreign_lang,diploms.protocol_2aspir_id,k2.fio_short as rez_fio,study_marks.name_short as study_mark, diploms.gak_num,
+$query='
+    SELECT
+        dc.name as dc_name,
+        diploms.dipl_name,
+        pp.name as pract_place,
+        commission.title as commission_title, '.
+	    ($kadri_id==0?'kadri.fio as kadri_fio,':'').'
+	    students.fio as student_fio,
+	    study_groups.name as group_name,
+	    dp.date_preview,
+	    diploms.date_act,
+	    language.name as foreign_lang,
+	    diploms.protocol_2aspir_id,
+	    k2.fio_short as rez_fio,
+	    study_marks.name_short as study_mark, diploms.gak_num,
 kadri.id as kadri_id,diploms.comment,diploms.id,students.id as student_id,users.id as user_id,recenz_id,diploms.recenz,dc.color_mark as dc_color_mark        
-	FROM diploms left join students on diploms.student_id=students.id 
+	FROM diploms
+	    left join students on diploms.student_id=students.id
 		left join kadri on diploms.kadri_id=kadri.id
 		left join kadri k2 on diploms.recenz_id=k2.id
 		left join study_groups on study_groups.id=students.group_id 
 		left join users on users.kadri_id=kadri.id 
 		left join language on language.id=diploms.foreign_lang 
-                left join pract_places pp on pp.id=diploms.pract_place_id 
+        left join pract_places pp on pp.id=diploms.pract_place_id
 		left join study_marks on study_marks.id=diploms.study_mark 
 		left join diplom_confirms dc on dc.id=diploms.diplom_confirm
 		left join  (select student_id,max(date_preview) as date_preview from diplom_previews group by student_id) dp
@@ -538,19 +585,53 @@ kadri.id as kadri_id,diploms.comment,diploms.id,students.id as student_id,users.
 			commission.id = diploms.gak_num
 		';
 
-if (isset($kadri_id) & $kadri_id!=0) 
-	{$search_query.=' and kadri.id="'.$kadri_id.'"';}
+if (isset($kadri_id) & $kadri_id!=0) {
+    $search_query.=' and kadri.id="'.$kadri_id.'"';
+}
 
-if ($notconfirm) 
-	{$search_query.=' and (diploms.diplom_confirm is null or diploms.diplom_confirm=0) ';}
+if ($notconfirm) {
+    $search_query.=' and (diploms.diplom_confirm is null or diploms.diplom_confirm=0) ';
+}
 
 $query=$query." where 1 ".$archiv_query."".$search_query;
-	
-$res=mysql_query($query.' order by '.$sort.' '.$stype.' limit '.(($page-1)*$pgVals).','.$pgVals);
+
+    /**
+     * Сортировки разнообразные
+     * 1 - Статус утверждения
+     * 2 - Тема диплома
+     * 3 - Место практики
+     * 4 - Преподаватель
+     * 5 - Студент
+     * 6 - Учебная группа
+     * 7 - Дата предзащиты
+     * 8 - Дата защиты
+     * 9 - Иностранный язык
+     * 10 - Протокол рекомендации в аспирантуру
+     * 11 - Рецензент
+     * 12 - Оценка
+     * 13 - Номен ГАК
+     */
+    $orderParams = array(
+        1 => "dc.name",
+        2 => "diploms.dipl_name",
+        3 => "pp.name",
+        4 => "kadri.fio",
+        5 => "students.fio",
+        6 => "study_groups.name",
+        7 => "dp.date_preview",
+        8 => "diploms.date_act",
+        9 => "language.name",
+        10 => "diploms.protocol_2aspir_id",
+        11 => "k2.fio",
+        12 => "study_marks.name",
+        13 => "commission.title"
+    );
+    $order = $orderParams[$sort];
+
+    $res=mysql_query($query.' order by '.$order.' '.$stype.' limit '.(($page-1)*$pgVals).','.$pgVals);
 //echo $query;
 
 if (!isset($_GET['save']) && !isset($_GET['print']) && $write_mode) {
-	//echo '<p class="notinfo"><a href="?type=add&'.$_SERVER["QUERY_STRING"].'"> Добавить</a><p>';
     echo '<p class="notinfo"><a href="'.WEB_ROOT.'_modules/_diploms/?action=add"> Добавить</a><p>';
     if ($filt_str_display!='') {
         echo '<div class=text><img src="images/filter.gif" alt="фильтр" border=0>включена фильтрация по: <b style="color:#FF0000;">'.$filt_str_display.'</b> &nbsp; &nbsp; сбросить фильтр<a class=button href="?'.reset_param_name_ARR($query_string,array('kadri_id','page','q','notconfirm')).'" title="сбросить фильтр"><img src="images/del_multi_filter.gif" alt="сбросить фильтр" border=0></a></div>';
