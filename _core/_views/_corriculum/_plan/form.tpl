@@ -39,6 +39,12 @@
     </p>
 
     <p>
+        {CHtml::activeLabel("form_id", $corriculum)}
+        {CHtml::activeDropDownList("form_id", $corriculum, CTaxonomyManager::getCacheEducationForms()->getItems())}
+        {CHtml::error("form_id", $corriculum)}
+    </p>
+
+    <p>
         {CHtml::activeLabel("duration", $corriculum)}
         {CHtml::activeTextField("duration", $corriculum)}
         {CHtml::error("duration", $corriculum)}

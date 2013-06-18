@@ -379,3 +379,8 @@ table th.vertical {
 .asu_char_select a {
     text-decoration: none;
 }
+
+p.error {
+    color: #c20000;
+    font-weight: bold;
+}

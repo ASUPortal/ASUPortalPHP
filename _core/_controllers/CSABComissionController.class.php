@@ -151,4 +151,137 @@ class CSABComissionController extends CBaseController {
             $diplom->save();
         }
     }
+    public function actionGetStatisticReport() {
+        $commission = CSABManager::getCommission(CRequest::getInt("id"));
+        $marks = array();
+        $marks[0] = "";
+        foreach (CTaxonomyManager::getMarksList() as $id=>$mark) {
+            if (in_array(mb_strtolower($mark), array(
+                "отлично",
+                "хорошо",
+                "удовлетворительно",
+                "неудовлетворительно"
+            ))) {
+                $marks[$id] = $mark;
+            }
+        }
+        $marks[] = "оценка не указана";
+        $report = array();
+        /**
+         * Добавляем оценки в список
+         */
+        $row = array();
+        foreach ($marks as $mark) {
+            $row[] = $mark;
+        }
+        $report["Оценка"] = $row;
+        /**
+         * Добавляем оценки по дням
+         */
+        foreach ($commission->diploms->getItems() as $diplom) {
+            $row = array();
+            foreach ($marks as $id=>$mark) {
+                $row[$id] = array(
+                    "Бюджет" => 0,
+                    "Контракт" => 0,
+                    "Не указана" => 0
+                );
+            }
+            $row[0] = array(
+                "Бюджет" => 0,
+                "Контракт" => 0,
+                "Не указана" => 0
+            );
+            if (array_key_exists(date("d.m.Y", strtotime($diplom->date_act)), $report)) {
+                $row = $report[date("d.m.Y", strtotime($diplom->date_act))];
+            }
+            /**
+             * Добавляем оценку в соответствующую колонку
+             */
+            if (is_null($diplom->mark)) {
+                $key = array_search("оценка не указана", $marks);
+            } else {
+                $key = array_search($diplom->mark->getValue(), $marks);
+            }
+            /**
+             * Статистика по форме обучения
+             */
+            $student = $diplom->student;
+            $byForm = $row[$key];
+            if (!is_null($student)) {
+                if ($student->getMoneyForm() == "") {
+                    $byForm["Не указана"] += 1;
+                } else {
+                    $byForm[$student->getMoneyForm()] += 1;
+                }
+            }
+            $row[$key] = $byForm;
+            $report[date("d.m.Y", strtotime($diplom->date_act))] = $row;
+        }
+        /**
+         * Посчитаем по дням
+         * Лучше отдельно, так нагляднее
+         */
+        foreach ($commission->diploms->getItems() as $diplom) {
+            $byForm = $report[date("d.m.Y", strtotime($diplom->date_act))][0];
+            $student = $diplom->student;
+            if (!is_null($student)) {
+                if ($student->getMoneyForm() == "") {
+                    $byForm["Не указана"] += 1;
+                } else {
+                    $byForm[$student->getMoneyForm()] += 1;
+                }
+            }
+            $report[date("d.m.Y", strtotime($diplom->date_act))][0] = $byForm;
+        }
+        /**
+         * Посчитаем всего.
+         * Тоже отдельно для наглядности
+         */
+        $row = array();
+        foreach ($marks as $id=>$mark) {
+            $row[$id] = array(
+                "Бюджет" => 0,
+                "Контракт" => 0,
+                "Не указана" => 0
+            );
+        }
+        foreach ($commission->diploms->getItems() as $diplom) {
+            if (is_null($diplom->mark)) {
+                $key = array_search("оценка не указана", $marks);
+            } else {
+                $key = array_search($diplom->mark->getValue(), $marks);
+            }
+            $byMark = $row[$key];
+            $student = $diplom->student;
+            if (!is_null($student)) {
+                if ($student->getMoneyForm() == "") {
+                    $byMark["Не указана"] += 1;
+                } else {
+                    $byMark[$student->getMoneyForm()] += 1;
+                }
+            }
+            $row[$key] = $byMark;
+            /**
+             * Полнейшее всего
+             */
+            $byMark = $row[0];
+            $student = $diplom->student;
+            if (!is_null($student)) {
+                if ($student->getMoneyForm() == "") {
+                    $byMark["Не указана"] += 1;
+                } else {
+                    $byMark[$student->getMoneyForm()] += 1;
+                }
+            }
+            $row[0] = $byMark;
+        }
+        $report["Всего"] = $row;
+        /**
+         * Слегка пересортируем элементы массива
+         */
+
+        $this->setData("report", $report);
+        $this->renderView("_state_attestation/subform.report.statistic.tpl");
+    }
 }

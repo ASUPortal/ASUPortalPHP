@@ -73,7 +73,8 @@ class CCorriculum extends CActiveModel{
             "description" => "Описание",
             "final_exam_title" => "Название итогового экзамена",
         	"load_classroom" => "Аудиторная нагрузка",
-        	"load_total" => "Общая нагрузка"
+        	"load_total" => "Общая нагрузка",
+            "form_id" => "Форма обучения"
         );
     }
     public function validationRules() {
@@ -85,7 +86,8 @@ class CCorriculum extends CActiveModel{
             "selected" => array(
                 "direction_id",
                 "profile_id",
-                "qualification_id"
+                "qualification_id",
+                "form_id"
             )
         );
     }

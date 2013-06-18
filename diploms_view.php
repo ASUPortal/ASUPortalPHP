@@ -440,7 +440,7 @@ c рецензент вне списка <a class=help title="автозапол
 
 else {
 	if (!isset($_GET['archiv'])) {
-		$query_='select count(*) from `diploms` where 1 and (date_act<"'.$def_settings['date_start'].'") ';
+		$query_='select count(id) from `diploms` where 1 and (date_act<"'.$def_settings['date_start'].'") ';
 		if ($kadri_id>0) {
             $query_.=' and `diploms`.`kadri_id`="'.$kadri_id.'"';
         }
@@ -448,7 +448,7 @@ else {
 		
 		echo '<a href="?'.$query_string.'&archiv" title="защиты прошлых учебных лет">архив: '.$archiv_cnt.'</a><br>';
 	} else {
-		$query_='select count(*) from `diploms` where 1 and (date_act>="'.$def_settings['date_start'].'" or date_act is NULL) ';
+		$query_='select count(id) from `diploms` where 1 and (date_act>="'.$def_settings['date_start'].'" or date_act is NULL) ';
 		if ($kadri_id>0) {
             $query_.=' and `diploms`.`kadri_id`="'.$kadri_id.'"';
         }

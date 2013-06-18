@@ -174,6 +174,23 @@ class CModel {
                 }
             }
         }
+        if (array_key_exists("checkdate", $rules)) {
+            $dates = $rules["checkdate"];
+            foreach ($dates as $field) {
+                $error = str_replace("%name%", $this->getAttributeLabel($field), ERROR_FIELD_NOT_A_DATE);
+                if ($this->$field != "") {
+                    $dateValue = $this->$field;
+                    if (strtotime($dateValue) === false) {
+                        $this->getValidationErrors()->add($field, $error);
+                    } else {
+                        $dateArray = explode(".", $dateValue);
+                        if (!checkdate($dateArray[1], $dateValue[0], $dateArray[2])) {
+                            $this->getValidationErrors()->add($field, $error);
+                        }
+                    }
+                }
+            }
+        }
 
         return $this->getValidationErrors()->getCount() == 0;
     }

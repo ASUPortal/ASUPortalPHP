@@ -543,7 +543,7 @@ class CHtml {
     }
     public static function error($name, CModel $model) {
         if ($model->getValidationErrors()->hasElement($name)) {
-            echo "<p>".$model->getValidationErrors()->getItem($name)."</p>";
+            echo "<p class=\"error\">".$model->getValidationErrors()->getItem($name)."</p>";
         }
     }
     public static function activeMultiSelect($name, CModel $model, $values = array()) {
@@ -733,7 +733,9 @@ class CHtml {
         }
     }
     public static function errorSummary(CModel $model) {
-
+        foreach ($model->getValidationErrors()->getItems() as $error) {
+            echo "<p class=\"error\">".$error."</p>";
+        }
     }
     public static function activeUpload($name, CModel $model) {
         $field = $model::getClassName()."[".$name."]";

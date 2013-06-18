@@ -58,6 +58,8 @@ class CCorriculumsController extends CBaseController {
             return true;
         }
         $this->setData("corriculum", $corriculum);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->renderView("_corriculum/_plan/edit.tpl");
     }
     public function actionView() {

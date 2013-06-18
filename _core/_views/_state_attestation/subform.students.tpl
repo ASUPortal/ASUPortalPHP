@@ -37,7 +37,7 @@
                 commission_id: {$form->commission->getId()},
                 diplom_id: diplom_id
             },
-            type: "post",
+            type: "get",
             beforeSend: function(){
                 jQuery("#diploms_list").html('<img src="{$web_root}images/loading.gif">');
             }

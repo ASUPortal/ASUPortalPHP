@@ -125,6 +125,7 @@ class CDiplomsController extends CBaseController {
     public function actionSave() {
         $diplom = new CDiplom();
         $diplom->setAttributes(CRequest::getArray($diplom::getClassName()));
+        $oldDate = $diplom->date_act;
         if ($diplom->validate()) {
             // дату нужно сконвертить в MySQL date
             $diplom->date_act = date("Y-m-d", strtotime($diplom->date_act));
@@ -132,6 +133,29 @@ class CDiplomsController extends CBaseController {
             //$this->redirect("?action=index");
             $this->redirect(WEB_ROOT."diploms_view.php");
             return true;
+        }
+        $diplom->date_act = $oldDate;
+        $commissions = array();
+        foreach (CSABManager::getCommissionsList() as $id=>$c) {
+            $commission = CSABManager::getCommission($id);
+            $nv = $commission->title;
+            if (!is_null($commission->manager)) {
+                $nv .= " ".$commission->manager->getName();
+            }
+            if (!is_null($commission->secretar)) {
+                $nv .= " (".$commission->secretar->getName().")";
+            }
+            $cnt = 0;
+            foreach ($commission->diploms->getItems() as $d) {
+                if (strtotime($diplom->date_act) == strtotime($d->date_act)) {
+                    $cnt++;
+                }
+            }
+            $nv .= " ".$cnt;
+            $commissions[$commission->getId()] = $nv;
+        }
+        if (!array_key_exists($diplom->gak_num, $commissions)) {
+            $diplom->gak_num = null;
         }
         $students = CStaffManager::getAllStudentsThisYearList();
         if (!array_key_exists($diplom->student_id, $students)) {
@@ -157,8 +181,7 @@ class CDiplomsController extends CBaseController {
         $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
         $this->addJSInclude("_core/jquery.ui.timepicker.js");
         $this->addCSSInclude("_core/jquery.ui.timepicker.css");
-        // сконвертим дату из MySQL date в нормальную дату
-        $diplom->date_act = date("d.m.Y", strtotime($diplom->date_act));
+        $this->setData("commissions", $commissions);
         $this->setData("diplom", $diplom);
         $this->renderView("_diploms/edit.tpl");
     }

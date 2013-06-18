@@ -244,6 +244,7 @@
     define("ERROR_FIELD_REQUIRED", "Поле \"%name%\" обязательно для заполнения");
     define("ERROR_FIELD_NUMERIC", "Значение поля \"%name%\" должно быть числовым");
     define("ERROR_FIELD_SELECTED", "Значение поля \"%name%\" должно быть выбрано из списка");
+    define("ERROR_FIELD_NOT_A_DATE", "Значение в поле \"%name%\" должно быть датой в формате дд.мм.гггг");
 
     define("WEB_ROOT", CSettingsManager::getSettingValue("web_root"));
     define("ROOT_FOLDER", CSettingsManager::getSettingValue("root_folder"));

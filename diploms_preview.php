@@ -204,7 +204,8 @@ if (isset($_GET['type']) && ($_GET['type']=='add' || $_GET['type']=='edit') && $
 <div class="forms_under_border" style="width:99%;">
 <form name="order_form" id="order_form" method="post" action="">
 
-Студент <a class=help title="фильтрация по учебному году, наличию дипломного проекта">?</a> <span class=warning>*</span> <br><select name="student_id" id="student_id" style="width:500;" title="cтудент"> 
+Студент <a class=help title="фильтрация по учебному году, наличию дипломного проекта">?</a> <span class=warning>*</span> <br>
+<select name="student_id" id="student_id" style="width:500;" title="cтудент">
 		<?php
 		$query='SELECT s.id, concat(s.fio," (",sg.name,")") as fio
 			  FROM    study_groups sg RIGHT OUTER JOIN  students s  ON (sg.id = s.group_id) 
@@ -214,7 +215,8 @@ if (isset($_GET['type']) && ($_GET['type']=='add' || $_GET['type']=='edit') && $
 			  order by 2';
 		echo getFrom_ListItemValue($query,'id','fio','student_id');
 		?>
-</select><?php echo sprav_edit_link('students');?>  
+</select>
+<?php echo sprav_edit_link('students');?>
 <p>
 Выполнения работы на момент предзащиты <br>
 <span class=text>готовность (0-100),%</span><input type=text maxlength=10 size=15 id=diplom_percent name=diplom_percent value="<?php echo getFormItemValue('diplom_percent'); ?>" title="в виде натурального числа">	 

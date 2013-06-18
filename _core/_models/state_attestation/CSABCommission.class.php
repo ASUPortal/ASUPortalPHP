@@ -33,7 +33,8 @@ class CSABCommission extends CActiveModel {
                 "storageTable" => TABLE_DIPLOMS,
                 "storageCondition" => "gak_num = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CStaffManager",
-                "managerGetObject" => "getDiplom"
+                "managerGetObject" => "getDiplom",
+                "managerOrder" => "date_act asc"
             ),
             "manager" => array(
                 "relationPower" => RELATION_HAS_ONE,
@@ -123,4 +124,30 @@ class CSABCommission extends CActiveModel {
 		}
 		return $result;
 	}
+    public function getStatByEducationTypeByDate() {
+        $result = array();
+        foreach ($this->diploms->getItems() as $diplom) {
+            $byDay = array();
+            if (array_key_exists($diplom->date_act, $result)) {
+                $byDay = $result[$diplom->date_act];
+            }
+            $student = $diplom->student;
+            if (!is_null($student)) {
+                $type = $student->secondaryEducationEndType;
+                if (!is_null($type)) {
+                    $type = $type->getValue();
+                } else {
+                    $type = "не указано";
+                }
+                $byType = array();
+                if (array_key_exists($type, $byDay)) {
+                    $byType = $byDay[$type];
+                }
+                $byType[] = $student->getName();
+                $byDay[$type] = $byType;
+            }
+            $result[$diplom->date_act] = $byDay;
+        }
+        return $result;
+    }
 }

@@ -94,6 +94,13 @@ class CDiplom extends CActiveModel {
             )
         );
     }
+    public function validationRules() {
+        return array(
+            "checkdate" => array(
+                "date_act"
+            )
+        );
+    }
     public function attributeLabels() {
         return array(
             "diplom_confirm" => "Утвержден",

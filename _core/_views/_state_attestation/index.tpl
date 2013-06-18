@@ -122,25 +122,25 @@
         {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $commissions->getItems() as $commission}
             <tr>
-                <td><a href="#" onclick="if (confirm('Действительно удалить комиссию {$commission->title}')) { location.href='?action=delete&id={$commission->getId()}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
-                <td>{counter}</td>
-                <td><a href="?action=edit&id={$commission->getId()}">{$commission->title}</a></td>
-                <td>
+                <td valign="top"><a href="#" onclick="if (confirm('Действительно удалить комиссию {$commission->title}')) { location.href='?action=delete&id={$commission->getId()}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+                <td valign="top">{counter}</td>
+                <td valign="top"><a href="?action=edit&id={$commission->getId()}">{$commission->title}</a></td>
+                <td valign="top">
                     {if !is_null($commission->year)}
                         {$commission->year->getValue()}
                     {/if}
                 </td>
-                <td>
+                <td valign="top"
                     {if !is_null($commission->secretar)}
                         {$commission->secretar->getName()}
                     {/if}
                 </td>
-                <td>
+                <td valign="top">
                     {if !is_null($commission->manager)}
                         {$commission->manager->getName()}
                     {/if}
                 </td>
-                <td>
+                <td valign="top">
                     <ul>
                     {foreach $commission->members->getItems() as $member}
                         <li>{$member->getName()}</li>

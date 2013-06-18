@@ -87,12 +87,19 @@ class CStudent extends CActiveModel {
                 "managerGetObject" => "getEductionForm"
             ),
             "secondaryEducationEndType" => array(
+                "relationPower" => RELATION_COMPUTED,
+                "storageProperty" => "_secondaryEducationEndType",
+                "relationFunction" => "getSecondaryEducationEndType"
+            ),
+            /*
+            "secondaryEducationEndType" => array(
                 "relationPower" => RELATION_HAS_ONE,
                 "storageProperty" => "_secondaryEducationEndType",
                 "storageField" => "education_form_end",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getEductionForm"
             ),
+            */
             "gender" => array(
                 "relationPower" => RELATION_HAS_ONE,
                 "storageProperty" => "_gender",
@@ -193,5 +200,23 @@ class CStudent extends CActiveModel {
     		}
     	}
     	return $this->_corriculum;
+    }
+
+    /**
+     * Форма обучения, которую студент заканчивает
+     *
+     * @return CTerm|mixed|null
+     */
+    public function getSecondaryEducationEndType() {
+        if (is_null($this->_secondaryEducationEndType)) {
+            $this->_secondaryEducationEndType = CTaxonomyManager::getEductionForm($this->education_form_end);
+            if (is_null($this->_secondaryEducationEndType)) {
+                $corriculum = $this->getCorriculum();
+                if (!is_null($corriculum)) {
+                    $this->_secondaryEducationEndType = $corriculum->educationForm;
+                }
+            }
+        }
+        return $this->_secondaryEducationEndType;
     }
 }
