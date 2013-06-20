@@ -572,12 +572,29 @@ class CPerson extends CActiveModel{
 
     /**
      * @param CTerm $year
-     * @return CSABPersonOrder
+     * @return CArrayList
      */
-    public function getSABOrderByYear(CTerm $year) {
+    public function getSABOrdersByYear(CTerm $year) {
+        $result = new CArrayList();
         foreach ($this->ordersSAB->getItems() as $order) {
             if ($year->getId() == $order->year_id) {
-                return $order;
+                $result->add($order->getId(), $order);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param CTerm $year
+     * @param $type
+     * @return CSABPersonOrder
+     */
+    public function getSABOrderByYearAndType(CTerm $year, $type) {
+        foreach ($this->getSABOrdersByYear($year)->getItems() as $order) {
+            if (!is_null($order->type)) {
+                if (mb_strtolower($order->type->alias) == mb_strtolower($type)) {
+                    return $order;
+                }
             }
         }
         return null;

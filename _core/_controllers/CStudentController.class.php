@@ -323,4 +323,42 @@ class CStudentController extends CBaseController {
     	}
     	echo $hours;
     }
+    public function actionGetCorriculumTimeDifference(){
+        $res = "";
+        $student = CStaffManager::getStudent(CRequest::getInt("id"));
+        if (!is_null($student)) {
+            $corriculum = $student->getCorriculum();
+            if (!is_null($corriculum)) {
+                $res = "По плану (".$corriculum->load_total.")";
+                /**
+                 * Считаем нагрузку у студента
+                 */
+                $hours = 0;
+                foreach ($corriculum->cycles->getItems() as $cycle) {
+                    foreach ($cycle->disciplines->getItems() as $disc) {
+                        // здесь нужно проверить, что у студента по этой дисциплине есть оценка
+                        $query = new CQuery();
+                        $query->select("act.id, mark.name as name")
+                            ->from(TABLE_STUDENTS_ACTIVITY." as act")
+                            ->condition("act.student_id = ".$student->getId()." and act.kadri_id = 380 and act.subject_id = ".$disc->discipline->getId()." and act.study_act_id in (1, 2, 12, 14)")
+                            ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
+                            ->order("act.id asc");
+                        if ($query->execute()->getCount() > 0) {
+                            $hours += $disc->getLaborValue();
+                        }
+                    }
+                }
+                $res .= " - у студента (".$hours.") = ";
+                /**
+                 * Разницу показываем как-нибудь правильно
+                 */
+                if ($corriculum->load_total != $hours) {
+                    $res .= '<span style="color: red; font-weight: bold;">'.($corriculum->load_total - $hours).'</span>';
+                } else {
+                    $res .= '<span style="color: green; font-weight: bold;">'.($corriculum->load_total - $hours).'</span>';
+                }
+            }
+        }
+        echo $res;
+    }
 }

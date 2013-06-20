@@ -10,11 +10,21 @@
     	}).done(function(data){
     		jQuery("#hours_total").html(data);
     	});
+        jQuery.ajax({
+            url: web_root + "_modules/_students",
+            data: {
+                action: "getCorriculumTimeDifference",
+                id: {$student->getId()}
+            }
+        }).done(function(data){
+            jQuery("#hours_difference").html(data);
+        });
 	{/if}
 	});
 </script>
 
 <div id="hours_total" style="color: red; font-size: 150px; position: absolute; right: 5px; "></div>
+<div id="hours_difference" style="position: absolute; right: 5px;"></div>
 
 <p>
     {CHtml::activeLabel("fio", $student)}

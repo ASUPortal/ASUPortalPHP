@@ -4,6 +4,7 @@
         <th>#</th>
         <th>Номер и дата приказа</th>
         <th>Год</th>
+        <th>Тип</th>
     </tr>
     {foreach $form->person->ordersSAB->getItems() as $order}
         <tr>
@@ -17,6 +18,11 @@
             <td>
                 {if !is_null($order->year)}
                     {$order->year->getValue()}
+                {/if}
+            </td>
+            <td>
+                {if !is_null($order->type)}
+                    {$order->type->getValue()}
                 {/if}
             </td>
         </tr>

@@ -211,7 +211,7 @@ if (isset($_GET['type']) && ($_GET['type']=='add' || $_GET['type']=='edit') && $
 			  FROM    study_groups sg RIGHT OUTER JOIN  students s  ON (sg.id = s.group_id) 
 			  left join diploms d on d.student_id=s.id 
 			  WHERE (sg.year_id = '.$def_settings['year_id'].') and d.id is NOT NULL
-			  group by s.id, concat(s.fio," (",sg.name,")") 
+			  group by s.id, concat(s.fio," (",sg.name,")")
 			  order by 2';
 		echo getFrom_ListItemValue($query,'id','fio','student_id');
 		?>
