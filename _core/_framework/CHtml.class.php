@@ -11,6 +11,7 @@
 class CHtml {
     private static $_calendarInit = false;
     private static $_multiselectInit = false;
+    private static $_printFormViewInit = false;
     public static function button($value, $onClick = "") {
         echo '<input type="button" value="'.$value.'" onclick="'.$onClick.'">';
     }
@@ -752,12 +753,39 @@ class CHtml {
     		$variables = $formset->computeTemplateVariables();
     		echo '<ul>';
     		foreach ($forms->getItems() as $form) {
-    			$url = "?action=print".
-      			"&manager=".$variables['manager'].
-    			"&method=".$variables['method'].
-    			"&id=".$variables['id'].
-    			"&template=".$form->getId();
-    			echo '<li><a href="'.WEB_ROOT.'_modules/_print/'.$url.'" target="_blank">'.$form->title.'</a></li>';
+                if ($variables["id"] != "selectedInView") {
+                    $url = "?action=print".
+                        "&manager=".$variables['manager'].
+                        "&method=".$variables['method'].
+                        "&id=".$variables['id'].
+                        "&template=".$form->getId();
+                    echo '<li><a href="'.WEB_ROOT.'_modules/_print/'.$url.'" target="_blank">'.$form->title.'</a></li>';
+                } else {
+                    if (!self::$_printFormViewInit) {
+                        self::$_printFormViewInit = true;
+                        ?>
+                        <script>
+                            function printTemplateFromView(baseUrl, formId){
+                                var selected = jQuery("input[name='selectedDoc']:checked")
+                                if (selected.length == 0) {
+                                    alert("Выберите один или несколько документов");
+                                    return false;
+                                }
+                                var ids = new Array();
+                                for(var i = 0; i < selected.length; i++) {
+                                    ids[ids.length] = selected[i].value;
+                                }
+                                window.open(web_root + "_modules/_print/" + baseUrl + "&id=" + ids.join(":"), "Печать по шаблону");
+                            }
+                        </script>
+                        <?php
+                    }
+                    $url = "?action=print".
+                        "&manager=".$variables['manager'].
+                        "&method=".$variables['method'].
+                        "&template=".$form->getId();
+                    echo '<li><a href="#" onclick="printTemplateFromView(\''.$url.'\', '.$form->getId().'); return false;" target="_blank">'.$form->title.'</a></li>';;
+                }
     		}
     		echo '</ul>';
     	}

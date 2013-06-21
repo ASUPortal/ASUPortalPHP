@@ -7,5 +7,5 @@
  * To change this template use File | Settings | File Templates.
  */
 class CDiplomPreviewComission extends CActiveModel {
-
+    protected $_table = TABLE_DIPLOM_PREVIEW_COMISSIONS;
 }

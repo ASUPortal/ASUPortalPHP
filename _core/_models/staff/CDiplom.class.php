@@ -146,7 +146,7 @@ class CDiplom extends CActiveModel {
                 $this->_previews->add($preview->getId(), $preview);
             }
             if ($this->_previews->getCount() == 0) {
-                if (!is_null($this->_student)) {
+                if (!is_null($this->student)) {
                     foreach (CActiveRecordProvider::getWithCondition(TABLE_DIPLOM_PREVIEWS, "student_id = ".$this->student->getId())->getItems() as $item) {
                         $preview = new CDiplomPreview($item);
                         $this->_previews->add($preview->getId(), $preview);

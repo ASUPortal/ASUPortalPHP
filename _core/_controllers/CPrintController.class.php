@@ -73,178 +73,183 @@ class CPrintController extends CBaseController {
              */
             $value = array();
             /**
-             * Получаем все дипломы, которые защищаются в выбранной
-             * комиссии
+             * Здесь групповая печать, ходим кругами
              */
-            $diploms = new CArrayList();
-            foreach ($object->diploms->getItems() as $diplom) {
-                $diploms->add($diplom->getId(), $diplom);
-            }
-            /**
-             * Теперь собираем всех рецензентов в один массив.
-             * К каждому рецензенту прицепляем дипломы, которые он
-             * рецензировал
-             */
-            $reviewers = new CArrayList();
-            foreach ($diploms->getItems() as $diplom) {
+            foreach ($object->getItems() as $commission) {
                 /**
-                 * Консультант
+                 * Получаем все дипломы, которые защищаются в выбранной
+                 * комиссии
                  */
-                if (!is_null($diplom->person)) {
-                    $reviewer = $diplom->person;
-                    $reviewerArr = new CArrayList();
-                    if ($reviewers->hasElement($reviewer->getId())) {
-                        $reviewerArr = $reviewers->getItem($reviewer->getId());
-                    }
-                    $reviewerArr->add($diplom->getId(), $diplom);
-                    $reviewers->add($reviewer->getId(), $reviewerArr);
+                $diploms = new CArrayList();
+                foreach ($commission->diploms->getItems() as $diplom) {
+                    $diploms->add($diplom->getId(), $diplom);
                 }
-            }
-            /**
-             * Теперь выводим это в окончательный массив
-             */
-            $reviewerIndex = 0;
-            foreach ($reviewers->getItems() as $reviewerId=>$diploms) {
-                $reviewerIndex++;
-                $isFirst = true;
+                /**
+                 * Теперь собираем всех рецензентов в один массив.
+                 * К каждому рецензенту прицепляем дипломы, которые он
+                 * рецензировал
+                 */
+                $reviewers = new CArrayList();
                 foreach ($diploms->getItems() as $diplom) {
-                    $dataRow = array();
                     /**
-                     * Для начала заполним результирующий массив пустыми строками
+                     * Консультант
                      */
-                    for ($i = 0; $i <= 7; $i++) {
-                        $dataRow[$i] = "";
+                    if (!is_null($diplom->person)) {
+                        $reviewer = $diplom->person;
+                        $reviewerArr = new CArrayList();
+                        if ($reviewers->hasElement($reviewer->getId())) {
+                            $reviewerArr = $reviewers->getItem($reviewer->getId());
+                        }
+                        $reviewerArr->add($diplom->getId(), $diplom);
+                        $reviewers->add($reviewer->getId(), $reviewerArr);
                     }
-                    /**
-                     * Если это первая строка, то выводим инфу по рецензенту
-                     * и диплому. В противном случае, только по диплому
-                     */
-                    if ($isFirst) {
-                        $isFirst = false;
+                }
+                /**
+                 * Теперь выводим это в окончательный массив
+                 */
+                $reviewerIndex = 0;
+                foreach ($reviewers->getItems() as $reviewerId=>$diploms) {
+                    $reviewerIndex++;
+                    $isFirst = true;
+                    foreach ($diploms->getItems() as $diplom) {
+                        $dataRow = array();
                         /**
-                         * Вся информация по рецензенту или руководителю
-                         *
-                         * Номер рецензента
+                         * Для начала заполним результирующий массив пустыми строками
                          */
-                        $dataRow[0] = "";
+                        for ($i = 0; $i <= 7; $i++) {
+                            $dataRow[$i] = "";
+                        }
                         /**
-                         * ФИО, ученая степень, звание
+                         * Если это первая строка, то выводим инфу по рецензенту
+                         * и диплому. В противном случае, только по диплому
                          */
-                        $dataRow[1] = "";
-                        $reviewer = CStaffManager::getPerson($reviewerId);
-                        if (!is_null($reviewer)) {
-                            $nv = "";
-                            $nv = $reviewer->getName();
+                        if ($isFirst) {
+                            $isFirst = false;
                             /**
-                             * Степень
+                             * Вся информация по рецензенту или руководителю
+                             *
+                             * Номер рецензента
                              */
-                            if (!is_null($reviewer->degree)) {
-                                $nv .= ", ".$reviewer->degree->getValue();
-                            }
+                            $dataRow[0] = "";
                             /**
-                             * Звание
+                             * ФИО, ученая степень, звание
                              */
-                            if (!is_null($reviewer->title)) {
-                                $nv .= ", ".$reviewer->title->getValue();
-                            }
-                            $dataRow[1] = $nv;
-                            /**
-                             * Дата рождения
-                             */
-                            $dataRow[2] = "";
-                            if ($reviewer->date_rogd != "") {
-                                $dataRow[2] = date("d.m.Y", strtotime($reviewer->date_rogd));
-                            }
-                            /**
-                             * Паспортные данные
-                             * номер, серия, кем и когда выдан
-                             * ИНН, СНИЛС
-                             */
-                            $nv = "";
-                            if ($reviewer->passp_seria != "") {
-                                $nv = $reviewer->passp_seria;
-                            }
-                            if ($reviewer->passp_nomer != "") {
-                                if ($nv == "") {
-                                    $nv = $reviewer->passp_nomer;
-                                } else {
-                                    $nv .= " ".$reviewer->passp_nomer;
+                            $dataRow[1] = "";
+                            $reviewer = CStaffManager::getPerson($reviewerId);
+                            if (!is_null($reviewer)) {
+                                $nv = "";
+                                $nv = $reviewer->getName();
+                                /**
+                                 * Степень
+                                 */
+                                if (!is_null($reviewer->degree)) {
+                                    $nv .= ", ".$reviewer->degree->getValue();
                                 }
-                            }
-                            if ($reviewer->passp_place != "") {
-                                if ($nv == "") {
-                                    $nv = "выдан ".$reviewer->passp_place;
-                                } else {
-                                    $nv .= " выдан ".$reviewer->passp_place;
+                                /**
+                                 * Звание
+                                 */
+                                if (!is_null($reviewer->title)) {
+                                    $nv .= ", ".$reviewer->title->getValue();
                                 }
-                            }
-                            if ($reviewer->INN != "") {
-                                if ($nv == "") {
-                                    $nv = $reviewer->INN;
-                                } else {
-                                    $nv .= ", ".$reviewer->INN;
+                                $dataRow[1] = $nv;
+                                /**
+                                 * Дата рождения
+                                 */
+                                $dataRow[2] = "";
+                                if ($reviewer->date_rogd != "") {
+                                    $dataRow[2] = date("d.m.Y", strtotime($reviewer->date_rogd));
                                 }
-                            }
-                            if ($reviewer->insurance_num != "") {
-                                if ($nv == "") {
-                                    $nv = $reviewer->insurance_num;
-                                } else {
-                                    $nv .= ", ".$reviewer->insurance_num;
+                                /**
+                                 * Паспортные данные
+                                 * номер, серия, кем и когда выдан
+                                 * ИНН, СНИЛС
+                                 */
+                                $nv = "";
+                                if ($reviewer->passp_seria != "") {
+                                    $nv = $reviewer->passp_seria;
                                 }
-                            }
-                            $dataRow[3] = $nv;
-                            /**
-                             * Полный домашний адрес
-                             */
-                            $dataRow[4] = $reviewer->add_home;
-                            /**
-                             * Номер и дата приказа
-                             */
-                            $dataRow[5] = "";
-                            if (!is_null($object->year)) {
-                                $order = $reviewer->getSABOrderByYearAndType($object->year, "order_consult");
-                                if (!is_null($order)) {
-                                    if (!is_null($order->order)) {
-                                        $dataRow[5] = $order->order->getName();
+                                if ($reviewer->passp_nomer != "") {
+                                    if ($nv == "") {
+                                        $nv = $reviewer->passp_nomer;
+                                    } else {
+                                        $nv .= " ".$reviewer->passp_nomer;
                                     }
                                 }
-                            }
-                            /**
-                             * Количество часов. По числу дипломников * ставку
-                             */
-                            $rate = 0;
-                            if (!is_null($object->year)) {
-                                $rateObj = CRatesManager::getRateByAliasAndYear($object->year, "sab_consult_student");
-                                if (!is_null($rateObj)) {
-                                    $rate = $rateObj->value;
+                                if ($reviewer->passp_place != "") {
+                                    if ($nv == "") {
+                                        $nv = "выдан ".$reviewer->passp_place;
+                                    } else {
+                                        $nv .= " выдан ".$reviewer->passp_place;
+                                    }
                                 }
+                                if ($reviewer->INN != "") {
+                                    if ($nv == "") {
+                                        $nv = $reviewer->INN;
+                                    } else {
+                                        $nv .= ", ".$reviewer->INN;
+                                    }
+                                }
+                                if ($reviewer->insurance_num != "") {
+                                    if ($nv == "") {
+                                        $nv = $reviewer->insurance_num;
+                                    } else {
+                                        $nv .= ", ".$reviewer->insurance_num;
+                                    }
+                                }
+                                $dataRow[3] = $nv;
+                                /**
+                                 * Полный домашний адрес
+                                 */
+                                $dataRow[4] = $reviewer->add_home;
+                                /**
+                                 * Номер и дата приказа
+                                 */
+                                $dataRow[5] = "";
+                                if (!is_null($commission->year)) {
+                                    $order = $reviewer->getSABOrderByYearAndType($commission->year, "order_consult");
+                                    if (!is_null($order)) {
+                                        if (!is_null($order->order)) {
+                                            $dataRow[5] = $order->order->getName();
+                                        }
+                                    }
+                                }
+                                /**
+                                 * Количество часов. По числу дипломников * ставку
+                                 */
+                                $rate = 0;
+                                if (!is_null($commission->year)) {
+                                    $rateObj = CRatesManager::getRateByAliasAndYear($commission->year, "sab_consult_student");
+                                    if (!is_null($rateObj)) {
+                                        $rate = $rateObj->value;
+                                    }
+                                }
+                                $dataRow[7] = $rate * $diploms->getCount();
                             }
-                            $dataRow[7] = $rate * $diploms->getCount();
                         }
-                    }
-                    /**
-                     * Фамилия и инициалы дипломника
-                     */
-                    $dataRow[6] = "";
-                    if (!is_null($diplom->student)) {
-                        $student = $diplom->student;
-                        $nv = "";
                         /**
-                         * ФИО
+                         * Фамилия и инициалы дипломника
                          */
-                        $nv = $student->getName();
-                        /**
-                         * Форма обучения
-                         */
-                        if ($student->getMoneyForm() != "") {
-                            $nv .= " (";
-                            $nv .= mb_substr($student->getMoneyForm(), 0, 1);
-                            $nv .= ")";
+                        $dataRow[6] = "";
+                        if (!is_null($diplom->student)) {
+                            $student = $diplom->student;
+                            $nv = "";
+                            /**
+                             * ФИО
+                             */
+                            $nv = $student->getName();
+                            /**
+                             * Форма обучения
+                             */
+                            if ($student->getMoneyForm() != "") {
+                                $nv .= " (";
+                                $nv .= mb_substr($student->getMoneyForm(), 0, 1);
+                                $nv .= ")";
+                            }
+                            $dataRow[6] = $nv;
                         }
-                        $dataRow[6] = $nv;
+                        $value[] = $dataRow;
                     }
-                    $value[] = $dataRow;
-                }
+                }                
             }
             $this->debugTable($value);
         }

@@ -118,6 +118,7 @@
             <th>{CHtml::tableOrder("secretar_id", $commissions->getFirstItem())}</th>
             <th>{CHtml::tableOrder("manager_id", $commissions->getFirstItem())}</th>
             <th>{CHtml::tableOrder("members", $commissions->getFirstItem())}</th>
+            <th>&nbsp;</th>
         </tr>
         {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $commissions->getItems() as $commission}
@@ -130,7 +131,7 @@
                         {$commission->year->getValue()}
                     {/if}
                 </td>
-                <td valign="top"
+                <td valign="top">
                     {if !is_null($commission->secretar)}
                         {$commission->secretar->getName()}
                     {/if}
@@ -146,6 +147,9 @@
                         <li>{$member->getName()}</li>
                     {/foreach}
                     </ul>
+                </td>
+                <td>
+                    <input type="checkbox" value="{$commission->getId()}" name="selectedDoc">
                 </td>
             </tr>
         {/foreach}

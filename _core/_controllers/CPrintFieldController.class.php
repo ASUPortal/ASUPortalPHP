@@ -18,15 +18,69 @@ class CPrintFieldController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
+        /**
         $set = CActiveRecordProvider::getAllFromTable(TABLE_PRINT_FIELDS);
         $fields = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $item) {
             $field = CPrintManager::getField($item->getId());
             $fields->add($field->getId(), $field);
         }
+        */
+        $set = new CRecordSet();
+        $query = new CQuery();
+        $set->setQuery($query);
+        $query->select("field.*")
+            ->from(TABLE_PRINT_FIELDS." as field");
+        /**
+         * Запрос на набор описателей
+         */
+        $queryFormset = new CQuery();
+        $queryFormset->select("formset.*")
+            ->from(TABLE_PRINT_FORMSETS." as formset")
+            ->order("formset.title asc");
+        /**
+         * Текущий выбранный описатель
+         */
+        $selectedField = null;
+        $selectedFormset = null;
+        /**
+         * Фильтры
+         * ---
+         * Конкретный выбранный описатель
+         */
+        if (!is_null(CRequest::getFilter("field"))) {
+            $query->condition("field.id = ".CRequest::getFilter("field"));
+            $selectedField = CPrintManager::getField(CRequest::getFilter("field"));
+            $queryFormset->condition("formset.id = ".$selectedField->formset_id);
+        }
+        /**
+         * Набор шаблонов
+         */
+        if (!is_null(CRequest::getFilter("formset"))) {
+            $query->condition("field.formset_id = ".CRequest::getFilter("formset"));
+            $selectedFormset = CPrintManager::getFormset(CRequest::getFilter("formset"))->getId();
+        }
+        /**
+         * Набираем выборку
+         */
+        $fields = new CArrayList();
+        foreach ($set->getPaginated()->getItems() as $ar) {
+            $field = new CPrintField($ar);
+            $fields->add($field->getId(), $field);
+        }
+        /**
+         * Наборы описателей
+         */
+        $formsets = array();
+        foreach ($queryFormset->execute()->getItems() as $item) {
+            $formsets[$item["id"]] = $item["title"];
+        }
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("fields", $fields);
+        $this->setData("formsets", $formsets);
+        $this->setData("selectedFormset", $selectedFormset);
+        $this->setData("selectedField", $selectedField);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_print/field/index.tpl");
     }
@@ -191,5 +245,26 @@ class CPrintFieldController extends CBaseController {
         $field = CPrintManager::getField(CRequest::getInt("id"));
         $field->remove();
         $this->redirect("?action=index");
+    }
+    public function actionSearch() {
+        $res = array();
+        $term = CRequest::getString("term");
+        /**
+         * Поиск по псевдониму или названию описателя
+         */
+        $query = new CQuery();
+        $query->select("field.id as id, field.title as title, field.alias as alias")
+            ->from(TABLE_PRINT_FIELDS." as field")
+            ->condition("field.alias like '%".$term."%' or field.title like '%".$term."%'")
+            ->limit(0, 5);
+        foreach ($query->execute()->getItems() as $item) {
+            $res[] = array(
+                "label" => $item["title"]." (".$item["alias"].")",
+                "value" => $item["title"]." (".$item["alias"].")",
+                "object_id" => $item["id"],
+                "filter" => "field"
+            );
+        }
+        echo json_encode($res);
     }
 }
