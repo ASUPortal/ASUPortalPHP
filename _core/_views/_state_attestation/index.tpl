@@ -88,6 +88,12 @@
                     });
                 }
             });
+            jQuery("#selectAll").change(function(){
+                var items = jQuery("input[name=selectedDoc]")
+                for (var i = 0; i < items.length; i++) {
+                    items[i].checked = this.checked;
+                }
+            });
         });
     </script>
 
@@ -118,7 +124,7 @@
             <th>{CHtml::tableOrder("secretar_id", $commissions->getFirstItem())}</th>
             <th>{CHtml::tableOrder("manager_id", $commissions->getFirstItem())}</th>
             <th>{CHtml::tableOrder("members", $commissions->getFirstItem())}</th>
-            <th>&nbsp;</th>
+            <th><input type="checkbox" id="selectAll"></th>
         </tr>
         {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $commissions->getItems() as $commission}
