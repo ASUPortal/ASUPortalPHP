@@ -21,12 +21,14 @@ class CCorriculumPractice extends CActiveModel {
      * Свойства для хранения связанных объектов
      */
     protected $_type;
+    protected $_discipline;
 
     public function attributeLabels() {
         return array(
             "type_id" => "Тип",
             "alias" => "Короткое имя для поиска",
-            "length" => "Длительность (недель)"
+            "length" => "Длительность (недель)",
+            "discipline_id" => "Дисциплина"
         );
     }
     public function relations() {
@@ -37,6 +39,24 @@ class CCorriculumPractice extends CActiveModel {
                 "storageField" => "type_id",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
+            ),
+            "discipline" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_discipline",
+                "storageField" => "discipline_id",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getDiscipline"
+            )
+        );
+    }
+    public function validationRules() {
+        return array(
+            "required" => array(
+                "alias",
+                "length"
+            ),
+            "selected" => array(
+                "type_id"
             )
         );
     }

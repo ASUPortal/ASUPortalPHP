@@ -137,19 +137,21 @@ class CDiplom extends CActiveModel {
     protected function getDiplomPreviews() {
         if (is_null($this->_previews)) {
             $this->_previews = new CArrayList();
-            /**
-             * Если есть ключ диплома, то ищем по нему,
-             * если нету, то ищем по студенту
-             */
-            foreach (CActiveRecordProvider::getWithCondition(TABLE_DIPLOM_PREVIEWS, "diplom_id = ".$this->getId())->getItems() as $item) {
-                $preview = new CDiplomPreview($item);
-                $this->_previews->add($preview->getId(), $preview);
-            }
-            if ($this->_previews->getCount() == 0) {
-                if (!is_null($this->student)) {
-                    foreach (CActiveRecordProvider::getWithCondition(TABLE_DIPLOM_PREVIEWS, "student_id = ".$this->student->getId())->getItems() as $item) {
-                        $preview = new CDiplomPreview($item);
-                        $this->_previews->add($preview->getId(), $preview);
+            if (!is_null($this->getId())) {
+                /**
+                 * Если есть ключ диплома, то ищем по нему,
+                 * если нету, то ищем по студенту
+                 */
+                foreach (CActiveRecordProvider::getWithCondition(TABLE_DIPLOM_PREVIEWS, "diplom_id = ".$this->getId())->getItems() as $item) {
+                    $preview = new CDiplomPreview($item);
+                    $this->_previews->add($preview->getId(), $preview);
+                }
+                if ($this->_previews->getCount() == 0) {
+                    if (!is_null($this->student)) {
+                        foreach (CActiveRecordProvider::getWithCondition(TABLE_DIPLOM_PREVIEWS, "student_id = ".$this->student->getId())->getItems() as $item) {
+                            $preview = new CDiplomPreview($item);
+                            $this->_previews->add($preview->getId(), $preview);
+                        }
                     }
                 }
             }
@@ -171,7 +173,7 @@ class CDiplom extends CActiveModel {
         }
         return $last;
     }
-    public function getAverageMarkComputed() {
+    public function getAverageMarkComputed($precise = 2) {
     	if (is_null($this->_averageMark)) {
     		$this->_averageMark = 0;
     		$student = $this->student;
@@ -193,8 +195,24 @@ class CDiplom extends CActiveModel {
     					$this->_averageMark += 2;
     				}
     			}
-    			if ($items->getCount() > 0) {
-    				$this->_averageMark = round(($this->_averageMark / ($items->getCount())), 2);
+                /**
+                 * Еще оценка за диплом
+                 */
+                $cnt = $items->getCount();
+                if (!is_null($this->mark)) {
+                    if (mb_strtolower($this->mark->getValue()) == "удовлетворительно") {
+                        $this->_averageMark += 3;
+                    } elseif (mb_strtolower($this->mark->getValue()) == "хорошо") {
+                        $this->_averageMark += 4;
+                    } elseif (mb_strtolower($this->mark->getValue()) == "отлично") {
+                        $this->_averageMark += 5;
+                    } elseif (mb_strtolower($this->mark->getValue()) == "неудовлетворительно") {
+                        $this->_averageMark += 2;
+                    }
+                    $cnt++;
+                }
+                if ($cnt > 0) {
+    				$this->_averageMark = round(($this->_averageMark / ($items->getCount() + 1)), $precise, PHP_ROUND_HALF_UP);
     			}
     		}    		
     	}

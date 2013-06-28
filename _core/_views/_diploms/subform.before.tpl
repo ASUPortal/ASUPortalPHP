@@ -13,7 +13,8 @@
     	data: {
     		action: "getAverageMark",
     		id: {$diplom->getId()}
-    	}
+    	},
+        cache: false
     }).done(function(data){
     	jQuery("#average_mark").html(data);
     });

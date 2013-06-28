@@ -72,44 +72,57 @@ class CPrintController extends CBaseController {
              * Это место для экспериментов и написания отладочного кода
              */
             $value = array();
-            $reviewers = new CArrayList();
+            /**
+             * Получаем все дипломы, которые защищаются в выбранной
+             * комиссии
+             */
             $diploms = new CArrayList();
-            foreach ($object->getItems() as $commission) {
-                /**
-                 * Получаем все дипломы, которые защищаются в выбранной
-                 * комиссии
-                 */
-                foreach ($commission->diploms->getItems() as $diplom) {
-                    $diploms->add($diplom->getId(), $diplom);
-                }
-                /**
-                 * Теперь собираем всех рецензентов в один массив.
-                 * К каждому рецензенту прицепляем дипломы, которые он
-                 * рецензировал
-                 */
-                foreach ($diploms->getItems() as $diplom) {
-                    /**
-                     * Рецензент
-                     */
-                    if (!is_null($diplom->reviewer)) {
-                        $reviewer = $diplom->reviewer;
-                        $reviewerArr = new CArrayList();
-                        if ($reviewers->hasElement($reviewer->getId())) {
-                            $reviewerArr = $reviewers->getItem($reviewer->getId());
-                        }
-                        $reviewerArr->add($diplom->getId(), $diplom);
-                        $reviewers->add($reviewer->getId(), $reviewerArr);
+            foreach ($object->diploms->getItems() as $diplom) {
+                $diploms->add($diplom->getId(), $diplom);
+            }
+            /**
+             * Считаем, сколько среди них студентов контрактников,
+             * сколько бюджетников
+             */
+            $types = array(
+                0 => 0,
+                1 => 0
+            );
+            foreach ($diploms->getItems() as $diplom) {
+                if (!is_null($diplom->student)) {
+                    if ($diplom->student->getMoneyForm() == "") {
+                        $types[0] = $types[0] + 1;
+                    } elseif (mb_strtolower($diplom->student->getMoneyForm()) == "бюджет") {
+                        $types[0] = $types[0] + 1;
+                    } elseif (mb_strtolower($diplom->student->getMoneyForm()) == "контракт") {
+                        $types[1] = $types[1] + 1;
                     }
                 }
             }
             /**
-             * Теперь выводим это в окончательный массив
+             * Теперь собираем всех членов комиссии в один массив.
+             * Сначала берем председателя, потом членов
+             */
+            $members = new CArrayList();
+            if (!is_null($object->manager)) {
+                $member = $object->manager;
+                $members->add($member->getId(), $member);
+            }
+            foreach ($object->members->getItems() as $member) {
+                $members->add($member->getId(), $member);
+            }
+            /**
+             * Теперь идем по всем членам комиссии и выводим
+             * сколько они заслушали дипломов.
+             *
+             * Переменную назовем как в прошлой форме чтобы не
+             * переделывать все
              */
             $reviewerIndex = 0;
-            foreach ($reviewers->getItems() as $reviewerId=>$diploms) {
+            foreach ($members->getItems() as $reviewer) {
                 $reviewerIndex++;
                 $isFirst = true;
-                foreach ($diploms->getItems() as $diplom) {
+                foreach ($types as $typeId=>$type) {
                     $dataRow = array();
                     /**
                      * Для начала заполним результирующий массив пустыми строками
@@ -133,118 +146,126 @@ class CPrintController extends CBaseController {
                          * ФИО, ученая степень, звание
                          */
                         $dataRow[1] = "";
-                        $reviewer = CStaffManager::getPerson($reviewerId);
-                        if (!is_null($reviewer)) {
-                            $nv = "";
-                            $nv = $reviewer->getName();
-                            /**
-                             * Степень
-                             */
-                            if (!is_null($reviewer->degree)) {
-                                $nv .= ", ".$reviewer->degree->getValue();
+                        $nv = "";
+                        $nv = $reviewer->getName();
+                        /**
+                         * Степень
+                         */
+                        if (!is_null($reviewer->degree)) {
+                            $nv .= ", ".$reviewer->degree->getValue();
+                        }
+                        /**
+                         * Звание
+                         */
+                        if (!is_null($reviewer->title)) {
+                            $nv .= ", ".$reviewer->title->getValue();
+                        }
+                        $dataRow[1] = $nv;
+                        /**
+                         * Дата рождения
+                         */
+                        $dataRow[2] = "";
+                        if ($reviewer->date_rogd != "") {
+                            $dataRow[2] = date("d.m.Y", strtotime($reviewer->date_rogd));
+                        }
+                        /**
+                         * Паспортные данные
+                         * номер, серия, кем и когда выдан
+                         * ИНН, СНИЛС
+                         */
+                        $nv = "";
+                        if ($reviewer->passp_seria != "") {
+                            $nv = $reviewer->passp_seria;
+                        }
+                        if ($reviewer->passp_nomer != "") {
+                            if ($nv == "") {
+                                $nv = $reviewer->passp_nomer;
+                            } else {
+                                $nv .= " ".$reviewer->passp_nomer;
                             }
-                            /**
-                             * Звание
-                             */
-                            if (!is_null($reviewer->title)) {
-                                $nv .= ", ".$reviewer->title->getValue();
+                        }
+                        if ($reviewer->passp_place != "") {
+                            if ($nv == "") {
+                                $nv = "выдан ".$reviewer->passp_place;
+                            } else {
+                                $nv .= " выдан ".$reviewer->passp_place;
                             }
-                            $dataRow[1] = $nv;
-                            /**
-                             * Дата рождения
-                             */
-                            $dataRow[2] = "";
-                            if ($reviewer->date_rogd != "") {
-                                $dataRow[2] = date("d.m.Y", strtotime($reviewer->date_rogd));
+                        }
+                        if ($reviewer->INN != "") {
+                            if ($nv == "") {
+                                $nv = $reviewer->INN;
+                            } else {
+                                $nv .= ", ".$reviewer->INN;
                             }
-                            /**
-                             * Паспортные данные
-                             * номер, серия, кем и когда выдан
-                             * ИНН, СНИЛС
-                             */
-                            $nv = "";
-                            if ($reviewer->passp_seria != "") {
-                                $nv = $reviewer->passp_seria;
+                        }
+                        if ($reviewer->insurance_num != "") {
+                            if ($nv == "") {
+                                $nv = $reviewer->insurance_num;
+                            } else {
+                                $nv .= ", ".$reviewer->insurance_num;
                             }
-                            if ($reviewer->passp_nomer != "") {
-                                if ($nv == "") {
-                                    $nv = $reviewer->passp_nomer;
+                        }
+                        $dataRow[3] = $nv;
+                        /**
+                         * Полный домашний адрес
+                         */
+                        $dataRow[4] = $reviewer->add_home;
+                        /**
+                         * Номер и дата приказа
+                         */
+                        $dataRow[5] = "";
+                        if (!is_null($object->year)) {
+                            if (!is_null($object->manager)) {
+                                if ($reviewer->getId() == $object->manager->getId()) {
+                                    $order = $reviewer->getSABOrderByYearAndType($object->year, "order_manager");
                                 } else {
-                                    $nv .= " ".$reviewer->passp_nomer;
+                                    $order = $reviewer->getSABOrderByYearAndType($object->year, "order_member");
+                                }
+                            } else {
+                                $order = $reviewer->getSABOrderByYearAndType($object->year, "order_member");
+                            }
+                            if (!is_null($order)) {
+                                if (!is_null($order->order)) {
+                                    $dataRow[5] = $order->order->getName();
                                 }
                             }
-                            if ($reviewer->passp_place != "") {
-                                if ($nv == "") {
-                                    $nv = "выдан ".$reviewer->passp_place;
-                                } else {
-                                    $nv .= " выдан ".$reviewer->passp_place;
+                        }
+                    }
+                    /**
+                     * Выводим количество и часы
+                     */
+                    $nv = $type;
+                    if ($typeId == 0) {
+                        $nv .= " (Б)";
+                    } else {
+                        $nv .= " (К)";
+                    }
+                    $dataRow[6] = $nv;
+                    $rate = 0;
+                    if (!is_null($object->year)) {
+                        /**
+                         * Разные ставки для члена ГАК и председателя
+                         */
+                        if (!is_null($object->manager)) {
+                            if ($reviewer->getId() == $object->manager->getId()) {
+                                $rateObj = CRatesManager::getRateByAliasAndYear($object->year, "sab_manager");
+                                if (!is_null($rateObj)) {
+                                    $rate = $rateObj->value;
                                 }
-                            }
-                            if ($reviewer->INN != "") {
-                                if ($nv == "") {
-                                    $nv = $reviewer->INN;
-                                } else {
-                                    $nv .= ", ".$reviewer->INN;
-                                }
-                            }
-                            if ($reviewer->insurance_num != "") {
-                                if ($nv == "") {
-                                    $nv = $reviewer->insurance_num;
-                                } else {
-                                    $nv .= ", ".$reviewer->insurance_num;
-                                }
-                            }
-                            $dataRow[3] = $nv;
-                            /**
-                             * Полный домашний адрес
-                             */
-                            $dataRow[4] = $reviewer->add_home;
-                            /**
-                             * Номер и дата приказа
-                             */
-                            $dataRow[5] = "";
-                            if (!is_null($commission->year)) {
-                                $order = $reviewer->getSABOrderByYearAndType($commission->year, "order_reviewer");
-                                if (!is_null($order)) {
-                                    if (!is_null($order->order)) {
-                                        $dataRow[5] = $order->order->getName();
-                                    }
-                                }
-                            }
-                            /**
-                             * Количество часов. По числу дипломников * ставку
-                             */
-                            $rate = 0;
-                            if (!is_null($commission->year)) {
-                                $rateObj = CRatesManager::getRateByAliasAndYear($commission->year, "sab_reviewer");
+                            } else {
+                                $rateObj = CRatesManager::getRateByAliasAndYear($object->year, "sab_member");
                                 if (!is_null($rateObj)) {
                                     $rate = $rateObj->value;
                                 }
                             }
-                            $dataRow[7] = $rate * $diploms->getCount();
+                        } else {
+                            $rateObj = CRatesManager::getRateByAliasAndYear($object->year, "sab_member");
+                            if (!is_null($rateObj)) {
+                                $rate = $rateObj->value;
+                            }
                         }
                     }
-                    /**
-                     * Фамилия и инициалы дипломника
-                     */
-                    $dataRow[6] = "";
-                    if (!is_null($diplom->student)) {
-                        $student = $diplom->student;
-                        $nv = "";
-                        /**
-                         * ФИО
-                         */
-                        $nv = $student->getName();
-                        /**
-                         * Форма обучения
-                         */
-                        if ($student->getMoneyForm() != "") {
-                            $nv .= " (";
-                            $nv .= mb_substr($student->getMoneyForm(), 0, 1);
-                            $nv .= ")";
-                        }
-                        $dataRow[6] = $nv;
-                    }
+                    $dataRow[7] = $rate * $type;
                     $value[] = $dataRow;
                 }
             }

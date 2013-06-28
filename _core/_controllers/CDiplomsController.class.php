@@ -189,7 +189,11 @@ class CDiplomsController extends CBaseController {
     	$mark = 0;
     	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
     	if (!is_null($diplom)) {
-    		$mark = $diplom->getAverageMarkComputed();
+            $precise = 2;
+            if (CRequest::getInt("p") != 0) {
+                $precise = CRequest::getInt("p");
+            }
+    		$mark = $diplom->getAverageMarkComputed($precise);
     	}
     	if ($mark !== 0) {
     		echo $mark;

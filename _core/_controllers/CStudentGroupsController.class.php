@@ -16,6 +16,7 @@ class CStudentGroupsController extends CBaseController {
 
         $this->_smartyEnabled = true;
         $this->setPageTitle("Учебные группы студентов");
+        $this->_useDojo = true;
 
         parent::__construct();
     }
@@ -120,5 +121,74 @@ class CStudentGroupsController extends CBaseController {
             $arr[$student->getId()] = $student->getName();
         }
         echo json_encode($arr);
+    }
+    /**
+     * Все студенты без оценок по учебному плану в указанной группе
+     */
+    public function actionGetStudentsWithoutMarks() {
+        $result = array();
+        $group = CStaffManager::getStudentGroup(CRequest::getInt("id"));
+        $corriculum = $group->corriculum;
+        if (!is_null($corriculum)) {
+            /**
+             * Набираем список дисциплин, которые нужно проверить
+             * Дисциплины с дочками не берем
+             */
+            $disciplines = array();
+            foreach ($corriculum->cycles->getItems() as $cycle) {
+                foreach ($cycle->disciplines->getItems() as $disc) {
+                    if ($disc->children->getCount() == 0) {
+                        if (!is_null($disc->discipline)) {
+                            $disciplines[$disc->discipline_id] = $disc->discipline->getValue();
+                        }
+                    } else {
+                        foreach ($disc->children->getItems() as $child) {
+                            if (!is_null($child->discipline)) {
+                                $disciplines[$child->discipline_id] = $child->discipline->getValue();
+                            }
+                        }
+                    }
+                }
+            }
+            /**
+             * А так же практики
+             */
+            foreach ($corriculum->practices->getItems() as $practice) {
+                if (!is_null($practice->discipline)) {
+                    $disciplines[$practice->discipline_id] = $practice->discipline->getValue();
+                }
+            }
+            /**
+             * Проверяем, по каким дисциплинам у студентов нет оценок
+             */
+            foreach ($disciplines as $d_id => $d_name) {
+                foreach ($group->getStudents()->getItems() as $student) {
+                    $query = new CQuery();
+                    $query->select("st_act.*")
+                        ->from(TABLE_STUDENTS_ACTIVITY." as st_act")
+                        ->condition("st_act.student_id = ".$student->getId()." AND subject_id = ".$d_id." AND kadri_id = 380");
+                    if ($query->execute()->getCount() == 0) {
+                        $disc_array = array();
+                        if (array_key_exists($d_name, $result)) {
+                            $disc_array = $result[$d_name];
+                        }
+                        $disc_array[] = $student->getName();
+                        $result[$d_name] = $disc_array;
+                    }
+                }
+            }
+        }
+        /**
+         * Сортируем по уменьшению количества студентов
+         */
+        uasort($result, "CStudentGroupsController::sortByItemsCount");
+        $this->setData("result", $result);
+        $this->renderView("_student_groups/subform.studentWithoutMarks.tpl");
+    }
+    public static function sortByItemsCount(array $el1, array $el2) {
+        if (count($el1) == count($el2)) {
+            return 0;
+        }
+        return (count($el1) > count($el2)) ? -1 : 1;
     }
 }

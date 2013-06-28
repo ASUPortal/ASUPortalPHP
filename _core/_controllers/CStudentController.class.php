@@ -317,6 +317,21 @@ class CStudentController extends CBaseController {
     					if ($query->execute()->getCount() > 0) {
     						$hours += $disc->getLaborValue();
     					}
+                        /**
+                         * А дочерние дисциплины куда?)
+                         */
+                        foreach ($disc->children->getItems() as $child) {
+                            // здесь нужно проверить, что у студента по этой дисциплине есть оценка
+                            $query = new CQuery();
+                            $query->select("act.id, mark.name as name")
+                                ->from(TABLE_STUDENTS_ACTIVITY." as act")
+                                ->condition("act.student_id = ".$student->getId()." and act.kadri_id = 380 and act.subject_id = ".$child->discipline->getId()." and act.study_act_id in (1, 2, 12, 14)")
+                                ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
+                                ->order("act.id asc");
+                            if ($query->execute()->getCount() > 0) {
+                                $hours += $child->getLaborValue();
+                            }
+                        }
     				}
     			}
     		}
@@ -345,6 +360,18 @@ class CStudentController extends CBaseController {
                             ->order("act.id asc");
                         if ($query->execute()->getCount() > 0) {
                             $hours += $disc->getLaborValue();
+                        }
+                        foreach ($disc->children->getItems() as $child) {
+                            // здесь нужно проверить, что у студента по этой дисциплине есть оценка
+                            $query = new CQuery();
+                            $query->select("act.id, mark.name as name")
+                                ->from(TABLE_STUDENTS_ACTIVITY." as act")
+                                ->condition("act.student_id = ".$student->getId()." and act.kadri_id = 380 and act.subject_id = ".$child->discipline->getId()." and act.study_act_id in (1, 2, 12, 14)")
+                                ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
+                                ->order("act.id asc");
+                            if ($query->execute()->getCount() > 0) {
+                                $hours += $child->getLaborValue();
+                            }
                         }
                     }
                 }

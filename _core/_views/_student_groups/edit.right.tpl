@@ -19,6 +19,13 @@
     </center></a>
 </p>
 
+<p>
+    <a href="#" onclick="showStudentsWithoutMarks(); return false;"><center>
+            <img src="{$web_root}images/{$icon_theme}/32x32/apps/system-file-manager.png"><br>
+            Студенты без оценок
+        </center></a>
+</p>
+
 <div id="printDialog" title="Печать по шаблону" style="display: none;">
     <b>Печать для всех студентов</b>
 
@@ -31,6 +38,15 @@
 </div>
 
 <script>
+    function showStudentsWithoutMarks(){
+        dojo.require("dijit.Dialog");
+        var dialog = new dijit.Dialog({
+            title: "Студенты без оценок по дисциплинам учебного плана",
+            href: "{$web_root}_modules/_student_groups/?action=GetStudentsWithoutMarks&id={$group->getId()}"
+        });
+        dialog.show();
+        return false;
+    };
     function printWithTemplate(manager, method, template_id) {
         /**
          * Закрываем диалог чтобы не мешался

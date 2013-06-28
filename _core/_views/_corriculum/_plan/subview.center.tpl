@@ -24,7 +24,11 @@
             {/if}
         </td>
         <!-- Распределение по видам занятий -->
-        <td>{$discipline->getLaborValue()}</td>
+        <td>
+            {if $discipline->children->getCount() == 0}
+                {$discipline->getLaborValue()}
+            {/if}
+        </td>
         {foreach $labors->getItems() as $key=>$value}
             <td>
                 {if !is_null($discipline->getLaborByType($key))}

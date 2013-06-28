@@ -26,7 +26,9 @@
             {/if}
         </td>
         <td>
-            {$discipline->getLaborValue()}
+            {if $discipline->children->getCount() == 0}
+                {$discipline->getLaborValue()}
+            {/if}
         </td>
         {foreach $labors->getItems() as $key=>$value}
         <td>

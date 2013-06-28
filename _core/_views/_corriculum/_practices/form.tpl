@@ -10,6 +10,12 @@
     </p>
 
     <p>
+        {CHtml::activeLabel("discipline_id", $practice)}
+        {CHtml::activeDropDownList("discipline_id", $practice, CTaxonomyManager::getDisciplinesList())}
+        {CHtml::error("discipline_id", $practice)}
+    </p>
+
+    <p>
         {CHtml::activeLabel("alias", $practice)}
         {CHtml::activeTextField("alias", $practice)}
         {CHtml::error("alias", $practice)}
