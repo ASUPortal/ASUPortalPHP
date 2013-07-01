@@ -4,13 +4,17 @@
         <td>&nbsp;</td>
         <td>
             {if !is_null($discipline->cycle)}
-                {$discipline->cycle->number}.
+    			{if ($discipline->cycle->number != "")}
+					{$discipline->cycle->number}.
+				{/if}
             {/if}
             {if $discipline->parent_id !== "0"}
                 {if !is_null($discipline->parent)}
                     {$discipline->parent->ordering}
                 {/if}
-                .{$discipline->ordering}
+				{if ($discipline->ordering) != ""}
+					.{$discipline->ordering}
+				{/if}
             {else}
                 {$discipline->ordering}
             {/if}
