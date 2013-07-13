@@ -36,40 +36,16 @@
                 });
             }
             /**
-             * Делаем ajax-овые формы
+             * Делаем форму чуть красивее
              */
-             /*
             var forms = jQuery(doc).find("form");
             for (var i = 0; i < forms.length; i++) {
-                jQuery(forms[i]).ajaxForm({
-                    context: {
-                        parentObj: this
-                    },
-                    dataType: "text",
-                    beforeSubmit: function(){
-                        this.context.parentObj._showOverlay();
-                    },
-                    success: function(data, status, xhr){
-                        if (data.substring(0, 1) == "{") {
-                            var url = jQuery.parseJSON(data);
-                            url = url.url;
-                            jQuery.ajax(url, {
-                                dataType: "html",
-                                complete: function(){
-
-                                },
-                                success: function(data, status, xhr){
-                                    this.parentObj._linkAjaxSuccess(data, url);
-                                },
-                                parentObj: this.parentObj
-                            });
-                        } else {
-                            this.parentObj._linkAjaxSuccess(data, window.location);
-                        }
-                    }
+                jQuery(forms[i]).on("submit", {
+                    parentObj: this
+                }, function(event){
+                    event.data.parentObj._showOverlay();
                 });
             }
-            */
         };
 
         /**

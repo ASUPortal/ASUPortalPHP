@@ -80,7 +80,6 @@ class CBaseController {
         /**
          * AJAX для портала
          */
-        $this->addJSInclude("_core/jquery.form.js");
         $this->addJSInclude("_core/jquery.ajax.js");
 
         $action = "action".$this->_action;
@@ -248,15 +247,8 @@ class CBaseController {
      *
      * @param $url
      */
-    public function redirect($url, $ajaxFormRedirect = false) {
-        if ($ajaxFormRedirect) {
-            $data = array(
-                "url" => $url
-            );
-            echo json_encode($data);
-        } else {
-            header("location: ".$url);
-        }
+    public function redirect($url) {
+        header("location: ".$url);
     }
     /**
      * Переадресация на страницу "Недостаточно прав"
