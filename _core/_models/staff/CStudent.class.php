@@ -144,6 +144,14 @@ class CStudent extends CActiveModel {
             )
         );
     }
+    public function validationRules() {
+        return array(
+            "required" => array(
+                "fio"
+            )
+        );
+    }
+
     public function getName() {
         return $this->getRecord()->getItemValue("fio");
     }

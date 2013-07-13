@@ -36,7 +36,7 @@ class CBaseController {
         }
 
         // подключаем jQuery по умолчанию
-        $this->addJSInclude("_core/jquery-1.7.2.min.js");
+        $this->addJSInclude(CSettingsManager::getSettingValue("jquery_path"));
         $this->addJSInclude("_core/jquery.cookie.js");
         $this->addJSInlineInclude("var web_root = '".WEB_ROOT."';");
         // ядреные модули
@@ -78,12 +78,10 @@ class CBaseController {
             }
         }
         /**
-         * Почему я не сделал этого сразу?
+         * AJAX для портала
          */
-        define("USE_DOJO", $this->_useDojo);
-        $this->setData("_dojo_path", CSettingsManager::getSettingValue("dojo_js_path"));
-        $this->setData("_dojo_theme", CSettingsManager::getSettingValue("dojo_css_theme"));
-        $this->setData("_dojo_enabled", USE_DOJO);
+        $this->addJSInclude("_core/jquery.form.js");
+        $this->addJSInclude("_core/jquery.ajax.js");
 
         $action = "action".$this->_action;
         if (method_exists($this, $action)) {
