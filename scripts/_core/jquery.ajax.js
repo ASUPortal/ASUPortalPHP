@@ -13,6 +13,9 @@
         this._doc = null;
 
         _initCenter = function(doc){
+            /**
+             * Делаем ajax-овые переходы по ссылкам
+             */
             var links = jQuery(doc).find("div.asu_center_container").find("a");
             for (var i = 0; i < links.length; i++) {
                 jQuery(links[i]).on("click", {
@@ -20,7 +23,6 @@
                 }, function(event){
                     event.data.parentObj._showOverlay();
                     jQuery.ajax(this.href, {
-                        cache: false,
                         dataType: "html",
                         complete: function(){
 
@@ -33,6 +35,41 @@
                     return false;
                 });
             }
+            /**
+             * Делаем ajax-овые формы
+             */
+             /*
+            var forms = jQuery(doc).find("form");
+            for (var i = 0; i < forms.length; i++) {
+                jQuery(forms[i]).ajaxForm({
+                    context: {
+                        parentObj: this
+                    },
+                    dataType: "text",
+                    beforeSubmit: function(){
+                        this.context.parentObj._showOverlay();
+                    },
+                    success: function(data, status, xhr){
+                        if (data.substring(0, 1) == "{") {
+                            var url = jQuery.parseJSON(data);
+                            url = url.url;
+                            jQuery.ajax(url, {
+                                dataType: "html",
+                                complete: function(){
+
+                                },
+                                success: function(data, status, xhr){
+                                    this.parentObj._linkAjaxSuccess(data, url);
+                                },
+                                parentObj: this.parentObj
+                            });
+                        } else {
+                            this.parentObj._linkAjaxSuccess(data, window.location);
+                        }
+                    }
+                });
+            }
+            */
         };
 
         /**

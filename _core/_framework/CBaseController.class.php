@@ -248,14 +248,14 @@ class CBaseController {
      *
      * @param $url
      */
-    public function redirect($url) {
-        if (!headers_sent()) {
-            header("location: ".$url);
+    public function redirect($url, $ajaxFormRedirect = false) {
+        if ($ajaxFormRedirect) {
+            $data = array(
+                "url" => $url
+            );
+            echo json_encode($data);
         } else {
-            echo '
-                <script>
-                    window.location.href="'.$url.'";
-                </script>';
+            header("location: ".$url);
         }
     }
     /**
@@ -446,5 +446,14 @@ class CBaseController {
     	}
     	$v->add($js, $js);
     	$this->getJSIEOnly()->add($version, $v);
+    }
+
+    /**
+     * Продолжить редактирование
+     *
+     * @return bool
+     */
+    public function continueEdit() {
+        return (CRequest::getInt("_continueEdit") == "1");
     }
 }

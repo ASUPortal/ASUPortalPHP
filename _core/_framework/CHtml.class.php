@@ -408,8 +408,17 @@ class CHtml {
      * @static
      * @param $value
      */
-    public static function submit($value, $ajaxSubmit = true) {
+    public static function submit($value, $canChooseContinue = true) {
         echo '<input type="submit" label="'.$value.'" type="submit" value="'.$value.'">';
+        /**
+         * Если разрешена смена опции "Продолжить редактирование", то
+         * показываем поставленную галочку
+         */
+        if ($canChooseContinue) {
+            echo '<input style="width: 10px; " value="1" type="checkbox" name="_continueEdit" checked="checked"> Продолжить редактирование';
+        } else {
+            echo '<input type="hidden" name="_continueEdit" value="0">';
+        }
     }
     /**
      * Большое поле для ввода
