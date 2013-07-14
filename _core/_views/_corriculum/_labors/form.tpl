@@ -13,8 +13,10 @@
 
     <div class="control-group">
         {CHtml::activeLabel("value", $labor)}
-        {CHtml::activeTextField("value", $labor)}
-        {CHtml::error("value", $labor)}
+        <div class="controls">
+            {CHtml::activeTextField("value", $labor)}
+            {CHtml::error("value", $labor)}
+        </div>
     </div>
 
     <div class="control-group">

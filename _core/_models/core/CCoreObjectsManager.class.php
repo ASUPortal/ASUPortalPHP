@@ -11,6 +11,7 @@ class CCoreObjectsManager {
     private static $_cacheModels = null;
     private static $_cacheModelFields = null;
     private static $_cacheModelFieldTranslations = null;
+    private static $_cacheValidators = null;
 
     /**
      * @return CArrayList|null
@@ -40,6 +41,16 @@ class CCoreObjectsManager {
             self::$_cacheModelFieldTranslations = new CArrayList();
         }
         return self::$_cacheModelFieldTranslations;
+    }
+
+    /**
+     * @return CArrayList|null
+     */
+    private static function getCacheValidators() {
+        if (is_null(self::$_cacheValidators)) {
+            self::$_cacheValidators = new CArrayList();
+        }
+        return self::$_cacheValidators;
     }
 
     /**
@@ -130,5 +141,23 @@ class CCoreObjectsManager {
             }
         }
         return $translation;
+    }
+
+    /**
+     * @param $key
+     * @return CCoreValidator
+     */
+    public static function getCoreValidator($key) {
+        if (!self::getCacheValidators()->hasElement($key)) {
+            $ar = null;
+            if (is_numeric($key)) {
+                $ar = CActiveRecordProvider::getById(TABLE_CORE_VALIDATORS, $key);
+            }
+            if (!is_null($ar)) {
+                $validator = new CCoreValidator($ar);
+                self::getCacheValidators()->add($validator->getId(), $validator);
+            }
+        }
+        return self::getCacheValidators()->getItem($key);
     }
 }

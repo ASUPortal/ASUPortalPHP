@@ -166,41 +166,4 @@ class CActiveRecordProvider {
     public static function removeFromCache($table, $id) {
         self::getCache()->removeItem($table."_".$id);
     }
-
-    /**
-     * Получить все записи из таблицы с учетом прав доступа
-     *
-     * @param $table
-     * @param string $order
-     * @return CRecordSet
-     */
-    public static function get2AllFromTable($table, $order = "") {
-        $set = new CRecordSet();
-        $q = new C2Query();
-        $q = $q->select("*", $table)
-            ->join("INNER", $table.ACL_USERS, $table.".id = ".$table.ACL_USERS.".object_id AND user_id = ".CSession::getCurrentUser()->getId()." AND ".$table.ACL_USERS.".level = 1");
-        $set->setQuery($q);
-        return $set;
-    }
-
-    /**
-     * Получить запись из таблицы с учетом прав доступа
-     *
-     * @param $table
-     * @param $id
-     * @return CActiveRecord|null
-     */
-    public static function get2ById($table, $id) {
-        $q = new C2Query();
-        $q = $q->select("*", $table)
-            ->join("INNER", $table.ACL_USERS, $table.".id = ".$table.ACL_USERS.".object_id AND user_id = ".CSession::getCurrentUser()->getId()." AND ".$table.ACL_USERS.".level = 1")
-            ->where($table.".id=".$id);
-        $res = $q->execute();
-        $record = null;
-        if ($res->getCount() > 0) {
-            $record = new CActiveRecord($res->getItem(0));
-            $record->setTable($table);
-        }
-        return $record;
-    }
 }

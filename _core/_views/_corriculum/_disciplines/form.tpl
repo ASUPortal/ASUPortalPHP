@@ -1,27 +1,35 @@
-<form action="disciplines.php" method="post">
+<form action="disciplines.php" method="post" class="form-horizontal">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $discipline)}
     {CHtml::activeHiddenField("cycle_id", $discipline)}
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("discipline_id", $discipline)}
-        {CHtml::activeDropDownList("discipline_id", $discipline, CTaxonomyManager::getDisciplinesList())}
-        {CHtml::error("discipline_id", $discipline)}
-    </p>
+        <div class="controls">
+            {CHtml::activeDropDownList("discipline_id", $discipline, CTaxonomyManager::getDisciplinesList())}
+            {CHtml::error("discipline_id", $discipline)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("parent_id", $discipline)}
-        {CHtml::activeDropDownList("parent_id", $discipline, $cycle->getDisciplinesList())}
-        {CHtml::error("parent_id", $discipline)}
-    </p>
+        <div class="controls">
+            {CHtml::activeDropDownList("parent_id", $discipline, $cycle->getDisciplinesList())}
+            {CHtml::error("parent_id", $discipline)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("ordering", $discipline)}
-        {CHtml::activeTextField("ordering", $discipline)}
-        {CHtml::error("ordering", $discipline)}
-    </p>
+        <div class="controls">
+            {CHtml::activeTextField("ordering", $discipline)}
+            {CHtml::error("ordering", $discipline)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
+        <div class="controls">
         {CHtml::submit("Сохранить")}
-    </p>
+        </div>
+    </div>
 </form>
