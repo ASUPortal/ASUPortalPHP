@@ -153,6 +153,41 @@ class CCoreObjectsManager {
         }
         return $translation;
     }
+    public static function getFieldValidators(CModel $model) {
+        $validators = array();
+        /**
+         * Сначала получаем валидаторы из модели
+         */
+        foreach ($model->getValidationRules() as $type=>$fields) {
+            foreach ($fields as $field) {
+                $v = array();
+                if (array_key_exists($field, $validators)) {
+                    $v = $validators[$field];
+                }
+                $v[] = $type;
+                $validators[$field] = $v;
+            }
+        }
+        /**
+         * Теперь берем валидаторы из базы
+         */
+        $persistedModel = CCoreObjectsManager::getCoreModel(get_class($model));
+        if (!is_null($persistedModel)) {
+            foreach ($persistedModel->fields->getItems() as $field) {
+                foreach ($field->validators->getItems() as $validator) {
+                    $v = array();
+                    if (array_key_exists($field->field_name, $validators)) {
+                        $v = $validators[$field->field_name];
+                    }
+                    if (!is_null($validator->getValidatorObject())) {
+                        $v[] = $validator->getValidatorObject();
+                    }
+                    $validators[$field->field_name] = $v;
+                }
+            }
+        }
+        return $validators;
+    }
 
     /**
      * @param $key
@@ -189,6 +224,10 @@ class CCoreObjectsManager {
         }
         return self::getCacheModelFieldValidators()->getItem($key);
     }
+
+    /**
+     * @return array
+     */
     public static function getCoreValidatorsList() {
         $res = array();
         foreach (CActiveRecordProvider::getAllFromTable(TABLE_CORE_VALIDATORS)->getItems() as $ar) {

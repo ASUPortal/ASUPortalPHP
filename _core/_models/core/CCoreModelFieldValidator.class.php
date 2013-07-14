@@ -11,6 +11,7 @@ class CCoreModelFieldValidator extends CActiveModel {
     protected $_table = TABLE_CORE_MODEL_FIELD_VALIDATORS;
     protected $_field;
     protected $_validator;
+    protected $_validatorObject;
 
     public $field_id;
 
@@ -31,5 +32,18 @@ class CCoreModelFieldValidator extends CActiveModel {
                 "managerGetObject" => "getCoreValidator"
             )
         );
+    }
+
+    /**
+     * @return IValidator
+     */
+    public function getValidatorObject() {
+        if (is_null($this->_validatorObject)) {
+            if (!is_null($this->validator)) {
+                $validatorClassName = $this->validator->class_name;
+                $this->_validatorObject = new $validatorClassName();
+            }
+        }
+        return $this->_validatorObject;
     }
 }

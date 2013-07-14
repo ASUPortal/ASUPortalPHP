@@ -1,43 +1,57 @@
-<form action="index.php">
+<form action="index.php" class="form-horizontal">
 <input type="hidden" name="action" value="save">
 {CHtml::activeHiddenField("id", $question)}
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("speciality_id", $question)}
-        {CHtml::activeDropDownList("speciality_id", $question, CTaxonomyManager::getSpecialitiesList())}
-        {CHtml::error("speciality_id", $question)}
-    </p>
+        <div class="controls">
+            {CHtml::activeDropDownList("speciality_id", $question, CTaxonomyManager::getSpecialitiesList())}
+            {CHtml::error("speciality_id", $question)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("course", $question)}
-        {CHtml::activeDropDownList("course", $question, $cources)}
-        {CHtml::error("course", $question)}
-    </p>
+        <div class="controls">
+            {CHtml::activeDropDownList("course", $question, $cources)}
+            {CHtml::error("course", $question)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("year_id", $question)}
-        {CHtml::activeDropDownList("year_id", $question, CTaxonomyManager::getYearsList())}
-        {CHtml::error("year_id", $question)}
-    </p>
+        <div class="controls">
+            {CHtml::activeDropDownList("year_id", $question, CTaxonomyManager::getYearsList())}
+            {CHtml::error("year_id", $question)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("category_id", $question)}
-        {CHtml::activeDropDownList("category_id", $question, CTaxonomyManager::getTaxonomy("questions_types")->getTermsList())}
-        {CHtml::error("category_id", $question)}
-    </p>
+        <div class="controls">
+            {CHtml::activeDropDownList("category_id", $question, CTaxonomyManager::getTaxonomy("questions_types")->getTermsList())}
+            {CHtml::error("category_id", $question)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("discipline_id", $question)}
-        {CHtml::activeDropDownList("discipline_id", $question, CTaxonomyManager::getDisciplinesList())}
-        {CHtml::error("discipline_id", $question)}
-    </p>
+        <div class="controls">
+            {CHtml::activeDropDownList("discipline_id", $question, CTaxonomyManager::getDisciplinesList())}
+            {CHtml::error("discipline_id", $question)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("text", $question)}
-        {CHtml::activeTextBox("text", $question)}
-        {CHtml::error("text", $question)}
-    </p>
+        <div class="controls">
+            {CHtml::activeTextBox("text", $question)}
+            {CHtml::error("text", $question)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
+        <div class="controls">
         {CHtml::submit("Сохранить")}
-    </p>
+        </div>
+    </div>
 </form>

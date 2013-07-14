@@ -270,6 +270,11 @@ class CHtml {
         }
         $field .= "[".$name."]";
         $fieldRequired = false;
+        $validators = CCoreObjectsManager::getFieldValidators($model);
+        if (array_key_exists($name, $validators)) {
+            $fieldRequired = true;
+        }
+        /**
         if (array_key_exists("required", $model->getValidationRules())) {
             $rules = $model->getValidationRules();
             $required = $rules["required"];
@@ -278,6 +283,7 @@ class CHtml {
                 $fieldRequired = true;
             }
         }
+        */
         self::textField($field, $model->$name, $id, $class, $html);
         if ($fieldRequired) {
             self::requiredStar();
