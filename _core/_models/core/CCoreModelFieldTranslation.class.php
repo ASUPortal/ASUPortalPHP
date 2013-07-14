@@ -8,7 +8,7 @@
  */
 
 class CCoreModelFieldTranslation extends CActiveModel{
-    protected $_table = TABLE_CORE_MODLE_FIELD_TRANSLATIONS;
+    protected $_table = TABLE_CORE_MODEL_FIELD_TRANSLATIONS;
     protected $_language;
     protected $_field;
 

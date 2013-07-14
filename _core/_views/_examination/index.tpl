@@ -3,7 +3,7 @@
 {block name="asu_center"}
 <h2>Экзаменационные вопросы</h2>
 
-    <table border="1" width="100%" cellpadding="2" cellspacing="0">
+    <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th>#</th>
             <th>&nbsp;</th>
@@ -17,7 +17,7 @@
         {foreach $questions->getItems() as $question}
         <tr>
             <td>{counter}</td>
-            <td><a href="#" onclick="if (confirm('Действительно удалить вопрос по дисциплине {$question->discipline->getValue()}')) { location.href='?action=del&id={$question->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить вопрос по дисциплине {$question->discipline->getValue()}')) { location.href='?action=del&id={$question->id}'; }; return false;"></a></td>
             <td>{$question->speciality->getValue()}</td>
             <td>{$question->course}</td>
             <td>{$question->year->getValue()}</td>

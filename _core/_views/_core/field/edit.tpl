@@ -10,12 +10,16 @@
     {include file="_core/field/form.tpl"}
 
     <ul class="nav nav-tabs">
-        <li class="active" data-toggle="tab"><a href="#translations">Перевод</a></li>
+        <li><a href="#translations" class="active" data-toggle="tab">Перевод</a></li>
+        <li><a href="#validators" data-toggle="tab">Валидация</a></li>
     </ul>
 
     <div class="tab-content">
         <div class="tab-pane active" id="translations">
             {include file="_core/field/subform.translations.tpl"}
+        </div>
+        <div class="tab-pane" id="validators">
+            {include file="_core/field/subform.validators.tpl"}
         </div>
     </div>
 {/block}

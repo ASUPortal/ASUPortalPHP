@@ -209,8 +209,9 @@
     define("TABLE_RATES", "pl_rates");
     define("TABLE_CORE_MODELS", "core_models");
     define("TABLE_CORE_MODEL_FIELDS", "core_model_fields");
-    define("TABLE_CORE_MODLE_FIELD_TRANSLATIONS", "core_model_field_translations");
+    define("TABLE_CORE_MODEL_FIELD_TRANSLATIONS", "core_model_field_translations");
     define("TABLE_CORE_VALIDATORS", "core_validators");
+    define("TABLE_CORE_MODEL_FIELD_VALIDATORS", "core_model_field_validators");
 
     // суффиксы таблиц доступа
     define("ACL_ENTRIES", "_access_entries");

@@ -11,6 +11,7 @@ class CCoreObjectsManager {
     private static $_cacheModels = null;
     private static $_cacheModelFields = null;
     private static $_cacheModelFieldTranslations = null;
+    private static $_cacheModelFieldValidators = null;
     private static $_cacheValidators = null;
 
     /**
@@ -51,6 +52,16 @@ class CCoreObjectsManager {
             self::$_cacheValidators = new CArrayList();
         }
         return self::$_cacheValidators;
+    }
+
+    /**
+     * @return CArrayList|null
+     */
+    private static function getCacheModelFieldValidators() {
+        if (is_null(self::$_cacheModelFieldValidators)) {
+            self::$_cacheModelFieldValidators = new CArrayList();
+        }
+        return self::$_cacheModelFieldValidators;
     }
 
     /**
@@ -102,7 +113,7 @@ class CCoreObjectsManager {
         if (!self::getCacheModelFieldTranslations()->hasElement($key)) {
             $ar = null;
             if (is_numeric($key)) {
-                $ar = CActiveRecordProvider::getById(TABLE_CORE_MODLE_FIELD_TRANSLATIONS, $key);
+                $ar = CActiveRecordProvider::getById(TABLE_CORE_MODEL_FIELD_TRANSLATIONS, $key);
             }
             if (!is_null($ar)) {
                 $t = new CCoreModelFieldTranslation($ar);
@@ -159,5 +170,32 @@ class CCoreObjectsManager {
             }
         }
         return self::getCacheValidators()->getItem($key);
+    }
+
+    /**
+     * @param $key
+     * @return CCoreModelFieldValidator
+     */
+    public static function getCoreModelFieldValidator($key) {
+        if (!self::getCacheModelFieldValidators()->hasElement($key)) {
+            $ar = null;
+            if (is_numeric($key)) {
+                $ar = CActiveRecordProvider::getById(TABLE_CORE_MODEL_FIELD_VALIDATORS, $key);
+            }
+            if (!is_null($ar)) {
+                $validator = new CCoreModelFieldValidator($ar);
+                self::getCacheModelFieldValidators()->add($validator->getId(), $validator);
+            }
+        }
+        return self::getCacheModelFieldValidators()->getItem($key);
+    }
+    public static function getCoreValidatorsList() {
+        $res = array();
+        foreach (CActiveRecordProvider::getAllFromTable(TABLE_CORE_VALIDATORS)->getItems() as $ar) {
+            $validator = new CCoreValidator($ar);
+            self::getCacheValidators()->add($validator->getId(), $validator);
+            $res[$validator->getId()] = $validator->title;
+        }
+        return $res;
     }
 }

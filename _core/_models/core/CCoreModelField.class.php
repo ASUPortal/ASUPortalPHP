@@ -10,6 +10,7 @@
 class CCoreModelField extends CActiveModel{
     protected $_table = TABLE_CORE_MODEL_FIELDS;
     protected $_translations = null;
+    protected $_validators = null;
     protected $_model = null;
 
     public $model_id;
@@ -19,7 +20,7 @@ class CCoreModelField extends CActiveModel{
             "translations" => array(
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_translations",
-                "storageTable" => TABLE_CORE_MODLE_FIELD_TRANSLATIONS,
+                "storageTable" => TABLE_CORE_MODEL_FIELD_TRANSLATIONS,
                 "storageCondition" => "field_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CCoreObjectsManager",
                 "managerGetObject" => "getCoreModelFieldTranslation"
@@ -30,6 +31,14 @@ class CCoreModelField extends CActiveModel{
                 "storageField" => "model_id",
                 "managerClass" => "CCoreObjectsManager",
                 "managerGetObject" => "getCoreModel"
+            ),
+            "validators" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_validators",
+                "storageTable" => TABLE_CORE_MODEL_FIELD_VALIDATORS,
+                "storageCondition" => "field_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "managerClass" => "CCoreObjectsManager",
+                "managerGetObject" => "getCoreModelFieldValidator"
             )
         );
     }

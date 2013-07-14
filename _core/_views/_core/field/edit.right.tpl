@@ -11,3 +11,10 @@
             Добавить перевод
         </center></a>
 </p>
+
+<p>
+    <a href="fieldvalidators.php?action=add&id={$field->getId()}"><center>
+            <img src="{$web_root}images/{$icon_theme}/32x32/status/dialog-warning.png">
+            Добавить валидатор
+        </center></a>
+</p>
