@@ -9,4 +9,5 @@
 
 interface IValidator {
     public function run($value);
+    public function getError();
 }

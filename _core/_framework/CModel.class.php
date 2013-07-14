@@ -95,6 +95,7 @@ class CModel {
      * @return bool
      */
     public function validate() {
+        /*
         $rules = $this->validationRules();
 
         if (array_key_exists("required", $rules)) {
@@ -138,6 +139,55 @@ class CModel {
                         $dateArray = explode(".", $dateValue);
                         if (!checkdate($dateArray[1], $dateValue[0], $dateArray[2])) {
                             $this->getValidationErrors()->add($field, $error);
+                        }
+                    }
+                }
+            }
+        }
+        */
+        $rules = CCoreObjectsManager::getFieldValidators($this);
+        $labels = CCoreObjectsManager::getAttributeLabels($this);
+        foreach ($rules as $field=>$validators) {
+            foreach ($validators as $validator) {
+                if (is_object($validator)) {
+                    /**
+                     * Это новая система валидаторов
+                     */
+                    if (!$validator->run($this->$field)) {
+                        $error = str_replace("%name%", $labels[$field], $validator->getError());
+                        $this->getValidationErrors()->add($field, $error);
+                    }
+                } elseif (is_string($validator)) {
+                    /**
+                     * Это старая система валидаторов
+                     */
+                    if ($validator == "required") {
+                        if ($this->$field == "") {
+                            $error = str_replace("%name%", $labels[$field], ERROR_FIELD_REQUIRED);
+                            $this->getValidationErrors()->add($field, $error);
+                        }
+                    } elseif ($validator == "numeric") {
+                        if (!is_numeric($this->$field)) {
+                            $error = str_replace("%name%", $labels[$field], ERROR_FIELD_NUMERIC);
+                            $this->getValidationErrors()->add($field, $error);
+                        }
+                    } elseif ($validator == "selected") {
+                        if ($this->$field == 0) {
+                            $error = str_replace("%name%", $labels[$field], ERROR_FIELD_SELECTED);
+                            $this->getValidationErrors()->add($field, $error);
+                        }
+                    } elseif ($validator == "checkdate") {
+                        if ($this->$field != "") {
+                            $dateValue = $this->$field;
+                            $error = str_replace("%name%", $labels[$field], ERROR_FIELD_NOT_A_DATE);
+                            if (strtotime($dateValue) === false) {
+                                $this->getValidationErrors()->add($field, $error);
+                            } else {
+                                $dateArray = explode(".", $dateValue);
+                                if (!checkdate($dateArray[1], $dateArray[0], $dateArray[2])) {
+                                    $this->getValidationErrors()->add($field, $error);
+                                }
+                            }
                         }
                     }
                 }

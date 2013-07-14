@@ -17,4 +17,7 @@ class CValidatorEmpty implements IValidator {
         }
         return $result;
     }
+    public function getError() {
+        return ERROR_FIELD_REQUIRED;
+    }
 }

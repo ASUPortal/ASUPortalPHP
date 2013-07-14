@@ -230,13 +230,18 @@ class CHtml {
         if ($id != "") {
             $inline .= ' id="'.$id.'"';
         }
+        if ($class == "") {
+            $class = "span5";
+        } else {
+            $class .= " span5";
+        }
         if ($class != "") {
             $inline .= ' class="'.$class.'"';
         }
         if ($html != "") {
             $inline .= $html;
         }
-        echo '<input style="width: 30em; " type="text" name="'.$name.'" value="'.htmlspecialchars($value).'" '.$inline.'>';
+        echo '<input type="text" name="'.$name.'" value="'.htmlspecialchars($value).'" '.$inline.'>';
     }
     /**
      * Активное текстовое поле
@@ -274,16 +279,6 @@ class CHtml {
         if (array_key_exists($name, $validators)) {
             $fieldRequired = true;
         }
-        /**
-        if (array_key_exists("required", $model->getValidationRules())) {
-            $rules = $model->getValidationRules();
-            $required = $rules["required"];
-            if (in_array($name, $required)) {
-                $html .= " required";
-                $fieldRequired = true;
-            }
-        }
-        */
         self::textField($field, $model->$name, $id, $class, $html);
         if ($fieldRequired) {
             self::requiredStar();
@@ -471,13 +466,18 @@ class CHtml {
         if ($id != "") {
             $inline .= ' id="'.$id.'"';
         }
+        if ($class == "") {
+            $class = "span5";
+        } else {
+            $class .= " span5";
+        }
         if ($class != "") {
             $inline .= ' class="'.$class.'"';
         }
         if ($html != "") {
             $inline .= $html;
         }
-        echo '<textarea style="width: 362px; height: 150px; " name="'.$name.'" '.$inline.'>'.$value.'</textarea>';
+        echo '<textarea name="'.$name.'" '.$inline.'>'.$value.'</textarea>';
     }
     public static function checkBox($name, $value, $checked = false, $id = "", $class = "", $html = "") {
         if ($id == "") {
@@ -586,7 +586,7 @@ class CHtml {
     }
     public static function error($name, CModel $model) {
         if ($model->getValidationErrors()->hasElement($name)) {
-            echo "<p class=\"error\">".$model->getValidationErrors()->getItem($name)."</p>";
+            echo '<span class="help-inline">'.$model->getValidationErrors()->getItem($name)."</span>";
         }
     }
     public static function activeMultiSelect($name, CModel $model, $values = array()) {
@@ -742,8 +742,12 @@ class CHtml {
         }
     }
     public static function errorSummary(CModel $model) {
-        foreach ($model->getValidationErrors()->getItems() as $error) {
-            echo "<p class=\"error\">".$error."</p>";
+        if ($model->getValidationErrors()->getCount() > 0) {
+            echo '<div class="alert alert-error">';
+            foreach ($model->getValidationErrors()->getItems() as $error) {
+                echo "<p>".$error."</p>";
+            }
+            echo '</div>';
         }
     }
     public static function activeUpload($name, CModel $model) {
