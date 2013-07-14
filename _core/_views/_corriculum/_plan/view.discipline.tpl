@@ -4,7 +4,7 @@
     <h2>{$discipline->number} {$discipline->discipline->name}</h2>
 
     <p><strong>Трудоемкость</strong></p>
-        <table cellpadding="0" cellspacing="0" border="1">
+        <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
                 <th>Вид учебной нагрузки</th>
                 <th>Нагрузка</th>
@@ -17,7 +17,7 @@
             {/foreach}
         </table>
     <p><strong>Форма итогового контроля</strong></p>
-        <table cellpadding="0" cellspacing="0" border="1">
+        <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
                 <th>Форма итогового контроля</th>
                 <th>Часов</th>
@@ -30,7 +30,7 @@
         {/foreach}
         </table>
     <p><strong>Распределение трудоемкости дисциплины по курсам и семестрам</strong></p>
-        <table cellpadding="0" cellspacing="0" border="1">
+        <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
                 <th>Семестр</th>
                 <th>Часов</th>

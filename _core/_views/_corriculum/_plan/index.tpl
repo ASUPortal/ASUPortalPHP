@@ -2,7 +2,7 @@
 
 {block name="asu_center"}
     <h2>Индивидуальные учебные планы</h2>
-    <table cellpadding="0" cellspacing="0" border="1">
+    <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
         <tr>
             <th>#</th>
@@ -18,7 +18,7 @@
         {foreach $corriculums->getItems() as $c}
             <tr>
                 <td>{counter}</td>
-                <td><a href="#" onclick="if (confirm('Действительно удалить учебный план по направлению {if !is_null($c->direction)}{$c->direction->name}{/if}')) { location.href='?action=delete&id={$c->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+                <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить учебный план по направлению {if !is_null($c->direction)}{$c->direction->name}{/if}')) { location.href='?action=delete&id={$c->id}'; }; return false;"></a></td>
                 <td>
                     <a href="?action=view&id={$c->id}">
                         {if ($c->title == "")}

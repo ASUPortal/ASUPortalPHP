@@ -2,7 +2,7 @@
 
 {block name="asu_center"}
 
-<table cellpadding="0" cellspacing="0" border="0" class="tableBlank">
+<table class="table table-striped table-bordered table-hover table-condensed">
     {include file="_corriculum/_plan/subview.header.tpl"}
     <tr>
         <td valign="top" colspan="2">

@@ -4,7 +4,7 @@
     <h2>{$cycle->number} {$cycle->title}</h2>
 
     <p><strong>Базовая часть</strong></p>
-        <table cellpadding="0" cellspacing="0" border="1">
+        <table class="table table-striped table-bordered table-hover table-condensed">
         {foreach $cycle->basicDisciplines->getItems() as $item}
         <tr>
             <td>{$item->number}</td>

@@ -819,7 +819,12 @@ class CHtml {
         if (is_null($model)) {
             return "";
         }
-    	$label = $model->getAttributeLabel($field);
+        $labels = CCoreObjectsManager::getAttributeLabels($model);
+        if (array_key_exists($field, $labels)) {
+            $label = $labels[$field];
+        } else {
+            $label = $field;
+        }
     	if (CRequest::getString("action") !== "") {
     		$actions[] = "action=".CRequest::getString("action");
     	}

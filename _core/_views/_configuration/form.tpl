@@ -1,54 +1,70 @@
-<form action="index.php" method="post">
+<form action="index.php" method="post" class="form-horizontal">
 {CHtml::hiddenField("action", "save")}
 {CHtml::activeHiddenField("id", $setting)}
 
-    <p>{CHtml::errorSummary($setting)}</p>
+    {CHtml::errorSummary($setting)}
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("title", $setting)}
-        {CHtml::activeTextField("title", $setting)}
-        {CHtml::error("title", $setting)}
-    </p>
+        <div class="controls">
+            {CHtml::activeTextField("title", $setting)}
+            {CHtml::error("title", $setting)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("alias", $setting)}
-        {CHtml::activeTextField("alias", $setting)}
-        {CHtml::error("alias", $setting)}
-    </p>
+        <div class="controls">
+            {CHtml::activeTextField("alias", $setting)}
+            {CHtml::error("alias", $setting)}
+        </div>
+    </div>
 
     {if !isset($values)}
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("value", $setting)}
-        {CHtml::activeTextBox("value", $setting)}
-        {CHtml::error("value", $setting)}
-    </p>
+        <div class="controls">
+            {CHtml::activeTextBox("value", $setting)}
+            {CHtml::error("value", $setting)}
+        </div>
+    </div>
     {else}
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("value", $setting)}
-        {CHtml::activeDropDownList("value", $setting, $values)}
-        {CHtml::error("value", $setting)}
-    </p>
+        <div class="controls">
+             {CHtml::activeDropDownList("value", $setting, $values)}
+             {CHtml::error("value", $setting)}
+        </div>
+    </div>
     {/if}
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("type", $setting)}
-        {CHtml::activeDropDownList("type", $setting, $types)}
-        {CHtml::error("type", $setting)}
-    </p>
+        <div class="controls">
+             {CHtml::activeDropDownList("type", $setting, $types)}
+             {CHtml::error("type", $setting)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("description", $setting)}
-        {CHtml::activeTextBox("description", $setting)}
-        {CHtml::error("description", $setting)}
-    </p>
+        <div class="controls">
+            {CHtml::activeTextBox("description", $setting)}
+            {CHtml::error("description", $setting)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("params", $setting)}
-        {CHtml::activeTextBox("params", $setting)}
-        {CHtml::error("params", $setting)}
-    </p>
+        <div class="controls">
+            {CHtml::activeTextBox("params", $setting)}
+            {CHtml::error("params", $setting)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
+        <div class="controls">
         {CHtml::submit("Сохранить")}
-    </p>
+        </div>
+    </div>
 </form>
