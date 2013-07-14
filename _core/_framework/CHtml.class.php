@@ -132,13 +132,9 @@ class CHtml {
         }
         $field .= "[".$name."]";
         $fieldRequired = false;
-        if (array_key_exists("selected", $model->getValidationRules())) {
-            $rules = $model->getValidationRules();
-            $required = $rules["selected"];
-            if (in_array($name, $required)) {
-                $html .= " required";
-                $fieldRequired = true;
-            }
+        $validators = CCoreObjectsManager::getFieldValidators($model);
+        if (array_key_exists($name, $validators)) {
+            $fieldRequired = true;
         }
         self::dropDownList($field, $values, $model->$name, $id, $class, $html);
         if ($fieldRequired) {
