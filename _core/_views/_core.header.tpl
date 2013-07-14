@@ -1,11 +1,12 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8" />
     <title>{$page_title} - Официальный портал кафедры АСУ</title>
     {foreach $js as $j}
         <script type="text/javascript" src="{$web_root}scripts/{$j}"></script>
     {/foreach}
+    <link href="{$web_root}css/_core/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
     {foreach $css as $c}
         <link href="{$web_root}css/{$c}" rel="stylesheet" type="text/css" />
     {/foreach}

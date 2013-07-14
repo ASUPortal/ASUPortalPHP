@@ -35,39 +35,45 @@
             buttonImageOnly: true,
             changeYear: true
         });
-        jQuery("#tabs").tabs();
-        jQuery("#tabs-secondary").tabs();
+        $('#tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+        $('#tabs a:first').tab('show');
     });
 </script>
 
-<form action="index.php" method="post">
+<form action="index.php" method="post" class="form-horizontal">
 {CHtml::hiddenField("action", "save")}
 {CHtml::activeHiddenField("id", $student)}
 
     <p>{CHtml::errorSummary($student)}</p>
 
-    <div id="tabs">
-        <ul style="height: 30px; ">
-            <li><a href="#tab-common">Общая информация</a></li>
-            <li><a href="#tab-basic-education">Начальное образование</a></li>
-            <li><a href="#tab-secondary-education">Высшее образование</a></li>
-            <li><a href="#tab-work">Работа</a></li>
-        </ul>
-        <div id="tab-common">
+    <ul class="nav nav-tabs" id="tabs">
+        <li><a href="#tab-common">Общая информация</a></li>
+        <li><a href="#tab-basic-education">Начальное образование</a></li>
+        <li><a href="#tab-secondary-education">Высшее образование</a></li>
+        <li><a href="#tab-work">Работа</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab-common">
             {include file="_students/subform.common.tpl"}
         </div>
-        <div id="tab-basic-education">
+        <div class="tab-pane" id="tab-basic-education">
             {include file="_students/subform.basic_education.tpl"}
         </div>
-        <div id="tab-secondary-education">
+        <div class="tab-pane" id="tab-secondary-education">
             {include file="_students/subform.secondary_education.education.tpl"}
         </div>
-        <div id="tab-work">
+        <div class="tab-pane" id="tab-work">
             {include file="_students/subform.work.tpl"}
         </div>
     </div>
 
-    <p>
+    <div class="control-group">
+        <div class="controls">
         {CHtml::submit("Сохранить")}
-    </p>
+        </div>
+    </div>
 </form>

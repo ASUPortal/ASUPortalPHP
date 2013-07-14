@@ -372,7 +372,7 @@ class CHtml {
      * @param $for
      */
     public static function label($text, $for) {
-        echo '<label for="'.$for.'">'.$text.'</label>';
+        echo '<label for="'.$for.'" class="control-label" >'.$text.'</label>';
     }
     /**
      * Метка, привязанная к модели
@@ -409,15 +409,42 @@ class CHtml {
      * @param $value
      */
     public static function submit($value, $canChooseContinue = true) {
-        echo '<input type="submit" label="'.$value.'" type="submit" value="'.$value.'">';
-        /**
-         * Если разрешена смена опции "Продолжить редактирование", то
-         * показываем поставленную галочку
-         */
         if ($canChooseContinue) {
-            echo '<input style="width: 10px; " value="1" type="checkbox" name="_continueEdit" checked="checked"> Продолжить редактирование';
+            ?>
+            <script>
+                jQuery(document).ready(function(){
+                    jQuery("#_saveAndContinue").click(function(){
+                        var form = jQuery(this).parents("form:first");
+                        jQuery("input[name=_continueEdit]").val("1");
+                        jQuery(form).submit();
+                        return false;
+                    });
+                    jQuery("#_saveAndBack").click(function(){
+                        var form = jQuery(this).parents("form:first");
+                        jQuery("input[name=_continueEdit]").val("0");
+                        jQuery(form).submit();
+                        return false;
+                    });
+                });
+            </script>
+            <input type="hidden" name="_continueEdit" value="1">
+            <div class="btn-group">
+                <button class="btn btn-primary"><?php echo $value; ?></button>
+                <button class="btn dropdown-toggle btn-primary" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#" id="_saveAndContinue">Сохранить и продолжить</a>
+                    </li>
+                    <li>
+                        <a href="#" id="_saveAndBack">Сохранить и к списку</a>
+                    </li>
+                </ul>
+            </div>
+        <?php
         } else {
-            echo '<input type="hidden" name="_continueEdit" value="0">';
+            echo '<input type="submit" class="btn btn-primary" label="'.$value.'" type="submit" value="'.$value.'">';
         }
     }
     /**
@@ -678,8 +705,7 @@ class CHtml {
         echo '</div>';
     }
     public static function paginator(CPaginator $paginator, $action) {
-        echo '<div class="asu_paginator">';
-        echo '<span>Страницы: </span>';
+        echo '<div class="pagination"><ul>';
         foreach ($paginator->getPagesList($action) as $page=>$link) {
         	if (CRequest::getString("order") !== "") {
         		$link = $link."&order=".CRequest::getString("order");
@@ -690,11 +716,15 @@ class CHtml {
             if (CRequest::getString("filter") !== "") {
                 $link = $link."&filter=".CRequest::getString("filter");
             }
-            echo '<span style="padding: 5px; "><a href="'.$link.'">'.$page.'</a></span>';
+            if (CRequest::getInt("page") == $page) {
+                echo '<li class="active"><a href="'.$link.'">'.$page.'</a></li>';
+            } else {
+                echo '<li><a href="'.$link.'">'.$page.'</a></li>';
+            }
         }
+        echo '</ul></div>';
         echo '<span>Текущая страница: '.$paginator->getCurrentPageNumber().' </span>';
         echo '<span>Всего: '.$paginator->getPagesCount().'</span>';
-        echo '</div>';
     }
     public static function helpForCurrentPage() {
         if (!is_null(CHelpManager::getHelpForCurrentPage())) {

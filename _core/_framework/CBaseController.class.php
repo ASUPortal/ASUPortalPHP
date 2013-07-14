@@ -81,6 +81,11 @@ class CBaseController {
          * AJAX для портала
          */
         $this->addJSInclude("_core/jquery.ajax.js");
+        /**
+         * Bootstrap для красоты
+         */
+        //$this->addCSSInclude("_core/bootstrap/css/bootstrap.css");
+        $this->addJSInclude("_core/bootstrap/js/bootstrap.js");
 
         $action = "action".$this->_action;
         if (method_exists($this, $action)) {
@@ -287,6 +292,7 @@ class CBaseController {
             // постоянно нужная ерунда типа управлялки меню,
             // нет другого места, откуда ее можно хорошо подцепить
             $this->addCSSInclude("_core/core.css");
+            /*
             $this->addCSSInclude("_modules/_sdmenu/sdmenu.css");
             $this->addJSInclude("_modules/_sdmenu/sdmenu.js");
             $this->addJQInlineInclude('
@@ -296,6 +302,7 @@ class CBaseController {
                     myMenu.init();
                 }
             ');
+            */
 
         }
         return $this->_smarty;

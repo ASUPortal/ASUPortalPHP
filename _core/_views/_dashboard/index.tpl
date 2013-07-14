@@ -10,13 +10,13 @@
 				{/if}
 			</div>
 			<div class="item_content">
-				<h2>
+				<h4>
 					{if $item->link !== ""}
 						<a href="{$item->link}">{$item->title}</a>
 					{else}
 						{$item->title}
 					{/if}
-				</h2>
+				</h4>
 				{if ($item->children->getCount() > 0)}
 					<ul>
 						{foreach $item->children->getItems() as $child}

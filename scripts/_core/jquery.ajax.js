@@ -16,12 +16,18 @@
             /**
              * Делаем ajax-овые переходы по ссылкам
              */
+            /*
             var links = jQuery(doc).find("div.asu_center_container").find("a");
+            for (var i = 0; i < links.length; i++) {
+                if (jQuery(links[i]).attr("href").indexOf("#") != -1) {
+                    links.splice(i, 1);
+                }
+            }
             for (var i = 0; i < links.length; i++) {
                 jQuery(links[i]).on("click", {
                     parentObj: this
                 }, function(event){
-                    event.data.parentObj._showOverlay();
+                    event.data.parentObj._showOverlay();/*
                     jQuery.ajax(this.href, {
                         dataType: "html",
                         complete: function(){
@@ -35,6 +41,7 @@
                     return false;
                 });
             }
+            */
             /**
              * Делаем форму чуть красивее
              */

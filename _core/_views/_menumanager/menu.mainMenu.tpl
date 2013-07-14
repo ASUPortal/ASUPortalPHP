@@ -1,18 +1,24 @@
-<div id="asu_wap_switch"></div>
+<script>
+    jQuery(document).ready(function(){
+        jQuery('.dropdown-toggle').dropdown()
+    });
+</script>
 
-<div id="mainMenu" class="sdmenu">
+<ul class="nav nav-tabs nav-stacked">
     {foreach CMenuManager::getMenu("main_menu")->getMenuPublishedItemsInHierarchy()->getItems() as $item}
-        <div class="collapsed">
-            {if ($item->getChilds()->getCount() > 0)}
-                <span class="hasChild" title="Выберите подраздел">{$item->getName()}</span>
+        {if ($item->getChilds()->getCount() > 0)}
+            <li class="dropdown-submenu">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    {$item->getName()}
+                </a>
+                <ul class="dropdown-menu">
                 {foreach $item->getChilds()->getItems() as $child}
-                    <a class="hasChild" href="{$child->getLink()|htmlspecialchars}" title="{$child->getName()|htmlspecialchars}">{$child->getName()}</a>
+                    <li><a tabindex="-1" title="{$child->getName()|htmlspecialchars}" href="{$child->getLink()|htmlspecialchars}">{$child->getName()}</a></li>
                 {/foreach}
-            {else}
-                <span class="noChild">
-                    <a class="noChild" href="{$item->getLink()|htmlspecialchars}" title="{$item->getName()|htmlspecialchars}">{$item->getName()}</a>
-                </span>
-            {/if}
-        </div>
+                </ul>
+            </li>
+        {else}
+            <li><a tabindex="-1" title="{$item->getName()|htmlspecialchars}" href="{$item->getLink()|htmlspecialchars}">{$item->getName()}</a></li>
+        {/if}
     {/foreach}
-</div>
+</ul>
