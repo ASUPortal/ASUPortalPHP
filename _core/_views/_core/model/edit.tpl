@@ -6,6 +6,16 @@
     {CHtml::helpForCurrentPage()}
 
     {include file="_core/model/form.tpl"}
+
+    <ul class="nav nav-tabs">
+        <li class="active" data-toggle="tab"><a href="#fields">Поля модели</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="fields">
+            {include file="_core/model/subform.fields.tpl"}
+        </div>
+    </div>
 {/block}
 
 {block name="asu_right"}

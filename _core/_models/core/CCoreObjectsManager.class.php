@@ -9,6 +9,7 @@
 
 class CCoreObjectsManager {
     private static $_cacheModels = null;
+    private static $_cacheModelFields = null;
 
     /**
      * @return CArrayList|null
@@ -18,6 +19,16 @@ class CCoreObjectsManager {
             self::$_cacheModels = new CArrayList();
         }
         return self::$_cacheModels;
+    }
+
+    /**
+     * @return CArrayList|null
+     */
+    private static function getCacheModelFields() {
+        if (is_null(self::$_cacheModelFields)) {
+            self::$_cacheModelFields = new CArrayList();
+        }
+        return self::$_cacheModelFields;
     }
 
     /**
@@ -36,5 +47,23 @@ class CCoreObjectsManager {
             }
         }
         return self::getCacheModels()->getItem($key);
+    }
+
+    /**
+     * @param $key
+     * @return CCoreModelField
+     */
+    public static function getCoreModelField($key) {
+        if (!self::getCacheModelFields()->hasElement($key)) {
+            $ar = null;
+            if (is_numeric($key)) {
+                $ar = CActiveRecordProvider::getById(TABLE_CORE_MODEL_FIELDS, $key);
+            }
+            if (!is_null($ar)) {
+                $field = new CCoreModelField($ar);
+                self::getCacheModelFields()->add($field->getId(), $field);
+            }
+        }
+        return self::getCacheModelFields()->getItem($key);
     }
 }

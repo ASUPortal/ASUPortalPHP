@@ -208,6 +208,7 @@
     define("TABLE_SAB_PERSON_ORDERS", "sab_person_orders");
     define("TABLE_RATES", "pl_rates");
     define("TABLE_CORE_MODELS", "core_models");
+    define("TABLE_CORE_MODEL_FIELDS", "core_model_fields");
 
     // суффиксы таблиц доступа
     define("ACL_ENTRIES", "_access_entries");

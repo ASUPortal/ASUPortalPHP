@@ -58,7 +58,7 @@ class CCoreModelsController extends CBaseController {
         $this->setData("model", $model);
         $this->renderView("_core/model/add.tpl");
     }
-    public function actionDel() {
+    public function actionDelete() {
         $model = CCoreObjectsManager::getCoreModel(CRequest::getInt("id"));
         $model->remove();
         $this->redirect("?action=index");
