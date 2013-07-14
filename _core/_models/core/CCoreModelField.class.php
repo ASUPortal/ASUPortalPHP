@@ -9,6 +9,20 @@
 
 class CCoreModelField extends CActiveModel{
     protected $_table = TABLE_CORE_MODEL_FIELDS;
+    protected $_translations = null;
 
     public $model_id;
+
+    public function relations() {
+        return array(
+            "translations" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_translations",
+                "storageTable" => TABLE_CORE_MODLE_FIELD_TRANSLATIONS,
+                "storageCondition" => "field_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "managerClass" => "CCoreObjectsManager",
+                "managerGetObject" => "getCoreModelFieldTranslation"
+            ),
+        );
+    }
 }
