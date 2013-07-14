@@ -10,6 +10,7 @@
 class CCoreModelFieldTranslation extends CActiveModel{
     protected $_table = TABLE_CORE_MODLE_FIELD_TRANSLATIONS;
     protected $_language;
+    protected $_field;
 
     public $field_id;
 
@@ -19,6 +20,13 @@ class CCoreModelFieldTranslation extends CActiveModel{
                 "relationPower" => RELATION_COMPUTED,
                 "storageProperty" => "_language",
                 "relationFunction" => "getLanguage"
+            ),
+            "field" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_field",
+                "storageField" => "field_id",
+                "managerClass" => "CCoreObjectsManager",
+                "managerGetObject" => "getCoreModelField"
             )
         );
     }

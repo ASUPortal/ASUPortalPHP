@@ -23,4 +23,40 @@ class CCoreModel extends CActiveModel {
             ),
         );
     }
+
+    private function getTranslationByLangId($lang) {
+        $translation = array();
+        if ($lang !== "") {
+            foreach ($this->fields->getItems() as $field) {
+                if ($field->getTranslationByLangId($lang) !== "") {
+                    $translation[$field->field_name] = $field->getTranslationByLangId($lang);
+                }
+            }
+        }
+        return $translation;
+    }
+
+    /**
+     * Перевод полей модели на язык по умолчанию
+     *
+     * @return array
+     */
+    public function getTranslationDefault() {
+        $translation = array();
+        $lang = CSettingsManager::getSettingValue("system_language_default");
+        $translation = $this->getTranslationByLangId($lang);
+        return $translation;
+    }
+
+    /**
+     * Перевод полей модели на текущий язык системы
+     *
+     * @return array
+     */
+    public function getTranslationCurrent() {
+        $translation = array();
+        $lang = CSettingsManager::getSettingValue("system_language_current");
+        $translation = $this->getTranslationByLangId($lang);
+        return $translation;
+    }
 }

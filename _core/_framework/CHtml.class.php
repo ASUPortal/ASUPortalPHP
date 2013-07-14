@@ -393,8 +393,8 @@ class CHtml {
             $name = substr($name, 0, strlen($name) - 1);
             $model = $model->$modelName;
         }
-        if (array_key_exists($name, $model->attributeLabels())) {
-            $labels = $model->attributeLabels();
+        $labels = CCoreObjectsManager::getAttributeLabels($model);
+        if (array_key_exists($name, $labels)) {
             $field = $model::getClassName()."[".$name."]";
             self::label($labels[$name], $field);
         } else {
@@ -716,7 +716,11 @@ class CHtml {
             if (CRequest::getString("filter") !== "") {
                 $link = $link."&filter=".CRequest::getString("filter");
             }
-            if (CRequest::getInt("page") == $page) {
+            $toCheck = 1;
+            if (CRequest::getInt("page") !== 0) {
+                $toCheck = CRequest::getInt("page");
+            }
+            if ($toCheck == $page) {
                 echo '<li class="active"><a href="'.$link.'">'.$page.'</a></li>';
             } else {
                 echo '<li><a href="'.$link.'">'.$page.'</a></li>';

@@ -5,6 +5,15 @@
 
     {CHtml::helpForCurrentPage()}
 
+    <p>Модель: {if !is_null($translation->field)}
+        {if !is_null($translation->field->model)}
+            {$translation->field->model->class_name}
+        {/if}
+    {/if}</p>
+    <p>Поле: {if !is_null($translation->field)}
+            {$translation->field->field_name}
+    {/if}</p>
+
     {include file="_core/translation/form.tpl"}
 {/block}
 

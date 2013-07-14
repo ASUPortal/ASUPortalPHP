@@ -10,6 +10,7 @@
 class CCoreModelField extends CActiveModel{
     protected $_table = TABLE_CORE_MODEL_FIELDS;
     protected $_translations = null;
+    protected $_model = null;
 
     public $model_id;
 
@@ -23,6 +24,29 @@ class CCoreModelField extends CActiveModel{
                 "managerClass" => "CCoreObjectsManager",
                 "managerGetObject" => "getCoreModelFieldTranslation"
             ),
+            "model" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_model",
+                "storageField" => "model_id",
+                "managerClass" => "CCoreObjectsManager",
+                "managerGetObject" => "getCoreModel"
+            )
         );
+    }
+
+    /**
+     * Получить значение перевода для указанного языка
+     *
+     * @param $id
+     * @return string
+     */
+    public function getTranslationByLangId($id) {
+        $value = "";
+        foreach ($this->translations->getItems() as $t) {
+            if ($t->language_id = $id) {
+                $value = $t->value;
+            }
+        }
+        return $value;
     }
 }

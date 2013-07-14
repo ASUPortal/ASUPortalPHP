@@ -51,10 +51,15 @@ class CCoreObjectsManager {
             $ar = null;
             if (is_numeric($key)) {
                 $ar = CActiveRecordProvider::getById(TABLE_CORE_MODELS, $key);
+            } elseif (is_string($key)) {
+                foreach (CActiveRecordProvider::getWithCondition(TABLE_CORE_MODELS, "class_name='".$key."'")->getItems() as $a) {
+                    $ar = $a;
+                }
             }
             if (!is_null($ar)) {
                 $model = new CCoreModel($ar);
                 self::getCacheModels()->add($model->getId(), $model);
+                self::getCacheModels()->add($model->class_name, $model);
             }
         }
         return self::getCacheModels()->getItem($key);
@@ -94,5 +99,36 @@ class CCoreObjectsManager {
             }
         }
         return self::getCacheModelFieldTranslations()->getItem($key);
+    }
+    public static function getAttributeLabels(CModel $model) {
+        $translation = array();
+        /**
+         * Получаем перевод из метода getAttributeLabels
+         */
+        foreach ($model->attributeLabels() as $key=>$value) {
+            $translation[$key] = $value;
+        }
+        /**
+         * Получаем модель-описание для текущей модели
+         */
+        $descriptionModel = self::getCoreModel(get_class($model));
+        if (!is_null($descriptionModel)) {
+            /**
+             * Получаем все поля и переводы для них
+             * для языка системы по умолчанию
+             */
+            $tr = $descriptionModel->getTranslationDefault();
+            foreach ($tr as $key=>$value) {
+                $translation[$key] = $value;
+            }
+            /**
+             * Теперь для текущего языка
+             */
+            $tr = $descriptionModel->getTranslationCurrent();
+            foreach ($tr as $key=>$value) {
+                $translation[$key] = $value;
+            }
+        }
+        return $translation;
     }
 }

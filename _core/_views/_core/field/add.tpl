@@ -5,6 +5,8 @@
 
     {CHtml::helpForCurrentPage()}
 
+    <p>Модель: {if !is_null($field->model)}{$field->model->title}{/if}</p>
+
     {include file="_core/field/form.tpl"}
 {/block}
 
