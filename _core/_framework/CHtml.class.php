@@ -12,6 +12,18 @@ class CHtml {
     private static $_calendarInit = false;
     private static $_multiselectInit = false;
     private static $_printFormViewInit = false;
+    private static function getFielsizeClass() {
+        $result = "span5";
+        if (!is_null(CSession::getCurrentUser())) {
+            if (!is_null(CSession::getCurrentUser()->getPersonalSettings())) {
+                if (CSession::getCurrentUser()->getPersonalSettings()->portal_input_size != "") {
+                    $result = CSession::getCurrentUser()->getPersonalSettings()->portal_input_size;
+                }
+            }
+        }
+        return $result;
+    }
+
     public static function button($value, $onClick = "") {
         echo '<input type="button" value="'.$value.'" onclick="'.$onClick.'">';
     }
@@ -57,6 +69,8 @@ class CHtml {
         }
         if ($class != "") {
             $inline .= ' class="'.$class.'"';
+        } else {
+            $inline = ' class="'.self::getFielsizeClass().'"';
         }
         if ($html != "") {
             $inline .= $html;
@@ -77,7 +91,7 @@ class CHtml {
                 $values[0] = "- Выберите из списка (".count($values).") -";
             }
         }
-        echo '<select style="width: 30em;  " name="'.$name.'" '.$inline.'>';
+        echo '<select name="'.$name.'" '.$inline.'>';
         // часто выбор делается из словаря, так что преобразуем объекты CTerm к строке
         foreach ($values as $key=>$value) {
             if (is_object($value)) {
@@ -227,9 +241,7 @@ class CHtml {
             $inline .= ' id="'.$id.'"';
         }
         if ($class == "") {
-            $class = "span5";
-        } else {
-            $class .= " span5";
+            $class = self::getFielsizeClass();
         }
         if ($class != "") {
             $inline .= ' class="'.$class.'"';
@@ -334,6 +346,14 @@ class CHtml {
         }
         $field .= "[".$name."]";
         self::textBox($field, $model->$name, $id, $class, $html);
+        $fieldRequired = false;
+        $validators = CCoreObjectsManager::getFieldValidators($model);
+        if (array_key_exists($name, $validators)) {
+            $fieldRequired = true;
+        }
+        if ($fieldRequired) {
+            self::requiredStar();
+        }
     }
     /**
      * Поле для ввода пароля
@@ -463,12 +483,13 @@ class CHtml {
             $inline .= ' id="'.$id.'"';
         }
         if ($class == "") {
-            $class = "span5";
-        } else {
-            $class .= " span5";
+            $class = self::getFielsizeClass();
         }
         if ($class != "") {
             $inline .= ' class="'.$class.'"';
+        }
+        if ($html == "") {
+            $html = ' rows="5"';
         }
         if ($html != "") {
             $inline .= $html;
@@ -518,6 +539,7 @@ class CHtml {
                 $inputName .= "[".$submodelName."]";
             }
             $inputName .= "[".$name."][]";
+            echo '<label class="checkbox">';
             echo '<input type="checkbox" name="'.$inputName.'"';
             if (is_array($model->$name)) {
                 if (array_key_exists($key, $model->$name)) {
@@ -536,7 +558,8 @@ class CHtml {
                 echo ("Какой-то неподдерживаемый тип данных для построение списка ".get_class($model->$name));
                 exit;
             }
-            echo ' value="'.$key.'">'.$value.'<br>';
+            echo ' value="'.$key.'">'.$value;
+            echo '</label>';
         }
     }
     public static function activeRadioButtonGroup($name, CModel $model, $values = array(), $groupName = "") {

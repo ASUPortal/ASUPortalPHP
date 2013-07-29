@@ -15,7 +15,7 @@ class CPaginator {
     /**
      * @return CRecordSet
      */
-    private function getRecordSet() {
+    public function getRecordSet() {
         return $this->_recordSet;
     }
     public function getPagesCount() {

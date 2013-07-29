@@ -106,32 +106,6 @@ body {
     display: none;
 }
 
-form p {
-
-}
-
-form p label {
-    width: 200px;
-    display: inline;
-    float: left;
-    font-weight: bold;
-    height: auto;
-}
-
-form p input, form p select {
-    /* width: 350px; */
-    width: 30em;
-}
-
-form p textarea {
-    width: 350px;
-    height: 150px;
-}
-
-form p input[type="submit"] {
-    width: 200px;
-}
-
 #asu_auth {
     position: absolute;
     display: none;

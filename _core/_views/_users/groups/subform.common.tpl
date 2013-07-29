@@ -1,11 +1,15 @@
-<p>
+<div class="control-group">
     {CHtml::activeLabel("group[comment]", $form)}
+    <div class="controls">
     {CHtml::activeTextField("group[comment]", $form)}
     {CHtml::error("group[comment]", $form)}
-</p>
+    </div>
+</div>
 
-<p>
+<div class="control-group">
     {CHtml::activeLabel("group[name]", $form)}
+    <div class="controls">
     {CHtml::activeTextField("group[name]", $form)}
     {CHtml::error("group[name]", $form)}
-</p>
+    </div>
+</div>

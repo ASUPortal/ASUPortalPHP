@@ -10,7 +10,7 @@
     {include file="_core/field/form.tpl"}
 
     <ul class="nav nav-tabs">
-        <li><a href="#translations" class="active" data-toggle="tab">Перевод</a></li>
+        <li class="active"><a href="#translations" data-toggle="tab">Перевод</a></li>
         <li><a href="#validators" data-toggle="tab">Валидация</a></li>
     </ul>
 

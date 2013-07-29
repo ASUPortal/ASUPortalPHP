@@ -18,4 +18,7 @@ class CIndPlanController extends CBaseController{
 
         parent::__construct();
     }
+    public function actionIndex() {
+        $this->renderView("_individual_plan/index.tpl");
+    }
 }

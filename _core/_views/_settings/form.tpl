@@ -4,53 +4,75 @@
     });
 </script>
 
-<form action="index.php" method="post">
+<form action="index.php" method="post" class="form-horizontal">
 {CHtml::hiddenField("action", "save")}
 {CHtml::activeHiddenField("id", $settings)}
 {CHtml::activeHiddenField("user_id", $settings)}
 
     <p>{CHtml::errorSummary($settings)}</p>
 
-    <div id="tabs">
-        <ul style="height: 35px; ">
-            <li><a href="#common">Общие настройки</a></li>
-            <li><a href="#dashboard">Рабочий стол</a></li>
-        </ul>
-        <div id="common">
-            <p>
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#common" data-toggle="tab">Общие настройки</a></li>
+        <li><a href="#dashboard" data-toggle="tab">Рабочий стол</a></li>
+        <li><a href="#portal" data-toggle="tab">Настройки портала</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="common">
+            <div class="control-group">
                 {CHtml::activeLabel("dashboard_enabled", $settings)}
+                <div class="controls">
                 {CHtml::activeCheckBox("dashboard_enabled", $settings)}
                 {CHtml::error("dashboard_enabled", $settings)}
-            </p>
+                </div>
+            </div>
         </div>
-        <div id="dashboard">
-            <p>
+        <div class="tab-pane" id="dashboard">
+            <div class="control-group">
                 {CHtml::activeLabel("dashboard_show_birthdays", $settings)}
+                <div class="controls">
                 {CHtml::activeCheckBox("dashboard_show_birthdays", $settings)}
                 {CHtml::error("dashboard_show_birthdays", $settings)}
-            </p>
+                </div>
+            </div>
 
-            <p>
+            <div class="control-group">
                 {CHtml::activeLabel("dashboard_show_messages", $settings)}
+                <div class="controls">
                 {CHtml::activeCheckBox("dashboard_show_messages", $settings)}
                 {CHtml::error("dashboard_show_messages", $settings)}
-            </p>
+                </div>
+            </div>
 
-            <p>
+            <div class="control-group">
                 {CHtml::activeLabel("dashboard_show_all_tasks", $settings)}
+                <div class="controls">
                 {CHtml::activeCheckBox("dashboard_show_all_tasks", $settings)}
                 {CHtml::error("dashboard_show_all_tasks", $settings)}
-            </p>
+                </div>
+            </div>
 
-            <p>
+            <div class="control-group">
                 {CHtml::activeLabel("dashboard_check_messages", $settings)}
+                <div class="controls">
                 {CHtml::activeCheckBox("dashboard_check_messages", $settings)}
                 {CHtml::error("dashboard_check_messages", $settings)}
-            </p>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="portal">
+            <div class="control-group">
+                {CHtml::activeLabel("portal_input_size", $settings)}
+                <div class="controls">
+                    {CHtml::activeDropDownList("portal_input_size", $settings, CUserSettings::getInputSizes())}
+                    {CHtml::error("portal_input_size", $settings)}
+                </div>
+            </div>
         </div>
     </div>
 
-    <p>
-    {CHtml::submit("Сохранить")}
-    </p>
+    <div class="control-group">
+        <div class="controls">
+            {CHtml::submit("Сохранить", false)}
+        </div>
+    </div>
 </form>

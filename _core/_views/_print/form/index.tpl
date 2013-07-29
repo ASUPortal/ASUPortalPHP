@@ -3,7 +3,7 @@
 {block name="asu_center"}
 <h2>Шаблоны документов</h2>
 
-<table width="100%" cellpadding="2" cellspacing="0" border="1">
+    <table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th>&nbsp;</th>
         <th>#</th>
@@ -16,7 +16,7 @@
 
     {foreach $forms->getItems() as $form}
         <tr>
-            <td valign="top"><a href="#" onclick="if (confirm('Действительно удалить шаблон {$form->title}')) { location.href='?action=delete&id={$form->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+            <td valign="top"><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить шаблон {$form->title}')) { location.href='?action=delete&id={$form->id}'; }; return false;"></a></td>
             <td valign="top">{counter}</td>
             <td valign="top"><a href="form.php?action=edit&id={$form->id}">{$form->title}<a/> ({$form->alias})</td>
             <td valign="top">{$form->description|nl2br}</td>

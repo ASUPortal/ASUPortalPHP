@@ -60,7 +60,11 @@ class CTasksController extends CBaseController{
         $task->setAttributes(CRequest::getArray($task::getClassName()));
         if ($task->validate()) {
             $task->save();
-            $this->redirect("?action=index");
+            if ($this->continueEdit()) {
+                $this->redirect("tasks.php?action=edit&id=".$task->getId());
+            } else {
+                $this->redirect("tasks?action=index");
+            }
             return true;
         }
         $this->setData("task", $task);

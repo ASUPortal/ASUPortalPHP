@@ -5,7 +5,7 @@
 
     {CHtml::helpForCurrentPage()}
 
-    <table border="1" cellpadding="2" cellspacing="0">
+    <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th></th>
             <th>#</th>
@@ -15,7 +15,7 @@
         {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $groups->getItems() as $group}
         <tr>
-            <td><a href="#" onclick="if (confirm('Действительно удалить группу {$group->getName()}')) { location.href='?action=delete&id={$group->getId()}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить группу {$group->getName()}')) { location.href='?action=delete&id={$group->getId()}'; }; return false;"></td>
             <td>{counter}</td>
             <td><a href="groups.php?action=edit&id={$group->getId()}">{$group->comment}</a></td>
             <td>{$group->getName()}</td>

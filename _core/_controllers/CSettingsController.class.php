@@ -18,13 +18,15 @@ class CSettingsController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
-        $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-        $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
         $settings = new CUserSettings();
         $settings->user_id = CSession::getCurrentUser()->getId();
         if (!is_null(CSession::getCurrentUser()->getPersonalSettings())) {
             $settings = CSession::getCurrentUser()->getPersonalSettings();
         }
+        $sizes = array(
+            5, 6, 7, 8
+        );
+        $this->setData("sizes", $sizes);
         $this->setData("settings", $settings);
         $this->renderView("_settings/index.tpl");
     }

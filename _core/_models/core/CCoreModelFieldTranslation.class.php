@@ -13,6 +13,12 @@ class CCoreModelFieldTranslation extends CActiveModel{
     protected $_field;
 
     public $field_id;
+    public $language_id;
+
+    public function __construct(CActiveRecord $aRecord = null) {
+        parent::__construct($aRecord);
+        $this->language_id = CSettingsManager::getSettingValue("system_language_default");
+    }
 
     protected function relations() {
         return array(

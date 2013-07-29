@@ -34,3 +34,4 @@
  	{/foreach}
 </head>
 <body>
+<div id="overlay"></div>

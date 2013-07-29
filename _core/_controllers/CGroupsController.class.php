@@ -63,7 +63,11 @@ class CGroupsController extends CBaseController {
         $form->setAttributes(CRequest::getArray($form::getClassName()));
         if ($form->validate()) {
             $form->save();
-            $this->redirect("groups.php?action=index");
+            if ($this->continueEdit()) {
+                $this->redirect("groups.php?action=edit&id=".$form->group["id"]);
+            } else {
+                $this->redirect("groups.php?action=index");
+            }
             return true;
         }
         $this->addJSInclude(JQUERY_UI_JS_PATH);

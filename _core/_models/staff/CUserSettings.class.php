@@ -17,7 +17,17 @@ class CUserSettings extends CActiveModel {
             "dashboard_show_birthdays" => "Показывать дни рождения",
             "dashboard_show_messages" => "Показывать сообщения",
             "dashboard_show_all_tasks" => "Показывать все задачи",
-            "dashboard_check_messages" => "Проверять сообщения"
+            "dashboard_check_messages" => "Проверять сообщения",
+            "portal_input_size" => "Размер полей ввода"
+        );
+    }
+    public static function getInputSizes() {
+        return array(
+            "span5" => "5",
+            "span6" => "6",
+            "span7" => "7",
+            "span8" => "8",
+            "span9" => "9",
         );
     }
     public function isDashboardEnabled() {

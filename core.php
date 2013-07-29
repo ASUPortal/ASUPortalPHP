@@ -223,14 +223,7 @@
     define("TABLE_CORE_MODEL_FIELD_TRANSLATIONS", "core_model_field_translations");
     define("TABLE_CORE_VALIDATORS", "core_validators");
     define("TABLE_CORE_MODEL_FIELD_VALIDATORS", "core_model_field_validators");
-
-    // суффиксы таблиц доступа
-    define("ACL_ENTRIES", "_access_entries");
-    define("ACL_USERS", "_access_users");
-    define("ACL_ENTRY_USER", "1");
-    define("ACL_ENTRY_GROUP", "2");
-    define("ACL_LEVEL_READER", "1");
-    define("ACL_LEVEL_AUTHOR", "2");
+    define("TABLE_IND_PLAN_WORKTYPES", "spravochnik_vidov_rabot");
 
     // Типы участия на кафедре
     define("TYPE_PPS", "профессорско-преподавательский состав");
