@@ -56,6 +56,17 @@
         }
     }
     /**
+     * Дадим возможность группировать контроллеры по папками
+     */
+    $controllersDir = opendir(CORE_CWD.CORE_DS.'_core'.CORE_DS.'_controllers');
+    while (false !== ($dir = readdir($controllersDir))) {
+        if ($dir != "." && $dir != "..") {
+            if (is_dir(CORE_CWD.CORE_DS.'_core'.CORE_DS.'_controllers'.CORE_DS.$dir)) {
+                $import[] = CORE_CWD.CORE_DS.'_core'.CORE_DS.'_controllers'.CORE_DS.$dir.CORE_DS;
+            }
+        }
+    }
+    /**
      * Конфигурация всего приложения
      */
     $config = array(
