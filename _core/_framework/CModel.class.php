@@ -8,9 +8,6 @@
  */
 class CModel {
     private $_errors = null;
-    protected $_aclControlEnabled = false;
-    protected $_readers = null;
-    protected $_authors = null;
     private static $_thisObject = null;
     /**
      * Название класса
@@ -76,51 +73,6 @@ class CModel {
         foreach ($array as $key=>$value) {
             $this->$key = $value;
         }
-        /**
-         * Если модель поддерживает ACL, то пробуем получить из запроса
-         * читателей и редакторов. Если все хорошо, то сразу складываем
-         * их в соответствующие свойства.
-         */
-        if ($this->isACLEnabled()) {
-            if (is_array(CRequest::getArray("readers"))) {
-                $readers = CRequest::getArray("readers");
-                foreach ($readers["id"] as $key=>$value) {
-                    if (is_null($this->_readers)) {
-                        $this->_readers = new CArrayList();
-                    }
-                    if ($readers["type"][$key] == ACL_ENTRY_USER) {
-                        $user = CStaffManager::getUser($value);
-                        if (!is_null($user)) {
-                            $this->_readers->add($this->_readers->getCount(), $user);
-                        }
-                    } elseif ($readers["type"][$key] == ACL_ENTRY_GROUP) {
-                        $group = CStaffManager::getUserGroup($value);
-                        if (!is_null($group)) {
-                            $this->_readers->add($this->_readers->getCount(), $group);
-                        }
-                    }
-                }
-            }
-            if (is_array(CRequest::getArray("authors"))) {
-                $authors = CRequest::getArray("readers");
-                foreach ($authors["id"] as $key=>$value) {
-                    if (is_null($this->_authors)) {
-                        $this->_authors = new CArrayList();
-                    }
-                    if ($authors["type"][$key] == ACL_ENTRY_USER) {
-                        $user = CStaffManager::getUser($value);
-                        if (!is_null($user)) {
-                            $this->_authors->add($this->_authors->getCount(), $user);
-                        }
-                    } elseif ($authors["type"][$key] == ACL_ENTRY_GROUP) {
-                        $group = CStaffManager::getUserGroup($value);
-                        if (!is_null($group)) {
-                            $this->_authors->add($this->_authors->getCount(), $group);
-                        }
-                    }
-                }
-            }
-        }
     }
     /**
      * Правила валидации модели, например, проверки на обязательные поля
@@ -143,6 +95,7 @@ class CModel {
      * @return bool
      */
     public function validate() {
+        /*
         $rules = $this->validationRules();
 
         if (array_key_exists("required", $rules)) {
@@ -186,6 +139,55 @@ class CModel {
                         $dateArray = explode(".", $dateValue);
                         if (!checkdate($dateArray[1], $dateValue[0], $dateArray[2])) {
                             $this->getValidationErrors()->add($field, $error);
+                        }
+                    }
+                }
+            }
+        }
+        */
+        $rules = CCoreObjectsManager::getFieldValidators($this);
+        $labels = CCoreObjectsManager::getAttributeLabels($this);
+        foreach ($rules as $field=>$validators) {
+            foreach ($validators as $validator) {
+                if (is_object($validator)) {
+                    /**
+                     * Это новая система валидаторов
+                     */
+                    if (!$validator->run($this->$field)) {
+                        $error = str_replace("%name%", $labels[$field], $validator->getError());
+                        $this->getValidationErrors()->add($field, $error);
+                    }
+                } elseif (is_string($validator)) {
+                    /**
+                     * Это старая система валидаторов
+                     */
+                    if ($validator == "required") {
+                        if ($this->$field == "") {
+                            $error = str_replace("%name%", $labels[$field], ERROR_FIELD_REQUIRED);
+                            $this->getValidationErrors()->add($field, $error);
+                        }
+                    } elseif ($validator == "numeric") {
+                        if (!is_numeric($this->$field)) {
+                            $error = str_replace("%name%", $labels[$field], ERROR_FIELD_NUMERIC);
+                            $this->getValidationErrors()->add($field, $error);
+                        }
+                    } elseif ($validator == "selected") {
+                        if ($this->$field == 0) {
+                            $error = str_replace("%name%", $labels[$field], ERROR_FIELD_SELECTED);
+                            $this->getValidationErrors()->add($field, $error);
+                        }
+                    } elseif ($validator == "checkdate") {
+                        if ($this->$field != "") {
+                            $dateValue = $this->$field;
+                            $error = str_replace("%name%", $labels[$field], ERROR_FIELD_NOT_A_DATE);
+                            if (strtotime($dateValue) === false) {
+                                $this->getValidationErrors()->add($field, $error);
+                            } else {
+                                $dateArray = explode(".", $dateValue);
+                                if (!checkdate($dateArray[1], $dateArray[0], $dateArray[2])) {
+                                    $this->getValidationErrors()->add($field, $error);
+                                }
+                            }
                         }
                     }
                 }
@@ -240,30 +242,5 @@ class CModel {
         } else {
             return $name;
         }
-    }
-    /**
-     * Установить читателей документа
-     *
-     * @param CArrayList $readers
-     */
-    public function setReaders(CArrayList $readers) {
-        $this->_readers = $readers;
-    }
-
-    /**
-     * Установить редакторов документа
-     *
-     * @param CArrayList $authors
-     */
-    public function setAuthors(CArrayList $authors) {
-        $this->_authors = $authors;
-    }
-    /**
-     * Поддерживает ли данная модель работу с ACL
-     *
-     * @return bool
-     */
-    protected function isACLEnabled() {
-        return $this->_aclControlEnabled;
     }
 }

@@ -17,34 +17,42 @@
     });
 </script>
 
-<p>
+<div class="control-group">
     {CHtml::activeLabel("study_mark", $diplom)}
-    {CHtml::activeDropDownList("study_mark", $diplom, CTaxonomyManager::getMarksList())}
-    {CHtml::error("study_mark", $diplom)}
-</p>
+    <div class="controls">
+        {CHtml::activeDropDownList("study_mark", $diplom, CTaxonomyManager::getMarksList())}
+        {CHtml::error("study_mark", $diplom)}
+    </div>
+</div>
 
-<p>
+<div class="control-group">
     {CHtml::activeLabel("session_start", $diplom)}
-    {CHtml::activeTextField("session_start", $diplom, "session_start")}
-    {CHtml::error("session_start", $diplom)}
-</p>
+    <div class="controls">
+        {CHtml::activeTextField("session_start", $diplom, "session_start")}
+        {CHtml::error("session_start", $diplom)}
+    </div>
+</div>
 
-<p>
+<div class="control-group">
     {CHtml::activeLabel("session_end", $diplom)}
-    {CHtml::activeTextField("session_end", $diplom, "session_end")}
-    {CHtml::error("session_end", $diplom)}
-</p>
+    <div class="controls">
+        {CHtml::activeTextField("session_end", $diplom, "session_end")}
+        {CHtml::error("session_end", $diplom)}
+    </div>
+</div>
 
-<p>
+<div class="control-group">
     {CHtml::activeLabel("aspire_recomendation", $diplom)}
-    {CHtml::activeCheckBox("aspire_recomendation", $diplom)}
-    {CHtml::error("aspire_recomendation", $diplom)}
-</p>
+    <div class="controls">
+        {CHtml::activeCheckBox("aspire_recomendation", $diplom)}
+        {CHtml::error("aspire_recomendation", $diplom)}
+    </div>
+</div>
 
-<br>
-
-<p>
+<div class="control-group">
     {CHtml::activeLabel("protocol_2aspir_id", $diplom)}
-    {CHtml::activeDropDownList("protocol_2aspir_id", $diplom, CProtocolManager::getAllDepProtocolsList())}
-    {CHtml::error("protocol_2aspir_id", $diplom)}
-</p>
+    <div class="controls">
+        {CHtml::activeDropDownList("protocol_2aspir_id", $diplom, CProtocolManager::getAllDepProtocolsList())}
+        {CHtml::error("protocol_2aspir_id", $diplom)}
+    </div>
+</div>

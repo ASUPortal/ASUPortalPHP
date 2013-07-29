@@ -21,17 +21,6 @@ class CActiveModel extends CModel{
 
             $aRecord = new CActiveRecord($arr);
             $aRecord->setTable($this->_table);
-            /**
-             * Если модель поддерживает ACL, то заранее прописываем ей читателей
-             * и редакторов из числа установленных по умолчанию
-             */
-            if ($this->isACLEnabled()) {
-                $table = CACLManager::getACLTable($this->getTable());
-                if (!is_null($table)) {
-                    $this->setReaders($table->getDefaultReaders());
-                    $this->setAuthors($table->getDefaultAuthors());
-                }
-            }
         } else {
             /**
              * Заполняем публичные свойства объекта данными
@@ -46,87 +35,6 @@ class CActiveModel extends CModel{
         $this->_aRecord = $aRecord;
     }
 
-    /**
-     * Дополнительные отношения для работы с ACL
-     *
-     * @return array
-     */
-    private function getACLRelations() {
-        return array(
-            "readers" => array(
-                "relationPower" => RELATION_COMPUTED,
-                "storageProperty" => "_readers",
-                "relationFunction" => "getReaders"
-            ),
-            "authors" => array(
-                "relationPower" => RELATION_COMPUTED,
-                "storageProperty" => "_authors",
-                "relationFunction" => "getAuthors"
-            )
-        );
-    }
-
-    /**
-     * Объекты доступа, которые видят данную запись
-     *
-     * @return CArrayList|null
-     */
-    public function getReaders() {
-        if (is_null($this->_readers)) {
-            $this->_readers = new CArrayList();
-            if ($this->isACLEnabled()) {
-                if ($this->getId()) {
-                    foreach (CActiveRecordProvider::getWithCondition($this->getTable().ACL_ENTRIES, "object_id=".$this->getId()." AND level=1")->getItems() as $item) {
-                        // это пользователь
-                        if ($item->getItemValue("entry_type") == 1) {
-                            $entry = CStaffManager::getUser($item->getItemValue("entry_id"));
-                            if (!is_null($entry)) {
-                                $this->_readers->add($this->_readers->getCount(), $entry);
-                            }
-                            // это группа пользователей
-                        } elseif ($item->getItemValue("entry_type") == 2) {
-                            $entry = CStaffManager::getUserGroup($item->getItemValue("entry_id"));
-                            if (!is_null($entry)) {
-                                $this->_readers->add($this->_readers->getCount(), $entry);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return $this->_readers;
-    }
-
-    /**
-     * Объекты доступа, которые данную запись могут изменять
-     *
-     * @return CArrayList|null
-     */
-    public function getAuthors() {
-        if (is_null($this->_authors)) {
-            $this->_authors = new CArrayList();
-            if ($this->isACLEnabled()) {
-                if ($this->getId()) {
-                    foreach (CActiveRecordProvider::getWithCondition($this->getTable().ACL_ENTRIES, "object_id=".$this->getId()." AND level=2")->getItems() as $item) {
-                        // это пользователь
-                        if ($item->getItemValue("entry_type") == 1) {
-                            $entry = CStaffManager::getUser($item->getItemValue("entry_id"));
-                            if (!is_null($entry)) {
-                                $this->_authors->add($this->_authors->getCount(), $entry);
-                            }
-                            // это группа пользователей
-                        } elseif ($item->getItemValue("entry_type") == 2) {
-                            $entry = CStaffManager::getUserGroup($item->getItemValue("entry_id"));
-                            if (!is_null($entry)) {
-                                $this->_authors->add($this->_authors->getCount(), $entry);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return $this->_authors;
-    }
 
     /**
      * Идентификатор записи в таблице
@@ -177,91 +85,6 @@ class CActiveModel extends CModel{
             $this->setId(mysql_insert_id());
         } else {
             $this->updateModel();
-        }
-        /**
-         * Если модель с поддержкой ACL, то, если readers/authors установлены,
-         * обновляем их вместе с записью
-         */
-        if ($this->isACLEnabled()) {
-            $this->saveACLEntries();
-        }
-    }
-
-    /**
-     * Сохранение ACL записей. Выделил в отдельный метод чтобы можно
-     * было их обновлять без пересохранения самой записи
-     */
-    public function saveACLEntries() {
-        // если читатели или редакторы установлены, то удаляем все старые записи
-        if (!is_null($this->_readers) && !is_null($this->_authors)) {
-            $q = new C2Query();
-            $q->query("DELETE FROM ".$this->getTable().ACL_USERS." WHERE object_id=".$this->getId())->execute();
-            $q = new C2Query();
-            $q->query("DELETE FROM ".$this->getTable().ACL_ENTRIES." WHERE object_id=".$this->getId())->execute();
-        }
-        // сохраняем читателей документа
-        if (!is_null($this->_readers)) {
-            foreach ($this->_readers->getItems() as $entry) {
-                $model = new CActiveModel();
-                $model->getRecord()->setTable($this->getTable().ACL_ENTRIES);
-                $model->object_id = $this->getId();
-                $model->entry_type = $entry->getType();
-                $model->entry_id = $entry->getId();
-                $model->level = ACL_LEVEL_READER;
-                $model->save();
-            }
-            // получаем реальных пользователей
-            $users = new CArrayList();
-            foreach ($this->_readers->getItems() as $entry) {
-                if ($entry->getType() == ACL_ENTRY_USER) {
-                    $users->add($entry->getId(), $entry);
-                } elseif ($entry->getType() == ACL_ENTRY_GROUP) {
-                    foreach ($entry->getUsersInHierarchy()->getItems() as $user) {
-                        $users->add($user->getId(), $user);
-                    }
-                }
-            }
-            // сохраняем реальных пользователей
-            foreach ($users->getItems() as $user) {
-                $model = new CActiveModel();
-                $model->getRecord()->setTable($this->getTable().ACL_USERS);
-                $model->object_id = $this->getId();
-                $model->user_id = $user->getId();
-                $model->level = ACL_LEVEL_READER;
-                $model->save();
-            }
-        }
-        // сохраняем редакторов документа
-        if (!is_null($this->_authors)) {
-            foreach ($this->_authors->getItems() as $entry) {
-                $model = new CActiveModel();
-                $model->getRecord()->setTable($this->getTable().ACL_ENTRIES);
-                $model->object_id = $this->getId();
-                $model->entry_type = $entry->getType();
-                $model->entry_id = $entry->getId();
-                $model->level = ACL_LEVEL_AUTHOR;
-                $model->save();
-            }
-            // получаем реальных пользователей
-            $users = new CArrayList();
-            foreach ($this->_authors->getItems() as $entry) {
-                if ($entry->getType() == ACL_ENTRY_USER) {
-                    $users->add($entry->getId(), $entry);
-                } elseif ($entry->getType() == ACL_ENTRY_GROUP) {
-                    foreach ($entry->getUsersInHierarchy()->getItems() as $user) {
-                        $users->add($user->getId(), $user);
-                    }
-                }
-            }
-            // сохраняем реальных пользователей
-            foreach ($users->getItems() as $user) {
-                $model = new CActiveModel();
-                $model->getRecord()->setTable($this->getTable().ACL_USERS);
-                $model->object_id = $this->getId();
-                $model->user_id = $user->getId();
-                $model->level = ACL_LEVEL_READER;
-                $model->save();
-            }
         }
     }
     /**
@@ -362,10 +185,6 @@ class CActiveModel extends CModel{
 
         // поле необычное.
         $relations = $this->relations();
-        // добивалка для моделей с поддержкой ACL
-        if ($this->isACLEnabled()) {
-            $relations = array_merge($relations, $this->getACLRelations());
-        }
         if (array_key_exists($name, $relations)) {
             $relation = $relations[$name];
 

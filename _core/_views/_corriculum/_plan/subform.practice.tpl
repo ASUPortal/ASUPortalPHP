@@ -1,4 +1,4 @@
-<table width="100%" cellpadding="2" cellspacing="0" border="1">
+<table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th>#</th>
         <th>&nbsp;</th>
@@ -9,7 +9,7 @@
     {foreach $corriculum->practices->getItems() as $p}
     <tr>
         <td>{counter}</td>
-        <td><a href="#" onclick="if (confirm('Действительно удалить практику {if !is_null($p->type)}{$p->type->getValue()}{/if}')) { location.href='practices.php?action=del&id={$p->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+        <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить практику {if !is_null($p->type)}{$p->type->getValue()}{/if}')) { location.href='practices.php?action=del&id={$p->id}'; }; return false;"></a></td>
         <td>
             {if !is_null($p->type)}
                 <a href="practices.php?action=edit&id={$p->getId()}">{$p->type->getValue()}</a>

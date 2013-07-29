@@ -77,7 +77,7 @@ class CHtml {
                 $values[0] = "- Выберите из списка (".count($values).") -";
             }
         }
-        echo '<select data-dojo-type="dijit/form/Select" style="width: 30em;  " name="'.$name.'" '.$inline.'>';
+        echo '<select style="width: 30em;  " name="'.$name.'" '.$inline.'>';
         // часто выбор делается из словаря, так что преобразуем объекты CTerm к строке
         foreach ($values as $key=>$value) {
             if (is_object($value)) {
@@ -132,13 +132,9 @@ class CHtml {
         }
         $field .= "[".$name."]";
         $fieldRequired = false;
-        if (array_key_exists("selected", $model->getValidationRules())) {
-            $rules = $model->getValidationRules();
-            $required = $rules["selected"];
-            if (in_array($name, $required)) {
-                $html .= " required";
-                $fieldRequired = true;
-            }
+        $validators = CCoreObjectsManager::getFieldValidators($model);
+        if (array_key_exists($name, $validators)) {
+            $fieldRequired = true;
         }
         self::dropDownList($field, $values, $model->$name, $id, $class, $html);
         if ($fieldRequired) {
@@ -230,13 +226,18 @@ class CHtml {
         if ($id != "") {
             $inline .= ' id="'.$id.'"';
         }
+        if ($class == "") {
+            $class = "span5";
+        } else {
+            $class .= " span5";
+        }
         if ($class != "") {
             $inline .= ' class="'.$class.'"';
         }
         if ($html != "") {
             $inline .= $html;
         }
-        echo '<input data-dojo-type="dijit/form/TextBox" style="width: 30em; " type="text" name="'.$name.'" value="'.htmlspecialchars($value).'" '.$inline.'>';
+        echo '<input type="text" name="'.$name.'" value="'.htmlspecialchars($value).'" '.$inline.'>';
     }
     /**
      * Активное текстовое поле
@@ -270,13 +271,9 @@ class CHtml {
         }
         $field .= "[".$name."]";
         $fieldRequired = false;
-        if (array_key_exists("required", $model->getValidationRules())) {
-            $rules = $model->getValidationRules();
-            $required = $rules["required"];
-            if (in_array($name, $required)) {
-                $html .= " required";
-                $fieldRequired = true;
-            }
+        $validators = CCoreObjectsManager::getFieldValidators($model);
+        if (array_key_exists($name, $validators)) {
+            $fieldRequired = true;
         }
         self::textField($field, $model->$name, $id, $class, $html);
         if ($fieldRequired) {
@@ -372,7 +369,7 @@ class CHtml {
      * @param $for
      */
     public static function label($text, $for) {
-        echo '<label for="'.$for.'">'.$text.'</label>';
+        echo '<label for="'.$for.'" class="control-label" >'.$text.'</label>';
     }
     /**
      * Метка, привязанная к модели
@@ -393,8 +390,8 @@ class CHtml {
             $name = substr($name, 0, strlen($name) - 1);
             $model = $model->$modelName;
         }
-        if (array_key_exists($name, $model->attributeLabels())) {
-            $labels = $model->attributeLabels();
+        $labels = CCoreObjectsManager::getAttributeLabels($model);
+        if (array_key_exists($name, $labels)) {
             $field = $model::getClassName()."[".$name."]";
             self::label($labels[$name], $field);
         } else {
@@ -408,8 +405,44 @@ class CHtml {
      * @static
      * @param $value
      */
-    public static function submit($value) {
-        echo '<input type="submit" data-dojo-type="dijit/form/Button" label="'.$value.'" type="submit" value="'.$value.'">';
+    public static function submit($value, $canChooseContinue = true) {
+        if ($canChooseContinue) {
+            ?>
+            <script>
+                jQuery(document).ready(function(){
+                    jQuery("#_saveAndContinue").click(function(){
+                        var form = jQuery(this).parents("form:first");
+                        jQuery("input[name=_continueEdit]").val("1");
+                        jQuery(form).submit();
+                        return false;
+                    });
+                    jQuery("#_saveAndBack").click(function(){
+                        var form = jQuery(this).parents("form:first");
+                        jQuery("input[name=_continueEdit]").val("0");
+                        jQuery(form).submit();
+                        return false;
+                    });
+                });
+            </script>
+            <input type="hidden" name="_continueEdit" value="1">
+            <div class="btn-group">
+                <button class="btn btn-primary"><?php echo $value; ?></button>
+                <button class="btn dropdown-toggle btn-primary" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#" id="_saveAndContinue">Сохранить и продолжить</a>
+                    </li>
+                    <li>
+                        <a href="#" id="_saveAndBack">Сохранить и к списку</a>
+                    </li>
+                </ul>
+            </div>
+        <?php
+        } else {
+            echo '<input type="submit" class="btn btn-primary" label="'.$value.'" type="submit" value="'.$value.'">';
+        }
     }
     /**
      * Большое поле для ввода
@@ -429,13 +462,18 @@ class CHtml {
         if ($id != "") {
             $inline .= ' id="'.$id.'"';
         }
+        if ($class == "") {
+            $class = "span5";
+        } else {
+            $class .= " span5";
+        }
         if ($class != "") {
             $inline .= ' class="'.$class.'"';
         }
         if ($html != "") {
             $inline .= $html;
         }
-        echo '<textarea data-dojo-type="dijit/form/Textarea" style="width: 362px; height: 150px; " name="'.$name.'" '.$inline.'>'.$value.'</textarea>';
+        echo '<textarea name="'.$name.'" '.$inline.'>'.$value.'</textarea>';
     }
     public static function checkBox($name, $value, $checked = false, $id = "", $class = "", $html = "") {
         if ($id == "") {
@@ -544,7 +582,7 @@ class CHtml {
     }
     public static function error($name, CModel $model) {
         if ($model->getValidationErrors()->hasElement($name)) {
-            echo "<p class=\"error\">".$model->getValidationErrors()->getItem($name)."</p>";
+            echo '<span class="help-inline">'.$model->getValidationErrors()->getItem($name)."</span>";
         }
     }
     public static function activeMultiSelect($name, CModel $model, $values = array()) {
@@ -565,49 +603,9 @@ class CHtml {
             $field .= "[".$submodelName."]";
         }
         $field .= "[".$name."][]";
-        if (USE_DOJO) {
-            /**
-             * Новая версия на dojo asu/asuMultiSelect
-             *
-             * Состоит из двух частей - выбиралки из списка и
-             * списка выбранных значений
-             */
-            echo '<script>
-                require(["asu/asuMultiSelect"]);
-            </script>';
-            echo '<div data-dojo-type="asu.asuMultiSelect" data-dojo-props="fieldName: \''.$field.'\'">';
-            /**
-             * Список со значениями для поиска
-             */
-            echo '<tr><td colspan="2">';
-            echo '<select id="_selector" style="width: 30em; ">';
-            foreach ($values as $key=>$value) {
-                echo '<option value="'.$key.'">'.$value.'</option>';
-            }
-            echo '</select>';
-            /**
-             * Список выбранных значений
-             */
-            echo '<select id="_display" multiple size="6" style="width: 30em; margin-left: 200px; ">';
-            foreach ($model->$name->getItems() as $f) {
-                echo '<option value="'.$f->getId().'">'.$f->getName().'</option>';
-            }
-            echo '</select>';
-            /**
-             * Удалялка
-             */
-            echo '<span id="_deleter" style="cursor: pointer; "><img src="'.WEB_ROOT.'images/todelete.png"></span>';
-            /**
-             * Список значений, которые будут отданы на сервер
-             */
-            foreach ($model->$name->getItems() as $f) {
-                echo '<input type="hidden" name="'.$field.'" value="'.$f->getId().'">';
-            }
-            echo '</div>';
-        } else {
-            // дописываем скрипт для мультивыбора
-            if (!self::$_multiselectInit) {
-                echo '
+        // дописываем скрипт для мультивыбора
+        if (!self::$_multiselectInit) {
+            echo '
                 <script>
                     jQuery(document).ready(function(){
                         jQuery(".multiselectClonable").change(function(){
@@ -625,23 +623,22 @@ class CHtml {
                     });
                 </script>
                 ';
-                self::$_multiselectInit = true;
-            }
-            echo '<div style="margin-left: 200px; ">';
-            foreach ($model->$name->getItems() as $f) {
-                // отрисовываем поле со значением
-                echo '<span>';
-                self::dropDownList($field, $values, $f->getId());
-                echo '&nbsp;&nbsp; <img src="'.WEB_ROOT.'images/design/mn.gif" style="cursor: pointer; " onclick="jQuery(this).parent().remove(); return false;" />';
-                echo '<br /></span>';
-            }
-            // добавляем последний невыбранным
-            echo '<span>';
-            self::dropDownList($field, $values, null, "", "multiselectClonable");
-            echo '&nbsp;&nbsp; <img src="'.WEB_ROOT.'images/design/mn.gif" style="cursor: pointer; display: none; " onclick="jQuery(this).parent().remove(); return false;" />';
-            echo '<br /></span>';
-            echo '</div>';
+            self::$_multiselectInit = true;
         }
+        echo '<div style="margin-left: 200px; ">';
+        foreach ($model->$name->getItems() as $f) {
+            // отрисовываем поле со значением
+            echo '<span>';
+            self::dropDownList($field, $values, $f->getId());
+            echo '&nbsp;&nbsp; <img src="'.WEB_ROOT.'images/design/mn.gif" style="cursor: pointer; " onclick="jQuery(this).parent().remove(); return false;" />';
+            echo '<br /></span>';
+        }
+        // добавляем последний невыбранным
+        echo '<span>';
+        self::dropDownList($field, $values, null, "", "multiselectClonable");
+        echo '&nbsp;&nbsp; <img src="'.WEB_ROOT.'images/design/mn.gif" style="cursor: pointer; display: none; " onclick="jQuery(this).parent().remove(); return false;" />';
+        echo '<br /></span>';
+        echo '</div>';
     }
     public static function activeSelect($name, CModel $model, $values = array(), $isMultiple = false, $size = 5, $id = "") {
         echo '<select name="'.$model::getClassName().'['.$name.'][]" size="'.$size.'" ';
@@ -710,8 +707,7 @@ class CHtml {
         echo '</div>';
     }
     public static function paginator(CPaginator $paginator, $action) {
-        echo '<div class="asu_paginator">';
-        echo '<span>Страницы: </span>';
+        echo '<div class="pagination"><ul>';
         foreach ($paginator->getPagesList($action) as $page=>$link) {
         	if (CRequest::getString("order") !== "") {
         		$link = $link."&order=".CRequest::getString("order");
@@ -722,11 +718,19 @@ class CHtml {
             if (CRequest::getString("filter") !== "") {
                 $link = $link."&filter=".CRequest::getString("filter");
             }
-            echo '<span style="padding: 5px; "><a href="'.$link.'">'.$page.'</a></span>';
+            $toCheck = 1;
+            if (CRequest::getInt("page") !== 0) {
+                $toCheck = CRequest::getInt("page");
+            }
+            if ($toCheck == $page) {
+                echo '<li class="active"><a href="'.$link.'">'.$page.'</a></li>';
+            } else {
+                echo '<li><a href="'.$link.'">'.$page.'</a></li>';
+            }
         }
+        echo '</ul></div>';
         echo '<span>Текущая страница: '.$paginator->getCurrentPageNumber().' </span>';
         echo '<span>Всего: '.$paginator->getPagesCount().'</span>';
-        echo '</div>';
     }
     public static function helpForCurrentPage() {
         if (!is_null(CHelpManager::getHelpForCurrentPage())) {
@@ -734,8 +738,12 @@ class CHtml {
         }
     }
     public static function errorSummary(CModel $model) {
-        foreach ($model->getValidationErrors()->getItems() as $error) {
-            echo "<p class=\"error\">".$error."</p>";
+        if ($model->getValidationErrors()->getCount() > 0) {
+            echo '<div class="alert alert-error">';
+            foreach ($model->getValidationErrors()->getItems() as $error) {
+                echo "<p>".$error."</p>";
+            }
+            echo '</div>';
         }
     }
     public static function activeUpload($name, CModel $model) {
@@ -817,7 +825,12 @@ class CHtml {
         if (is_null($model)) {
             return "";
         }
-    	$label = $model->getAttributeLabel($field);
+        $labels = CCoreObjectsManager::getAttributeLabels($model);
+        if (array_key_exists($field, $labels)) {
+            $label = $labels[$field];
+        } else {
+            $label = $field;
+        }
     	if (CRequest::getString("action") !== "") {
     		$actions[] = "action=".CRequest::getString("action");
     	}

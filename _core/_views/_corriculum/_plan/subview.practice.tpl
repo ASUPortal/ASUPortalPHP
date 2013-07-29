@@ -1,4 +1,4 @@
-<table width="100%" cellpadding="2" cellspacing="0" border="1">
+<table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th colspan="3">Практика и итоговая государственная аттестация</th>
     </tr>

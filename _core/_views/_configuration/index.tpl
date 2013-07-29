@@ -5,7 +5,7 @@
 
     {CHtml::helpForCurrentPage()}
 
-    <table border="1" cellpadding="2" cellspacing="0">
+    <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th width="5"></th>
             <th width="5">#</th>
@@ -15,7 +15,7 @@
         </tr>
         {foreach $settings->getItems() as $setting}
         <tr>
-            <td><a href="#" onclick="if (confirm('Действительно удалить настройку {$setting->title}')) { location.href='?action=delete&id={$setting->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить настройку {$setting->title}')) { location.href='?action=delete&id={$setting->id}'; }; return false;"></a></td>
             <td>{counter}</td>
             <td><a href="?action=edit&id={$setting->id}">{$setting->title}</a></td>
             <td>{$setting->alias}</td>

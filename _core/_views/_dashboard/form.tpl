@@ -4,43 +4,53 @@
     });
 </script>
 
-<form action="index.php" method="post">
+<form action="index.php" method="post" class="form-horizontal">
 {CHtml::hiddenField("action", "save")}
 {CHtml::activeHiddenField("id", $item)}
 {CHtml::activeHiddenField("user_id", $item)}
 
-    <p>{CHtml::errorSummary($item)}</p>
+    {CHtml::errorSummary($item)}
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("title", $item)}
-        {CHtml::activeTextField("title", $item)}
-        {CHtml::error("title", $item)}
-    </p>
+        <div class="controls">
+            {CHtml::activeTextField("title", $item)}
+            {CHtml::error("title", $item)}
+        </div>
+    </div>
     
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("link", $item)}
-        {CHtml::activeTextField("link", $item)}
-        {CHtml::error("link", $item)}
-    </p>   
+        <div class="controls">
+            {CHtml::activeTextField("link", $item)}
+            {CHtml::error("link", $item)}
+        </div>
+    </div>
     
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("icon", $item)}
-        <select name="CDashboardItem[icon]" id="icon_selector">
-            {foreach $icons->getItems() as $file}
-                <option value="{$file}" data-image="{$web_root}images/{$icon_theme}/16x16/{$file}"
-                {if $item->icon == $file}selected{/if}>{$file}</option>
-            {/foreach}
-        </select>
-        {CHtml::error("icon", $item)}
-    </p> 
+        <div class="controls">
+            <select name="CDashboardItem[icon]" id="icon_selector">
+                {foreach $icons->getItems() as $file}
+                    <option value="{$file}" data-image="{$web_root}images/{$icon_theme}/16x16/{$file}"
+                    {if $item->icon == $file}selected{/if}>{$file}</option>
+                {/foreach}
+            </select>
+            {CHtml::error("icon", $item)}
+        </div>
+    </div>
     
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("parent_id", $item)}
-        {CHtml::activeDropDownList("parent_id", $item, $parents->getItems())}
-        {CHtml::error("parent_id", $item)}
-    </p>
+        <div class="controls">
+            {CHtml::activeDropDownList("parent_id", $item, $parents->getItems())}
+            {CHtml::error("parent_id", $item)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
+        <div class="controls">
         {CHtml::submit("Сохранить")}
-    </p>
+        </div>
+    </div>
 </form>

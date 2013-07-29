@@ -40,30 +40,21 @@
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_framework'.CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_mailer'.CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."help".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."corriculum".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."menu".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."staff".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."taxonomy".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."calendar".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."news".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."state_examination".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."state_attestation".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."rating".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."examination".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."print".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."gradebook".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."acl".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."dashboard".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."configuration".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."library".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."grant".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."page".CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS."mail".CORE_DS,
         SMARTY_DIR,
         PHPMAILER_DIR,
         PRINT_ENGINE_WORD
     );
+    /**
+     * Добавляем все папки моделей
+     */
+    $modelsDir = opendir(CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models');
+    while (false !== ($dir = readdir($modelsDir))) {
+        if ($dir != "." && $dir != "..") {
+            if (is_dir(CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS.$dir)) {
+                $import[] = CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS.$dir.CORE_DS;
+            }
+        }
+    }
     /**
      * Конфигурация всего приложения
      */
@@ -216,6 +207,11 @@
     define("TABLE_SAB_COMMISSION_DIPLOMS", "sab_commission_diploms");
     define("TABLE_SAB_PERSON_ORDERS", "sab_person_orders");
     define("TABLE_RATES", "pl_rates");
+    define("TABLE_CORE_MODELS", "core_models");
+    define("TABLE_CORE_MODEL_FIELDS", "core_model_fields");
+    define("TABLE_CORE_MODEL_FIELD_TRANSLATIONS", "core_model_field_translations");
+    define("TABLE_CORE_VALIDATORS", "core_validators");
+    define("TABLE_CORE_MODEL_FIELD_VALIDATORS", "core_model_field_validators");
 
     // суффиксы таблиц доступа
     define("ACL_ENTRIES", "_access_entries");

@@ -36,7 +36,7 @@ class CBaseController {
         }
 
         // подключаем jQuery по умолчанию
-        $this->addJSInclude("_core/jquery-1.7.2.min.js");
+        $this->addJSInclude(CSettingsManager::getSettingValue("jquery_path"));
         $this->addJSInclude("_core/jquery.cookie.js");
         $this->addJSInlineInclude("var web_root = '".WEB_ROOT."';");
         // ядреные модули
@@ -78,12 +78,14 @@ class CBaseController {
             }
         }
         /**
-         * Почему я не сделал этого сразу?
+         * AJAX для портала
          */
-        define("USE_DOJO", $this->_useDojo);
-        $this->setData("_dojo_path", CSettingsManager::getSettingValue("dojo_js_path"));
-        $this->setData("_dojo_theme", CSettingsManager::getSettingValue("dojo_css_theme"));
-        $this->setData("_dojo_enabled", USE_DOJO);
+        $this->addJSInclude("_core/jquery.ajax.js");
+        /**
+         * Bootstrap для красоты
+         */
+        //$this->addCSSInclude("_core/bootstrap/css/bootstrap.css");
+        $this->addJSInclude("_core/bootstrap/js/bootstrap.js");
 
         $action = "action".$this->_action;
         if (method_exists($this, $action)) {
@@ -251,14 +253,7 @@ class CBaseController {
      * @param $url
      */
     public function redirect($url) {
-        if (!headers_sent()) {
-            header("location: ".$url);
-        } else {
-            echo '
-                <script>
-                    window.location.href="'.$url.'";
-                </script>';
-        }
+        header("location: ".$url);
     }
     /**
      * Переадресация на страницу "Недостаточно прав"
@@ -297,6 +292,7 @@ class CBaseController {
             // постоянно нужная ерунда типа управлялки меню,
             // нет другого места, откуда ее можно хорошо подцепить
             $this->addCSSInclude("_core/core.css");
+            /*
             $this->addCSSInclude("_modules/_sdmenu/sdmenu.css");
             $this->addJSInclude("_modules/_sdmenu/sdmenu.js");
             $this->addJQInlineInclude('
@@ -306,6 +302,7 @@ class CBaseController {
                     myMenu.init();
                 }
             ');
+            */
 
         }
         return $this->_smarty;
@@ -448,5 +445,14 @@ class CBaseController {
     	}
     	$v->add($js, $js);
     	$this->getJSIEOnly()->add($version, $v);
+    }
+
+    /**
+     * Продолжить редактирование
+     *
+     * @return bool
+     */
+    public function continueEdit() {
+        return (CRequest::getInt("_continueEdit") == "1");
     }
 }

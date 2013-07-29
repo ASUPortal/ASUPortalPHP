@@ -61,7 +61,7 @@
 <table border="0" width="100%" class="tableBlank">
     <tr>
         <td valign="top">
-            <form>
+            <form class="form-search">
                 <p>
                     <label for="group">Группа</label>
                     {CHtml::dropDownList("group", $groups, $selectedGroup, "group")}
@@ -87,13 +87,13 @@
         </td>
         <td valign="top" width="200px">
             <p>
-                <input type="text" id="search" style="width: 100%; " placeholder="Поиск">
+                <input type="text" id="search" class="input-medium search-query" placeholder="Поиск">
             </p>
         </td>
     </tr>
 </table>
 
-    <table border="1" cellpadding="2" cellspacing="0">
+    <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th></th>
             <th>#</th>
@@ -108,7 +108,7 @@
         {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $students->getItems() as $student}
         <tr>
-            <td><a href="#" onclick="if (confirm('Действительно удалить стедунта {$student->fio}')) { location.href='?action=delete&id={$student->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить стедунта {$student->fio}')) { location.href='?action=delete&id={$student->id}'; }; return false;"></a></td>
             <td>{counter}</td>
             <td><a href="?action=edit&id={$student->getId()}">{$student->getName()}</a></td>
             <td>{$student->stud_num}</td>

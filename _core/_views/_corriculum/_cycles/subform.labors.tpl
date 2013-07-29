@@ -16,7 +16,7 @@
                 {$discipline->ordering}
             {/if}
         </td>
-        <td><a href="#" onclick="if (confirm('Действительно удалить дисциплину {if !is_null($discipline->discipline)}{$discipline->discipline->getValue()}{/if}')) { location.href='disciplines.php?action=del&id={$discipline->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+        <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить дисциплину {if !is_null($discipline->discipline)}{$discipline->discipline->getValue()}{/if}')) { location.href='disciplines.php?action=del&id={$discipline->id}'; }; return false;"></a></td>
         <td>
             {if !is_null($discipline->discipline)}
                 {for $i=1 to $level}
@@ -42,7 +42,7 @@
     </tr>
 {/function}
 
-<table width="100%" cellpadding="2" cellspacing="0" border="1">
+<table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th rowspan="2">&nbsp;</th>
         <th rowspan="2">#</th>

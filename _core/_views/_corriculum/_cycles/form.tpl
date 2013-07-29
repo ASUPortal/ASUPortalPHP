@@ -1,27 +1,35 @@
-<form action="cycles.php" method="post">
+<form action="cycles.php" method="post" class="form-horizontal">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $cycle)}
     {CHtml::activeHiddenField("corriculum_id", $cycle)}
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("title", $cycle)}
-        {CHtml::activeTextField("title", $cycle)}
-        {CHtml::error("title", $cycle)}
-    </p>
+        <div class="controls">
+            {CHtml::activeTextField("title", $cycle)}
+            {CHtml::error("title", $cycle)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("title_abbreviated", $cycle)}
-        {CHtml::activeTextField("title_abbreviated", $cycle)}
-        {CHtml::error("title_abbreviated", $cycle)}
-    </p>
+        <div class="controls">
+            {CHtml::activeTextField("title_abbreviated", $cycle)}
+            {CHtml::error("title_abbreviated", $cycle)}
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("number", $cycle)}
-        {CHtml::activeTextField("number", $cycle)}
-        {CHtml::error("number", $cycle)}
-    </p>
+        <div class="controls">
+            {CHtml::activeTextField("number", $cycle)}
+            {CHtml::error("number", $cycle)}
+        </div>
+    </div>
 
-        <p>
-    {CHtml::submit("Сохранить")}
-    </p>
+    <div class="control-group">
+        <div class="controls">
+        {CHtml::submit("Сохранить")}
+        </div>
+    </div>
 </form>

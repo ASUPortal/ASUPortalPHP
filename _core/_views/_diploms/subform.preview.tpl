@@ -1,4 +1,4 @@
-<table cellpadding="0" cellspacing="0" border="1" width="100%">
+<table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th>#</th>
         <th>&nbsp;</th>
@@ -10,7 +10,7 @@
     {foreach $diplom->previews->getItems() as $preview}
         <tr>
             <td>{counter}</td>
-            <td><a href="#" onclick="if (confirm('Действительно удалить предзащиту от {$preview->getPreviewDate()}')) { location.href='previews.php?action=delete&id={$preview->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить предзащиту от {$preview->getPreviewDate()}')) { location.href='previews.php?action=delete&id={$preview->id}'; }; return false;"></a></td>
             <td>
                 <a href="previews.php?action=edit&id={$preview->getId()}">
                     {$preview->getPreviewDate()}

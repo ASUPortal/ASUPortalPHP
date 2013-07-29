@@ -43,7 +43,7 @@
         <!-- Распределение по видам занятий -->
     </tr>
 {/function}
-<table width="100%" cellpadding="0" cellspacing="0" border="1">
+<table class="table table-striped table-bordered table-hover table-condensed">
     <thead>
     <tr>
         <td rowspan="2">Цикл</td>

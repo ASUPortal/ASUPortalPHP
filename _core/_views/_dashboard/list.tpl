@@ -3,7 +3,7 @@
 {block name="asu_center"}
 <h2>Элементы рабочего стола</h2>
 
-<table border="1" cellpadding="2" cellspacing="0">
+<table class="table table-striped table-bordered table-hover table-condensed">
 	<tr>
 		<th width="5"></th>
 		<th width="5">#</th>
@@ -12,7 +12,7 @@
 	</tr>
 	{foreach $items->getItems() as $item}
 	<tr>
-		<td><a href="#" onclick="if (confirm('Действительно удалить ссылку {$item->title}')) { location.href='?action=delete&id={$item->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+		<td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить ссылку {$item->title}')) { location.href='?action=delete&id={$item->id}'; }; return false;"></a></td>
 		<td>{counter}</td>
 		<td>
 			{if ($item->icon == "")}
@@ -25,7 +25,7 @@
 	</tr>
 		{foreach $item->children->getItems() as $child}
 		<tr>
-			<td><a href="#" onclick="if (confirm('Действительно удалить ссылку {$child->title}')) { location.href='?action=delete&id={$child->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+			<td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить ссылку {$child->title}')) { location.href='?action=delete&id={$child->id}'; }; return false;"></a></td>
 			<td>{counter}</td>
 			<td>&nbsp;</td>
 			<td>- <a href="?action=edit&id={$child->id}">{$child->title}</a></td>

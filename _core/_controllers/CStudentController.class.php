@@ -155,7 +155,11 @@ class CStudentController extends CBaseController {
         $student->setAttributes(CRequest::getArray(CStudent::getClassName()));
         if ($student->validate()) {
             $student->save();
-            $this->redirect("?action=index");
+            if ($this->continueEdit()) {
+                $this->redirect("?action=edit&id=".$student->getId());
+            } else {
+                $this->redirect("?action=index");
+            }
             return true;
         }
         $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");

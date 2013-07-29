@@ -1,15 +1,19 @@
 {function name=menuItemsAsListWithCount level=0}
-<ul class="level{$level}">
+<ul class="{if $level == 0}nav{else}dropdown-menu{/if}">
     {foreach $data as $entry}
         {if ($entry->getChilds()->getCount() > 0)}
-            <li>
-                <a href="{$entry->getLink()|htmlspecialchars}"><strong>{$entry->getName()|htmlspecialchars}</strong></a> ({$entry->getChilds()->getCount()})
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="{$entry->getLink()|htmlspecialchars}">{$entry->getName()|htmlspecialchars}</a>
                 {call name=menuItemsAsListWithCount data=$entry->getChilds()->getItems() level=$level+1}
             </li>
         {else}
             {if $level > 0 || $entry->getId() == 200000}
             <li>
-                <a href="{$entry->getLink()|htmlspecialchars}"><strong>{$entry->getName()|htmlspecialchars}</strong></a>
+                {if {$entry->getName()} == "<hr />"}
+                    <a class="divider"></a>
+                {else}
+                <a href="{$entry->getLink()|htmlspecialchars}">{$entry->getName()|htmlspecialchars}</a>
+                {/if}
             </li>
             {/if}
         {/if}
@@ -17,7 +21,8 @@
 </ul>
 {/function}
 
-<div id="adminMenu">
-    {include file="_menumanager/menu.mainWapMenu.tpl"}
-    {call name=menuItemsAsListWithCount data=CMenuManager::getMenu("admin_menu")->getMenuPublishedItemsInHierarchy()->getItems()}
+<div class="navbar">
+    <div class="navbar-inner">
+        {call name=menuItemsAsListWithCount data=CMenuManager::getMenu("admin_menu")->getMenuPublishedItemsInHierarchy()->getItems()}
+    </div>
 </div>

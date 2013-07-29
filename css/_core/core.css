@@ -1,9 +1,8 @@
 body {
-    font-family: tahoma;
-    font-size: 12px;
+
     padding: 0px;
     margin: 0px;
-    background: #ffffaa;
+    background: #ffffff;
 }
 
 .base_wrapper {
@@ -11,17 +10,15 @@ body {
     left: 0px;
     position: relative;
     width: auto;
-    margin-left: 10px;
-    margin-right: 10px;
     background: #ffffff;
 }
 
 .asu_header {
     position: relative;
-    height: 90px;
+    height: 93px;
     background: #0000cc;
     background-image: url("../../_themes/blue/images/head.gif");
-    border-bottom: 3px solid #ffffff;
+    border-bottom: 5px solid #ffffff;
     width: 100%;
 }
 
@@ -34,13 +31,8 @@ body {
 
 .asu_header_ugatu_logo {
     float: right;
-    background-image: url("../../_themes/blue/images/right_logo.gif");
-    height: 93px;
-    width: 190px;
-}
-
-.asu_header_content_container {
-    margin-left: 152px;
+    background-image: url("../../_themes/blue/images/head.gif");
+    background-repeat: repeat-x;
 }
 
 .asu_header_content {
@@ -70,10 +62,6 @@ body {
     padding: 5px;
 }
 
-.asu_center_container {
-    margin-left: 210px;
-}
-
 .center_no_menu {
     margin-left: 55px;
 }
@@ -88,17 +76,6 @@ body {
 
 .asu_hidemenu img {
     cursor: pointer;
-}
-
-.asu_center {
-    padding: 5px;
-    margin-right: 80px;
-}
-
-.asu_right {
-    width: 75px;
-    padding: 5px;
-    overflow: hidden;
 }
 
 .asu_right p {
@@ -146,17 +123,6 @@ form p input, form p select {
     width: 30em;
 }
 
-ul.ul-input {
-    width: 340px;
-    padding: 0px;
-    margin: 0px;
-    border: 1px solid #cccccc;
-}
-
-ul.tagit li.tagit-choice {
-    border: 1px solid #0000ff;
-}
-
 form p textarea {
     width: 350px;
     height: 150px;
@@ -191,130 +157,6 @@ form p input[type="submit"] {
     padding: 0px;
     font-weight: normal;
     width: 75px;
-}
-
-#adminMenu {
-    display: block;
-    height: 20px;
-    width: auto;
-    padding: 0px;
-    margin: 0px;
-}
-
-#adminMenu ul {
-    list-style-type: none;
-    padding: 0px;
-    margin: 0px;
-}
-
-#adminMenu ul.level0 li{
-    list-style-type: none;
-    display: block;
-    float: left;
-    padding: 5px;
-    background:  #EFEFFF;
-}
-
-#adminmenu ul li {
-    list-style-type: none;
-    display: block;
-    float: left;
-    padding: 5px;
-    background:  #EFEFFF;
-}
-
-#adminMenu ul li ul{
-    border: 1px solid black;
-    display: none;
-    position: absolute;
-    margin-top: 5px;
-    margin-left: -5px;
-    z-index: 1;
-}
-
-#adminMenu ul li ul li {
-    float: none;
-}
-
-#adminMenu ul li ul:hover,
-#adminMenu ul li ul li:hover {
-    display: block; 
-}
-
-#adminMenu ul li:hover > ul {
-    display: block;
-}
-
-#adminMenu ul.level0 li ul.level1 {
-    border: 1px solid black;
-    display: none;
-    position: absolute;
-    margin-top: 5px;
-    margin-left: -5px;
-}
-#adminMenu ul.level0 li ul.level1 li {
-    float: none;
-}
-
-#adminMenu ul.level0 li ul.level1:hover,
-#adminMenu ul.level0 li ul.level1 li:hover {
-    display: block;
-}
-#adminMenu ul.level0 li:hover > ul.level1 {
-    display: block;
-}
-
-table {
-    font-family: tahoma;
-    font-size: 12px;
-    margin:10px 0pt 15px;
-    width: 100%;
-    text-align: left;
-}
-
-table img {
-	border: none;
-}
-
-table th {
-    background-color: #ffffff;
-    padding: 5px;
-}
-
-table td {
-    padding: 1px;
-}
-
-table tr:nth-child(2n+1) {
-    background: #DFEFFF;
-}
-table tr:nth-child(2n) {
-    background: #99D1FF;
-}
-
-table.dijit tr {
-    background: none;
-}
-
-table input {
-    width: auto;
-    height: 20px;
-}
-
-table.noStyle tr {
-    background: none;
-}
-
-table.tableBlank {
-    background: none;
-}
-
-table.tableBlank tr {
-    background: none;
-}
-
-table th.vertical {
-    writing-mode: tb-rl;
 }
 
 .asu_help_block {
@@ -383,4 +225,27 @@ table th.vertical {
 p.error {
     color: #c20000;
     font-weight: bold;
+}
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    background-image: url("loader.gif");
+    background-repeat: no-repeat;
+    background-position: center center;
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+    z-index: 10000;
+    display: none;
+}
+
+.asu_menu {
+    display: block;
+    position: relative;
 }
