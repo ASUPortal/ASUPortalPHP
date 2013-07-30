@@ -3,9 +3,9 @@
 {block name="asu_center"}
 <h2>Справочная система</h2>
 
-<table width="100%" border="1" cellpadding="0" cellspacing="0">
+    <table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
-        <th><img src="{$web_root}images/todelete.png"></th>
+        <th></th>
         <th>#</th>
         <th>Заголовок</th>
         <th>URL</th>
@@ -14,7 +14,7 @@
     
     {foreach $helps->getItems() as $help}
         <tr>
-            <td valign="top"><a href="#" onclick="if (confirm('Действительно удалить {$help->title}')) { location.href='?action=delete&id={$help->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+            <td valign="top"><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить {$help->title}')) { location.href='?action=delete&id={$help->id}'; }; return false;"></td>
             <td valign="top">{counter}</td>
             <td valign="top"><a href="?action=edit&id={$help->id}">{$help->title}</a></td>
             <td valign="top">{$help->url}</td>

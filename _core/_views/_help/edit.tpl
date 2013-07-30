@@ -3,6 +3,8 @@
 {block name="asu_center"}
 <h2>Редактирование элемента справочной системы</h2>
 
+    {CHtml::helpForCurrentPage()}
+
 {include file="_help/form.tpl"}
 {/block}
 

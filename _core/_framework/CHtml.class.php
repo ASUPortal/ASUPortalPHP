@@ -757,7 +757,24 @@ class CHtml {
     }
     public static function helpForCurrentPage() {
         if (!is_null(CHelpManager::getHelpForCurrentPage())) {
-            echo '<div class="asu_help_block">'.CHelpManager::getHelpForCurrentPage()->content.'</div>';
+            echo '<div class="alert alert-info">';
+            echo '<h4>'.CHelpManager::getHelpForCurrentPage()->title.'</h4>';
+            echo CHelpManager::getHelpForCurrentPage()->content;
+            if (CSession::getCurrentUser()->hasRole("help_add_inline")) {
+                echo '<p>';
+                echo '<a href="'.WEB_ROOT.'_modules/_help/?action=edit&id='.CHelpManager::getHelpForCurrentPage()->getId().'" target="_blank">Редактировать справку</a>';
+                echo '</p>';
+            }
+            echo '</div>';
+        } elseif (CSession::getCurrentUser()->hasRole("help_add_inline")) {
+            echo '<div class="alert alert-info">';
+            $uri = "";
+            if (array_key_exists("REQUEST_URI", $_SERVER)) {
+                $uri = $_SERVER["REQUEST_URI"];
+                $uri = str_replace(ROOT_FOLDER, "", $uri);
+            }
+            echo '<a href="'.WEB_ROOT.'_modules/_help/?action=add&page='.$uri.'" target="_blank">Добавить справку для текущей страницы</a>';
+            echo '</div>';
         }
     }
     public static function errorSummary(CModel $model) {

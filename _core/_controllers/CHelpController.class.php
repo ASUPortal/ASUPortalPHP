@@ -18,8 +18,7 @@ class CHelpController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
-        $set = CActiveRecordProvider::get2AllFromTable(TABLE_HELP);
+        $set = CActiveRecordProvider::getAllFromTable(TABLE_HELP);
         $items = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $item) {
             $help = new CHelp($item);
@@ -31,12 +30,9 @@ class CHelpController extends CBaseController {
     }
     public function actionAdd() {
         $help = new CHelp();
-        if (CRequest::getInt("id", CHelp::getClassName())) {
-            $help = CHelpManager::getHelp(CRequest::getInt("id", CHelp::getClassName()));
+        if (CRequest::getString("page") != "") {
+            $help->url = CRequest::getString("page");
         }
-        $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-        $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
-        $this->addJSInclude("_core/dialogs/personSelector.js");
         $this->addCSSInclude("_modules/_redactor/redactor.css");
         $this->addJSInclude("_modules/_redactor/redactor.min.js");
         $this->setData("help", $help);
@@ -47,19 +43,19 @@ class CHelpController extends CBaseController {
         $help->setAttributes(CRequest::getArray($help::getClassName()));
         if ($help->validate()) {
             $help->save();
-            $this->redirect("?action=index");
+            if ($this->continueEdit()) {
+                $this->redirect("?action=edit&id=".$help->getId());
+            } else {
+                $this->redirect("?action=index");
+            }
         }
-        $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-        $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
-        $this->addJSInclude("_core/dialogs/personSelector.js");
+        $this->addCSSInclude("_modules/_redactor/redactor.css");
+        $this->addJSInclude("_modules/_redactor/redactor.min.js");
         $this->setData("help", $help);
         $this->renderView("_help/add.tpl");
     }
     public function actionEdit() {
         $help = CHelpManager::getHelp(CRequest::getInt("id"));
-        $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-        $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
-        $this->addJSInclude("_core/dialogs/personSelector.js");
         $this->addCSSInclude("_modules/_redactor/redactor.css");
         $this->addJSInclude("_modules/_redactor/redactor.min.js");
         $this->setData("help", $help);

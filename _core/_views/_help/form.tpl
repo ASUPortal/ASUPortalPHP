@@ -1,31 +1,35 @@
-<form action="index.php" method="post">
+<form action="index.php" method="post" class="form-horizontal">
 {CHtml::hiddenField("action", "save")}
 {CHtml::activeHiddenField("id", $help)}
 
-    <p>{CHtml::errorSummary($help)}</p>
+    {CHtml::errorSummary($help)}
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("title", $help)}
+        <div class="controls">
         {CHtml::activeTextField("title", $help)}
         {CHtml::error("title", $help)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("url", $help)}
+        <div class="controls">
         {CHtml::activeTextField("url", $help)}
         {CHtml::error("url", $help)}
-    </p>
+        </div>
+    </div>
 
-    <div>
+    <div class="control-group">
         {CHtml::activeTextBox("content", $help, "content")}
         {CHtml::error("content", $help)}
     </div>
 
-    {include file="_core.acl.tpl" table=$help}
-
-    <p>
-        {CHtml::submit("Сохранить")}
-    </p>
+    <div class="control-group">
+        <div class="controls">
+            {CHtml::submit("Сохранить")}
+        </div>
+    </div>
 </form>
 
 <script>

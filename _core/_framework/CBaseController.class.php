@@ -84,8 +84,9 @@ class CBaseController {
         /**
          * Bootstrap для красоты
          */
-        //$this->addCSSInclude("_core/bootstrap/css/bootstrap.css");
         $this->addJSInclude("_core/bootstrap/js/bootstrap.js");
+
+        $this->addJSInclude("_core/jquery-migrate-1.2.1.js");
 
         $action = "action".$this->_action;
         if (method_exists($this, $action)) {
