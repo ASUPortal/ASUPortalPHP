@@ -37,4 +37,20 @@ class CIndPlanManager {
         }
         return self::getCacheWorktypes()->getItem($key);
     }
+
+    /**
+     * @param CPerson $person
+     * @param CTerm $year
+     * @return CIndPlanPersonLoad
+     */
+    public static function getLoadByPersonAndYear(CPerson $person, CTerm $year) {
+        /**
+         * Честно говоря, не вижу большого смысла кешировать эту лажу, поэтому
+         * данные каждый раз извлекаются заново. Пусть так и будет
+         */
+        $load = new CIndPlanPersonLoad();
+        $load->person = $person;
+        $load->year = $year;
+        return $load;
+    }
 }

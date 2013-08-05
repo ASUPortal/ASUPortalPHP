@@ -31,6 +31,8 @@ class CPerson extends CActiveModel{
     protected $_doctorpapers = null;
     protected $_degree = null;
     protected $_orders_sab = null;
+    private $_indPlansByYears = null;
+    private $_indPlanYearFilter = null;
 
     protected function relations() {
         return array(
@@ -598,5 +600,47 @@ class CPerson extends CActiveModel{
             }
         }
         return null;
+    }
+
+    /**
+     * Добавляем фильтр в учебный план по году
+     * Не придумал другого способа, кто придумает, пусть перепишет
+     *
+     * @param CTerm $year
+     */
+    public function setIndPlanYearFilter(CTerm $year) {
+        $this->_indPlanYearFilter = $year;
+    }
+
+    /**
+     * @return CArrayList
+     */
+    public function getIndPlansByYears() {
+        if (is_null($this->_indPlansByYears)) {
+            $this->_indPlansByYears = new CArrayList();
+            if (is_null($this->_indPlanYearFilter)) {
+                foreach (CTaxonomyManager::getYearsList() as $id=>$title) {
+                    $year = CTaxonomyManager::getYear($id);
+                    $load = CIndPlanManager::getLoadByPersonAndYear($this, $year);
+                    if (!is_null($load)) {
+                        $this->_indPlansByYears->add($this->_indPlansByYears->getCount(), $load);
+                    }
+                }
+            } else {
+                $load = CIndPlanManager::getLoadByPersonAndYear($this, $this->_indPlanYearFilter);
+                if (!is_null($load)) {
+                    $this->_indPlansByYears->add($this->_indPlansByYears->getCount(), $load);
+                }
+            }
+            /**
+             * Очищаем от пустых значений
+             */
+            foreach ($this->_indPlansByYears->getItems() as $key=>$value) {
+                if (!$value->haveValues()) {
+                    $this->_indPlansByYears->removeItem($key);
+                }
+            }
+        }
+        return $this->_indPlansByYears;
     }
 }
