@@ -296,4 +296,64 @@ class CUtils {
         }
         $mailer->Send();
     }
+
+    /**
+     * @param $string
+     * @param $delimiter
+     * @return string
+     */
+    public static function strRight($string, $delimiter) {
+        $arr = explode($delimiter, $string);
+        if (count($arr) == 1) {
+            return $arr[0];
+        } else {
+            unset($arr[0]);
+            return implode($delimiter, $arr);
+        }
+    }
+
+    /**
+     * @param $string
+     * @param $delimiter
+     * @return string
+     */
+    public static function strRightBack($string, $delimiter) {
+        $arr = explode($delimiter, $string);
+        return $arr[count($arr) - 1];
+    }
+
+    /**
+     * @param $string
+     * @param $delimiter
+     * @return string
+     */
+    public static function strLeftBack($string, $delimiter) {
+        $arr = explode($delimiter, $string);
+        if (count($arr) == 1) {
+            return $arr[0];
+        } else {
+            unset($arr[count($arr) - 1]);
+            return implode($delimiter, $arr);
+        }
+    }
+
+    /**
+     * Создаем папки в иерархии до указанной директории
+     *
+     * @param $path
+     */
+    public static function createFoldersToPath($path) {
+        $arr = explode(CORE_DS, $path);
+        $currentPath = CORE_DS;
+        foreach ($arr as $path) {
+            if ($currentPath == CORE_DS) {
+                $currentPath .= $path;
+            } else {
+                $currentPath .= CORE_DS.$path;
+            }
+            if (!file_exists($currentPath)) {
+                mkdir($currentPath);
+            }
+        }
+    }
 }

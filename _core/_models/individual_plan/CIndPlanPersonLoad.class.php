@@ -13,6 +13,7 @@ class CIndPlanPersonLoad {
 
     private $_teachingLoad = null;
     private $_conclusions = null;
+    private $_changes = null;
 
     /**
      * @return CIndPlanPersonLoadTeaching|null
@@ -32,14 +33,31 @@ class CIndPlanPersonLoad {
     public function getConclusions() {
         if (is_null($this->_conclusions)) {
             $this->_conclusions = new CArrayList();
-            foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_LOAD_CONCLUSTIONS,
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_CONCLUSTIONS,
                     "id_year=".$this->getYear()->getId()." AND ".
                     "id_kadri=".$this->getPerson()->getId())->getItems() as $ar) {
-                $c = new CIndPlanPersonLoadConclusion($ar);
+                $c = new CIndPlanPersonConclusion($ar);
                 $this->_conclusions->add($c->getId(), $c);
             }
         }
         return $this->_conclusions;
+    }
+
+    /**
+     * @return CArrayList|null
+     */
+    public function getChanges() {
+        if (is_null($this->_changes)) {
+            $this->_changes = new CArrayList();
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_CHANGES,
+                    "id_year=".$this->getYear()->getId()." AND ".
+                    "id_kadri=".$this->getPerson()->getId())->getItems() as $ar) {
+
+                $c = new CIndPlanPersonChange($ar);
+                $this->_changes->add($c->getId(), $c);
+            }
+        }
+        return $this->_changes;
     }
 
     /**
@@ -71,7 +89,7 @@ class CIndPlanPersonLoad {
         } elseif ($this->getTeachingLoad()->getFact()->getCount() > 0) {
             return true;
         } elseif ($this->getConclusions()->getCount() > 0) {
-            return true; 
+            return true;
         }
         return false;
     }

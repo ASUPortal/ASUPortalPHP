@@ -9,6 +9,7 @@
      */
     define('CORE_DS', DIRECTORY_SEPARATOR);
     define('CORE_CWD', str_replace(CORE_DS."core.php", "", __FILE__));
+    define("CACHE_DIR", CORE_CWD.CORE_DS."_core".CORE_DS."_cache");
     define('SMARTY_FOLDER', CORE_CWD.'/_core/_external/smarty');
     define('SMARTY_DIR', SMARTY_FOLDER.'/libs/');
     define('VIEWS_DIR', CORE_CWD.CORE_DS.'_core'.CORE_DS.'_views'.CORE_DS);
@@ -17,7 +18,7 @@
     define("JSON_CONTROLLERS_DIR", CORE_CWD.CORE_DS.'_core'.CORE_DS.'_json_controllers'.CORE_DS);
     define('AJAX_VIEW', "_ajax.html.php");
     define('SMARTY_TEMPLATES', VIEWS_DIR);
-    define('SMARTY_COMPILE', SMARTY_FOLDER.'/compile/');
+    define('SMARTY_COMPILE', CACHE_DIR);
     define('SMARTY_CACHE', SMARTY_FOLDER.'/cache/');
     define("PHPMAILER_DIR", CORE_CWD.'/_core/_external/phpmailer');
     define("PRINT_ENGINE_WORD", CORE_CWD.CORE_DS.'_core'.CORE_DS.'_external'.CORE_DS.'phpword'.CORE_DS);
@@ -227,7 +228,8 @@
     define("TABLE_IND_PLAN_LOAD_TEACHING_PLAN", "plan");
     define("TABLE_IND_PLAN_LOAD_TEACHING_FACT", "fact");
     define("TABLE_IND_PLAN_LOAD_ORGANIZATIONAL", "uch_org_rab");
-    define("TABLE_IND_PLAN_LOAD_CONCLUSTIONS", "zakl");
+    define("TABLE_IND_PLAN_CONCLUSTIONS", "zakl");
+    define("TABLE_IND_PLAN_CHANGES", "izmen");
 
     // Типы участия на кафедре
     define("TYPE_PPS", "профессорско-преподавательский состав");

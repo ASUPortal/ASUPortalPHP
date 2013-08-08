@@ -19,7 +19,7 @@ class CIndPlanLoadConclusionController extends CBaseController{
         parent::__construct();
     }
     public function actionAdd() {
-        $c = new CIndPlanPersonLoadConclusion();
+        $c = new CIndPlanPersonConclusion();
         $c->id_kadri = CRequest::getInt("id");
         $this->setData("conclusion", $c);
         $this->renderView("_individual_plan/conclusion/add.tpl");
@@ -30,7 +30,7 @@ class CIndPlanLoadConclusionController extends CBaseController{
         $this->renderView("_individual_plan/conclusion/edit.tpl");
     }
     public function actionSave() {
-        $c = new CIndPlanPersonLoadConclusion();
+        $c = new CIndPlanPersonConclusion();
         $c->setAttributes(CRequest::getArray($c::getClassName()));
         if ($c->validate()) {
             $c->save();

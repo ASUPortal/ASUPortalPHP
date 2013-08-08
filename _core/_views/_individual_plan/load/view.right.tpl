@@ -20,6 +20,7 @@
         <h3 id="myModalLabel">Добавление записи в план</h3>
     </div>
     <div class="modal-body">
+        <p><a href="load/changes.php?action=add&id={$person->getId()}">Изменение в годовом индивидуальном плане</a></p>
         <p><a href="load/conclusions.php?action=add&id={$person->getId()}">Заключение заведующего кафедрой</a></p>
     </div>
     <div class="modal-footer">

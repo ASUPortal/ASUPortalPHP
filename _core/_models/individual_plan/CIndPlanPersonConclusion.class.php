@@ -7,6 +7,6 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class CIndPlanPersonLoadConclusion extends CActiveModel{
-    protected $_table = TABLE_IND_PLAN_LOAD_CONCLUSTIONS;
+class CIndPlanPersonConclusion extends CActiveModel{
+    protected $_table = TABLE_IND_PLAN_CONCLUSTIONS;
 }

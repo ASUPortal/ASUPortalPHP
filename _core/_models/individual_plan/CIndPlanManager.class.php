@@ -60,9 +60,22 @@ class CIndPlanManager {
      */
     public static function getConclusion($key) {
         $c = null;
-        $ar = CActiveRecordProvider::getById(TABLE_IND_PLAN_LOAD_CONCLUSTIONS, $key);
+        $ar = CActiveRecordProvider::getById(TABLE_IND_PLAN_CONCLUSTIONS, $key);
         if (!is_null($ar)) {
-            $c = new CIndPlanPersonLoadConclusion($ar);
+            $c = new CIndPlanPersonConclusion($ar);
+        }
+        return $c;
+    }
+
+    /**
+     * @param $key
+     * @return CIndPlanPersonChange|null
+     */
+    public static function getChange($key) {
+        $c = null;
+        $ar = CActiveRecordProvider::getById(TABLE_IND_PLAN_CHANGES, $key);
+        if (!is_null($ar)) {
+            $c = new CIndPlanPersonChange($ar);
         }
         return $c;
     }
