@@ -70,7 +70,7 @@ class CHtml {
         if ($class != "") {
             $inline .= ' class="'.$class.'"';
         } else {
-            $inline = ' class="'.self::getFielsizeClass().'"';
+            $inline .= ' class="'.self::getFielsizeClass().'"';
         }
         if ($html != "") {
             $inline .= $html;

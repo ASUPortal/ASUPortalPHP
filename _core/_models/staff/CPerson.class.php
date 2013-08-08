@@ -610,6 +610,9 @@ class CPerson extends CActiveModel{
      */
     public function setIndPlanYearFilter(CTerm $year) {
         $this->_indPlanYearFilter = $year;
+        if (!is_null($this->_indPlansByYears)) {
+            $this->_indPlansByYears = null;
+        }
     }
 
     /**
