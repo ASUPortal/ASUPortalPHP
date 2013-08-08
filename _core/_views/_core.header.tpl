@@ -6,7 +6,8 @@
     {foreach $js as $j}
         <script type="text/javascript" src="{$web_root}scripts/{$j}"></script>
     {/foreach}
-    <link href="{$web_root}css/_core/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="{$web_root}scripts/_core/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="{$web_root}scripts/_core/datepicker/css/datepicker.css" rel="stylesheet" media="screen">
     {foreach $css as $c}
         <link href="{$web_root}css/{$c}" rel="stylesheet" type="text/css" />
     {/foreach}

@@ -1,10 +1,7 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: Администратор
- * Date: 06.10.12
- * Time: 18:14
- * To change this template use File | Settings | File Templates.
+ * Приходится подстраиваться под существующий подход портала.
+ * Ну да ладно, это еще не так страшно, как до этого было
  */
 require_once("../../../core.php");
 mysql_query("SET NAMES UTF8");

@@ -16,9 +16,9 @@
             <tr>
                 <td width="16">{counter start=1}</td>
                 <td width="16"><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить изменение?')) { location.href='load/changes.php?action=delete&id={$c->getId()}'; }; return false;"></a></td>
-                <td width="16"><a href="load/conclusions.php?action=edit&id={$c->getId()}" class="icon-pencil"></a></td>
+                <td width="16"><a href="load/changes.php?action=edit&id={$c->getId()}" class="icon-pencil"></a></td>
                 <td>{$c->razdel}</td>
-                <td>{$c->izemenie}</td>
+                <td>{$c->izmenenie}</td>
                 <td>{$c->zav}</td>
                 <td>{$c->prep}</td>
                 <td>{$c->getMark()}</td>

@@ -10,6 +10,18 @@
 class CIndPlanPersonChange extends CActiveModel{
     protected $_table = TABLE_IND_PLAN_CHANGES;
 
+    public $id_kadri;
+    public $zav;
+    public $prep;
+    public $id_otmetka = 0;
+
+    public function __construct(CActiveRecord $aRecord = null) {
+        parent::__construct($aRecord);
+
+        $this->zav = date("d.m.Y");
+        $this->prep = date("d.m.Y");
+    }
+
     /**
      * @return string
      */

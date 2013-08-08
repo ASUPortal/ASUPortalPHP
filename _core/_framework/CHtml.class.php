@@ -292,7 +292,7 @@ class CHtml {
             self::requiredStar();
         }
     }
-    public static function activeDateField($name, CModel $model, $format = "%d.%m.%Y", $id = "", $class = "", $html = "") {
+    public static function activeDateField($name, CModel $model, $format = "dd.mm.yyyy", $id = "", $class = "", $html = "") {
         $field = $model::getClassName()."[".$name."]";
         if ($id == "") {
             $id = $field;
@@ -302,6 +302,33 @@ class CHtml {
         }
         $id = str_replace("[", "_", $id);
         $id = str_replace("]", "_", $id);
+
+        ?>
+        <div class="input-append date <?php echo self::getFielsizeClass(); ?> datepicker" id="<?php echo $id; ?>" data-date="<?php echo $model->$name; ?>" data-date-format="<?php echo $format; ?>">
+            <input name="<?php echo $field; ?>" class="<?php echo self::getFielsizeClass(); ?>" type="text" value="<?php echo $model->$name; ?>">
+            <span class="add-on"><i class="icon-th"></i></span>
+        </div>
+        <?php
+        if (!self::$_calendarInit) {
+            self::$_calendarInit = true;
+            ?>
+            <script>
+                jQuery(document).ready(function(){
+                    jQuery(".datepicker").datepicker();
+                });
+            </script>
+            <?php
+        }
+        $fieldRequired = false;
+        $validators = CCoreObjectsManager::getFieldValidators($model);
+        if (array_key_exists($name, $validators)) {
+            $fieldRequired = true;
+        }
+        if ($fieldRequired) {
+            self::requiredStar();
+        }
+
+        /*
         self::textField($field, $model->$name, $id, $class, $html);
         if (!self::$_calendarInit) {
             self::$_calendarInit = true;
@@ -323,6 +350,7 @@ class CHtml {
                     step           :    1                // show all years in drop-down boxes (instead of every other year as default)
                 });
             </script>';
+        */
     }
     public static function activeTextBox($name, CModel $model, $id = "", $class = "", $html = "", $multiple_key = "") {
         /**
