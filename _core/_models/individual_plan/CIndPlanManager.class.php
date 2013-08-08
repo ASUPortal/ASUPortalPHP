@@ -79,4 +79,17 @@ class CIndPlanManager {
         }
         return $c;
     }
+
+    /**
+     * @param $key
+     * @return CIndPlanPersonPublication|null
+     */
+    public static function getPublication($key) {
+        $c = null;
+        $ar = CActiveRecordProvider::getById(TABLE_IND_PLAN_PUBLICATIONS, $key);
+        if (!is_null($ar)) {
+            $c = new CIndPlanPersonPublication($ar);
+        }
+        return $c;
+    }
 }

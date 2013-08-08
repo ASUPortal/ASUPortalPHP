@@ -24,7 +24,7 @@
 
         </div>
         <div class="tab-pane" id="works{$load->year->getId()}">
-
+            {include file="_individual_plan/load/subform.publication.tpl"}
         </div>
         <div class="tab-pane" id="changes{$load->year->getId()}">
             {include file="_individual_plan/load/subform.change.tpl"}

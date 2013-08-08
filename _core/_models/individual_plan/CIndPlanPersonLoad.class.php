@@ -14,6 +14,7 @@ class CIndPlanPersonLoad {
     private $_teachingLoad = null;
     private $_conclusions = null;
     private $_changes = null;
+    private $_publications = null;
 
     /**
      * @return CIndPlanPersonLoadTeaching|null
@@ -41,6 +42,22 @@ class CIndPlanPersonLoad {
             }
         }
         return $this->_conclusions;
+    }
+
+    /**
+     * @return CArrayList|null
+     */
+    public function getPublications() {
+        if (is_null($this->_publications)) {
+            $this->_publications = new CArrayList();
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_PUBLICATIONS,
+                    "id_year=".$this->getYear()->getId()." AND ".
+                    "id_kadri=".$this->getPerson()->getId())->getItems() as $ar) {
+                $c = new CIndPlanPersonPublication($ar);
+                $this->_publications->add($c->getId(), $c);
+            }
+        }
+        return $this->_publications;
     }
 
     /**
@@ -89,6 +106,8 @@ class CIndPlanPersonLoad {
         } elseif ($this->getTeachingLoad()->getFact()->getCount() > 0) {
             return true;
         } elseif ($this->getConclusions()->getCount() > 0) {
+            return true;
+        } elseif ($this->getPublications()->getCount() > 0) {
             return true;
         }
         return false;

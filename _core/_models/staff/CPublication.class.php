@@ -7,5 +7,5 @@
  * To change this template use File | Settings | File Templates.
  */
 class CPublication extends CActiveModel {
-
+    protected $_table = TABLE_PUBLICATIONS;
 }

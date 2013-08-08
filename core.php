@@ -230,6 +230,7 @@
     define("TABLE_IND_PLAN_LOAD_ORGANIZATIONAL", "uch_org_rab");
     define("TABLE_IND_PLAN_CONCLUSTIONS", "zakl");
     define("TABLE_IND_PLAN_CHANGES", "izmen");
+    define("TABLE_IND_PLAN_PUBLICATIONS", "perechen_nauch_rab");
 
     // Типы участия на кафедре
     define("TYPE_PPS", "профессорско-преподавательский состав");
