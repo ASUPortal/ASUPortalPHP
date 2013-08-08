@@ -38,16 +38,12 @@ class CIndPlanLoadController extends CBaseController{
         $this->setData("persons", $persons);
         $this->renderView("_individual_plan/load/index.tpl");
     }
-    public function actionAdd() {
-
-    }
-    public function actionEdit() {
-
-    }
-    public function actionSave() {
-
-    }
-    public function actionDelete() {
-
+    public function actionView() {
+        $person = CStaffManager::getPerson(CRequest::getInt("id"));
+        if (CRequest::getInt("year") !== 0) {
+            $person->setIndPlanYearFilter(CTaxonomyManager::getYear(CRequest::getInt("year")));
+        }
+        $this->setData("person", $person);
+        $this->renderView("_individual_plan/load/view.tpl");
     }
 }

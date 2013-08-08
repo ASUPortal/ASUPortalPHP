@@ -53,4 +53,17 @@ class CIndPlanManager {
         $load->year = $year;
         return $load;
     }
+
+    /**
+     * @param $key
+     * @return CIndPlanPersonLoadConclusion|null
+     */
+    public static function getConclusion($key) {
+        $c = null;
+        $ar = CActiveRecordProvider::getById(TABLE_IND_PLAN_LOAD_CONCLUSTIONS, $key);
+        if (!is_null($ar)) {
+            $c = new CIndPlanPersonLoadConclusion($ar);
+        }
+        return $c;
+    }
 }

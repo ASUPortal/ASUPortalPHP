@@ -14,22 +14,28 @@
             <tr>
                 <th>#</th>
                 <th>{CHtml::tableOrder("fio", $persons->getFirstItem())}</th>
-                <th></th>
+                <th>Год</th>
             </tr>
             {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $persons->getItems() as $person}
             <tr>
                 <td rowspan="{$person->getIndPlansByYears()->getCount() + 1}">{counter}</td>
-                <td rowspan="{$person->getIndPlansByYears()->getCount() + 1}">{$person->fio}</td>
+                <td rowspan="{$person->getIndPlansByYears()->getCount() + 1}">
+                    <a href="load.php?action=view&id={$person->getId()}">
+                        {$person->fio}
+                    </a>
+                </td>
                 {if $person->getIndPlansByYears()->getCount() == 0}
-                    <td>Добавить что-нибудь</td>
+                    <td>Нет информации</td>
                 {/if}
             </tr>
                 {foreach $person->getIndPlansByYears()->getItems() as $load}
                     <tr>
                         <td>
                             {if !is_null($load->year)}
-                                {$load->year->getValue()}
+                                <a href="load.php?action=view&id={$person->getId()}&year={$load->year->getId()}">
+                                    {$load->year->getValue()}
+                                </a>
                             {/if}
                         </td>
                     </tr>
