@@ -92,7 +92,11 @@ class CStaffManager{
     public static function getAllStudentGroupsList() {
         $arr = array();
         foreach (self::getAllStudentGroups()->getItems() as $group) {
-            $arr[$group->getId()] = $group->getName()." (".$group->getYear()->getValue().")";
+            if (!is_null($group->getYear())) {
+                $arr[$group->getId()] = $group->getName()." (".$group->getYear()->getValue().")";
+            } else {
+                $arr[$group->getId()] = $group->getName();
+            }
         }
         return $arr;
     }
@@ -175,7 +179,7 @@ class CStaffManager{
                 $person = new CPerson($rec);
                 self::getCachePerson()->add($person->getId(), $person);
                 self::getCachePerson()->add($person->getName(), $person);
-                self::getCacheGroups()->add($person->e_mail, $person);
+                self::getCachePerson()->add($person->e_mail, $person);
             }
         };
         return self::getCachePerson()->getItem($id);

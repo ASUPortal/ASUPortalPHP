@@ -12,7 +12,7 @@
                     <th width="16">&nbsp;</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("title", $objects->getFirstItem())}</th>
+                    #viewTableHeadFields#
                 </tr>
             </thead>
             <tbody>
@@ -22,7 +22,7 @@
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить #viewObjectSingleName#')) { location.href='#controllerFile#?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{counter}</td>
                     <td><a href="#controllerFile#?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>{$object->title}</td>
+                    #viewTableBodyFields#
                 </tr>
             {/foreach}
             </tbody>

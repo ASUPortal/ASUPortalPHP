@@ -11,8 +11,8 @@
         </tr>
         {foreach $load->getPublications()->getItems() as $c}
             <tr>
-                <td width="16">{counter start=1}</td>
                 <td width="16"><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить публикацию?')) { location.href='load/publications.php?action=delete&id={$c->getId()}'; }; return false;"></a></td>
+                <td width="16">{counter start=1}</td>
                 <td width="16"><a href="load/publications.php?action=edit&id={$c->getId()}" class="icon-pencil"></a></td>
                 <td>
                     {if !is_null($c->publication)}

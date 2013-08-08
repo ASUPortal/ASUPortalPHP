@@ -39,6 +39,20 @@ class CIndPlanManager {
     }
 
     /**
+     * @param $category
+     * @return array
+     */
+    public static function getWorklistByCategory($category) {
+        $result = array();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_WORKTYPES, "id_razdel=".$category)->getItems() as $ar) {
+            $w = new CIndPlanWorktype($ar);
+            self::getCacheWorktypes()->add($w->getId(), $w);
+            $result[$w->getId()] = $w->name;
+        }
+        return $result;
+    }
+
+    /**
      * @param CPerson $person
      * @param CTerm $year
      * @return CIndPlanPersonLoad
@@ -89,6 +103,19 @@ class CIndPlanManager {
         $ar = CActiveRecordProvider::getById(TABLE_IND_PLAN_PUBLICATIONS, $key);
         if (!is_null($ar)) {
             $c = new CIndPlanPersonPublication($ar);
+        }
+        return $c;
+    }
+
+    /**
+     * @param $key
+     * @return CIndPlanPersonLoadEducation|null
+     */
+    public static function getLoadEducation($key) {
+        $c = null;
+        $ar = CActiveRecordProvider::getById(TABLE_IND_PLAN_LOAD_EDUCATION, $key);
+        if (!is_null($ar)) {
+            $c = new CIndPlanPersonLoadEducation($ar);
         }
         return $c;
     }

@@ -20,8 +20,8 @@
         <div class="tab-pane" id="science{$load->year->getId()}">
             Научно-методическая
         </div>
-        <div class="tab-pane" id="#education{$load->year->getId()}">
-
+        <div class="tab-pane" id="education{$load->year->getId()}">
+            {include file="_individual_plan/load/subform.education.tpl"}
         </div>
         <div class="tab-pane" id="works{$load->year->getId()}">
             {include file="_individual_plan/load/subform.publication.tpl"}

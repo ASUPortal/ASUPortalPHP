@@ -86,6 +86,51 @@ class CGeneratorControllersController extends CBaseController {
             }
 
             /**
+             * Получим список полей модели, которые хранятся в БД
+             * и из них сразу наклепаем столбцов в таблице и полей в форме
+             */
+            $fields = array();
+            $modelName = $params->modelName;
+            $model = new $modelName();
+            foreach ($model->getDbTableFields()->getItems() as $field) {
+                $fields[] = $field->name;
+            }
+            $viewFormFields = array();
+            $viewTableHeadFields = array();
+            $viewTableBodyFields = array();
+            foreach ($fields as $field) {
+                $templateField = file_get_contents(CORE_CWD."/_core/_models/generator/templates/field.text.tpl");
+                $fieldFields = array(
+                    "fieldTitle" => $field
+                );
+                foreach ($fieldFields as $key=>$value) {
+                    $templateField = str_replace("#".$key."#", $value, $templateField);
+                }
+                $viewFormFields[] = $templateField;
+
+                $templateField = file_get_contents(CORE_CWD."/_core/_models/generator/templates/field.tablebody.tpl");
+                $fieldFields = array(
+                    "fieldTitle" => $field
+                );
+                foreach ($fieldFields as $key=>$value) {
+                    $templateField = str_replace("#".$key."#", $value, $templateField);
+                }
+                $viewTableBodyFields[] = $templateField;
+
+                $templateField = file_get_contents(CORE_CWD."/_core/_models/generator/templates/field.tablehead.tpl");
+                $fieldFields = array(
+                    "fieldTitle" => $field
+                );
+                foreach ($fieldFields as $key=>$value) {
+                    $templateField = str_replace("#".$key."#", $value, $templateField);
+                }
+                $viewTableHeadFields[] = $templateField;
+            }
+            $viewFormFields = implode("\n\n", $viewFormFields);
+            $viewTableHeadFields = implode("\n", $viewTableHeadFields);
+            $viewTableBodyFields = implode("\n", $viewTableBodyFields);
+
+            /**
              * Набор представлений на все случаи жизни
              */
             CUtils::createFoldersToPath(CORE_CWD.CORE_DS."_core".CORE_DS."_views".CORE_DS.$params->viewPath);
@@ -104,7 +149,10 @@ class CGeneratorControllersController extends CBaseController {
                 "viewObjectSingleName" => $params->viewObjectSingleName,
                 "viewObjectSingleNameRP" => $params->viewObjectSingleNameRP,
                 "controllerFile" => CUtils::strRightBack($params->controllerFile, CORE_DS),
-                "viewPath" => $params->viewPath
+                "viewPath" => $params->viewPath,
+                "viewFormFields" => $viewFormFields,
+                "viewTableHeadFields" => $viewTableHeadFields,
+                "viewTableBodyFields" => $viewTableBodyFields
             );
             foreach ($viewFiles as $viewFile) {
                 $templateView = file_get_contents($viewFile);

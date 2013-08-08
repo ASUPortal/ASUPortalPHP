@@ -2,13 +2,9 @@
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $object)}
 
-    <div class="control-group">
-        {CHtml::activeLabel("title", $object)}
-        <div class="controls">
-            {CHtml::activeTextField("title", $object)}
-            {CHtml::error("title", $object)}
-        </div>
-    </div>
+    {CHtml::errorSummary($object)}
+
+    #viewFormFields#
 
     <div class="control-group">
         <div class="controls">

@@ -120,4 +120,33 @@ class CCoreModelsController extends CBaseController {
             }
         }
     }
+    public function actionImportFields() {
+        $model = CCoreObjectsManager::getCoreModel(CRequest::getInt("id"));
+        $className = $model->class_name;
+        $obj = new $className();
+        $fields = array();
+        foreach ($obj->getDbTableFields()->getItems() as $field) {
+            if (mb_strtolower($field->name) !== "id") {
+                $fields[] = $field->name;
+            }
+        }
+        $form = new CCoreModelForm();
+        $form->id = $model->getId();
+        foreach ($fields as $field) {
+            $form->fields[] = array(
+                "name" => $field,
+                "translation" => $field,
+                "validator" => 0,
+            );
+        }
+        $this->setData("form", $form);
+        $this->renderView("_core/model/import.tpl");
+    }
+    public function actionSaveImported() {
+        $form = new CCoreModelForm();
+        $form->setAttributes(CRequest::getArray($form::getClassName()));
+        $form->save();
+
+        $this->redirect("?action=edit&id=".$form->id);
+    }
 }

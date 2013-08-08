@@ -298,4 +298,11 @@ class CActiveModel extends CModel{
         }
         return $newObj;
     }
+
+    /**
+     * @return CArrayList|null
+     */
+    public function getDbTableFields() {
+        return $this->getDbTable()->getFields();
+    }
 }
