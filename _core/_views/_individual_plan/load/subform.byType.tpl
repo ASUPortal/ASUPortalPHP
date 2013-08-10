@@ -46,10 +46,16 @@
 
 {if $load->getTeachingLoad()->getFact()->getCount() == 0}
     Нет распределения по видам нагрузки
+    <a href="load/teaching.php?action=add&id={$person->getId()}&year={$load->year->getId()}" class="icon-pencil"></a>
 {else}
     <ul class="nav nav-pills">
         <li class="active"><a href="#teaching{$load->year->getId()}_main" data-toggle="tab">Основная</a></li>
         <li><a href="#teaching{$load->year->getId()}_add" data-toggle="tab">Дополнительная</a></li>
+        <li>
+            <p class="navbar-text">
+                <a href="load/teaching.php?action=add&id={$person->getId()}&year={$load->year->getId()}" class="icon-pencil"></a>
+            </p>
+        </li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="teaching{$load->year->getId()}_main">
