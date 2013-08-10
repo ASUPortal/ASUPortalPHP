@@ -92,8 +92,10 @@ class CGeneratorControllersController extends CBaseController {
             $fields = array();
             $modelName = $params->modelName;
             $model = new $modelName();
-            foreach ($model->getDbTableFields()->getItems() as $field) {
-                $fields[] = $field->name;
+            if (is_a($model, "CActiveModel")) {
+                foreach ($model->getDbTableFields()->getItems() as $field) {
+                    $fields[] = $field->name;
+                }
             }
             $viewFormFields = array();
             $viewTableHeadFields = array();

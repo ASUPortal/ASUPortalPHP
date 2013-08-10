@@ -145,4 +145,17 @@ class CIndPlanManager {
         }
         return $c;
     }
+
+    /**
+     * @param $personId
+     * @param $yearId
+     * @return CIndPlanPersonLoadTeaching|null
+     */
+    public static function getLoadTeaching($personId, $yearId) {
+        $person = CStaffManager::getPerson($personId);
+        $year = CTaxonomyManager::getYear($yearId);
+
+        $load = self::getLoadByPersonAndYear($person, $year);
+        return $load->getTeachingLoad();
+    }
 }

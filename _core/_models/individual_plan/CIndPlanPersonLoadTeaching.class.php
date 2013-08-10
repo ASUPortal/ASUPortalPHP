@@ -100,19 +100,7 @@ class CIndPlanPersonLoadTeaching extends CFormModel {
         /**
          * По месяцам (кроме августа)
          */
-        $colByMonth = array(
-            1 => 6,
-            2 => 9,
-            3 => 10,
-            4 => 11,
-            5 => 12,
-            6 => 13,
-            7 => 14,
-            9 => 2,
-            10 => 3,
-            11 => 4,
-            12 => 5
-        );
+        $colByMonth = $this->getColumnForMonth();
         for ($month = 1; $month <= 12; $month++) {
             if (array_key_exists($month, $colByMonth)) {
                 foreach ($this->getFactByMonth($month, $type)->getItems() as $key=>$value) {
@@ -158,7 +146,7 @@ class CIndPlanPersonLoadTeaching extends CFormModel {
         $summRow = array(
             "Итого"
         );
-        foreach ($result as $key=>$row) {
+        foreach ($result as $row) {
             for ($i = 1; $i < count($row); $i++) {
                 $summ = 0;
                 if (array_key_exists($i, $summRow)) {
@@ -181,6 +169,7 @@ class CIndPlanPersonLoadTeaching extends CFormModel {
 
     /**
      * @param $month
+     * @param $type
      * @return CArrayList
      */
     private function getFactByMonth($month, $type) {
@@ -204,5 +193,80 @@ class CIndPlanPersonLoadTeaching extends CFormModel {
         }
 
         return $result;
+    }
+
+    /**
+     *
+     *
+     * @return array
+     */
+    private function getColumnForMonth() {
+        return array(
+            1 => 6,
+            2 => 9,
+            3 => 10,
+            4 => 11,
+            5 => 12,
+            6 => 13,
+            7 => 14,
+            9 => 2,
+            10 => 3,
+            11 => 4,
+            12 => 5
+        );
+    }
+
+    /**
+     * Название поля для редактирования
+     *
+     * @param $rowId
+     * @param $cellId
+     * @return string
+     */
+    public function getFieldName($rowId, $cellId, $type) {
+        $columns = $this->getColumnForMonth();
+        $month = array_search($cellId, $columns);
+        return self::getClassName()."[".$rowId."][".$month."][".$type."]";
+    }
+
+    public function save() {
+        /**
+         * Удаляем старые данные
+         */
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_LOAD_TEACHING_FACT,
+                 "id_kadri=".$this->kadri_id." AND ".
+                 "id_year=".$this->year_id)->getItems() as $ar) {
+
+            $ar->remove();
+        }
+        /**
+         * Создаем новые
+         * Для начала, пересорируем все
+         */
+        for ($type = 1; $type <= 2; $type++) {
+            $months = array();
+            foreach ($this->getItems()->getItems() as $workId=>$data) {
+                foreach ($data as $monthId=>$arr) {
+                    $month = array();
+                    if (array_key_exists($monthId, $months)) {
+                        $month = $months[$monthId];
+                    }
+                    $month[$workId] = $arr[$type];
+                    $months[$monthId] = $month;
+                }
+            }
+            foreach ($months as $monthId=>$data) {
+                $obj = new CIndPlanPersonLoadTeachingFact();
+                $obj->id_kadri = $this->kadri_id;
+                $obj->id_year = $this->year_id;
+                $obj->hours_kind_type = $type;
+                $obj->id_month = $monthId;
+                foreach ($data as $workId=>$value) {
+                    $work = "rab_".$workId;
+                    $obj->$work = $value;
+                }
+                $obj->save();
+            }
+        }
     }
 }
