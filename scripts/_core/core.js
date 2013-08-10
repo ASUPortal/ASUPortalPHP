@@ -8,20 +8,20 @@
 jQuery(document).ready(function(){
     // показ-скрытие левого меню
     jQuery("#asu_menu_hider").click(function(){
-        if (jQuery("#asu_left_menu").css("display") == "block") {
-            jQuery("#asu_left_menu").hide("slow");
-            jQuery("#asu_center_container").addClass("center_no_menu");
+        if (jQuery("#asu_body_menu").hasClass("span2")) {
+            jQuery("#asu_body_menu").removeClass("span2").addClass("span1");
+            jQuery("#asu_body_content").removeClass("span10").addClass("span11");
             jQuery.cookie("leftMainCol", "none");
         } else {
-            jQuery("#asu_left_menu").show("slow");
-            jQuery("#center_no_menu").removeClass("center_no_menu");
+            jQuery("#asu_body_menu").removeClass("span1").addClass("span2");
+            jQuery("#asu_body_content").removeClass("span11").addClass("span10");
             jQuery.cookie("leftMainCol", "");
         }
     });
     // автоматическое скрытие при открытии страницы
     if (jQuery.cookie("leftMainCol") == "none") {
-        jQuery("#asu_left_menu").hide();
-        jQuery("#asu_center_container").addClass("center_no_menu");
+        jQuery("#asu_body_menu").removeClass("span2").addClass("span1");
+        jQuery("#asu_body_content").removeClass("span10").addClass("span11");
     }
     // переход на wap-версию
     jQuery("#asu_wap_switch").click(function(){

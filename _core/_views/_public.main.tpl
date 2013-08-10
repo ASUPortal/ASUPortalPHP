@@ -1,16 +1,12 @@
 {include file="_core.header.tpl"}
 
-<div class="base_wrapper">
-    <div class="asu_header">
-        {if !$wap_mode}
-            <a href="/"><div class="asu_header_asu_logo"></div></a>
-        {/if}
+    <div class="container-fluid asu_header">
+        <div class="row-fluid">
+            <div class="span2">
+                <a href="/"><div class="asu_header_asu_logo"></div></a>
+            </div>
 
-        <div class="asu_header_content_container">
-            {if !$wap_mode}
-                <a href="/"><div class="asu_header_ugatu_logo"></div></a>
-            {/if}
-            <div class="asu_header_content">
+            <div class="asu_header_content span8">
                 <p>Официальный портал кафедры АСУ</p>
                 <p>
                     <strong>Сегодня: {CUtils::getDayOfWeekName(time())} {date("d.m.Y")} <font size="+2">{CUtils::getStudyWeekNumber()}</font>-я учебная неделя</strong>
@@ -59,58 +55,48 @@
                 {/if}
                 </p>
             </div>
-
-            <div style="clear: both;"></div>
+            {if !$wap_mode}
+                <div class="span2">
+                    <a href="/"><div class="asu_header_ugatu_logo"></div></a>
+                </div>
+            {/if}
         </div>
-
-        <div style="clear: both;"></div>
     </div>
 
-    <div class="asu_body">
-        {if !$wap_mode}
-        <div class="asu_left align_left" id="asu_left_menu">
-            {block name="asu_left"}
-                {include file="_menumanager/menu.mainMenu.tpl"}
-            {/block}
-        </div>
-
-        <div class="asu_hidemenu align_left">
-            {block name="asu_hidemenu"}
-                {include file="_core.hidemenu.tpl"}
-            {/block}
-        </div>
-
-        <div class="asu_center_container" id="asu_center_container">
-            {else}
-            <div class="asu_center_container center_wap" id="asu_center_container">
-                {/if}
-                <div class="asu_right align_right asu_right_home">
-                    {block name="asu_right"}
-                    {/block}
-                    {block name="asu_right_default_widgets"}
-                        {include file="_public.right.tpl"}
-                    {/block}
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2" id="asu_body_menu">
+                <div class="row">
+                    <div class="span12">
+                        {block name="asu_left"}
+                            {include file="_menumanager/menu.mainMenu.tpl"}
+                        {/block}
+                    </div>
                 </div>
-
-                <div class="asu_center asu_center_home">
-                    {if (CSession::isAuth())}
-                        {if (CSession::getCurrentUser()->getStatus() == "преподаватель")}
-                            {include file="_menumanager/menu.adminMenu.tpl"}
-                        {/if}
-                    {/if}
-
-                    {block name="asu_center"}
-                    {/block}
-                </div>
-
-                <div style="clear: both;"></div>
             </div>
 
-            <div style="clear: both;"></div>
-        </div>
+            <div class="span10" id="asu_body_content">
+                <div class="row">
+                    <div class="span11">
+                        {if (CSession::isAuth())}
+                            {if (CSession::getCurrentUser()->getStatus() == "преподаватель")}
+                                {include file="_menumanager/menu.adminMenu.tpl"}
+                            {/if}
+                        {/if}
 
-        <div class="asu_footer">
+                        {block name="asu_center"}
+                        {/block}
+                    </div>
+                    <div class="span1">
+                        {block name="asu_right"}{/block}
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <div class="asu_footer row-fluid">
+
     </div>
 
 {include file="_core.footer.tpl"}

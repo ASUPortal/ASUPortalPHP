@@ -1,9 +1,3 @@
-<script>
-    jQuery(document).ready(function(){
-        jQuery('.dropdown-toggle').dropdown()
-    });
-</script>
-
 <ul class="nav nav-tabs nav-stacked">
     {foreach CMenuManager::getMenu("main_menu")->getMenuPublishedItemsInHierarchy()->getItems() as $item}
         {if ($item->getChilds()->getCount() > 0)}

@@ -19,7 +19,6 @@ body {
     background: #0000cc;
     background-image: url("../../_themes/blue/images/head.gif");
     border-bottom: 5px solid #ffffff;
-    width: 100%;
 }
 
 .asu_header_asu_logo {
@@ -87,11 +86,8 @@ body {
 }
 
 .asu_footer {
-    position: relative;
     height: 25px;
     background: #0000cc;
-    width: 100%;
-    z-index: 0;
 }
 
 .align_left {

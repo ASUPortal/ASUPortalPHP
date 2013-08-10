@@ -23,6 +23,13 @@
 
 <div class="navbar">
     <div class="navbar-inner">
+        <ul class="nav">
+            <li>
+                <p class="navbar-text">
+                    <a href="#" id="asu_menu_hider" class="icon-th-list"></a>
+                </p>
+            </li>
+        </ul>
         {call name=menuItemsAsListWithCount data=CMenuManager::getMenu("admin_menu")->getMenuPublishedItemsInHierarchy()->getItems()}
     </div>
 </div>
