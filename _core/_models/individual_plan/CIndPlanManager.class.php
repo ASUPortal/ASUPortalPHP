@@ -119,4 +119,17 @@ class CIndPlanManager {
         }
         return $c;
     }
+
+    /**
+     * @param $key
+     * @return CIndPlanPersonLoadScience|null
+     */
+    public static function getLoadScience($key) {
+        $c = null;
+        $ar = CActiveRecordProvider::getById(TABLE_IND_PLAN_LOAD_SCIENCE, $key);
+        if (!is_null($ar)) {
+            $c = new CIndPlanPersonLoadScience($ar);
+        }
+        return $c;
+    }
 }

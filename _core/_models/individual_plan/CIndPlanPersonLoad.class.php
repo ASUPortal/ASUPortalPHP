@@ -16,6 +16,7 @@ class CIndPlanPersonLoad {
     private $_changes = null;
     private $_publications = null;
     private $_educations = null;
+    private $_science = null;
 
     /**
      * @return CIndPlanPersonLoadTeaching|null
@@ -96,6 +97,24 @@ class CIndPlanPersonLoad {
     }
 
     /**
+     * @return CArrayList|null
+     */
+    public function getScienceLoad() {
+        if (is_null($this->_science)) {
+            $this->_science = new CArrayList();
+
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_LOAD_SCIENCE,
+                "id_year=".$this->getYear()->getId()." AND ".
+                    "id_kadri=".$this->getPerson()->getId())->getItems() as $ar) {
+
+                $c = new CIndPlanPersonLoadScience($ar);
+                $this->_science->add($c->getId(), $c);
+            }
+        }
+        return $this->_science;
+    }
+
+    /**
      * @return CPerson
      */
     private function getPerson() {
@@ -128,6 +147,8 @@ class CIndPlanPersonLoad {
         } elseif ($this->getPublications()->getCount() > 0) {
             return true;
         } elseif ($this->getEducationLoad()->getCount() > 0) {
+            return true;
+        } elseif ($this->getScienceLoad()->getCount() > 0) {
             return true;
         }
         return false;

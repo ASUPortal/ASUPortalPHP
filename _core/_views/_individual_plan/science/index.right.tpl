@@ -9,17 +9,9 @@
 {/if}{/if}
 
 <p>
-    <a href="worktypes.php?action=index">
+    <a href="sciences.php?action=add">
         <center>
-            <img src="{$web_root}images/{$icon_theme}/32x32/apps/preferences-system-windows.png"><br>
-            Виды работ
-        </center></a>
-</p>
-
-<p>
-    <a href="load.php?action=index">
-        <center>
-            <img src="{$web_root}images/{$icon_theme}/32x32/apps/preferences-system-windows.png"><br>
-            Учебная нагрузка
+            <img src="{$web_root}images/{$icon_theme}/32x32/actions/list-add.png"><br>
+            Добавить
         </center></a>
 </p>

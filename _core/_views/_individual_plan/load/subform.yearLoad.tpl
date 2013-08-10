@@ -18,7 +18,7 @@
             Учебно и орг. методическая
         </div>
         <div class="tab-pane" id="science{$load->year->getId()}">
-            Научно-методическая
+            {include file="_individual_plan/load/subform.science.tpl"}
         </div>
         <div class="tab-pane" id="education{$load->year->getId()}">
             {include file="_individual_plan/load/subform.education.tpl"}
