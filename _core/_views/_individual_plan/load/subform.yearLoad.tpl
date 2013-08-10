@@ -12,7 +12,7 @@
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="teaching{$load->year->getId()}">
-
+            {include file="_individual_plan/load/subform.byType.tpl"}
         </div>
         <div class="tab-pane" id="orgload{$load->year->getId()}">
             {include file="_individual_plan/load/subform.organizational.tpl"}

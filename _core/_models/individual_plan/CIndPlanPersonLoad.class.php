@@ -159,9 +159,7 @@ class CIndPlanPersonLoad {
         /**
          * Проверяем, есть ли учебная работа
          */
-        if ($this->getTeachingLoad()->getPlan()->getCount() > 0) {
-            return true;
-        } elseif ($this->getTeachingLoad()->getFact()->getCount() > 0) {
+        if ($this->getTeachingLoad()->getFact()->getCount() > 0) {
             return true;
         } elseif ($this->getConclusions()->getCount() > 0) {
             return true;

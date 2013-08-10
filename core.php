@@ -225,7 +225,6 @@
     define("TABLE_CORE_VALIDATORS", "core_validators");
     define("TABLE_CORE_MODEL_FIELD_VALIDATORS", "core_model_field_validators");
     define("TABLE_IND_PLAN_WORKTYPES", "spravochnik_vidov_rabot");
-    define("TABLE_IND_PLAN_LOAD_TEACHING_PLAN", "plan");
     define("TABLE_IND_PLAN_LOAD_TEACHING_FACT", "fact");
     define("TABLE_IND_PLAN_LOAD_ORGANIZATIONAL", "uch_org_rab");
     define("TABLE_IND_PLAN_CONCLUSTIONS", "zakl");
