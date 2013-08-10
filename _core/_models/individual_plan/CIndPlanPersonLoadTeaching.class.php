@@ -115,7 +115,7 @@ class CIndPlanPersonLoadTeaching extends CFormModel {
         );
         for ($month = 1; $month <= 12; $month++) {
             if (array_key_exists($month, $colByMonth)) {
-                foreach ($this->getFactByMonth($month)->getItems() as $key=>$value) {
+                foreach ($this->getFactByMonth($month, $type)->getItems() as $key=>$value) {
                     $row = $result[$key];
                     /**
                      * По месяцу
@@ -183,7 +183,7 @@ class CIndPlanPersonLoadTeaching extends CFormModel {
      * @param $month
      * @return CArrayList
      */
-    private function getFactByMonth($month) {
+    private function getFactByMonth($month, $type) {
         $taxonomy = CTaxonomyManager::getLegacyTaxonomy("spravochnik_uch_rab");
         $workTypes = $taxonomy->getTermsList();
 
@@ -194,7 +194,7 @@ class CIndPlanPersonLoadTeaching extends CFormModel {
         }
         foreach ($workTypes as $key=>$value) {
             foreach ($this->getFact()->getItems() as $fact) {
-                if ($fact->id_month == $month) {
+                if ($fact->id_month == $month && $fact->hours_kind_type == $type) {
                     $value = $result->getItem($key);
                     $workId = "rab_".$key;
                     $value += $fact->$workId;

@@ -26,6 +26,7 @@
             <th>май</th>
             <th>июнь</th>
             <th>июль</th>
+            <th>итого</th>
         </tr>
         {foreach $data as $row}
             <tr>
