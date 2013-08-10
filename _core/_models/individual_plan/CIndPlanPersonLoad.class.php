@@ -17,6 +17,7 @@ class CIndPlanPersonLoad {
     private $_publications = null;
     private $_educations = null;
     private $_science = null;
+    private $_organizations = null;
 
     /**
      * @return CIndPlanPersonLoadTeaching|null
@@ -112,6 +113,26 @@ class CIndPlanPersonLoad {
             }
         }
         return $this->_science;
+    }
+
+    /**
+     * @return CArrayList|null
+     */
+    public function getOrganizationalLoad() {
+        if (is_null($this->_organizations)) {
+            $this->_organizations = new CArrayList();
+
+            $this->_science = new CArrayList();
+
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_LOAD_ORGANIZATIONAL,
+                "id_year=".$this->getYear()->getId()." AND ".
+                    "id_kadri=".$this->getPerson()->getId())->getItems() as $ar) {
+
+                $c = new CIndPlanPersonLoadOrg($ar);
+                $this->_organizations->add($c->getId(), $c);
+            }
+        }
+        return $this->_organizations;
     }
 
     /**

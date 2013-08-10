@@ -20,6 +20,7 @@
         <h3 id="myModalLabel">Добавление записи в план</h3>
     </div>
     <div class="modal-body">
+        <p><a href="load/organizational.php?action=add&id={$person->getId()}">Учебно и организационно-методическая работа</a></p>
         <p><a href="load/sciences.php?action=add&id={$person->getId()}">Научно-методическая и госбюджетая научно-исследовательская работа</a></p>
         <p><a href="load/educations.php?action=add&id={$person->getId()}">Учебно-воспитательная работа</a></p>
         <p><a href="load/publications.php?action=add&id={$person->getId()}">Научная работа</a></p>

@@ -15,7 +15,7 @@
 
         </div>
         <div class="tab-pane" id="orgload{$load->year->getId()}">
-            Учебно и орг. методическая
+            {include file="_individual_plan/load/subform.organizational.tpl"}
         </div>
         <div class="tab-pane" id="science{$load->year->getId()}">
             {include file="_individual_plan/load/subform.science.tpl"}

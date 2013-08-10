@@ -132,4 +132,17 @@ class CIndPlanManager {
         }
         return $c;
     }
+
+    /**
+     * @param $key
+     * @return CIndPlanPersonLoadOrg|null
+     */
+    public static function getLoadOrganizational($key) {
+        $c = null;
+        $ar = CActiveRecordProvider::getById(TABLE_IND_PLAN_LOAD_ORGANIZATIONAL, $key);
+        if (!is_null($ar)) {
+            $c = new CIndPlanPersonLoadOrg($ar);
+        }
+        return $c;
+    }
 }
