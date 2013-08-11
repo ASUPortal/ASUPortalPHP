@@ -317,8 +317,8 @@ function SavePrintMode()	// режим страницы при печати ил
 	else return false;
 }
 
-function getPagenumList($pg_cnt,$pg_cur,$pg_tw,$pg_name,$q_str,$link_tmp)
-{//нумерация страниц с возможностью использования шаблона с %%\w+%%
+function getPagenumList($pg_cnt,$pg_cur,$pg_tw,$pg_name,$q_str,$link_tmp) {
+    //нумерация страниц с возможностью использования шаблона с %%\w+%%
 
     /*
     pg_cnt  -общее число страниц
@@ -330,39 +330,63 @@ function getPagenumList($pg_cnt,$pg_cur,$pg_tw,$pg_name,$q_str,$link_tmp)
             
     пример нумерации 1 2 3...5 6 7...9 10 11
     */
-  $pg_response="";
-  $pg_cur=intval($pg_cur);
-  $pg_cnt=intval($pg_cnt);
+    $pg_response="";
+    $pg_cur=intval($pg_cur);
+    $pg_cnt=intval($pg_cnt);
   
-  if (SavePrintMode()) {
-	$pg_response= '<span > '.$pg_cur.' из '.$pg_cnt.'</span> ';	 
-	}
-  else {
+    if (SavePrintMode()) {
+	    $pg_response= '<span > '.$pg_cur.' из '.$pg_cnt.'</span> ';
+	} else {
+        if (intval($pg_tw)<=0) {
+            $pg_tw = 3;
+        };
+        $pages = array();
 
-    
-    if (intval($pg_tw)<=0) $pg_tw=3;
+        if (intval($pg_cur) > 1) {
+            if ($link_tmp == '') {
+                $pages[] = "<a href='?".$q_str."&".$pg_name."=".($pg_cur-1)."'>< назад</a>";
+            } else {
+                $pages[] = "<a href=".preg_replace ('/%%\w+%%/',$pg_cur-1,$link_tmp).">< назад</a>";
+            }
+        }
+        for ($i = 1; $i <= $pg_cnt; $i++) {
+            if ($i == $pg_cur) {
+                $pages["current"] = '<a href="#">'.$i.'</a>';
+            } else {
+                if (abs($i-$pg_cur)<$pg_tw-1 || $i<=$pg_tw || $i>$pg_cnt-$pg_tw) {
+                    if ($link_tmp=='') {
+                        $pages[] = "<a href='?".$q_str."&".$pg_name."=".$i."'>".$i."</a>";
+                    } else {
+                        $pages[] = "<a href=".preg_replace('/%%\w+%%/',$i,$link_tmp).">".$i."</a>";
+                    }
+                } else {
+                    if (!array_search('<a href="#">...</a>', $pages)) {
+                        $pages[] = '<a href="#">...</a>';
+                    }
+                }
+            }
+        }
+        if ($pg_cur<$pg_cnt) {
+            if ($link_tmp=='') {
+                $pages[] = "<a href='?".$q_str."&".$pg_name."=".($pg_cur+1)."'>вперед ></a>";
+            } else {
+                $pages[] = "<a href=".preg_replace('/%%\w+%%/',$pg_cur+1,$link_tmp).">вперед ></a>";
+            }
+        }
 
-    if (intval($pg_cur)>1) 
-        if ($link_tmp=='') $pg_response.="<a href='?".$q_str."&".$pg_name."=".($pg_cur-1)."' class='pgLink'>< назад</a> ";
-        else $pg_response.="<a href=".preg_replace ('/%%\w+%%/',$pg_cur-1,$link_tmp)." class='pgLink'>< назад</a> ";
-
-    for ($i=1;$i<=$pg_cnt;$i++)
-    {            
-        if ($i==$pg_cur) $pg_response.="<span class=pglink_cur><b>".$i."</b></span> ";
-        else 
-            if (abs($i-$pg_cur)<$pg_tw-1 || $i<=$pg_tw || $i>$pg_cnt-$pg_tw) 
-                if ($link_tmp=='') $pg_response.="<a href='?".$q_str."&".$pg_name."=".$i."' class='pgLink'>".$i."</a> ";
-                else $pg_response.="<a href=".preg_replace('/%%\w+%%/',$i,$link_tmp)." class='pgLink'>".$i."</a> ";
-               //pg_response+="<a href='?"+q_str+"&"+pg_name+"="+i+"'>"+i+"</a> ";
-            else $pg_response.="%%"; 
+        $pg_response = '<div class="pagination">';
+        $pg_response .= '<ul>';
+        foreach ($pages as $key=>$link) {
+            if ($key == "current") {
+                $pg_response .= '<li class="active">'.$link.'</li>';
+            } else {
+                $pg_response .= '<li>'.$link.'</li>';
+            }
+        }
+        $pg_response .= '</ul>';
+        $pg_response .= '</div>';
     }
-    $pg_response=preg_replace('/%%+/', '...',$pg_response);
-    if ($pg_cur<$pg_cnt) 
-        if ($link_tmp=='') $pg_response.="<a href='?".$q_str."&".$pg_name."=".($pg_cur+1)."' class='pgLink'>вперед ></a> ";
-        else $pg_response.="<a href=".preg_replace("/%%\w+%%/",$pg_cur+1,$link_tmp)." class='pgLink'>вперед ></a> ";
-	
-  }
-    return '<span class="pgLink_span">'.$pg_response.'</span>';
+    return $pg_response;
 }
 //-----------------------------------
 function getScalarVal($q_val)
