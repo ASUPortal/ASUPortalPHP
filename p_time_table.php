@@ -139,6 +139,7 @@ echo '</div><div class="middle2">'.$sess.' &nbsp;'.$def_settings['year_name'].' 
 		  echo $end1;
 		  include "display_voting.php";
 		  }
+       define("CORRECT_FOOTER", true);
 		echo $end2; include('footer.php'); 
    }
   if (isset($_GET['getallsub']))
@@ -241,6 +242,7 @@ echo '</div><div class="middle2">'.$sess.' &nbsp;'.$def_settings['year_name'].' 
 		  echo $end1;
 		  include "display_voting.php";
 		  }
+       define("CORRECT_FOOTER", true);
 		echo $end2; include('footer.php'); 
 
 	   }

@@ -22,7 +22,7 @@ else {
 if (!isset($_GET['wap'])) {
 $dateTimeOut=$dateTimeOut."<a class=warning href='#show' style='font-size:12pt;' onClick=javascript:show_auth_form('author_layer');>авторизация</a>
 <div name='author_layer' id='author_layer' style='position:absolute; top: 70px; display:none;width:300'>
-<table width='250' border='1' bgcolor='#FFFFFF' cellspasing='10' cellpadding='10' align='center'>
+<table width='250' border='1' style='background: #ffffff; ' cellspasing='10' cellpadding='10' align='center'>
   <tr>
     <td width='50%'>
 <div class='text'><p align='center'><strong>Авторизация пользователя</strong></p>
@@ -39,5 +39,3 @@ $dateTimeOut=$dateTimeOut."<a class=warning href='#show' style='font-size:12pt;'
 </table>
 </div>";
 }}
-//echo '<div class="text">войти</div>';
-?>

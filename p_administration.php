@@ -369,5 +369,6 @@ $query='SELECT DISTINCT tasks.name,tasks.url,tasks.comment
         include "display_voting.php";
     }
     echo $end2;
+define("CORRECT_FOOTER", true);
     include('footer.php');
 ?>

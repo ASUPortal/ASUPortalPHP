@@ -61,6 +61,7 @@ $act='';
 	           echo '<script language="Javascript">setTimeout("window.location.href=\"'.$curpage.'\"",2000);</script>
 	          <div class="middle_lite">Файл успешно удален.</div>';
 	          echo $end1;
+                define("CORRECT_FOOTER", true);
 	          include "display_voting.php";
 	          echo $end2;include('footer.php'); exit();
 			  //echo '<div class="middle_lite">Файл <b>'.$a['nameFile'].'</b> успешно удален.</div>';   
@@ -156,6 +157,7 @@ if (isset($_POST['insertbrowserFile']) ){
 	          <div class="middle_lite">Файл <b>'.$_FILES['lfile']['name'] .'</b> успешно загружен на сайт.</div>';
 	          echo $end1;
 	          include "display_voting.php";
+                 define("CORRECT_FOOTER", true);
 	          echo $end2;include('footer.php'); exit();
 	         }
 	        else    {    echo 'He удалось занести в базу данные по файлу';     }			        
@@ -274,5 +276,6 @@ if (isset($_POST['insertbrowserFile']) ){
 
 echo $end1;
 include "display_voting.php";
+define("CORRECT_FOOTER", true);
 echo $end2;include('footer.php'); 
 ?>

@@ -37,6 +37,7 @@ class CBaseController {
 
         // подключаем jQuery по умолчанию
         $this->addJSInclude(CSettingsManager::getSettingValue("jquery_path"));
+        $this->addJSInclude(CSettingsManager::getSettingValue("jquery_migrate_path"));
         $this->addJSInclude("_core/jquery.cookie.js");
         $this->addJSInlineInclude("var web_root = '".WEB_ROOT."';");
         // ядреные модули
@@ -84,10 +85,8 @@ class CBaseController {
         /**
          * Bootstrap для красоты
          */
-        $this->addJSInclude("_core/bootstrap/js/bootstrap.js");
+        $this->addJSInclude(CSettingsManager::getSettingValue("bootstrap_path")."js/bootstrap.js");
         $this->addJSInclude("_core/datepicker/js/bootstrap-datepicker.js");
-
-        $this->addJSInclude("_core/jquery-migrate-1.2.1.js");
 
         $action = "action".$this->_action;
         if (method_exists($this, $action)) {

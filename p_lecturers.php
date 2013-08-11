@@ -478,6 +478,7 @@ if (isset($_GET['archiv'])) {$archiv_query=' and (date_act_sort<"'.$def_settings
   include "display_voting.php";
   
 }
+define("CORRECT_FOOTER", true);
 echo $end2; include('footer.php'); 
 
  //mysql_close();

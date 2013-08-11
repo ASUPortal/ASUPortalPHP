@@ -52,6 +52,7 @@ function display_subjects()
   <div class="middle_lite"><a href="?go=1&toinsert=1">Добавить новый предмет</a></div><br>';
   echo $end1;
   include "display_voting.php";
+     define("CORRECT_FOOTER", true);
   echo $end2; include('footer.php'); 
  }
 /*function Upper_word($word)
@@ -161,6 +162,7 @@ echo '	</select>
       </div><form>';
       echo $end1;
       include "display_voting.php";
+         define("CORRECT_FOOTER", true);
       echo $end2; include('footer.php'); 
      }
     if (isset($_GET['gotoinsert']))
@@ -189,6 +191,7 @@ echo '	</select>
         <input type="hidden" name="go" value="1">
         </div><form>';
         echo $end1;
+           define("CORRECT_FOOTER", true);
         include "display_voting.php";
         echo $end2; include('footer.php'); 
        }
@@ -245,6 +248,7 @@ echo '	</select>
       <div class="middle_lite">Предмет <!--<b>"'.$true_name.'"</b>--> успешно добавлен.</div>';
       echo $end1;
       include "display_voting.php";
+         define("CORRECT_FOOTER", true);
       echo $end2; include('footer.php'); 
      }
     if(isset($_GET['gotodelete']))
@@ -282,6 +286,7 @@ echo '	</select>
         <div class="middle_lite">Предмет <b>"'.$d['name'].'"</b> удалён.</div>';
         echo $end1;
         include "display_voting.php";
+           define("CORRECT_FOOTER", true);
         echo $end2; include('footer.php'); 
         //mysql_close();
        }
@@ -324,6 +329,7 @@ echo '	</select>	  <br><br>
         Отменить изменения</a></div><br>';
       echo $end1;
       include "display_voting.php";
+         define("CORRECT_FOOTER", true);
       echo $end2; include('footer.php'); 
       //mysql_close();
      }
@@ -352,6 +358,7 @@ echo '	</select>	  <br><br>
         Отменить изменения</a></div><br>';
         echo $end1;
         include "display_voting.php";
+           define("CORRECT_FOOTER", true);
         echo $end2; include('footer.php'); 
        }
       if($_GET['toupdatename']=="")
@@ -383,6 +390,7 @@ echo '	</select>	  <br><br>
       <div class="middle_lite">Предмет <b>"'.$eee['name'].'"</b> успешно обновлен </div>';
       echo $end1;
       include "display_voting.php";
+         define("CORRECT_FOOTER", true);
       echo $end2; include('footer.php'); 
      }
     if(isset($_GET['toopen']))
@@ -449,6 +457,7 @@ else
  
      	echo $end1;
       include "display_voting.php";
+define("CORRECT_FOOTER", true);
       echo $end2; include('footer.php'); 
  
 ?>

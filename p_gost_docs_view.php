@@ -140,6 +140,7 @@ echo '<div class=text style="text-align:center;"> для увеличения с
 	  include "display_voting.php";
 	  }
 	echo $end2;
+define("CORRECT_FOOTER", true);
 include('footer.php'); 
 
 ?>

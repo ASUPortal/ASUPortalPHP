@@ -109,6 +109,7 @@ if (isset($_POST['main_text']) && $_POST['main_text']!='')  //обновлени
 
         echo $end1;
         include "display_voting.php";
+define("CORRECT_FOOTER", true);
         echo $end2; include('footer.php'); 
 
 ?>

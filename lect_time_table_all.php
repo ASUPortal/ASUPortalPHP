@@ -288,6 +288,7 @@ echo'<input type="submit" value="OK"></form>';
 	echo '&nbsp<input type=button onclick=window.location.href="lect_time_table_all.php?go=1&insert=1" title="Добавление (правка) расписания" value="OK">';
 	echo $end1;
     include "display_voting.php";
+    define("CORRECT_FOOTER", true);
     echo $end2; include('footer.php'); 
     //mysql_close();
    }

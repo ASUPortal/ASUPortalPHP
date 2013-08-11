@@ -433,5 +433,6 @@ if (!isset($_GET['save']) && !isset($_GET['print']))
         echo $end1;
         include "display_voting.php";
         echo $end2;
+    define("CORRECT_FOOTER", true);
 	include('footer.php'); 
  } ?>

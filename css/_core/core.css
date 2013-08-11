@@ -1,5 +1,4 @@
 body {
-
     padding: 0px;
     margin: 0px;
     background: #ffffff;
@@ -212,7 +211,7 @@ p.error {
     -khtml-opacity: 0.5;
     opacity: 0.5;
     z-index: 10000;
-    display: none;
+    display: block;
 }
 
 .asu_menu {

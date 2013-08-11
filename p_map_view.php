@@ -279,5 +279,6 @@ if (!isset($_GET['wap'])) {
   
 }
 echo $end2;
+    define("CORRECT_FOOTER", true);
 ?>
 <?php include('footer.php'); ?>

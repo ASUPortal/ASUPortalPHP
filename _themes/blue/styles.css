@@ -1,5 +1,4 @@
 body {
-	background-color:#ffffaa; color:#000000; margin-top:0px; margin-bottom:0px; font-family:Arial; font-size:10pt;
 	}
 a,
 .main a,
@@ -142,7 +141,7 @@ tr.row_dark:hover,tr.row_light:hover, tr.hover {background-color:#ffffaa; }	/*  
 .fLetter {font-size:18pt;font-family:Arial; font-weight:bold; text-decoration:none;}
 .fLetter_cnt {font-size:8pt;color:#ff0000;}
 .tab_passive {display:none; visibility:hidden;}
-.tab_active {display:; visibility:visible;}
+.tab_active {display: block; visibility:visible;}
 
 @media all {
 	.middle_big,.time_big ,.text_big,.author_big {

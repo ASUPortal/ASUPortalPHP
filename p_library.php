@@ -1,12 +1,12 @@
 <?php
 include 'sql_connect.php';
 
-$pg_title="Учебные материалы";
+$pg_title="пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
 
-$getsubj=0;	//выбранной предмет учебных материалоы
+$getsubj=0;	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 if (isset($_GET['getsubj']) && intval($_GET['getsubj'])>0) { $getsubj=intval($_GET['getsubj']); }
 
-$getdir=0;	// папка с учебными материалами выбранного преподавателя
+$getdir=0;	// пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 if (isset($_GET['getdir']) && intval($_GET['getdir'])>0) { $getdir=intval($_GET['getdir']); }
 
 $fiosubj='';
@@ -27,8 +27,8 @@ else
    if ($fiosubj!='') $head_title=$fiosubj.'. '.$head_title;
  }
 
-$firstLet=array ("А","Б","В","Г","Д","Е","Ё","Ж","З","И","Й","К","Л","М","Н","О","П","Р","С","Т","У","Ф",
-"Х","Ц","Ч","Ш","Щ","Э","Ю","Я","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R",
+$firstLet=array ("пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ",
+"пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","пїЅ","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R",
 "S","T","U","V","W","X","Y","W","Z");
 
 function letters()
@@ -37,8 +37,8 @@ function letters()
   $letterId=-1;
   if (isset($_GET['getsub']) && intval($_GET['getsub'])>=0) {$letterId=intval($_GET['getsub']);}
   
-  echo '<p class=middle_library style="font-size:18pt;"> <span class=text>предметы с русскими начальными буквами: </span>';
-  //код выборки первых букв имени предмета и числа файлов в них
+  echo '<p class=middle_library style="font-size:18pt;"> <span class=text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: </span>';
+  //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ
   $query_letter_rus='SELECT UPPER(left(s.name,1)) as name, COUNT(f.id_file) AS file_cnt
 	  FROM    (   documents d
 	           INNER JOIN
@@ -47,7 +47,7 @@ function letters()
 	       INNER JOIN
 	          subjects s
 	       ON (s.id = d.subj_id)
-	where UPPER(left(s.name,1))>="А" && UPPER(left(s.name,1))<="Я"
+	where UPPER(left(s.name,1))>="пїЅ" && UPPER(left(s.name,1))<="пїЅ"
 	GROUP BY 1
 	ORDER BY 1 ASC';
   $res_rus=mysql_query($query_letter_rus);
@@ -56,11 +56,11 @@ function letters()
    while ($a_rus=mysql_fetch_assoc($res_rus))
    {
 	if ($firstLet[$letterId]==$a_rus['name']) {echo '<font size=+3>'.$a_rus['name'].'<sub class=fLetter_cnt>'.$a_rus['file_cnt'].'</sub></font>&nbsp;';}
-	else {echo '<a href="?onget=1&getsub='.array_search($a_rus['name'],$firstLet).'" title="в категории файлов: '.$a_rus['file_cnt'].'">'.$a_rus['name'].'<sub class=fLetter_cnt>'.$a_rus['file_cnt'].'</sub></a>&nbsp;';}
+	else {echo '<a href="?onget=1&getsub='.array_search($a_rus['name'],$firstLet).'" title="пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: '.$a_rus['file_cnt'].'">'.$a_rus['name'].'<sub class=fLetter_cnt>'.$a_rus['file_cnt'].'</sub></a>&nbsp;';}
 	}
   }
-  else {echo '<div class=text> <b>файлов не найдено.</b></p>';}
-  echo '<p><span class=text>предметы с англоязычными начальными буквами: </span> ';
+  else {echo '<div class=text> <b>пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.</b></p>';}
+  echo '<p><span class=text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: </span> ';
   $query_letter_rus='SELECT UPPER(left(s.name,1)) as name, COUNT(f.id_file) AS file_cnt
 	  FROM    (   documents d
 	           INNER JOIN
@@ -81,11 +81,11 @@ function letters()
 	else {echo '<a href="?onget=1&getsub='.array_search($a_rus['name'],$firstLet).'">'.$a_rus['name'].'<sub>'.$a_rus['file_cnt'].'</sub></a>&nbsp;';}
 	}
   }
-  else {echo '<span class=text> <b>файлов не найдено.</b></span></p>';}
-  echo '<a class=main href="?onget=1&getallsub=1">все</a>';
+  else {echo '<span class=text> <b>пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.</b></span></p>';}
+  echo '<a class=main href="?onget=1&getallsub=1">пїЅпїЅпїЅ</a>';
   
   ?>
-  <div class=text><a href="#show" onclick="hide_show('nFiles');">последние файлы в разделе "Учеба" (за 7 дней)  показать/скрыть</a></div>
+  <div class=text><a href="#show" onclick="hide_show('nFiles');">пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅ" (пїЅпїЅ 7 пїЅпїЅпїЅпїЅ)  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅ</a></div>
   <?php
 
 $time_in_days=7;
@@ -117,7 +117,7 @@ $query='select f.nameFile,f.browserFile,f.entry,f.date_time,subjects.name as sub
    }
    echo '</table></div>';
    }
-   else {echo '<div class=warning>новых файлов не обнаружено</div>';}  
+   else {echo '<div class=warning>пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</div>';}  
  }
  
 if (!isset($_GET['onget']))
@@ -128,7 +128,7 @@ if (!isset($_GET['onget']))
  
  }
 
-//запрос файла и получение запроса на скачку
+//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
  if (isset($_GET['getdirect']) )
    {    
       $res04=mysql_query ('update files set entry=entry+1 where nameFolder="'.f_ri($_GET['getdirect']).'"
@@ -149,11 +149,11 @@ else { echo $head_wap;}
 
 <?php
     echo '<div class="main">'.$pg_title;
-if (isset($_SESSION['auth']) && $_SESSION['userType']=='преподаватель') {echo '<a href="lect_library.php" class=text title="'.$_SESSION['FIO'].'"> добавить  свой предмет\файл</a>';}
+if (isset($_SESSION['auth']) && $_SESSION['userType']=='пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ') {echo '<a href="lect_library.php" class=text title="'.$_SESSION['FIO'].'"> пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\пїЅпїЅпїЅпїЅ</a>';}
 echo '</div>
-	<div class=text style="text-align:center;"> часть файлов сжаты архиватором WinRar, загрузить архиватор Вы можете <a href="apps/wrar34b5ru.exe"> <u>здесь</u> </a><p>';
+	<div class=text style="text-align:center;"> пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ WinRar, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ <a href="apps/wrar34b5ru.exe"> <u>пїЅпїЅпїЅпїЅпїЅ</u> </a><p>';
     letters();
-  if ($getdir>0)	//выбор пособий преподавателя по предмету
+  if ($getdir>0)	//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
    {   
 
     $res02=mysql_query ('select * from files where nameFolder="'.$getdir.'" order by browserFile');
@@ -165,10 +165,10 @@ echo '</div>
     $res02b=mysql_query ('select id,FIO from users where id="'.$dd['user_id'].'"');
     $ddd=mysql_fetch_array($res02b);
     echo '<div class="middle"><a href=p_library.php?onget=1&getsubj='.$dd['subj_id'].'">'.$dd['name'].'</a></div><div class="text_library" >
-		'.($hide_person_data_rule?$hide_person_data_text:'<a href="p_lecturers.php?onget=1&idlect='.$ddd['id'].'" title="подробнее о преподавателе" style="text-decoration:none;">'.$ddd['FIO'].'</a>').'</div>';
+		'.($hide_person_data_rule?$hide_person_data_text:'<a href="p_lecturers.php?onget=1&idlect='.$ddd['id'].'" title="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" style="text-decoration:none;">'.$ddd['FIO'].'</a>').'</div>';
     if(mysql_num_rows($res02)==0)
      {
-      echo '<br><div class="middle_lite_library">В данном предмете материалов нет.</div>';
+      echo '<br><div class="middle_lite_library">пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ.</div>';
      }
     else
      {
@@ -176,7 +176,7 @@ echo '</div>
        {
         echo '<br><div class="middle_lite_library">
         <a href="?onget=1&getdirect='.$getdir.'&getfile='.$d['nameFile'].'"
-        title="Добавлено '.DateTimeCustomConvert($d['date_time'],'dt','mysql2rus').'">';
+        title="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ '.DateTimeCustomConvert($d['date_time'],'dt','mysql2rus').'">';
 		  
 		file_type_img($d['nameFile']);
 		
@@ -186,18 +186,18 @@ echo '</div>
         if (trim($d['add_link'])!='') {
 		 	$add_link_array = explode("\n", $d['add_link']);
 			 //$d['add_link']=str_replace("\n","<br>",$d['add_link']);
-			 echo '<div class="text">Сопутствующие ссылки: <img src="images/pc.gif" border=0><br>';
+			 echo '<div class="text">пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: <img src="images/pc.gif" border=0><br>';
 			 for ($i=0;$i<count($add_link_array);$i++) 
 			 	{
 				  if (strstr($add_link_array[$i],'http://') || strstr($add_link_array[$i],'www.') || strstr($add_link_array[$i],'ftp://'))
 				  {if (strstr($add_link_array[$i],'www.') && !strstr($add_link_array[$i],'http://') && !strstr($add_link_array[$i],'ftp://')) 
 				  	{$add_link_array[$i]='http://'.$add_link_array[$i];}
-				   echo '- &nbsp; <a href="'.$add_link_array[$i].'" title="перейти по ссылке" target="_blank">'.$add_link_array[$i].'</a><br>';}
+				   echo '- &nbsp; <a href="'.$add_link_array[$i].'" title="пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ" target="_blank">'.$add_link_array[$i].'</a><br>';}
 				  else {echo '<b>'.$add_link_array[$i].'</b><br>';}
 				  }
 		echo '</div>';
 		}
-		echo '<div class="text">Скачано:&nbsp;'.$d['entry'].'&nbsp;раз(а)</div>';
+		echo '<div class="text">пїЅпїЅпїЅпїЅпїЅпїЅпїЅ:&nbsp;'.$d['entry'].'&nbsp;пїЅпїЅпїЅ(пїЅ)</div>';
        }
      }
    }
@@ -214,10 +214,10 @@ echo '</div>
      }
 	//$query_list=
     $filter='';
-    if (isset($_GET['getsub']) && intval($_GET['getsub'])>=0) {	//фильтр по первой букве имени предмета
+    if (isset($_GET['getsub']) && intval($_GET['getsub'])>=0) {	//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	 $getsub=intval($_GET['getsub']);
 	 $filter=' and s.name like "'.$firstLet[$getsub].'%"';}
-	else if ($getsubj>0) 	//фильтр по предмету
+	else if ($getsubj>0) 	//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		{
 		 $getsubj=$getsubj;
 		 $filter=' and s.id='.$getsubj.'';}				
@@ -227,7 +227,7 @@ echo '</div>
 		inner join files f on d.nameFolder=f.nameFolder where 1 '.$filter);
     
 	$count=mysql_result($res05,0,0);
-    $length=10;	//число предметов на странице
+    $length=10;	//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	$pages=$count/$length;
     $pages_and=$pages;
     $pages_and=intval($pages_and);
@@ -248,7 +248,7 @@ echo '</div>
      {
       $length=$count-$start;
      }
-    //запрос общего списка на главной странице-------------------------------------------------------------------------------
+    //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ-------------------------------------------------------------------------------
 	 $res05=mysql_query ('select distinct s.id,s.name from subjects s 
 	 	inner join documents d on d.subj_id=s.id 
 		inner join files f on d.nameFolder=f.nameFolder where 1 '.$filter.' 
@@ -274,9 +274,9 @@ while($p_=mysql_fetch_array($res05))
 	while($p=mysql_fetch_array($res06))
      {
 		  echo '<div class="text" style="padding-left:40px;">
-		  Преподаватель:&nbsp;
-		  '.($hide_person_data_rule?$hide_person_data_text:'<a href="p_lecturers.php?onget=1&idlect='.$p['user_id'].'" title="подробнее о преподавателе">'.$p['fio'].'</a>').', &nbsp;
-	      <a href="?onget=1&getdir='.$p['nameFolder'].'">найдено материалов преподавателя ('.$p['f_cnt'].')</a></div>';
+		  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:&nbsp;
+		  '.($hide_person_data_rule?$hide_person_data_text:'<a href="p_lecturers.php?onget=1&idlect='.$p['user_id'].'" title="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ">'.$p['fio'].'</a>').', &nbsp;
+	      <a href="?onget=1&getdir='.$p['nameFolder'].'">пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ('.$p['f_cnt'].')</a></div>';
 	      echo '';
 		
      } 
@@ -290,10 +290,10 @@ while($p_=mysql_fetch_array($res05))
 	?> 
   </div>
 	
-	<p class="pages" valign="bottom">отражены только предметы с методическими материалами<br>в скобках указано число материалов по данному предмету 
-	<div class=text><b>Примечание:</b> <br>на внешнем зеркале портала ряд <u>Учебно-методических материалов</u> не доступны для загрузки. <br>
-  Вам следует обратиться к ним из локальной сети УГАТУ по адресу <a href="http://10.61.2.63"><u>http://10.61.2.63</u></a>.<br>
-  Либо послать письменный запрос <a href="mailto:smart_newline@mail.ru"> <u>Администратору портала</u>. </div>     
+	<p class="pages" valign="bottom">пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ<br>пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
+	<div class=text><b>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:</b> <br>пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ <u>пїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</u> пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. <br>
+  пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ <a href="http://10.61.2.63"><u>http://10.61.2.63</u></a>.<br>
+  пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ <a href="mailto:smart_newline@mail.ru"> <u>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ</u>. </div>     
 
 <?php  
    }
@@ -301,5 +301,6 @@ if (!isset($_GET['wap'])) {
   echo $end1;
   include "display_voting.php";		  
 }
+define("CORRECT_FOOTER", true);
 echo $end2; include('footer.php');  
 ?>

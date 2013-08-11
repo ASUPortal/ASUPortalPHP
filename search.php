@@ -54,5 +54,6 @@ include ('master_page_short.php');
 <?php
   echo $end1;
   include "display_voting.php";
+define("CORRECT_FOOTER", true);
   echo $end2; include('footer.php'); 
 ?>

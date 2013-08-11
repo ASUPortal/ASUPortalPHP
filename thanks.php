@@ -31,6 +31,7 @@ echo '<div class="main">'.$pg_title.'</div>';
 <?php
   echo $end1;
   include "display_voting.php";
+define("CORRECT_FOOTER", true);
   echo $end2; include('footer.php'); 
 ?>	
 <?php include('footer.php'); ?>

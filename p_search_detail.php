@@ -175,6 +175,7 @@ else {$query=$query.'	where LOWER(users.fio) like "%'.$q.'%" or LOWER(biography.
 //-----------------------------------------------------------------------
   echo $end1;
   include "display_voting.php";
+define("CORRECT_FOOTER", true);
   echo $end2; include('footer.php'); 
 
 ?>

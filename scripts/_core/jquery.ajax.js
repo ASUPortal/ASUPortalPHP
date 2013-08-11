@@ -61,6 +61,7 @@
              * Инициализируем ссылки в документе
              */
             this._initCenter(doc);
+            this._hideOverlay();
         }(params);
     }
 
