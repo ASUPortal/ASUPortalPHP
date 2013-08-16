@@ -12,10 +12,10 @@
 
 <div class="container-fluid asu_footer">
     <div class="row-fluid">
-        <div style="text-align:right;">
-            <a href="<?php echo $files_path;?>p_portal_about.php" title="подробнее...">(с)Портал АСУ</a>
+        <div style="text-align:right;color:#fff">
+            <a href="<?php echo $files_path;?>p_portal_about.php" style="color:#fff" title="Подробнее...">(с)Портал АСУ</a>
             2006-<?php echo date("Y");?>,
-            <a href="http://www.ugatu.ac.ru" title="перейти на сайт УГАТУ" target="_blank">УГАТУ</a>
+            <a href="http://www.ugatu.ac.ru" title="Перейти на сайт УГАТУ" style="color:#fff" target="_blank">УГАТУ</a>
         </div>
     </div>
 </div>

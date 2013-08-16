@@ -22,11 +22,11 @@
 	background : Window url('images/autocomplete_indicator.gif') right center no-repeat; 
 	height:16px; width:16px; position:absolute;	}
 .help {
-FONT: bold 14px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR:#FF0000;background-color:#DAEBFE; TEXT-ALIGN: justify ;
+FONT: bold 14px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR:rgb(231, 0, 19);background-color:#DAEBFE; TEXT-ALIGN: justify ;
 border-style:solid; border-width:1px; border-color:Blue; padding:2px;TEXT-DECORATION:none;
 }
 .warning {
-FONT: bold 11px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #FF0000; TEXT-ALIGN: justify ;
+FONT: bold 11px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR:rgb(231, 0, 19); TEXT-ALIGN: justify ;
 }
 .main {
 	FONT: bold 17px/15px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: center ;}
@@ -52,7 +52,7 @@ FONT: bold 11px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #FF0000; 
 	COLOR: #000099; TEXT-DECORATION: none;
 }
 .middle_library A:hover {
-	COLOR: #c42215; TEXT-DECORATION: none;
+	COLOR:rgb(231, 0, 19); TEXT-DECORATION: none;
 }
 .middle_news {
 	FONT: bold 14px/15px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: left ;
@@ -64,7 +64,7 @@ FONT: bold 11px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #FF0000; 
 	COLOR: #000099; font-weight:normal; TEXT-DECORATION: none; font-size:10pt;
 }
 .middle_lite A:hover {
-	COLOR: #c42215; TEXT-DECORATION: none;
+	COLOR:rgb(231, 0, 19); TEXT-DECORATION: none;
 }
 .lecturers {
  color:#000000; font-family : arial, sans-serif; font-size : 14px;  margin-left :5px; margin-right :5px; margin-top : 10px;
@@ -73,7 +73,7 @@ FONT: bold 11px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #FF0000; 
 	COLOR: #000099; TEXT-DECORATION: none;
 }
 .lecturers A:hover {
-	COLOR: #c42215; TEXT-DECORATION: none;
+	COLOR:rgb(231, 0, 19); TEXT-DECORATION: none;
 }
 .middle_lite_library {
 	FONT: 14px/20px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: left ;
@@ -82,7 +82,7 @@ FONT: bold 11px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #FF0000; 
 	COLOR: #000099; TEXT-DECORATION: none;
 }
 .middle_lite_library A:hover {
-	COLOR: #c42215; TEXT-DECORATION: none;
+	COLOR:rgb(231, 0, 19); TEXT-DECORATION: none;
 }
 .middle_lite_other {
 	FONT: 14px/25px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: left ;
@@ -94,7 +94,7 @@ FONT: bold 11px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #FF0000; 
 	COLOR: #000099; TEXT-DECORATION: none;
 }
 .middle_lite_warning {
-	FONT: 14px/25px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #FF0000; TEXT-ALIGN: left ;
+	FONT: 14px/25px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR:rgb(231, 0, 19); TEXT-ALIGN: left ;
 }
 .TEXT {
 	FONT: 11px/15px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #000000; TEXT-ALIGN: justify ;
@@ -103,7 +103,7 @@ FONT: bold 11px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #FF0000; 
 	COLOR: #000099; TEXT-DECORATION: none;
 }
 .TEXT A:hover {
-	COLOR: #c42215; TEXT-DECORATION: none;
+	COLOR:rgb(231, 0, 19); TEXT-DECORATION: none;
 }
 .news {
 	FONT: 11px/13px verdana, sans-serif; VERTICAL-ALIGN: middle; COLOR: #000000; TEXT-ALIGN: justify ; margin-left :5px;
@@ -128,7 +128,7 @@ color:#000000; font-family : tahoma, sans-serif; font-size : 12px;  margin-left 
 	COLOR: #000099; TEXT-DECORATION: none;
 }
 .title A:hover {
-	COLOR: #c42215; TEXT-DECORATION: none;
+	COLOR:rgb(231, 0, 19); TEXT-DECORATION: none;
 }
 .title2 {
 color:#000000; font-family : tahoma, sans-serif; font-size : 12px; margin-top :200px; margin-left :5px; margin-right :5px;
@@ -140,14 +140,14 @@ color:#000000; font-family : tahoma, sans-serif; font-size : 12px; margin-top :2
 	COLOR: #000099; TEXT-DECORATION: none;
 }
 .menu A:hover {
-	COLOR: #c42215; TEXT-DECORATION: none; }
+	COLOR:rgb(231, 0, 19); TEXT-DECORATION: none; }
 .main_menu {
 	FONT: 14px/25px Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #ffffff; TEXT-ALIGN: center ;}
 .main_menu A {
 	COLOR: #ffffff; font-weight:bold; TEXT-DECORATION: none; font-size:10pt;
 }
 .main_menu A:hover {
-	COLOR: #c42215; TEXT-DECORATION: none;}
+	COLOR:rgb(231, 0, 19); TEXT-DECORATION: none;}
 
 
 .pages {
@@ -157,7 +157,7 @@ color:#000000; font-family : tahoma, sans-serif; font-size : 12px; margin-top :2
 	COLOR: #000099; TEXT-DECORATION: none;
 }
 .pages A:hover {
-	COLOR: #c42215; TEXT-DECORATION: none;
+	COLOR:rgb(231, 0, 19); TEXT-DECORATION: none;
 }
 .success {FONT: bold 11px Tahoma, Arial, sans-serif; VERTICAL-ALIGN: top; COLOR: #33CC00; TEXT-ALIGN: justify ;}
 .forms_under_border {border-style:solid; border-width:thin; border-color: #ccccff; background-color:#ebeaff;}

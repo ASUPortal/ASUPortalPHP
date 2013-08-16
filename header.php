@@ -62,13 +62,13 @@ if (!isset($bodyOnLoad) && !isset($_GET['wap'])) {$bodyOnLoad=' ';}
 //для отрисовки закругленных таблиц
 $tab_begin='<table width=160 cellspacing=0 cellpadding=0 class=round_table align=center valign="top" border=0>
    <tr height=18>
-   <td width=10 background='.$web_root.'_themes/'.$theme_folder.'/images/1_03.gif></td>
-   <td width=135 background='.$web_root.'_themes/'.$theme_folder.'/images/1_05.gif></td>
-   <td width=15 background='.$web_root.'_themes/'.$theme_folder.'/images/1_07.gif></td></tr>';
+   <td width=10 background=#fff></td>
+   <td width=135 background=#fff></td>
+   <td width=15 background=|#fff></td></tr>';
 $tab_end='   <tr height=18>
-   <td width=10 background='.$web_root.'_themes/'.$theme_folder.'/images/1_09.gif></td>
-   <td width=135 background='.$web_root.'_themes/'.$theme_folder.'/images/1_10.gif></td>
-   <td width=15 background='.$web_root.'_themes/'.$theme_folder.'/images/1_11.gif></td></tr></table>';
+   <td width=10 background=#fff></td>
+   <td width=135 background=#fff></td>
+   <td width=15 background=#fff></td></tr></table>';
 
 //---------------------------------------------------------------------------------------
 $leftColDispl='';	//стиль отражения лев.панели (глав.меню.. статистика)
@@ -145,13 +145,6 @@ $head='<html>
                            <img src='.$web_root.'images/design/baners/baner5.gif alt="Cтудгородок УГАТУ" border=1></a></td></tr>
         <tr class=round_table><td colspan=3 align=center class=baner_img><a href=http://www.library.ugatu.ac.ru/index.html title="Библиотека,электронный каталог УГАТУ" target="_blank">
                            <img src='.$web_root.'images/design/baners/baner6.gif alt="Библиотека УГАТУ" border=1></a></td></tr>'.$tab_end;
-    $friends2 = '<!--div align=center class=middle> Образовательные сайты:</div>'.$tab_begin.'
-        <tr><td colspan=3 align=center><a href=http://www.ucheba.ru title="Образовательный сайт">
-                           <img src='.$web_root.'images/design/baners/baner1.gif alt="Учеба.ру"></a><br>&nbsp;</td></tr>
-        <tr><td colspan=3 align=center><a href=http://www.5ballov.ru title="Студенческий портал">
-                           <img src='.$web_root.'images/design/baners/baner2.gif alt="5Баллов.ру"></a><br>&nbsp;</td></tr>
-        <tr><td colspan=3 align=center><a href=http://www.bankreferatov.ru title="Крупнейший каталог рефератов">
-                           <img src='.$web_root.'images/design/baners/baner3.gif alt="БанкРефератов.ру"></a><br>&nbsp;</td></tr>'.$tab_end.'-->';
     /**
      * Статистика за неделю
      */
@@ -204,17 +197,8 @@ $head='<html>
      */
     $search='
         <FORM NAME="searchF" id="searchF" METHOD="get" ACTION="'.$web_root.'p_search_detail.php">
-        <div align=left class=text>поиск
-        <span style="padding-left:20px;"></span>
-        '.echoIf($admin_email!='','<a class=light_blink href="mailto:'.$admin_email.'?subject=To Portal administrator" title="отправить письмо администратору портала">
-            <img src="'.$web_root.'_themes/'.$theme_folder.'/images/email.gif" border=0 alt="письмо"></a>','').
-        '<span style="padding-left:20px;"></span>
-        <a class=light_blink href="'.$web_root.'p_map_view.php" title="перейти на карту портала">
-            <img src="'.$web_root.'_themes/'.$theme_folder.'/images/navigator.gif" border=0 alt="карта"></a>
-        </div>
-        <INPUT TYPE="text" NAME="q" SIZE=20 VALUE="" MAXLENGTH=160 title="введите фразу для поиска">
-        <a href="#search" onclick="searchF.submit();" class=light_blink>
-            <img  src="'.$web_root.'_themes/'.$theme_folder.'/images/search.gif" width=16 alt="поиск на портале"border=0></a><br>
+        <INPUT TYPE="text" NAME="q" SIZE=20 VALUE="" MAXLENGTH=160 placeholder="Поиск">
+        <br>
         <INPUT TYPE=SUBMIT VALUE="Найти" style="display:none;">
         <INPUT TYPE="hidden" NAME="r1" VALUE="on">
         <INPUT TYPE="hidden" NAME="r2" VALUE="on">

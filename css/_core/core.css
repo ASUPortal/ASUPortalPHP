@@ -15,7 +15,6 @@ body {
 .asu_header {
     position: relative;
     height: 93px;
-    background: #0000cc;
     background-image: url("../../_themes/blue/images/head.gif");
     border-bottom: 5px solid #ffffff;
 }
@@ -86,7 +85,7 @@ body {
 
 .asu_footer {
     height: 25px;
-    background: #0000cc;
+    background-image: url("../../_themes/blue/images/footer.gif");
 }
 
 .align_left {

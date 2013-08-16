@@ -159,11 +159,11 @@ else
         echo getPagenumList($pages,$number,3,'number',$q_str,'');
         ?>
     </p>
-    <table border="1" width="95%" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+    <table style="border: solid 1px #dddddd" width="95%" cellspacing="0" cellpadding="0" align="center">
         <?php
         while($a=mysql_fetch_array($res02))
         {
-            echo '<tr><td colspan=2 background="'.$files_path.'_themes/'.$theme_folder.'/images/news_03.gif" height="10" bgcolor="#2020bd"></td></tr>';
+            echo '<tr><td colspan=2 style="background:#eeeeee" height="10"></td></tr>';
             echo '<tr>';
 
             //вывод фото новости (кроме ?wap)
@@ -171,7 +171,7 @@ else
             if (!isset($_GET['wap'])) {
 
                 echo '<td width="130" align="center" valign="middle"><a href=#view
-	  		onclick=javascript:win_open("index.php?id='.$a['id'].'",400,600); title="подробнее...">';
+	  		onclick="javascript:win_open("index.php?id='.$a['id'].'",400,600);" style="font-size=12pt!important" title="подробнее...">';
                 if ($a['image']!="")
                 {
                     if ($a['news_type']=='notice')
@@ -236,7 +236,7 @@ else
                 {$url.='wap&';}
 
                 $details='<div class="menu" align="right"><a href=#view
-	  		onclick=javascript:win_open("'.$url.'id='.$a['id'].'",400,600);>подробнее...</a></div>';
+	  		onclick="javascript:win_open("'.$url.'id='.$a['id'].'",400,600);" style="font-size:12px">подробнее...</a></div>';
             }
             $b=htmlspecialchars($b,ENT_COMPAT );
             $b=msg_replace($b);
