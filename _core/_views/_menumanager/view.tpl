@@ -49,7 +49,7 @@
     {CHtml::helpForCurrentPage()}
 
     Пункты меню
-    <table border="1" cellpadding="0" cellspacing="0">
+    <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th>Пункт меню</th>
             <th>Ссылка</th>

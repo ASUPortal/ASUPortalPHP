@@ -8,7 +8,7 @@
     </ul>
     <div id="tabs-1">
         <p><strong>Бюджет</strong></p>
-        <table border="1" cellpadding="0" cellspacing="0">
+        <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
                 <th>#</th>
                 <th>Приказ</th>
@@ -24,7 +24,7 @@
         </table>
 
         <p><strong>Внебюджет</strong></p>
-        <table border="1" cellpadding="0" cellspacing="0">
+        <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
                 <th>#</th>
                 <th>Приказ</th>
@@ -41,7 +41,7 @@
     </div>
     <div id="tabs-2">
         <p><strong>Бюджет</strong></p>
-        <table border="1" cellpadding="0" cellspacing="0">
+        <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
                 <th>#</th>
                 <th>Приказ</th>
@@ -57,7 +57,7 @@
         </table>
 
         <p><strong>Внебюджет</strong></p>
-        <table border="1" cellpadding="0" cellspacing="0">
+        <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
                 <th>#</th>
                 <th>Приказ</th>
@@ -74,7 +74,7 @@
     </div>
     <div id="tabs-3">
         <p><strong>Бюджет</strong></p>
-        <table border="1" cellpadding="0" cellspacing="0">
+        <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
                 <th>#</th>
                 <th>Приказ</th>
@@ -90,7 +90,7 @@
         </table>
 
         <p><strong>Внебюджет</strong></p>
-        <table border="1" cellpadding="0" cellspacing="0">
+        <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
                 <th>#</th>
                 <th>Приказ</th>
