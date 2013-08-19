@@ -61,7 +61,7 @@
 {foreach $form->commission->getDiplomsListByDate() as $date=>$diploms}
     <h2>{$date|date_format:"%d.%m.%Y"}</h2>
 
-<table border="1" cellpadding="2" cellspacing="0">
+<table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th></th>
         <th>#</th>
@@ -70,7 +70,7 @@
     </tr>
     {foreach $diploms as $diplom}
         <tr>
-            <td><a href="#" onclick="if (confirm('Действительно удалить диплом {$diplom->dipl_name}')) { removeDiplom({$diplom->getId()}); }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+            <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить диплом {$diplom->dipl_name}')) { removeDiplom({$diplom->getId()}); }; return false;"></a></td>
             <td>{counter}</td>
             <td>
                 {if !is_null($diplom->student)}

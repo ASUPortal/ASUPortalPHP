@@ -8,7 +8,7 @@
 <table cellpadding="0" cellspacing="0" border="1" id="dataTable">
     <thead>
     <tr>
-        <th><img src="{$web_root}images/todelete.png"></th>
+        <th>&nbsp;</th>
         <th>#</th>
         <th>Название</th>
         <th>Значений</th>
@@ -17,7 +17,7 @@
     </thead>
     {foreach $indexes->getItems() as $index}
         <tr>
-            <td><a href="#" onclick="if (confirm('Действительно удалить показатель {$index->title}')) { location.href='?action=delete&id={$index->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+            <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить показатель {$index->title}')) { location.href='?action=delete&id={$index->id}'; }; return false;"></a></td>
             <td>{counter}</td>
             <td><a href="?action=edit&id={$index->id}">{$index->title}</a></td>
             <td align="center">{$index->getAvailableIndexValues()->getCount()}</td>

@@ -27,7 +27,7 @@
 
             {foreach $taxonomy->getTerms()->getItems() as $item}
                 <tr class="text" bgcolor="#DFEFFF">
-                    <td><a href="?action=delete&id={$item->id}" onclick="if (!confirm('Вы действительно хотите удалить термин {$item->getValue()}?')){ return false }"><img src="{$web_root}images/todelete.png"></a></td>
+                    <td><a href="?action=delete&id={$item->id}" onclick="if (!confirm('Вы действительно хотите удалить термин {$item->getValue()}?')){ return false }"></a></td>
                     <td>{counter}</td>
                     <td><a href="?action=editTerm&id={$item->id}">{$item->getValue()}</a></td>
                     <td>{$item->getAlias()}</td>

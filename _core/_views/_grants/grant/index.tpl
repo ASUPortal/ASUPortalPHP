@@ -16,7 +16,7 @@
             {foreach $grants->getItems() as $grant}
                 <tr>
                     <td>{counter}</td>
-                    <td><a href="#" onclick="if (confirm('Действительно удалить грант {$grant->title}')) { location.href='?action=delete&id={$grant->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+                    <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить грант {$grant->title}')) { location.href='?action=delete&id={$grant->id}'; }; return false;"></a></td>
                     <td><a href="index.php?action=edit&id={$grant->getId()}">
                             {if $grant->author_id == CSession::getCurrentPerson()->getId()}
                                 <b>{$grant->title}</b>

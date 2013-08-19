@@ -1,4 +1,4 @@
-<table border="1" cellpadding="2" cellspacing="0">
+<table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th></th>
         <th>#</th>
@@ -9,7 +9,7 @@
     </tr>
     {foreach $form->person->doctorpapers->getItems() as $paper}
         <tr>
-            <td><a href="#" onclick="if (confirm('Действительно удалить курсы?')) { location.href='papers.php?action=delete&id={$paper->getId()}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+            <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить курсы?')) { location.href='papers.php?action=delete&id={$paper->getId()}'; }; return false;"></a></td>
             <td><a href="papers.php?action=edit&id={$paper->getId()}">{counter}</a></td>
             <td>{$paper->tema}</td>
             <td>{$paper->spec_nom}</td>

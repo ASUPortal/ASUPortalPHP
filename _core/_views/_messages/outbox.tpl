@@ -21,7 +21,7 @@
             {if $messages->getCount() == 0}
                 Вам еще никому не писали!
             {else}
-                <table border="1" cellpadding="2" cellspacing="0">
+                <table class="table table-striped table-bordered table-hover table-condensed">
                     <tr>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
@@ -33,7 +33,7 @@
                     {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
                     {foreach $messages->getItems() as $mail}
                         <tr>
-                            <td><a href="#" onclick="if (confirm('Действительно удалить сообщение {$mail->getTheme()}')) { location.href='?action=delete&id={$mail->getId()}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+                            <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить сообщение {$mail->getTheme()}')) { location.href='?action=delete&id={$mail->getId()}'; }; return false;"></a></td>
                             <td>{counter}</td>
                             <td>
                                 <a href="?action=view&id={$mail->getId()}">

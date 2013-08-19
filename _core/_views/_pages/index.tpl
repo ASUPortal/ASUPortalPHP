@@ -17,7 +17,7 @@
             {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $pages->getItems() as $page}
                 <tr>
-                    <td><a href="#" onclick="if (confirm('Действительно удалить страницу {$page->title}')) { location.href='?action=delete&id={$page->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+                    <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить страницу {$page->title}')) { location.href='?action=delete&id={$page->id}'; }; return false;"></a></td>
                     <td>{counter}</td>
                     <td><a href="admin.php?action=edit&id={$page->getId()}">{$page->title}</a</td>
                     <td>

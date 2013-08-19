@@ -13,7 +13,7 @@
     </tr>
     {foreach $forms->getItems() as $set}
     <tr>
-        <td valign="top"><a href="#" onclick="if (confirm('Действительно удалить набор {$set->title}')) { location.href='?action=delete&id={$set->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+        <td valign="top"><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить набор {$set->title}')) { location.href='?action=delete&id={$set->id}'; }; return false;"></a></td>
         <td valign="top">{counter}</td>
         <td valign="top"><a href="?action=edit&id={$set->id}">{$set->title}</a> ({$set->alias})</td>
         <td valign="top">{$set->description|nl2br}</td>

@@ -1,4 +1,4 @@
-<table border="1" cellpadding="2" cellspacing="0">
+<table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th></th>
         <th>#</th>
@@ -8,7 +8,7 @@
     </tr>
     {foreach $form->person->ordersSAB->getItems() as $order}
         <tr>
-            <td><a href="#" onclick="if (confirm('Действительно удалить приказ {if !is_null($order->order)}{$order->order->getName()}{/if}?')) { location.href='orderssab.php?action=delete&id={$order->getId()}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+            <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить приказ {if !is_null($order->order)}{$order->order->getName()}{/if}?')) { location.href='orderssab.php?action=delete&id={$order->getId()}'; }; return false;"></a></td>
             <td>{counter}</td>
             <td><a href="orderssab.php?action=edit&id={$order->getId()}">
                 {if !is_null($order->order)}

@@ -29,7 +29,7 @@
     {foreach $form->grant->periods->getItems() as $period}
         <tr>
             <td>{counter}</td>
-            <td><a href="#" onclick="if (confirm('Действительно удалить период {$period->title}')) { location.href='periods.php?action=delete&id={$period->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+            <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить период {$period->title}')) { location.href='periods.php?action=delete&id={$period->id}'; }; return false;"></a></td>
             <td colspan="2"><a href="periods.php?action=edit&id={$period->getId()}">{$period->title}</a></td>
             <td>{$period->getPeriod()}</td>
             <td width="16">
@@ -41,7 +41,7 @@
         {foreach $period->money->getItems() as $money}
             <tr>
                 <td></td>
-                <td><a href="#" onclick="if (confirm('Действительно удалить операцию?')) { location.href='money.php?action=delete&id={$money->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+                <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить операцию?')) { location.href='money.php?action=delete&id={$money->id}'; }; return false;"></a></td>
                 <td width="16">
                     {if $money->type_id == "1"}
                         <img src="{$web_root}images/tango/16x16/actions/edit-redo.png">

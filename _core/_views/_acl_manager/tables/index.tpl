@@ -5,7 +5,7 @@
 
     {CHtml::helpForCurrentPage()}
 
-<table border="1" cellpadding="2" cellspacing="0">
+<table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th></th>
         <th>#</th>
@@ -16,7 +16,7 @@
     </tr>
     {foreach $tables->getItems() as $table}
     <tr>
-        <td valign="top"><a href="#" onclick="if (confirm('Действительно удалить таблицу {$table->title}')) { location.href='?action=delete&id={$table->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+        <td valign="top"><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить таблицу {$table->title}')) { location.href='?action=delete&id={$table->id}'; }; return false;"></a></td>
         <td>{counter}</td>
         <td>{$table->table}</td>
         <td><a href="tables.php?action=edit&id={$table->getId()}">{$table->title}</a></td>

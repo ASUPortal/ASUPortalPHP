@@ -59,8 +59,8 @@
             {CHtml::activeHiddenField("edit_title", $form, $form->id)}
             <tr>
                 <td>
-                    <a href="indexes.php?action=deleteValue&id={$form->id}" onclick="if (!confirm('Вы действительно хотите удалить показатель ')){ return false }">
-                        <img src="{$web_root}images/todelete.png">
+                    <a class="icon-trash" href="indexes.php?action=deleteValue&id={$form->id}" onclick="if (!confirm('Вы действительно хотите удалить показатель ')){ return false }">
+
                     </a>
                 </td>
                 <td>

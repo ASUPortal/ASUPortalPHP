@@ -171,7 +171,7 @@
 
     {foreach $records->getItems() as $record}
     <tr>
-        <td><a href="#" onclick="if (confirm('Действительно удалить работу стедунта {if !is_null($record->student)}{$record->student->getName()}{/if}')) { location.href='?action=delete&id={$record->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+        <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить работу стедунта {if !is_null($record->student)}{$record->student->getName()}{/if}')) { location.href='?action=delete&id={$record->id}'; }; return false;"></a></td>
         <td><a href="?action=edit&id={$record->getId()}">{$record->getId()}</a></td>
         <td>{$record->getDate()}</td>
         <td>

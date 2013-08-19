@@ -115,7 +115,7 @@
         </tr>
     </table>
 
-    <table border="1" cellpadding="2" cellspacing="0">
+    <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th></th>
             <th>#</th>
@@ -129,7 +129,7 @@
         {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $commissions->getItems() as $commission}
             <tr>
-                <td valign="top"><a href="#" onclick="if (confirm('Действительно удалить комиссию {$commission->title}')) { location.href='?action=delete&id={$commission->getId()}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+                <td valign="top"><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить комиссию {$commission->title}')) { location.href='?action=delete&id={$commission->getId()}'; }; return false;"></a></td>
                 <td valign="top">{counter}</td>
                 <td valign="top"><a href="?action=edit&id={$commission->getId()}">{$commission->title}</a></td>
                 <td valign="top">

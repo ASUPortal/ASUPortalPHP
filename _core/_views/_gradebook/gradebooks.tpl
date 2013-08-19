@@ -3,7 +3,7 @@
 {block name="asu_center"}
 <h2>Мои журналы</h2>
 
-    <table border="1" cellpadding="2" cellspacing="0">
+    <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th>&nbsp;</th>
             <th>#</th>
@@ -14,7 +14,7 @@
         </tr>
         {foreach $gradebooks->getItems() as $gradebook}
         <tr>
-            <td><a href="#" onclick="if (confirm('Действительно удалить журнал?')) { location.href='?action=deleteGradebook&id={$gradebook->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+            <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить журнал?')) { location.href='?action=deleteGradebook&id={$gradebook->id}'; }; return false;"></a></td>
             <td>{counter}</td>
             <td><a href="index.php?action=viewGradebook&id={$gradebook->getId()}">С {$gradebook->date_start} по {$gradebook->date_end}</a></td>
             <td>

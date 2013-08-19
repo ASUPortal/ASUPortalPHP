@@ -112,7 +112,7 @@
     </tr>
 </table>
 
-<table border="1" cellpadding="2" cellspacing="0">
+<table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th></th>
         <th>#</th>
@@ -124,7 +124,7 @@
     {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
     {foreach $orders->getItems() as $order}
     <tr>
-        <td><a href="#" onclick="if (confirm('Действительно удалить приказ {$order->title}')) { location.href='?action=delete&id={$order->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+        <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить приказ {$order->title}')) { location.href='?action=delete&id={$order->id}'; }; return false;"></a></td>
         <td>{counter}</td>
         <td>
             {if !is_null($order->type)}

@@ -8,7 +8,7 @@
 <table cellpadding="0" cellspacing="0" border="1">
     <thead>
     <tr>
-        <th><img src="{$web_root}images/todelete.png"></th>
+        <th></th>
         <th>#</th>
         <th>Преподаватель</th>
         <th>Показатель</th>
@@ -17,7 +17,7 @@
     </thead>
     {foreach $persons->getItems() as $person}
         <tr>
-            <td><a href="#" onclick="if (confirm('Действительно удалить показатель {$person->getName()}')) { location.href='?action=delete&id={$person->id}&year={$year->getId()}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+            <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить показатель {$person->getName()}')) { location.href='?action=delete&id={$person->id}&year={$year->getId()}'; }; return false;"></a></td>
             <td>{$person->id}</td>
             <td><a href="persons.php?action=view&id={$person->id}&year={$year->getId()}">{$person->getName()}</a></td>
             <td>

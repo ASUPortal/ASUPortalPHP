@@ -8,7 +8,7 @@
     {if $rates->getCount() == 0}
         Нет данных для отображения
     {else}
-        <table border="1" cellpadding="2" cellspacing="0">
+        <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
                 <th></th>
                 <th>#</th>
@@ -21,7 +21,7 @@
             {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $rates->getItems() as $rate}
                 <tr>
-                    <td><a href="#" onclick="if (confirm('Действительно удалить ставку {$rate->title}')) { location.href='?action=delete&id={$rate->getId()}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+                    <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить ставку {$rate->title}')) { location.href='?action=delete&id={$rate->getId()}'; }; return false;"></a></td>
                     <td>{counter}</td>
                     <td><a href="?action=edit&id={$rate->getId()}">{$rate->title}</a></td>
                     <td>{$rate->alias}</td>

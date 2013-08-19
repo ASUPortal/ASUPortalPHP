@@ -60,7 +60,7 @@
     </tr>
 </table>
 
-<table border="1" cellpadding="2" cellspacing="0">
+<table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th></th>
             <th>#</th>
@@ -70,7 +70,7 @@
         {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $specialities->getItems() as $speciality}
         <tr>
-            <td><a href="#" onclick="if (confirm('Действительно удалить специальность {$speciality->name}')) { location.href='?action=delete&id={$speciality->id}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+            <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить специальность {$speciality->name}')) { location.href='?action=delete&id={$speciality->id}'; }; return false;"></a></td>
             <td>{counter}</td>
             <td><a href="?action=edit&id={$speciality->getId()}">{$speciality->name}</a></td>
             <td>{$speciality->comment}</td>

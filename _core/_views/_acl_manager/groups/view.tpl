@@ -8,7 +8,7 @@
     {/if}
 
     <p>Состав группы</p>
-    <table border="1" cellpadding="2" cellspacing="0">
+    <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th width="16"></th>
             <th width="16">#</th>
@@ -25,7 +25,7 @@
         {/foreach}
         {foreach $group->users->getItems() as $user}
             <tr>
-                <td valign="top"><a href="#" onclick="if (confirm('Действительно удалить пользователя {$user->getName()} из группы')) { location.href='?action=delete&id={$user->getId()}'; }; return false;"><img src="{$web_root}images/todelete.png"></a></td>
+                <td valign="top"><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить пользователя {$user->getName()} из группы')) { location.href='?action=delete&id={$user->getId()}'; }; return false;"></a></td>
                 <td valign="top">{counter}</td>
                 <td valign="top"><center><img src="{$web_root}images/{$icon_theme}/16x16/apps/preferences-desktop-theme.png"></center></td>
                 <td valign="top">{$user->getName()}</td>

@@ -2,7 +2,7 @@
 {if $form->grant->attachments->getCount() == 0}
     Вложений пока нет
 {else}
-    <table border="1" cellpadding="2" cellspacing="0">
+    <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th>Вложение</th>
             <th>Автор</th>
