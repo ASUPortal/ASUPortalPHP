@@ -5,7 +5,7 @@
     {include file="_corriculum/_plan/form.tpl"}
 
     <ul class="nav nav-tabs">
-        <li><a href="#practice" data-toggle="tab">Практика и итоговая аттестация</a></li>
+        <li class="active"><a href="#practice" data-toggle="tab">Практика и итоговая аттестация</a></li>
     </ul>
 
     <div class="tab-content">

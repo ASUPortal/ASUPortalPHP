@@ -39,7 +39,11 @@ class CCorriculumPracticesController extends CBaseController {
         $p->setAttributes(CRequest::getArray($p::getClassName()));
         if ($p->validate()) {
             $p->save();
-            $this->redirect("index.php?action=edit&id=".$p->corriculum_id);
+            if ($this->continueEdit()) {
+                $this->redirect("practices.php?action=edit&id=".$p->getId());
+            } else {
+                $this->redirect("index.php?action=edit&id=".$p->corriculum_id);
+            }
             return true;
         }
         $this->setData("practice", $p);

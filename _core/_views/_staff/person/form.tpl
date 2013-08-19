@@ -1,9 +1,5 @@
 <script>
     jQuery(document).ready(function(){
-        jQuery("#tabs").tabs();
-        jQuery("#tabs-common").tabs();
-        jQuery("#tabs-orders").tabs();
-        jQuery("#tabs-orders-education").tabs();
         jQuery("#date_rogd").datepicker({
             dateFormat: "dd.mm.yy",
             showOn: "both",
@@ -14,32 +10,35 @@
     });
 </script>
 
-<form action="index.php" method="post">
+<form action="index.php" method="post" class="form-horizontal">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("person[id]", $form)}
 
-    <div id="tabs">
-        <ul style="height: 30px; ">
-            <li><a href="#tab-common">Общие сведения</a></li>
-            <li><a href="#tab-education">Образование, диссертации</a></li>
-            <li><a href="#tab-labor">Трудовая и научная деятельность</a></li>
-            <li><a href="#tab-orders">Приказы</a></li>
-        </ul>
-        <div id="tab-common">
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#tab-common">Общие сведения</a></li>
+        <li><a data-toggle="tab" href="#tab-education">Образование, диссертации</a></li>
+        <li><a data-toggle="tab" href="#tab-labor">Трудовая и научная деятельность</a></li>
+        <li><a data-toggle="tab" href="#tab-orders">Приказы</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab-common">
             {include file="_staff/person/subform.common.tpl"}
         </div>
-        <div id="tab-education">
+        <div class="tab-pane" id="tab-education">
             {include file="_staff/person/subform.education.tpl"}
         </div>
-        <div id="tab-labor">
+        <div class="tab-pane" id="tab-labor">
             {include file="_staff/person/subform.labor.tpl"}
         </div>
-        <div id="tab-orders">
+        <div class="tab-pane" id="tab-orders">
             {include file="_staff/person/subform.orders.tpl"}
         </div>
     </div>
 
-    <p>
+    <div class="control-group">
+        <div class="controls">
         {CHtml::submit("Сохранить")}
-    </p>
+        </div>
+    </div>
 </form>

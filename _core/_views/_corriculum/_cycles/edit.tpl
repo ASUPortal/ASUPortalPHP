@@ -4,18 +4,13 @@
 <h2>Редактирование цикла</h2>
 {include file="_corriculum/_cycles/form.tpl"}
 
-<script>
-    jQuery(document).ready(function(){
-        jQuery("#tabs").tabs();
-    });
-</script>
-
 <h2>Дисциплины</h2>
-    <div id="tabs">
-        <ul style="height: 30px; ">
-            <li><a href="#labor">Распределение нагрузки</a></li>
-        </ul>
-        <div id="labor">
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#labor">Распределение нагрузки</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="labor">
             {include file="_corriculum/_cycles/subform.labors.tpl"}
         </div>
     </div>

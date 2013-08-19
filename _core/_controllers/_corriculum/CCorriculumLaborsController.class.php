@@ -33,7 +33,11 @@ class CCorriculumLaborsController extends CBaseController {
         $labor->setAttributes(CRequest::getArray($labor::getClassName()));
         if ($labor->validate()) {
             $labor->save();
-            $this->redirect("disciplines.php?action=edit&id=".$labor->discipline_id);
+            if ($this->continueEdit()) {
+                $this->redirect("labors.php?action=edit&id=".$labor->getId());
+            } else {
+                $this->redirect("disciplines.php?action=edit&id=".$labor->discipline_id);
+            }
             return true;
         }
         $this->setData("labor", $labor);

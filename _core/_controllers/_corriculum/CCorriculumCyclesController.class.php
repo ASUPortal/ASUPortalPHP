@@ -48,7 +48,11 @@ class CCorriculumCyclesController extends CBaseController {
         $cycle->setAttributes(CRequest::getArray($cycle::getClassName()));
         if ($cycle->validate()) {
             $cycle->save();
-            $this->redirect("index.php?action=view&id=".$cycle->corriculum->getId());
+            if ($this->continueEdit()) {
+                $this->redirect("cycles.php?action=edit&id=".$cycle->getId());
+            } else {
+                $this->redirect("index.php?action=view&id=".$cycle->corriculum->getId());
+            }
             return true;
         }
         $this->setData("cycle", $cycle);

@@ -1,33 +1,43 @@
-<form action="practices.php" method="post">
+<form action="practices.php" method="post" class="form-horizontal">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $practice)}
     {CHtml::activeHiddenField("corriculum_id", $practice)}
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("type_id", $practice)}
+        <div class="controls">
         {CHtml::activeDropDownList("type_id", $practice, CTaxonomyManager::getTaxonomy("practice_types")->getTermsList())}
         {CHtml::error("type_id", $practice)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("discipline_id", $practice)}
+        <div class="controls">
         {CHtml::activeDropDownList("discipline_id", $practice, CTaxonomyManager::getDisciplinesList())}
         {CHtml::error("discipline_id", $practice)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("alias", $practice)}
+        <div class="controls">
         {CHtml::activeTextField("alias", $practice)}
         {CHtml::error("alias", $practice)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("length", $practice)}
+        <div class="controls">
         {CHtml::activeTextField("length", $practice)}
         {CHtml::error("length", $practice)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
+        <div class="controls">
         {CHtml::submit("Сохранить")}
-    </p>
+        </div>
+    </div>
 </form>

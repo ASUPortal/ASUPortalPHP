@@ -40,7 +40,11 @@ class CCorriculumDisciplinesController extends CBaseController {
         $discipline->setAttributes(CRequest::getArray($discipline::getClassName()));
         if ($discipline->validate()) {
             $discipline->save();
-            $this->redirect("cycles.php?action=edit&id=".$discipline->cycle_id);
+            if ($this->continueEdit()) {
+                $this->redirect("discipines.php?action=edit&id=".$discipline->getId());
+            } else {
+                $this->redirect("cycles.php?action=edit&id=".$discipline->cycle_id);
+            }
             return true;
         }
         $this->setData("cycle", $discipline->cycle);

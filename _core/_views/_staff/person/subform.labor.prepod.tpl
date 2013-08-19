@@ -1,12 +1,12 @@
 <p>Общая ставка: {$form->person->getOrdersRate()}</p>
 
-<div id="tabs-orders-education">
-    <ul style="height: 32px; ">
-        <li><a href="#tabs-1">Основной</a></li>
-        <li><a href="#tabs-2">Совместительство</a></li>
-        <li><a href="#tabs-3">Дополнительно</a></li>
-    </ul>
-    <div id="tabs-1">
+<ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#tabs-1">Основной</a></li>
+    <li><a data-toggle="tab" href="#tabs-2">Совместительство</a></li>
+    <li><a data-toggle="tab" href="#tabs-3">Дополнительно</a></li>
+</ul>
+<div class="tab-content">
+    <div id="tabs-1" class="tab-pane active">
         <p><strong>Бюджет</strong></p>
         <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
@@ -39,7 +39,7 @@
             {/foreach}
         </table>
     </div>
-    <div id="tabs-2">
+    <div id="tabs-2" class="tab-pane">
         <p><strong>Бюджет</strong></p>
         <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
@@ -72,7 +72,7 @@
             {/foreach}
         </table>
     </div>
-    <div id="tabs-3">
+    <div id="tabs-3" class="tab-pane">
         <p><strong>Бюджет</strong></p>
         <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
