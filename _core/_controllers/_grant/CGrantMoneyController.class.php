@@ -48,7 +48,11 @@ class CGrantMoneyController extends CBaseController{
         $money->setAttributes(CRequest::getArray($money::getClassName()));
         if ($money->validate()) {
             $money->save();
-            $this->redirect("index.php?action=edit&id=".$money->period->grant_id);
+            if ($this->continueEdit()) {
+                $this->redirect("money.php?action=edit&id=".$money->getId());
+            } else {
+                $this->redirect("index.php?action=edit&id=".$money->period->grant_id);
+            }
             return true;
         }
         $this->setData("money", $money);

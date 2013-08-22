@@ -100,19 +100,6 @@ body {
     display: none;
 }
 
-#asu_auth {
-    position: absolute;
-    display: none;
-    width: 300px;
-    border: 1px solid black;
-    padding: 3px;
-    background: #ffffff;
-    left: 50%;
-    margin-left:-150px;
-    color: #000000;
-    z-index: 1000;
-}
-
 #asu_auth p {
     clear:both;
 }

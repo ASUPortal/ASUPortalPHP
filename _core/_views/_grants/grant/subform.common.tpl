@@ -22,43 +22,49 @@
     });
 </script>
 
-<p>
+<div class="control-group">
     {CHtml::activeLabel("grant[title]", $form)}
+    <div class="controls">
     {CHtml::activeTextField("grant[title]", $form)}
     {CHtml::error("grant[title]", $form)}
-</p>
+</div></div>
 
-<p>
+<div class="control-group">
     {CHtml::activeLabel("grant[number]", $form)}
+    <div class="controls">
     {CHtml::activeTextField("grant[number]", $form)}
     {CHtml::error("grant[number]", $form)}
-</p>
+</div></div>
 
-<p>
+<div class="control-group">
     {CHtml::activeLabel("grant[comment]", $form)}
+    <div class="controls">
     {CHtml::activeTextBox("grant[comment]", $form)}
     {CHtml::error("grant[comment]", $form)}
-</p>
+</div></div>
 
-<p>
+<div class="control-group">
     {CHtml::activeLabel("grant[date_start]", $form)}
+    <div class="controls">
     {CHtml::activeTextField("grant[date_start]", $form, "date_start")}
     {CHtml::error("grant[date_start]", $form)}
-</p>
+</div></div>
 
-<p>
+<div class="control-group">
     {CHtml::activeLabel("grant[date_end]", $form)}
+    <div class="controls">
     {CHtml::activeTextField("grant[date_end]", $form, "date_end")}
     {CHtml::error("grant[date_end]", $form)}
-</p>
+</div></div>
 
-<p>
+<div class="control-group">
     {CHtml::activeLabel("grant[manager_id]", $form)}
+    <div class="controls">
     {CHtml::activeDropDownList("grant[manager_id]", $form, CStaffManager::getPersonsList())}
     {CHtml::error("grant[date_end]", $form)}
-</p>
+</div></div>
 
-<p>
+<div class="control-group">
     {CHtml::activeTextBox("grant[description]", $form, "description")}
     {CHtml::error("grant[description]", $form)}
-</p>
+</div>

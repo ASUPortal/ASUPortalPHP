@@ -1,4 +1,4 @@
-{if !is_null(CSession::getCurrentUser()->getPersonalSettings())}{if CSession::getCurrentUser()->getPersonalSettings()->isDashboardEnabled()}
+{if !is_null(CSession::getCurrentUser())}{if !is_null(CSession::getCurrentUser()->getPersonalSettings())}{if CSession::getCurrentUser()->getPersonalSettings()->isDashboardEnabled()}
     <p>
         <a href="{$web_root}_modules/_dashboard/">
             <center>
@@ -6,4 +6,4 @@
                 На рабочий стол
             </center></a>
     </p>
-{/if}{/if}
+{/if}{/if}{/if}

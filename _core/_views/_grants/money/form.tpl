@@ -13,37 +13,42 @@
     });
 </script>
 
-<form action="money.php" method="post" enctype="multipart/form-data">
+<form action="money.php" method="post" enctype="multipart/form-data" class="form-horizontal">
     {CHtml::activeHiddenField("id", $money)}
     {CHtml::activeHiddenField("period_id", $money)}
     {CHtml::hiddenField("action", "save")}
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("type_id", $money)}
+        <div class="controls">
         {CHtml::activeDropDownList("type_id", $money, $types, "type")}
         {CHtml::error("type_id", $money)}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("value", $money)}
+        <div class="controls">
         {CHtml::activeTextField("value", $money)}
         {CHtml::error("value", $money)}
-    </p>
+    </div></div>
 
-    <p id="category">
+    <div id="category" class="control-group">
         {CHtml::activeLabel("category_id", $money)}
+        <div class="controls">
         {CHtml::activeDropDownList("category_id", $money, CTaxonomyManager::getTaxonomy("outgo_categories")->getTermsList())}
         {CHtml::error("category_id", $money)}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("comment", $money)}
+        <div class="controls">
         {CHtml::activeTextBox("comment", $money)}
         {CHtml::error("comment", $money)}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
+        <div class="controls">
         {CHtml::submit("Сохранить")}
-    </p>
+    </div></div>
 
 </form>

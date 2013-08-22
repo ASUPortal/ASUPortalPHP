@@ -5,7 +5,7 @@
 
     {CHtml::dropDownList("year_id", CTaxonomyManager::getYearsList(), $year->getId(), "", "", "onchange='location.href=\"indexes.php?action=index&year=\" + this.value'")}
 
-<table cellpadding="0" cellspacing="0" border="1" id="dataTable">
+    <table class="table table-striped table-bordered table-hover table-condensed">
     <thead>
     <tr>
         <th>&nbsp;</th>

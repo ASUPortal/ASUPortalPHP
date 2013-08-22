@@ -1,39 +1,35 @@
-<script>
-    jQuery(document).ready(function(){
-        jQuery("#tabs").tabs();
-    });
-</script>
-
-<form action="index.php" method="post" enctype="multipart/form-data">
+<form action="index.php" method="post" enctype="multipart/form-data" class="form-horizontal">
     {CHtml::activeHiddenField("grant[id]", $form)}
     {CHtml::hiddenField("action", "save")}
 
-    <div id="tabs">
-        <ul style="height: 30px; ">
-            <li><a href="#tab-common">Общая информация</a></li>
-            <li><a href="#tab-finances">Финансирование</a></li>
-            <li><a href="#tab-events">Мероприятия</a></li>
-            <li><a href="#tab-attachments">Документы</a></li>
-            <li><a href="#tab-members">Участники</a></li>
-        </ul>
-        <div id="tab-common">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#tab-common">Общая информация</a></li>
+        <li><a data-toggle="tab" href="#tab-finances">Финансирование</a></li>
+        <li><a data-toggle="tab" href="#tab-events">Мероприятия</a></li>
+        <li><a data-toggle="tab" href="#tab-attachments">Документы</a></li>
+        <li><a data-toggle="tab" href="#tab-members">Участники</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="tab-common" class="tab-pane active">
             {include file="_grants/grant/subform.common.tpl"}
         </div>
-        <div id="tab-finances">
+        <div id="tab-finances" class="tab-pane">
             {include file="_grants/grant/subform.finances.tpl"}
         </div>
-        <div id="tab-events">
+        <div id="tab-events" class="tab-pane">
             {include file="_grants/grant/subform.events.tpl"}
         </div>
-        <div id="tab-attachments">
+        <div id="tab-attachments" class="tab-pane">
             {include file="_grants/grant/subform.attachments.tpl"}
         </div>
-        <div id="tab-members">
+        <div id="tab-members" class="tab-pane">
             {include file="_grants/grant/subform.members.tpl"}
         </div>
     </div>
 
-    <p>
+    <div class="control-group">
+        <div class="controls">
         {CHtml::submit("Сохранить")}
-    </p>
+        </div>
+    </div>
 </form>

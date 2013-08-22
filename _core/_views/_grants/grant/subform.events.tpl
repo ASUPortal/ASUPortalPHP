@@ -1,4 +1,4 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
+<table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th>#</th>
         <th>&nbsp;</th>

@@ -1,24 +1,27 @@
-<p>
+<div class="control-group">
     {CHtml::activeLabel("grant[finances_source]", $form)}
+    <div class="controls">
     {CHtml::activeTextField("grant[finances_source]", $form)}
     {CHtml::error("grant[finances_source]", $form)}
-</p>
+</div></div>
 
-<p>
+<div class="control-group">
     {CHtml::activeLabel("grant[finances_planned]", $form)}
+    <div class="controls">
     {CHtml::activeTextField("grant[finances_planned]", $form)}
     {CHtml::error("grant[finances_planned]", $form)}
-</p>
+</div></div>
 
-<p>
+<div class="control-group">
     {CHtml::activeLabel("grant[finances_accepted]", $form)}
+    <div class="controls">
     {CHtml::activeTextField("grant[finances_accepted]", $form)}
     {CHtml::error("grant[finances_accepted]", $form)}
-</p>
+</div></div>
 
 <h3>Поступления и расходы</h3>
 
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
+<table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th>#</th>
         <th width="11">&nbsp;</th>

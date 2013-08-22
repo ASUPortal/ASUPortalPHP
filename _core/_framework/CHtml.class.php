@@ -790,13 +790,36 @@ class CHtml {
         if (!is_null(CHelpManager::getHelpForCurrentPage())) {
             echo '<div class="alert alert-info">';
             echo '<h4>'.CHelpManager::getHelpForCurrentPage()->title.'</h4>';
-            echo CHelpManager::getHelpForCurrentPage()->content;
+            $printHelpBox = false;
+            if (mb_strlen(CHelpManager::getHelpForCurrentPage()->content) > 512) {
+                echo mb_substr(CHelpManager::getHelpForCurrentPage()->content, 0, 512)."...";
+                echo '<p><a href="#help" data-toggle="modal">Читать польностью</a></p>';
+                $printHelpBox = true;
+            } else {
+                echo CHelpManager::getHelpForCurrentPage()->content;
+            }
             if (CSession::getCurrentUser()->hasRole("help_add_inline")) {
                 echo '<p>';
                 echo '<a href="'.WEB_ROOT.'_modules/_help/?action=edit&id='.CHelpManager::getHelpForCurrentPage()->getId().'" target="_blank">Редактировать справку</a>';
                 echo '</p>';
             }
             echo '</div>';
+            if ($printHelpBox) {
+                echo '
+                    <div class="modal hide fade" id="help">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 id="myModalLabel">Справка</h3>
+                        </div>
+                        <div class="modal-body">
+                            '.CHelpManager::getHelpForCurrentPage()->content.'
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                        </div>
+                    </div>
+                ';
+            }
         } elseif (CSession::getCurrentUser()->hasRole("help_add_inline")) {
             echo '<div class="alert alert-info">';
             $uri = "";

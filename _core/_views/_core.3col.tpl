@@ -22,36 +22,7 @@
                     </a>
                     <a href="{CUtils::getLogoutLink()}">выход</a>
                     {else}
-                    <a href="{CUtils::getLoginLink()}" onclick="$('#asu_auth').show(); return false; ">авторизация</a>
-
-                <div id="asu_auth">
-                    <form action="{CUtils::getLoginLink()}" method="POST">
-                        <p><strong>Авторизация пользователя</strong></p>
-
-                        <p>
-                            {CHtml::label("Логин", "login")} *
-                            {CHtml::textField("login")}
-                        </p>
-
-                        <p>
-                            {CHtml::label("Пароль", "password")} *
-                            {CHtml::passwordField("password")}
-                        </p>
-
-                        <p>
-                            {CHtml::checkBox("saveAuth", "1")}
-                            {CHtml::label("Запомнить на две недели", "saveAuth")}
-                        </p>
-
-                        <p>
-                            {CHtml::link("Восстановление пароля", "$web_root/_modules/_acl_manager/?action=restorePassword")}
-                        </p>
-
-                        <p>
-                            {CHtml::submit("Вход")}
-                        </p>
-                    </form>
-                </div>
+                    <a href="#asu_auth" data-toggle="modal">авторизация</a>
                 {/if}
                 </p>
             </div>
@@ -101,4 +72,43 @@
         </div>
     </div>
 
+    {if !CSession::isAuth()}
+        <div id="asu_auth" class="modal hide fade">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">Авторизация пользователя</h3>
+            </div>
+            <div class="modal-body">
+                <form action="{CUtils::getLoginLink()}" method="POST" class="form-horizontal">
+                    <div class="control-group">
+                        {CHtml::label("Логин", "login")}
+                        <div class="controls">
+                        {CHtml::textField("login")}
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        {CHtml::label("Пароль", "password")}
+                        <div class="controls">
+                        {CHtml::passwordField("password")}
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        {CHtml::label("Запомнить на две недели", "saveAuth")}
+                        <div class="controls">
+                            {CHtml::checkBox("saveAuth", "1")}
+                        </div>
+                    </div>
+
+
+                    <div class="control-group">
+                        <div class="controls">
+                        {CHtml::submit("Вход", false)}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {/if}
 {include file="_core.footer.tpl"}

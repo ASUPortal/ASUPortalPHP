@@ -3,6 +3,7 @@
 {block name="asu_center"}
     <h2>{$object->title}</h2>
 
+    <p>{$object->description}</p>
 {/block}
 
 {block name="asu_right"}

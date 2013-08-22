@@ -1,5 +1,9 @@
 <?php
 class CPublicGrantsController extends CBaseController{
+    public $allowedAnonymous = array(
+        "index",
+        "view"
+    );
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");

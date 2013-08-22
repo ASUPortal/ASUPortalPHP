@@ -44,7 +44,11 @@ class CGrantEventsController extends CBaseController{
         $event->setAttributes(CRequest::getArray($event::getClassName()));
         if ($event->validate()) {
             $event->save();
-            $this->redirect("index.php?action=edit&id=".$event->grant_id);
+            if ($this->continueEdit()) {
+                $this->redirect("events.php?action=edit&id=".$event->getId());
+            } else {
+                $this->redirect("index.php?action=edit&id=".$event->grant_id);
+            }
             return true;
         }
         $this->addJSInclude(JQUERY_UI_JS_PATH);

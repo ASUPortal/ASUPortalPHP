@@ -7,12 +7,6 @@
         Нет объектов для отображения
     {else}
         <table class="table table-striped table-bordered table-hover table-condensed">
-            <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>{CHtml::tableOrder("title", $objects->getFirstItem())}</th>
-                </tr>
-            </thead>
             <tbody>
             {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $objects->getItems() as $object}
