@@ -2,7 +2,6 @@
 
 include 'sql_connect.php';
 
-
 //открываем заставку, если требуется
 $hide_logo=true;
 
@@ -35,71 +34,40 @@ $showKadriImg_ifNullBiogImg=true;
 if (!isset($_GET['wap'])) { if (!isset($_GET['id']))	{echo $head;} }
 else { echo $head_wap;}
 
-if(isset($_GET['id']))
-{
-
-
+if(isset($_GET['id'])) {
     $query='select news.*,users.fio,users.id as user_id from news left join users on users.id=news.user_id_insert where news.id="'.$_GET['id'].'" ';
-    //echo $query;
     $res00=mysql_query ($query);
-    echo $head1;
-    if(mysql_num_rows($res00)==1)
-    {
+    if(mysql_num_rows($res00)==1) {
         $g=mysql_fetch_array($res00);
 
         $e=$g['file'];
         $e=htmlspecialchars($e,ENT_COMPAT );
         $e=msg_replace($e);
 
-        if (!isset($_GET['save']) && !isset($_GET['print']))
-        {
+        if (!isset($_GET['save']) && !isset($_GET['print'])) {
             echo "<div style='text-align:right;'>
 		 	<a class=text href='?".$_SERVER["QUERY_STRING"]."&save&attach=doc' title='Выгрузить'>Передать в MS Word</a>&nbsp;&nbsp;&nbsp;
 			<a class=text href='?".$_SERVER["QUERY_STRING"]."&print' title='Распечатать'>Печать</a></div>";
         }
-        $class_css='';
-        if (isset($_GET['save']) || isset($_GET['print']))  {$class_css='_big';}
 
-        if ($g['news_type']=='notice') {$g['title']=$g['title'].'<div class="author'.$class_css.'">(автор: '.($hide_person_data_rule?$hide_person_data_text:$g['fio']).')</div>' ;}
-
-        echo '<br><div class="middle'.$class_css.'">'.$g['title'].'</div><br><div class="time'.$class_css.'">'.DateTimeCustomConvert($g['date_time'],'dt','mysql2rus').'</div><br><div class="text'.$class_css.'">';
-        if ($g['image']!="")
-        {
+        if ($g['image']!="") {
             $notice_img_path='';$notice_img_path_small='';
             if ($g['news_type']=='notice'){$notice_img_path='lects/';		  }
             else {$notice_img_path='news/';}
             $notice_img_path_small='small/';
-        }
-        else {
+        } else {
             //echo '<img src="images/design/themes/'.$theme_folder.'/no_photo.gif" border="0" align="left" hspace="10" vspace="0">';
         }
         echo $e.'</div>';
-        if (trim($g['file_attach'])!='')
-        {
+        if (trim($g['file_attach'])!='') {
             echo '<br> <div class=success>Прикреплен файл: <a href="news/attachement/'.trim($g['file_attach']).'">
 
 			  		<img src="images/design/attachment.gif" border=0><b>'.trim($g['file_attach']).'</b></a></div>';
-
         }
-        if (!isset($_GET['save']) && !isset($_GET['print']))
-        {
-            echo '<div class="middle_library" id="close_link"><br>';
-            if (isset($_GET['wap'])) {echo '<a onclick="javascript:history.back();" href="#">к списку новостей</a>';}
-            else {echo'<a href="javascript:window.close()">Закрыть</a>';}
-            echo '</div>';
-        }
-        ?>
-        <?php include('footer.php'); ?>
-    <?php
-
-    }
-    else
-    {
+    } else {
         echo '<div style="text-align:center;" class=warning>Запись не найдена</div><p align=center><a href=#close onclick="javascript:window.close();">Закрыть</a></p>'; exit();
     }
-}
-else
-{
+} else {
     if(!isset($_GET['number'])) {
         $number=1; $start=0;
     } else {
@@ -139,10 +107,34 @@ else
 
     $res02=mysql_query ($query) or die(mysql_error());
     echo '<div class="main">'.$pg_title;
-    if (isset($_SESSION['auth']) && $_SESSION['auth']==1 /*&& $_SESSION['userType']!='преподаватель'*/)
-    {echo '<a href="admin_news.php?go=1" class=text title="'.$_SESSION['FIO'].'"> добавить  новость</a>';}
+    if (isset($_SESSION['auth']) && $_SESSION['auth']==1 /*&& $_SESSION['userType']!='преподаватель'*/) {
+        echo '<a href="admin_news.php?go=1" class=text title="'.$_SESSION['FIO'].'"> добавить  новость</a>';
+    }
     echo '</div>';
     ?>
+    <script>
+        jQuery(document).ready(function(){
+            /**
+             * Содержимое новостей подгружается аяксом
+             * в перед показом диалога
+             */
+            jQuery(".modal").on("show", function(){
+                jQuery(this).find(".modal-body").html('<div style="text-align: center;"><img src="<?php echo WEB_ROOT; ?>images/loader.gif"></div>');
+            });
+            jQuery(".modal").on("shown", function(){
+                var url = jQuery(this).attr("url");
+                jQuery.ajax({
+                    url: url,
+                    type: "GET",
+                    cache: false,
+                    context: this,
+                    success: function(data){
+                        jQuery(this).find(".modal-body").html(data);
+                    }
+                });
+            });
+        });
+    </script>
     <p style="text-align:center;">
         <?php
         if ($pages>1)
@@ -170,33 +162,30 @@ else
 
             if (!isset($_GET['wap'])) {
 
-                echo '<td width="130" align="center" valign="middle"><a href=#view
-	  		onclick="javascript:win_open("index.php?id='.$a['id'].'",400,600);" style="font-size=12pt!important" title="подробнее...">';
-                if ($a['image']!="")
-                {
-                    if ($a['news_type']=='notice')
-                    {
-                        //echo '<img src="images/lects/small/sm_'.urlencode($a['image']).'" align="center" valign="middle"  border=0>';
+                echo '<td style="width: 130px;" align="center" valign="middle">';
+                if ($a['image']!="") {
+                    if ($a['news_type']=='notice') {
                         echo '<img src="images/news/small/sm_'.urlencode($a['image']).'" align="center" valign="middle"  border=0>';
+                    } else {
+                        echo '<img src="images/news/small/sm_'.urlencode($a['image']).'" align="center" valign="middle" alt="Фото новости" border=0>';
                     }
-                    else {echo '<img src="images/news/small/sm_'.urlencode($a['image']).'" align="center" valign="middle" alt="Фото новости" border=0>';}
-                }
-                else {
+                } else {
                     //сначала пытаемся получить фото из анкета, если не находим из биографии
-
-                    if ($a['user_photo']!="")
-                    {echo '<img src="images/lects/small/sm_'.$a['user_photo'].'"
-			   border="0" align="center" valign="middle" alt="Фото преподавателя из биографии" border=0>';}
-                    else if ($showKadriImg_ifNullBiogImg && $a['kadri_photo']!="")
-                    {echo '<img src="images/lects/small/sm_'.$a['kadri_photo'].'"
-			   border="0" align="center" valign="middle" alt="Фото преподавателя из анкеты" border=0>';}
-                    else {echo '<img src="images/design/notice.gif" border="0" align="center" valign="middle" alt="Фото новости" border=0>';}
+                    if ($a['user_photo']!="") {
+                        echo '<img src="images/lects/small/sm_'.$a['user_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из биографии" border=0>';
+                    } else if ($showKadriImg_ifNullBiogImg && $a['kadri_photo']!="") {
+                        echo '<img src="images/lects/small/sm_'.$a['kadri_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из анкеты" border=0>';
+                    } else {
+                        echo '<img src="images/design/notice.gif" border="0" align="center" valign="middle" alt="Фото новости" border=0>';
+                    }
                 }
 
-                echo '</a></td>';
-            }else {echo '<td width=5></td>';}
+                echo '</td>';
+            } else {
+                echo '<td width=5></td>';
+            }
 
-            echo '<td width="100%" valign="top">';
+            echo '<td valign="top">';
             $file_path='news/';
             if ($a['news_type']=='notice') {$file_path='notice/';}
 
@@ -232,11 +221,25 @@ else
                 if ($posCnt>0) $b=substr($b,0,$posCnt);
                 $b=$b.' ...';
                 $url='index.php?';
-                if (isset($_GET['wap']))
-                {$url.='wap&';}
+                if (isset($_GET['wap'])) {
+                    $url.='wap&';
+                }
 
+                /*
                 $details='<div class="menu" align="right"><a href=#view
-	  		onclick="javascript:win_open("'.$url.'id='.$a['id'].'",400,600);" style="font-size:12px">подробнее...</a></div>';
+	  		onclick="alert(111); javascript:win_open("'.$url.'id='.$a['id'].'",400,600);" style="font-size:12px">подробнее...</a></div>';
+                */
+                $details = '<div align="right"><a href="#news'.$a["id"].'" data-toggle="modal">подробнее...</a></div>';
+                $details .= '
+                <div id="news'.$a["id"].'" class="modal hide fade" url="'.WEB_ROOT.$url.'id='.$a["id"].'">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel">'.$a["title"].'</h3>
+                    </div>
+                    <div class="modal-body">
+                    423143124123412
+                    </div>
+                </div>';
             }
             $b=htmlspecialchars($b,ENT_COMPAT );
             $b=msg_replace($b);

@@ -62,13 +62,13 @@ if (!isset($bodyOnLoad) && !isset($_GET['wap'])) {$bodyOnLoad=' ';}
 //для отрисовки закругленных таблиц
 $tab_begin='<table width=160 cellspacing=0 cellpadding=0 class=round_table align=center valign="top" border=0>
    <tr height=18>
-   <td width=10 background=#fff></td>
-   <td width=135 background=#fff></td>
-   <td width=15 background=|#fff></td></tr>';
-$tab_end='   <tr height=18>
-   <td width=10 background=#fff></td>
-   <td width=135 background=#fff></td>
-   <td width=15 background=#fff></td></tr></table>';
+   <td width=10></td>
+   <td width=135></td>
+   <td width=15></td></tr>';
+$tab_end='<tr height=18>
+   <td width=10></td>
+   <td width=135></td>
+   <td width=15></td></tr></table>';
 
 //---------------------------------------------------------------------------------------
 $leftColDispl='';	//стиль отражения лев.панели (глав.меню.. статистика)
