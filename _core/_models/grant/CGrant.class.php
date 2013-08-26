@@ -45,7 +45,7 @@ class CGrant extends CActiveModel{
                 "relationPower" => RELATION_MANY_TO_MANY,
                 "storageProperty" => "_members",
                 "joinTable" => TABLE_GRANT_MEMBERS,
-                "leftCondition" => "grant_id = ".(is_null($this->getId()) ? 0 : $this->getId()),
+                "leftCondition" => "grant_id = ".(is_null($this->getId()) || $this->getId() == "" ? 0 : $this->getId()),
                 "rightKey" => "person_id",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPerson"
@@ -54,7 +54,7 @@ class CGrant extends CActiveModel{
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_attachments",
                 "storageTable" => TABLE_GRANT_ATTACHMENTS,
-                "storageCondition" => "grant_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "storageCondition" => "grant_id = " . (is_null($this->getId()) || $this->getId() == "" ? 0 : $this->getId()),
                 "managerClass" => "CGrantManager",
                 "managerGetObject" => "getAttachment"
             ),
@@ -62,7 +62,7 @@ class CGrant extends CActiveModel{
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_events",
                 "storageTable" => TABLE_GRANT_EVENTS,
-                "storageCondition" => "grant_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "storageCondition" => "grant_id = " . (is_null($this->getId()) || $this->getId() == "" ? 0 : $this->getId()),
                 "managerClass" => "CGrantManager",
                 "managerGetObject" => "getEvent"
             ),
@@ -70,7 +70,7 @@ class CGrant extends CActiveModel{
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_periods",
                 "storageTable" => TABLE_GRANT_PERIODS,
-                "storageCondition" => "grant_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "storageCondition" => "grant_id = " . (is_null($this->getId()) || $this->getId() == "" ? 0 : $this->getId()),
                 "managerClass" => "CGrantManager",
                 "managerGetObject" => "getPeriod"
             )

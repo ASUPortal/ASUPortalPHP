@@ -81,11 +81,13 @@ class CGrantsController extends CBaseController{
     }
     public function actionSave() {
         $form = new CGrantForm();
+        $grant = new CGrant();
+        $form->grant = $grant;
         $form->setAttributes(CRequest::getArray($form::getClassName()));
         if ($form->validate()) {
             $form->save();
             if ($this->continueEdit()) {
-                $this->redirect("?action=edit&id=".$form->grant["id"]);
+                $this->redirect("?action=edit&id=".$form->grant->getId());
             } else {
                 $this->redirect("?action=index");
             }

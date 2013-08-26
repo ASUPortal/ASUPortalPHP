@@ -10,9 +10,7 @@
 class CGrantForm extends CFormModel{
     public $grant =  null;
     public function save() {
-        $grant = new CGrant();
-        $grant->setAttributes($this->grant);
-        $grant->save();
+        $this->grant->save();
         /**
          * Работа с участниками
          */
@@ -38,5 +36,18 @@ class CGrantForm extends CFormModel{
                 $ar->insert();
             }
         }
+    }
+
+    /**
+     * validate() вызывается раньше save(), поэтому
+     * грант устанавливается здесь
+     *
+     * @return bool
+     */
+    public function validate() {
+        $fields = $this->grant;
+        $this->grant = new CGrant();
+        $this->grant->setAttributes($fields);
+        return $this->grant->validate();
     }
 }
