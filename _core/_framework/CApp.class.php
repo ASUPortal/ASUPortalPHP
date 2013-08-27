@@ -10,8 +10,10 @@ class CApp {
     private static $_inst = null;
     private $_config = null;
     private $_cache = null;
-    private $_dbConnection = null;
     private static $_log = array();
+    private $_dbLegacyConnection = null;
+    private $_dbConnection = null;
+    private $_dbLogConnection = null;
     /**
      * @param array $config
      */
@@ -47,15 +49,71 @@ class CApp {
                 classAutoload($p);
             }
         }
-        // инициализируем соединение с базой, если этого еще не сделано
-        global $sql_connect;
-        if (is_null($sql_connect)) {
-            $sql_connect = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD) or die("Невозможно установить соединение с БД");
-            mysql_select_db(DB_DATABASE) or die("Невозможно обратиться к базе данных ".DB_DATABASE);
-            mysql_query("SET NAMES UTF8");
-        }
+        /**
+         * Соединение с базой данных в режиме совместимости.
+         * Используется для работы старого портала
+         */
+        $this->_dbLegacyConnection = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD) or die("Невозможно установить соединение с БД");
+        mysql_select_db(DB_DATABASE) or die("Невозможно обратиться к базе данных ".DB_DATABASE);
+        mysql_query("SET NAMES UTF8");
+        mysql_query('SET SQL_LOG_BIN =1');
         // внутренняя кодировка приложений UTF-8
         mb_internal_encoding("UTF-8");
+        /**
+         * Стартуем сессию. Еще она стартует в sql_connect.php, но здесь при случае тоже может
+         */
+        if (!isset($_SESSION)) {
+            session_start();
+        }
+        /**
+         * Считаем разнообразную статистику
+         */
+        $this->logUserActivity();
+    }
+
+    /**
+     * Протоколирование действий пользователя
+     */
+    private function logUserActivity() {
+
+    }
+
+    /**
+     * Соединение с рабочей базой портала
+     *
+     * @return null|PDO
+     */
+    public function getDbConnection() {
+        if (is_null($this->_dbConnection)) {
+            $this->_dbConnection = new PDO(
+                "mysql:host=".$sql_host.";dbname=".$sql_base,
+                $sql_login,
+                $sql_passw,
+                array(
+                    PDO::ATTR_PERSISTENT => true
+                )
+            );
+        }
+        return $this->_dbConnection;
+    }
+
+    /**
+     * Соединение с БД Протокол
+     *
+     * @return null|PDO
+     */
+    private function getDbLogConnection() {
+        if (is_null($this->_dbLogConnection)) {
+            $this->_dbLogConnection = new PDO(
+                "mysql:host=".$sql_stats_host.";dbname=".$sql_stats_base,
+                $sql_stats_login,
+                $sql_stats_passw,
+                array(
+                    PDO::ATTR_PERSISTENT => true
+                )
+            );
+        }
+        return $this->_dbLogConnection;
     }
     /**
      * Работа с кешем
@@ -74,39 +132,5 @@ class CApp {
     }
     public function getConfig() {
         return $this->_config;
-    }
-
-    /**
-     * Соединение с базой данных
-     *
-     * @return C2DbConnection
-     */
-    public function getDb() {
-        if (is_null($this->_dbConnection)) {
-            $this->_dbConnection = new C2DbConnection(DB_HOST, DB_USER, DB_PASSWORD);
-        }
-        return $this->_dbConnection;
-    }
-
-    /**
-     * @param $category
-     * @param $message
-     * @param array $params
-     * @param null $source
-     * @param null $language
-     * @return string
-     */
-    public static function t($category,$message,$params=array(),$source=null,$language=null) {
-        return $params!==array() ? strtr($message,$params) : $message;
-    }
-    public static function trace($msg,$category='application') {
-        if(APP_DEBUG)
-            self::log($msg,$category);
-    }
-    public static function log($msg, $category) {
-        self::$_log[] = array(
-            "message" => $msg,
-            "category" => $category
-        );
     }
 }
