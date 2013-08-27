@@ -134,14 +134,15 @@ class CQuery {
         $this->_query = $q;
         if (!$this->_isExecuted) {
             $start = microtime();
-            $this->_result = mysql_query($q) or die(mysql_error()." -> ".$q);
+            $this->_result = $this->getDb()->prepare($q);
+            $this->_result->execute();
             $end = microtime();
             $this->_isExecuted = true;
             CLog::writeToLog($this->getQueryString()." (".($end - $start).")");
             CLog::addQueryTime($end-$start);
         }
         $rArr = new CArrayList();
-        while ($row = mysql_fetch_assoc($this->_result)) {
+        foreach ($this->_result->fetchAll(PDO::FETCH_ASSOC) as $row) {
             $rArr->add($rArr->getCount(), $row);
         }
         return $rArr;
@@ -184,13 +185,11 @@ class CQuery {
      */
     private function queryUpdate() {
         $t = array();
+        $values = array();
         foreach($this->_update as $key=>$value) {
             if ($key != "id") {
-                if (is_int($value)) {
-                    $t[] = "`".$key."` = ".$value;
-                } elseif(is_string($value)) {
-                    $t[] = "`".$key."` = '".$value."'";
-                }
+                $t[] = "`".$key."` = :".$key;
+                $values[":".$key] = $value;
             }
         }
         $q =
@@ -202,7 +201,8 @@ class CQuery {
         }
         $this->_query = $q;
         if (!$this->_isExecuted) {
-            $this->_result = mysql_query($q) or die(mysql_error()." -> ".$q);
+            $this->_result = $this->getDb()->prepare($q);
+            $this->_result->execute($values);
             $this->_isExecuted = true;
             CLog::writeToLog($this->getQueryString());
         }
@@ -219,7 +219,8 @@ class CQuery {
         }
         $this->_query = $q;
         if (!$this->_isExecuted) {
-            $this->_result = mysql_query($q) or die(mysql_error()." -> ".$q);
+            $this->_result = $this->getDb()->prepare($q);
+            $this->_result->execute();
             $this->_isExecuted = true;
             CLog::writeToLog($this->getQueryString());
         }
@@ -359,8 +360,9 @@ class CQuery {
     }
     private function queryCustom() {
         $res = new CArrayList();
-        $q = mysql_query($this->getQueryString()) or die(mysql_error()." -> ".$this->getQueryString());
-        while ($row = mysql_fetch_assoc($q)) {
+        $this->_result = $this->getDb()->prepare($this->getQueryString());
+        $this->_result->execute();
+        foreach ($this->_result->fetchAll(PDO::FETCH_ASSOC) as $row) {
             $res->add($res->getCount(), $row);
         }
         return $res;

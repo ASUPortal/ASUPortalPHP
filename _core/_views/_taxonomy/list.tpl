@@ -13,7 +13,7 @@
     </tr>
     {foreach $taxonomies->getItems() as $taxonomy}
         <tr>
-            <td><a href="?action=deleteTaxonomy&id={$taxonomy->id}" onclick="if (!confirm('Вы действительно хотите удалить таксономию {$taxonomy->getName()}?')){ return false }"></a></td>
+            <td><a class="icon-trash" href="?action=deleteTaxonomy&id={$taxonomy->id}" onclick="if (!confirm('Вы действительно хотите удалить таксономию {$taxonomy->getName()}?')){ return false }"></a></td>
             <td>{counter}</td>
             <td><a href="?action=index&id={$taxonomy->id}">{$taxonomy->getName()}</a></td>
             <td>{$taxonomy->getTerms()->getCount()}</td>
@@ -22,7 +22,7 @@
     {/foreach}
     {foreach $legacy->getItems() as $taxonomy}
         <tr>
-            <td><a href="?action=deleteLegacyTaxonomy&id={$taxonomy->id}" onclick="if (!confirm('Вы действительно хотите удалить таксономию {$taxonomy->getName()}?')){ return false }"></a></td>
+            <td><a class="icon-trash" href="?action=deleteLegacyTaxonomy&id={$taxonomy->id}" onclick="if (!confirm('Вы действительно хотите удалить таксономию {$taxonomy->getName()}?')){ return false }"></a></td>
             <td>{counter}</td>
             <td><a href="?action=legacy&id={$taxonomy->getId()}">{$taxonomy->getName()}</a></td>
             <td> - </td>

@@ -19,13 +19,13 @@ class CPersonForm extends CFormModel{
         /**
          * Сохраняем сотрудника
          */
-        $personObj = new CPerson();
-        $personObj->setAttributes($personArr);
-        $personObj->save();
+        $this->person = new CPerson();
+        $this->person->setAttributes($personArr);
+        $this->person->save();
         /**
          * Удаляем старые типы участия на кафедре
          */
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_PERSON_BY_TYPES, "kadri_id=".$personObj->getId())->getItems() as $ar) {
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_PERSON_BY_TYPES, "kadri_id=".$this->person->getId())->getItems() as $ar) {
             $ar->remove();
         }
         /**
@@ -33,7 +33,7 @@ class CPersonForm extends CFormModel{
          */
         foreach ($types as $type) {
             $ar = new CActiveRecord(array(
-                "kadri_id" => $personObj->getId(),
+                "kadri_id" => $this->person->getId(),
                 "person_type_id" => $type,
                 "id" => null
             ));
