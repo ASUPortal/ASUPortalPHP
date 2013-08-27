@@ -82,7 +82,7 @@ class CActiveModel extends CModel{
         }
         if (is_null($this->getId()) | $this->getId() == "") {
             $this->saveModel();
-            $this->setId(mysql_insert_id());
+            $this->setId(CApp::getApp()->getDbConnection()->lastInsertId());
         } else {
             $this->updateModel();
         }
