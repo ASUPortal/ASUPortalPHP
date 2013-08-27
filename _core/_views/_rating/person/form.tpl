@@ -15,7 +15,7 @@
 <form action="persons.php" method="post">
     {CHtml::hiddenField("action", "save")}
 
-    <p>{CHtml::errorSummary($form)}</p>
+    {CHtml::errorSummary($form)}
 
     <p>
         {CHtml::activeLabel("person_id", $form)}
@@ -47,7 +47,8 @@
         {CHtml::error("indexes", $form)}
     </p>
 
-    <p>
-    {CHtml::submit("Сохранить")}
-    </p>
+    <div class="control-group">
+        <div class="controls">
+            {CHtml::submit("Сохранить")}
+        </div></div>
 </form>

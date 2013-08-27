@@ -121,7 +121,11 @@ class CRatingIndexController extends CBaseController {
                 }
             }
             $index->save();
-            $this->redirect("?action=index");
+            if ($this->continueEdit()) {
+                $this->redirect("?action=edit&id=".$index->getId());
+            } else {
+                $this->redirect("?action=index");
+            }
         }
         $this->setData("form", new CRatingValueForm());
         $this->setData("index", $index);

@@ -96,7 +96,11 @@ class CTaxonomyController extends CBaseController {
             $t->setTaxonomy($taxonomy);
             $t->save();
         }
-        $this->redirect("?action=index&id=".$taxonomy->getId());
+        if ($this->continueEdit()) {
+            $this->redirect("?action=index&id=".$taxonomy->getId());
+        } else {
+            $this->redirect("?action=index");
+        }
     }
     public function actionDeleteTaxonomy() {
         $taxonomy = CTaxonomyManager::getTaxonomy(CRequest::getInt("id"));
@@ -121,7 +125,11 @@ class CTaxonomyController extends CBaseController {
         $term->setAttributes(CRequest::getArray(CTerm::getClassName()));
         if ($term->validate()) {
             $term->save();
-            $this->redirect("?action=index&id=".$term->getParentTaxonomy()->getId());
+            if ($this->continueEdit()) {
+                $this->redirect("?action=editTerm&id=".$term->getId());
+            } else {
+                $this->redirect("?action=index&id=".$term->getParentTaxonomy()->getId());
+            }
         }
         $this->setData("term", $term);
         $this->renderView("_taxonomy/editTerm.tpl");

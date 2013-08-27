@@ -3,7 +3,7 @@
 {block name="asu_center"}
 <h2>Справочники</h2>
 
-<table cellpadding="0" cellspacing="0" border="1" width="99%">
+    <table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th align="center"></th>
         <th align="center">№</th>

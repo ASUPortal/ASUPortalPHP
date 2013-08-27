@@ -1,26 +1,30 @@
-<form action="index.php" method="post">
+<form action="index.php" method="post" class="form-horizontal">
     {CHtml::hiddenField("action", "saveTaxonomy")}
     {CHtml::activeHiddenField("id", $taxonomy)}
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("name", $taxonomy)}
+        <div class="controls">
         {CHtml::activeTextField("name", $taxonomy)}
         {CHtml::error("name", $taxonomy)}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("alias", $taxonomy)}
+        <div class="controls">
         {CHtml::activeTextField("alias", $taxonomy)}
         {CHtml::error("alias", $taxonomy)}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("terms", $taxonomy)}
+        <div class="controls">
         {CHtml::activeTextBox("terms", $taxonomy)}
         {CHtml::error("terms", $taxonomy)}
-    </p>
+    </div></div>
 
-        <p>
-    {CHtml::submit("Сохранить")}
-    </p>
+        <div class="control-group">
+            <div class="controls">
+            {CHtml::submit("Сохранить")}
+    </div></div>
 </form>

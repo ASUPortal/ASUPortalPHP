@@ -5,46 +5,52 @@
 
     {CHtml::helpForCurrentPage()}
 
-    <form action="indexes.php" method="post">
+    <form action="indexes.php" method="post" class="form-horizontal">
     <input type="hidden" name="action" value="save">
     {CHtml::activeHiddenField("id", $index)}
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("title", $index)}
+        <div class="controls">
         {CHtml::activeTextField("title", $index)}
         {CHtml::error("title", $index)}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("year_id", $index)}
+        <div class="controls">
         {CHtml::activeDropDownList("year_id", $index, CTaxonomyManager::getYearsList())}
         {CHtml::error("year_id", $index)}
-    </p>
+    </div></div>
 
     <div id="system_properties" style="display: none; ">
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("manager_class", $index)}
+        <div class="controls">
         {CHtml::activeTextField("manager_class", $index)}
         {CHtml::error("manager_class", $index)}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("manager_method", $index)}
+        <div class="controls">
         {CHtml::activeTextField("manager_method", $index)}
         {CHtml::error("manager_method", $index)}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("person_method", $index)}
+        <div class="controls">
         {CHtml::activeTextField("person_method", $index)}
         {CHtml::error("person_method", $index)}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("isMultivalue", $index)}
+        <div class="controls">
         {CHtml::activeTextField("isMultivalue", $index)}
         {CHtml::error("isMultivalue", $index)}
-    </p>
+    </div></div>
     </div>
 
     {if !is_null($index->id)}
@@ -59,9 +65,7 @@
             {CHtml::activeHiddenField("edit_title", $form, $form->id)}
             <tr>
                 <td>
-                    <a class="icon-trash" href="indexes.php?action=deleteValue&id={$form->id}" onclick="if (!confirm('Вы действительно хотите удалить показатель ')){ return false }">
-
-                    </a>
+                    <a class="icon-trash" href="indexes.php?action=deleteValue&id={$form->id}" onclick="if (!confirm('Вы действительно хотите удалить показатель ')){ return false }"></a>
                 </td>
                 <td>
                     {if $form->edit_title == 1}
@@ -73,16 +77,20 @@
                 <td>{CHtml::activeTextField("value", $form, "", "", "", $form->id)}</td>
                 <td align="center"><a href="#" onclick="jQuery('#index_{$form->id}').show(); return false;">[+]</a></td>
             </tr>
-                <tr id="index_{$form->id}" style="display: none;">
-                    <td>{CHtml::activeDropDownList("evaluate_method", $form, $evaluation_methods, "", "", "", $form->id)}</td>
-                    <td valign="top">{CHtml::activeTextBox("evaluate_code", $form, "", "", 'style="width: 100%; height: 250px; "', $form->id)}</td>
-                    <td><a href="#" onclick="jQuery('#index_{$form->id}').hide(); return false; ">[-]</a></td>
-                </tr>
+            <tr id="index_{$form->id}" style="display: none;">
+                <td>{CHtml::activeDropDownList("evaluate_method", $form, $evaluation_methods, "", "", "", $form->id)}</td>
+                <td valign="top">{CHtml::activeTextBox("evaluate_code", $form, "", "", 'style="width: 100%; height: 250px; "', $form->id)}</td>
+                <td><a href="#" onclick="jQuery('#index_{$form->id}').hide(); return false; ">[-]</a></td>
+            </tr>
             {/foreach}
         </table>
     {/if}
 
-    {CHtml::submit("Сохранить")}
+
+        <div class="control-group">
+            <div class="controls">
+                {CHtml::submit("Сохранить")}
+            </div></div>
 
     </form>
 {/block}

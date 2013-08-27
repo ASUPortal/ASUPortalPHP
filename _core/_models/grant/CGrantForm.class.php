@@ -9,32 +9,40 @@
 
 class CGrantForm extends CFormModel{
     public $grant =  null;
+    private $_fields = null;
     public function save() {
+
         $this->grant->save();
         /**
          * Работа с участниками
          */
-        if (array_key_exists("members", $this->grant)) {
-            $members = array();
-            $members = $this->grant["members"];
-            /**
-             * Удаляем старых участников
-             */
-            foreach (CActiveRecordProvider::getWithCondition(TABLE_GRANT_MEMBERS, "grant_id= ".$grant->getId())->getItems() as $ar) {
-                $ar->remove();
-            }
-            /**
-             * Добавляем новых
-             */
-            foreach ($members as $member) {
-                $ar = new CActiveRecord(array(
-                    "id" => null,
-                    "grant_id" => $grant->getId(),
-                    "person_id" => $member
-                ));
-                $ar->setTable(TABLE_GRANT_MEMBERS);
-                $ar->insert();
-            }
+        $members = array();
+        if (array_key_exists("members", $this->_fields)) {
+            $members = $this->_fields["members"];
+        }
+        /**
+         * Делаем руководителя тоже участником
+         */
+        if ($this->grant->manager_id != "0") {
+            $members[] = $this->grant->manager_id;
+        }
+        /**
+         * Удаляем старых участников
+         */
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_GRANT_MEMBERS, "grant_id= ".$this->grant->getId())->getItems() as $ar) {
+            $ar->remove();
+        }
+        /**
+         * Добавляем новых
+         */
+        foreach ($members as $member) {
+            $ar = new CActiveRecord(array(
+                "id" => null,
+                "grant_id" => $this->grant->getId(),
+                "person_id" => $member
+            ));
+            $ar->setTable(TABLE_GRANT_MEMBERS);
+            $ar->insert();
         }
     }
 
@@ -45,9 +53,9 @@ class CGrantForm extends CFormModel{
      * @return bool
      */
     public function validate() {
-        $fields = $this->grant;
+        $this->_fields = $this->grant;
         $this->grant = new CGrant();
-        $this->grant->setAttributes($fields);
+        $this->grant->setAttributes($this->_fields);
         return $this->grant->validate();
     }
 }
