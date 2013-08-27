@@ -24,12 +24,20 @@
     define("PRINT_ENGINE_WORD", CORE_CWD.CORE_DS.'_core'.CORE_DS.'_external'.CORE_DS.'phpword'.CORE_DS);
     define("PRINT_TEMPLATES_DIR", CORE_CWD.CORE_DS.'library'.CORE_DS.'templates'.CORE_DS);
     /**
-     * Перекидываем настройки соединения с БД в константы.
+     * Перекидываем настройки соединения с БД в константы
      */
     define("DB_HOST", $sql_host);
     define("DB_USER", $sql_login);
     define("DB_PASSWORD", $sql_passw);
     define("DB_DATABASE", $sql_base);
+    /**
+     * Перекидываем настройки соединения с БД Протокол в константы
+     */
+    define("LOG_DB_HOST", $sql_stats_host);
+    define("LOG_DB_USER", $sql_stats_login);
+    define("LOG_DB_PASSWORD", $sql_stats_passw);
+    define("LOG_DB_DATABASE", $sql_stats_base);
+    define("LOG_TABLE_STATS", "stats");
     /**
      * Директории, из которых выполняется автолоад классов
      * и выполняется поиск
@@ -111,10 +119,6 @@
             // пока оставим так
         }
     }
-    /**
-     * Запуск приложения. Инициализация автозагружаемых классов и кэша
-     */
-    CApp::createApplication($config)->run();
     /**
      * Импорт отсальных констант. Там уже можно использовать настройки
      * из базы данных, так как автолоадер уже запущен
@@ -232,7 +236,10 @@
     define("TABLE_IND_PLAN_PUBLICATIONS", "perechen_nauch_rab");
     define("TABLE_IND_PLAN_LOAD_EDUCATION", "uch_vosp_rab");
     define("TABLE_IND_PLAN_LOAD_SCIENCE", "nauch_met_rab");
-
+    /**
+     * Запуск приложения. Инициализация автозагружаемых классов и кэша
+     */
+    CApp::createApplication($config)->run();
     // Типы участия на кафедре
     define("TYPE_PPS", "профессорско-преподавательский состав");
     define("TYPE_REVIEWER", "рецензент");

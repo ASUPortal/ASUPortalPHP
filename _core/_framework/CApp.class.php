@@ -75,7 +75,18 @@ class CApp {
      * Протоколирование действий пользователя
      */
     private function logUserActivity() {
-
+        $query = new CQuery($this->getDbLogConnection());
+        $query->insert(LOG_TABLE_STATS, array(
+            "url" => basename($_SERVER["SCRIPT_NAME"]),
+            "host_ip" => $_SERVER["REMOTE_ADDR"],
+            "port" => $_SERVER["REMOTE_PORT"],
+            "agent" => $_SERVER["HTTP_USER_AGENT"],
+            "user_name" => (is_null(CSession::getCurrentUser()) ? 0 : CSession::getCurrentUser()->getId()),
+            "q_string" => $_SERVER['QUERY_STRING'],
+            "referer" => (array_key_exists("HTTP_REFERER", $_SERVER) ? $_SERVER["HTTP_REFERER"] : 0),
+            "is_bot" => (CUtils::isHTTPRefererIsBot() ? 1 : 0)
+        ));
+        $query->execute();
     }
 
     /**
@@ -85,14 +96,19 @@ class CApp {
      */
     public function getDbConnection() {
         if (is_null($this->_dbConnection)) {
-            $this->_dbConnection = new PDO(
-                "mysql:host=".$sql_host.";dbname=".$sql_base,
-                $sql_login,
-                $sql_passw,
-                array(
-                    PDO::ATTR_PERSISTENT => true
-                )
-            );
+            try {
+                $this->_dbConnection = new PDO(
+                    "mysql:host=".DB_HOST.";dbname=".DB_DATABASE,
+                    DB_USER,
+                    DB_PASSWORD,
+                    array(
+                        PDO::ATTR_PERSISTENT => true,
+                        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES UTF8'
+                    )
+                );
+            } catch (PDOException $e) {
+                die ("Подключение к рабочей базе не удалось: ".$e->getMessage());
+            }
         }
         return $this->_dbConnection;
     }
@@ -104,14 +120,19 @@ class CApp {
      */
     private function getDbLogConnection() {
         if (is_null($this->_dbLogConnection)) {
-            $this->_dbLogConnection = new PDO(
-                "mysql:host=".$sql_stats_host.";dbname=".$sql_stats_base,
-                $sql_stats_login,
-                $sql_stats_passw,
-                array(
-                    PDO::ATTR_PERSISTENT => true
-                )
-            );
+            try {
+                $this->_dbLogConnection = new PDO(
+                    "mysql:host=".LOG_DB_HOST.";dbname=".LOG_DB_DATABASE,
+                    LOG_DB_USER,
+                    LOG_DB_PASSWORD,
+                    array(
+                        PDO::ATTR_PERSISTENT => true,
+                        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES UTF8'
+                    )
+                );
+            } catch (PDOException $e) {
+                die("Подключение к БД Протокол не удалось: ".$e->getMessage());
+            }
         }
         return $this->_dbLogConnection;
     }

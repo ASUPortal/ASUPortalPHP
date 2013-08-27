@@ -29,13 +29,15 @@ class CQuery {
     private $_limit = null;
     private $_limitStart = null;
     private $_group = null;
+    private $_db = null;
 
     /**
-     * Конструктор.
+     * Запрос к указанной базе
      *
-     * @return CQuery
+     * @param PDO $db
      */
-    public function __construct() {
+    public function __construct(PDO $db = null) {
+        $this->_db = $db;
         return $this;
     }
     /**
@@ -157,22 +159,24 @@ class CQuery {
      */
     private function queryInsert() {
         $columns = array();
+        $placeholders = array();
         $values = array();
         foreach ($this->_fields as $key=>$value) {
             if ($key != "id") {
                 $columns[] = "`".$key."`";
-                $values[] = "'".$value."'";
+                $values[":".$key] = $value;
+                $placeholders[] = ":".$key;
             }
         }
         $q =
             "INSERT INTO ".$this->_table." ".
             "(".implode(", ", $columns).") VALUES ".
-            "(".implode(", ", $values).")";
+            "(".implode(", ", $placeholders).")";
         $this->_query = $q;
         if (!$this->_isExecuted) {
-            $this->_result = mysql_query($q) or die(mysql_error()." -> ".$q);
+            $statement = $this->getDb()->prepare($q);
+            $this->_result = $statement->execute($values);
             $this->_isExecuted = true;
-            //CLog::writeToLog($this->getQueryString());
         }
     }
     /**
@@ -219,6 +223,18 @@ class CQuery {
             $this->_isExecuted = true;
             CLog::writeToLog($this->getQueryString());
         }
+    }
+
+    /**
+     * База данных, в которой выполняется запрос
+     *
+     * @return PDO
+     */
+    private function getDb() {
+        if (is_null($this->_db)) {
+            $this->_db = CApp::getApp()->getDbConnection();
+        }
+        return $this->_db;
     }
     /**
      * Исполнение запроса
