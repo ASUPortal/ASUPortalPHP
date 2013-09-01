@@ -15,10 +15,19 @@
         session_start();
     }
 
-    /**
-     * Вся работа с БД отсюда уехала в CApp->run()
-     * Статистика из stat.php уехала туда же
-     */
+    global $sql_connect;
+    $sql_connect = mysql_connect($sql_host, $sql_login, $sql_passw);
+    if(!$sql_connect) {
+        echo '<div class=main>Не могу соединиться с сервером Базы Данных. <font color=red>Дальнейшая работа невозможна.</font></div>';
+        exit();
+    }
+
+    if(mysql_select_db($sql_base, $sql_connect) === false) {
+        echo '<div class=main>Не могу выбрать базу данных портала. <font color=red>Дальнейшая работа невозможна.</font></div>';
+        exit();
+    }
+    mysql_query("SET NAMES utf8", $sql_connect);
+    mysql_query('SET SQL_LOG_BIN =1', $sql_connect);
 
     if (!isset($files_path)) {
         $files_path = "";

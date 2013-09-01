@@ -11,8 +11,6 @@ class CApp {
     private $_config = null;
     private $_cache = null;
     private static $_log = array();
-    private $_dbLegacyConnection = null;
-    private $_dbConnection = null;
     private $_dbLogConnection = null;
     /**
      * @param array $config
@@ -49,14 +47,13 @@ class CApp {
                 classAutoload($p);
             }
         }
-        /**
-         * Соединение с базой данных в режиме совместимости.
-         * Используется для работы старого портала
-         */
-        $this->_dbLegacyConnection = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD) or die("Невозможно установить соединение с БД");
-        mysql_select_db(DB_DATABASE) or die("Невозможно обратиться к базе данных ".DB_DATABASE);
-        mysql_query("SET NAMES UTF8");
-        mysql_query('SET SQL_LOG_BIN =1');
+        // инициализируем соединение с базой, если этого еще не сделано
+        global $sql_connect;
+        if (is_null($sql_connect)) {
+            $sql_connect = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD) or die("Невозможно установить соединение с БД");
+            mysql_select_db(DB_DATABASE, $sql_connect) or die("Невозможно обратиться к базе данных ".DB_DATABASE);
+            mysql_query("SET NAMES UTF8", $sql_connect);
+        }
         // внутренняя кодировка приложений UTF-8
         mb_internal_encoding("UTF-8");
         /**
@@ -87,36 +84,23 @@ class CApp {
             "is_bot" => (CUtils::isHTTPRefererIsBot() ? 1 : 0)
         ));
         $query->execute();
+
     }
 
     /**
      * Соединение с рабочей базой портала
      *
-     * @return null|PDO
+     * @return resource
      */
     public function getDbConnection() {
-        if (is_null($this->_dbConnection)) {
-            try {
-                $this->_dbConnection = new PDO(
-                    "mysql:host=".DB_HOST.";dbname=".DB_DATABASE,
-                    DB_USER,
-                    DB_PASSWORD,
-                    array(
-                        PDO::ATTR_PERSISTENT => true,
-                        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES UTF8'
-                    )
-                );
-            } catch (PDOException $e) {
-                die ("Подключение к рабочей базе не удалось: ".$e->getMessage());
-            }
-        }
-        return $this->_dbConnection;
+        global $sql_connect;
+        return $sql_connect;
     }
 
     /**
      * Соединение с БД Протокол
      *
-     * @return null|PDO
+     * @return PDO
      */
     private function getDbLogConnection() {
         if (is_null($this->_dbLogConnection)) {

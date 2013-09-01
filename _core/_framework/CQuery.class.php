@@ -7,12 +7,17 @@
  * To change this template use File | Settings | File Templates.
  *
  * Инкапсулирует запросы к базе данных, построитель запросов
+ *
+ * В версии от 01.09.2013 сделал поддержку PDO, пока только
+ * для протокольной базы. Следующими разработчикам рекомендую
+ * адаптировать остальной портал под работу именно таким
+ * методом, но для этого нужно переписать оставшуюся часть поратал.
  */
-    define("QUERY_SELECT", "SELECT");
-    define("QUERY_UPDATE", "UPDATE");
-    define("QUERY_INSERT", "INSERT");
-    define("QUERY_REMOVE", "REMOVE");
-    define("QUERY_CUSTOM", "CUSTOM");
+define("QUERY_SELECT", "SELECT");
+define("QUERY_UPDATE", "UPDATE");
+define("QUERY_INSERT", "INSERT");
+define("QUERY_REMOVE", "REMOVE");
+define("QUERY_CUSTOM", "CUSTOM");
 
 class CQuery {
     private $_fields = null;
@@ -32,13 +37,27 @@ class CQuery {
     private $_db = null;
 
     /**
-     * Запрос к указанной базе
+     * Конструктор.
      *
-     * @param PDO $db
+     * @param $db resource|DPO
+     * @return CQuery
      */
-    public function __construct(PDO $db = null) {
+    public function __construct($db = null) {
         $this->_db = $db;
         return $this;
+    }
+
+    /**
+     * База, в которой выполняется запрос
+     *
+     * @return resource
+     */
+    private function getDb() {
+        if (is_null($this->_db)) {
+            global $sql_connect;
+            $this->_db = $sql_connect;
+        }
+        return $this->_db;
     }
     /**
      * Список полей, которые выбираем.
@@ -109,7 +128,7 @@ class CQuery {
     private function querySelect() {
         $q =
             "SELECT ".$this->getFields()." ".
-            "FROM ".$this->_table." ";
+                "FROM ".$this->_table." ";
         foreach ($this->getInnerJoins()->getItems() as $key=>$value) {
             $q .= "
             INNER JOIN ".$key." ON ".$value." ";
@@ -120,7 +139,7 @@ class CQuery {
         }
         if(!is_null($this->_condition)) {
             $q .=
-            "WHERE ".$this->_condition;
+                "WHERE ".$this->_condition;
         }
         if (!is_null($this->_group)) {
             $q .= "GROUP BY ".$this->_group." ";
@@ -132,20 +151,36 @@ class CQuery {
             $q .= " LIMIT ".$this->_limitStart.", ".$this->_limit;
         }
         $this->_query = $q;
-        if (!$this->_isExecuted) {
-            $start = microtime();
-            $this->_result = $this->getDb()->prepare($q);
-            $this->_result->execute();
-            $end = microtime();
-            $this->_isExecuted = true;
-            CLog::writeToLog($this->getQueryString()." (".($end - $start).")");
-            CLog::addQueryTime($end-$start);
+        if (is_object($this->getDb())) {
+            if (!$this->_isExecuted) {
+                $start = microtime();
+                $this->_result = $this->getDb()->prepare($q);
+                $this->_result->execute();
+                $end = microtime();
+                $this->_isExecuted = true;
+                CLog::writeToLog($this->getQueryString()." (".($end - $start).")");
+                CLog::addQueryTime($end-$start);
+            }
+            $rArr = new CArrayList();
+            foreach ($this->_result->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                $rArr->add($rArr->getCount(), $row);
+            }
+            return $rArr;
+        } else {
+            if (!$this->_isExecuted) {
+                $start = microtime();
+                $this->_result = mysql_query($q, $this->getDb()) or die(mysql_error($this->getDb())." -> ".$q);
+                $end = microtime();
+                $this->_isExecuted = true;
+                CLog::writeToLog($this->getQueryString()." (".($end - $start).")");
+                CLog::addQueryTime($end-$start);
+            }
+            $rArr = new CArrayList();
+            while ($row = mysql_fetch_assoc($this->_result)) {
+                $rArr->add($rArr->getCount(), $row);
+            }
+            return $rArr;
         }
-        $rArr = new CArrayList();
-        foreach ($this->_result->fetchAll(PDO::FETCH_ASSOC) as $row) {
-            $rArr->add($rArr->getCount(), $row);
-        }
-        return $rArr;
     }
     /**
      * Строка запроса
@@ -159,52 +194,99 @@ class CQuery {
      * Исполнение запроса на вставку данных
      */
     private function queryInsert() {
-        $columns = array();
-        $placeholders = array();
-        $values = array();
-        foreach ($this->_fields as $key=>$value) {
-            if ($key != "id") {
-                $columns[] = "`".$key."`";
-                $values[":".$key] = $value;
-                $placeholders[] = ":".$key;
+        if (is_object($this->getDb())) {
+            $columns = array();
+            $placeholders = array();
+            $values = array();
+            foreach ($this->_fields as $key=>$value) {
+                if ($key != "id") {
+                    $columns[] = "`".$key."`";
+                    $values[":".$key] = $value;
+                    $placeholders[] = ":".$key;
+                }
             }
-        }
-        $q =
-            "INSERT INTO ".$this->_table." ".
-            "(".implode(", ", $columns).") VALUES ".
-            "(".implode(", ", $placeholders).")";
-        $this->_query = $q;
-        if (!$this->_isExecuted) {
-            $statement = $this->getDb()->prepare($q);
-            $this->_result = $statement->execute($values);
-            $this->_isExecuted = true;
+            $q =
+                "INSERT INTO ".$this->_table." ".
+                    "(".implode(", ", $columns).") VALUES ".
+                    "(".implode(", ", $placeholders).")";
+            $this->_query = $q;
+            if (!$this->_isExecuted) {
+                $statement = $this->getDb()->prepare($q);
+                $this->_result = $statement->execute($values);
+                $this->_isExecuted = true;
+            }
+        } else {
+            $columns = array();
+            $values = array();
+            foreach ($this->_fields as $key=>$value) {
+                if ($key != "id") {
+                    $columns[] = "`".$key."`";
+                    $values[] = "'".$value."'";
+                }
+            }
+            $q =
+                "INSERT INTO ".$this->_table." ".
+                    "(".implode(", ", $columns).") VALUES ".
+                    "(".implode(", ", $values).")";
+            $this->_query = $q;
+            if (!$this->_isExecuted) {
+                $this->_result = mysql_query($q, $this->getDb()) or die(mysql_error($this->getDb())." -> ".$q);
+                $this->_isExecuted = true;
+                //CLog::writeToLog($this->getQueryString());
+            }
         }
     }
     /**
      * Исполнение запроса на обновление данных
      */
     private function queryUpdate() {
-        $t = array();
-        $values = array();
-        foreach($this->_update as $key=>$value) {
-            if ($key != "id") {
-                $t[] = "`".$key."` = :".$key;
-                $values[":".$key] = $value;
+        if (is_object($this->getDb())) {
+            $t = array();
+            $values = array();
+            foreach($this->_update as $key=>$value) {
+                if ($key != "id") {
+                    $t[] = "`".$key."` = :".$key;
+                    $values[":".$key] = $value;
+                }
             }
-        }
-        $q =
-            "UPDATE ".$this->_table." ".
-            "SET ".implode(", ", $t)." ";
-        if(!is_null($this->_condition)) {
-            $q .=
-            "WHERE ".$this->_condition;
-        }
-        $this->_query = $q;
-        if (!$this->_isExecuted) {
-            $this->_result = $this->getDb()->prepare($q);
-            $this->_result->execute($values);
-            $this->_isExecuted = true;
-            CLog::writeToLog($this->getQueryString());
+            $q =
+                "UPDATE ".$this->_table." ".
+                    "SET ".implode(", ", $t)." ";
+            if(!is_null($this->_condition)) {
+                $q .=
+                    "WHERE ".$this->_condition;
+            }
+            $this->_query = $q;
+            if (!$this->_isExecuted) {
+                $this->_result = $this->getDb()->prepare($q);
+                $this->_result->execute($values);
+                $this->_isExecuted = true;
+                CLog::writeToLog($this->getQueryString());
+            }
+        } else {
+            $t = array();
+            foreach($this->_update as $key=>$value) {
+                if ($key != "id") {
+                    if (is_int($value)) {
+                        $t[] = "`".$key."` = ".$value;
+                    } elseif(is_string($value)) {
+                        $t[] = "`".$key."` = '".$value."'";
+                    }
+                }
+            }
+            $q =
+                "UPDATE ".$this->_table." ".
+                    "SET ".implode(", ", $t)." ";
+            if(!is_null($this->_condition)) {
+                $q .=
+                    "WHERE ".$this->_condition;
+            }
+            $this->_query = $q;
+            if (!$this->_isExecuted) {
+                $this->_result = mysql_query($q, $this->getDb()) or die(mysql_error($this->getDb())." -> ".$q);
+                $this->_isExecuted = true;
+                CLog::writeToLog($this->getQueryString());
+            }
         }
     }
     /**
@@ -218,24 +300,20 @@ class CQuery {
                 "WHERE ".$this->_condition;
         }
         $this->_query = $q;
-        if (!$this->_isExecuted) {
-            $this->_result = $this->getDb()->prepare($q);
-            $this->_result->execute();
-            $this->_isExecuted = true;
-            CLog::writeToLog($this->getQueryString());
+        if (is_object($this->getDb())) {
+            if (!$this->_isExecuted) {
+                $this->_result = $this->getDb()->prepare($q);
+                $this->_result->execute();
+                $this->_isExecuted = true;
+                CLog::writeToLog($this->getQueryString());
+            }
+        } else {
+            if (!$this->_isExecuted) {
+                $this->_result = mysql_query($q, $this->getDb()) or die(mysql_error($this->getDb())." -> ".$q);
+                $this->_isExecuted = true;
+                CLog::writeToLog($this->getQueryString());
+            }
         }
-    }
-
-    /**
-     * База данных, в которой выполняется запрос
-     *
-     * @return PDO
-     */
-    private function getDb() {
-        if (is_null($this->_db)) {
-            $this->_db = CApp::getApp()->getDbConnection();
-        }
-        return $this->_db;
     }
     /**
      * Исполнение запроса
@@ -359,12 +437,21 @@ class CQuery {
         $this->_query = $query;
     }
     private function queryCustom() {
-        $res = new CArrayList();
-        $this->_result = $this->getDb()->prepare($this->getQueryString());
-        $this->_result->execute();
-        foreach ($this->_result->fetchAll(PDO::FETCH_ASSOC) as $row) {
-            $res->add($res->getCount(), $row);
+        if (is_object($this->getDb())) {
+            $res = new CArrayList();
+            $this->_result = $this->getDb()->prepare($this->getQueryString());
+            $this->_result->execute();
+            foreach ($this->_result->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                $res->add($res->getCount(), $row);
+            }
+            return $res;
+        } else {
+            $res = new CArrayList();
+            $q = mysql_query($this->getQueryString(), $this->getDb()) or die(mysql_error($this->getDb())." -> ".$this->getQueryString());
+            while ($row = mysql_fetch_assoc($q)) {
+                $res->add($res->getCount(), $row);
+            }
+            return $res;
         }
-        return $res;
     }
 }
