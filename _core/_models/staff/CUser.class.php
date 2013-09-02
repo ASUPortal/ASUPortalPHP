@@ -67,6 +67,10 @@ class CUser extends CActiveModel {
                 foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_HAS_ROLES, "user_id=".$this->getId())->getItems() as $ar) {
                     $role = CStaffManager::getUserRole($ar->getItemValue("task_id"));
                     if (!is_null($role)) {
+                        $role->level = $ar->getItemValue("task_rights_id");
+                        if ($role->level == ACCESS_LEVEL_NO_ACCESS) {
+                            $role->level = ACCESS_LEVEL_READ_OWN_ONLY;
+                        }
                         $this->_roles->add($role->getId(), $role);
                     }
                 }

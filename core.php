@@ -236,6 +236,15 @@
     define("TABLE_IND_PLAN_PUBLICATIONS", "perechen_nauch_rab");
     define("TABLE_IND_PLAN_LOAD_EDUCATION", "uch_vosp_rab");
     define("TABLE_IND_PLAN_LOAD_SCIENCE", "nauch_met_rab");
+    define("TABLE_ACCESS_LEVELS", "task_rights");
+    /**
+     * Уровни доступа константами
+     */
+    define("ACCESS_LEVEL_NO_ACCESS", 0);
+    define("ACCESS_LEVEL_READ_OWN_ONLY", 1);
+    define("ACCESS_LEVEL_READ_ALL", 2);
+    define("ACCESS_LEVEL_WRITE_OWN_ONLY", 3);
+    define("ACCESS_LEVEL_WRITE_ALL", 4);
     /**
      * Запуск приложения. Инициализация автозагружаемых классов и кэша
      */

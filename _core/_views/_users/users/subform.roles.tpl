@@ -2,7 +2,7 @@
     jQuery(document).ready(function(){
         var groups = {$fromGroups};
         jQuery.each(groups, function(key, value){
-            var inputs = jQuery("#roles").find("input[value=" + key + "]");
+            var inputs = jQuery("#roles").find("select[name='CModel[user][roles][" + key + "]']");
             jQuery.each(inputs, function(key, input) {
                 jQuery(input).prop("disabled", true);
             });
@@ -11,10 +11,12 @@
 </script>
 
 <p>
-    Права, полученные от групп недоступны для удаления
+    Права, полученные от групп недоступны для изменения
 </p>
 
-<p id="roles">
-    {CHtml::activeCheckBoxGroup("user[roles]", $form, CStaffManager::getAllUserRolesList())}
+<div class="control-group">
+    <div class="controls" id="roles">
+    {CHtml::actionUserRolesSelector("user[roles]", $form)}
     {CHtml::error("user[roles]", $form)}
-</p>
+    </div>
+</div>

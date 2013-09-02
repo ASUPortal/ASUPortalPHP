@@ -36,15 +36,17 @@ class CUserGroupForm extends CFormModel{
         /**
          * Создаем новые задачи группы и пользователей
          */
-        foreach ($roles as $role) {
-            $ar = new CActiveRecord(array(
-                "id" => null,
-                "user_group_id" => $groupObj->getId(),
-                "task_id" => $role,
-                "task_rights_id" => 4
-            ));
-            $ar->setTable(TABLE_USER_GROUP_HAS_ROLES);
-            $ar->insert();
+        foreach ($roles as $role=>$level) {
+            if ($level != 0) {
+                $ar = new CActiveRecord(array(
+                    "id" => null,
+                    "user_group_id" => $groupObj->getId(),
+                    "task_id" => $role,
+                    "task_rights_id" => $level
+                ));
+                $ar->setTable(TABLE_USER_GROUP_HAS_ROLES);
+                $ar->insert();
+            }
         }
         foreach ($members as $member) {
             $ar = new CActiveRecord(array(

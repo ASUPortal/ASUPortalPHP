@@ -68,15 +68,17 @@ class CUserForm extends CFormModel{
         foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_HAS_ROLES, "user_id = ".$userObj->getId())->getItems() as $ar) {
             $ar->remove();
         }
-        foreach ($roles as $role) {
-            $ar = new CActiveRecord(array(
-                "id" => null,
-                "user_id" => $userObj->getId(),
-                "task_id" => $role,
-                "task_rights_id" => 4
-            ));
-            $ar->setTable(TABLE_USER_HAS_ROLES);
-            $ar->insert();
+        foreach ($roles as $role=>$level) {
+            if ($level != 0) {
+                $ar = new CActiveRecord(array(
+                    "id" => null,
+                    "user_id" => $userObj->getId(),
+                    "task_id" => $role,
+                    "task_rights_id" => $level
+                ));
+                $ar->setTable(TABLE_USER_HAS_ROLES);
+                $ar->insert();
+            }
         }
     }
 }

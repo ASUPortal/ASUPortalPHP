@@ -1,6 +1,6 @@
 <div class="control-group" id="roles">
     <div class="controls">
-    {CHtml::activeCheckBoxGroup("group[roles]", $form, CStaffManager::getAllUserRolesList())}
+    {CHtml::actionUserRolesSelector("group[roles]", $form)}
     {CHtml::error("group[roles]", $form)}
     </div>
 </div>

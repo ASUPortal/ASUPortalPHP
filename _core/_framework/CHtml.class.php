@@ -593,6 +593,49 @@ class CHtml {
             echo '</label>';
         }
     }
+    public static function actionUserRolesSelector($name, CModel $model) {
+        $values = CStaffManager::getAllUserRolesList();
+        $selectValues = CStaffManager::getAccessLevelsList();
+        $selectValues[0] = " -- Нет доступа --";
+        $submodelName = "";
+        if (strpos($name, "[") !== false) {
+            $submodelName = substr($name, 0, strpos($name, "["));
+            $name = substr($name, strpos($name, "[") + 1);
+            $name = substr($name, 0, strlen($name) - 1);
+            $model = $model->$submodelName;
+        }
+        $roles = $model->$name;
+        foreach ($values as $key=>$value) {
+            $level = 0;
+            if ($roles->hasElement($key)) {
+                $level = 4;
+                $role = $roles->getItem($key);
+                if ($role->level > 0) {
+                    $level = $role->level;
+                }
+            }
+            //
+            $inputName = $model::getClassName();
+            if ($submodelName !== "") {
+                $inputName .= "[".$submodelName."]";
+            }
+            $inputName .= "[".$name."][".$key."]";
+            echo '<div class="control-group">';
+            echo '<label class="control-label">'.$value.'</label>';
+            echo '<div class="controls">';
+            echo '<select name="'.$inputName.'">';
+            foreach ($selectValues as $selectKey=>$selectValue) {
+                echo '<option value="'.$selectKey.'" ';
+                if ($level == $selectKey) {
+                    echo 'selected';
+                }
+                echo '>'.$selectValue.'</option>';
+            }
+            echo '</select>';
+            echo '</div>';
+            echo '</div>';
+        }
+    }
     public static function activeRadioButtonGroup($name, CModel $model, $values = array(), $groupName = "") {
         foreach ($values as $key=>$value) {
             $inputName = $model::getClassName()."[".$name.$groupName."][]";

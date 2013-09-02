@@ -122,7 +122,11 @@ class CUsersController extends CBaseController{
          */
         if ($form->validate()) {
             $form->save();
-            $this->redirect("?action=index");
+            if ($this->continueEdit()) {
+                $this->redirect("?action=edit&id=".$form->user["id"]);
+            } else {
+                $this->redirect("?action=index");
+            }
             return true;
         }
         /**

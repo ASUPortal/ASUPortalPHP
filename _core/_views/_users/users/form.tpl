@@ -1,31 +1,26 @@
-<script>
-    jQuery(document).ready(function(){
-        jQuery("#tabs").tabs();
-    });
-</script>
-
-<form action="index.php" method="post">
+<form action="index.php" method="post" class="form-horizontal">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("user[id]", $form)}
 
-    <div id="tabs">
-        <ul style="height: 30px; ">
-            <li><a href="#tab-common">Общая информация</a></li>
-            <li><a href="#tab-groups">Членство в группах</a></li>
-            <li><a href="#tab-roles">Права пользователя</a></li>
-        </ul>
-        <div id="tab-common">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-common" data-toggle="tab">Общая информация</a></li>
+        <li><a href="#tab-groups" data-toggle="tab">Членство в группах</a></li>
+        <li><a href="#tab-roles" data-toggle="tab">Права пользователя</a></li>
+    </ul>
+    <div id="tabs" class="tab-content">
+        <div id="tab-common" class="tab-pane active">
             {include file="_users/users/subform.common.tpl"}
         </div>
-        <div id="tab-groups">
+        <div id="tab-groups" class="tab-pane">
             {include file="_users/users/subform.groups.tpl"}
         </div>
-        <div id="tab-roles">
+        <div id="tab-roles" class="tab-pane">
             {include file="_users/users/subform.roles.tpl"}
         </div>
     </div>
 
-    <p>
+    <div class="control-group">
+        <div class="controls">
         {CHtml::submit("Сохранить")}
-    </p>
+    </div></div>
 </form>

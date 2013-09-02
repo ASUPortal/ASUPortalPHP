@@ -9,6 +9,7 @@
 class CUserRole extends CActiveModel {
     protected $_table = TABLE_USER_ROLES;
     protected $_menu = null;
+    public $level;
     public $hidden = 0;
     public function getName() {
         return $this->getRecord()->getItemValue("name");

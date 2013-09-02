@@ -1,19 +1,19 @@
 <?php
 
-if (!isset($files_path)) {$files_path='';}
+if (!isset($files_path)) {
+    $files_path='';
+}
 
 include ($files_path.'sql_connect.php');
 
-if (!isset($_SESSION['auth']) || $_SESSION['auth']!=1) 
-	{
+if (!isset($_SESSION['auth']) || $_SESSION['auth']!=1)  {
 
 //все символы 2-значные
 $url='';
 $url=$_SERVER["REQUEST_URI"];
 
 	 header('Location: '.$files_path.'p_denied_access.php?type=not_auth&url='.$url.'');
-	 }
-else { 	
+} else {
 	if ($_SESSION['group_blocked']==1) {
         header('Location: p_denied_access.php?type=user_lock' );
     } else {

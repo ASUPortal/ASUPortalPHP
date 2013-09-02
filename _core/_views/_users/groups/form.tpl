@@ -19,7 +19,9 @@
         </div>
     </div>
 
-    <p>
-        {CHtml::submit("Сохранить")}
-    </p>
+    <div class="control-group">
+        <div class="controls">
+            {CHtml::submit("Сохранить")}
+        </div>
+    </div>
 </form>

@@ -548,6 +548,13 @@ class CStaffManager{
         }
         return $res;
     }
+    public static function getAccessLevelsList() {
+        $res = array();
+        foreach (CActiveRecordProvider::getAllFromTable(TABLE_ACCESS_LEVELS)->getItems() as $ar) {
+            $res[$ar->getItemValue("id")] = $ar->getItemValue("name");
+        }
+        return $res;
+    }
     /**
      * Роль пользователя
      *

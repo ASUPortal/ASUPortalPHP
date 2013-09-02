@@ -8,14 +8,20 @@ $multy_ptypes=true;	//множественные "тип участия на к�
 
 $lect_id=0;  
 //получаем норме пользователя по его kadri_id
-$lect_id=getScalarVal('select id from users where kadri_id="'.$_GET['kadri_id'].'"');
-//echo ' $lect_id='.$lect_id;
+if (array_key_exists("kadri_id", $_GET)) {
+    $lect_id=getScalarVal('select id from users where kadri_id="'.$_GET['kadri_id'].'"');
+}
 
-if ($_SESSION['task_rights_id']<3 && !$lect_control) {$lect_control=false;}
-else {$lect_control=true;}
+if ($_SESSION['task_rights_id']<3 && !$lect_control) {
+    $lect_control=false;
+} else {
+    $lect_control=true;
+}
 
 $kadri_id=0;
-if (isset($_GET['kadri_id']) && intval($_GET['kadri_id'])>0 ) {$kadri_id=intval($_GET['kadri_id']);}
+if (isset($_GET['kadri_id']) && intval($_GET['kadri_id'])>0 ) {
+    $kadri_id=intval($_GET['kadri_id']);
+}
 
 
 $kind_type_defaults='&kind_type1=on&kind_type2=on&kind_type3=on&kind_type4=on&filial_flag=on';		//какую нагрузку показывать
@@ -23,23 +29,22 @@ $query_string=$_SERVER['QUERY_STRING'];
 if (isset($_GET['year'])) {$year=intval($_GET['year']);}
 
 //session_start();
-//print_r($_SESSION);
+//var_dump($_SESSION);
 
-if ($kadri_id==0)
-{	if ($_SESSION['task_rights_id']<=2 && $kadri_id!=$_SESSION['kadri_id']) 
-		{header('Location:?kadri_id='.$_SESSION['kadri_id'].$kind_type_defaults);}
-         else {header('Location:s_hours.php');}
+if ($kadri_id==0) {
+    if ($_SESSION['task_rights_id']<=2 && $kadri_id!=$_SESSION['kadri_id'])  {
+        header('Location:?kadri_id='.$_SESSION['kadri_id'].$kind_type_defaults);
+    } else {
+        header('Location:s_hours.php');
+    }
 }
 
-
-if (isset($_GET['type']) & $_GET['type']=='del' & isset($_GET['hours_id']))
-{
-//echo '!!!!!!!del!!!!!!';
-$query='delete from hours_kind where id="'.$_GET['hours_id'].'"';	
-//echo $query;
-$res=mysql_query($query);
-header('Location:?kadri_id='.$kadri_id.'&year='.$_GET['year'].$kind_type_defaults);
-	
+if (array_key_exists("type", $_GET)) {
+    if (isset($_GET['type']) & $_GET['type']=='del' & isset($_GET['hours_id'])){
+        $query='delete from hours_kind where id="'.$_GET['hours_id'].'"';
+        $res=mysql_query($query);
+        header('Location:?kadri_id='.$kadri_id.'&year='.$_GET['year'].$kind_type_defaults);
+    }
 }
 
 include ('master_page_short.php');
