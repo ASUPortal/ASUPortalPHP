@@ -2,35 +2,16 @@
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $work)}
 
-    <div class="control-group">
-        {CHtml::activeLabel("id_razdel", $work)}
-        <div class="controls">
-            {CHtml::activeDropDownList("id_razdel", $work, CIndPlanWorktype::getCategories())}
-            {CHtml::error("id_razdel", $work)}
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#common" data-toggle="tab">Общая информация</a></li>
+        <li><a href="#completion" data-toggle="tab">Автозаполнение</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="common">
+            {include file="_individual_plan/worktypes/subform.common.tpl"}
         </div>
-    </div>
-
-    <div class="control-group">
-        {CHtml::activeLabel("name", $work)}
-        <div class="controls">
-            {CHtml::activeTextBox("name", $work)}
-            {CHtml::error("name", $work)}
-        </div>
-    </div>
-
-    <div class="control-group">
-        {CHtml::activeLabel("time_norm", $work)}
-        <div class="controls">
-            {CHtml::activeTextBox("time_norm", $work)}
-            {CHtml::error("time_norm", $work)}
-        </div>
-    </div>
-
-    <div class="control-group">
-        {CHtml::activeLabel("comment", $work)}
-        <div class="controls">
-            {CHtml::activeTextBox("comment", $work)}
-            {CHtml::error("comment", $work)}
+        <div class="tab-pane" id="completion">
+            {include file="_individual_plan/worktypes/subform.completion.tpl"}
         </div>
     </div>
 

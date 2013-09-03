@@ -17,4 +17,19 @@ class CIndPlanWorktype extends CActiveModel {
             4 => "Учебно-воспитательная работа"
         );
     }
+
+    /**
+     * Возможно ли вычисление
+     *
+     * @return bool
+     */
+    public function isAutcomputable() {
+        return !($this->completion_planned == "" | $this->completion_completed == "");
+    }
+    public function computeCompletion(CPerson $person, CTerm $year) {
+        return eval($this->completion_completed);
+    }
+    public function computePlannedHours(CPerson $person, CTerm $year) {
+        return eval($this->completion_planned);
+    }
 }

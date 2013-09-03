@@ -72,4 +72,51 @@ class CIndPlanLoadController extends CBaseController{
         $this->setData("person", $person);
         $this->renderView("_individual_plan/load/view.tpl");
     }
+    public function actionGetAutocompleteData() {
+        $person = CStaffManager::getPerson(CRequest::getInt("person"));
+        $year = CTaxonomyManager::getYear(CRequest::getInt("year"));
+        /**
+         * Вычисляем нагрузку по категориям
+         */
+        $result = array();
+        foreach (CIndPlanWorktype::getCategories() as $categoryId=>$name) {
+            foreach (CIndPlanManager::getWorklistByCategory($categoryId) as $key=>$value) {
+                $worktype = CIndPlanManager::getWorktype($key);
+                if ($worktype->isAutcomputable()) {
+                    $type = array(
+                        "id" => $worktype->getId(),
+                        "title" => $worktype->name,
+                        "planned" => $worktype->computePlannedHours($person, $year),
+                        "isExecuted" => $worktype->computeCompletion($person, $year),
+                        "category" => $name
+                    );
+                    $result[] = $type;
+                }
+            }
+        }
+        $this->setData("data", $result);
+        $this->renderView("_individual_plan/load/autocompletion.tpl");
+    }
+    public function actionSetAutocompleteDate() {
+        $person = CStaffManager::getPerson(CRequest::getInt("person"));
+        $year = CTaxonomyManager::getYear(CRequest::getInt("year"));
+        $items = CRequest::getArray("items");
+        foreach ($items as $item) {
+            $worktype = CIndPlanManager::getWorktype($item);
+            if ($worktype->id_razdel == "2") {
+                /**
+                 * Учебно- и организационно-методическая работа
+                 */
+
+            } elseif ($worktype->id_razdel == "3") {
+                /**
+                 * Научно-методическая и госбюджетная научно-исследовательская работа
+                 */
+            } elseif ($worktype->id_razdel == "4") {
+                /**
+                 * Учебно-воспитательная работа
+                 */
+            }
+        }
+    }
 }

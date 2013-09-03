@@ -187,6 +187,16 @@ class CBaseController {
     public function addJSInlineInclude($code) {
         $this->getJSInlineIncludes()->add($this->getJSInlineIncludes()->getCount(), $code);
     }
+    private function preventJsAndCssCache() {
+        foreach ($this->getCSSIncludes()->getItems() as $key=>$value) {
+            $value .= "?_noCache=".time();
+            $this->getCSSIncludes()->add($key, $value);
+        }
+        foreach ($this->getJSIncludes()->getItems() as $key=>$value) {
+            $value .= "?_noCache=".time();
+            $this->getJSIncludes()->add($key, $value);
+        }
+    }
     /**
      * Отобразить выбранное представление.
      * Данные передать через setData
@@ -199,6 +209,7 @@ class CBaseController {
             foreach ($this->getData()->getItems() as $key=>$value) {
                 $this->getSmarty()->assign($key, $value);
             }
+            $this->preventJsAndCssCache();
             $this->getSmarty()->assign("css", $this->getCSSIncludes()->getItems());
             $this->getSmarty()->assign("js", $this->getJSIncludes()->getItems());
             $this->getSmarty()->assign("jsIe", $this->getJSIEOnly()->getItems());

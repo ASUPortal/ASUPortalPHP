@@ -125,7 +125,7 @@ class CIndPlanPersonLoad {
             $this->_science = new CArrayList();
 
             foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_LOAD_ORGANIZATIONAL,
-                "id_year=".$this->getYear()->getId()." AND ".
+                    "id_year=".$this->getYear()->getId()." AND ".
                     "id_kadri=".$this->getPerson()->getId())->getItems() as $ar) {
 
                 $c = new CIndPlanPersonLoadOrg($ar);
