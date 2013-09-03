@@ -16,16 +16,20 @@ jQuery(document).ready(function(){
             /**
              * Диалог уже есть, просто показываем его
              */
-            jQuery("#birthdaysDialog").dialog("open");
+            jQuery("#birthdaysDialog>div").modal();
         } else {
-            /**
-             * Загружаем диалог заново
-             */
-            jQuery('<div id="birthdaysDialog">').dialog({
-                modal: true,
-                title: "Ближайшие дни рождения",
-                open: function(){
-                    jQuery(this).load(web_root + "_modules/_dashboard/?action=showBirthdayDialog");
+            jQuery.ajax({
+                url: web_root + "_modules/_dashboard/?action=showBirthdayDialog",
+                cache: false,
+                type: "get",
+                beforeSend: function(){
+                    jQuery("#overlay").css("display", "block");
+                },
+                success: function(data){
+                    jQuery("#overlay").css("display", "none");
+                    var container = jQuery('<div id="birthdaysDialog">').html(data);
+                    jQuery("body").append(container);
+                    jQuery("#birthdaysDialog>div").modal();
                 }
             });
         }
