@@ -225,19 +225,15 @@ if(isset($_GET['id'])) {
                     $url.='wap&';
                 }
 
-                /*
-                $details='<div class="menu" align="right"><a href=#view
-	  		onclick="alert(111); javascript:win_open("'.$url.'id='.$a['id'].'",400,600);" style="font-size:12px">подробнее...</a></div>';
-                */
                 $details = '<div align="right"><a href="#news'.$a["id"].'" data-toggle="modal">подробнее...</a></div>';
                 $details .= '
                 <div id="news'.$a["id"].'" class="modal hide fade" url="'.WEB_ROOT.$url.'id='.$a["id"].'">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
                         <h3 id="myModalLabel">'.$a["title"].'</h3>
                     </div>
                     <div class="modal-body">
-                    423143124123412
+
                     </div>
                 </div>';
             }

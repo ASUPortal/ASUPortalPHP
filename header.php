@@ -76,7 +76,9 @@ $rightColDispl='';	//стиль отражения прав.панели (гла
 
 if (isset ($_COOKIE['leftMainCol'])) {$leftColDispl=$_COOKIE['leftMainCol'];$rightColDispl=$leftColDispl;}
 
-$head='<html>
+$head='
+<!DOCTYPE html>
+<html>
 <head>
 <title>'.del_HTMLTags($head_title).'</title>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
