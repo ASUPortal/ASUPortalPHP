@@ -116,6 +116,8 @@ class CIndPlanPersonLoad {
     }
 
     /**
+     * Учебная и организационно-методическая
+     *
      * @return CArrayList|null
      */
     public function getOrganizationalLoad() {

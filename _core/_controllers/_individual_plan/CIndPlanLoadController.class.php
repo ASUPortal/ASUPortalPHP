@@ -103,19 +103,27 @@ class CIndPlanLoadController extends CBaseController{
         $items = CRequest::getArray("items");
         foreach ($items as $item) {
             $worktype = CIndPlanManager::getWorktype($item);
-            if ($worktype->id_razdel == "2") {
-                /**
-                 * Учебно- и организационно-методическая работа
-                 */
-
-            } elseif ($worktype->id_razdel == "3") {
-                /**
-                 * Научно-методическая и госбюджетная научно-исследовательская работа
-                 */
-            } elseif ($worktype->id_razdel == "4") {
-                /**
-                 * Учебно-воспитательная работа
-                 */
+            if (!is_null($worktype)) {
+                if ($worktype->id_razdel == "2") {
+                    /**
+                     * Учебно- и организационно-методическая работа
+                     */
+                    $work = new CIndPlanPersonLoadOrg();
+                    $work->id_year = $year->getId();
+                    $work->id_kadri = $person->getId();
+                    $work->id_vidov_rabot = $item;
+                    $work->kol_vo_plan = $worktype->computePlannedHours($person, $year);
+                    $work->id_otmetka = $worktype->computeCompletion($person, $year) ? "2":"1";
+                    $work->save();
+                } elseif ($worktype->id_razdel == "3") {
+                    /**
+                     * Научно-методическая и госбюджетная научно-исследовательская работа
+                     */
+                } elseif ($worktype->id_razdel == "4") {
+                    /**
+                     * Учебно-воспитательная работа
+                     */
+                }
             }
         }
     }
