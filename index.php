@@ -201,7 +201,7 @@ if(isset($_GET['id'])) {
                 $a['title'].=')</font>';
             }
 
-            echo '<p class="title">'.$a['title'].'</p><p class="text">'.DateTimeCustomConvert($a['date_time'],'dt','mysql2rus').'</p>';
+            echo '<p class="title">'.$a['title'].'</p><p class="text">'.date("d.m.Y", strtotime($a["date_time"])).'</p>';
             if (trim($a['file_attach'])!='') {
                 echo '<a href="news/attachement/'.trim($a['file_attach']).'"
 	 	        title="Скачать прикрепленный файл: '.trim($a['file_attach']).'"><img src="images/design/attachment.gif" border=0></a>';
