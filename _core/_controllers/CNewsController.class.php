@@ -70,7 +70,11 @@ class CNewsController extends CBaseController {
         if ($newsItem->validate()) {
             $newsItem->date_time = date("Y-m-d H:i:s", strtotime($newsItem->date_time));
             $newsItem->save();
-            $this->redirect("?action=index");
+            if ($this->continueEdit()) {
+                $this->redirect("?action=edit&id=".$newsItem->getId());
+            } else {
+                $this->redirect("?action=index");
+            }
             return true;
         }
         $this->addJSInclude(JQUERY_UI_JS_PATH);

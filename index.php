@@ -106,8 +106,8 @@ if(isset($_GET['id'])) {
 
     $res02=mysql_query ($query) or die(mysql_error());
     echo '<div class="main">'.$pg_title;
-    if (isset($_SESSION['auth']) && $_SESSION['auth']==1 /*&& $_SESSION['userType']!='преподаватель'*/) {
-        echo '<a href="admin_news.php?go=1" class=text title="'.$_SESSION['FIO'].'"> добавить  новость</a>';
+    if (CSession::isAuth()){
+        echo '<a href="'.WEB_ROOT.'_modules/_news/?action=add" class="text"> Добавить новость</a>';
     }
     echo '</div>';
     ?>
