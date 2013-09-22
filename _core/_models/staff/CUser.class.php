@@ -158,7 +158,7 @@ class CUser extends CActiveModel {
     public function getUnreadMessages() {
         if (is_null($this->_unreadMessages)) {
             $this->_unreadMessages = new CArrayList();
-            foreach (CActiveRecordProvider::getWithCondition(TABLE_MESSAGES, "read_status = 0 and to_user_id = ".$this->getId())->getItems() as $item) {
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_MESSAGES, "read_status = 0 and to_user_id = ".$this->getId()." and mail_type='in'")->getItems() as $item) {
                 $msg = new CMessage($item);
                 $this->_unreadMessages->add($msg->getId(), $msg);
             }
