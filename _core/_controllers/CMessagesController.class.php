@@ -128,6 +128,10 @@ class CMessagesController extends CBaseController {
             $this->redirect("?action=outbox");
             return true;
         }
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->addCSSInclude("_modules/_redactor/redactor.css");
+        $this->addJSInclude("_modules/_redactor/redactor.min.js");
         $this->setData("message", $mail);
         $this->renderView("_messages/edit.tpl");
     }
