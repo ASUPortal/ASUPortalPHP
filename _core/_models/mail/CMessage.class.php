@@ -10,6 +10,8 @@ class CMessage extends CActiveModel {
     protected $_table = TABLE_MESSAGES;
     protected $_sender = null;
     protected $_recipient = null;
+    public $mail_type = 'out';
+    public $read_status = '0';
 
     public function relations() {
         return array(

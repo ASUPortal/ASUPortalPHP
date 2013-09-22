@@ -31,7 +31,7 @@ class CMessagesController extends CBaseController {
         $set->setQuery($query);
         $query->select("mail.*")
             ->from(TABLE_MESSAGES." as mail")
-            ->condition("mail.to_user_id = ".CSession::getCurrentUser()->getId())
+            ->condition("mail.to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'")
             ->order("mail.date_send desc");
         $messages = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
@@ -55,7 +55,7 @@ class CMessagesController extends CBaseController {
         $set->setQuery($query);
         $query->select("mail.*")
             ->from(TABLE_MESSAGES." as mail")
-            ->condition("mail.from_user_id = ".CSession::getCurrentUser()->getId())
+            ->condition("mail.from_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'out'")
             ->order("mail.date_send desc");
         $messages = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
@@ -105,7 +105,15 @@ class CMessagesController extends CBaseController {
         $mail->setAttributes(CRequest::getArray($mail::getClassName()));
         $mail->date_send = date("Y-m-d H:i:s");
         if ($mail->validate()) {
+            $mail->mail_type = "in";
+            $mail->read_status = "0";
             $mail->save();
+            // а теперь делаем копию письма
+            $mailCopy = new CMessage();
+            $mailCopy->setAttributes(CRequest::getArray($mail::getClassName()));
+            $mailCopy->mail_type = "out";
+            $mailCopy->read_status = "1";
+            $mailCopy->save();
             // если пользователь-получатель подписан на сообщения, то
             // отправляем их почтой
             if (!is_null($mail->getRecipient())) {
