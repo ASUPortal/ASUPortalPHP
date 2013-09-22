@@ -86,7 +86,7 @@ class CMessage extends CActiveModel {
         return $this->mail_text;
     }
     public function getSendDate() {
-        return date("d.m.Y H:i:s");
+        return date("d.m.Y H:i:s", strtotime($this->date_send));
     }
     public function isRead() {
         return $this->read_status == 1;
