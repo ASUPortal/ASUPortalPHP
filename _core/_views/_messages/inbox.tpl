@@ -1,23 +1,19 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-<script>
-    jQuery(document).ready(function(){
-        jQuery("#tabs").tabs();
-    });
-</script>
 
     <h2>Мои входящие сообщения</h2>
 
     {include file="_messages/subform.subscription.tpl"}
 
-    <div id="tabs">
-        <ul style="height: 30px; ">
-            <li><a href="#tab-inbox">Входящие</a></li>
-            <li><a href="#tab-outbox" onclick="location.href='?action=outbox#tab-outbox'">Исходящие</a></li>
-            <li><a href="#tab-new">Написать сообщение</a></li>
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-inbox" data-toggle="tab">Входящие</a></li>
+            <li><a href="?action=outbox">Исходящие</a></li>
+            <li><a href="#tab-new" data-toggle="tab">Написать сообщение</a></li>
         </ul>
-        <div id="tab-inbox">
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab-inbox">
             {if $messages->getCount() == 0}
                 Вам никто ничего еще не написал.
             {else}
@@ -63,10 +59,7 @@
                 {CHtml::paginator($paginator, "?action=inbox")}
             {/if}
         </div>
-        <div id="tab-outbox">
-            <img src="{$web_root}images/loading.gif">
-        </div>
-        <div id="tab-new">
+        <div class="tab-pane" id="tab-new">
             {include file="_messages/subform.new.tpl"}
         </div>
     </div>

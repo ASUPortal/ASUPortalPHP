@@ -16,9 +16,10 @@
     });
 </script>
 
-<form>
-    <p>
+<form class="form-horizontal">
+    <div class="control-group">
         <label>Дублировать входящие сообщения на эл. почту</label>
-        <input type="checkbox" id="subscribe" value="1" {if !is_null(CSession::getCurrentUser()->getSubscription())}checked{/if}>
-    </p>
+        <div class="controls">
+            <input type="checkbox" id="subscribe" value="1" {if !is_null(CSession::getCurrentUser()->getSubscription())}checked{/if}>
+    </div></div>
 </form>

@@ -117,7 +117,7 @@ class CMessagesController extends CBaseController {
                     }
                 }
             }
-            $this->redirect("?action=outbox#tab-outbox");
+            $this->redirect("?action=outbox");
             return true;
         }
         $this->setData("message", $mail);
