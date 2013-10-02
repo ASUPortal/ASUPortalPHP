@@ -2,33 +2,20 @@
 	$pg_title="Журнал успеваемости студентов";
 	include "sql_connect.php";
 	include "header.php";
-	if (!isset($_GET["wap"])) {	echo $head;}
-	else { echo $head_wap;}
-
+    echo $head;
 ?>
 <script language="JavaScript">
 var main_page='<?php echo $main_page;?>';	//for redirect & links
-function pageVals(query_str)
-{
+function pageVals(query_str) {
  	var pageCnt= parseInt(document.getElementById('pageVals').value);
- 	if (pageCnt>0 && pageCnt<100) {document.location.href=main_page+'?'+query_str+'&pageVals='+pageCnt;}
- 	else {alert('Введите значение с 1 до 99.');}
- 	
-	 //if (pageCnt>0 && pageCnt<100) {alert('ok');}
-	 
-	//alert(pageCnt);
+ 	if (pageCnt>0 && pageCnt<100) {
+        document.location.href=main_page+'?'+query_str+'&pageVals='+pageCnt;
+    } else {
+        alert('Введите значение с 1 до 99.');
+    }
 } 
 </script>
 <?php
-
-/**
- * $query_all='SELECT time_intervals.name as year_name, time_intervals.date_start,time_intervals.date_end
- *	FROM settings inner join time_intervals on time_intervals.id=settings.year_id
- *	where 1 limit 0,1';
- * if ( $res_all=mysql_query($query_all) and mysql_numrows($res_all)>0) {$def_settings=mysql_fetch_array($res_all);}
- *
- * Переписано для использования новой системы глобальных настроек
- */
 $query_all = "
     select
         time_intervals.name as year_name,
@@ -45,7 +32,9 @@ if ($res_all=mysql_query($query_all) and mysql_numrows($res_all)>0) {
 }
 
 echo '<h4 class=main>'.$pg_title.' за текущий ('.$def_settings['year_name'].') учебный год ';
-if ($hide_person_data_rule) die($hide_person_data_task);
+if ($hide_person_data_rule) {
+    die($hide_person_data_task);
+}
 //-----------------------отражаем ссылку добавления сведений успеваемости----------
 if (isset($_SESSION) && $_SESSION['auth']==1) {
 		$pg2control='study_activity.php';
@@ -67,6 +56,7 @@ echo '</h4>';
 echo '<div>Количество записей в журнале за текущий год: '.
     getScalarVal('SELECT count(*) as cnt FROM `study_activity` WHERE `date_act`>="'.$def_settings['date_start'].'"').', в архиве: '.
     getScalarVal('SELECT count(*) as cnt FROM `study_activity` WHERE `date_act`<"'.$def_settings['date_start'].'"');
+echo '</div>';
 $q='';
 $student_id=0;
 $pageVals=20;	//число тем на странице по умолчанию
@@ -76,102 +66,107 @@ $archiv='';
 
 $allowArchiv=true;	//разрешать поиск в архиве
 
-if (isset($_GET['q'])) {$q=f_ri($_GET['q']);}  
-if (isset($_GET['student_id'])) {$student_id=intval($_GET['student_id']);}  
-if (isset($_GET['pageVals']) && $_GET['pageVals']<=99 && $_GET['pageVals']>=1)
-    {$pageVals=$_GET['pageVals'];$filt_str_display=$filt_str_display.' числу записей;';}
-if (isset($_GET['page']) && $_GET['page']>1)
-    {$page=$_GET['page'];$filt_str_display=$filt_str_display.'  странице;';}
-
-if (isset($_GET['archiv']) && $allowArchiv)
-    {$archiv=$_GET['archiv'];$filt_str_display=$filt_str_display.'  архиву;';}
+if (isset($_GET['q'])) {
+    $q=f_ri($_GET['q']);
+}
+if (isset($_GET['student_id'])) {
+    $student_id=intval($_GET['student_id']);
+}
+if (isset($_GET['pageVals']) && $_GET['pageVals']<=99 && $_GET['pageVals']>=1) {
+    $pageVals=$_GET['pageVals'];$filt_str_display=$filt_str_display.' числу записей;';
+}
+if (isset($_GET['page']) && $_GET['page']>1) {
+    $page=$_GET['page'];$filt_str_display=$filt_str_display.'  странице;';
+}
+if (isset($_GET['archiv']) && $allowArchiv) {
+    $archiv=$_GET['archiv'];$filt_str_display=$filt_str_display.'  архиву;';
+}
 
 	?>
 <div align=center style="padding:20px; width:70%;">
-Введите Фамилию студента для поиска, &nbsp;  &nbsp;  &nbsp; 
-<span style='font-size:10pt; color:#999999;'>например, <a href="?q=петров">петров</a> </span><br><br>
-<form id="stud_search" name="stud_search" action="" method="get">
-<input type=text name="q" id="q" style="font-size:14pt;" value='<?php echo $q;?>'> &nbsp;
-<?php if (isset($_GET['wap'])) { ?> <input type=hidden name="wap" id="wap"> <?php } ?>
-<input type=submit value=найти style="font-size:14pt;"> <br>
-<label><input type=checkbox id=archiv name=archiv <?php if ($archiv=='on') echo ' checked'; if (!$allowArchiv) echo ' disabled title="архив отключен администратором системы"'; ?>  > искать в архиве </label>
-</form>
+    Введите Фамилию студента для поиска, &nbsp;  &nbsp;  &nbsp;
+    <span style='font-size:10pt; color:#999999;'>например, <a href="?q=петров">петров</a> </span><br><br>
+    <form id="stud_search" name="stud_search" action="" method="get">
+        <input type=text name="q" id="q" style="font-size:14pt;" value='<?php echo $q;?>'> &nbsp;
+        <input type=submit value=найти style="font-size:14pt;"> <br>
+        <label>
+            <input type=checkbox id=archiv name=archiv <?php if ($archiv=='on') echo ' checked'; if (!$allowArchiv) echo ' disabled title="архив отключен администратором системы"'; ?>  > искать в архиве
+        </label>
+    </form>
 </div>
 
 <?php
 
 if ($q!='') {
- 
-echo '<div>Результаты поиска по: <span style="font-weight:bold;font-size:14pt;">'.$q.'</span></div>';
+    echo '<div>Результаты поиска по: <span style="font-weight:bold;font-size:14pt;">'.$q.'</span></div>';
 
-$query='SELECT s.fio, s.id, sg.name AS gr_name, count(*) as rec_cnt
-  FROM    study_groups sg
-       INNER JOIN students s ON (sg.id = s.group_id)
-       INNER JOIN study_activity sa ON (s.id = sa.student_id)
- WHERE '.echoIf($archiv=='on','sa.date_act<"'.$def_settings['date_start'].'"','(sa.date_act>="'.$def_settings['date_start'].'" or sa.date_act is null)').' 
- and s.fio like "%'.strtolower($q).'%"
- group by s.fio, s.id, sg.name
- order by s.fio limit 0,50';
-$res=mysql_query($query);
-$rec_cnt=mysql_num_rows($res);
-if ($rec_cnt>0) {
-	echo '<div>найдено записей: <b>'.$rec_cnt.'</b>'.echoIf($archiv=='on',' <span class=warning>(поиск в архиве)</span>','').'</div>'; 
-	$i=1;
-	while ($a=mysql_fetch_array($res))
-	{
-	 	echo $i.'. <a href="?student_id='.$a['id'].echoIf($archiv=='on','&archiv=on','').'">'.color_mark($q,$a['fio']).
-            ' ('.$a['gr_name'].')</a> записей: '.$a['rec_cnt'].' <p>';
-	 	$i++;
-	 }
-}
-else {echo '<div>ничего не найдено</div>';}
+    $query='SELECT s.fio, s.id, sg.name AS gr_name, count(*) as rec_cnt
+      FROM    study_groups sg
+           INNER JOIN students s ON (sg.id = s.group_id)
+           INNER JOIN study_activity sa ON (s.id = sa.student_id)
+     WHERE '.echoIf($archiv=='on','sa.date_act<"'.$def_settings['date_start'].'"','(sa.date_act>="'.$def_settings['date_start'].'" or sa.date_act is null)').'
+     and s.fio like "%'.strtolower($q).'%"
+     group by s.fio, s.id, sg.name
+     order by s.fio limit 0,50';
+    $res=mysql_query($query);
+    $rec_cnt=mysql_num_rows($res);
+    if ($rec_cnt>0) {
+        echo '<div>найдено записей: <b>'.$rec_cnt.'</b>'.echoIf($archiv=='on',' <span class=warning>(поиск в архиве)</span>','').'</div>';
+        $i=1;
+        while ($a=mysql_fetch_array($res))
+        {
+            echo $i.'. <a href="?student_id='.$a['id'].echoIf($archiv=='on','&archiv=on','').'">'.color_mark($q,$a['fio']).
+                ' ('.$a['gr_name'].')</a> записей: '.$a['rec_cnt'].' <p>';
+            $i++;
+         }
+    } else {
+        echo '<div>ничего не найдено</div>';
+    }
 }
 //--------------------------------------------------
-if ($student_id>0)
-{
+if ($student_id>0) {
 	$stud_name=getScalarVal('select concat(s.fio," (",sg.name,")") as fio from students s LEFT OUTER JOIN
               study_groups sg
            ON (sg.id = s.group_id) where s.id='.$student_id);
-    if ($stud_name=='') echo '<div class=warning>Указанный студент не найден';
-    else {
-	echo '<div>Результаты поиска по студенту: <span style="font-weight:bold;font-size:14pt;">'.
-	$stud_name.'</span></div>';	
+    if ($stud_name=='') {
+        echo '<div class=warning>Указанный студент не найден';
+    } else {
+	    echo '<div>Результаты поиска по студенту: <span style="font-weight:bold;font-size:14pt;">'.
+        $stud_name.'</span></div>';
 
-	//echo $query;
-	if (!isset($_GET['old_style'])) {
-		echo '<span><a href="?old_style=1&'.reset_param_name($query_string,'old_style').'">старый отчет</a></span>';
-        require '_rep_gen.php';	//генератор отчета
-		$inGrFilendNum=array(1,2,3);
-	$query='SELECT DATE_FORMAT(sa.date_act, \'%d.%m.%Y\') as "дата",
-       subjects.name_short as "дисциплина",
-       kadri.fio_short as "преподаватель",
-       study_act.name_short as "вид контроля", sa.study_act_comment as "номер контроля",
-       sm.name_short as "оценка"';
-   //показываем пользователям, кому разрешены правки в Успеваемости показывать Примечание в таблице
-   if ($pgAdmin) $query.=', sa.comment as "примечание"';
-  $query.='FROM       study_activity sa
-                               LEFT OUTER JOIN
-                                  subjects subjects
-                               ON (subjects.id = sa.subject_id)                           
-						LEFT OUTER JOIN
-                              kadri kadri
-                           ON (kadri.id = sa.kadri_id)
-                   LEFT OUTER JOIN
-                      study_marks sm
-                   ON (sm.id = sa.study_mark)               
-       LEFT OUTER JOIN
-          study_act study_act
-       ON (study_act.id = sa.study_act_id)  
-	   where sa.student_id='.$student_id.' and '.echoIf($archiv=='on','sa.date_act<"'.$def_settings['date_start'].'"','(sa.date_act>="'.$def_settings['date_start'].'" or sa.date_act is null)').'';
-	   
-	   	//echo $query;
-		//$sort=1;
-		//$stype='desc';		//тип сортировки столбца
+        //echo $query;
+        if (!isset($_GET['old_style'])) {
+            echo '<span><a href="?old_style=1&'.reset_param_name($query_string,'old_style').'">старый отчет</a></span>';
+            require '_rep_gen.php';	//генератор отчета
+            $inGrFilendNum=array(1,2,3);
+        $query='SELECT DATE_FORMAT(sa.date_act, \'%d.%m.%Y\') as "дата",
+           subjects.name_short as "дисциплина",
+           kadri.fio_short as "преподаватель",
+           study_act.name_short as "вид контроля", sa.study_act_comment as "номер контроля",
+           sm.name_short as "оценка"';
+       //показываем пользователям, кому разрешены правки в Успеваемости показывать Примечание в таблице
+       if ($pgAdmin) $query.=', sa.comment as "примечание"';
+      $query.='FROM       study_activity sa
+                                   LEFT OUTER JOIN
+                                      subjects subjects
+                                   ON (subjects.id = sa.subject_id)
+                            LEFT OUTER JOIN
+                                  kadri kadri
+                               ON (kadri.id = sa.kadri_id)
+                       LEFT OUTER JOIN
+                          study_marks sm
+                       ON (sm.id = sa.study_mark)
+           LEFT OUTER JOIN
+              study_act study_act
+           ON (study_act.id = sa.study_act_id)
+           where sa.student_id='.$student_id.' and '.echoIf($archiv=='on','sa.date_act<"'.$def_settings['date_start'].'"','(sa.date_act>="'.$def_settings['date_start'].'" or sa.date_act is null)').'';
 
-		report_build($inGrFilendNum,$query);	//основная функция построения отчета	   
-		
-	}
-	else {	//вывод запроса в старом стиле
+            //echo $query;
+            //$sort=1;
+            //$stype='desc';		//тип сортировки столбца
+
+            report_build($inGrFilendNum,$query);	//основная функция построения отчета
+	} else {	//вывод запроса в старом стиле
 		$sort=1;
 		$stype='desc';
 		if (isset($_GET['sort'])) {$sort=intval($_GET['sort']);}
@@ -238,8 +233,7 @@ echo '<table name=tab1 border=1 cellpadding="10" cellspacing="0" width="99%">
 //------------------------------------------- шапка списочной таблицы -начало-----------------------------------------------------
 	echo '<td width="50">№</td>';
 
-	for ($i=1;$i<=count($table_headers);$i++)
-	{
+	for ($i=1;$i<=count($table_headers);$i++) {
 		echo '<td width="'.$table_headers[$i][1].'">'.print_col($i,$table_headers[$i][0]).'</td>';
 	}
 //------------------------------------------- шапка списочной таблицы -конец-----------------------------------------------------
@@ -284,11 +278,13 @@ echo '<div align="left"> страницы ';
 
 $add_string=reset_param_name($query_string,'page');//"&pageVals=".$pageVals;
 
-for ($i=1;$i<=$pages_cnt;$i++)
-    {if ($i!=$page)
-        {echo '<a href="?'.$add_string.'&page='.$i.'"> '.$i.' </a>';} else {echo ' <b>'.$i.'</b> ';}
-
+for ($i=1;$i<=$pages_cnt;$i++) {
+    if ($i!=$page) {
+        echo '<a href="?'.$add_string.'&page='.$i.'"> '.$i.' </a>';
+    } else {
+        echo ' <b>'.$i.'</b> ';
     }
+}
 //--------------------------------------------------------
 
 $add_string=reset_param_name($add_string,'pageVals');// preg_replace("/(&pageVals=)(\d+)/x","",$add_string);
@@ -298,8 +294,9 @@ echo '<br>макс.число записей на странице:
 	<input type=button onclick="javascript:pageVals(\''.$add_string.'\');" value=Ok>
 	<p> Всего записей: '.mysql_num_rows($res).'</div>'; 
 		
-	}
-	else {echo '<div>ничего не найдено</div>';}
+	} else {
+        echo '<div>ничего не найдено</div>';
+    }
 	}
 } 
 } 
@@ -308,6 +305,5 @@ echo '<br>макс.число записей на странице:
 	  echo $end1;
 	  include "display_voting.php";
 	  }
-define("CORRECT_FOOTER", true);
-	echo $end2; include('footer.php'); 
+    define("CORRECT_FOOTER", true);
 	?>
