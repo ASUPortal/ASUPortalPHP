@@ -13,7 +13,17 @@ class CCoreModelField extends CActiveModel{
     protected $_validators = null;
     protected $_model = null;
 
+    public $export_to_search = 0;
     public $model_id;
+
+    /**
+     * Поддерживаем ли модель выгрузку в поиск
+     *
+     * @return bool
+     */
+    public function isExportable() {
+        return ($this->export_to_search == "1");
+    }
 
     public function relations() {
         return array(

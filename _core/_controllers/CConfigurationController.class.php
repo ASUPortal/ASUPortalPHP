@@ -65,7 +65,11 @@ class CConfigurationController extends CBaseController {
         $setting->setAttributes(CRequest::getArray($setting::getClassName()));
         if ($setting->validate()) {
             $setting->save();
-            $this->redirect("?action=index");
+            if ($this->continueEdit()) {
+                $this->redirect("?action=edit&id=".$setting->getId());
+            } else {
+                $this->redirect("?action=index");
+            }
             return true;
         }
         $this->setData("types", array(

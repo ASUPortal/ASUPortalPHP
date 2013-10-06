@@ -12,6 +12,15 @@
         </center></a>
 </p>
 
+{if ($model->export_to_search == "1")}
+<p>
+    <a href="models.php?action=export&id={$model->getId()}"><center>
+            <img src="{$web_root}images/{$icon_theme}/32x32/actions/document-print-preview.png">
+            Выгрузить в поиск
+        </center></a>
+</p>
+{/if}
+
 <p>
     <a href="?action=importFields&id={$model->getId()}"><center>
             <img src="{$web_root}images/{$icon_theme}/32x32/actions/document-save.png">

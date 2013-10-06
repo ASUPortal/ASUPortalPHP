@@ -149,4 +149,19 @@ class CCoreModelsController extends CBaseController {
 
         $this->redirect("?action=edit&id=".$form->id);
     }
+    public function actionExport() {
+        $metaModel = CCoreObjectsManager::getCoreModel(CRequest::getInt("id"));
+        if (!$metaModel->isExportable()) {
+            $this->redirect("models.php?action=edit&id=".$metaModel->getId());
+            return false;
+        }
+        $modelClass = $metaModel->class_name;
+        $model = new $modelClass();
+        $records = CActiveRecordProvider::getAllFromTable($model->getRecord()->getTable());
+        foreach ($records->getItems() as $record) {
+            $model = new $modelClass($record);
+            CSolr::addObject($model);
+        }
+        CSolr::commit();
+    }
 }

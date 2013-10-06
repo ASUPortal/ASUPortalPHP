@@ -10,6 +10,7 @@
 class CCoreModel extends CActiveModel {
     protected $_table = TABLE_CORE_MODELS;
     protected $_fields = null;
+    public $export_to_search = 0;
 
     protected function relations() {
         return array(
@@ -58,5 +59,14 @@ class CCoreModel extends CActiveModel {
         $lang = CSettingsManager::getSettingValue("system_language_current");
         $translation = $this->getTranslationByLangId($lang);
         return $translation;
+    }
+
+    /**
+     * Поддерживаем ли модель выгрузку в поиск
+     *
+     * @return bool
+     */
+    public function isExportable() {
+        return ($this->export_to_search == "1");
     }
 }
