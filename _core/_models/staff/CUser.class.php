@@ -80,6 +80,23 @@ class CUser extends CActiveModel {
     }
 
     /**
+     * Уровень доступа к текущей задаче
+     *
+     * @return int
+     */
+    public function getLevelForCurrentTask() {
+        $level = ACCESS_LEVEL_NO_ACCESS;
+        $task = CSession::getCurrentTask();
+        if (!is_null($task)) {
+            if ($this->getRoles()->hasElement($task->getId())) {
+                $personTask = $this->getRoles()->getItem($task->getId());
+                $level = $personTask->level;
+            }
+        }
+        return $level;
+    }
+
+    /**
      * Проверяем, обладает ли пользователь указанной ролью.
      *
      * @param $roleToFind

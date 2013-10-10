@@ -81,12 +81,12 @@ function letters() {
     $res_rus=mysql_query($query_letter_rus);
     if (mysql_num_rows($res_rus)>0) {
         while ($a_rus=mysql_fetch_assoc($res_rus)) {
-            if (array_key_exists($letterId, $firstLet)) {
+            if ($letterId >= 0) {
                 if ($firstLet[$letterId]==$a_rus['name']) {
                     echo '<font size=+3>'.$a_rus['name'].'<sub class=fLetter_cnt>'.$a_rus['file_cnt'].'</sub></font>&nbsp;';
-                } else {
-                    echo '<a href="?onget=1&getsub='.array_search($a_rus['name'],$firstLet).'" title="в категории файлов: '.$a_rus['file_cnt'].'">'.$a_rus['name'].'<sub class=fLetter_cnt>'.$a_rus['file_cnt'].'</sub></a>&nbsp;';
                 }
+            } else {
+                echo '<a href="?onget=1&getsub='.array_search($a_rus['name'],$firstLet).'" title="в категории файлов: '.$a_rus['file_cnt'].'"><font size=+2>'.$a_rus['name'].'</font><sub class=fLetter_cnt>'.$a_rus['file_cnt'].'</sub></a>&nbsp;';
             }
         }
     } else {
@@ -112,12 +112,12 @@ function letters() {
     $res_rus=mysql_query($query_letter_rus);
     if (mysql_num_rows($res_rus)>0) {
         while ($a_rus=mysql_fetch_assoc($res_rus)) {
-            if (array_key_exists($letterId, $firstLet)) {
+            if ($letterId >= 0) {
                 if ($firstLet[$letterId]==$a_rus['name']) {
-                    echo '<font size=+2>'.$a_rus['name'].'<sub>'.$a_rus['file_cnt'].'</sub></font>&nbsp;';
-                } else {
-                    echo '<a href="?onget=1&getsub='.array_search($a_rus['name'],$firstLet).'">'.$a_rus['name'].'<sub>'.$a_rus['file_cnt'].'</sub></a>&nbsp;';
+                    echo '<font size=+3>'.$a_rus['name'].'<sub class=fLetter_cnt>'.$a_rus['file_cnt'].'</sub></font>&nbsp;';
                 }
+            } else {
+                echo '<a href="?onget=1&getsub='.array_search($a_rus['name'],$firstLet).'" title="в категории файлов: '.$a_rus['file_cnt'].'"><font size=+2>'.$a_rus['name'].'</font><sub class=fLetter_cnt>'.$a_rus['file_cnt'].'</sub></a>&nbsp;';
             }
         }
     } else {

@@ -11,6 +11,9 @@ class CGradebookController extends CBaseController {
         if (!CSession::isAuth()) {
             $this->redirectNoAccess();
         }
+        if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_NO_ACCESS) {
+            $this->redirectNoAccess();
+        }
 
         $this->_smartyEnabled = true;
         $this->setPageTitle("Журнал успеваемости");
@@ -23,7 +26,7 @@ class CGradebookController extends CBaseController {
         $query->select("activity.*")
             ->from(TABLE_STUDENTS_ACTIVITY." as activity");
         // сортировки по столбцам
-    	if (CRequest::getString("order") == "") {
+        if (CRequest::getString("order") == "") {
             $query->order("activity.id desc");
     	} elseif (CRequest::getString("order") == "date_act") {
     		if (CRequest::getString("direction") == "") {
@@ -52,7 +55,7 @@ class CGradebookController extends CBaseController {
             } else {
                 $query->order("student_f.fio ".CRequest::getString("direction"));
             }
-        }else {
+        } else {
             $query = new CQuery();
             $query->select("activity.*")
                 ->from(TABLE_STUDENTS_ACTIVITY)
@@ -144,6 +147,14 @@ class CGradebookController extends CBaseController {
                 $groupQuery->innerJoin(TABLE_STUDENTS_CONTROL_TYPES." as control", "activity.study_act_id = control.id AND control.id=".$selectedControl->getId());
                 $disciplineQuery->innerJoin(TABLE_STUDENTS_CONTROL_TYPES." as control", "activity.study_act_id = control.id AND control.id=".$selectedControl->getId());
             }
+        }
+        /**
+         * Ограничения по уровню доступа
+         */
+        if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY) {
+            $query->condition("activity.kadri_id=".CSession::getCurrentPerson()->getId());
+        } elseif (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
+            $query->condition("activity.kadri_id=".CSession::getCurrentPerson()->getId());
         }
         $set->setQuery($query);
         // ищем преподавателей, у которых есть оценки в списке

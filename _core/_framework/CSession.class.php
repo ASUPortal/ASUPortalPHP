@@ -100,4 +100,36 @@ class CSession {
         $s = self::getSession();
         return $s['kadri_id'];
     }
+
+    /**
+     * @return CUserRole
+     */
+    public static function getCurrentTask() {
+        $self = $_SERVER["PHP_SELF"];
+        $root_folder = CSettingsManager::getSettingValue("root_folder");
+        $self = str_replace($root_folder, "", $self);
+        if (substr($self, 0, 1) == "/") {
+            $self = substr($self, 1);
+        }
+        /**
+         * Начинаем поиск задач, походящих под описание. Если не находим,
+         * то отрезаем справа /
+         */
+        $queryCount = 0;
+        $tasks = CActiveRecordProvider::getWithCondition(TABLE_USER_ROLES, "url='".$self."'");
+        while ($tasks->getCount() == 0 && strlen($self) > 1 && $queryCount <= 5) {
+            $self = CUtils::strLeftBack($self, "/");
+            if (substr($self, strlen($self) - 1) != "/") {
+                $self .= "/";
+            }
+            $tasks = CActiveRecordProvider::getWithCondition(TABLE_USER_ROLES, "url='".$self."'");
+            $queryCount++;
+        }
+        if ($tasks->getCount() > 0) {
+            foreach ($tasks->getItems() as $ar) {
+                $task = new CUserRole($ar);
+            }
+        }
+        return $task;
+    }
 }
