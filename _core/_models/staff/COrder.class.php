@@ -46,4 +46,13 @@ class COrder extends CActiveModel {
             "conditions" => "Дополнительные условия работы"
         );
     }
+    /**
+     * Является ли приказом указанного типа
+     * 
+     * @param type $type
+     * @return type
+     */
+    public function isOrderType($type) {
+        return (strpos(strtolower($this->num_order), strtolower($type)) !== false);
+    }    
 }
