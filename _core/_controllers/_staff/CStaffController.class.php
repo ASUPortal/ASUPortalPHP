@@ -25,7 +25,7 @@ class CStaffController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
+        $set = new CRecordSet(true);
         $query = new CQuery();
         $set->setQuery($query);
         /**
@@ -35,165 +35,6 @@ class CStaffController extends CBaseController{
             ->from(TABLE_PERSON." as person")
             ->order("person.fio asc");
         /**
-         * Сортировки
-         */
-        $direction = "asc";
-        if (CRequest::getString("direction") !== "") {
-            $direction = CRequest::getString("direction");
-        }
-        if (CRequest::getString("order") == "types") {
-            $query->innerJoin(TABLE_PERSON_BY_TYPES." as pt1", "pt1.kadri_id = person.id")
-                ->innerJoin(TABLE_TYPES." as type1", "type1.id = pt1.person_type_id")
-                ->order("type1.name ".$direction);
-        } elseif (CRequest::getString("order") == "fio") {
-            $query->order("person.fio ".$direction);
-        }
-        /**
-         *
-         */
-        $selectedPerson = null;
-        $selectedType = null;
-        /**
-         * Запросы для фильтров
-         */
-        $queryTypes = new CQuery();
-        $queryTypes->select("type.id, type.name")
-            ->from(TABLE_TYPES." as type")
-            ->order("type.name asc");
-        /**
-         * Фильтры
-         * -------
-         *
-         * Выбор конкретного сотрудника
-         */
-        if (!is_null(CRequest::getFilter("person"))) {
-            $query->condition("person.id = ".CRequest::getFilter("person"));
-            $selectedPerson = CStaffManager::getPerson(CRequest::getFilter("person"));
-            $queryTypes->innerJoin(TABLE_PERSON_BY_TYPES." as pt", "type.id = pt.person_type_id AND pt.kadri_id=".$selectedPerson->getId());
-        }
-        /**
-         * Тип участия на кафедре
-         */
-        if (!is_null(CRequest::getFilter("type"))) {
-            $query->innerJoin(TABLE_PERSON_BY_TYPES." as type", "person.id = type.kadri_id AND type.person_type_id=".CRequest::getFilter("type"));
-            $selectedType = CTaxonomyManager::getLegacyTaxonomy("person_types")->getTerm(CRequest::getFilter("type"))->getId();
-        }
-        /**
-         * Пол
-         */
-        $this->setData("selectedGender", null);
-        if (!is_null(CRequest::getFilter("gender"))) {
-            $query->condition("person.pol = ".CRequest::getFilter("gender"));
-            $queryTypes->innerJoin(TABLE_PERSON_BY_TYPES." as pt", "type.id = pt.person_type_id")
-            ->innerJoin(TABLE_PERSON." as p", "pt.kadri_id = p.id")
-            ->condition("p.pol = ".CRequest::getFilter("gender"));
-            /**
-             * Пол добавляем в фильтры только если по нему искали
-             */
-            $genders = array();
-            foreach (CTaxonomyManager::getCacheGenders()->getItems() as $gender) {
-                $genders[$gender->getId()] = $gender->getValue();
-            }
-            $this->setData("genders", $genders);
-            $this->setData("selectedGender", CRequest::getFilter("gender"));
-        }
-        /**
-         * Семейное положение
-         */
-        $this->setData("selectedFamily", null);
-        if (!is_null(CRequest::getFilter("family"))) {
-            $query->condition("person.family_status=".CRequest::getFilter("family"));
-            $queryTypes->innerJoin(TABLE_PERSON_BY_TYPES." as pt", "type.id = pt.person_type_id")
-                ->innerJoin(TABLE_PERSON." as p", "pt.kadri_id = p.id")
-                ->condition("p.family_status = ".CRequest::getFilter("family"));
-            /**
-             * Семейное положение добавляем в фильтры только если по нему искали
-             */
-            $familyStatuses = CTaxonomyManager::getLegacyTaxonomy("family_status")->getTermsList();
-            $this->setData("familyStatuses", $familyStatuses);
-            $this->setData("selectedFamily", CRequest::getFilter("family"));
-        }
-        /**
-         * Роль на кафедре
-         */
-        $this->setData("selectedRole", null);
-        if (!is_null(CRequest::getFilter("role"))) {
-            $query->condition("person.department_role_id=".CRequest::getFilter("role"));
-            $queryTypes->innerJoin(TABLE_PERSON_BY_TYPES." as pt", "type.id = pt.person_type_id")
-                ->innerJoin(TABLE_PERSON." as p", "pt.kadri_id = p.id")
-                ->condition("p.department_role_id = ".CRequest::getFilter("role"));
-            /**
-             * Роль добавляем только если по ней искали
-             */
-            $roles = CTaxonomyManager::getTaxonomy("department_roles")->getTermsList();
-            $this->setData("roles", $roles);
-            $this->setData("selectedRole", CRequest::getFilter("role"));
-        }
-        /**
-         * Иностранный язык
-         */
-        $this->setData("selectedLanguage", null);
-        if (!is_null(CRequest::getFilter("language"))) {
-            $query->condition("person.language1=".CRequest::getFilter("language"));
-            $queryTypes->innerJoin(TABLE_PERSON_BY_TYPES." as pt", "type.id = pt.person_type_id")
-                ->innerJoin(TABLE_PERSON." as p", "pt.kadri_id = p.id")
-                ->condition("p.language1 = ".CRequest::getFilter("language"));
-            /**
-             * добавляем в фильтры только если по нему искали
-             */
-            $languages = CTaxonomyManager::getLegacyTaxonomy("language")->getTermsList();
-            $this->setData("languages", $languages);
-            $this->setData("selectedLanguage", CRequest::getFilter("language"));
-        }
-        /**
-         * Должность
-         */
-        $this->setData("selectedPost", null);
-        if (!is_null(CRequest::getFilter("post"))) {
-            $query->condition("person.dolgnost=".CRequest::getFilter("post"));
-            $queryTypes->innerJoin(TABLE_PERSON_BY_TYPES." as pt", "type.id = pt.person_type_id")
-                ->innerJoin(TABLE_PERSON." as p", "pt.kadri_id = p.id")
-                ->condition("p.dolgnost = ".CRequest::getFilter("post"));
-            /**
-             * добавляем в фильтры только если по нему искали
-             */
-            $posts = CTaxonomyManager::getLegacyTaxonomy("dolgnost")->getTermsList();
-            $this->setData("posts", $posts);
-            $this->setData("selectedPost", CRequest::getFilter("post"));
-        }
-        /**
-         * Звание
-         */
-        $this->setData("selectedTitle", null);
-        if (!is_null(CRequest::getFilter("title"))) {
-            $query->condition("person.zvanie=".CRequest::getFilter("title"));
-            $queryTypes->innerJoin(TABLE_PERSON_BY_TYPES." as pt", "type.id = pt.person_type_id")
-                ->innerJoin(TABLE_PERSON." as p", "pt.kadri_id = p.id")
-                ->condition("p.zvanie = ".CRequest::getFilter("title"));
-            /**
-             * добавляем в фильтры только если по нему искали
-             */
-            $titles = CTaxonomyManager::getLegacyTaxonomy("zvanie")->getTermsList();
-            $this->setData("titles", $titles);
-            $this->setData("selectedTitle", CRequest::getFilter("title"));
-        }
-        /**
-         * Ученая степень
-         */
-        $this->setData("selectedDegree", null);
-        if (!is_null(CRequest::getFilter("degree"))) {
-            $query->condition("person.stepen=".CRequest::getFilter("degree"));
-            $queryTypes->innerJoin(TABLE_PERSON_BY_TYPES." as pt", "type.id = pt.person_type_id")
-                ->innerJoin(TABLE_PERSON." as p", "pt.kadri_id = p.id")
-                ->condition("p.stepen = ".CRequest::getFilter("degree"));
-            /**
-             * добавляем в фильтры только если по нему искали
-             */
-            $degrees = CTaxonomyManager::getLegacyTaxonomy("stepen")->getTermsList();
-            $this->setData("degrees", $degrees);
-            $this->setData("selectedDegree", CRequest::getFilter("degree"));
-        }
-        /**
          * Набираем выборку
          */
         $persons = new CArrayList();
@@ -201,21 +42,6 @@ class CStaffController extends CBaseController{
             $person = new CPerson($ar);
             $persons->add($person->getId(), $person);
         }
-        /**
-         * Выборка по фильтрам
-         */
-        $types = array();
-        foreach ($queryTypes->execute()->getItems() as $item) {
-            $types[$item["id"]] = $item["name"];
-        }
-        $this->setData("types", $types);
-        $this->setData("selectedType", $selectedType);
-        /**
-         * Все передаем в представление
-         */
-        $this->setData("selectedPerson", $selectedPerson);
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("paginator", $set->getPaginator());
         $this->setData("persons", $persons);
         $this->renderView("_staff/person/index.tpl");

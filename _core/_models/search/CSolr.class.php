@@ -64,4 +64,16 @@ class CSolr {
         $url .= $options["path"]."/update?softCommit=true";
         $responseTxt = file_get_contents($url);
     }
+    public static function search($query, $params = array()) {
+        $solrQuery = new SolrQuery();
+        $solrQuery->setQuery("doc_body:*".$query."*");
+        foreach ($params as $key=>$value) {
+            $solrQuery->addFilterQuery($key.":".$value);
+        }
+
+        $query_response = self::getClient()->query($solrQuery);
+        $response = $query_response->getResponse();
+
+        return $response["response"]["docs"];
+    }
 }

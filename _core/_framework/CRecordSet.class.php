@@ -13,6 +13,25 @@ class CRecordSet {
     private $_paginator = null;
     private $_query = null;
     private $_manualAdded = false;
+    private $_useGlobalSearch = false;
+
+    /**
+     * Использовать ли глобальный поиск
+     *
+     * @param bool $useGlobalSearch
+     */
+    function __construct($useGlobalSearch = false){
+        $this->_useGlobalSearch = $useGlobalSearch;
+    }
+
+    /**
+     * Использовать ли глобальный поиск по порталу
+     *
+     * @param $value
+     */
+    public function useGlobalSearch($value) {
+        $this->_useGlobalSearch = $value;
+    }
     /**
      * @return CArrayList
      */
@@ -163,6 +182,19 @@ class CRecordSet {
             $res = new CArrayList();
             $start = ($this->getCurrentPage() - 1) * $this->getPageSize();
             $query = $this->getQuery();
+            /**
+             * Использование глобального поиск и глобальных сортировок
+             */
+            if ($this->_useGlobalSearch) {
+                $globalFilter = CRequest::getGlobalFilter();
+                if ($globalFilter["field"] !== false) {
+                    if (is_numeric($globalFilter["value"])) {
+                        $query->condition($globalFilter["field"].'='.$globalFilter["value"]);
+                    } else {
+                        $query->condition($globalFilter["field"]."='".$globalFilter["value"]."'");
+                    }
+                }
+            }
             $query->limit($start, $this->getPageSize());
             $items = $query->execute();
             foreach ($items->getItems() as $item) {

@@ -87,11 +87,41 @@ class CBaseController {
          */
         $this->addJSInclude(CSettingsManager::getSettingValue("bootstrap_path")."js/bootstrap.js");
         $this->addJSInclude("_core/datepicker/js/bootstrap-datepicker.js");
+        /**
+         * Для сабформы с поиском добавляем параметры поиска
+         */
+        $this->initGlobalSearchSubform();
 
         $action = "action".$this->_action;
         if (method_exists($this, $action)) {
             $this->$action();
         }
+    }
+
+    /**
+     * Собираем данные для сабформы поиска
+     */
+    private function initGlobalSearchSubform() {
+        $search = array();
+        if (CRequest::getGlobalFilterClass() != "") {
+            $modelMeta = CCoreObjectsManager::getCoreModel(CRequest::getGlobalFilterClass());
+            if (!is_null($modelMeta)) {
+                $globalSearch = CRequest::getGlobalFilter();
+                if ($globalSearch["field"] !== false) {
+                    /**
+                     * Получаем название поля, по которому в данный
+                     * момент выполняется поиск
+                     */
+                    $translations = $modelMeta->getTranslationDefault();
+                    $search[$globalSearch["field"]] = $globalSearch["value"];
+                    if (array_key_exists($globalSearch["field"], $translations)) {
+                        unset($search[$globalSearch["field"]]);
+                        $search[$translations[$globalSearch["field"]]] = $globalSearch["value"];
+                    }
+                }
+            }
+        }
+        $this->setData("__search", $search);
     }
     /**
      * Лист подключаемых либ

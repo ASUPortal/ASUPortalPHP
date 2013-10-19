@@ -58,4 +58,38 @@ class CSearchController extends CBaseController{
         $this->setData("config", $config);
         $this->renderView("_search/index.tpl");
     }
+    public function actionSearch() {
+        $userQuery = $_GET["query"];
+        $result = array();
+        /**
+         * Выполняем поиск
+         */
+        $docs = CSolr::search($userQuery);
+        /**
+         * В зависимости от класса модели берем данные только
+         * из полей, которые описаны в метаданных модели
+         */
+        foreach ($docs as $doc) {
+            $class = $doc->_class_;
+            /**
+             * Получаем модель по наименованию
+             */
+            $model = CCoreObjectsManager::getCoreModel($class);
+            if (!is_null($model)) {
+                foreach ($model->fields->getItems() as $field) {
+                    if (property_exists($doc, $field->field_name)) {
+                        $fieldName = $field->field_name;
+                        if (strpos($doc->$fieldName, $userQuery) !== false) {
+                            $result[] = array(
+                                "field" => $fieldName,
+                                "value" => $doc->$fieldName,
+                                "class" => $doc->_class_
+                            );
+                        }
+                    }
+                }
+            }
+        }
+        echo json_encode($result);
+    }
 }

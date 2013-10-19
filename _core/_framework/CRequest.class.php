@@ -79,6 +79,34 @@ class CRequest {
     }
 
     /**
+     * Параметры глобального фильтра
+     *
+     * @return array
+     */
+    public static function getGlobalFilter() {
+        $result = array(
+            "field" => false,
+            "value" => false
+        );
+        if (CRequest::getString("filter") != "") {
+            $filter = CUtils::strRight(CRequest::getString("filter"), "=");
+            $params = explode(":", $filter);
+            $result["field"] = $params[0];
+            $result["value"] = $params[1];
+        }
+        return $result;
+    }
+
+    /**
+     * Класс, для которого выполняется поиск
+     *
+     * @return string
+     */
+    public static function getGlobalFilterClass() {
+        return CRequest::getString("filterClass");
+    }
+
+    /**
      * Получить значение фильтра
      *
      * @param $name
