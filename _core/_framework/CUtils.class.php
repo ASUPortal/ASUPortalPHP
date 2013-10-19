@@ -315,6 +315,16 @@ class CUtils {
     /**
      * @param $string
      * @param $delimiter
+     * @return mixed
+     */
+    public static function strLeft($string, $delimiter) {
+        $arr = explode($delimiter, $string);
+        return $arr[0];
+    }
+
+    /**
+     * @param $string
+     * @param $delimiter
      * @return string
      */
     public static function strRightBack($string, $delimiter) {

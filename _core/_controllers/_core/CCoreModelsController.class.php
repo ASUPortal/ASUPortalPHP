@@ -10,7 +10,7 @@
 class CCoreModelsController extends CBaseController {
     public function __construct() {
         if (!CSession::isAuth()) {
-            //$this->redirectNoAccess();
+            $this->redirectNoAccess();
         }
 
         $this->_smartyEnabled = true;
@@ -163,5 +163,6 @@ class CCoreModelsController extends CBaseController {
             CSolr::addObject($model);
         }
         CSolr::commit();
+        $this->redirect("?action=edit&id=".$metaModel->getId());
     }
 }

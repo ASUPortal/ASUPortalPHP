@@ -10,6 +10,8 @@
 class CCoreModel extends CActiveModel {
     protected $_table = TABLE_CORE_MODELS;
     protected $_fields = null;
+    protected $_tasks = null;
+    protected $_taskModels = null;
     public $export_to_search = 0;
 
     protected function relations() {
@@ -22,6 +24,23 @@ class CCoreModel extends CActiveModel {
                 "managerClass" => "CCoreObjectsManager",
                 "managerGetObject" => "getCoreModelField"
             ),
+            "tasks" => array(
+                "relationPower" => RELATION_MANY_TO_MANY,
+                "storageProperty" => "_tasks",
+                "joinTable" => TABLE_CORE_MODEL_TASKS,
+                "leftCondition" => "model_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "rightKey" => "task_id",
+                "managerClass" => "CStaffManager",
+                "managerGetObject" => "getUserRole"
+            ),
+            "taskModels" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_taskModels",
+                "storageTable" => TABLE_CORE_MODEL_TASKS,
+                "storageCondition" => "model_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "managerClass" => "CCoreObjectsManager",
+                "managerGetObject" => "getCoreModelTask"
+            )
         );
     }
 
@@ -67,6 +86,12 @@ class CCoreModel extends CActiveModel {
      * @return bool
      */
     public function isExportable() {
-        return ($this->export_to_search == "1");
+        $exportable = false;
+        foreach ($this->fields->getItems() as $field) {
+            if ($field->isExportable()) {
+                $exportable = true;
+            }
+        }
+        return $exportable;
     }
 }

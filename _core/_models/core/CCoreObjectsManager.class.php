@@ -13,6 +13,17 @@ class CCoreObjectsManager {
     private static $_cacheModelFieldTranslations = null;
     private static $_cacheModelFieldValidators = null;
     private static $_cacheValidators = null;
+    private static $_cacheModelTasks = null;
+
+    /**
+     * @return CArrayList|null
+     */
+    private static function getCacheModelTasks() {
+        if (is_null(self::$_cacheModelTasks)) {
+            self::$_cacheModelTasks = new CArrayList();
+        }
+        return self::$_cacheModelTasks;
+    }
 
     /**
      * @return CArrayList|null
@@ -236,5 +247,34 @@ class CCoreObjectsManager {
             $res[$validator->getId()] = $validator->title;
         }
         return $res;
+    }
+
+    /**
+     * @param $key
+     * @return CCoreModelTask
+     */
+    public static function getCoreModelTask($key) {
+        if (!self::getCacheModelTasks()->hasElement($key)) {
+            $ar = CActiveRecordProvider::getById(TABLE_CORE_MODEL_TASKS, $key);
+            if (!is_null($ar)) {
+                $task = new CCoreModelTask($ar);
+                self::getCacheModelTasks()->add($task->getId(), $task);
+            }
+        }
+        return self::getCacheModelTasks()->getItem($key);
+    }
+
+    /**
+     * @return CArrayList
+     */
+    public static function getAllExportableModels() {
+        $result = new CArrayList();
+        foreach (CActiveRecordProvider::getAllFromTable(TABLE_CORE_MODELS)->getItems() as $ar) {
+            $model = new CCoreModel($ar);
+            if ($model->isExportable()) {
+                $result->add($model->getId(), $model);
+            }
+        }
+        return $result;
     }
 }

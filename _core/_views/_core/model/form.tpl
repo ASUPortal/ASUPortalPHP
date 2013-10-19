@@ -21,14 +21,6 @@
     </div>
 
     <div class="control-group">
-        {CHtml::activeLabel("export_to_search", $model)}
-        <div class="controls">
-            {CHtml::activeCheckBox("export_to_search", $model)}
-            {CHtml::error("export_to_search", $model)}
-        </div>
-    </div>
-
-    <div class="control-group">
         {CHtml::activeLabel("comment", $model)}
         <div class="controls">
             {CHtml::activeTextBox("comment", $model)}

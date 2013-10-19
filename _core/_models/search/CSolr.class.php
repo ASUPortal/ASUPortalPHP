@@ -39,6 +39,16 @@ class CSolr {
                 }
             }
         }
+        /**
+         * Выгружаем список задач, с которыми связана модель
+         */
+        foreach ($metaModel->tasks->getItems() as $task) {
+            $doc->addField("_tasks_", $task->getId());
+        }
+        /**
+         * Класс модели
+         */
+        $doc->addField("_class_", $metaModel->class_name);
         $response = self::getClient()->addDocument($doc);
     }
 

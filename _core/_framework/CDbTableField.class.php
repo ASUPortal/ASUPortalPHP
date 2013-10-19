@@ -8,8 +8,29 @@
  */
 class CDbTableField {
     public $name;
+    public $type;
 
     public function __construct(array $data) {
         $this->name = $data["Field"];
+        $this->type = $data["Type"];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTextField() {
+        if ($this->type == "text") {
+            return true;
+        } elseif (CUtils::strLeft($this->type, "(") == "varchar") {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNumericField() {
+        return !$this->isTextField();
     }
 }
