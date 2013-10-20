@@ -39,11 +39,14 @@ class CSearchController extends CBaseController{
             foreach ($model->fields->getItems() as $field) {
                 if ($field->isExportable()) {
                     if (CUtils::strRight($field->field_name, "_") !== "id") {
+                        $config[$field->field_name] = '<field name="'.$field->field_name.'" type="text_general" indexed="true" stored="true" />';
+                        /**
                         if ($fields[$field->field_name]) {
                             $config[$field->field_name] = '<field name="'.$field->field_name.'" type="text_general" indexed="true" stored="true" />';
                         } else {
                             $config[$field->field_name] = '<field name="'.$field->field_name.'" type="int" indexed="true" stored="true" />';
                         }
+                         */
                     }
                 }
             }
@@ -89,6 +92,13 @@ class CSearchController extends CBaseController{
                     }
                 }
             }
+        }
+        echo json_encode($result);
+    }
+    public function actionGetExportableModels() {
+        $result = array();
+        foreach (CCoreObjectsManager::getAllExportableModels()->getItems() as $model) {
+            $result[] = $model->getId();
         }
         echo json_encode($result);
     }

@@ -153,6 +153,7 @@ class CCoreModelsController extends CBaseController {
         $metaModel = CCoreObjectsManager::getCoreModel(CRequest::getInt("id"));
         if (!$metaModel->isExportable()) {
             $this->redirect("models.php?action=edit&id=".$metaModel->getId());
+            echo 1;
             return false;
         }
         $modelClass = $metaModel->class_name;
@@ -163,6 +164,7 @@ class CCoreModelsController extends CBaseController {
             CSolr::addObject($model);
         }
         CSolr::commit();
-        $this->redirect("?action=edit&id=".$metaModel->getId());
+
+        echo 1;
     }
 }

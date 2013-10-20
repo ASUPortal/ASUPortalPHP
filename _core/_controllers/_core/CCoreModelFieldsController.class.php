@@ -50,4 +50,11 @@ class CCoreModelFieldsController extends CBaseController {
         $field->remove();
         $this->redirect("models.php?action=edit&id=".$model);
     }
+    public function actionChangeExport() {
+        $field = CCoreObjectsManager::getCoreModelField(CRequest::getInt("id"));
+        $field->export_to_search = (1 - $field->export_to_search);
+        $field->save();
+
+        echo $field->export_to_search;
+    }
 }
