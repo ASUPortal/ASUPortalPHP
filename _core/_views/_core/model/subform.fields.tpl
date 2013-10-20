@@ -7,6 +7,7 @@
         <th>#</th>
         <th>{CHtml::tableOrder("field_name", $model->fields->getFirstItem())}</th>
         <th>{CHtml::tableOrder("export_to_search", $model->fields->getFirstItem())}</th>
+        <th>{CHtml::tableOrder("defaultTranslation", $model->fields->getFirstItem())}</th>
     </tr>
     {foreach $model->fields->getItems() as $field}
     <tr>
@@ -24,6 +25,7 @@
                 <i class="icon-off exportSwitch" id="{$field->getId()}"></i>
             {/if}
         </td>
+        <td>{$field->getTranslationDefault()}</td>
     </tr>
     {/foreach}
 </table>

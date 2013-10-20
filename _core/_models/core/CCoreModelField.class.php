@@ -68,4 +68,13 @@ class CCoreModelField extends CActiveModel{
         }
         return $value;
     }
+
+    /**
+     * Перевод на текущий язык
+     *
+     * @return string
+     */
+    public function getTranslationDefault() {
+        return $this->getTranslationByLangId(CSettingsManager::getSettingValue("system_language_default"));
+    }
 }
