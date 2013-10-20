@@ -98,6 +98,26 @@ class CRequest {
     }
 
     /**
+     * Параметры глобальной сортировки
+     *
+     * @return array
+     */
+    public static function getGlobalOrder() {
+        $result = array(
+            "field" => false,
+            "direction" => false
+        );
+        if (CRequest::getString("order") != "") {
+            $result["field"] = CRequest::getString("order");
+            $result["direction"] = "asc";
+        }
+        if (CRequest::getString("direction") != "") {
+            $result["direction"] = CRequest::getString("direction");
+        }
+        return $result;
+    }
+
+    /**
      * Класс, для которого выполняется поиск
      *
      * @return string

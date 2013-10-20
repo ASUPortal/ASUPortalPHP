@@ -118,10 +118,14 @@ class CBaseController {
                      * момент выполняется поиск
                      */
                     $translations = $modelMeta->getTranslationDefault();
-                    $search[$globalSearch["field"]] = $globalSearch["value"];
+                    $filterValue = $globalSearch["value"];
+                    if (CRequest::getString("filterLabel") != "") {
+                        $filterValue = CRequest::getString("filterLabel");
+                    }
+                    $search[$globalSearch["field"]] = $filterValue;
                     if (array_key_exists($globalSearch["field"], $translations)) {
                         unset($search[$globalSearch["field"]]);
-                        $search[$translations[$globalSearch["field"]]] = $globalSearch["value"];
+                        $search[$translations[$globalSearch["field"]]] = $filterValue;
                     }
                 }
             }

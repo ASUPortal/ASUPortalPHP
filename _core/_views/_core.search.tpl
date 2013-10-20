@@ -51,21 +51,22 @@
                         var lookup = new Array();
                         searchResults = new Object();
                         for (var i = 0; i < data.length; i++) {
-                            lookup.push(data[i].value);
+                            lookup.push(data[i].label);
                             var searchObj = new Object();
                             searchObj.field = data[i].field;
                             searchObj.className = data[i].class;
-                            searchResults[data[i].value] = searchObj;
+                            searchObj.value = data[i].value;
+                            searchResults[data[i].label] = searchObj;
                         }
-                        jQuery("#main_search_field").css("background-image", "none");
                         process(lookup);
+                        jQuery("#main_search_field").css("background-image", "none");
                     }
                 });
             },
             updater: function(item){
-                var value = item;
-                var key = searchResults[value].field;
-                var className = searchResults[value].className;
+                var value = searchResults[item].value;
+                var key = searchResults[item].field;
+                var className = searchResults[item].className;
                 /**
                  * Делаем фильтр по указанному полю
                  */
@@ -77,13 +78,14 @@
                     var parts = qw.split("&");
                     for (var i = 0; i < parts.length; i++) {
                         var param = parts[i].split("=");
-                        if (param[0] !== "filter" && param[0] !== "filterClass") {
+                        if (param[0] !== "filter" && param[0] !== "filterClass" && param[0] !== "filterLabel") {
                             params[params.length] = param[0] + "=" + param[1];
                         }
                     }
                 }
                 params[params.length] = "filter=" + key + ":" + value;
                 params[params.length] = "filterClass=" + className;
+                params[params.length] = "filterLabel=" + item;
                 /**
                  * Собираем строку запроса обратно
                  */
@@ -108,7 +110,7 @@
                 var parts = qw.split("&");
                 for (var i = 0; i < parts.length; i++) {
                     var param = parts[i].split("=");
-                    if (param[0] !== "filter" && param[0] !== "filterClass") {
+                    if (param[0] !== "filter" && param[0] !== "filterClass" && param[0] !== "filterLabel") {
                         params[params.length] = param[0] + "=" + param[1];
                     }
                 }

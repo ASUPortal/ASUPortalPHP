@@ -24,9 +24,17 @@ class CSolr {
         }
         return self::$_client;
     }
-    public static function addObject(CActiveModel $model) {
+
+    /**
+     * @param CActiveModel $model
+     * @param bool $exportTasks
+     * @param bool $isMain
+     * @return SolrInputDocument
+     */
+    private static function createSolrInputDocument(CActiveModel $model, $exportTasks = false, $isMain = false) {
         $doc = new SolrInputDocument();
         $doc->addField("id", $model->getRecord()->getTable()."_".$model->getId());
+        $doc->addField("_doc_id_", $model->getId());
         /**
          * Выгружаем дополнительные выгружаемые поля
          */
@@ -42,14 +50,64 @@ class CSolr {
         /**
          * Выгружаем список задач, с которыми связана модель
          */
-        foreach ($metaModel->tasks->getItems() as $task) {
-            $doc->addField("_tasks_", $task->getId());
+        if ($exportTasks) {
+            foreach ($metaModel->tasks->getItems() as $task) {
+                $doc->addField("_tasks_", $task->getId());
+            }
         }
         /**
          * Класс модели
          */
         $doc->addField("_class_", $metaModel->class_name);
+        /**
+         * Модель является основной
+         */
+        if ($isMain) {
+            $doc->addField("_is_main_", "1");
+        } else {
+            $doc->addField("_is_main_", "0");
+        }
+        return $doc;
+    }
+    private static function getConditionField(array $params = array()) {
+        $result = "";
+        if ($params["relationPower"] == RELATION_HAS_ONE) {
+            if ($params["storageField"] != "") {
+                $condition = $params["storageField"];
+                $result = CUtils::strLeft($condition, "=");
+                $result = str_replace(" ", "", $result);
+            }
+        }
+        return $result;
+    }
+    public static function addObject(CActiveModel $model) {
+        $doc = self::createSolrInputDocument($model, true, true);
         $response = self::getClient()->addDocument($doc);
+        /**
+         * Непосредственно связанные объекты
+         */
+        foreach ($model->getRelations() as $name=>$params) {
+            if ($params["relationPower"] == RELATION_HAS_ONE) {
+                $obj = $model->$name;
+                if (!is_null($obj)) {
+                    $modelMeta = CCoreObjectsManager::getCoreModel(get_class($obj));
+                    if (!is_null($modelMeta)) {
+                        if ($modelMeta->isExportable()) {
+                            $doc = self::createSolrInputDocument($obj, false, false);
+                            $doc->addField("_parent_class_", get_class($model));
+                            $doc->addField("_parent_field_", self::getConditionField($params));
+                            $response = self::getClient()->addDocument($doc);
+                        }
+                    }
+                }
+            } elseif ($params["relationPower"] == RELATION_HAS_MANY) {
+
+            } elseif ($params["relationPower"] == RELATION_MANY_TO_MANY) {
+
+            } elseif ($params["relationPower"] == RELATION_COMPUTED) {
+
+            }
+        }
     }
 
     /**
@@ -67,6 +125,9 @@ class CSolr {
     public static function search($query, $params = array()) {
         $solrQuery = new SolrQuery();
         $solrQuery->setQuery("doc_body:*".$query."*");
+        if (mb_strpos($query, " ") !== false) {
+            $solrQuery->setQuery('doc_body:"*'.$query.'*"');
+        }
         foreach ($params as $key=>$value) {
             $solrQuery->addFilterQuery($key.":".$value);
         }

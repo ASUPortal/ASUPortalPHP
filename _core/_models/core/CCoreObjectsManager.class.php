@@ -277,4 +277,22 @@ class CCoreObjectsManager {
         }
         return $result;
     }
+
+    /**
+     * Все модели, которые связаны с указанной задачей
+     *
+     * @param $key
+     * @return CArrayList
+     */
+    public static function getModelsByTask($key) {
+        $result = new CArrayList();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_CORE_MODEL_TASKS, "task_id=".$key)->getItems() as $ar) {
+            $modelTask = new CCoreModelTask($ar);
+            if (!is_null($modelTask->model)) {
+                $model = $modelTask->model;
+                $result->add($model->getId(), $model);
+            }
+        }
+        return $result;
+    }
 }

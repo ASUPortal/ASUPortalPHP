@@ -25,6 +25,15 @@ class CModel {
     protected function relations() {
         return array();
     }
+
+    /**
+     * Получаем отношения между объектами
+     *
+     * @return array
+     */
+    public function getRelations() {
+        return $this->relations();
+    }
     /**
      * Переопределяемый метод для указания названий полей в сущности
      *

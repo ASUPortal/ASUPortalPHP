@@ -164,7 +164,6 @@ class CCoreModelsController extends CBaseController {
             CSolr::addObject($model);
         }
         CSolr::commit();
-
         echo 1;
     }
 }

@@ -186,6 +186,7 @@ class CRecordSet {
              * Использование глобального поиск и глобальных сортировок
              */
             if ($this->_useGlobalSearch) {
+                // глобальный поиск
                 $globalFilter = CRequest::getGlobalFilter();
                 if ($globalFilter["field"] !== false) {
                     if (is_numeric($globalFilter["value"])) {
@@ -193,6 +194,11 @@ class CRecordSet {
                     } else {
                         $query->condition($globalFilter["field"]."='".$globalFilter["value"]."'");
                     }
+                }
+                // глобальные сортировки
+                $globalOrder = CRequest::getGlobalOrder();
+                if ($globalOrder["field"] !== false) {
+                    $query->order($globalOrder["field"]." ".$globalOrder["direction"]);
                 }
             }
             $query->limit($start, $this->getPageSize());

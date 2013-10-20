@@ -968,16 +968,28 @@ class CHtml {
         } else {
             $label = $field;
         }
-    	if (CRequest::getString("action") !== "") {
-    		$actions[] = "action=".CRequest::getString("action");
-    	}
-    	if (CRequest::getInt("page") !== 0) {
-    		$actions[] = "page=".CRequest::getInt("page");
-    	}
-        if (CRequest::getString("filter") !== "") {
-            $actions[] = "filter=".CRequest::getString("filter");
+        $inherit = array(
+            "action",
+            "page",
+            "filter",
+            "filterClass",
+            "filterLabel"
+        );
+        foreach ($inherit as $value) {
+            if (CRequest::getString($value) !== "") {
+                $actions[] = $value."=".CRequest::getString($value);
+            }
         }
-    	$actions[] = "order=".$field;
+        /**
+         * Позволяем сортировать только если поле есть в модели
+         */
+        $showLink = false;
+        if (is_a($model, "CActiveModel")) {
+            if ($model->getDbTableFields()->hasElement($field)) {
+                $showLink = true;
+            }
+        }
+        $actions[] = "order=".$field;
     	if (CRequest::getString("order") == $field) {
     		if (CRequest::getString("direction") == "") {
     			$actions[] = "direction=asc";
@@ -986,11 +998,12 @@ class CHtml {
     		} elseif (CRequest::getString("direction") == "desc") {
     			$actions[] = "direction=asc";
     		}
-    		$label = '<a href="?'.implode($actions, "&").'">'.$label.'</a>';
     	} else {
     		$actions[] = "direction=desc";
-    		$label = '<a href="?'.implode($actions, "&").'">'.$label.'</a>';
     	}
+        if ($showLink) {
+            $label = '<a href="?'.implode($actions, "&").'">'.$label.'</a>';
+        }
     	echo $label;
     }
     public static function activeNamesSelect($field, CModel $model) {

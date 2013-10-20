@@ -54,16 +54,23 @@ class CSearchController extends CBaseController{
         /**
          * Список задач модели
          * Класс модели
+         * Основная, связанная сущность
          */
-        $config["_tasks_"] = '<field name="_tasks_" type="int" indexed="true" stored="true" multiValued="true" />';
+        $config["_tasks_"] = '<field name="_tasks_" type="int" indexed="true" stored="false" multiValued="true" />';
         $config["_class_"] = '<field name="_class_" type="text_general" indexed="true" stored="true" />';
+        $config["_is_main_"] = '<field name="_is_main_" type="text_general" indexed="true" stored="true" />';
+        $config["_parent_class_"] = '<field name="_parent_class_" type="text_general" indexed="true" stored="true" />';
+        $config["_parent_field_"] = '<field name="_parent_field_" type="text_general" indexed="true" stored="true" />';
+        $config["_doc_id_"] = '<field name="_doc_id_" type="int" indexed="true" stored="true" />';
 
         $this->setData("config", $config);
         $this->renderView("_search/index.tpl");
     }
     public function actionSearch() {
-        $userQuery = $_GET["query"];
-        $params = array();
+        $userQuery = mb_strtolower($_GET["query"]);
+        $params = array(
+            "_is_main_" => 1
+        );
         /**
          * Получаем доп. параметры
          */
@@ -86,21 +93,65 @@ class CSearchController extends CBaseController{
          */
         if (is_array($docs)) {
             foreach ($docs as $doc) {
-                $class = $doc->_class_;
-                /**
-                 * Получаем модель по наименованию
-                 */
-                $model = CCoreObjectsManager::getCoreModel($class);
-                if (!is_null($model)) {
-                    foreach ($model->fields->getItems() as $field) {
-                        if (property_exists($doc, $field->field_name)) {
-                            $fieldName = $field->field_name;
-                            if (strpos($doc->$fieldName, $userQuery) !== false) {
-                                $result[] = array(
-                                    "field" => $fieldName,
-                                    "value" => $doc->$fieldName,
-                                    "class" => $doc->_class_
-                                );
+                if (property_exists($doc, "_class_")) {
+                    $class = $doc->_class_;
+                    /**
+                     * Получаем модель по наименованию
+                     */
+                    $model = CCoreObjectsManager::getCoreModel($class);
+                    if (!is_null($model)) {
+                        foreach ($model->fields->getItems() as $field) {
+                            if (property_exists($doc, $field->field_name)) {
+                                $fieldName = $field->field_name;
+                                $fieldValue = mb_strtolower($doc->$fieldName);
+                                if (mb_strpos($fieldValue, $userQuery) !== false) {
+                                    $result[] = array(
+                                        "field" => $fieldName,
+                                        "value" => $doc->$fieldName,
+                                        "class" => $doc->_class_,
+                                        "label" => $doc->$fieldName
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        /**
+         * Если определена задача, то попробуем поискать
+         * и в связанных с ее моделями
+         */
+        if (array_key_exists("_tasks_", $params)) {
+            foreach (CCoreObjectsManager::getModelsByTask($params["_tasks_"])->getItems() as $coreModel) {
+                $newParams = array(
+                    "_is_main_" => "0",
+                    "_parent_class_" => $coreModel->class_name
+                );
+                $docs = CSolr::search($userQuery, $newParams);
+                if (is_array($docs)) {
+                    foreach ($docs as $doc) {
+                        if (property_exists($doc, "_class_")) {
+                            $class = $doc->_class_;
+                            /**
+                             * Получаем модель по наименованию
+                             */
+                            $model = CCoreObjectsManager::getCoreModel($class);
+                            if (!is_null($model)) {
+                                foreach ($model->fields->getItems() as $field) {
+                                    if (property_exists($doc, $field->field_name)) {
+                                        $fieldName = $field->field_name;
+                                        $fieldValue = strtolower($doc->$fieldName);
+                                        if (mb_strpos($fieldValue, $userQuery) !== false) {
+                                            $result[] = array(
+                                                "field" => $doc->_parent_field_,
+                                                "value" => $doc->_doc_id_,
+                                                "class" => $doc->_parent_class_,
+                                                "label" => $doc->$fieldName
+                                            );
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
