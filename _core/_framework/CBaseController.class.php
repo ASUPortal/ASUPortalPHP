@@ -92,6 +92,8 @@ class CBaseController {
          */
         $this->initGlobalSearchSubform();
 
+        $this->setData("__controller", $this);
+
         $action = "action".$this->_action;
         if (method_exists($this, $action)) {
             $this->$action();
@@ -103,6 +105,9 @@ class CBaseController {
      */
     private function initGlobalSearchSubform() {
         $search = array();
+        /**
+         * Инициализация левой части с параметрами поиска
+         */
         if (CRequest::getGlobalFilterClass() != "") {
             $modelMeta = CCoreObjectsManager::getCoreModel(CRequest::getGlobalFilterClass());
             if (!is_null($modelMeta)) {
@@ -122,6 +127,13 @@ class CBaseController {
             }
         }
         $this->setData("__search", $search);
+        /**
+         * Поиск только в рамках текущей задачи
+         */
+        $this->setData("__current_task", "");
+        if (!is_null(CSession::getCurrentTask())) {
+            $this->setData("__current_task", CSession::getCurrentTask()->getId());
+        }
     }
     /**
      * Лист подключаемых либ

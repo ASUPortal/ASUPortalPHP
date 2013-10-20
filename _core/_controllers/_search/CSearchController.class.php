@@ -63,31 +63,45 @@ class CSearchController extends CBaseController{
     }
     public function actionSearch() {
         $userQuery = $_GET["query"];
+        $params = array();
+        /**
+         * Получаем доп. параметры
+         */
+        if (array_key_exists("params", $_GET)) {
+            foreach ($_GET["params"] as $key=>$value) {
+                if ($key == "__task") {
+                    $key = "_tasks_";
+                }
+                $params[$key] = $value;
+            }
+        }
         $result = array();
         /**
          * Выполняем поиск
          */
-        $docs = CSolr::search($userQuery);
+        $docs = CSolr::search($userQuery, $params);
         /**
          * В зависимости от класса модели берем данные только
          * из полей, которые описаны в метаданных модели
          */
-        foreach ($docs as $doc) {
-            $class = $doc->_class_;
-            /**
-             * Получаем модель по наименованию
-             */
-            $model = CCoreObjectsManager::getCoreModel($class);
-            if (!is_null($model)) {
-                foreach ($model->fields->getItems() as $field) {
-                    if (property_exists($doc, $field->field_name)) {
-                        $fieldName = $field->field_name;
-                        if (strpos($doc->$fieldName, $userQuery) !== false) {
-                            $result[] = array(
-                                "field" => $fieldName,
-                                "value" => $doc->$fieldName,
-                                "class" => $doc->_class_
-                            );
+        if (is_array($docs)) {
+            foreach ($docs as $doc) {
+                $class = $doc->_class_;
+                /**
+                 * Получаем модель по наименованию
+                 */
+                $model = CCoreObjectsManager::getCoreModel($class);
+                if (!is_null($model)) {
+                    foreach ($model->fields->getItems() as $field) {
+                        if (property_exists($doc, $field->field_name)) {
+                            $fieldName = $field->field_name;
+                            if (strpos($doc->$fieldName, $userQuery) !== false) {
+                                $result[] = array(
+                                    "field" => $fieldName,
+                                    "value" => $doc->$fieldName,
+                                    "class" => $doc->_class_
+                                );
+                            }
                         }
                     }
                 }

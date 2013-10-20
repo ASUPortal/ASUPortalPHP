@@ -30,7 +30,12 @@
                     dataType: "json",
                     data: {
                         "query": query,
-                        "action": "search"
+                        "action": "search",
+                        "params": {
+                            {if $__current_task != ""}
+                            "__task": {$__current_task}
+                            {/if}
+                        }
                     },
                     beforeSend: function(){
                         /**

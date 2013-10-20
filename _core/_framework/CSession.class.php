@@ -125,6 +125,7 @@ class CSession {
             $tasks = CActiveRecordProvider::getWithCondition(TABLE_USER_ROLES, "url='".$self."'");
             $queryCount++;
         }
+        $task = null;
         if ($tasks->getCount() > 0) {
             foreach ($tasks->getItems() as $ar) {
                 $task = new CUserRole($ar);
