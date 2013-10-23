@@ -59,7 +59,9 @@ class CExamManager {
     public static function getSpecialitiesWithQuestionsList() {
         $res = array();
         foreach (self::getAllQuestions()->getItems() as $q) {
-            $res[$q->speciality_id] = $q->speciality->getValue();
+            if (!is_null($q->speciality)) {
+                $res[$q->speciality_id] = $q->speciality->getValue();
+            }
         }
         return $res;
     }
