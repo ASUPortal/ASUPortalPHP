@@ -19,7 +19,7 @@ class CIndPlanWorkTypesController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
+        $set = new CRecordSet(true);
         $query = new CQuery();
         $set->setQuery($query);
         /**
@@ -28,21 +28,11 @@ class CIndPlanWorkTypesController extends CBaseController{
         $query->select("w.*")
             ->from(TABLE_IND_PLAN_WORKTYPES." as w")
             ->order("w.name asc");
-        /**
-         * Фильтр по категории
-         */
-        $selectedCategory = null;
-        if (!is_null(CRequest::getFilter("category"))) {
-            $selectedCategory = CRequest::getFilter("category");
-            $query->condition("w.id_razdel = ".$selectedCategory);
-        }
         $works = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $work = new CIndPlanWorktype($ar);
             $works->add($work->getId(), $work);
         }
-
-        $this->setData("selectedCategory", $selectedCategory);
         $this->setData("works", $works);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_individual_plan/worktypes/index.tpl");

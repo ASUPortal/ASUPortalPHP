@@ -19,7 +19,7 @@ class CIndPlanLoadController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
+        $set = new CRecordSet(false);
         $query = new CQuery();
         $set->setQuery($query);
 

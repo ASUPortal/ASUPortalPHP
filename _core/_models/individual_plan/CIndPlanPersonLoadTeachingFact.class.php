@@ -9,4 +9,13 @@
 
 class CIndPlanPersonLoadTeachingFact extends CActiveModel{
     protected $_table = TABLE_IND_PLAN_LOAD_TEACHING_FACT;
+
+    /**
+     * По контрактной форме обучения
+     *
+     * @return bool
+     */
+    public function isContract() {
+        return ($this->is_contract_form == "1");
+    }
 }

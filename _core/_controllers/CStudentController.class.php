@@ -20,96 +20,17 @@ class CStudentController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
+        $set = new CRecordSet(true);
         $query = new CQuery();
         $query->select("student.*")
             ->from(TABLE_STUDENTS." as student")
             ->order("student.id desc");
         $set->setQuery($query);
-        // здесь разнообразные выборки с сортировками
-        if (CRequest::getString("order") == "fio") {
-            $direction = "asc";
-            if (CRequest::getString("direction") != "") {
-                $direction = CRequest::getString("direction");
-            }
-            $query->order("student.fio ".$direction);
-        } elseif (CRequest::getString("order") == "group_id") {
-            $direction = "asc";
-            if (CRequest::getString("direction") != "") {
-                $direction = CRequest::getString("direction");
-            }
-            $query->innerJoin(TABLE_STUDENT_GROUPS." as st_group", "student.group_id = st_group.id");
-            $query->order("st_group.name ".$direction);
-        } elseif(CRequest::getString("order") == "bud_contract") {
-            $direction = "asc";
-            if (CRequest::getString("direction") != "") {
-                $direction = CRequest::getString("direction");
-            }
-            $query->order("student.bud_contract ".$direction);
-        } elseif(CRequest::getString("order") == "telephone") {
-            $direction = "asc";
-            if (CRequest::getString("direction") != "") {
-                $direction = CRequest::getString("direction");
-            }
-            $query->order("student.telephone ".$direction);
-        } elseif(CRequest::getString("order") == "diploms") {
-            $direction = "asc";
-            if (CRequest::getString("direction") != "") {
-                $direction = CRequest::getString("direction");
-            }
-            $query->innerJoin(TABLE_DIPLOMS." as diplom", "student.id = diplom.student_id");
-            $query->order("diplom.dipl_name ".$direction);
-        } elseif (CRequest::getString("order") == "stud_num") {
-            $direction = "asc";
-            if (CRequest::getString("direction") != "") {
-                $direction = CRequest::getString("direction");
-            }
-            $query->order("student.stud_num ".$direction);
-        }
-        // запросы для фильтров
-        $queryGroups = new CQuery();
-        $queryGroups->select("distinct(st_group.id) as id, st_group.name as name")
-            ->from(TABLE_STUDENT_GROUPS." as st_group")
-            ->innerJoin(TABLE_STUDENTS." as student", "student.group_id = st_group.id")
-            ->order("st_group.name");
-        // фильтры
-        $selectedStudent = null;
-        $selectedGroup = null;
-        $selectedDiplom = null;
-        // фильтр по группе
-        if (!is_null(CRequest::getFilter("group"))) {
-            $query->innerJoin(TABLE_STUDENT_GROUPS." as st_group_f", "st_group_f.id = student.group_id AND st_group_f.id = ".CRequest::getFilter("group"));
-            $selectedGroup = CRequest::getFilter("group");
-        }
-        // фильтр по студенту
-        if (!is_null(CRequest::getFilter("student"))) {
-            $query->condition("student.id = ".CRequest::getFilter("student"));
-            $selectedStudent = CStaffManager::getStudent(CRequest::getFilter("student"));
-            $queryGroups->condition("st_group.id = ".$selectedStudent->group_id);
-        }
-        // фильтр по теме диплома
-        if (!is_null(CRequest::getFilter("diplom"))) {
-            $query->innerJoin(TABLE_DIPLOMS." as diplom", "diplom.student_id = student.id AND diplom.id=".CRequest::getFilter("diplom"));
-            $selectedDiplom = CStaffManager::getDiplom(CRequest::getFilter("diplom"));
-            $queryGroups->innerJoin(TABLE_DIPLOMS." as diplom", "diplom.student_id = student.id AND diplom.id=".CRequest::getFilter("diplom"));
-        }
-        // параметры фильтров
-        $groups = array();
-        foreach ($queryGroups->execute()->getItems() as $item) {
-            $groups[$item["id"]] = $item["name"];
-        }
-        // выборка финишных данных и их показ пользователю
         $students = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $item) {
             $student = new CStudent($item);
             $students->add($student->getId(), $student);
         }
-        $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-        $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
-        $this->setData("groups", $groups);
-        $this->setData("selectedGroup", $selectedGroup);
-        $this->setData("selectedStudent", $selectedStudent);
-        $this->setData("selectedDiplom", $selectedDiplom);
         $this->setData("students", $students);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_students/index.tpl");

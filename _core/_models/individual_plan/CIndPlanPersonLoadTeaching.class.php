@@ -63,6 +63,8 @@ class CIndPlanPersonLoadTeaching extends CFormModel {
             $type = 1;
         } elseif ($type == "add") {
             $type = 2;
+        } elseif ($type == "hours") {
+            $type = 4;
         }
 
         $taxonomy = CTaxonomyManager::getLegacyTaxonomy("spravochnik_uch_rab");
@@ -76,93 +78,32 @@ class CIndPlanPersonLoadTeaching extends CFormModel {
             $result[$key] = $row;
         }
         /**
-         * План на осенний семестр и на весенний тоже сразу
+         * Заполняем все пустыми данными
          */
-        foreach ($this->getPlan($type, 1)->getItems() as $key=>$value) {
-            $row = $result[$key];
-            $row[1] = $value;
-            $sum = 0;
-            if (array_key_exists(16, $row)) {
-                $row[16] = $sum;
+        foreach ($result as $key=>$value) {
+            $row = $value;
+            for ($i = 1; $i <= 24; $i++) {
+                $row[$i] = 0;
             }
-            $sum += $value;
-            $row[16] = $sum;
             $result[$key] = $row;
         }
-        foreach ($this->getPlan($type, 2)->getItems() as $key=>$value) {
-            $row = $result[$key];
-            $row[8] = $value;
-            $sum =$row[16];
-            $sum += $value;
-            $row[16] = $sum;
-            $result[$key] = $row;
-        }
-        /**
-         * По месяцам (кроме августа)
-         */
+
         $colByMonth = $this->getColumnForMonth();
         for ($month = 1; $month <= 12; $month++) {
             if (array_key_exists($month, $colByMonth)) {
-                foreach ($this->getFactByMonth($month, $type)->getItems() as $key=>$value) {
+                // бюджет
+                foreach ($this->getFactByMonth($month, $type, 0)->getItems() as $key=>$value) {
                     $row = $result[$key];
-                    /**
-                     * По месяцу
-                     */
                     $row[$colByMonth[$month]] = $value;
-                    /**
-                     * За год всего
-                     */
-                    $val = 0;
-                    if (array_key_exists(17, $row)) {
-                        $val = $row[17];
-                    }
-                    $val += $value;
-                    $row[17] = $val;
-                    /**
-                     * По семестрам
-                     */
-                    if (in_array($month, array(
-                        9, 10, 11, 12, 1
-                    ))) {
-                        // осенний
-                        $colId = 7;
-                    } else {
-                        // весенний
-                        $colId = 15;
-                    }
-                    $sumByPart = 0;
-                    if (array_key_exists($colId, $row)) {
-                        $sumByPart = $row[$colId];
-                    }
-                    $sumByPart += $value;
-                    $row[$colId] = $sumByPart;
+                    $result[$key] = $row;
+                }
+                // контракт
+                foreach ($this->getFactByMonth($month, $type, 1)->getItems() as $key=>$value) {
+                    $row = $result[$key];
+                    $row[$colByMonth[$month] + 1] = $value;
                     $result[$key] = $row;
                 }
             }
-        }
-        /**
-         * Суммы по столбцам
-         */
-        $summRow = array(
-            "Итого"
-        );
-        foreach ($result as $row) {
-            for ($i = 1; $i < count($row); $i++) {
-                $summ = 0;
-                if (array_key_exists($i, $summRow)) {
-                    $summ = $summRow[$i];
-                }
-                $summ += $row[$i];
-                $summRow[$i] = $summ;
-            }
-        }
-        $result[] = $summRow;
-        /**
-         * Сортировка
-         */
-        foreach ($result as $key=>$row) {
-            ksort($row);
-            $result[$key] = $row;
         }
         return $result;
     }
@@ -170,24 +111,20 @@ class CIndPlanPersonLoadTeaching extends CFormModel {
     /**
      * @param $month
      * @param $type
+     * @param $isContract
      * @return CArrayList
      */
-    private function getFactByMonth($month, $type) {
-        $taxonomy = CTaxonomyManager::getLegacyTaxonomy("spravochnik_uch_rab");
-        $workTypes = $taxonomy->getTermsList();
-
+    private function getFactByMonth($month, $type, $isContract) {
         $result = new CArrayList();
 
-        foreach ($workTypes as $key=>$value) {
+        foreach (CTaxonomyManager::getLegacyTaxonomy("spravochnik_uch_rab")->getTerms()->getItems() as $key=>$value) {
             $result->add($key, 0);
-        }
-        foreach ($workTypes as $key=>$value) {
             foreach ($this->getFact()->getItems() as $fact) {
-                if ($fact->id_month == $month && $fact->hours_kind_type == $type) {
-                    $value = $result->getItem($key);
-                    $workId = "rab_".$key;
-                    $value += $fact->$workId;
-                    $result->add($key, $value);
+                if ($fact->id_month == $month && $fact->hours_kind_type == $type && $fact->is_contract_form == $isContract) {
+                    $val = $result->getItem($key);
+                    $part = "rab_".$key;
+                    $val += $fact->$part;
+                    $result->add($key, $val);
                 }
             }
         }
@@ -202,17 +139,17 @@ class CIndPlanPersonLoadTeaching extends CFormModel {
      */
     private function getColumnForMonth() {
         return array(
-            1 => 6,
-            2 => 9,
-            3 => 10,
-            4 => 11,
-            5 => 12,
-            6 => 13,
-            7 => 14,
-            9 => 2,
+            1 => 9,
+            2 => 11,
+            3 => 13,
+            4 => 15,
+            5 => 17,
+            6 => 19,
+            7 => 21,
+            9 => 1,
             10 => 3,
-            11 => 4,
-            12 => 5
+            11 => 5,
+            12 => 7
         );
     }
 
@@ -221,12 +158,22 @@ class CIndPlanPersonLoadTeaching extends CFormModel {
      *
      * @param $rowId
      * @param $cellId
+     * @param $type
      * @return string
      */
     public function getFieldName($rowId, $cellId, $type) {
         $columns = $this->getColumnForMonth();
-        $month = array_search($cellId, $columns);
-        return self::getClassName()."[".$rowId."][".$month."][".$type."]";
+        // четные колонки - контракт, нечетные - бюджет
+        if ($cellId % 2 == 0) {
+            // контракт
+            $cellId--;
+            $month = array_search($cellId, $columns);
+            return self::getClassName()."[".$type."][1][".$month."][".$rowId."]";
+        } else {
+            // бюджет
+            $month = array_search($cellId, $columns);
+            return self::getClassName()."[".$type."][0][".$month."][".$rowId."]";
+        }
     }
 
     public function save() {
@@ -241,31 +188,34 @@ class CIndPlanPersonLoadTeaching extends CFormModel {
         }
         /**
          * Создаем новые
-         * Для начала, пересорируем все
+         *
+         * Классификация и состав массивов следующий:
+         * номер типа (основная, дополнительная, почасовка)
+         *    тип оплаты (бюджет - 0, контракт - 1)
+         *       месяц (обычный порядок)
+         *          вид нагрузки (номер)
          */
-        for ($type = 1; $type <= 2; $type++) {
-            $months = array();
-            foreach ($this->getItems()->getItems() as $workId=>$data) {
-                foreach ($data as $monthId=>$arr) {
-                    $month = array();
-                    if (array_key_exists($monthId, $months)) {
-                        $month = $months[$monthId];
+        $data = $this->getItems()->getItems();
+        for ($type = 1; $type <= 4; $type++) {
+            if ($type != 3) {
+                if (array_key_exists($type, $data)) {
+                    $byType = $data[$type];
+                    foreach ($byType as $isContract=>$monthData) {
+                        foreach ($monthData as $monthId=>$byKind) {
+                            $obj = new CIndPlanPersonLoadTeachingFact();
+                            $obj->id_kadri = $this->kadri_id;
+                            $obj->id_year = $this->year_id;
+                            $obj->hours_kind_type = $type;
+                            $obj->id_month = $monthId;
+                            $obj->is_contract_form = $isContract;
+                            foreach ($byKind as $kind=>$value) {
+                                $work = "rab_".$kind;
+                                $obj->$work = $value;
+                            }
+                            $obj->save();
+                        }
                     }
-                    $month[$workId] = $arr[$type];
-                    $months[$monthId] = $month;
                 }
-            }
-            foreach ($months as $monthId=>$data) {
-                $obj = new CIndPlanPersonLoadTeachingFact();
-                $obj->id_kadri = $this->kadri_id;
-                $obj->id_year = $this->year_id;
-                $obj->hours_kind_type = $type;
-                $obj->id_month = $monthId;
-                foreach ($data as $workId=>$value) {
-                    $work = "rab_".$workId;
-                    $obj->$work = $value;
-                }
-                $obj->save();
             }
         }
     }
