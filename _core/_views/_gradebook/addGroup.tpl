@@ -13,9 +13,8 @@
         });
         jQuery("#group_id").change(function(){
             jQuery.getJSON(
-                    web_root + "_modules/_json_service",
+                    web_root + "_modules/_gradebook/",
                     {
-                        controller: "staff",
                         action: "getStudentsByGroup",
                         group: jQuery(this).val()
                     },
