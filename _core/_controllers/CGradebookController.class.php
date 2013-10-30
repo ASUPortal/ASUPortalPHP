@@ -522,4 +522,18 @@ class CGradebookController extends CBaseController {
         }
         echo json_encode($res);
     }
+    /**
+     * Получить всех студентов учебной группы
+     */
+    public function actionGetStudentsByGroup() {
+        $group = CRequest::getInt("group");
+        $res = array();
+        foreach (CStaffManager::getStudentGroup($group)->getStudents()->getItems() as $student) {
+            $res[$student->getId()] = "(".$student->stud_num.") ".$student->getName();
+            if ($student->stud_num == "") {
+                $res[$student->getId()] = $student->getName();
+            }
+        }
+        echo json_encode($res);
+    }
 }
