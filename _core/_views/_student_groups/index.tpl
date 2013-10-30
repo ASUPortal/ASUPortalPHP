@@ -5,60 +5,7 @@
 
     {CHtml::helpForCurrentPage()}
     
-    <script>
-	    jQuery(document).ready(function(){
-		    jQuery("#search").autocomplete({
-                source: web_root + "_modules/_student_groups/?action=search",
-                minLength: 2,
-                select: function(event, ui) {
-                    if (ui.item.type == 1) {
-                        // выбрана учебная группа
-                        window.location.href = "?action=index&filter=group:" + ui.item.object_id;
-                    }
-                }
-            });
-	    });
-        /**
-         * Очистка указанного фильтра
-         * @param type
-         */
-        function removeFilter(type) {
-            var filters = new Object();
-            {if !is_null($selectedGroup)}
-                filters.group = {$selectedGroup->getId()};
-            {/if}
-            var action = "?action=index&filter=";
-            var actions = new Array();
-            jQuery.each(filters, function(key, value){
-                if (key !== type) {
-                    actions[actions.length] = key + ":" + value;
-                }
-            });
-            action = action + actions.join("_");
-            window.location.href = action;
-        }
-    </script>
-    
-	<table border="0" width="100%" class="tableBlank">
-	    <tr>
-	        <td valign="top">
-	            <form>
-		        {if !is_null($selectedGroup)}
-	            <p>
-	            	<label for="group">Учебная группа</label>
-	            	{$selectedGroup->getName()}
-	            	<span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('group'); return false; "/></span>
-	            </p>
-	            {/if}
-	            </form>
-	        </td>
-	        <td valign="top" width="200px">
-	            <p>
-	                <input type="text" id="search" style="width: 100%; " placeholder="Поиск">
-	            </p>
-	        </td>
-	    </tr>
-	</table>    
+    {include file="_core.search.tpl"} 
 
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
