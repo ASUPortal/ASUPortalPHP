@@ -88,15 +88,10 @@ class CStudentGroup extends CActiveModel {
     public function getStudents() {
         if (is_null($this->_students)) {
             $this->_students = new CArrayList();
-            $tList = new CArrayList();
             foreach (CActiveRecordProvider::getWithCondition(TABLE_STUDENTS, "group_id=".$this->getId(), "fio asc")->getItems() as $item) {
                 $student = new CStudent($item);
-                $tList->add($student->getName(), $student->getId());
-                CStaffManager::getCacheStudents()->add($student->getId(), $student);
-            }
-            foreach ($tList->getSortedByKey(true)->getItems() as $id) {
-                $student = CStaffManager::getStudent($id);
                 $this->_students->add($student->getId(), $student);
+                CStaffManager::getCacheStudents()->add($student->getId(), $student);
             }
         }
         return $this->_students;
