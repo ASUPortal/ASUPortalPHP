@@ -22,7 +22,7 @@
                     function (students) {
                         jQuery("#student_container").empty();
                         jQuery.each(students, function (key, value) {
-                            var item = jQuery(jQuery("#student_template").find("p")[0]).clone().appendTo("#student_container");
+                            var item = jQuery(jQuery("#student_template").find("div")[0]).clone().appendTo("#student_container");
 
                             var label = jQuery(item).find("label")[0];
                             jQuery(label).html(value);
@@ -45,70 +45,80 @@
     });
 </script>
 
-<form action="index.php" method="post">
+<form action="index.php" method="post" class="form-horizontal">
     {CHtml::hiddenField("action", "saveGroup")}
 
-    <p>{CHtml::errorSummary($activity)}</p>
+    {CHtml::errorSummary($activity)}
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("date_act", $activity)}
+        <div class="controls">
         {CHtml::activeTextField("date_act", $activity, "date_act")}
         {CHtml::error("date_act", $activity)}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("subject_id", $activity)}
+        <div class="controls">
         {CHtml::activeDropDownList("subject_id", $activity, CTaxonomyManager::getDisciplinesList(), "subject_id")}
         {CHtml::error("subject_id", $activity)}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("kadri_id", $activity)}
+        <div class="controls">
         {CHtml::activeDropDownList("kadri_id", $activity, CStaffManager::getPersonsList(), "kadri_id")}
         {CHtml::personTypeFilter("kadri_id", $activity)}
         {CHtml::error("kadri_id", $activity)}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("group_id", $activity)}
+        <div class="controls">
         {CHtml::activeDropDownList("group_id", $activity, $groups, "group_id")}
         {CHtml::error("group_id", $activity)}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("study_act_id", $activity)}
+        <div class="controls">
         {CHtml::activeDropDownList("study_act_id", $activity, CTaxonomyManager::getControlTypesList(), "study_act_id")}
         {CHtml::error("study_act_id", $activity)}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("study_act_comment", $activity)}
+        <div class="controls">
         {CHtml::activeTextField("study_act_comment", $activity, "study_act_comment")}
         {CHtml::error("study_act_comment", $activity)}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("comment", $activity)}
+        <div class="controls">
         {CHtml::activeTextField("comment", $activity, "comment")}
         {CHtml::error("comment", $activity)}
-    </p>
+    </div></div>
 
     <div id="student_template" style="display: none; ">
-        <p>
+        <div class="control-group">
             {CHtml::activeLabel("student", $activity)}
+            <div class="controls">
             {CHtml::activeDropDownList("student", $activity, CTaxonomyManager::getMarksList())}
-        </p>
+        </div></div>
     </div>
     <div id="student_container"></div>
 
-    <p>
+    <div class="control-group">
+        <div class="controls">
         {CHtml::submit("Сохранить")}
-    </p>
+    </div></div>
 
-    <p>
+    <div class="control-group">
         {CHtml::label("Сохранить значения", "saveValues")}
+        <div class="controls">
         {CHtml::checkBox("saveValues", "1", true)}
-    </p>
+    </div></div>
 </form>
 {/block}
 
