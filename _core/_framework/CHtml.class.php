@@ -199,7 +199,7 @@ class CHtml {
      * @param $name
      * @param CActiveModel $model
      */
-    public static function activeHiddenField($name, CModel $model, $multiple_key = "", $value = "") {
+    public static function activeHiddenField($name, CModel $model, $multiple_key = "", $value = "", $id = "") {
         /**
          * Безумно полезная штука для работы со связанными
          * моделями. Если в названии поля есть скобки, то производится
@@ -223,7 +223,7 @@ class CHtml {
         if ($value == "") {
             $value = $model->$name;
         }
-        self::hiddenField($field, $value);
+        self::hiddenField($field, $value, $id);
     }
     /**
      * Однострочное текстовое поле
