@@ -112,6 +112,11 @@ class CDiplomsController extends CBaseController {
                 $reviewers[$reviewer->getId()] = $reviewer->getName();
             }
         }
+        $diplomLookup = "";
+        if (!is_null($diplom->practPlace)) {
+            $diplomLookup = $diplom->practPlace->getValue();
+        }
+        $this->setData("diplomLookup", $diplomLookup);
         $this->setData("reviewers", $reviewers);
         $this->setData("students", $students);
         $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
