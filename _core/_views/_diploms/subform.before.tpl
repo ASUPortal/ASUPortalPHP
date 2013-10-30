@@ -6,6 +6,24 @@
             buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
             buttonImageOnly: true
         });
+        jQuery("#pract_place_lookup").typeahead({
+            source: function(query, process){
+                process([
+                    {foreach CTaxonomyManager::getPracticePlacesList() as $val}
+                            "{$val|escape}",
+                    {/foreach}
+                ]);
+            },
+            updater: function(selected){
+                var data = new Object();
+                {foreach CTaxonomyManager::getPracticePlacesList() as $key=>$val}
+                    data["{$val|escape}"] = {$key};
+                {/foreach}
+                jQuery('#pract_place_id').val(data[selected]);
+                return unescape(selected);
+            }
+        });
+        jQuery("#pract_place_lookup").val('{$diplomLookup}');
     });
     {if !is_null($diplom->getId())}
     jQuery.ajax({
@@ -20,6 +38,8 @@
     });
     {/if}
 </script>
+
+{CHtml::activeHiddenField("pract_place_id", $diplom, "", "", "pract_place_id")}
 
 <div id="average_mark" style="color: red; font-size: 150px; position: absolute; right: 5px; "></div>
 
@@ -48,7 +68,7 @@
 <div class="control-group">
     {CHtml::activeLabel("pract_place_id", $diplom)}
     <div class="controls">
-        {CHtml::activeDropDownList("pract_place_id", $diplom, CTaxonomyManager::getPracticePlacesList())}
+        {CHtml::activeTextField("pract_place_lookup", $diplom, "pract_place_lookup")}
         <span><a href="{$web_root}pract_bases.php" target="_blank">
             <img src="{$web_root}images/toupdate.png">
         </a></span>
