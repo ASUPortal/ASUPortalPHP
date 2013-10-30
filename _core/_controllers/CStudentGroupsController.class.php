@@ -21,20 +21,12 @@ class CStudentGroupsController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
+        $set = new CRecordSet(true);
         $query = new CQuery();
         $query->select("st_group.*")
             ->from(TABLE_STUDENT_GROUPS." as st_group")
             ->order("st_group.id desc");
         $set->setQuery($query);
-        /**
-         * Фильтры пока никакие не делаю, так как некогда
-         */
-        $selectedGroup = null;
-        if (!is_null(CRequest::getFilter("group"))) {
-            $query->condition("st_group.id = ".CRequest::getFilter("group"));
-            $selectedGroup = CStaffManager::getStudentGroup(CRequest::getFilter("group"));
-        }
         /**
          * Финишная выборка
          */
@@ -43,15 +35,6 @@ class CStudentGroupsController extends CBaseController {
             $group = new CStudentGroup($item);
             $groups->add($group->getId(), $group);
         }
-        /**
-         * Подключаем скрипты
-         */
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
-        /**
-         * Передаем значения в представление
-         */
-        $this->setData("selectedGroup", $selectedGroup);
         $this->setData("groups", $groups);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_student_groups/index.tpl");
