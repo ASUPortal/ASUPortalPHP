@@ -138,6 +138,7 @@
             },
             dataType: "json"
         }).done(function(data){
+            jQuery("#groupPrintDialog").modal("hide");
             window.location.href = data.url;
         });
     }
