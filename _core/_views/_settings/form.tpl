@@ -1,9 +1,3 @@
-<script>
-    jQuery(document).ready(function() {
-        jQuery("#tabs").tabs();
-    });
-</script>
-
 <form action="index.php" method="post" class="form-horizontal">
 {CHtml::hiddenField("action", "save")}
 {CHtml::activeHiddenField("id", $settings)}

@@ -23,6 +23,8 @@
     define("PHPMAILER_DIR", CORE_CWD.'/_core/_external/phpmailer');
     define("PRINT_ENGINE_WORD", CORE_CWD.CORE_DS.'_core'.CORE_DS.'_external'.CORE_DS.'phpword'.CORE_DS);
     define("PRINT_TEMPLATES_DIR", CORE_CWD.CORE_DS.'library'.CORE_DS.'templates'.CORE_DS);
+    define("PRINT_DOCUMENTS_DIR", CORE_CWD.CORE_DS.'tmp'.CORE_DS.'print'.CORE_DS);
+    define("ZIP_DOCUMENTS_DIR", CORE_CWD.CORE_DS.'tmp'.CORE_DS.'zip'.CORE_DS);
     /**
      * Перекидываем настройки соединения с БД в константы
      */
@@ -273,7 +275,8 @@
 
     define("WEB_ROOT", CSettingsManager::getSettingValue("web_root"));
     define("ROOT_FOLDER", CSettingsManager::getSettingValue("root_folder"));
-    define("PRINT_DOCUMENTS_URL", WEB_ROOT."/library/templates/");
+    define("PRINT_DOCUMENTS_URL", WEB_ROOT."/tmp/print/");
+    define("ZIP_DOCUMENTS_URL", WEB_ROOT."/tmp/zip/");
     define("ADMIN_EMAIL", CSettingsManager::getSettingValue("admin_email"));
 
     define("APP_DEBUG", true);

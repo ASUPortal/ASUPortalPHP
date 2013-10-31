@@ -332,19 +332,19 @@ class CPrintController extends CBaseController {
          */
         $filename = date("dmY_Hns")."_".$form->template_file;
         $i = 0;
-        while (file_exists(PRINT_TEMPLATES_DIR.$filename)) {
+        while (file_exists(PRINT_DOCUMENTS_DIR.$filename)) {
             $filename = date("dmY_Hns")."_".$i."_".$form->template_file;
             $i++;
         }
-        $wordTemplate->save(PRINT_TEMPLATES_DIR.$filename);
+        $wordTemplate->save(PRINT_DOCUMENTS_DIR.$filename);
         /**
          * Отдаем документ пользователю
          * Не отдаем, если у нас тут групповая печать
          */
         if (CRequest::getInt("noredirect") == "1") {
             echo json_encode(array(
-                "filename" => PRINT_TEMPLATES_DIR.$filename,
-                "url" => PRINT_DOCUMENTS_URL.$filename
+                "filename" => PRINT_DOCUMENTS_DIR.$filename,
+                "url" => PRINT_DOCUMENTS_DIR.$filename
             ));
         } else {
             $this->redirect(PRINT_DOCUMENTS_URL.$filename);

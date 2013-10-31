@@ -13,28 +13,44 @@
 </p>
 
 <p>
-    <a href="#" onclick="jQuery('#printDialog').dialog();"><center>
+    <a href="#printDialog" data-toggle="modal"><center>
         <img src="{$web_root}images/{$icon_theme}/32x32/devices/printer.png"><br>
         Печать по шаблону
     </center></a>
 </p>
 
+{if (false)}
 <p>
     <a href="#" onclick="showStudentsWithoutMarks(); return false;"><center>
             <img src="{$web_root}images/{$icon_theme}/32x32/apps/system-file-manager.png"><br>
             Студенты без оценок
         </center></a>
 </p>
+{/if}
 
-<div id="printDialog" title="Печать по шаблону" style="display: none;">
-    <b>Печать для всех студентов</b>
+<div id="printDialog" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Печать по шаблону</h3>
+    </div>
+    <div class="modal-body">
+        <b>Печать для всех студентов</b>
 
-    {CHtml::printGroupOnTemplate("formset_students")}
+        {CHtml::printGroupOnTemplate("formset_students")}
+    </div>
 </div>
 
-<div id="groupPrintDialog" title="Печать по шаблону" style="display: none;">
-    <div id="progressbar"></div>
-    <div id="statusbar">Подождите, идет формирование архива</div>
+<div id="groupPrintDialog"  class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Печать по шаблону</h3>
+    </div>
+    <div class="modal-body">
+        <div class="progress progress-striped active">
+            <div class="bar" id="progressbar" style="width: 0%;"></div>
+        </div>
+        <div id="statusbar">Подождите, идет формирование архива</div>
+    </div>
 </div>
 
 <script>
@@ -51,15 +67,11 @@
         /**
          * Закрываем диалог чтобы не мешался
          */
-        jQuery("#printDialog").dialog("close");
+        jQuery("#printDialog").modal("hide");
         /**
          * Открываем свой диалог групповой печати
          */
-        jQuery("#groupPrintDialog").dialog();
-        /**
-         * Ставим прогресс-бар
-         */
-        jQuery("#progressbar").progressbar();
+        jQuery("#groupPrintDialog").modal("show");
         /**
          * Система будет синхронная - так немного проще
          * Да и мало кто это заметит
@@ -83,9 +95,8 @@
         /**
          * Адаптируем прогресс-бар
          */
-        jQuery("#progressbar").progressbar({
-            max: (students.length - 1)
-        });
+        jQuery("#progressbar").attr("items", (students.length - 1));
+        jQuery("#progressbar").css("width", "0%");
         /**
          * Для каждого студента генерим вкладыш
          */
@@ -104,9 +115,8 @@
                 }
             }).done(function(data) {
                 attachments[attachments.length] = data.filename;
-                jQuery("#progressbar").progressbar({
-                    value: attachments.length
-                });
+                var width = (attachments.length) * 100 / jQuery("#progressbar").attr("items");
+                jQuery("#progressbar").css("width", width + "%");
                 /**
                  * Если все вкладыши отработаны, то сгенерим
                  * архив и отдадим его пользователю

@@ -23,18 +23,18 @@ class CZipController extends CBaseController {
         $files = CRequest::getArray("files");
         $zip = new ZipArchive();
         $filename = date("dmY_Hns").".zip";
-        $zip->open(PRINT_TEMPLATES_DIR.$filename, ZipArchive::CREATE);
+        $zip->open(ZIP_DOCUMENTS_DIR.$filename, ZipArchive::CREATE);
         foreach ($files as $file) {
             $zip->addFile($file, basename($file));
         }
         $zip->close();
         if (CRequest::getInt("noredirect") == "1") {
             echo json_encode(array(
-                "filename" => PRINT_TEMPLATES_DIR.$filename,
-                "url" => PRINT_DOCUMENTS_URL.$filename
+                "filename" => ZIP_DOCUMENTS_DIR.$filename,
+                "url" => ZIP_DOCUMENTS_URL.$filename
             ));
         } else {
-            $this->redirect(PRINT_DOCUMENTS_URL.$filename);
+            $this->redirect(ZIP_DOCUMENTS_URL.$filename);
         }
     }
 }
