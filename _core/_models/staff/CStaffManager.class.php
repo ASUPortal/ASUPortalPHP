@@ -563,14 +563,20 @@ class CStaffManager{
      * @return CUserRole
      */
     public static function getUserRole($key) {
+        /**
+         * Объекты клонируются, так как иначе ломается задача управления группами -
+         * в задаче Управление группами показываются суммарные
+         * права пользователя, так как объекты везде одни и те же.
+         */
         if (!self::getCacheRoles()->hasElement($key)) {
-            $ar = CActiveRecordProvider::getById(TABLE_USER_ROLES, $key);
+        $ar = CActiveRecordProvider::getById(TABLE_USER_ROLES, $key);
             if (!is_null($ar)) {
                 $role = new CUserRole($ar);
                 self::getCacheRoles()->add($role->getId(), $role);
             }
         }
-        return self::getCacheRoles()->getItem($key);
+        $obj = self::getCacheRoles()->getItem($key);
+        return clone($obj);
     }
     /**
      * Кэш групп пользователей
