@@ -91,7 +91,7 @@
         ),
         "cache" => array(
             "class" => "CCacheDummy",
-            "cacheDir" => CORE_CWD.CORE_DS.'_core'.CORE_DS.'_cache'.CORE_DS,
+            "cacheDir" => CORE_CWD.CORE_DS.'tmp'.CORE_DS.'cache'.CORE_DS,
             "timeout" => 360
         ),
         "smarty" => array(
