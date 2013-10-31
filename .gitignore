@@ -15,3 +15,5 @@ images/news/*
 .project
 .settings
 _modules/docs_tpl/*
+tmp/smarty/*
+tmp/timthumb/*
