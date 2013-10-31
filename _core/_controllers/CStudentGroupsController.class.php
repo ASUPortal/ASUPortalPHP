@@ -61,7 +61,11 @@ class CStudentGroupsController extends CBaseController {
         $group->setAttributes(CRequest::getArray($group::getClassName()));
         if ($group->validate()) {
             $group->save();
-            $this->redirect("?action=index");
+            if ($this->continueEdit()) {
+                $this->redirect("?action=edit&id=".$group->getId());
+            } else {
+                $this->redirect("?action=index");
+            }
             return true;
         }
         $students = array();
