@@ -1,22 +1,3 @@
-<script>
-    jQuery(document).ready(function(){
-        jQuery("#session_end").timepicker({
-            hourText: "Часы",
-            minuteText: "Минуты",
-            showNowButton: true,
-            nowButtonText: "Сейчас",
-            showPeriodLabels: false
-        });
-        jQuery("#session_start").timepicker({
-            hourText: "Часы",
-            minuteText: "Минуты",
-            showNowButton: true,
-            nowButtonText: "Сейчас",
-            showPeriodLabels: false
-        });
-    });
-</script>
-
 <div class="control-group">
     {CHtml::activeLabel("study_mark", $diplom)}
     <div class="controls">
@@ -28,7 +9,7 @@
 <div class="control-group">
     {CHtml::activeLabel("session_start", $diplom)}
     <div class="controls">
-        {CHtml::activeTextField("session_start", $diplom, "session_start")}
+        {CHtml::activeTimeField("session_start", $diplom, "session_start")}
         {CHtml::error("session_start", $diplom)}
     </div>
 </div>
@@ -36,7 +17,7 @@
 <div class="control-group">
     {CHtml::activeLabel("session_end", $diplom)}
     <div class="controls">
-        {CHtml::activeTextField("session_end", $diplom, "session_end")}
+        {CHtml::activeTimeField("session_end", $diplom, "session_end")}
         {CHtml::error("session_end", $diplom)}
     </div>
 </div>

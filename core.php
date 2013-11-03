@@ -95,7 +95,7 @@
             "timeout" => 360
         ),
         "smarty" => array(
-            "cacheEnabled" => true
+            "cacheEnabled" => false
         )
     );
     /**

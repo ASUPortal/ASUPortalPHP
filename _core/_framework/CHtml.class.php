@@ -10,6 +10,7 @@
  */
 class CHtml {
     private static $_calendarInit = false;
+    private static $_clocksInit = false;
     private static $_multiselectInit = false;
     private static $_printFormViewInit = false;
     private static function getFielsizeClass() {
@@ -295,6 +296,41 @@ class CHtml {
             self::requiredStar();
         }
     }
+    public static function activeTimeField($name, CModel $model, $id = "", $class = "", $html = "") {
+        $field = $model::getClassName()."[".$name."]";
+        if ($id == "") {
+            $id = $field;
+        }
+        $id = str_replace("[", "_", $id);
+        $id = str_replace("]", "_", $id);
+        ?>
+        <div class="input-append bootstrap-timepicker">
+            <input id="<?php echo $id; ?>" type="text" name="<?php echo $field; ?>" class="timepicker <?php echo self::getFielsizeClass(); ?>" value="<?php echo $model->$name; ?>">
+            <span class="add-on"><i class="icon-time"></i></span>
+        </div>
+        <?php
+        if (!self::$_clocksInit) {
+            self::$_clocksInit = true;
+            ?>
+            <script>
+                jQuery(document).ready(function(){
+                    jQuery(".timepicker").timepicker({
+                        showMeridian: false,
+                        defaultTime: "current"
+                    });
+                });
+            </script>
+        <?php
+        $fieldRequired = false;
+        $validators = CCoreObjectsManager::getFieldValidators($model);
+        if (array_key_exists($name, $validators)) {
+            $fieldRequired = true;
+        }
+        if ($fieldRequired) {
+            self::requiredStar();
+        }
+        }
+    }
     public static function activeDateField($name, CModel $model, $format = "dd.mm.yyyy", $id = "", $class = "", $html = "") {
         $field = $model::getClassName()."[".$name."]";
         if ($id == "") {
@@ -330,30 +366,6 @@ class CHtml {
         if ($fieldRequired) {
             self::requiredStar();
         }
-
-        /*
-        self::textField($field, $model->$name, $id, $class, $html);
-        if (!self::$_calendarInit) {
-            self::$_calendarInit = true;
-            echo '
-            <script type="text/javascript" src="'.WEB_ROOT.'scripts/calendar.js"></script>
-            <script type="text/javascript" src="'.WEB_ROOT.'scripts/calendar-setup.js"></script>
-            <script type="text/javascript" src="'.WEB_ROOT.'scripts/lang/calendar-ru_win_.js"></script>
-            <link rel="stylesheet" type="text/css" media="all" href="'.WEB_ROOT.'css/calendar-win2k-asu.css" title="win2k-cold-1" />';
-        }
-        echo '
-        <button type="reset" id="'.$id.'_select">...</button>
-            <script type="text/javascript">
-                Calendar.setup({
-                    inputField     :    "'.$id.'",      // id of the input field
-                    ifFormat       :    "'.$format.'",       // format of the input field "%m/%d/%Y %I:%M %p"
-                    showsTime      :    false,            // will display a time selector
-                    button         :    "'.$id.'_select",   // trigger for the calendar (button ID)
-                    singleClick    :    true,           // double-click mode false
-                    step           :    1                // show all years in drop-down boxes (instead of every other year as default)
-                });
-            </script>';
-        */
     }
     public static function activeTextBox($name, CModel $model, $id = "", $class = "", $html = "", $multiple_key = "") {
         /**
