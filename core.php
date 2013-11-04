@@ -233,13 +233,8 @@
     define("TABLE_CORE_VALIDATORS", "core_validators");
     define("TABLE_CORE_MODEL_FIELD_VALIDATORS", "core_model_field_validators");
     define("TABLE_IND_PLAN_WORKTYPES", "spravochnik_vidov_rabot");
-    define("TABLE_IND_PLAN_LOAD_TEACHING_FACT", "fact");
-    define("TABLE_IND_PLAN_LOAD_ORGANIZATIONAL", "uch_org_rab");
-    define("TABLE_IND_PLAN_CONCLUSTIONS", "zakl");
-    define("TABLE_IND_PLAN_CHANGES", "izmen");
-    define("TABLE_IND_PLAN_PUBLICATIONS", "perechen_nauch_rab");
-    define("TABLE_IND_PLAN_LOAD_EDUCATION", "uch_vosp_rab");
-    define("TABLE_IND_PLAN_LOAD_SCIENCE", "nauch_met_rab");
+    define("TABLE_IND_PLAN_LOADS", "ip_loads");
+    define("TABLE_IND_PLAN_WORKS", "ip_works");
     define("TABLE_ACCESS_LEVELS", "task_rights");
     /**
      * Уровни доступа константами

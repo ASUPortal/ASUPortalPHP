@@ -31,8 +31,7 @@ class CPerson extends CActiveModel{
     protected $_doctorpapers = null;
     protected $_degree = null;
     protected $_orders_sab = null;
-    private $_indPlansByYears = null;
-    private $_indPlanYearFilter = null;
+    protected $_indPlanLoads = null;
 
     protected function relations() {
         return array(
@@ -136,6 +135,14 @@ class CPerson extends CActiveModel{
                 "storageCondition" => "kadri_id = " . $this->id." AND disser_type='доктор'",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPersonDoctorPaper"
+            ),
+            "loads" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_indPlanLoads",
+                "storageTable" => TABLE_IND_PLAN_LOADS,
+                "storageCondition" => "person_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "managerClass" => "CIndPlanManager",
+                "managerGetObject" => "getLoad"
             )
         );
     }
@@ -501,6 +508,17 @@ class CPerson extends CActiveModel{
     }
 
     /**
+     * @return array
+     */
+    public function getActiveOrdersList() {
+        $result = array();
+        foreach ($this->getActiveOrders()->getItems() as $order) {
+            $result[$order->getId()] = "Приказ № ".$order->num_order." от ".$order->date_order;
+        }
+        return $result;
+    }
+
+    /**
      * Активные приказы указанного типа
      *
      * @param $money_type
@@ -603,47 +621,43 @@ class CPerson extends CActiveModel{
     }
 
     /**
-     * Добавляем фильтр в учебный план по году
-     * Не придумал другого способа, кто придумает, пусть перепишет
-     *
-     * @param CTerm $year
+     * @param $restrict
+     * @return CArrayList
      */
-    public function setIndPlanYearFilter(CTerm $year) {
-        $this->_indPlanYearFilter = $year;
-        if (!is_null($this->_indPlansByYears)) {
-            $this->_indPlansByYears = null;
+    public function getIndPlansByYears($restrict = 0) {
+        $result = new CArrayList();
+        foreach ($this->loads->getItems() as $load) {
+            $year = new CArrayList();
+            if ($result->hasElement($load->year_id)) {
+                $year = $result->getItem($load->year_id);
+            }
+            $year->add($load->getId(), $load);
+            $result->add($load->year_id, $year);
         }
+        /**
+         * Если есть ограничение, то все, которые под него не попадают
+         * исключаем из результатов
+         */
+        if ($restrict > 0) {
+            foreach ($result->getItems() as $year=>$load) {
+                if ($year != $restrict) {
+                    $result->removeItem($year);
+                }
+            }
+        }
+        return $result;
     }
 
     /**
-     * @return CArrayList
+     * Список публикаций для подстановки
+     *
+     * @return array
      */
-    public function getIndPlansByYears() {
-        if (is_null($this->_indPlansByYears)) {
-            $this->_indPlansByYears = new CArrayList();
-            if (is_null($this->_indPlanYearFilter)) {
-                foreach (CTaxonomyManager::getYearsList() as $id=>$title) {
-                    $year = CTaxonomyManager::getYear($id);
-                    $load = CIndPlanManager::getLoadByPersonAndYear($this, $year);
-                    if (!is_null($load)) {
-                        $this->_indPlansByYears->add($this->_indPlansByYears->getCount(), $load);
-                    }
-                }
-            } else {
-                $load = CIndPlanManager::getLoadByPersonAndYear($this, $this->_indPlanYearFilter);
-                if (!is_null($load)) {
-                    $this->_indPlansByYears->add($this->_indPlansByYears->getCount(), $load);
-                }
-            }
-            /**
-             * Очищаем от пустых значений
-             */
-            foreach ($this->_indPlansByYears->getItems() as $key=>$value) {
-                if (!$value->haveValues()) {
-                    $this->_indPlansByYears->removeItem($key);
-                }
-            }
+    public function getPublicationsList() {
+        $result = array();
+        foreach ($this->publications->getItems() as $paper) {
+            $result[$paper->getId()] = $paper->name;
         }
-        return $this->_indPlansByYears;
+        return $result;
     }
 }
