@@ -6,7 +6,7 @@
 </p>
 
 <p>
-    <a href="{$web_root}_modules/_students/?action=index&filter=group:{$group->getId()}"><center>
+    <a href="{$web_root}_modules/_students/?action=index&filter=group_id:{$group->getId()}"><center>
         <img src="{$web_root}images/{$icon_theme}/32x32/apps/system-users.png"><br>
         Студенты
     </center></a>
