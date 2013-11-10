@@ -24,14 +24,24 @@ class CIndPlanPersonLoad extends CActiveModel{
                 "managerGetObject" => "getPerson"
             ),
             "works" => array(
-                "relationPower" => RELATION_HAS_MANY,
+                "relationPower" => RELATION_COMPUTED,
                 "storageProperty" => "_works",
-                "storageTable" => TABLE_IND_PLAN_WORKS,
-                "storageCondition" => "load_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "managerClass" => "CIndPlanManager",
-                "managerGetObject" => "getWork"
+                "relationFunction" => "getWorks",
             )
         );
+    }
+
+    protected function getWorks() {
+        if (is_null($this->_works)) {
+            $this->_works = new CArrayList();
+            if (!is_null($this->getId())) {
+                foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_WORKS, "load_id=".$this->getId())->getItems() as $ar) {
+                    $work = new CIndPlanPersonWork($ar);
+                    $this->_works->add($work->getId(), $work);
+                }
+            }
+        }
+        return $this->_works;
     }
 
     /**
