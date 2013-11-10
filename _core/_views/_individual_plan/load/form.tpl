@@ -38,6 +38,14 @@
     </div>
 
     <div class="control-group">
+        {CHtml::activeLabel("separate_contract", $load)}
+        <div class="controls">
+            {CHtml::activeCheckBox("separate_contract", $load)}
+            {CHtml::error("separate_contract", $load)}
+        </div>
+    </div>
+
+    <div class="control-group">
         <div class="controls">
             {CHtml::submit("Сохранить")}
         </div>

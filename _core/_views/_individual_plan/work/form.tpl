@@ -1,6 +1,8 @@
 <form action="work.php" method="post" enctype="multipart/form-data" class="form-horizontal">
     {CHtml::hiddenField("action", "save")}
-    {CHtml::activeHiddenField("id", $object)}
+    {if $object->work_type != "1"}
+        {CHtml::activeHiddenField("id", $object)}
+    {/if}
     {CHtml::activeHiddenField("load_id", $object)}
     {CHtml::activeHiddenField("work_type", $object)}
 

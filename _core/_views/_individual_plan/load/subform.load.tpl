@@ -1,5 +1,10 @@
 <ul class="nav nav-pills">
-    <li class="active"><a href="#work_{$load->getId()}_1" data-toggle="tab">Учебная</a></li>
+    <li class="active">
+        <a href="#work_{$load->getId()}_1" data-toggle="tab">
+            Учебная
+            <i class="icon-pencil" onclick="window.location.href='work.php?action=add&id={$load->getId()}&type=1'"></i>
+        </a>
+    </li>
     <li>
         <a href="#work_{$load->getId()}_2" data-toggle="tab">
             Учебно- и организационно-методическая

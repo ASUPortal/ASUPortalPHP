@@ -12,6 +12,7 @@ class CIndPlanPersonWork extends CActiveModel{
     public $load_id;
     public $work_type;
     public $is_executed = 0;
+    public $separate_contract = 0;
     protected $_load = null;
     protected $_workType = null;
     protected $_publication = null;

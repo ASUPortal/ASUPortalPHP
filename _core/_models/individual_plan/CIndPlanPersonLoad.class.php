@@ -11,6 +11,7 @@ class CIndPlanPersonLoad extends CActiveModel{
     protected $_table = TABLE_IND_PLAN_LOADS;
     protected $_person = null;
     protected $_works = null;
+    private $_loadTable = null;
     public $person_id;
 
     public function relations() {
@@ -45,5 +46,26 @@ class CIndPlanPersonLoad extends CActiveModel{
             }
         }
         return $result;
+    }
+
+    /**
+     * Таблица учебной нагрузки. Отдельным классом проще
+     *
+     * @return CIndPlanPersonLoadTable
+     */
+    public function getStudyLoadTable() {
+        if (is_null($this->_loadTable)) {
+            $this->_loadTable = new CIndPlanPersonLoadTable($this);
+        }
+        return $this->_loadTable;
+    }
+
+    /**
+     * Показывать в учебной форме разделение на бюджет и контракт
+     *
+     * @return bool
+     */
+    public function isSeparateContract() {
+        return $this->separate_contract == "1";
     }
 }
