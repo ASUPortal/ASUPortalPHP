@@ -10,6 +10,7 @@
 class CIndPlanPersonLoadTable extends CFormModel{
     private $_load = null;
     private $_workTypes = null;
+    private $_workTypesAlias = null;
     public $work_type = 1;
     public $load_id;
 
@@ -22,15 +23,29 @@ class CIndPlanPersonLoadTable extends CFormModel{
     }
 
     /**
-     * @return null
+     * @return array
      */
     private function getWorktypes() {
         if (is_null($this->_workTypes)) {
+            $this->_workTypes = array();
             foreach (CTaxonomyManager::getLegacyTaxonomy("spravochnik_uch_rab")->getTerms()->getItems() as $term) {
                 $this->_workTypes[$term->getId()] = $term->getValue();
             }
         }
         return $this->_workTypes;
+    }
+
+    /**
+     * @return array
+     */
+    private function getWorktypesAlias() {
+        if (is_null($this->_workTypesAlias)) {
+            $this->_workTypesAlias = array();
+            foreach (CTaxonomyManager::getLegacyTaxonomy("spravochnik_uch_rab")->getTerms()->getItems() as $term) {
+                $this->_workTypesAlias[$term->getId()] = $term->name_hours_kind;
+            }
+        }
+        return $this->_workTypesAlias;
     }
 
     /**
@@ -59,8 +74,8 @@ class CIndPlanPersonLoadTable extends CFormModel{
                 // тип работы
                 $row[0] = $type;
                 // план на семестр (по бюджету и контракту)
-                $row[1] = 0;
-                $row[2] = 0;
+                $row[1] = $this->getLoadByMonthAndType(20, $key, 0);
+                $row[2] = $this->getLoadByMonthAndType(20, $key, 1);
                 // данные на осенний семестр (месяцы с 9 по 12 и 1)
                 $row[3] = $this->getLoadByMonthAndType(9, $key, 0);
                 $row[4] = $this->getLoadByMonthAndType(9, $key, 1);
@@ -76,8 +91,8 @@ class CIndPlanPersonLoadTable extends CFormModel{
                 $row[13] = $row[3] + $row[5] + $row[7] + $row[9] + $row[11];
                 $row[14] = $row[4] + $row[6] + $row[8] + $row[10] + $row[12];
                 // план на весенний семестр (месяцы с 2 по 7)
-                $row[15] = 0;
-                $row[16] = 0;
+                $row[15] = $this->getLoadByMonthAndType(21, $key, 0);
+                $row[16] = $this->getLoadByMonthAndType(21, $key, 1);
                 // данные на весенний семестр (месяцы с 2 по 7)
                 $row[17] = $this->getLoadByMonthAndType(2, $key, 0);
                 $row[18] = $this->getLoadByMonthAndType(2, $key, 1);
@@ -109,7 +124,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
                 // тип работы
                 $row[0] = $type;
                 // план на семестр
-                $row[1] = 0;
+                $row[1] = $this->getLoadByMonthAndType(20, $key);
                 // данные на осенний семестр (месяцы с 9 по 12 и 1)
                 $row[2] = $this->getLoadByMonthAndType(9, $key);
                 $row[3] = $this->getLoadByMonthAndType(10, $key);
@@ -119,7 +134,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
                 // итого за осенний семестр
                 $row[7] = $row[2] + $row[3] + $row[4] + $row[5] + $row[6];
                 // план на весенний семестр (месяцы с 2 по 7)
-                $row[8] = 0;
+                $row[8] = $this->getLoadByMonthAndType(21, $key);
                 // данные на весенний семестр (месяцы с 2 по 7)
                 $row[9] = $this->getLoadByMonthAndType(2, $key);
                 $row[10] = $this->getLoadByMonthAndType(3, $key);
@@ -174,6 +189,82 @@ class CIndPlanPersonLoadTable extends CFormModel{
         }
         return $result;
     }
+
+    /**
+     * Нагрузка по типу (лекция, практика, т.п.)
+     * Параметрам
+     *      type_1 - основная
+     *      type_2 - дополнительная
+     *      type_3 - надбавка
+     *      type_4 - почасовка
+     *      filials - с учетом выезда
+     * Семестру
+     *      1 - осенний
+     *      2 - весенний
+     * Типу данных
+     *      0 - только бюджет
+     *      1 - только контракт
+     *      2 - сумма бюджета и контракта
+     *
+     * @param $typeAlias
+     * @param array $params
+     * @param int $period
+     * @param int $dataType
+     * @return int
+     */
+    private function getLoadPlanByType($typeAlias, $params = array(), $period = 1, $dataType = 2) {
+        $result = 0;
+        $defaulParams = array(
+            "type_1" => false,
+            "type_2" => false,
+            "type_3" => false,
+            "type_4" => false,
+            "filials" => false
+        );
+        $params = array_merge($defaulParams, $params);
+        // общие условия
+        $condition = array(
+            "kadri_id = ".$this->getLoad()->person_id,
+            "year_id = ".$this->getLoad()->year->getId(),
+            "part_id = ".$period
+        );
+        // типы нагрузки
+        $types = array();
+        if ($params["type_1"]) {
+            $types[] = "1";
+        }
+        if ($params["type_2"]) {
+            $types[] = "2";
+        }
+        if ($params["type_3"]) {
+            $types[] = "3";
+        }
+        if ($params["type_4"]) {
+            $types[] = "4";
+        }
+        if (count($types) > 0) {
+            $condition[] = "hours_kind_type in (".implode(", ", $types).")";
+        } else {
+            $condition[] = "hours_kind_type in (0)";
+        }
+        if ($params["filials"]) {
+            $condition[] = "on_filial = 1";
+        }
+        // какие столбцы брать и считать ли сумму
+        $query = new CQuery();
+        if ($dataType == 2) {
+            $query->select("IFNULL(SUM(".$typeAlias."), 0) + IFNULL(SUM(".$typeAlias."_add), 0) as value");
+        } elseif ($dataType == 1) {
+            $query->select("IFNULL(SUM(".$typeAlias."_add), 0) as value");
+        } elseif ($dataType == 0) {
+            $query->select("IFNULL(SUM(".$typeAlias."), 0) as value");
+        }
+        $query->from(TABLE_IND_PLAN_PLANNED);
+        $query->condition(implode(" AND ", $condition));
+        $data = $query->execute()->getFirstItem();
+        $result = $data["value"];
+        return $result;
+    }
     public function getFieldName($work_id, $column_id, $isContract = 0) {
         $months = array();
         // связь между номерами колонок и месяцами
@@ -200,7 +291,12 @@ class CIndPlanPersonLoadTable extends CFormModel{
                 25 => 6,
                 26 => 6,
                 27 => 7,
-                28 => 7
+                28 => 7,
+
+                1 => 20,
+                2 => 20,
+                15 => 21,
+                16 => 21
             );
         } else {
             $months = array(
@@ -214,7 +310,10 @@ class CIndPlanPersonLoadTable extends CFormModel{
                 11 => 4,
                 12 => 5,
                 13 => 6,
-                14 => 7
+                14 => 7,
+
+                1 => 20,
+                8 => 21
             );
         }
         return "CModel[data][".$isContract."][".$work_id."][".$months[$column_id]."]";
@@ -239,5 +338,72 @@ class CIndPlanPersonLoadTable extends CFormModel{
                 }
             }
         }
+    }
+    public function getAutoFillData($type_1 = false, $type_2 = false, $type_3 = false, $type_4 = false, $filias = false) {
+        $result = array();
+        /**
+         * Этот код специально написан так тупо чтобы быть прозрачным
+         * и очевидным. Иначе приходится слишком много думать, чтобы
+         * поправить простую ошибку
+         */
+        if ($this->getLoad()->isSeparateContract()) {
+            foreach ($this->getWorktypesAlias() as $typeId=>$typeAlias) {
+                $dataRow = array(
+                    "20" => $this->getLoadPlanByType($typeAlias, array(
+                        "type_1" => $type_1,
+                        "type_2" => $type_2,
+                        "type_3" => $type_3,
+                        "type_4" => $type_4,
+                        "filials" => $filias
+                    ), 1, 0),
+                    "21" => $this->getLoadPlanByType($typeAlias, array(
+                        "type_1" => $type_1,
+                        "type_2" => $type_2,
+                        "type_3" => $type_3,
+                        "type_4" => $type_4,
+                        "filials" => $filias
+                    ), 1, 0)
+                );
+                $result[0][$typeId] = $dataRow;
+                $dataRow = array(
+                    "20" => $this->getLoadPlanByType($typeAlias, array(
+                        "type_1" => $type_1,
+                        "type_2" => $type_2,
+                        "type_3" => $type_3,
+                        "type_4" => $type_4,
+                        "filials" => $filias
+                    ), 1, 1),
+                    "21" => $this->getLoadPlanByType($typeAlias, array(
+                        "type_1" => $type_1,
+                        "type_2" => $type_2,
+                        "type_3" => $type_3,
+                        "type_4" => $type_4,
+                        "filials" => $filias
+                    ), 1, 1)
+                );
+                $result[1][$typeId] = $dataRow;
+            }
+        } else {
+            foreach ($this->getWorktypesAlias() as $typeId=>$typeAlias) {
+                $dataRow = array(
+                    "20" => $this->getLoadPlanByType($typeAlias, array(
+                        "type_1" => $type_1,
+                        "type_2" => $type_2,
+                        "type_3" => $type_3,
+                        "type_4" => $type_4,
+                        "filials" => $filias
+                    ), 1),
+                    "21" => $this->getLoadPlanByType($typeAlias, array(
+                        "type_1" => $type_1,
+                        "type_2" => $type_2,
+                        "type_3" => $type_3,
+                        "type_4" => $type_4,
+                        "filials" => $filias
+                    ), 2)
+                );
+                $result[0][$typeId] = $dataRow;
+            }
+        }
+        return $result;
     }
 }

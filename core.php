@@ -235,6 +235,7 @@
     define("TABLE_IND_PLAN_WORKTYPES", "spravochnik_vidov_rabot");
     define("TABLE_IND_PLAN_LOADS", "ip_loads");
     define("TABLE_IND_PLAN_WORKS", "ip_works");
+    define("TABLE_IND_PLAN_PLANNED", "hours_kind");
     define("TABLE_ACCESS_LEVELS", "task_rights");
     /**
      * Уровни доступа константами

@@ -20,6 +20,7 @@ class CIndPlanWorkController extends CBaseController{
         if (CRequest::getInt("type") == "1") {
             $load = CIndPlanManager::getLoad(CRequest::getInt("id"));
             $object = $load->getStudyLoadTable();
+            $this->addJSInclude("_modules/_individual_plan/plan.js");
         } else {
             $object = new CIndPlanPersonWork();
             $object->load_id = CRequest::getInt("id");
@@ -69,5 +70,17 @@ class CIndPlanWorkController extends CBaseController{
         }
         $this->setData("object", $object);
         $this->renderView("_individual_plan/work/edit.tpl");
+    }
+    public function actionGetDataForAutofill() {
+        // получаем объект учебной нагрузки, который будем заполнять
+        $load = CIndPlanManager::getLoad(CRequest::getInt("load_id"));
+        $loadTable = $load->getStudyLoadTable();
+        echo json_encode($loadTable->getAutoFillData(
+            CRequest::getInt("type_1") == 1,
+            CRequest::getInt("type_2") == 1,
+            CRequest::getInt("type_3") == 1,
+            CRequest::getInt("type_4") == 1,
+            CRequest::getInt("filials") == 1
+        ));
     }
 }

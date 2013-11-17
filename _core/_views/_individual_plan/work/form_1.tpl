@@ -1,5 +1,20 @@
+<style>
+    .input-indplan {
+        width: 50px;
+        padding: 1px !important;
+        margin: 0px !important;
+        border-radius: 0px !important;
+    }
+    .table-indplan {
+
+    }
+    .table-indplan td {
+        padding: 2px !important;
+    }
+</style>
+
 {if $object->getLoad()->isSeparateContract()}
-    <table class="table table-striped table-bordered table-hover table-condensed">
+    <table class="table table-striped table-bordered table-hover table-condensed table-indplan">
         <tr>
             <th rowspan="4">&nbsp;</th>
             <th rowspan="3" colspan="2">План на семестр</th>
@@ -68,13 +83,13 @@
             <tr>
                 {foreach $rows as $col_id=>$col}
                     <td>
-                        {if in_array($col_id, array(0, 1, 2, 13, 14, 15, 16, 29, 30, 31, 32, 33, 34))}
+                        {if in_array($col_id, array(0, 13, 14, 29, 30, 31, 32, 33, 34))}
                             {$col}
                         {else}
                             {if ($col_id % 2 == 1)}
-                                {CHtml::textField($object->getFieldName($row_id, $col_id, 0), $col, "", "input-mini")}
+                                {CHtml::textField($object->getFieldName($row_id, $col_id, 0), $col, "", "input-indplan")}
                             {else}
-                                {CHtml::textField($object->getFieldName($row_id, $col_id, 1), $col, "", "input-mini")}
+                                {CHtml::textField($object->getFieldName($row_id, $col_id, 1), $col, "", "input-indplan")}
                             {/if}
                         {/if}
                     </td>
@@ -116,10 +131,10 @@
             <tr>
                 {foreach $rows as $col_id=>$col}
                     <td>
-                        {if in_array($col_id, array(0, 1, 7, 8, 15, 16, 17))}
+                        {if in_array($col_id, array(0, 7, 15, 16, 17))}
                             {$col}
                         {else}
-                            {CHtml::textField($object->getFieldName($row_id, $col_id), $col, "", "input-mini")}
+                            {CHtml::textField($object->getFieldName($row_id, $col_id), $col, "", "input-indplan")}
                         {/if}
                     </td>
                 {/foreach}
