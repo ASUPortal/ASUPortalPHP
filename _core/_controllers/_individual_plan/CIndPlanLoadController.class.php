@@ -54,7 +54,7 @@ class CIndPlanLoadController extends CBaseController{
     public function actionEdit() {
         $load = CIndPlanManager::getLoad(CRequest::getInt("id"));
         $this->setData("load", $load);
-        $this->renderView("_individual_plan/load/add.tpl");
+        $this->renderView("_individual_plan/load/edit.tpl");
     }
     public function actionSave() {
         $load = new CIndPlanPersonLoad();
@@ -70,5 +70,11 @@ class CIndPlanLoadController extends CBaseController{
         }
         $this->setData("load", $load);
         $this->renderView("_individual_plan/load/add.tpl");
+    }
+    public function actionDelete() {
+        $load = CIndPlanManager::getLoad(CRequest::getInt("id"));
+        $person = $load->person;
+        $load->remove();
+        $this->redirect("?action=view&id=".$person->getId());
     }
 }

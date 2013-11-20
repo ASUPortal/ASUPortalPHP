@@ -86,4 +86,10 @@ class CIndPlanPersonLoad extends CActiveModel{
     public function isSeparateContract() {
         return $this->separate_contract == "1";
     }
+    public function remove() {
+        foreach ($this->getWorks()->getItems() as  $ar) {
+            $ar->remove();
+        }
+        parent::remove();
+    }
 }
