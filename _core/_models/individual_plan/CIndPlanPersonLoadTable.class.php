@@ -248,7 +248,9 @@ class CIndPlanPersonLoadTable extends CFormModel{
             $condition[] = "hours_kind_type in (0)";
         }
         if ($params["filials"]) {
-            $condition[] = "on_filial = 1";
+            $condition[] = "on_filial in (0, 1)";
+        } else {
+            $condition[] = "on_filial in (0)";
         }
         // какие столбцы брать и считать ли сумму
         $query = new CQuery();
@@ -362,7 +364,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
                         "type_3" => $type_3,
                         "type_4" => $type_4,
                         "filials" => $filias
-                    ), 1, 0)
+                    ), 2, 0)
                 );
                 $result[0][$typeId] = $dataRow;
                 $dataRow = array(
@@ -379,7 +381,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
                         "type_3" => $type_3,
                         "type_4" => $type_4,
                         "filials" => $filias
-                    ), 1, 1)
+                    ), 2, 1)
                 );
                 $result[1][$typeId] = $dataRow;
             }
