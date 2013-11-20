@@ -64,7 +64,7 @@
             <th>Б</th>
             <th>К</th>
         </tr>
-        {foreach $load->getStudyLoadTable()->getTable() as $rows}
+        {foreach $load->getStudyLoadTable()->getTable(true) as $rows}
             <tr>
                 {foreach $rows as $col}
                     <td>{$col}</td>
@@ -102,7 +102,7 @@
         <th>июль</th>
         <th>итого</th>
     </tr>
-{foreach $load->getStudyLoadTable()->getTable() as $rows}
+{foreach $load->getStudyLoadTable()->getTable(true) as $rows}
     <tr>
     {foreach $rows as $col}
         <td>{$col}</td>
