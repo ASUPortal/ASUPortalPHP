@@ -58,7 +58,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
     /**
      * @return array
      */
-    public function getTable() {
+    public function getTable($showTotals = false) {
         $result = array();
         /**
          * Этот код специально написан так тупо чтобы быть прозрачным
@@ -118,6 +118,17 @@ class CIndPlanPersonLoadTable extends CFormModel{
                 // добавляем в таблицу
                 $result[$key] = $row;
             }
+            if ($showTotals) {
+                // сумма
+                $row = array();
+                $row[0] = "Итого";
+                foreach ($result as $dataRow) {
+                    for ($i = 1; $i < 35; $i++) {
+                        $row[$i] += $dataRow[$i];
+                    }
+                }
+                $result[] = $row;                 
+            }
         } else {
             foreach ($this->getWorktypes() as $key=>$type) {
                 $row = array();
@@ -150,6 +161,17 @@ class CIndPlanPersonLoadTable extends CFormModel{
                 $row[17] = $row[7] + $row[15];
                 // добавляем в таблицу
                 $result[$key] = $row;
+            }
+            if ($showTotals) {
+                // сумма
+                $row = array();
+                $row[0] = "Итого";
+                foreach ($result as $dataRow) {
+                    for ($i = 1; $i < 18; $i++) {
+                        $row[$i] += $dataRow[$i];
+                    }
+                }
+                $result[] = $row;                 
             }
         }
         return $result;
