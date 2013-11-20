@@ -1,7 +1,11 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-    <h2>Редактирование вида работы</h2>
+    <h2>Редактирование вида работы ({if ($object->work_type == "1")}
+            {$object->getLoad()->person->getName()}
+        {else}
+            {$object->load->person->getName()}
+        {/if})</h2>
 
     {CHtml::helpForCurrentPage()}
 
