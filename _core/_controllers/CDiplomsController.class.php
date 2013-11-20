@@ -60,10 +60,7 @@ class CDiplomsController extends CBaseController {
         $reviewers = CStaffManager::getPersonsListWithType(TYPE_REVIEWER);
         $this->setData("reviewers", $reviewers);
         $this->setData("students", $students);
-        $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-        $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
-        $this->addJSInclude("_core/jquery.ui.timepicker.js");
-        $this->addCSSInclude("_core/jquery.ui.timepicker.css");
+        $this->setData("diplomLookup", "");
         $this->setData("commissions", $commissions);
         $this->setData("diplom", $diplom);
         $this->renderView("_diploms/add.tpl");
@@ -119,10 +116,6 @@ class CDiplomsController extends CBaseController {
         $this->setData("diplomLookup", $diplomLookup);
         $this->setData("reviewers", $reviewers);
         $this->setData("students", $students);
-        $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-        $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
-        $this->addJSInclude("_core/jquery.ui.timepicker.js");
-        $this->addCSSInclude("_core/jquery.ui.timepicker.css");
         $this->setData("commissions", $commissions);
         $this->setData("diplom", $diplom);
         $this->renderView("_diploms/edit.tpl");
@@ -135,8 +128,12 @@ class CDiplomsController extends CBaseController {
             // дату нужно сконвертить в MySQL date
             $diplom->date_act = date("Y-m-d", strtotime($diplom->date_act));
             $diplom->save();
+            if ($this->continueEdit()) {
+                $this->redirect("?action=edit&id=".$diplom->getId());
+            } else {
+                $this->redirect(WEB_ROOT."diploms_view.php");
+            }
             //$this->redirect("?action=index");
-            $this->redirect(WEB_ROOT."diploms_view.php");
             return true;
         }
         $diplom->date_act = $oldDate;
@@ -182,10 +179,6 @@ class CDiplomsController extends CBaseController {
         }
         $this->setData("reviewers", $reviewers);
         $this->setData("students", $students);
-        $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-        $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
-        $this->addJSInclude("_core/jquery.ui.timepicker.js");
-        $this->addCSSInclude("_core/jquery.ui.timepicker.css");
         $this->setData("commissions", $commissions);
         $this->setData("diplom", $diplom);
         $this->renderView("_diploms/edit.tpl");

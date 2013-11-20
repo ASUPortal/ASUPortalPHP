@@ -575,8 +575,12 @@ class CStaffManager{
                 self::getCacheRoles()->add($role->getId(), $role);
             }
         }
-        $obj = self::getCacheRoles()->getItem($key);
-        return clone($obj);
+        $obj = null;
+        if (self::getCacheRoles()->hasElement($key)) {
+            $obj = self::getCacheRoles()->getItem($key);            
+            $obj = clone($obj);
+        }
+        return $obj;
     }
     /**
      * Кэш групп пользователей

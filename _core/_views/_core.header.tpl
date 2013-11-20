@@ -8,6 +8,7 @@
     {/foreach}
     <link href="{$web_root}scripts/_core/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
     <link href="{$web_root}scripts/_core/datepicker/css/datepicker.css" rel="stylesheet" media="screen">
+    <link href="{$web_root}scripts/_core/timepicker/css/bootstrap-timepicker.css" rel="stylesheet" media="screen">
     {foreach $css as $c}
         <link href="{$web_root}css/{$c}" rel="stylesheet" type="text/css" />
     {/foreach}

@@ -20,7 +20,7 @@ class CRecordSet {
      *
      * @param bool $useGlobalSearch
      */
-    function __construct($useGlobalSearch = false){
+    function __construct($useGlobalSearch = true){
         $this->_useGlobalSearch = $useGlobalSearch;
     }
 
