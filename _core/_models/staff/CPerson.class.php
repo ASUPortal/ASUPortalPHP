@@ -32,6 +32,7 @@ class CPerson extends CActiveModel{
     protected $_degree = null;
     protected $_orders_sab = null;
     protected $_indPlanLoads = null;
+    public $to_tabel = "0";
 
     protected function relations() {
         return array(
