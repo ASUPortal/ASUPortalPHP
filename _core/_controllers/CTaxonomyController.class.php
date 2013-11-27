@@ -11,7 +11,17 @@
 class CTaxonomyController extends CBaseController {
     public function __construct() {
         if (!CSession::isAuth()) {
-            $this->redirectNoAccess();
+            $action = CRequest::getString("action");
+            if ($action == "") {
+                $action = "index";
+            }
+            if (!in_array($action, $this->allowedAnonymous)) {
+                $this->redirectNoAccess();
+            }
+        } else {
+            if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_NO_ACCESS) {
+                $this->redirectNoAccess();
+            }
         }
 
         $this->_smartyEnabled = true;
