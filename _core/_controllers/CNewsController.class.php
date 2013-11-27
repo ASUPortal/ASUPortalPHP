@@ -12,12 +12,16 @@ class CNewsController extends CBaseController {
         "index"
     );
     public function __construct() {
-        if (CSession::isAuth()) {
+        if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
             if ($action == "") {
                 $action = "index";
             }
             if (!in_array($action, $this->allowedAnonymous)) {
+                $this->redirectNoAccess();
+            }
+        } else {
+            if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_NO_ACCESS) {
                 $this->redirectNoAccess();
             }
         }
