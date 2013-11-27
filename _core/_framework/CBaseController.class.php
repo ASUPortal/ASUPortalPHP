@@ -11,6 +11,7 @@
  */
 
 class CBaseController {
+    protected $allowedAnonymous = array();
     private $_action = null;
     private $_js = null;
     private $_css = null;
