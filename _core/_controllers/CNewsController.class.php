@@ -8,8 +8,11 @@
  */
 
 class CNewsController extends CBaseController {
+    protected $allowedAnonymous = array(
+        "index"
+    );
     public function __construct() {
-        if (!CSession::isAuth()) {
+        if (CSession::isAuth()) {
             $action = CRequest::getString("action");
             if ($action == "") {
                 $action = "index";
