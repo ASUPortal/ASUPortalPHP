@@ -21,7 +21,7 @@ class CGradebookController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
+        $set = new CRecordSet(false);
         $query = new CQuery();
         $query->select("activity.*")
             ->from(TABLE_STUDENTS_ACTIVITY." as activity");
@@ -529,9 +529,9 @@ class CGradebookController extends CBaseController {
         $group = CRequest::getInt("group");
         $res = array();
         foreach (CStaffManager::getStudentGroup($group)->getStudents()->getItems() as $student) {
-            $res[$student->getId()] = "(".$student->stud_num.") ".$student->getName();
-            if ($student->stud_num == "") {
-                $res[$student->getId()] = $student->getName();
+            $res[$student->getId()] = $student->getName();
+            if ($student->stud_num != "") {
+                $res[$student->getId()] = $student->getName()." (".$student->stud_num.")";
             }
         }
         echo json_encode($res);
