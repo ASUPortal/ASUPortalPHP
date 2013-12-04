@@ -11,7 +11,7 @@
     function removeFilter(type) {
         var filters = new Object();
         {if !is_null($selectedPerson)}
-            filters.person = {$selectedPerson};
+            filters.person_id = {$selectedPerson};
         {/if}
         {if !is_null($selectedGroup)}
             filters.group = {$selectedGroup};
@@ -114,7 +114,7 @@
                 <label for="person">Преподаватель</label>
                 {CHtml::dropDownList("person", $persons, $selectedPerson, "person")}
                 {if !is_null($selectedPerson)}
-                    <span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('control'); return false; "/></span>
+                    <span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('person'); return false; "/></span>
                 {/if}
             </p>
             <p>
