@@ -10,7 +10,10 @@
 class CIndPlanLoadController extends CBaseController{
     public function __construct() {
         if (!CSession::isAuth()) {
-            //$this->redirectNoAccess();
+            $this->redirectNoAccess();
+        }
+        if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_NO_ACCESS) {
+            $this->redirectNoAccess();
         }
 
         $this->_smartyEnabled = true;
@@ -26,6 +29,14 @@ class CIndPlanLoadController extends CBaseController{
         $query->select("p.*")
             ->from(TABLE_PERSON." as p")
             ->order("p.fio asc");
+        if(CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY || 
+        CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY){
+            if(is_null(CSession::getCurrentPerson())){
+                $query->condition("p.id = 0");
+            } else {
+                $query->condition("p.id = ".CSession::getCurrentPerson()->getId());
+            }
+        }
 
         $persons = new CArrayList();
 
