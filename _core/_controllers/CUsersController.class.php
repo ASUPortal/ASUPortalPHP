@@ -8,7 +8,7 @@
  */
 
 class CUsersController extends CBaseController{
-    private $allowedAnonymous = array(
+    protected $allowedAnonymous = array(
         "login"
     );
     public function __construct() {
