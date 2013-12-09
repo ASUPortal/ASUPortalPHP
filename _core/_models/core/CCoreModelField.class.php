@@ -15,6 +15,8 @@ class CCoreModelField extends CActiveModel{
 
     public $export_to_search = 0;
     public $model_id;
+    public $is_readers = 0;
+    public $is_authors = 0;
 
     /**
      * Поддерживаем ли модель выгрузку в поиск
@@ -23,6 +25,24 @@ class CCoreModelField extends CActiveModel{
      */
     public function isExportable() {
         return ($this->export_to_search == "1");
+    }
+
+    /**
+     * Лимитирует ли поле доступ на чтение
+     *
+     * @return bool
+     */
+    public function isReaders() {
+        return ($this->is_readers == "1");
+    }
+
+    /**
+     * Лимитирует ли поле доступ на запись
+     *
+     * @return bool
+     */
+    public function isAuthors() {
+        return ($this->is_authors == "1");
     }
 
     public function relations() {

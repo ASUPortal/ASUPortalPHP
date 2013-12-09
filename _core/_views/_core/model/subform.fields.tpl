@@ -7,6 +7,8 @@
         <th>#</th>
         <th>{CHtml::tableOrder("field_name", $model->fields->getFirstItem())}</th>
         <th>{CHtml::tableOrder("export_to_search", $model->fields->getFirstItem())}</th>
+        <th>{CHtml::tableOrder("is_readers", $model->fields->getFirstItem())}</th>
+        <th>{CHtml::tableOrder("is_authors", $model->fields->getFirstItem())}</th>
         <th>{CHtml::tableOrder("defaultTranslation", $model->fields->getFirstItem())}</th>
     </tr>
     {foreach $model->fields->getItems() as $field}
@@ -25,6 +27,20 @@
                 <i class="icon-off exportSwitch" id="{$field->getId()}"></i>
             {/if}
         </td>
+        <td>
+            {if $field->isReaders()}
+                <i class="icon-ok readersSwitch" id="{$field->getId()}"></i>
+            {else}
+                <i class="icon-off readersSwitch" id="{$field->getId()}"></i>
+            {/if}
+        </td>
+        <td>
+            {if $field->isAuthors()}
+                <i class="icon-ok authorsSwitch" id="{$field->getId()}"></i>
+            {else}
+                <i class="icon-off authorsSwitch" id="{$field->getId()}"></i>
+            {/if}
+        </td>
         <td>{$field->getTranslationDefault()}</td>
     </tr>
     {/foreach}
@@ -34,15 +50,17 @@
 <script>
     jQuery(document).ready(function(){
         jQuery(".exportSwitch").css("cursor", "pointer");
-        jQuery(".exportSwitch").on("click", function(){
-            var id = jQuery(this).attr("id");
-            var image = jQuery(this);
+        jQuery(".readersSwitch").css("cursor", "pointer");
+        jQuery(".authorsSwitch").css("cursor", "pointer");
+        function onStateChange(that, action) {
+            var id = jQuery(that).attr("id");
+            var image = jQuery(that);
             jQuery.ajax({
                 url: "{$web_root}_modules/_core/fields.php",
                 cache: false,
                 type: "GET",
                 data: {
-                    "action": "changeExport",
+                    "action": action,
                     "id": id
                 },
                 beforeSend: function() {
@@ -64,6 +82,15 @@
                     }
                 }
             });
+        }
+        jQuery(".readersSwitch").on("click", function(){
+            onStateChange(this, "ChangeReaders");
+        });
+        jQuery(".authorsSwitch").on("click", function(){
+            onStateChange(this, "ChangeAuthors");
+        });
+        jQuery(".exportSwitch").on("click", function(){
+            onStateChange(this, "ChangeExport");
         });
     });
 </script>

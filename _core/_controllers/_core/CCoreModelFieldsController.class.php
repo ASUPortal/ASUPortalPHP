@@ -57,4 +57,18 @@ class CCoreModelFieldsController extends CBaseController {
 
         echo $field->export_to_search;
     }
+    public function actionChangeReaders() {
+        $field = CCoreObjectsManager::getCoreModelField(CRequest::getInt("id"));
+        $field->is_readers = (1 - $field->is_readers);
+        $field->save();
+
+        echo $field->is_readers;
+    }
+    public function actionChangeAuthors() {
+        $field = CCoreObjectsManager::getCoreModelField(CRequest::getInt("id"));
+        $field->is_authors = (1 - $field->is_authors);
+        $field->save();
+
+        echo $field->is_authors;
+    }
 }
