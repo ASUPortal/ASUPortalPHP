@@ -9,6 +9,7 @@
 class CUserRole extends CActiveModel {
     protected $_table = TABLE_USER_ROLES;
     protected $_menu = null;
+    protected $_models = null;
     public $level;
     public $hidden = 0;
     public function getName() {
@@ -20,6 +21,15 @@ class CUserRole extends CActiveModel {
                 "relationPower" => RELATION_COMPUTED,
                 "storageProperty" => "_menu",
                 "relationFunction" => "getMenu"
+            ),
+            "models" => array(
+                "relationPower" => RELATION_MANY_TO_MANY,
+                "storageProperty" => "_models",
+                "joinTable" => TABLE_CORE_MODEL_TASKS,
+                "leftCondition" => "task_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "rightKey" => "model_id",
+                "managerClass" => "CCoreObjectsManager",
+                "managerGetObject" => "getCoreModel"
             )
         );
     }

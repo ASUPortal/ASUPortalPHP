@@ -12,6 +12,9 @@ class CCoreModel extends CActiveModel {
     protected $_fields = null;
     protected $_tasks = null;
     protected $_taskModels = null;
+    protected $_readersFields = null;
+    protected $_authorsFields = null;
+    private $_model = null;
     public $export_to_search = 0;
 
     protected function relations() {
@@ -40,6 +43,22 @@ class CCoreModel extends CActiveModel {
                 "storageCondition" => "model_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CCoreObjectsManager",
                 "managerGetObject" => "getCoreModelTask"
+            ),
+            "readersFields" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_readersFields",
+                "storageTable" => TABLE_CORE_MODEL_FIELDS,
+                "storageCondition" => "model_id = " . (is_null($this->getId()) ? 0 : $this->getId())." and is_readers = 1",
+                "managerClass" => "CCoreObjectsManager",
+                "managerGetObject" => "getCoreModelField"
+            ),
+            "authorsFields" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_authorsFields",
+                "storageTable" => TABLE_CORE_MODEL_FIELDS,
+                "storageCondition" => "model_id = " . (is_null($this->getId()) ? 0 : $this->getId())." and is_authors = 1",
+                "managerClass" => "CCoreObjectsManager",
+                "managerGetObject" => "getCoreModelField"
             )
         );
     }
@@ -93,5 +112,27 @@ class CCoreModel extends CActiveModel {
             }
         }
         return $exportable;
+    }
+
+    /**
+     * @return CActiveModel
+     */
+    private function getModel() {
+        if (is_null($this->_model)) {
+            $class = $this->class_name;
+            $this->_model = new $class();
+        }
+        return $this->_model;
+    }
+
+    /**
+     * Название таблицы, в которой хранится модель
+     *
+     * @return string
+     */
+    public function getModelTable() {
+        if (!is_null($this->getModel())) {
+            return $this->getModel()->getTable();
+        }
     }
 }

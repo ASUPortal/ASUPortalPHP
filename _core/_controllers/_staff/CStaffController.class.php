@@ -25,7 +25,7 @@ class CStaffController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet(true);
+        $set = new CRecordSet(true, true);
         $query = new CQuery();
         $set->setQuery($query);
         /**

@@ -14,14 +14,21 @@ class CRecordSet {
     private $_query = null;
     private $_manualAdded = false;
     private $_useGlobalSearch = false;
+    private $_isAclControlledSet = false;
 
     /**
      * Использовать ли глобальный поиск
      *
      * @param bool $useGlobalSearch
+     *
+     * Является ли этот запрос основным на выборку данных
+     * и должна ли к нему применяться система контроля доступа
+     *
+     * @param bool $isAclControlledSet
      */
-    function __construct($useGlobalSearch = true){
+    function __construct($useGlobalSearch = true, $isAclControlledSet = false){
         $this->_useGlobalSearch = $useGlobalSearch;
+        $this->_isAclControlledSet = $isAclControlledSet;
     }
 
     /**
@@ -201,6 +208,12 @@ class CRecordSet {
                     $query->order($globalOrder["field"]." ".$globalOrder["direction"]);
                 }
             }
+            /**
+             * Использование глобального ограничения доступа
+             */
+            if ($this->_isAclControlledSet) {
+                $this->updateQueryForACLLimitations();
+            }
             $query->limit($start, $this->getPageSize());
             $items = $query->execute();
             foreach ($items->getItems() as $item) {
@@ -209,6 +222,49 @@ class CRecordSet {
                 $res->add($ar->getId(), $ar);
             }
             return $res;
+        }
+    }
+
+    /**
+     * Обновление поискового запроса с учетом прав доступа
+     * Делается из допущения, что текущая задача - эта задача, по
+     * которой выполняется основной запрос
+     *
+     * @return bool
+     */
+    private function updateQueryForACLLimitations() {
+        // пробуем угадать к какой из моделей, которые
+        // поддерживаются текущей задачей относится этот запрос
+        if (CSession::getCurrentUser()->getLevelForCurrentTask() != ACCESS_LEVEL_READ_OWN_ONLY &&
+            CSession::getCurrentUser()->getLevelForCurrentTask() != ACCESS_LEVEL_WRITE_OWN_ONLY &&
+            CSession::getCurrentUser()->getLevelForCurrentTask() != ACCESS_LEVEL_NO_ACCESS) {
+
+            return false;
+        }
+        $task = CSession::getCurrentTask();
+        if (is_null($task)) {
+            return false;
+        }
+        $targetModel = null;
+        foreach ($task->models->getItems() as $model) {
+            if (mb_strtolower($model->getModelTable()) == mb_strtolower($this->getTableName())) {
+                $targetModel = $model;
+            }
+        }
+        $q = array();
+        if (!is_null($targetModel)) {
+            foreach ($targetModel->readersFields->getItems() as $field) {
+                $q[] = "(".$this->getTableAlias().".".$field->field_name."=".CSession::getCurrentPerson()->getId().")";
+            }
+        }
+        if (count($q) > 0) {
+            $query = $this->getQuery();
+            $condition = $query->getCondition();
+            if (!is_null($condition)) {
+                $condition .= " AND ";
+            }
+            $condition .= "(".implode(" OR ", $q).")";
+            $this->getQuery()->condition($condition);
         }
     }
     /**
@@ -237,6 +293,12 @@ class CRecordSet {
      */
     private function getQuery() {
         return $this->_query;
+    }
+    private function getTableName() {
+        if (strpos($this->getQuery()->getTable(), " as ")) {
+            return substr($this->getQuery()->getTable(), 0, strpos($this->getQuery()->getTable(), "as") - 1);
+        }
+        return $this->getQuery()->getTable();
     }
     private function getTableAlias() {
         if (strpos($this->getQuery()->getTable(), " as ")) {
