@@ -130,7 +130,11 @@ class CGrantsController extends CBaseController{
         $this->setData("form", $form);
         $this->renderView("_grants/grant/subform.attachments.tpl");
     }
-    public function actionSearch() {
-
+    public function actionRemoveAttach() {
+        $attach = CGrantManager::getAttachment(CRequest::getInt("id"));
+        $grant_id = $attach->grant_id;
+        $attach->remove();
+        
+        $this->redirect("?action=edit&id=".$grant_id);
     }
 }
