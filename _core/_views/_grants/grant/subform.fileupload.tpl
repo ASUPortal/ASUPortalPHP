@@ -12,6 +12,6 @@
     </p>
 
     <p>
-        {CHtml::submit("Добавить файл")}
+        {CHtml::submit("Добавить файл", false)}
     </p>
 </form>
