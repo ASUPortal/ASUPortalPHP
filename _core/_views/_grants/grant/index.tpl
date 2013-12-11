@@ -11,6 +11,8 @@
                 <th>#</th>
                 <th>&nbsp;</th>
                 <th>{CHtml::tableOrder("title", $grants->getFirstItem())}</th>
+                <th>{CHtml::tableOrder("date_start", $grants->getFirstItem())}</th>
+                <th>{CHtml::tableOrder("date_end", $grants->getFirstItem())}</th>
                 <th>{CHtml::tableOrder("comment", $grants->getFirstItem())}</th>
             </tr>
             {foreach $grants->getItems() as $grant}
@@ -24,6 +26,8 @@
                                 {$grant->title}
                             {/if}
                         </a></td>
+                    <td>{$grant->date_start}</td>
+                    <td>{$grant->date_end}</td>
                     <td>{$grant->comment}</td>
                 </tr>
             {/foreach}
