@@ -7,58 +7,53 @@
 </p>
 
 <p>
-    <a href="#" onclick="uploadFile(); return false;">
+    <a href="#uploadDialog" role="button" data-toggle="modal">
         <center>
             <img src="{$web_root}images/{$icon_theme}/32x32/devices/media-floppy.png"><br>
             Добавить файл
         </center></a>
 </p>
 
+<div id="uploadDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Загрузка файлов</h3>
+    </div>
+    <div class="modal-body" id="uploadDialogBody">
+    <p>Подождите, идет загрузка</p>
+    </div>
+</div>
+
 <script>
-    function uploadFile() {
-        var dialog = jQuery("#uploadDialog");
-        /**
-         * Не загружаем диалог 20 раз
-         */
-        if (dialog.length > 0) {
-            jQuery("#uploadDialog").dialog("open");
-        } else {
-            jQuery('<div id="uploadDialog">').dialog({
-                modal: true,
-                title: "Загрузка файлов",
-                width: 390,
-                height: 200,
-                open: function(){
-                    jQuery(this).load(web_root + "_modules/_grants/?action=getuploadform&id={$form->grant->getId()}", function(){
-                        /**
-                         * В этот момент форма подгрузилась,
-                         * навешиваем на нее события
-                         */
-                        jQuery("#fileupload").ajaxForm({
-                            url: web_root + "_modules/_grants/",
-                            beforeSubmit: function(){
-                                /**
-                                 * Перед началом загрузки показываем прогрессор
-                                 */
-                                jQuery("#attachmentsSubform").html('<img src="' + web_root + 'images/loading.gif">');
-                            },
-                            success: function(){
-                                /**
-                                 * После окончания загрузки закрываем диалог
-                                 */
-                                jQuery("#uploadDialog").dialog("close");
-                                /**
-                                 * И обновляем сабформу с вложениями
-                                 */
-                                jQuery("#attachmentsSubform").load(web_root + "_modules/_grants/?action=getAttachmentsSubform&id={$form->grant->getId()}");
-                            }
-                        });
+    jQuery(document).ready(function(){
+        jQuery("#uploadDialog").on("show", function(){
+            jQuery("#uploadDialogBody").load(web_root + "_modules/_grants/?action=getuploadform&id={$form->grant->getId()}", function(){
+                    /**
+                     * В этот момент форма подгрузилась,
+                     * навешиваем на нее события
+                     */
+                    jQuery("#fileupload").ajaxForm({
+                        url: web_root + "_modules/_grants/",
+                        beforeSubmit: function(){
+                            /**
+                             * Перед началом загрузки показываем прогрессор
+                             */
+                            jQuery("#attachmentsSubform").html('<img src="' + web_root + 'images/loading.gif">');
+                        },
+                        success: function(){
+                            /**
+                             * После окончания загрузки закрываем диалог
+                             */
+                            jQuery("#uploadDialog").modal("hide");
+                            /**
+                             * И обновляем сабформу с вложениями
+                             */
+                            jQuery("#attachmentsSubform").load(web_root + "_modules/_grants/?action=getAttachmentsSubform&id={$form->grant->getId()}");
+                        }
                     });
-                }
-            });
-        }
-        return false;
-    }
+                });
+        });
+    });
 </script>
 
 <p>
