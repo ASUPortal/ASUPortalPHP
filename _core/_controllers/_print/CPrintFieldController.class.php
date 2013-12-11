@@ -26,7 +26,7 @@ class CPrintFieldController extends CBaseController {
             $fields->add($field->getId(), $field);
         }
         */
-        $set = new CRecordSet();
+        $set = new CRecordSet(false);
         $query = new CQuery();
         $set->setQuery($query);
         $query->select("field.*")
