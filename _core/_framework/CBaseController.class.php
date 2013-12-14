@@ -82,7 +82,11 @@ class CBaseController {
          */
         if (!is_null(CSession::getCurrentUser())) {
             if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_NO_ACCESS) {
-                $this->redirect($_SERVER["HTTP_REFERER"], ERROR_INSUFFICIENT_ACCESS_LEVEL);
+                $url = WEB_ROOT;
+                if (array_key_exists("HTTP_REFERER", $_SERVER)) {
+                    $url = $_SERVER["HTTP_REFERER"];
+                }
+                $this->redirect($url, ERROR_INSUFFICIENT_ACCESS_LEVEL);
             }
         }
     }
