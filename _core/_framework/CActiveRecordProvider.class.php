@@ -100,38 +100,6 @@ class CActiveRecordProvider {
             self::getCache()->add($key, $set);
         }
         return self::getCache()->getItem($key);
-        /*
-        $key = $table."_".$condition."_".$order;
-        if (!CApp::getApp()->getCache()->hasCache($key)) {
-            $q = new CQuery();
-            $res = new CArrayList();
-            $q->select("*")
-                ->from($table)
-                ->condition($condition);
-
-            if (!is_null($order)) {
-                $q->order($order);
-            }
-
-            $r = $q->execute();
-
-            foreach ($r->getItems() as $item) {
-                $record = new CActiveRecord($item);
-                $record->setTable($table);
-                $res->add($res->getCount(), $record);
-                CApp::getApp()->getCache()->set($record->getTable()."_".$record->getId(), $record);
-            }
-
-            CApp::getApp()->getCache()->set($key, $res);
-        }
-
-        $set = new CRecordSet();
-        $res = CApp::getApp()->getCache()->get($key);
-        foreach ($res->getItems() as $item) {
-            $set->add($set->getCount(), $item);
-        }
-        return $set;
-        */
     }
 
     /**
