@@ -21,6 +21,14 @@
     </div>
 
     <div class="control-group">
+        {CHtml::activeLabel("type_id", $validator)}
+        <div class="controls">
+            {CHtml::activeDropDownList("type_id", $validator, CCoreValidatorsController::getTypesList())}
+            {CHtml::error("type_id", $validator)}
+        </div>
+    </div>
+
+    <div class="control-group">
         {CHtml::activeLabel("comment", $validator)}
         <div class="controls">
             {CHtml::activeTextBox("comment", $validator)}

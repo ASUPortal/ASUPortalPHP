@@ -8,7 +8,7 @@
     <div class="control-group">
         {CHtml::activeLabel("validator_id", $validator)}
         <div class="controls">
-            {CHtml::activeDropDownList("validator_id", $validator, CCoreObjectsManager::getCoreValidatorsList())}
+            {CHtml::activeDropDownList("validator_id", $validator, CCoreObjectsManager::getCoreValidatorsList(1))}
             {CHtml::error("validator_id", $validator)}
         </div>
     </div>

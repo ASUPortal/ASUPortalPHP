@@ -248,6 +248,7 @@
     define("TABLE_CORE_MODEL_FIELDS", "core_model_fields");
     define("TABLE_CORE_MODEL_FIELD_TRANSLATIONS", "core_model_field_translations");
     define("TABLE_CORE_VALIDATORS", "core_validators");
+    define("TABLE_CORE_MODEL_VALIDATORS", "core_model_validators");
     define("TABLE_CORE_MODEL_FIELD_VALIDATORS", "core_model_field_validators");
     define("TABLE_IND_PLAN_WORKTYPES", "spravochnik_vidov_rabot");
     define("TABLE_IND_PLAN_LOADS", "ip_loads");

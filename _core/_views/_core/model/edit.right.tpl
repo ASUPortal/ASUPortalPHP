@@ -20,6 +20,13 @@
 </p>
 
 <p>
+    <a href="modelvalidators.php?action=add&id={$model->getId()}"><center>
+            <img src="{$web_root}images/{$icon_theme}/32x32/actions/list-add.png">
+            Добавить валидатор
+        </center></a>
+</p>
+
+<p>
     <a href="?action=importFields&id={$model->getId()}"><center>
             <img src="{$web_root}images/{$icon_theme}/32x32/actions/document-save.png">
             Импортировать поля

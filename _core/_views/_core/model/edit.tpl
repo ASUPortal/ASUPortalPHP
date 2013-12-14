@@ -10,6 +10,7 @@
     <ul class="nav nav-tabs">
         <li class="active"><a href="#fields" data-toggle="tab">Поля модели</a></li>
         <li><a href="#tasks" data-toggle="tab">Задачи модели</a></li>
+        <li><a href="#validators" data-toggle="tab">Валидаторы модели</a></li>
     </ul>
 
     <div class="tab-content">
@@ -18,6 +19,9 @@
         </div>
         <div class="tab-pane" id="tasks">
             {include file="_core/model/subform.tasks.tpl"}
+        </div>
+        <div class="tab-pane" id="validators">
+            {include file="_core/model/subform.validators.tpl"}
         </div>
     </div>
 {/block}

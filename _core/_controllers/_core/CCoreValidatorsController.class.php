@@ -10,7 +10,7 @@
 class CCoreValidatorsController extends CBaseController {
     public function __construct() {
         if (!CSession::isAuth()) {
-            //$this->redirectNoAccess();
+            $this->redirectNoAccess();
         }
 
         $this->_smartyEnabled = true;
@@ -62,5 +62,11 @@ class CCoreValidatorsController extends CBaseController {
         $validator = CCoreObjectsManager::getCoreValidator(CRequest::getInt("id"));
         $validator->remove();
         $this->redirect("?action=index");
+    }
+    public static function getTypesList() {
+        return array(
+            1 => "Валидатор поля",
+            2 => "Валидатор модели"
+        );
     }
 }

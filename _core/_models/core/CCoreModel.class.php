@@ -10,6 +10,7 @@
 class CCoreModel extends CActiveModel {
     protected $_table = TABLE_CORE_MODELS;
     protected $_fields = null;
+    protected $_validators = null;
     protected $_tasks = null;
     protected $_taskModels = null;
     protected $_readersFields = null;
@@ -43,6 +44,15 @@ class CCoreModel extends CActiveModel {
                 "storageCondition" => "model_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CCoreObjectsManager",
                 "managerGetObject" => "getCoreModelTask"
+            ),
+            "validators" => array(
+                "relationPower" => RELATION_MANY_TO_MANY,
+                "storageProperty" => "_validators",
+                "joinTable" => TABLE_CORE_MODEL_VALIDATORS,
+                "leftCondition" => "model_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "rightKey" => "validator_id",
+                "managerClass" => "CCoreObjectsManager",
+                "managerGetObject" => "getCoreModelValidator"
             )
         );
     }

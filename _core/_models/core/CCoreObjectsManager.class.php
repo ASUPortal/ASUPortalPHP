@@ -10,6 +10,7 @@
 class CCoreObjectsManager {
     private static $_cacheModels = null;
     private static $_cacheModelFields = null;
+    private static $_cacheModelValidators = null;
     private static $_cacheModelFieldTranslations = null;
     private static $_cacheModelFieldValidators = null;
     private static $_cacheValidators = null;
@@ -23,6 +24,16 @@ class CCoreObjectsManager {
             self::$_cacheModelTasks = new CArrayList();
         }
         return self::$_cacheModelTasks;
+    }
+
+    /**
+     * @return CArrayList
+     */
+    private static function getCacheModelValidators() {
+        if (is_null(self::$_cacheModelValidators)) {
+            self::$_cacheModelValidators = new CArrayList();
+        }
+        return self::$_cacheModelValidators;
     }
 
     /**
@@ -239,14 +250,32 @@ class CCoreObjectsManager {
     /**
      * @return array
      */
-    public static function getCoreValidatorsList() {
+    public static function getCoreValidatorsList($type) {
         $res = array();
-        foreach (CActiveRecordProvider::getAllFromTable(TABLE_CORE_VALIDATORS)->getItems() as $ar) {
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_CORE_VALIDATORS, "type_id = ".$type)->getItems() as $ar) {
             $validator = new CCoreValidator($ar);
             self::getCacheValidators()->add($validator->getId(), $validator);
             $res[$validator->getId()] = $validator->title;
         }
         return $res;
+    }
+
+    /**
+     * @param $key
+     * @return CCoreModelValidator
+     */
+    public static function getCoreModelValidator($key) {
+        if (!self::getCacheModelValidators()->hasElement($key)) {
+            $ar = null;
+            if (is_numeric($key)) {
+                $ar = CActiveRecordProvider::getById(TABLE_CORE_MODEL_VALIDATORS, $key);
+            }
+            if (!is_null($ar)) {
+                $validator = new CCoreModelValidator($ar);
+                self::getCacheModelValidators()->add($validator->getId(), $validator);
+            }
+        }
+        return self::getCacheModelValidators()->getItem($key);
     }
 
     /**
