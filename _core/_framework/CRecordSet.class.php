@@ -233,27 +233,51 @@ class CRecordSet {
      * @return bool
      */
     private function updateQueryForACLLimitations() {
-        // пробуем угадать к какой из моделей, которые
-        // поддерживаются текущей задачей относится этот запрос
-        if (CSession::getCurrentUser()->getLevelForCurrentTask() != ACCESS_LEVEL_READ_OWN_ONLY &&
-            CSession::getCurrentUser()->getLevelForCurrentTask() != ACCESS_LEVEL_WRITE_OWN_ONLY &&
-            CSession::getCurrentUser()->getLevelForCurrentTask() != ACCESS_LEVEL_NO_ACCESS) {
-
-            return false;
-        }
+        /**
+         * Для начала проверим, что текущая задача определяется
+         * Если не определяется, то менять ничего мы не можем -
+         * данных недостаточно
+         */
         $task = CSession::getCurrentTask();
         if (is_null($task)) {
             return false;
         }
+        /**
+         * Теперь проверим, что найденная задача связана с какой-либо моделью
+         * Если модель определить не можем, то тоже выходим
+         */
         $targetModel = null;
         foreach ($task->models->getItems() as $model) {
             if (mb_strtolower($model->getModelTable()) == mb_strtolower($this->getTableName())) {
                 $targetModel = $model;
             }
         }
+        if (is_null($targetModel)) {
+            return false;
+        }
+        /**
+         * Теперь проверим, поддерживает ли эта модель работу с readers/authors-полями
+         * Если таких полей нет, то тоже нет смысла что-либо проверять
+         */
+        if ($targetModel->getReadersFields()->getCount() == 0) {
+            return false;
+        }
+        /**
+         * Если у пользователя нет доступа к текущей задаче, то
+         * ставим в поля, регламентирующие доступ 0 - нулевого пользователя у нас точно нет
+         *
+         * Если доступ на чтение/запись только своего, то добавляем в readers-поля
+         * id текущего пользователя
+         */
         $q = array();
-        if (!is_null($targetModel)) {
-            foreach ($targetModel->readersFields->getItems() as $field) {
+        if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_NO_ACCESS) {
+            foreach ($targetModel->getReadersFields()->getItems() as $field) {
+                $q[] = "(".$this->getTableAlias().".".$field->field_name."= 0)";
+            }
+        } elseif (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY ||
+            CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
+
+            foreach ($targetModel->getReadersFields()->getItems() as $field) {
                 $q[] = "(".$this->getTableAlias().".".$field->field_name."=".CSession::getCurrentPerson()->getId().")";
             }
         }

@@ -43,26 +43,49 @@ class CCoreModel extends CActiveModel {
                 "storageCondition" => "model_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CCoreObjectsManager",
                 "managerGetObject" => "getCoreModelTask"
-            ),
-            "readersFields" => array(
-                "relationPower" => RELATION_HAS_MANY,
-                "storageProperty" => "_readersFields",
-                "storageTable" => TABLE_CORE_MODEL_FIELDS,
-                "storageCondition" => "model_id = " . (is_null($this->getId()) ? 0 : $this->getId())." and is_readers = 1",
-                "managerClass" => "CCoreObjectsManager",
-                "managerGetObject" => "getCoreModelField"
-            ),
-            "authorsFields" => array(
-                "relationPower" => RELATION_HAS_MANY,
-                "storageProperty" => "_authorsFields",
-                "storageTable" => TABLE_CORE_MODEL_FIELDS,
-                "storageCondition" => "model_id = " . (is_null($this->getId()) ? 0 : $this->getId())." and is_authors = 1",
-                "managerClass" => "CCoreObjectsManager",
-                "managerGetObject" => "getCoreModelField"
             )
         );
     }
 
+    /**
+     * @return CArrayList
+     */
+    public function getAuthorsFields() {
+        if (is_null($this->_authorsFields)) {
+            $this->_authorsFields = new CArrayList();
+            foreach ($this->fields->getItems() as $item) {
+                if ($item->isAuthors()) {
+                    $this->_authorsFields->add($item->getId(), $item);
+                }
+            }
+        }
+        return $this->_authorsFields;
+    }
+
+    /**
+     * @return CArrayList
+     */
+    public function getReadersFields() {
+        if (is_null($this->_readersFields)) {
+            $this->_readersFields = new CArrayList();
+            /**
+             * Все поля для редактирования являются
+             * полями для чтения
+             */
+            foreach ($this->getReadersFields()->getItems() as $item) {
+                $this->_readersFields->add($item->getId(), $item);
+            }
+            /**
+             * А теперь все поля для чтения
+             */
+            foreach ($this->fields->getItems() as $item) {
+                if ($item->isReaders()) {
+                    $this->_readersFields->add($item->getId(), $item);
+                }
+            }
+        }
+        return $this->_readersFields;
+    }
     private function getTranslationByLangId($lang) {
         $translation = array();
         if ($lang !== "") {
