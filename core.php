@@ -96,6 +96,23 @@
         ),
         "smarty" => array(
             "cacheEnabled" => false
+        ),
+        "crud" => array(
+            "create" => array(
+                "add"
+            ),
+            "read" => array(
+                "edit",
+                "view",
+                "index"
+            ),
+            "update" => array(
+                "save"
+            ),
+            "delete" => array(
+                "del",
+                "delete"
+            )
         )
     );
     /**

@@ -36,6 +36,51 @@ class CBaseController {
             $this->_action = CRequest::getString("action");
         }
 
+        /**
+         * Стандартный жаваскрипт и css подключается в отдельной
+         * функции
+         */
+        $this->initDefaultIncludes();
+        /**
+         * Для сабформы с поиском добавляем параметры поиска
+         */
+        $this->initGlobalSearchSubform();
+
+        $action = "action".$this->_action;
+        if (method_exists($this, $action)) {
+            $this->onActionBeforeExecute();
+            $this->$action();
+            $this->onActionAfterExecute();
+        } else {
+            /**
+             * В случае отсутствия действия можно куда-нибудь
+             * перекидывать или показывать уведомительные
+             * сообщения
+             */
+            $this->onActionNotExists();
+        }
+    }
+
+    /**
+     * Функция выполняется после выполнения действия
+     * Назначения не придумал, но пусть будет для
+     * симметрии
+     */
+    protected function onActionAfterExecute() {
+
+    }
+
+    /**
+     * Функция выполняется перед выполнением действия
+     * Можно проверять валидность чего-нибудь
+     */
+    protected function onActionBeforeExecute() {
+
+    }
+    protected function onActionNotExists() {
+
+    }
+    private function initDefaultIncludes() {
         // подключаем jQuery по умолчанию
         $this->addJSInclude(CSettingsManager::getSettingValue("jquery_path"));
         $this->addJSInclude(CSettingsManager::getSettingValue("jquery_migrate_path"));
@@ -89,17 +134,6 @@ class CBaseController {
         $this->addJSInclude(CSettingsManager::getSettingValue("bootstrap_path")."js/bootstrap.js");
         $this->addJSInclude("_core/datepicker/js/bootstrap-datepicker.js");
         $this->addJSInclude("_core/timepicker/js/bootstrap-timepicker.js");
-        /**
-         * Для сабформы с поиском добавляем параметры поиска
-         */
-        $this->initGlobalSearchSubform();
-
-        $this->setData("__controller", $this);
-
-        $action = "action".$this->_action;
-        if (method_exists($this, $action)) {
-            $this->$action();
-        }
     }
 
     /**
@@ -140,6 +174,7 @@ class CBaseController {
         if (!is_null(CSession::getCurrentTask())) {
             $this->setData("__current_task", CSession::getCurrentTask()->getId());
         }
+        $this->setData("__controller", $this);
     }
     /**
      * Лист подключаемых либ
