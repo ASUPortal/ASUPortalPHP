@@ -187,6 +187,7 @@ class CBaseController {
         if (!is_null(CSession::getCurrentTask())) {
             $this->setData("__current_task", CSession::getCurrentTask()->getId());
         }
+        CSession::setCurrentController($this);
         $this->setData("__controller", $this);
     }
     /**
@@ -368,7 +369,13 @@ class CBaseController {
             header("location: ".$url);
         } else {
             $notification = new CRedirectNotification();
-            $notification->message = $message;
+            if (is_string($message)) {
+                $notification->message = $message;
+            } elseif (is_a($message, "CArrayList")) {
+                $notification->message = implode(", ", $message->getItems());
+            } else {
+                throw new Exception("Переданный тип сообщения не поддерживается");
+            }
             $notification->url = $url;
 
             $this->setData("notification", $notification);

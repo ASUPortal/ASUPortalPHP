@@ -15,6 +15,21 @@ class CActiveModel extends CModel{
 
     public function __construct(CActiveRecord $aRecord = null) {
         if (is_null($aRecord)) {
+            /**
+             * Перед созданием нового объекта выполним валидаторы onCreate для модели
+             */
+            $valid = $this->validateModel(VALIDATION_EVENT_CREATE);
+            if (!$valid) {
+                $controller = CSession::getCurrentController();
+                if (!is_null($controller)) {
+                    $url = WEB_ROOT;
+                    if (array_key_exists("HTTP_REFERER", $_SERVER)) {
+                        $url = $_SERVER["HTTP_REFERER"];
+                    }
+                    $controller->redirect($url, $this->getValidationErrors());
+                }
+            }
+
             $arr = array(
                 "id" => null
             );
@@ -115,6 +130,21 @@ class CActiveModel extends CModel{
      * Удаление текущей записи из БД
      */
     public function remove() {
+        /**
+         * Перед удалением объекта выполним валидаторы onDelete для модели
+         */
+        $valid = $this->validateModel(VALIDATION_EVENT_REMOVE);
+        if (!$valid) {
+            $controller = CSession::getCurrentController();
+            if (!is_null($controller)) {
+                $url = WEB_ROOT;
+                if (array_key_exists("HTTP_REFERER", $_SERVER)) {
+                    $url = $_SERVER["HTTP_REFERER"];
+                }
+                $controller->redirect($url, $this->getValidationErrors());
+            }
+        }
+
         $this->getRecord()->remove();
     }
     /**

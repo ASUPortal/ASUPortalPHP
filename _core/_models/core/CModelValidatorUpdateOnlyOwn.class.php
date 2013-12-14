@@ -24,11 +24,17 @@ class CModelValidatorUpdateOnlyOwn implements IModelValidator{
     }
 
     public function onCreate(CModel $model){
-        throw new Exception("Метод ".__FUNCTION__." не поддерживается классом ".get_class($this));
+        /**
+         * За создание этот валидатор не отвечает, поэтому всегда согласен
+         */
+        return true;
     }
 
     public function onRead(CModel $model) {
-        throw new Exception("Метод ".__FUNCTION__." не поддерживается классом ".get_class($this));
+        /**
+         * За создание этот валидатор не отвечает, поэтому всегда согласен
+         */
+        return true;
     }
 
     /**
@@ -87,7 +93,10 @@ class CModelValidatorUpdateOnlyOwn implements IModelValidator{
     }
 
     public function onDelete(CModel $model) {
-        throw new Exception("Метод ".__FUNCTION__." не поддерживается классом ".get_class($this));
+        /**
+         * За создание этот валидатор не отвечает, поэтому всегда согласен
+         */
+        return true;
     }
 
 }

@@ -11,6 +11,27 @@
 class CSession {
     private static $_user = null;
     private static $_person = null;
+    private static $_currentController = null;
+
+    /**
+     * Сеттер для текущего контроллера
+     *
+     * @param CBaseController $currentController
+     */
+    public static function setCurrentController(CBaseController $currentController) {
+        self::$_currentController = $currentController;
+    }
+
+    /**
+     * Объект текущего контроллера
+     *
+     * @return CBaseController
+     */
+    public static function getCurrentController() {
+        return self::$_currentController;
+    }
+
+
 
     /**
      * Объект текущего пользователя

@@ -155,6 +155,19 @@ class CModel {
                 }
             }
         }
+        $this->validateModel(VALIDATION_EVENT_UPDATE);
+
+        return $this->getValidationErrors()->getCount() == 0;
+    }
+
+    /**
+     * Валидация модели по указанному событию
+     *
+     * @param $event
+     * @return bool
+     */
+    protected function validateModel($event) {
+        $isValid = true;
         /**
          * Валидация самой модели
          * Если текущая модель - наследник CFormModel, то, если не можем найти модель
@@ -178,14 +191,14 @@ class CModel {
         }
         foreach ($modelsToValidate as $model) {
             foreach (CCoreObjectsManager::getModelValidators($model)->getItems() as $validator) {
-                if (!$validator->onUpdate($model)) {
+                if (!$validator->$event($model)) {
                     $error = $validator->getError();
                     $this->getValidationErrors()->add($this->getValidationErrors()->getCount(), $error);
+                    $isValid = false;
                 }
             }
         }
-
-        return $this->getValidationErrors()->getCount() == 0;
+        return $isValid;
     }
     /**
      * Пееропределение связи свойств объекта с полями таблицы БД.

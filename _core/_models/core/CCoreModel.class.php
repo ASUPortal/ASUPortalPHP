@@ -152,7 +152,9 @@ class CCoreModel extends CActiveModel {
     private function getModel() {
         if (is_null($this->_model)) {
             $class = $this->class_name;
-            $this->_model = new $class();
+            $this->_model = new $class(new CActiveRecord(array(
+                "id" => null
+            )));
         }
         return $this->_model;
     }

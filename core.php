@@ -289,6 +289,11 @@
     define("ERROR_FIELD_NOT_A_DATE", "Значение в поле \"%name%\" должно быть датой в формате дд.мм.гггг");
     define("ERROR_INSUFFICIENT_ACCESS_LEVEL", "У Вас недостаточно прав для доступа к данной задаче");
 
+    // события валидации
+    define("VALIDATION_EVENT_UPDATE", "onUpdate");
+    define("VALIDATION_EVENT_CREATE", "onCreate");
+    define("VALIDATION_EVENT_REMOVE", "onDelete");
+
     define("WEB_ROOT", CSettingsManager::getSettingValue("web_root"));
     define("ROOT_FOLDER", CSettingsManager::getSettingValue("root_folder"));
     define("PRINT_DOCUMENTS_URL", WEB_ROOT."/tmp/print/");
