@@ -68,9 +68,13 @@ class CUser extends CActiveModel {
                     $role = CStaffManager::getUserRole($ar->getItemValue("task_id"));
                     if (!is_null($role)) {
                         $role->level = $ar->getItemValue("task_rights_id");
+                        /**
+                         * Можно запретить доступ пользователю к конкретной задаче
+
                         if ($role->level == ACCESS_LEVEL_NO_ACCESS) {
                             $role->level = ACCESS_LEVEL_READ_OWN_ONLY;
                         }
+                         */
                         $this->_roles->add($role->getId(), $role);
                     }
                 }

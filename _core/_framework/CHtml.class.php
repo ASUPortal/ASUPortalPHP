@@ -620,11 +620,17 @@ class CHtml {
         foreach ($values as $key=>$value) {
             $level = 0;
             if ($roles->hasElement($key)) {
-                $level = 4;
+                $level = ACCESS_LEVEL_READ_OWN_ONLY;
                 $role = $roles->getItem($key);
+                /**
+                 * Конкретному пользователю можно запретить
+                 * доступ к конкретной задаче
+                 *
                 if ($role->level > 0) {
                     $level = $role->level;
                 }
+                 */
+                $level = $role->level;
             }
             //
             $inputName = $model::getClassName();

@@ -69,7 +69,10 @@ class CUserForm extends CFormModel{
             $ar->remove();
         }
         foreach ($roles as $role=>$level) {
-            if ($level != 0) {
+            /**
+             * Можно индивидуально запрещать доступ к задаче
+             */
+            // if ($level != 0) {
                 $ar = new CActiveRecord(array(
                     "id" => null,
                     "user_id" => $userObj->getId(),
@@ -78,7 +81,7 @@ class CUserForm extends CFormModel{
                 ));
                 $ar->setTable(TABLE_USER_HAS_ROLES);
                 $ar->insert();
-            }
+            // }
         }
     }
 }
