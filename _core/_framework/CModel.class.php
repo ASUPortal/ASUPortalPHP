@@ -104,6 +104,9 @@ class CModel {
      * @return bool
      */
     public function validate() {
+        /**
+         * Валидация полей модели
+         */
         $rules = CCoreObjectsManager::getFieldValidators($this);
         $labels = CCoreObjectsManager::getAttributeLabels($this);
         foreach ($rules as $field=>$validators) {
@@ -149,6 +152,35 @@ class CModel {
                             }
                         }
                     }
+                }
+            }
+        }
+        /**
+         * Валидация самой модели
+         * Если текущая модель - наследник CFormModel, то, если не можем найти модель
+         * для нее, смотрим модели объектов в публичных свойствах и валидируем их
+         */
+        $modelsToValidate = array();
+        if (is_a($this, "CFormModel")) {
+            $model = CCoreObjectsManager::getCoreModel($this);
+            if (!is_null($model)) {
+                $modelsToValidate[] = $this;
+            } else {
+                $publicVars = get_object_vars($this);
+                foreach ($publicVars as $key=>$value) {
+                    if (is_object($value)) {
+                        $modelsToValidate[] = $value;
+                    }
+                }
+            }
+        } else {
+            $modelsToValidate[] = $this;
+        }
+        foreach ($modelsToValidate as $model) {
+            foreach (CCoreObjectsManager::getModelValidators($model)->getItems() as $validator) {
+                if (!$validator->onUpdate($model)) {
+                    $error = $validator->getError();
+                    $this->getValidationErrors()->add($this->getValidationErrors()->getCount(), $error);
                 }
             }
         }

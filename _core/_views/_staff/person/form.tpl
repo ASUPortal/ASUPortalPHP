@@ -14,6 +14,7 @@
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("person[id]", $form)}
 
+    {CHtml::errorSummary($form)}
 
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#tab-common">Общие сведения</a></li>

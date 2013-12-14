@@ -46,11 +46,10 @@ class CCoreModel extends CActiveModel {
                 "managerGetObject" => "getCoreModelTask"
             ),
             "validators" => array(
-                "relationPower" => RELATION_MANY_TO_MANY,
+                "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_validators",
-                "joinTable" => TABLE_CORE_MODEL_VALIDATORS,
-                "leftCondition" => "model_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
-                "rightKey" => "validator_id",
+                "storageTable" => TABLE_CORE_MODEL_VALIDATORS,
+                "storageCondition" => "model_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CCoreObjectsManager",
                 "managerGetObject" => "getCoreModelValidator"
             )
@@ -168,4 +167,5 @@ class CCoreModel extends CActiveModel {
             return $this->getModel()->getTable();
         }
     }
+
 }

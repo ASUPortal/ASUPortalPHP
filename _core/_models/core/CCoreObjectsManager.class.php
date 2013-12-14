@@ -91,6 +91,9 @@ class CCoreObjectsManager {
      * @return CCoreModel
      */
     public static function getCoreModel($key) {
+        if (is_object($key)) {
+            $key = get_class($key);
+        }
         if (!self::getCacheModels()->hasElement($key)) {
             $ar = null;
             if (is_numeric($key)) {
@@ -175,6 +178,35 @@ class CCoreObjectsManager {
         }
         return $translation;
     }
+
+    /**
+     * Получаем валидаторы из модели
+     *
+     * @param CModel $model
+     * @return CArrayList
+     */
+    public static function getModelValidators(CModel $model) {
+        $validators = new CArrayList();
+        $coreModel = self::getCoreModel(get_class($model));
+        if (!is_null($coreModel)) {
+            foreach ($coreModel->validators->getItems() as $validator) {
+                if (!is_null($validator->validator)) {
+                    $val = $validator->validator;
+                    $class_name = $val->class_name;
+                    $obj = new $class_name();
+                    $validators->add($validators->getCount(), $obj);
+                }
+            }
+        }
+        return $validators;
+    }
+
+    /**
+     * Валидаторы полей для модели
+     *
+     * @param CModel $model
+     * @return array
+     */
     public static function getFieldValidators(CModel $model) {
         $validators = array();
         /**

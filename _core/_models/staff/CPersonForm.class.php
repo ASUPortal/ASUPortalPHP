@@ -19,8 +19,6 @@ class CPersonForm extends CFormModel{
         /**
          * Сохраняем сотрудника
          */
-        $this->person = new CPerson();
-        $this->person->setAttributes($personArr);
         $this->person->save();
         /**
          * Удаляем старые типы участия на кафедре
@@ -41,4 +39,16 @@ class CPersonForm extends CFormModel{
             $ar->insert();
         }
     }
+
+    public function setAttributes(array $array) {
+        parent::setAttributes($array);
+
+        $personArr = $this->person;
+        if (array_key_exists("types", $personArr)) {
+            unset($personArr["types"]);
+        }
+        $this->person = new CPerson();
+        $this->person->setAttributes($personArr);
+    }
+
 }

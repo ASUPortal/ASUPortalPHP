@@ -7,7 +7,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
-interface IModelValidator extends IValidator{
+interface IModelValidator{
+    public function getError();
     public function onCreate(CModel $model);
     public function onRead(CModel $model);
     public function onUpdate(CModel $model);
