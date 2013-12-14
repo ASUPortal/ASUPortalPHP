@@ -104,56 +104,6 @@ class CModel {
      * @return bool
      */
     public function validate() {
-        /*
-        $rules = $this->validationRules();
-
-        if (array_key_exists("required", $rules)) {
-            $required = $rules["required"];
-            foreach($required as $field) {
-                $error = str_replace("%name%", $this->getAttributeLabel($field), ERROR_FIELD_REQUIRED);
-                if (is_null($this->$field)) {
-                    $this->getValidationErrors()->add($field, $error);
-                } elseif ($this->$field == "") {
-                    $this->getValidationErrors()->add($field, $error);
-                }
-            }
-        }
-        if (array_key_exists("numeric", $rules)) {
-            $numeric = $rules["numeric"];
-            foreach($numeric as $field) {
-                $error = str_replace("%name%", $this->getAttributeLabel($field), ERROR_FIELD_NUMERIC);
-                if (!is_numeric($this->$field)) {
-                    $this->getValidationErrors()->add($field, $error);
-                }
-            }
-        }
-        if (array_key_exists("selected", $rules)) {
-            $selected = $rules["selected"];
-            foreach ($selected as $field) {
-                $error = str_replace("%name%", $this->getAttributeLabel($field), ERROR_FIELD_SELECTED);
-                if ($this->$field == 0) {
-                    $this->getValidationErrors()->add($field, $error);
-                }
-            }
-        }
-        if (array_key_exists("checkdate", $rules)) {
-            $dates = $rules["checkdate"];
-            foreach ($dates as $field) {
-                $error = str_replace("%name%", $this->getAttributeLabel($field), ERROR_FIELD_NOT_A_DATE);
-                if ($this->$field != "") {
-                    $dateValue = $this->$field;
-                    if (strtotime($dateValue) === false) {
-                        $this->getValidationErrors()->add($field, $error);
-                    } else {
-                        $dateArray = explode(".", $dateValue);
-                        if (!checkdate($dateArray[1], $dateValue[0], $dateArray[2])) {
-                            $this->getValidationErrors()->add($field, $error);
-                        }
-                    }
-                }
-            }
-        }
-        */
         $rules = CCoreObjectsManager::getFieldValidators($this);
         $labels = CCoreObjectsManager::getAttributeLabels($this);
         foreach ($rules as $field=>$validators) {
