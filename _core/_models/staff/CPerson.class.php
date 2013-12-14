@@ -40,7 +40,7 @@ class CPerson extends CActiveModel{
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_orders",
                 "storageTable" => TABLE_STAFF_ORDERS,
-                "storageCondition" => "kadri_id = " . $this->id,
+                "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getOrder"
             ),
@@ -48,7 +48,7 @@ class CPerson extends CActiveModel{
                 "relationPower" => RELATION_MANY_TO_MANY,
                 "storageProperty" => "_ratingIndexesValues",
                 "joinTable" => TABLE_PERSON_RATINGS,
-                "leftCondition" => "person_id = ". $this->id,
+                "leftCondition" => "person_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
                 "rightKey" => "index_id",
                 "managerClass" => "CRatingManager",
                 "managerGetObject" => "getRatingIndexValue"
@@ -57,7 +57,7 @@ class CPerson extends CActiveModel{
                 "relationPower" => RELATION_MANY_TO_MANY,
                 "storageProperty" => "_publications",
                 "joinTable" => TABLE_PUBLICATION_BY_PERSONS,
-                "leftCondition" => "kadri_id = ". $this->id,
+                "leftCondition" => "kadri_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
                 "rightKey" => "izdan_id",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPublication"
@@ -88,7 +88,7 @@ class CPerson extends CActiveModel{
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_degrees",
                 "storageTable" => TABLE_PERSON_DISSER,
-                "storageCondition" => "kadri_id = " . $this->id . " and disser_type = 'степень'",
+                "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and disser_type = 'степень'",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getDegree"
             ),
@@ -101,7 +101,7 @@ class CPerson extends CActiveModel{
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_children",
                 "storageTable" => TABLE_PERSON_CHILDREN,
-                "storageCondition" => "kadri_id = " . $this->id,
+                "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPersonChild"
             ),
@@ -109,7 +109,7 @@ class CPerson extends CActiveModel{
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_diploms",
                 "storageTable" => TABLE_PERSON_DIPLOMS,
-                "storageCondition" => "kadri_id = " . $this->id,
+                "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPersonDiplom"
             ),
@@ -117,7 +117,7 @@ class CPerson extends CActiveModel{
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_cources",
                 "storageTable" => TABLE_PERSON_COURCES,
-                "storageCondition" => "kadri_id = " . $this->id,
+                "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPersonCourse"
             ),
@@ -125,7 +125,7 @@ class CPerson extends CActiveModel{
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_phdpapers",
                 "storageTable" => TABLE_PERSON_DISSER,
-                "storageCondition" => "kadri_id = " . $this->id." AND disser_type='кандидат'",
+                "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND disser_type='кандидат'",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPersonPHDPaper"
             ),
@@ -133,7 +133,7 @@ class CPerson extends CActiveModel{
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_doctorpapers",
                 "storageTable" => TABLE_PERSON_DISSER,
-                "storageCondition" => "kadri_id = " . $this->id." AND disser_type='доктор'",
+                "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND disser_type='доктор'",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPersonDoctorPaper"
             ),
@@ -410,11 +410,13 @@ class CPerson extends CActiveModel{
     public function getTypes() {
         if (is_null($this->_types)) {
             $this->_types = new CArrayList();
-            $tList = CActiveRecordProvider::getWithCondition("kadri_in_ptypes", "kadri_id=".$this->getId());
-            foreach ($tList->getItems() as $item) {
-                $term = CTaxonomyManager::getTypeById($item->getItemValue("person_type_id"));
-                if (!is_null($term)) {
-                    $this->_types->add($term->getId(), $term);
+            if (!is_null($this->getId())) {
+                $tList = CActiveRecordProvider::getWithCondition("kadri_in_ptypes", "kadri_id=".$this->getId());
+                foreach ($tList->getItems() as $item) {
+                    $term = CTaxonomyManager::getTypeById($item->getItemValue("person_type_id"));
+                    if (!is_null($term)) {
+                        $this->_types->add($term->getId(), $term);
+                    }
                 }
             }
         }
