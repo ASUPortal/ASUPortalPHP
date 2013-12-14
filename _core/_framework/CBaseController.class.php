@@ -72,10 +72,19 @@ class CBaseController {
 
     /**
      * Функция выполняется перед выполнением действия
-     * Можно проверять валидность чего-нибудь
+     * Можно проверять валидность чего-нибудь или наличие прав
+     * на выполнение действия
      */
     protected function onActionBeforeExecute() {
-
+        /**
+         * Пока здесь будет только одна проверка на то,
+         * что у пользователя есть доступ к текущей задаче
+         */
+        if (!is_null(CSession::getCurrentUser())) {
+            if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_NO_ACCESS) {
+                $this->redirect($_SERVER["HTTP_REFERER"], ERROR_INSUFFICIENT_ACCESS_LEVEL);
+            }
+        }
     }
     protected function onActionNotExists() {
 
@@ -342,13 +351,26 @@ class CBaseController {
         }
         return $this->_data;
     }
+
     /**
-     * Переадресация на указанный адрес
+     * Переадресация на указанный адрес.
+     * С возможностью указать сообщение для переадресации
      *
      * @param $url
+     * @param null $message
      */
-    public function redirect($url) {
-        header("location: ".$url);
+    public function redirect($url, $message = null) {
+        if (is_null($message)) {
+            header("location: ".$url);
+        } else {
+            $notification = new CRedirectNotification();
+            $notification->message = $message;
+            $notification->url = $url;
+
+            $this->setData("notification", $notification);
+            $this->renderView("_core/notification/noaccess.tpl");
+        }
+        exit;
     }
     /**
      * Переадресация на страницу "Недостаточно прав"
