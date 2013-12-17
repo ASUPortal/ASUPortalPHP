@@ -137,7 +137,7 @@ class CDiplom extends CActiveModel {
     protected function getDiplomPreviews() {
         if (is_null($this->_previews)) {
             $this->_previews = new CArrayList();
-            if (!is_null($this->getId())) {
+            if ($this->getId() != "") {
                 /**
                  * Если есть ключ диплома, то ищем по нему,
                  * если нету, то ищем по студенту
