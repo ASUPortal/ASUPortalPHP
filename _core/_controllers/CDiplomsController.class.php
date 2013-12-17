@@ -136,7 +136,8 @@ class CDiplomsController extends CBaseController {
             //$this->redirect("?action=index");
             return true;
         }
-        $diplom->date_act = $oldDate;
+        // сконвертим дату из MySQL date в нормальную дату
+        $diplom->date_act = date("d.m.Y", strtotime($diplom->date_act));
         $commissions = array();
         foreach (CSABManager::getCommissionsList() as $id=>$c) {
             $commission = CSABManager::getCommission($id);
@@ -177,6 +178,11 @@ class CDiplomsController extends CBaseController {
                 $reviewers[$reviewer->getId()] = $reviewer->getName();
             }
         }
+        $diplomLookup = "";
+        if (!is_null($diplom->practPlace)) {
+            $diplomLookup = $diplom->practPlace->getValue();
+        }
+        $this->setData("diplomLookup", $diplomLookup);        
         $this->setData("reviewers", $reviewers);
         $this->setData("students", $students);
         $this->setData("commissions", $commissions);
