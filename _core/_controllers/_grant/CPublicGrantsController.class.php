@@ -41,4 +41,7 @@ class CPublicGrantsController extends CBaseController{
         $this->setData("object", $object);
         $this->renderView("__public/_grants/view.tpl");
     }
+    protected function onActionBeforeExecute() {
+        
+    }
 }
