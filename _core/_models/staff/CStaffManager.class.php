@@ -947,7 +947,8 @@ class CStaffManager{
         $query->select("student.*")
             ->from(TABLE_STUDENTS." as student")
             ->leftJoin(TABLE_STUDENT_GROUPS." as st_group", "st_group.id = student.group_id")
-            ->condition("st_group.year_id = ".CUtils::getCurrentYear()->getId());
+            ->condition("st_group.year_id = ".CUtils::getCurrentYear()->getId())
+            ->order("student.fio asc");
         foreach ($query->execute()->getItems() as $arr) {
             $student = new CStudent(new CActiveRecord($arr));
             $res->add($student->getId(), $student);

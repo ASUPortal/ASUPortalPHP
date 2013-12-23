@@ -1,11 +1,5 @@
 <script>
     jQuery(document).ready(function(){
-        jQuery("#date_act").datepicker({
-            dateFormat: "dd.mm.yy",
-            showOn: "both",
-            buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
-            buttonImageOnly: true
-        });
         jQuery("#pract_place_lookup").typeahead({
             source: function(query, process){
                 process([
@@ -125,7 +119,7 @@
 <div class="control-group">
     {CHtml::activeLabel("date_act", $diplom)}
     <div class="controls">
-        {CHtml::activeTextField("date_act", $diplom, "date_act")}
+        {CHtml::activeDateField("date_act", $diplom)}
         {CHtml::error("date_act", $diplom)}
     </div>
 </div>
