@@ -236,4 +236,29 @@ class CSearchController extends CBaseController{
         }
         echo json_encode($result);
     }
+    public function actionLookupGetDialog() {
+        $this->renderView("_search/subform.lookupdialog.tpl");
+    }
+    public function actionLookupViewData() {
+        $catalog = CRequest::getString("catalog");
+        $result = array();
+        if ($catalog == "staff") {
+            // выбор сотрудников
+            foreach (CStaffManager::getAllPersons()->getItems() as $person) {
+                $result[$person->getId()] = $person->getName();
+            }
+        } elseif($catalog == "student") {
+            // выбор студентов
+            foreach (CStaffManager::getAllStudents()->getItems() as $student) {
+                $result[$student->getId()] = $student->getName();
+            }
+        } elseif (!is_null(CTaxonomyManager::getLegacyTaxonomy($catalog))) {
+            // унаследованная таксономия
+            $taxonomy = CTaxonomyManager::getLegacyTaxonomy($catalog);
+            foreach ($taxonomy->getTerms()->getItems() as $term) {
+                $result[$term->getId()] = $term->getValue();
+            }
+        }
+        echo json_encode($result);
+    }
 }

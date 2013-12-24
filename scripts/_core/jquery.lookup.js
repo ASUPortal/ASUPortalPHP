@@ -39,6 +39,129 @@
                 }
             });
         };
+
+        // выбор в виде списка
+        this._onGlassButtonClick = function(event){
+            // показываем диалог, загружаем туда данные из каталога
+            var parentObj = event.data;
+            jQuery.ajax({
+                cache: false,
+                url: web_root + "_modules/_search/",
+                dataType: "html",
+                data: {
+                    "action": "LookupGetDialog"
+                },
+                context: parentObj,
+                success: function(data){
+                    var lookupDialog = jQuery(data);
+                    jQuery(lookupDialog).on("show", this, this._onDialogShow);
+                    jQuery(lookupDialog).on("shown", this, this._onDialogShown);
+                    jQuery("[asu-action=ok]", lookupDialog).on("click", this, this._onDialogOkClick);
+                    jQuery(lookupDialog).modal();
+                }
+            });
+        };
+
+        // при показе диалога
+        this._onDialogShow = function(event){
+            // ставим загрузку в диалоге
+            var place = jQuery(".modal-body", this);
+            jQuery(place).html('<div style="text-align: center;"><img src="' + web_root + 'images/loader.gif"></div>');
+        };
+
+        // щелчок на элементе в диалоге
+        this._onDialogRowClick = function(event){
+            if (!event.data._isMultiple) {
+                // выбор не множественный снимаем все остальные выбиралки
+                var selected = jQuery(this).parents("table").find("input:checked");
+                jQuery.each(selected, function(){
+                    jQuery(this).attr("checked", false);
+                });
+            }
+            // выбираем чекбокс в текущей строке
+            var checkbox = jQuery(this).find("input[type=checkbox]");
+            jQuery(checkbox).attr("checked", true);
+        };
+
+        // ок в диалоге
+        this._onDialogOkClick = function(event){
+            var dialog = jQuery(this).parents(".modal");
+            // получаем выбранные элементы
+            var items = jQuery("input:checked", dialog);
+            // добавляем их в выбиратор
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                event.data._addNewValue(jQuery(item).val());
+            }
+            // обновляем представление
+            event.data._updateDisplay();
+            // закрываем диалог
+            jQuery(dialog).modal("hide");
+        };
+
+        // загрузка данных в диалог
+        this._onDialogShown = function(event){
+            this.parentObject = event.data;
+            jQuery.ajax({
+                cache: false,
+                url: web_root + "_modules/_search/",
+                dataType: "json",
+                data: {
+                    "action": "LookupViewData",
+                    "catalog": event.data._catalog
+                },
+                context: this,
+                success: function(data){
+                    var parentObject = this.parentObject;
+                    // загружаем полученные данные
+                    var container = jQuery(".modal-body", this);
+                    jQuery(container).empty();
+                    var table = jQuery("<table/>",{
+                        "class": "table table-hover table-condensed"
+                    });
+                    var body = jQuery("<tbody/>");
+                    // для каждой полученной записи добавляем строку
+                    var index = 1;
+                    jQuery.each(data, function(key, value){
+                        var row = jQuery("<tr/>");
+                        jQuery(row).css("cursor", "pointer");
+                        jQuery(row).on("click", parentObject, parentObject._onDialogRowClick);
+                        jQuery(row).appendTo(body);
+
+                        var selectColumn = jQuery("<td/>");
+                        var selector = jQuery("<input/>", {
+                            "type": "checkbox",
+                            "value": key
+                        });
+                        jQuery(selector).appendTo(selectColumn);
+
+                        var number = jQuery("<td/>", {
+                            "text": index++
+                        });
+                        var dataRow = jQuery("<td/>", {
+                            "text": value
+                        });
+
+                        jQuery(selectColumn).appendTo(row);
+                        jQuery(number).appendTo(row);
+                        jQuery(dataRow).appendTo(row);
+
+                        jQuery(row).appendTo(body);
+                    });
+                    jQuery(body).appendTo(table);
+                    jQuery(table).appendTo(container);
+                }
+            });
+        };
+
+        // добавление в список значений
+        this._addNewValue = function(value){
+            if (!this._isMultiple) {
+                this._values = new Array();
+            }
+            this._values[this._values.length] = value;
+        };
+
         // обработка выбора в TypeAhead-е
         this._onTypeAheadSelect = function(item){
             // добавляем
@@ -48,10 +171,7 @@
                     id = key;
                 }
             });
-            if (!this.options.context._isMultiple) {
-                this.options.context._values = new Array();
-            }
-            this.options.context._values[this.options.context._values.length] = id;
+            this.options.context._addNewValue(id);
             // обновляем представление
             this.options.context._updateDisplay();
         };
@@ -181,6 +301,11 @@
             var removeButton = jQuery(".icon-remove", this);
             jQuery(removeButton).css("cursor", "pointer");
             jQuery(removeButton).on("click", this, this._onRemoveButtonClick);
+
+            // обработчик кнопки выбора из списка
+            var lookButton = jQuery(".icon-search", this);
+            jQuery(lookButton).css("cursor", "pointer");
+            jQuery(lookButton).on("click", this, this._onGlassButtonClick);
         };
 
         this._init();

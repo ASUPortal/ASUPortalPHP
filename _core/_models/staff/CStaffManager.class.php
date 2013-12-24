@@ -45,7 +45,7 @@ class CStaffManager{
     public static function initPerson() {
         if (!self::$_fullInit) {
             self::$_fullInit = true;
-            foreach (CActiveRecordProvider::getAllFromTable(TABLE_PERSON)->getItems() as $item) {
+            foreach (CActiveRecordProvider::getAllFromTable(TABLE_PERSON." as person", "person.fio asc")->getItems() as $item) {
                 $person = new CPerson($item);
                 self::getCachePerson()->add($person->getId(), $person);
             }
