@@ -1,36 +1,18 @@
 <script>
     jQuery(document).ready(function(){
-        jQuery("#pract_place_lookup").typeahead({
-            source: function(query, process){
-                process([
-                    {foreach CTaxonomyManager::getPracticePlacesList() as $val}
-                            "{$val|escape}",
-                    {/foreach}
-                ]);
+        {if !is_null($diplom->getId())}
+        jQuery.ajax({
+            url: web_root + "_modules/_diploms",
+            data: {
+                action: "getAverageMark",
+                id: {$diplom->getId()}
             },
-            updater: function(selected){
-                var data = new Object();
-                {foreach CTaxonomyManager::getPracticePlacesList() as $key=>$val}
-                    data["{$val|escape}"] = {$key};
-                {/foreach}
-                jQuery('#pract_place_id').val(data[selected]);
-                return unescape(selected);
-            }
+            cache: false
+        }).done(function(data){
+            jQuery("#average_mark").html(data);
         });
-        jQuery("#pract_place_lookup").val('{$diplomLookup}');
+        {/if}
     });
-    {if !is_null($diplom->getId())}
-    jQuery.ajax({
-    	url: web_root + "_modules/_diploms",
-    	data: {
-    		action: "getAverageMark",
-    		id: {$diplom->getId()}
-    	},
-        cache: false
-    }).done(function(data){
-    	jQuery("#average_mark").html(data);
-    });
-    {/if}
 </script>
 
 {CHtml::activeHiddenField("pract_place_id", $diplom, "", "", "pract_place_id")}
@@ -40,10 +22,7 @@
 <div class="control-group">
     {CHtml::activeLabel("kadri_id", $diplom)}
     <div class="controls">
-        {CHtml::activeDropDownList("kadri_id", $diplom, CStaffManager::getPersonsList())}
-        <span><a href="{$web_root}_modules/_staff/" target="_blank">
-                <img src="{$web_root}images/toupdate.png">
-            </a></span>
+        {CHtml::activeLookup("kadri_id", $diplom, "staff")}
         {CHtml::error("kadri_id", $diplom)}
     </div>
 </div>
@@ -51,10 +30,7 @@
 <div class="control-group">
     {CHtml::activeLabel("student_id", $diplom)}
     <div class="controls">
-        {CHtml::activeDropDownList("student_id", $diplom, $students)}
-        <span><a href="{$web_root}_modules/_students/" target="_blank">
-                <img src="{$web_root}images/toupdate.png">
-            </a></span>
+        {CHtml::activeLookup("student_id", $diplom, "student")}
         {CHtml::error("student_id", $diplom)}
     </div>
 </div>
@@ -62,10 +38,7 @@
 <div class="control-group">
     {CHtml::activeLabel("pract_place_id", $diplom)}
     <div class="controls">
-        {CHtml::activeTextField("pract_place_lookup", $diplom, "pract_place_lookup")}
-        <span><a href="{$web_root}pract_bases.php" target="_blank">
-            <img src="{$web_root}images/toupdate.png">
-        </a></span>
+        {CHtml::activeLookup("pract_place_id", $diplom, "pract_places")}
         {CHtml::error("pract_place_id", $diplom)}
     </div>
 </div>

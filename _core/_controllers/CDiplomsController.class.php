@@ -56,11 +56,8 @@ class CDiplomsController extends CBaseController {
             $nv .= " ".$cnt;
             $commissions[$commission->getId()] = $nv;
         }
-        $students = CStaffManager::getAllStudentsThisYearList();
         $reviewers = CStaffManager::getPersonsListWithType(TYPE_REVIEWER);
         $this->setData("reviewers", $reviewers);
-        $this->setData("students", $students);
-        $this->setData("diplomLookup", "");
         $this->setData("commissions", $commissions);
         $this->setData("diplom", $diplom);
         $this->renderView("_diploms/add.tpl");
@@ -91,17 +88,6 @@ class CDiplomsController extends CBaseController {
         if (!array_key_exists($diplom->gak_num, $commissions)) {
         	$diplom->gak_num = null;
         }
-        $students = CStaffManager::getAllStudentsThisYearList();
-        if (!array_key_exists($diplom->student_id, $students)) {
-            $student = CStaffManager::getStudent($diplom->student_id);
-            if (!is_null($student)) {
-                $nv = $student->getName();
-                if (!is_null($student->getGroup())) {
-                    $nv .= " (".$student->getGroup()->getName().")";
-                }
-                $students[$student->getId()] = $nv;
-            }
-        }
         $reviewers = CStaffManager::getPersonsListWithType(TYPE_REVIEWER);
         if (!array_key_exists($diplom->recenz_id, $reviewers)) {
             $reviewer = CStaffManager::getPerson($diplom->recenz_id);
@@ -109,13 +95,7 @@ class CDiplomsController extends CBaseController {
                 $reviewers[$reviewer->getId()] = $reviewer->getName();
             }
         }
-        $diplomLookup = "";
-        if (!is_null($diplom->practPlace)) {
-            $diplomLookup = $diplom->practPlace->getValue();
-        }
-        $this->setData("diplomLookup", $diplomLookup);
         $this->setData("reviewers", $reviewers);
-        $this->setData("students", $students);
         $this->setData("commissions", $commissions);
         $this->setData("diplom", $diplom);
         $this->renderView("_diploms/edit.tpl");
@@ -160,17 +140,6 @@ class CDiplomsController extends CBaseController {
         if (!array_key_exists($diplom->gak_num, $commissions)) {
             $diplom->gak_num = null;
         }
-        $students = CStaffManager::getAllStudentsThisYearList();
-        if (!array_key_exists($diplom->student_id, $students)) {
-            $student = CStaffManager::getStudent($diplom->student_id);
-            if (!is_null($student)) {
-                $nv = $student->getName();
-                if (!is_null($student->getGroup())) {
-                    $nv .= " (".$student->getGroup()->getName().")";
-                }
-                $students[$student->getId()] = $nv;
-            }
-        }
         $reviewers = CStaffManager::getPersonsListWithType(TYPE_REVIEWER);
         if (!array_key_exists($diplom->recenz_id, $reviewers)) {
             $reviewer = CStaffManager::getPerson($diplom->recenz_id);
@@ -178,13 +147,7 @@ class CDiplomsController extends CBaseController {
                 $reviewers[$reviewer->getId()] = $reviewer->getName();
             }
         }
-        $diplomLookup = "";
-        if (!is_null($diplom->practPlace)) {
-            $diplomLookup = $diplom->practPlace->getValue();
-        }
-        $this->setData("diplomLookup", $diplomLookup);        
         $this->setData("reviewers", $reviewers);
-        $this->setData("students", $students);
         $this->setData("commissions", $commissions);
         $this->setData("diplom", $diplom);
         $this->renderView("_diploms/edit.tpl");

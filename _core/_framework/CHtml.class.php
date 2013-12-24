@@ -13,6 +13,7 @@ class CHtml {
     private static $_clocksInit = false;
     private static $_multiselectInit = false;
     private static $_printFormViewInit = false;
+    private static $_catalogLookupInit = false;
     private static function getFielsizeClass() {
         $result = "span5";
         if (!is_null(CSession::getCurrentUser())) {
@@ -869,7 +870,7 @@ class CHtml {
                 echo '
                     <div class="modal hide fade" id="help">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">?</button>
                             <h3 id="myModalLabel">Справка</h3>
                         </div>
                         <div class="modal-body">
@@ -1056,5 +1057,79 @@ class CHtml {
      */
     private static function requiredStar() {
         echo '<span class="field_required">*</span>';
+    }
+    public static function activeLookup($name, CModel $model, $catalog = "", $isMultiple = false, $allowCreation = false) {
+        /**
+         * Безумно полезная штука для работы со связанными
+         * моделями. Если в названии поля есть скобки, то производится
+         * разбор вида подмодель[ее поле]
+         */
+        $submodelName = "";
+        if (strpos($name, "[") !== false) {
+            $submodelName = substr($name, 0, strpos($name, "["));
+            $name = substr($name, strpos($name, "[") + 1);
+            $name = substr($name, 0, strlen($name) - 1);
+            $model = $model->$submodelName;
+        }
+        $field = $model::getClassName();
+        if ($submodelName !== "") {
+            $field .= "[".$submodelName."]";
+        }
+        $field .= "[".$name."]";
+        $fieldRequired = false;
+        $validators = CCoreObjectsManager::getFieldValidators($model);
+        if (array_key_exists($name, $validators)) {
+            $fieldRequired = true;
+        }
+        $inline = "";
+        $class = self::getFielsizeClass();
+        $inline .= ' class="'.$class.'"';
+        $data = $model->$name;
+        ?>
+        <div class="catalogLookup" asu-catalog="<?php echo $catalog; ?>" asu-multiple="<?php echo ($isMultiple) ? "true":"false" ;?>" asu-value-name="<?php echo $field; ?>">
+
+        <?php if (is_object($data)) : ?>
+            <?php foreach ($data->getItems() as $val) : ?>
+                <input type="hidden" name="<?php echo $field; ?>" value="<?php echo $val; ?>" asu-type="value">
+            <?php endforeach; ?>
+        <?php else: ?>
+            <input type="hidden" name="<?php echo $field; ?>" value="<?php echo $data; ?>" asu-type="value">
+        <?php endif;?>
+
+        <table <?php echo $inline; ?> id="<?php echo $name;?>" style="margin-left: 0px; ">
+            <tr>
+                <td width="100%">
+                    <input type="text" value="" asu-name="lookup" placeholder="Введите текст для поиска" style="width: 95%; ">
+                </td>
+                <td style="width: 16px; ">
+                    <i class="icon-search" />
+                </td>
+            </tr>
+            <tr>
+                <td width="100%">
+                    <div class="btn-group btn-group-vertical" asu-type="placeholder" style="width: 100%; ">
+
+                    </div>
+                </td>
+                <td style="width: 16px; ">
+                    <i class="icon-remove" />
+                </td>
+            </tr>
+        </table>
+        </div>
+        <?php
+        if (!self::$_catalogLookupInit) {
+            self::$_catalogLookupInit = true;
+            ?>
+            <script>
+                jQuery(document).ready(function(){
+                    jQuery(".catalogLookup").catalogLookup();
+                });
+            </script>
+            <?php
+        }
+        if ($fieldRequired) {
+            self::requiredStar();
+        }
     }
 }

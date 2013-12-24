@@ -147,6 +147,10 @@ class CBaseController {
         $this->addJSInclude(CSettingsManager::getSettingValue("bootstrap_path")."js/bootstrap.js");
         $this->addJSInclude("_core/datepicker/js/bootstrap-datepicker.js");
         $this->addJSInclude("_core/timepicker/js/bootstrap-timepicker.js");
+        /**
+         * Поиск по каталогам
+         */
+        $this->addJSInclude("_core/jquery.lookup.js");
     }
 
     /**

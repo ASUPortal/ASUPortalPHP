@@ -167,4 +167,73 @@ class CSearchController extends CBaseController{
         }
         echo json_encode($result);
     }
+    public function actionLookupTypeAhead() {
+        $catalog = CRequest::getString("catalog");
+        $lookup = CRequest::getString("query");
+
+        $result = array();
+        if ($catalog == "staff") {
+            // выбор сотрудников
+            $query = new CQuery();
+            $query->select("person.id as id, person.fio as name")
+                ->from(TABLE_PERSON." as person")
+                ->condition("person.fio like '%".$lookup."%'")
+                ->limit(0, 10);
+            foreach ($query->execute()->getItems() as $item) {
+                $result[$item["id"]] = $item["name"];
+            }
+        } elseif ($catalog == "student") {
+            // выбор студентов
+            $query = new CQuery();
+            $query->select("distinct(student.id) as id, student.fio as name")
+                ->from(TABLE_STUDENTS." as student")
+                ->condition("student.fio like '%".$lookup."%'")
+                ->limit(0, 10);
+            foreach ($query->execute()->getItems() as $item) {
+                $result[$item["id"]] = $item["name"];
+            }
+        } elseif (!is_null(CTaxonomyManager::getLegacyTaxonomy($catalog))) {
+            // унаследованная таксономия
+            $taxonomy = CTaxonomyManager::getLegacyTaxonomy($catalog);
+            $query = new CQuery();
+            $query->select("distinct(taxonomy.id) as id, taxonomy.name as name")
+                ->from($taxonomy->getTableName()." as taxonomy")
+                ->condition("taxonomy.name like '%".$lookup."%'")
+                ->limit(0, 10);
+            foreach ($query->execute()->getItems() as $item) {
+                $result[$item["id"]] = $item["name"];
+            }
+        } else {
+
+        }
+
+        echo json_encode($result);
+    }
+    public function actionLookupGetItem() {
+        $catalog = CRequest::getString("catalog");
+        $id = CRequest::getInt("id");
+
+        $result = array();
+        if ($catalog == "staff") {
+            // выбор сотрудников
+            $person = CStaffManager::getPerson($id);
+            if (!is_null($person)) {
+                $result[$person->getId()] = $person->getName();
+            }
+        } elseif($catalog == "student") {
+            // выбор студентов
+            $student = CStaffManager::getStudent($id);
+            if (!is_null($student)) {
+                $result[$student->getId()] = $student->getName();
+            }
+        } elseif (!is_null(CTaxonomyManager::getLegacyTaxonomy($catalog))) {
+            // унаследованная таксономия
+            $taxonomy = CTaxonomyManager::getLegacyTaxonomy($catalog);
+            $term = $taxonomy->getTerm($id);
+            if (!is_null($term)) {
+                $result[$term->getId()] = $term->getValue();
+            }
+        }
+        echo json_encode($result);
+    }
 }
