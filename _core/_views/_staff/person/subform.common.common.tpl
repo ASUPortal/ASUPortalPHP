@@ -1,7 +1,7 @@
 <div class="control-group">
     {CHtml::activeLabel("person[types]", $form)}
     <div class="controls">
-    {CHtml::activeMultiSelect("person[types]", $form, CTaxonomyManager::getTypesList())}
+    {CHtml::activeLookup("person[types][]", $form, "person_types", true)}
     {CHtml::error("person[types]", $form)}
     </div>
 </div>

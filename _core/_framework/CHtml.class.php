@@ -1067,8 +1067,8 @@ class CHtml {
         $submodelName = "";
         if (strpos($name, "[") !== false) {
             $submodelName = substr($name, 0, strpos($name, "["));
-            $name = substr($name, strpos($name, "[") + 1);
-            $name = substr($name, 0, strlen($name) - 1);
+            $name = CUtils::strRight($name, "[");
+            $name = CUtils::strLeft($name, "]");
             $model = $model->$submodelName;
         }
         $field = $model::getClassName();
@@ -1076,6 +1076,9 @@ class CHtml {
             $field .= "[".$submodelName."]";
         }
         $field .= "[".$name."]";
+        if ($isMultiple) {
+            $field .= "[]";
+        }
         $fieldRequired = false;
         $validators = CCoreObjectsManager::getFieldValidators($model);
         if (array_key_exists($name, $validators)) {
@@ -1090,7 +1093,7 @@ class CHtml {
 
         <?php if (is_object($data)) : ?>
             <?php foreach ($data->getItems() as $val) : ?>
-                <input type="hidden" name="<?php echo $field; ?>" value="<?php echo $val; ?>" asu-type="value">
+                <input type="hidden" name="<?php echo $field; ?>" value="<?php echo $val->getId(); ?>" asu-type="value">
             <?php endforeach; ?>
         <?php else: ?>
             <input type="hidden" name="<?php echo $field; ?>" value="<?php echo $data; ?>" asu-type="value">

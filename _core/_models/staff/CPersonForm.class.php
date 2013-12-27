@@ -9,13 +9,9 @@
 
 class CPersonForm extends CFormModel{
     public $person = null;
+    private $_types = array();
     public function save() {
         $personArr = $this->person;
-        $types = array();
-        if (array_key_exists("types", $personArr)) {
-            $types = $personArr["types"];
-            unset($personArr["types"]);
-        }
         /**
          * Сохраняем сотрудника
          */
@@ -29,14 +25,16 @@ class CPersonForm extends CFormModel{
         /**
          * Сохраняем новые типы участия на кафедре
          */
-        foreach ($types as $type) {
-            $ar = new CActiveRecord(array(
-                "kadri_id" => $this->person->getId(),
-                "person_type_id" => $type,
-                "id" => null
-            ));
-            $ar->setTable(TABLE_PERSON_BY_TYPES);
-            $ar->insert();
+        foreach ($this->_types as $type) {
+            if ($type != "" && $type != "0") {
+                $ar = new CActiveRecord(array(
+                    "kadri_id" => $this->person->getId(),
+                    "person_type_id" => $type,
+                    "id" => null
+                ));
+                $ar->setTable(TABLE_PERSON_BY_TYPES);
+                $ar->insert();
+            }
         }
     }
 
@@ -45,6 +43,7 @@ class CPersonForm extends CFormModel{
 
         $personArr = $this->person;
         if (array_key_exists("types", $personArr)) {
+            $this->_types = $personArr["types"];
             unset($personArr["types"]);
         }
         $this->person = new CPerson();
