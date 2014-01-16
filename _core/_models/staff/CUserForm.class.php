@@ -63,11 +63,27 @@ class CUserForm extends CFormModel{
             $ar->insert();
         }
         /**
-         * Сохраняем личные права пользователя
+         * Исключаем из личных прав пользователей те, которые совпадают с правами
+         * на задачу
+         */
+        foreach ($userObj->getGroups()->getItems() as $group) {
+            foreach ($group->getRoles()->getItems() as $role) {
+                if (array_key_exists($role->getId(), $roles)) {
+                    if ($role->level == $roles[$role->getId()]) {
+                        unset($roles[$role->getId()]);
+                    }
+                }
+            }
+        }
+        /**
+         * Удаляем старые и сохраняем отличающиеся
          */
         foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_HAS_ROLES, "user_id = ".$userObj->getId())->getItems() as $ar) {
             $ar->remove();
         }
+        /**
+         * Сохраняем личные права пользователя
+         */
         foreach ($roles as $role=>$level) {
             /**
              * Можно индивидуально запрещать доступ к задаче
