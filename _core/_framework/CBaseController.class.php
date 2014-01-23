@@ -151,6 +151,11 @@ class CBaseController {
          * Поиск по каталогам
          */
         $this->addJSInclude("_core/jquery.lookup.js");
+        /**
+         * Загрузка файлов
+         */
+        $this->addJSInclude("_core/jquery.form.js");
+        $this->addJSInclude("_core/jquery.upload.js");
     }
 
     /**
@@ -310,7 +315,7 @@ class CBaseController {
             foreach ($this->getData()->getItems() as $key=>$value) {
                 $this->getSmarty()->assign($key, $value);
             }
-            $this->preventJsAndCssCache();
+            // $this->preventJsAndCssCache();
             $this->getSmarty()->assign("css", $this->getCSSIncludes()->getItems());
             $this->getSmarty()->assign("js", $this->getJSIncludes()->getItems());
             $this->getSmarty()->assign("jsIe", $this->getJSIEOnly()->getItems());

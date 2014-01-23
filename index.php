@@ -115,7 +115,7 @@ if(isset($_GET['id'])) {
         jQuery(document).ready(function(){
             /**
              * Содержимое новостей подгружается аяксом
-             * в перед показом диалога
+             * перед показом диалога
              */
             jQuery(".modal").on("show", function(){
                 jQuery(this).find(".modal-body").html('<div style="text-align: center;"><img src="<?php echo WEB_ROOT; ?>images/loader.gif"></div>');

@@ -217,7 +217,7 @@ class CModel {
      *
      * @return array
      */
-    protected function fieldsProperty() {
+    public function fieldsProperty() {
         return array(
 
         );

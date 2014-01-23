@@ -368,6 +368,16 @@ class CUtils {
     }
 
     /**
+     * Проверяет, является ли указанный файл изображением
+     *
+     * @param $filepath
+     * @return bool
+     */
+    public static function isImage($filepath) {
+        // не придумал ничего лучше и проще
+        return (getimagesize($filepath) !== false);
+    }
+    /**
      * Проверяем, является ли текущий пользователь ботом
      *
      * @return bool

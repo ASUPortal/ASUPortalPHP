@@ -14,6 +14,7 @@ class CHtml {
     private static $_multiselectInit = false;
     private static $_printFormViewInit = false;
     private static $_catalogLookupInit = false;
+    private static $_uploadWidgetInit = false;
     private static function getFielsizeClass() {
         $result = "span5";
         if (!is_null(CSession::getCurrentUser())) {
@@ -902,9 +903,60 @@ class CHtml {
             echo '</div>';
         }
     }
-    public static function activeUpload($name, CModel $model) {
+    public static function activeUpload($name, CActiveModel $model, $isMultiple = false, $imageWidth = 200) {
         $field = $model::getClassName()."[".$name."]";
-        echo '<input type="file" name="'.$field.'">';
+        $data = $model->$name;
+        // var_dump($data);
+        // echo '<input type="file" name="'.$field.'">';
+        $inline = "";
+        $class = self::getFielsizeClass();
+        $inline .= ' class="'.$class.'"';
+
+        $uploadDir = "";
+        if (array_key_exists($name, $model->fieldsProperty())) {
+            $properties = $model->fieldsProperty();
+            $property = $properties[$name];
+            if ($property["type"] == FIELD_UPLOADABLE) {
+                $uploadDir = $property["upload_dir"];
+            }
+        }
+        ?>
+        <div class="activeUpload" asu-storage="<?php echo $uploadDir; ?>" asu-multiple="<?php echo ($isMultiple) ? "true":"false" ;?>" asu-size="<?php echo $imageWidth; ?>">
+            <table style="margin-left: 0px; " border="0" <?php echo $inline; ?>>
+                <tbody>
+                <tr>
+                    <td width="100%">
+                        <input type="file" name="upload_<?php echo $name; ?>" asu-type="upload" />
+                    </td>
+                    <td style="width: 16px; " valign="top">
+                        <i class="icon-remove" />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100%">
+                        <div class="btn-group btn-group-vertical" asu-type="placeholder" style="width: 100%; ">
+
+                        </div>
+                    </td>
+                    <td style="width: 16px; ">
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <?php
+
+        if (!self::$_uploadWidgetInit) {
+            self::$_uploadWidgetInit = true;
+            ?>
+            <script>
+                jQuery(document).ready(function(){
+                    jQuery(".activeUpload").activeUpload();
+                });
+            </script>
+            <?php
+        }
     }
     /**
      * Печать по шаблону
