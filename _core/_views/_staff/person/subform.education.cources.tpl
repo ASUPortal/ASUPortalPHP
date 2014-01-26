@@ -7,6 +7,7 @@
         <th>Время проведения</th>
         <th>Документ по завершении</th>
         <th>Доп. информация</th>
+        <th width="32"><i class="icon-camera"></i></th>
     </tr>
     {foreach $form->person->cources->getItems() as $course}
         <tr>
@@ -17,6 +18,7 @@
             <td>{$course->getPeriod()}</td>
             <td>{$course->document}</td>
             <td>{$course->comment}</td>
+            <td>{CHtml::activeAttachPreview("file_attach", $course, true)}</td>
         </tr>
     {/foreach}
 </table>

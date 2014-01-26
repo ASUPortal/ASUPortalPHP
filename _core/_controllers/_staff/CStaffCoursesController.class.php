@@ -1,5 +1,5 @@
 <?php
-class CStaffDiplomsController extends CBaseController{
+class CStaffCoursesController extends CBaseController{
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -12,40 +12,40 @@ class CStaffDiplomsController extends CBaseController{
         }
 
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Управление дипломами сотрудников");
+        $this->setPageTitle("Управление курсами повышения квалификации");
 
         parent::__construct();
     }
     public function actionAdd() {
-        $object = new CPersonDiplom();
+        $object = new CPersonCourse();
         $object->kadri_id = CRequest::getInt("id");
         $this->setData("object", $object);
-        $this->renderView("_staff/diplom/add.tpl");
+        $this->renderView("_staff/course/add.tpl");
     }
     public function actionEdit() {
-        $object = CStaffManager::getPersonDiplom(CRequest::getInt("id"));
+        $object = CStaffManager::getPersonCourse(CRequest::getInt("id"));
         $this->setData("object", $object);
-        $this->renderView("_staff/diplom/edit.tpl");
+        $this->renderView("_staff/course/edit.tpl");
     }
     public function actionDelete() {
-        $object = CStaffManager::getPersonDiplom(CRequest::getInt("id"));
+        $object = CStaffManager::getPersonCourse(CRequest::getInt("id"));
         $person = $object->kadri_id;
         $object->remove();
         $this->redirect("index.php?action=edit&id=".$person);
     }
     public function actionSave() {
-        $object = new CPersonDiplom();
+        $object = new CPersonCourse();
         $object->setAttributes(CRequest::getArray($object::getClassName()));
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("diploms.php?action=edit&id=".$object->getId());
+                $this->redirect("courses.php?action=edit&id=".$object->getId());
             } else {
                 $this->redirect("index.php?action=edit&id=".$object->kadri_id);
             }
             return true;
         }
         $this->setData("object", $object);
-        $this->renderView("_staff/diplom/edit.tpl");
+        $this->renderView("_staff/course/edit.tpl");
     }
 }
