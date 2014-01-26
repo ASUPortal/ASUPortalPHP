@@ -774,4 +774,24 @@ class CUtils {
         }
         return false;
     }
+
+    /**
+     * Mime-type файла по указанному пути
+     *
+     * @param $filename
+     * @return mixed
+     */
+    public static function getMimetype($filename) {
+        $filetype = "";
+        if (class_exists("finfo")) {
+            $finfo = new finfo(FILEINFO_MIME);
+            $filetype = $finfo->file($filename);
+            $filetype = CUtils::strLeft($filetype, ";");
+            $filetype = str_replace("/", "-", $filetype);
+        } else {
+            $filetype = mime_content_type($filename);
+            $filetype = str_replace("/", "-", $filetype);
+        }
+        return $filetype;
+    }
 }
