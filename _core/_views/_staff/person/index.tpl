@@ -11,6 +11,7 @@
         <tr>
             <th></th>
             <th>#</th>
+            <th><i class="icon-camera"></i></th>
             <th>{CHtml::tableOrder("fio", $persons->getFirstItem())}</th>
             <th>{CHtml::tableOrder("types", $persons->getFirstItem())}</th>
         </tr>
@@ -19,6 +20,11 @@
             <tr>
                 <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить сотрудника {$person->getName()}')) { location.href='?action=delete&id={$person->getId()}'; }; return false;"></a></td>
                 <td>{counter}</td>
+                <td>
+                    {if $person->isPhotoExists()}
+                        <img src="{$web_root}_modules/_thumbnails/?src={$web_root}images/lects/{$person->photo}&w=100" />
+                    {/if}
+                </td>
                 <td><a href="?action=edit&id={$person->getId()}">{$person->getName()}</a></td>
                 <td>
                     {$needSeparation = false}

@@ -663,4 +663,12 @@ class CPerson extends CActiveModel{
         }
         return $result;
     }
+    public function isPhotoExists() {
+        if ($this->photo != "") {
+            if (file_exists(CORE_CWD.CORE_DS."images".CORE_DS."lects".CORE_DS.$this->photo)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
