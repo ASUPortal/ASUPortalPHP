@@ -14,6 +14,10 @@ class CDbTable {
     public function __construct($name) {
         $this->name = $name;
     }
+
+    /**
+     * @return CArrayList
+     */
     public function getFields() {
         if (is_null($this->_fields)) {
             $this->_fields = new CArrayList();
