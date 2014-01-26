@@ -39,6 +39,15 @@
             jQuery(link).append(image);
             jQuery(this._placeholder).append(container);
 
+            // если это картинка, то даем возможность просмотреть ее
+            // во всплывающем окне
+            if (data.isImage) {
+                jQuery(link).colorbox({
+                    maxHeight: "100%",
+                    title: '<a href="' + data.fullUrl + '" target="_blank">Открыть в полном размере</a>'
+                });
+            }
+
             jQuery(container).on("click", this._onItemClick);
         };
         /**

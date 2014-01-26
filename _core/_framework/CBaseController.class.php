@@ -156,6 +156,8 @@ class CBaseController {
          */
         $this->addJSInclude("_core/jquery.form.js");
         $this->addJSInclude("_core/jquery.upload.js");
+        $this->addJSInclude("_core/jquery.colorbox.js");
+        $this->addCSSInclude("_core/jColorbox/colorbox.css");
     }
 
     /**

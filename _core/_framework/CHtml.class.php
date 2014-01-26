@@ -15,6 +15,8 @@ class CHtml {
     private static $_printFormViewInit = false;
     private static $_catalogLookupInit = false;
     private static $_uploadWidgetInit = false;
+    private static $_clearboxInit = false;
+
     private static function getFielsizeClass() {
         $result = "span5";
         if (!is_null(CSession::getCurrentUser())) {
@@ -1268,12 +1270,32 @@ class CHtml {
                 }
             }
             if ($addLinkToOriginal) {
-                echo '<a href="'.$link.'" target="_blank">';
+                echo '<a href="'.$link.'" target="_blank"';
+                if (CUtils::isImage($storage.$file)) {
+                    echo ' class="image_clearboxy"';
+                }
+                echo '>';
             }
             echo '<img src="'.$icon.'" />';
             if ($addLinkToOriginal) {
                 echo '</a>';
             }
+        }
+        if (!self::$_clearboxInit) {
+            self::$_clearboxInit = true;
+            ?>
+            <script>
+                jQuery(document).ready(function(){
+                    jQuery("a.image_clearboxy").colorbox({
+                        maxHeight: "100%",
+                        title: function(){
+                            var url = $(this).attr('href');
+                            return '<a href="' + url + '" target="_blank">Открыть в полном размере</a>';
+                        }
+                    });
+                });
+            </script>
+            <?php
         }
     }
 }
