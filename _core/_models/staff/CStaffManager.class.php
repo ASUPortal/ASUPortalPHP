@@ -1142,4 +1142,21 @@ class CStaffManager{
         }
         return $paper;
     }
+
+    /**
+     * @param $key
+     * @return CPersonPaper
+     */
+    public static function getPersonPaper($key) {
+        $paper = null;
+        $ar = CActiveRecordProvider::getById(TABLE_PERSON_DISSER, $key);
+        if (!is_null($ar)) {
+            if ($ar->getItemValue("disser_type") == DISSER_PHD) {
+                $paper = new CPersonPHDPaper($ar);
+            } elseif ($ar->getItemValue("disser_type") == DISSER_DOCTOR) {
+                $paper = new CPersonDoctorPaper($ar);
+            }
+        }
+        return $paper;
+    }
 }

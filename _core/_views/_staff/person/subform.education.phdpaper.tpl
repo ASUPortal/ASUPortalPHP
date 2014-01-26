@@ -6,6 +6,7 @@
         <th>Номер спец-ти по ВАК</th>
         <th>Год защиты</th>
         <th>Доп. информация</th>
+        <th width="32"><i class="icon-camera"></i></th>
     </tr>
     {foreach $form->person->phdpapers->getItems() as $paper}
         <tr>
@@ -15,6 +16,7 @@
             <td>{$paper->spec_nom}</td>
             <td>{$paper->god_zach}</td>
             <td>{$paper->comment}</td>
+            <td>{CHtml::activeAttachPreview("file_attach", $paper, true)}</td>
         </tr>
     {/foreach}
 </table>

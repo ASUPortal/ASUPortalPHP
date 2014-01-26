@@ -1,0 +1,29 @@
+<?php
+/**
+ * Created by JetBrains PhpStorm.
+ * User: aleksandr
+ * Date: 26.01.14
+ * Time: 15:38
+ * To change this template use File | Settings | File Templates.
+ */
+
+class CPersonPaper extends CActiveModel{
+    protected $_table = TABLE_PERSON_DISSER;
+    public $type = 0;
+
+    public function getTypes() {
+        return array(
+            DISSER_DOCTOR => "Докторская диссертация",
+            DISSER_PHD => "Кандидатская диссертация"
+        );
+    }
+
+    public function fieldsProperty() {
+        return array(
+            'file_attach' => array(
+                'type'  => FIELD_UPLOADABLE,
+                'upload_dir' => CORE_CWD.CORE_DS."library".CORE_DS."anketa".CORE_DS."kandid".CORE_DS
+            )
+        );
+    }
+}

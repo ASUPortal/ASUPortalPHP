@@ -7,6 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class CPersonPHDPaper extends CActiveModel {
-    protected $_table = TABLE_PERSON_DISSER;
+class CPersonPHDPaper extends CPersonPaper {
+    public $disser_type = DISSER_PHD;
+    public $type = 1;
 }

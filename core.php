@@ -261,6 +261,11 @@
     define("PAGINATION_ALL", "all");
     define("PAGINATION_DEFAULT", 20);
     /**
+     * Константы для диссертаций
+     */
+    define("DISSER_DOCTOR", "доктор");
+    define("DISSER_PHD", "кандидат");
+    /**
      * Уровни доступа константами
      */
     define("ACCESS_LEVEL_NO_ACCESS", 0);
