@@ -265,6 +265,7 @@
      */
     define("DISSER_DOCTOR", "доктор");
     define("DISSER_PHD", "кандидат");
+    define("DISSER_DEGREE", "степень");
     /**
      * Стандартные действия
      */

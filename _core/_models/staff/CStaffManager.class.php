@@ -385,12 +385,12 @@ class CStaffManager{
      * Ученая степень преподавателя по id ученой степени
      *
      * @param $key
-     * @return CDegree
+     * @return CPersonDegree
      */
-    public static function getDegree($key) {
+    public static function getPersonDegree($key) {
         if (!self::getCacheDegrees()->hasElement($key)) {
             foreach (CActiveRecordProvider::getWithCondition(TABLE_PERSON_DISSER, "id = ".$key." AND disser_type = 'степень'")->getItems() as $obj) {
-                $degree = new CDegree($obj);
+                $degree = new CPersonDegree($obj);
                 self::getCacheDegrees()->add($degree->getId(), $degree);
             }
         }
@@ -1155,6 +1155,8 @@ class CStaffManager{
                 $paper = new CPersonPHDPaper($ar);
             } elseif ($ar->getItemValue("disser_type") == DISSER_DOCTOR) {
                 $paper = new CPersonDoctorPaper($ar);
+            } elseif ($ar->getItemValue("disser_type") == DISSER_DEGREE) {
+                $paper = new CPersonDegree($ar);
             }
         }
         return $paper;

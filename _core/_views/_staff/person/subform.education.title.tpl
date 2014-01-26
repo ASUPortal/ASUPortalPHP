@@ -6,6 +6,7 @@
         <th>Год присвоения</th>
         <th>Серия, номер свидетельства</th>
         <th>Доп. информация</th>
+        <th width="32"><i class="icon-camera"></i></th>
     </tr>
     {foreach $form->person->degrees->getItems() as $degree}
         <tr>
@@ -19,6 +20,7 @@
             <td>{$degree->year}</td>
             <td>номер {$degree->doc_num}, серия {$degree->doc_series}</td>
             <td>{$degree->comment}</td>
+            <td>{CHtml::activeAttachPreview("file_attach", $degree, true)}</td>
         </tr>
     {/foreach}
 </table>

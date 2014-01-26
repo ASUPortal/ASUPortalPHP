@@ -82,7 +82,7 @@ class CPerson extends CActiveModel{
                 "storageProperty" => "_degree",
                 "storageField" => "stepen",
                 "managerClass" => "CTaxonomyManager",
-                "managerGetObject" => "getDegree"
+                "managerGetObject" => "getPersonDegree"
             ),
             "degrees" => array(
                 "relationPower" => RELATION_HAS_MANY,
@@ -90,7 +90,7 @@ class CPerson extends CActiveModel{
                 "storageTable" => TABLE_PERSON_DISSER,
                 "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and disser_type = 'степень'",
                 "managerClass" => "CStaffManager",
-                "managerGetObject" => "getDegree"
+                "managerGetObject" => "getPersonDegree"
             ),
             "types" => array(
                 "relationPower" => RELATION_COMPUTED,

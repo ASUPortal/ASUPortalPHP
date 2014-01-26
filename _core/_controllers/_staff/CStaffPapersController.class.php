@@ -21,6 +21,8 @@ class CStaffPapersController extends CBaseController{
             $object = new CPersonPHDPaper();
         } elseif (CRequest::getInt("type") == "2") {
             $object = new CPersonDoctorPaper();
+        } elseif (CRequest::getInt("type") == "3") {
+            $object = new CPersonDegree();
         }
         $object->kadri_id = CRequest::getInt("id");
         $this->setData("object", $object);
