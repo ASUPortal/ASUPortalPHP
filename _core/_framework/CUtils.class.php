@@ -851,6 +851,7 @@ class CUtils {
             $ext = strtolower(array_pop(explode('.',$filename)));
             if (array_key_exists($ext, $mime_types)) {
                 $filetype = $mime_types[$ext];
+                $filetype = str_replace("/", "-", $filetype);
             } else {
                 $filetype = "unknown";
             }
