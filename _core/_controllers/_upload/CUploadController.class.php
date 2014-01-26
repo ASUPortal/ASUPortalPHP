@@ -58,16 +58,16 @@ class CUploadController extends CBaseController {
         );
 
         if (file_exists($storage.$file)) {
-            $result["fullUrl"] = WEB_ROOT.ROOT_FOLDER.CUtils::strRight($storage, CORE_CWD).$file;
+            $result["fullUrl"] = WEB_ROOT.CUtils::strRight($storage, CORE_CWD).$file;
             $result["isImage"] = CUtils::isImage($storage.$file);
             if (CUtils::isImage($storage.$file)) {
-                $result["previewUrl"] = WEB_ROOT.ROOT_FOLDER."_modules/_thumbnails/?src=".$result["fullUrl"]."&w=".$size;
+                $result["previewUrl"] = WEB_ROOT."_modules/_thumbnails/?src=".$result["fullUrl"]."&w=".$size;
             } else {
                 $filetype = CUtils::getMimetype($storage.$file);
                 if (file_exists(CORE_CWD.CORE_DS."images".CORE_DS.ICON_THEME.CORE_DS."64x64".CORE_DS."mimetypes".CORE_DS.$filetype.".png")) {
-                    $result["previewUrl"] = WEB_ROOT.ROOT_FOLDER."images/".ICON_THEME."/64x64/mimetypes/".$filetype.".png";
+                    $result["previewUrl"] = WEB_ROOT."images/".ICON_THEME."/64x64/mimetypes/".$filetype.".png";
                 } else {
-                    $result["previewUrl"] = WEB_ROOT.ROOT_FOLDER."images/".ICON_THEME."/64x64/mimetypes/unknown.png";
+                    $result["previewUrl"] = WEB_ROOT."images/".ICON_THEME."/64x64/mimetypes/unknown.png";
                 }
             }
         }

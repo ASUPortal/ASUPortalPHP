@@ -1252,18 +1252,18 @@ class CHtml {
             }
         }
         if ($display) {
-            $link = WEB_ROOT.ROOT_FOLDER.CUtils::strRight($storage, CORE_CWD).$file;
+            $link = WEB_ROOT.CUtils::strRight($storage, CORE_CWD).$file;
             $icon = "";
             if (CUtils::isImage($storage.$file)) {
                 // показываем превью изображения
-                $icon = WEB_ROOT.ROOT_FOLDER."_modules/_thumbnails/?src=".$link."&w=".$size;
+                $icon = WEB_ROOT."_modules/_thumbnails/?src=".$link."&w=".$size;
             } else {
                 // показываем значок типа документа
                 $filetype = CUtils::getMimetype($storage.$file);
                 if (file_exists(CORE_CWD.CORE_DS."images".CORE_DS.ICON_THEME.CORE_DS."64x64".CORE_DS."mimetypes".CORE_DS.$filetype.".png")) {
-                    $icon = WEB_ROOT.ROOT_FOLDER."images/".ICON_THEME."/64x64/mimetypes/".$filetype.".png";
+                    $icon = WEB_ROOT."images/".ICON_THEME."/64x64/mimetypes/".$filetype.".png";
                 } else {
-                    $icon = WEB_ROOT.ROOT_FOLDER."images/".ICON_THEME."/64x64/mimetypes/unknown.png";
+                    $icon = WEB_ROOT."images/".ICON_THEME."/64x64/mimetypes/unknown.png";
                 }
             }
             if ($addLinkToOriginal) {
