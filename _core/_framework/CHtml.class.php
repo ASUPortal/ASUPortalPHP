@@ -922,10 +922,22 @@ class CHtml {
         }
     }
     public static function activeUpload($name, CActiveModel $model, $isMultiple = false, $imageWidth = 200) {
-        $field = $model::getClassName()."[".$name."]";
+        $submodelName = "";
+        if (strpos($name, "[") !== false) {
+            $submodelName = substr($name, 0, strpos($name, "["));
+            $name = CUtils::strRight($name, "[");
+            $name = CUtils::strLeft($name, "]");
+            $model = $model->$submodelName;
+        }
+        $field = $model::getClassName();
+        if ($submodelName !== "") {
+            $field .= "[".$submodelName."]";
+        }
+        $field .= "[".$name."]";
+        if ($isMultiple) {
+            $field .= "[]";
+        }
         $data = $model->$name;
-        // var_dump($data);
-        // echo '<input type="file" name="'.$field.'">';
         $inline = "";
         $class = self::getFielsizeClass();
         $inline .= ' class="'.$class.'"';
