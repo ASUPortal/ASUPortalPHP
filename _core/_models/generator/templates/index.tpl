@@ -33,5 +33,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="#viewPath#/index.right.tpl"}
+    {include file="#viewPath#/common.right.tpl"}
 {/block}

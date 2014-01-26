@@ -9,5 +9,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="#viewPath#/add.right.tpl"}
+    {include file="#viewPath#/common.right.tpl"}
 {/block}

@@ -42,5 +42,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_staff/person/index.right.tpl"}
+    {include file="_staff/person/common.right.tpl"}
 {/block}

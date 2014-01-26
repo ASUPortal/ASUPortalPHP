@@ -266,6 +266,10 @@
     define("DISSER_DOCTOR", "доктор");
     define("DISSER_PHD", "кандидат");
     /**
+     * Стандартные действия
+     */
+    define("ACTION_INDEX", "index");
+    /**
      * Уровни доступа константами
      */
     define("ACCESS_LEVEL_NO_ACCESS", 0);

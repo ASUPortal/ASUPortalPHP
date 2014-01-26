@@ -138,11 +138,9 @@ class CGeneratorControllersController extends CBaseController {
             CUtils::createFoldersToPath(CORE_CWD.CORE_DS."_core".CORE_DS."_views".CORE_DS.$params->viewPath);
             $viewFiles = array(
                 CORE_CWD."/_core/_models/generator/templates/index.tpl",
-                CORE_CWD."/_core/_models/generator/templates/index.right.tpl",
+                CORE_CWD."/_core/_models/generator/templates/common.right.tpl",
                 CORE_CWD."/_core/_models/generator/templates/add.tpl",
-                CORE_CWD."/_core/_models/generator/templates/add.right.tpl",
                 CORE_CWD."/_core/_models/generator/templates/edit.tpl",
-                CORE_CWD."/_core/_models/generator/templates/edit.right.tpl",
                 CORE_CWD."/_core/_models/generator/templates/form.tpl",
             );
             $viewFields = array(

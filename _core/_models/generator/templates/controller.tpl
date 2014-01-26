@@ -30,16 +30,49 @@ class #controllerName# extends CBaseController{
         }
         $this->setData("objects", $objects);
         $this->setData("paginator", $set->getPaginator());
+        /**
+         * Генерация меню
+         */
+        $this->addActionsMenuItem(array(
+            "title" => "Добавить сотрудника",
+            "link" => "#controllerFile#?action=add",
+            "icon" => "actions/list-add.png"
+        ));
+        /**
+         * Отображение представления
+         */
         $this->renderView("#viewPath#/index.tpl");
     }
     public function actionAdd() {
         $object = new #modelName#();
         $this->setData("object", $object);
+        /**
+         * Генерация меню
+         */
+        $this->addActionsMenuItem(array(
+            "title" => "Назад",
+            "link" => "#controllerFile#?action=index",
+            "icon" => "actions/edit-undo.png"
+        ));
+        /**
+         * Отображение представления
+         */
         $this->renderView("#viewPath#/add.tpl");
     }
     public function actionEdit() {
         $object = #modelManager#::#modelManagerGetter#(CRequest::getInt("id"));
         $this->setData("object", $object);
+        /**
+         * Генерация меню
+         */
+        $this->addActionsMenuItem(array(
+            "title" => "Назад",
+            "link" => "#controllerFile#?action=index",
+            "icon" => "actions/edit-undo.png"
+        ));
+        /**
+         * Отображение представления
+         */
         $this->renderView("#viewPath#/edit.tpl");
     }
     public function actionDelete() {

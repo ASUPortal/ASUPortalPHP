@@ -90,6 +90,23 @@ class CBaseController {
                 $this->redirect($url, ERROR_INSUFFICIENT_ACCESS_LEVEL);
             }
         }
+        /**
+         * Если у пользователя включен рабочий стол, то даем возможность
+         * из любого места туда перейти
+         */
+        if (!is_null(CSession::getCurrentUser())) {
+            if (!is_null(CSession::getCurrentUser()->getPersonalSettings())) {
+                if (CSession::getCurrentUser()->getPersonalSettings()->isDashboardEnabled()) {
+                    if ($this->getAction() == ACTION_INDEX) {
+                        $this->addActionsMenuItem(array(
+                            "link" => WEB_ROOT."_modules/_dashboard/",
+                            "title" => "На рабочий стол",
+                            "icon" => "apps/preferences-system-session.png"
+                        ));
+                    }
+                }
+            }
+        }
     }
     protected function onActionNotExists() {
 

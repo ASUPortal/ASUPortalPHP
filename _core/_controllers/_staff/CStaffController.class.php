@@ -44,6 +44,17 @@ class CStaffController extends CBaseController{
         }
         $this->setData("paginator", $set->getPaginator());
         $this->setData("persons", $persons);
+        /**
+         * Генерация меню
+         */
+        $this->addActionsMenuItem(array(
+            "title" => "Добавить сотрудника",
+            "link" => "index.php?action=add",
+            "icon" => "actions/list-add.png"
+        ));
+        /**
+         * Отображение представления
+         */
         $this->renderView("_staff/person/index.tpl");
     }
     public function actionAdd() {
@@ -51,6 +62,17 @@ class CStaffController extends CBaseController{
         $person = new CPerson();
         $form->person = $person;
         $this->setData("form", $form);
+        /**
+         * Генерация меню
+         */
+        $this->addActionsMenuItem(array(
+            "title" => "Назад",
+            "link" => "index.php?action=index",
+            "icon" => "actions/edit-undo.png"
+        ));
+        /**
+         * Отображение представления
+         */
         $this->renderView("_staff/person/add.tpl");
     }
     public function actionEdit() {
