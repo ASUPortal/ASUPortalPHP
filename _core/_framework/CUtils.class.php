@@ -843,6 +843,11 @@ class CUtils {
                 'xls' => 'application/vnd.ms-excel',
                 'ppt' => 'application/vnd.ms-powerpoint',
 
+                // ms office new
+                'docx' => 'application/msword',
+                'xlsx' => 'application/vnd.ms-excel',
+                'pptx' => 'application/vnd.ms-powerpoint',
+
                 // open office
                 'odt' => 'application/vnd.oasis.opendocument.text',
                 'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
