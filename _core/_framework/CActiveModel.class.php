@@ -199,6 +199,20 @@ class CActiveModel extends CModel{
         }
         // проверяем, не обычное ли это поле
         if (array_key_exists($name, $this->getRecord()->getItems())) {
+            // обходной маневр для конвертации mysql-дат в отечественные
+            $properties = $this->fieldsProperty();
+            if (array_key_exists($name, $properties)) {
+                $property = $properties[$name];
+                if (array_key_exists("type", $property)) {
+                    if ($property["type"] == FIELD_MYSQL_DATE) {
+                        $value = $this->getRecord()->getItemValue($name);
+                        if (strpos($value, "0000-00-00") !== false) {
+                            return "";
+                        }
+                        return date($property["format"], strtotime($value));
+                    }
+                }
+            }
             return $this->getRecord()->getItemValue($name);
         }
 
@@ -282,6 +296,24 @@ class CActiveModel extends CModel{
      */
     public function setAttributes(array $array) {
         parent::setAttributes($array);
+        // дополнительные обработчики
+        foreach ($this->fieldsProperty() as $field=>$property) {
+            if ($property['type'] == FIELD_MYSQL_DATE) {
+                // преобразование даты из отечественного формата в mysql-формат
+                $format = "Y-m-d H:i:s";
+                if (array_key_exists("mysql_format", $property)) {
+                    $format = $property["mysql_format"];
+                }
+                if ($array[$field] !== "") {
+                    if (strtotime($array[$field]) !== false) {
+                        $value = date($format, strtotime($array[$field]));
+                        $array[$field] = $value;
+                    }
+                } else {
+                    $array[$field] = date($format, 0);
+                }
+            }
+        }
         foreach ($array as $key=>$value) {
             if ($this->getDbTable()->getFields()->hasElement($key)) {
                 $this->getRecord()->setItemValue($key, $value);

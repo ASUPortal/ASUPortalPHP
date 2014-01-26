@@ -48,9 +48,9 @@ class CModel {
      * @param array $array
      */
     public function setAttributes(array $array) {
-        // загрузка файлов из загружаемых полей
         foreach ($this->fieldsProperty() as $field=>$property) {
             if ($property['type'] == FIELD_UPLOADABLE) {
+                // загрузка файлов из загружаемых полей
                 if (array_key_exists($this::getClassName(), $_FILES)) {
                     if ($_FILES[$this::getClassName()]['tmp_name'][$field] !== "") {
                         $fileName = CUtils::toTranslit($_FILES[$this::getClassName()]['name'][$field]);

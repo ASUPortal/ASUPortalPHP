@@ -289,8 +289,12 @@
     define("RELATION_COMPUTED", "computed");
     define("RELATION_MANY_TO_MANY", "many_to_many");
 
-    // типы полей
+    /**
+     * Типы полей.
+     * Для загрузки файлов и других корректировок
+     */
     define("FIELD_UPLOADABLE", "uploadable");
+    define("FIELD_MYSQL_DATE", "mysql_date");
 
     // сообщения об ошибках
     define("ERROR_FIELD_REQUIRED", "Поле \"%name%\" обязательно для заполнения");

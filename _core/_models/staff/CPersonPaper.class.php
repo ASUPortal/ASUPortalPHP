@@ -23,6 +23,26 @@ class CPersonPaper extends CActiveModel{
             'file_attach' => array(
                 'type'  => FIELD_UPLOADABLE,
                 'upload_dir' => CORE_CWD.CORE_DS."library".CORE_DS."anketa".CORE_DS."kandid".CORE_DS
+            ),
+            'date_begin' => array(
+                'type' => FIELD_MYSQL_DATE,
+                'format' => "d.m.Y"
+            ),
+            'date_out' => array(
+                'type' => FIELD_MYSQL_DATE,
+                'format' => "d.m.Y"
+            ),
+            'date_end' => array(
+                'type' => FIELD_MYSQL_DATE,
+                'format' => "d.m.Y"
+            ),
+            'dis_sov_date' => array(
+                'type' => FIELD_MYSQL_DATE,
+                'format' => "d.m.Y"
+            ),
+            'vak_date' => array(
+                'type' => FIELD_MYSQL_DATE,
+                'format' => "d.m.Y"
             )
         );
     }
