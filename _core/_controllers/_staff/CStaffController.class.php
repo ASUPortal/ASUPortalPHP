@@ -63,6 +63,62 @@ class CStaffController extends CBaseController{
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("form", $form);
+        /**
+         * Собираем меню
+         */
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "index.php?action=index",
+                "icon" => "actions/edit-undo.png"
+            ),
+            array(
+                "title" => "Добавить ребенка",
+                "link" => "children.php?action=add&parent_id=".$person->getId(),
+                "icon" => "actions/contact-new.png"
+            ),
+            array(
+                "title" => "Добавить образование",
+                "link" => "#",
+                "icon" => "actions/address-book-new.png",
+                "child" => array(
+                    array(
+                        "title" => "Добавить высшее образование",
+                        "link" => "diploms.php?action=add&id=".$person->getId(),
+                        "icon" => "actions/address-book-new.png"
+                    ),
+                    array(
+                        "title" => "Добавить курсы повышения квалификации",
+                        "link" => "courses.php?action=add&id=".$person->getId(),
+                        "icon" => "actions/address-book-new.png"
+                    ),
+                    array(
+                        "title" => "Добавить кандидатскую диссертацию",
+                        "link" => "papers.php?action=add&id=".$person->getId()."&type=1",
+                        "icon" => "actions/address-book-new.png"
+                    ),
+                    array(
+                        "title" => "Добавить докторскую диссертацию",
+                        "link" => "papers.php?action=add&id=".$person->getId()."&type=2",
+                        "icon" => "actions/address-book-new.png"
+                    )
+                )
+            ),
+            array(
+                "title" => "Добавить приказ ГЭК",
+                "link" => "orderssab.php?action=add&id=".$person->getId(),
+                "icon" => "actions/bookmark-new.png"
+            ),
+            array(
+                "title" => "Печать по шаблону",
+                "link" => "#",
+                "icon" => "devices/printer.png",
+                "template" => "formset_person"
+            )
+        ));
+        /**
+         * Отображение
+         */
         $this->renderView("_staff/person/edit.tpl");
     }
     public function actionSave() {

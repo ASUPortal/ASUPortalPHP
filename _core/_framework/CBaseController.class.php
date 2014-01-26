@@ -24,6 +24,7 @@ class CBaseController {
     private $_jsIEOnly = null;
     private $_cssAbs = null;
     protected $_useDojo = false;
+    private $_actionsMenuContent = array();
 
     /**
      * Конструктор базового класса. Определяет, какой метод
@@ -317,7 +318,8 @@ class CBaseController {
             foreach ($this->getData()->getItems() as $key=>$value) {
                 $this->getSmarty()->assign($key, $value);
             }
-            // $this->preventJsAndCssCache();
+            $this->preventJsAndCssCache();
+            $this->getSmarty()->assign("_actions_menu", $this->getActionsMenuContent());
             $this->getSmarty()->assign("css", $this->getCSSIncludes()->getItems());
             $this->getSmarty()->assign("js", $this->getJSIncludes()->getItems());
             $this->getSmarty()->assign("jsIe", $this->getJSIEOnly()->getItems());
@@ -335,6 +337,44 @@ class CBaseController {
             require(VIEWS_DIR.$view);
             exit;
         }
+    }
+
+    /**
+     * Содержимое меню с действиями
+     *
+     * @return array
+     */
+    protected function getActionsMenuContent() {
+        return $this->_actionsMenuContent;
+    }
+
+    /**
+     * Добавить элемент в меню действий (правая колонка)
+     *
+     * @param array $item
+     */
+    protected function addActionsMenuItem(array $item) {
+        $isArray = false;
+        foreach ($item as $i) {
+            if (is_array($i)) {
+                $isArray = true;
+            }
+        }
+        if ($isArray) {
+            foreach ($item as $i) {
+                $this->_actionsMenuContent[] = $i;
+            }
+        } else {
+            $this->_actionsMenuContent[] = $item;
+        }
+    }
+    /**
+     * Текущее действие
+     *
+     * @return null|string
+     */
+    protected function getAction() {
+        return mb_strtolower($this->_action);
     }
     /**
      * Отобразить выбранное представление.

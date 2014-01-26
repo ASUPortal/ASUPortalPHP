@@ -204,3 +204,17 @@ p.error {
     display: block;
     position: relative;
 }
+
+.menu_item_container {
+    text-align: center;
+    padding-bottom: 5px;
+}
+
+.menu_children_container {
+    display: none;
+    padding-bottom: 5px;
+}
+
+.menu_child_container img {
+    padding-right: 5px;
+}

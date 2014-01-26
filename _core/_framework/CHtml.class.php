@@ -1298,4 +1298,17 @@ class CHtml {
             <?php
         }
     }
+    /**
+     * Показать правое меню действий
+     *
+     * @param array $items
+     */
+    public static function displayActionsMenu(array $items) {
+        /**
+         * Делегируем обязанности другому классу, так как
+         * этот уже достаточно вырос
+         */
+        $renderer = new CActionsMenuRenderer();
+        $renderer->render($items);
+    }
 }
