@@ -18,14 +18,41 @@ class CPaginator {
     public function getRecordSet() {
         return $this->_recordSet;
     }
+
+    /**
+     * Количество записей на странице для текущего набора записей
+     *
+     * @return int
+     */
+    public function getCurrentPageSize() {
+        return $this->getRecordSet()->getPageSize();
+    }
+
+    /**
+     * Доступные размеры страниц
+     *
+     * @return array
+     */
+    public function getPageSizes() {
+        return array(
+            20 => 20,
+            50 => 50,
+            100 => 100,
+            PAGINATION_ALL => "Все"
+        );
+    }
     public function getPagesCount() {
         if (is_null($this->_pagesCount)) {
-            $records = $this->getRecordSet()->getItemsCount();
-            $pageSize = $this->getRecordSet()->getPageSize();
-            if (($records / $pageSize) == ceil($records / $pageSize)) {
-                $this->_pagesCount =  ($records / $pageSize);
+            if ($this->getCurrentPageSize() == PAGINATION_ALL) {
+                $this->_pagesCount = 1;
             } else {
-                $this->_pagesCount =  ceil($records / $pageSize);
+                $records = $this->getRecordSet()->getItemsCount();
+                $pageSize = $this->getRecordSet()->getPageSize();
+                if (($records / $pageSize) == ceil($records / $pageSize)) {
+                    $this->_pagesCount =  ($records / $pageSize);
+                } else {
+                    $this->_pagesCount =  ceil($records / $pageSize);
+                }
             }
         }
         return $this->_pagesCount;

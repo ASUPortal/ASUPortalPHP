@@ -91,10 +91,13 @@ class CRecordSet {
      */
     public function getPageSize() {
         if (is_null($this->_pageSize)) {
-            $this->_pageSize = 20;
+            $this->_pageSize = PAGINATION_DEFAULT;
         }
         if (CRequest::getInt("page_size") !== 0) {
             $this->_pageSize = CRequest::getInt("page_size");
+        }
+        if (CRequest::getString("page_size") == PAGINATION_ALL) {
+            $this->_pageSize = PAGINATION_ALL;
         }
         return $this->_pageSize;
     }
@@ -187,7 +190,6 @@ class CRecordSet {
             return $res;
         } else {
             $res = new CArrayList();
-            $start = ($this->getCurrentPage() - 1) * $this->getPageSize();
             $query = $this->getQuery();
             /**
              * Использование глобального поиск и глобальных сортировок
@@ -214,7 +216,10 @@ class CRecordSet {
             if ($this->_isAclControlledSet) {
                 $this->updateQueryForACLLimitations();
             }
-            $query->limit($start, $this->getPageSize());
+            if ($this->getPageSize() != PAGINATION_ALL) {
+                $start = ($this->getCurrentPage() - 1) * $this->getPageSize();
+                $query->limit($start, $this->getPageSize());
+            }
             $items = $query->execute();
             foreach ($items->getItems() as $item) {
                 $ar = new CActiveRecord($item);

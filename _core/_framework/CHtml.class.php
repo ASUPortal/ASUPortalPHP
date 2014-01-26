@@ -845,9 +845,27 @@ class CHtml {
                 echo '<li><a href="'.$link.'">'.$page.'</a></li>';
             }
         }
-        echo '</ul></div>';
+        echo '</ul>';
+        echo '</div>';
+
         echo '<span>Текущая страница: '.$paginator->getCurrentPageNumber().' </span>';
-        echo '<span>Всего: '.$paginator->getPagesCount().'</span>';
+        echo '<span>Всего: '.$paginator->getPagesCount().' </span>';
+        echo '<span>Отображать: ';
+        $sizes = $paginator->getPageSizes();
+        echo '<div class="btn-group">';
+        echo '<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">';
+        echo $sizes[$paginator->getCurrentPageSize()];
+        echo '<span class="caret"></span>';
+        echo '</a>';
+        echo '<ul class="dropdown-menu">';
+        foreach ($sizes as $key=>$name) {
+            echo '<li>';
+            echo '<a href="'.$action.'&page_size='.$key.'">'.$sizes[$key].'</a>';
+            echo '</li>';
+        }
+        echo '</ul>';
+        echo '</div>';
+        echo '<span>';
     }
     public static function helpForCurrentPage() {
         if (!is_null(CHelpManager::getHelpForCurrentPage())) {

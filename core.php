@@ -256,6 +256,11 @@
     define("TABLE_IND_PLAN_PLANNED", "hours_kind");
     define("TABLE_ACCESS_LEVELS", "task_rights");
     /**
+     * Константы пагинатора
+     */
+    define("PAGINATION_ALL", "all");
+    define("PAGINATION_DEFAULT", 20);
+    /**
      * Уровни доступа константами
      */
     define("ACCESS_LEVEL_NO_ACCESS", 0);

@@ -11,7 +11,7 @@
         <tr>
             <th></th>
             <th>#</th>
-            <th><i class="icon-camera"></i></th>
+            <th width="100"><i class="icon-camera"></i></th>
             <th>{CHtml::tableOrder("fio", $persons->getFirstItem())}</th>
             <th>{CHtml::tableOrder("types", $persons->getFirstItem())}</th>
         </tr>
