@@ -18,3 +18,4 @@ _modules/docs_tpl/*
 tmp/smarty/*
 tmp/timthumb/*
 news/attachement/*
+images/lects/*

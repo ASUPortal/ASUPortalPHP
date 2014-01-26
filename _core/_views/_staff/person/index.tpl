@@ -21,9 +21,7 @@
                 <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить сотрудника {$person->getName()}')) { location.href='?action=delete&id={$person->getId()}'; }; return false;"></a></td>
                 <td>{counter}</td>
                 <td>
-                    {if $person->isPhotoExists()}
-                        <img src="{$web_root}_modules/_thumbnails/?src={$web_root}images/lects/{$person->photo}&w=100" />
-                    {/if}
+                    {CHtml::activeAttachPreview("photo", $person, 100)}
                 </td>
                 <td><a href="?action=edit&id={$person->getId()}">{$person->getName()}</a></td>
                 <td>

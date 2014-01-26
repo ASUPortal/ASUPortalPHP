@@ -192,6 +192,14 @@ class CPerson extends CActiveModel{
             "order_seb_id" => "Приказ по ГАК"
         );
     }
+    public function fieldsProperty() {
+        return array(
+            'photo' => array(
+                'type'  => FIELD_UPLOADABLE,
+                'upload_dir' => CORE_CWD.CORE_DS."images".CORE_DS."lects".CORE_DS
+            )
+        );
+    }
     /**
      * Есть ли приказ, который в настоящее время действует
      *
@@ -662,13 +670,5 @@ class CPerson extends CActiveModel{
             $result[$paper->getId()] = $paper->name;
         }
         return $result;
-    }
-    public function isPhotoExists() {
-        if ($this->photo != "") {
-            if (file_exists(CORE_CWD.CORE_DS."images".CORE_DS."lects".CORE_DS.$this->photo)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

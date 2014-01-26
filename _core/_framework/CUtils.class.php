@@ -375,7 +375,7 @@ class CUtils {
      */
     public static function isImage($filepath) {
         // не придумал ничего лучше и проще
-        return (getimagesize($filepath) !== false);
+        return (@getimagesize($filepath) !== false);
     }
     /**
      * Проверяем, является ли текущий пользователь ботом

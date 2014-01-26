@@ -55,6 +55,14 @@
 </div>
 
 <div class="control-group">
+    {CHtml::activeLabel("person[photo]", $form)}
+    <div class="controls">
+        {CHtml::activeUpload("person[photo]", $form)}
+        {CHtml::error("person[photo]", $form)}
+    </div>
+</div>
+
+<div class="control-group">
     {CHtml::activeLabel("person[pol]", $form)}
     <div class="controls">
     {CHtml::activeDropDownList("person[pol]", $form, CTaxonomyManager::getLegacyTaxonomy("pol")->getTermsList())}

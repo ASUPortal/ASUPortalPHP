@@ -96,21 +96,23 @@
             jQuery(this._placeholder).empty();
             jQuery(this._loadingPlaceholder).empty();
             for (var i = 0; i < this._values.length; i++) {
-                jQuery.ajax({
-                    url: web_root + "_modules/_upload/",
-                    cache: false,
-                    type: "post",
-                    dataType: "json",
-                    context: this,
-                    data: {
-                        action: "getInfo",
-                        _storage: this._storage,
-                        _file: this._values[i],
-                        _size: this._imageSize,
-                        _index: i
-                    },
-                    success: this._onItemLoaded
-                });
+                if (this._values[i] != "") {
+                    jQuery.ajax({
+                        url: web_root + "_modules/_upload/",
+                        cache: false,
+                        type: "post",
+                        dataType: "json",
+                        context: this,
+                        data: {
+                            action: "getInfo",
+                            _storage: this._storage,
+                            _file: this._values[i],
+                            _size: this._imageSize,
+                            _index: i
+                        },
+                        success: this._onItemLoaded
+                    });
+                }
             }
             // удаляем старые поля ввода
             var itemName = jQuery(this).attr("asu-value-name");
@@ -118,9 +120,10 @@
             jQuery.each(items, function(key, item){
                 jQuery(item).remove();
             });
-            // если нечего показывать, то ничего не показываем
+            // если нечего показывать, то добавляем пустое значение
+            // (чтобы старое перетерлось)
             if (this._values.length == 0) {
-                return true;
+                this._values[this._values.length] = "";
             }
             // создаем новые
             var itemHolder = this;

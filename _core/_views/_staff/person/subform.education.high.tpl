@@ -6,6 +6,7 @@
         <th>Год окончания</th>
         <th>Специальность в дипломе</th>
         <th>Доп. информация</th>
+        <th width="32"><i class="icon-camera"></i></th>
     </tr>
     {foreach $form->person->diploms->getItems() as $diplom}
         <tr>
@@ -15,6 +16,9 @@
             <td>{$diplom->god_okonch}</td>
             <td>{$diplom->spec_name}</td>
             <td>{$diplom->comment}</td>
+            <td>
+                {CHtml::activeAttachPreview("file_attach", $diplom, true)}
+            </td>
         </tr>
     {/foreach}
 </table>

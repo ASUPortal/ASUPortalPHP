@@ -10,7 +10,7 @@
     });
 </script>
 
-<form action="index.php" method="post" class="form-horizontal">
+<form action="index.php" method="post" class="form-horizontal" enctype="multipart/form-data">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("person[id]", $form)}
 

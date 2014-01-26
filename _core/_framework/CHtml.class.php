@@ -921,7 +921,7 @@ class CHtml {
             echo '</div>';
         }
     }
-    public static function activeUpload($name, CActiveModel $model, $isMultiple = false, $imageWidth = 200) {
+    public static function activeUpload($name, CModel $model, $isMultiple = false, $imageWidth = 200) {
         $submodelName = "";
         if (strpos($name, "[") !== false) {
             $submodelName = substr($name, 0, strpos($name, "["));
@@ -1224,6 +1224,56 @@ class CHtml {
         }
         if ($fieldRequired) {
             self::requiredStar();
+        }
+    }
+    /**
+     * Предпросмотр вложений со ссылками на оригиналы
+     *
+     * @param $name
+     * @param CModel $model
+     * @param int $size
+     * @param bool $addLinkToOriginal
+     */
+    public static function activeAttachPreview($name, CModel $model, $addLinkToOriginal = false, $size = 100) {
+        $attributes = $model->fieldsProperty();
+        $display = false;
+        if (array_key_exists($name, $attributes)) {
+            $field = $attributes[$name];
+            if ($field["type"] == FIELD_UPLOADABLE) {
+                $storage = $field["upload_dir"];
+                $file = $model->$name;
+                if ($file !== "") {
+                    if (file_exists($storage.$file)) {
+                        $display = true;
+                    }
+                }
+            }
+        }
+        if ($display) {
+            $link = WEB_ROOT.ROOT_FOLDER.CUtils::strRight($storage, CORE_CWD).$file;
+            $icon = "";
+            if (CUtils::isImage($storage.$file)) {
+                // показываем превью изображения
+                $icon = WEB_ROOT.ROOT_FOLDER."_modules/_thumbnails/?src=".$link."&w=".$size;
+            } else {
+                // показываем значок типа документа
+                $finfo = new finfo(FILEINFO_MIME);
+                $filetype = $finfo->file($storage.$file);
+                $filetype = CUtils::strLeft($filetype, ";");
+                $filetype = str_replace("/", "-", $filetype);
+                if (file_exists(CORE_CWD.CORE_DS."images".CORE_DS.ICON_THEME.CORE_DS."64x64".CORE_DS."mimetypes".CORE_DS.$filetype.".png")) {
+                    $icon = WEB_ROOT.ROOT_FOLDER."images/".ICON_THEME."/64x64/mimetypes/".$filetype.".png";
+                } else {
+                    $icon = WEB_ROOT.ROOT_FOLDER."images/".ICON_THEME."/64x64/mimetypes/unknown.png";
+                }
+            }
+            if ($addLinkToOriginal) {
+                echo '<a href="'.$link.'" target="_blank">';
+            }
+            echo '<img src="'.$icon.'" />';
+            if ($addLinkToOriginal) {
+                echo '</a>';
+            }
         }
     }
 }
