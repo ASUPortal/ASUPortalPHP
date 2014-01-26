@@ -112,6 +112,27 @@
                     success: this._onItemLoaded
                 });
             }
+            // удаляем старые поля ввода
+            var itemName = jQuery(this).attr("asu-value-name");
+            var items = jQuery("[asu-type=value]", this);
+            jQuery.each(items, function(key, item){
+                jQuery(item).remove();
+            });
+            // если нечего показывать, то ничего не показываем
+            if (this._values.length == 0) {
+                return true;
+            }
+            // создаем новые
+            var itemHolder = this;
+            jQuery.each(this._values, function(index, value){
+                var input = jQuery("<input/>", {
+                    "type": "hidden",
+                    "name": itemName,
+                    "value": value
+                });
+                jQuery(input).attr("asu-type", "value");
+                jQuery(input).appendTo(itemHolder);
+            });
         };
         /**
          * Обработка выбора файла

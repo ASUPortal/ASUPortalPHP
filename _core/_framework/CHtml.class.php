@@ -921,7 +921,16 @@ class CHtml {
             }
         }
         ?>
-        <div class="activeUpload" asu-storage="<?php echo $uploadDir; ?>" asu-multiple="<?php echo ($isMultiple) ? "true":"false" ;?>" asu-size="<?php echo $imageWidth; ?>">
+        <div class="activeUpload" asu-storage="<?php echo $uploadDir; ?>" asu-multiple="<?php echo ($isMultiple) ? "true":"false" ;?>" asu-size="<?php echo $imageWidth; ?>" asu-value-name="<?php echo $field; ?>">
+
+            <?php if (is_object($data)) : ?>
+                <?php foreach ($data->getItems() as $val) : ?>
+                    <input type="hidden" name="<?php echo $field; ?>" value="<?php echo $val->getId(); ?>" asu-type="value">
+                <?php endforeach; ?>
+            <?php else: ?>
+                <input type="hidden" name="<?php echo $field; ?>" value="<?php echo $data; ?>" asu-type="value">
+            <?php endif;?>
+
             <table style="margin-left: 0px; " border="0" <?php echo $inline; ?>>
                 <tbody>
                 <tr>

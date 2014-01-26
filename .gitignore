@@ -17,3 +17,4 @@ images/news/*
 _modules/docs_tpl/*
 tmp/smarty/*
 tmp/timthumb/*
+news/attachement/*
