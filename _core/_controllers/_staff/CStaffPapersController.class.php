@@ -24,11 +24,33 @@ class CStaffPapersController extends CBaseController{
         }
         $object->kadri_id = CRequest::getInt("id");
         $this->setData("object", $object);
+        /**
+         * Генерация меню
+         */
+        $this->addActionsMenuItem(array(
+            "title" => "Назад",
+            "link" => "index.php?action=edit&id=".$object->kadri_id,
+            "icon" => "actions/edit-undo.png"
+        ));
+        /**
+         * Отображение представления
+         */
         $this->renderView("_staff/paper/add.tpl");
     }
     public function actionEdit() {
         $object = CStaffManager::getPersonPaper(CRequest::getInt("id"));
         $this->setData("object", $object);
+        /**
+         * Генерация меню
+         */
+        $this->addActionsMenuItem(array(
+            "title" => "Назад",
+            "link" => "index.php?action=edit&id=".$object->kadri_id,
+            "icon" => "actions/edit-undo.png"
+        ));
+        /**
+         * Отображение представления
+         */
         $this->renderView("_staff/paper/edit.tpl");
     }
     public function actionDelete() {

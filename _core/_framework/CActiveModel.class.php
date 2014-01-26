@@ -304,13 +304,15 @@ class CActiveModel extends CModel{
                 if (array_key_exists("mysql_format", $property)) {
                     $format = $property["mysql_format"];
                 }
-                if ($array[$field] !== "") {
-                    if (strtotime($array[$field]) !== false) {
-                        $value = date($format, strtotime($array[$field]));
-                        $array[$field] = $value;
+                if (array_key_exists($field, $array)) {
+                    if ($array[$field] !== "") {
+                        if (strtotime($array[$field]) !== false) {
+                            $value = date($format, strtotime($array[$field]));
+                            $array[$field] = $value;
+                        }
+                    } else {
+                        $array[$field] = date($format, 0);
                     }
-                } else {
-                    $array[$field] = date($format, 0);
                 }
             }
         }
