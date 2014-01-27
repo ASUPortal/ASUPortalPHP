@@ -20,7 +20,7 @@
                 <td>{$field["name"]}</td>
                 {CHtml::activeHiddenField("name", $form, $field["name"], $field["name"])}
                 <td>{CHtml::activeTextField("translation", $form, "", "span5", "", $field["name"])}</td>
-                <td>{CHtml::activeDropDownList("validator", $form, CCoreObjectsManager::getCoreValidatorsList(), "", "span5", "", $field["name"])}</td>
+                <td>{CHtml::activeDropDownList("validator", $form, CCoreObjectsManager::getCoreValidatorsList(1), "", "span5", "", $field["name"])}</td>
             </tr>
         {/foreach}
     </table>
