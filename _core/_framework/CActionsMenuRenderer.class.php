@@ -61,10 +61,7 @@ class CActionsMenuRenderer {
      */
     private function renderChildItem(array $item) {
         echo '<div class="menu_child_container">';
-        echo '<a href="'.$item["link"].'">';
-        echo '<img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'">';
-        echo $item['title'];
-        echo '</a>';
+        $this->renderItemContent($item);
         echo '</div>';
     }
     /**
@@ -72,7 +69,7 @@ class CActionsMenuRenderer {
      *
      * @param array $item
      */
-    private function renderPrintMenuItem(array $item) {
+    private function renderMenuItemPrint(array $item) {
         // кнопка печати по шаблону
         echo '<div class="menu_item_container">';
         echo '<a href="#print_'.self::$childContainers.'" data-toggle="modal">';
@@ -92,6 +89,61 @@ class CActionsMenuRenderer {
         echo '</div>';
         self::$childContainers++;
     }
+    private function renderMenuItemDefault(array $item) {
+        echo '<a href="'.$item["link"].'">';
+        echo '<img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'">';
+        echo $item['title'];
+        echo '</a>';
+    }
+    private function renderMenuItemAjaxAction(array $item) {
+        echo '<a href="#" id="ajaxMenuAction_'.self::$childContainers.'">';
+        echo '<img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'">';
+        echo $item['title'];
+        echo '</a>';
+
+        ?>
+        <script>
+            jQuery(document).ready(function(){
+                jQuery("#ajaxMenuAction_<?php echo self::$childContainers; ?>").on("click", function(){
+                    jQuery("<?php echo $item["form"]; ?>").ajaxSubmit({
+                        url: "<?php echo $item['link']; ?>",
+                        type: "post",
+                        data: {
+                            action: "<?php echo $item['action']; ?>"
+                        },
+                        beforeSubmit: function(){
+                            // показываем асушную загружалку
+                            var overlay = jQuery("#overlay");
+                            if (overlay.length > 0) {
+                                jQuery(overlay).css("display", "block");
+                            }
+                        },
+                        success: function(data){
+                            // открываем текущую страницу заново
+                            if (data.length == 0) {
+                                window.location.reload();
+                                return false; 
+                            }
+                            // если есть сообщение со страницы, то показываем его
+                            alert(data);
+                        }
+                    });
+                    return false;
+                });
+            });
+        </script>
+        <?php
+        self::$childContainers++;
+    }
+    private function renderItemContent(array $item) {
+        if (array_key_exists("template", $item)) {
+            $this->renderMenuItemPrint($item);
+        } elseif (array_key_exists("form", $item)) {
+            $this->renderMenuItemAjaxAction($item);
+        } else {
+            $this->renderMenuItemDefault($item);
+        }
+    }
 
     /**
      * Отображение одного пункта меню
@@ -99,19 +151,12 @@ class CActionsMenuRenderer {
      * @param array $item
      */
     private function renderItem(array $item) {
-        if (array_key_exists("template", $item)) {
-            $this->renderPrintMenuItem($item);
+        if (array_key_exists("child", $item)) {
+            echo '<div class="menu_item_container popoverable" asu-popover="'.self::$childContainers.'" asu-title="'.$item['title'].'">';
         } else {
-            if (array_key_exists("child", $item)) {
-                echo '<div class="menu_item_container popoverable" asu-popover="'.self::$childContainers.'" asu-title="'.$item['title'].'">';
-            } else {
-                echo '<div class="menu_item_container">';
-            }
-            echo '<a href="'.$item["link"].'">';
-            echo '<img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'">';
-            echo $item['title'];
-            echo '</a>';
-            echo '</div>';
+            echo '<div class="menu_item_container">';
         }
+        $this->renderItemContent($item);
+        echo '</div>';
     }
 }

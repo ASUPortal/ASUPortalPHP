@@ -46,6 +46,20 @@ class CStudentController extends CBaseController {
                 "title" => "Импорт",
                 "link" => "?action=import",
                 "icon" => "actions/document-save.png"
+            ),
+            array(
+                "title" => "Групповые операции",
+                "link" => "#",
+                "icon" => "apps/utilities-terminal.png",
+                "child" => array(
+                    array(
+                        "title" => "Перенос в другую группу",
+                        "icon" => "actions/edit-redo.png",
+                        "form" => "#MainView",
+                        "link" => "index.php",
+                        "action" => "changeGroup"
+                    )
+                )
             )
         ));
         $this->setData("students", $students);

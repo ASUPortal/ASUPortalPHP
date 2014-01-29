@@ -6,7 +6,7 @@
     {CHtml::helpForCurrentPage()}
     {include file="_core.search.tpl"}
 
-    <form action="index.php" method="post">
+    <form action="index.php" method="post" id="MainView">
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th></th>
@@ -24,7 +24,7 @@
         {foreach $students->getItems() as $student}
         <tr>
             <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить стедунта {$student->fio}')) { location.href='?action=delete&id={$student->id}'; }; return false;"></a></td>
-            <td>{CHtml::activeViewGroupSelect("id", $students->getFirstItem())}</td>
+            <td>{CHtml::activeViewGroupSelect("id", $student)}</td>
             <td>{counter}</td>
             <td><a href="?action=edit&id={$student->getId()}">{$student->getName()}</a></td>
             <td>{$student->stud_num}</td>

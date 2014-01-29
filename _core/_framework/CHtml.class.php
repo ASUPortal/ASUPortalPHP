@@ -16,6 +16,8 @@ class CHtml {
     private static $_catalogLookupInit = false;
     private static $_uploadWidgetInit = false;
     private static $_clearboxInit = false;
+    private static $_viewGroupSelectInit = false;
+    private static $_widgetsIndex = 0;
 
     private static function getFielsizeClass() {
         $result = "span5";
@@ -1307,5 +1309,37 @@ class CHtml {
          */
         $renderer = new CActionsMenuRenderer();
         $renderer->render($items);
+    }
+    public static function activeViewGroupSelect($name, CModel $model, $isHeader = false) {
+        if ($isHeader) {
+            // это в шапке таблицы, тут нужно показать групповую скрывалку/показывалку
+            if (!self::$_viewGroupSelectInit) {
+                self::$_viewGroupSelectInit = true;
+                ?>
+                <script>
+                    jQuery(document).ready(function(){
+                        jQuery("._viewGroupSelector").on("change", function(){
+                            var index = jQuery(this).attr("asu-index");
+                            var items = jQuery("._viewGroupSelectorItem,[asu-index=" + index + "]");
+                            if (jQuery(this).is(":checked")) {
+                                for (var i = 0; i < items.length; i++) {
+                                    jQuery(items[i]).attr("checked", true);
+                                }
+                            } else {
+                                for (var i = 0; i < items.length; i++) {
+                                    jQuery(items[i]).attr("checked", false);
+                                }
+                            }
+                        });
+                    });
+                </script>
+                <?php
+            }
+            self::$_widgetsIndex++;
+            echo '<input type="checkbox" value="1" class="_viewGroupSelector" asu-index="'.(self::$_widgetsIndex).'" />';
+        } else {
+            $data = $model->$name;
+            echo '<input type="checkbox" name="selectedInView[]" value="'.$data.'" class="_viewGroupSelectorItem" asu-index="'.(self::$_widgetsIndex).'" />';
+        }
     }
 }

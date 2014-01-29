@@ -66,7 +66,7 @@
     }
 
     $.fn.asuAjax = function(){
-        var ajax = new asuAjax(this[0]);
+        var ajax = asuAjax(this[0]);
     }
 }(jQuery));
 /**
