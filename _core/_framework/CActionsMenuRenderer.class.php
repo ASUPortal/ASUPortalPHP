@@ -105,29 +105,18 @@ class CActionsMenuRenderer {
         <script>
             jQuery(document).ready(function(){
                 jQuery("#ajaxMenuAction_<?php echo self::$childContainers; ?>").on("click", function(){
-                    jQuery("<?php echo $item["form"]; ?>").ajaxSubmit({
-                        url: "<?php echo $item['link']; ?>",
-                        type: "post",
-                        data: {
-                            action: "<?php echo $item['action']; ?>"
-                        },
-                        beforeSubmit: function(){
-                            // показываем асушную загружалку
-                            var overlay = jQuery("#overlay");
-                            if (overlay.length > 0) {
-                                jQuery(overlay).css("display", "block");
-                            }
-                        },
-                        success: function(data){
-                            // открываем текущую страницу заново
-                            if (data.length == 0) {
-                                window.location.reload();
-                                return false; 
-                            }
-                            // если есть сообщение со страницы, то показываем его
-                            alert(data);
-                        }
-                    });
+                    var form = jQuery("<?php echo $item["form"]; ?>");
+                    jQuery(form).attr("action", "<?php echo $item['link']; ?>");
+                    var action = jQuery("[name=action]", form);
+                    if (action.length == 0) {
+                        var input = jQuery("<input />", {
+                            type: "hidden",
+                            name: "action",
+                            value: "<?php echo $item["action"]; ?>"
+                        });
+                        jQuery(form).append(input);
+                    }
+                    jQuery(form).submit();
                     return false;
                 });
             });

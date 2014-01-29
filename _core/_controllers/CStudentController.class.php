@@ -376,4 +376,35 @@ class CStudentController extends CBaseController {
         }
         echo $res;
     }
+    public function actionChangeGroup() {
+        $items = CRequest::getArray("selectedInView");
+        $form = new CStudentChangeGroupForm();
+        $form->students = $items;
+        $this->setData("form", $form);
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "?action=index",
+                "icon" => "actions/edit-undo.png"
+            )
+        ));
+        $this->renderView("_students/changeGroup.tpl");
+    }
+    public function actionChangeGroupProcess() {
+        $form = new CStudentChangeGroupForm();
+        $form->setAttributes(CRequest::getArray(CStudentChangeGroupForm::getClassName()));
+        if ($form->validate()) {
+            
+            return false;
+        }
+        $this->setData("form", $form);
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "?action=index",
+                "icon" => "actions/edit-undo.png"
+            )
+        ));
+        $this->renderView("_students/changeGroup.tpl");
+    }
 }

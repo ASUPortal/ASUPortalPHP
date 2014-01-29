@@ -182,7 +182,9 @@ class CModel {
                 $publicVars = get_object_vars($this);
                 foreach ($publicVars as $key=>$value) {
                     if (is_object($value)) {
-                        $modelsToValidate[] = $value;
+                        if (is_a($value, "CModel")) {
+                            $modelsToValidate[] = $value;
+                        }
                     }
                 }
             }

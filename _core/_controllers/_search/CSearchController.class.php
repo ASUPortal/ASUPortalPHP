@@ -192,6 +192,16 @@ class CSearchController extends CBaseController{
             foreach ($query->execute()->getItems() as $item) {
                 $result[$item["id"]] = $item["name"];
             }
+        } elseif ($catalog == "studentgroup") {
+            // выбор студенческих групп
+            $query = new CQuery();
+            $query->select("distinct(gr.id) as id, gr.name as name")
+                ->from(TABLE_STUDENT_GROUPS." as gr")
+                ->condition("gr.name like '%".$lookup."%'")
+                ->limit(0, 10);
+            foreach ($query->execute()->getItems() as $item) {
+                $result[$item["id"]] = $item["name"];
+            }
         } elseif (!is_null(CTaxonomyManager::getLegacyTaxonomy($catalog))) {
             // унаследованная таксономия
             $taxonomy = CTaxonomyManager::getLegacyTaxonomy($catalog);
@@ -226,6 +236,12 @@ class CSearchController extends CBaseController{
             if (!is_null($student)) {
                 $result[$student->getId()] = $student->getName();
             }
+        } elseif ($catalog == "studentgroup") {
+            // группы студентов
+            $group = CStaffManager::getStudentGroup($id);
+            if (!is_null($group)) {
+                $result[$group->getId()] = $group->getName();
+            }
         } elseif (!is_null(CTaxonomyManager::getLegacyTaxonomy($catalog))) {
             // унаследованная таксономия
             $taxonomy = CTaxonomyManager::getLegacyTaxonomy($catalog);
@@ -251,6 +267,11 @@ class CSearchController extends CBaseController{
             // выбор студентов
             foreach (CStaffManager::getAllStudents()->getItems() as $student) {
                 $result[$student->getId()] = $student->getName();
+            }
+        } elseif ($catalog == "studentgroup") {
+            // выбор студенческих групп
+            foreach (CStaffManager::getAllStudentGroups()->getItems() as $group) {
+                $result[$group->getId()] = $group->getName();
             }
         } elseif (!is_null(CTaxonomyManager::getLegacyTaxonomy($catalog))) {
             // унаследованная таксономия

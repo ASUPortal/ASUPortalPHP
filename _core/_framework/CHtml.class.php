@@ -193,11 +193,17 @@ class CHtml {
      * @param $value
      */
     public static function hiddenField($name, $value, $id = "") {
-        echo '<input type="hidden" name="'.$name.'" ';
-        if ($id != "") {
-            echo 'id="'.$id.'" ';
+        if (is_array($value)) {
+            foreach ($value as $val) {
+                echo '<input type="hidden" name="'.$name.'[]" value="'.$val.'" />';
+            }
+        } else {
+            echo '<input type="hidden" name="'.$name.'" ';
+            if ($id != "") {
+                echo 'id="'.$id.'" ';
+            }
+            echo 'value="'.$value.'">';
         }
-        echo 'value="'.$value.'">';
     }
     /**
      * Скрытое поле с автозаполнением значения из модели
