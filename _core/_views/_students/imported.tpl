@@ -26,5 +26,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_students/imported.right.tpl"}
+{include file="_students/common.right.tpl"}
 {/block}

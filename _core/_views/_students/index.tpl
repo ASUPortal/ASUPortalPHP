@@ -6,9 +6,11 @@
     {CHtml::helpForCurrentPage()}
     {include file="_core.search.tpl"}
 
+    <form action="index.php" method="post">
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th></th>
+            <th>{CHtml::activeViewGroupSelect("id", $students->getFirstItem(), true)}</th>
             <th>#</th>
             <th>{CHtml::tableOrder("fio", $students->getFirstItem())}</th>
             <th>{CHtml::tableOrder("stud_num", $students->getFirstItem())}</th>
@@ -22,6 +24,7 @@
         {foreach $students->getItems() as $student}
         <tr>
             <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить стедунта {$student->fio}')) { location.href='?action=delete&id={$student->id}'; }; return false;"></a></td>
+            <td>{CHtml::activeViewGroupSelect("id", $students->getFirstItem())}</td>
             <td>{counter}</td>
             <td><a href="?action=edit&id={$student->getId()}">{$student->getName()}</a></td>
             <td>{$student->stud_num}</td>
@@ -41,10 +44,11 @@
         </tr>
         {/foreach}
     </table>
+    </form>
 
     {CHtml::paginator($paginator, "?action=index")}
 {/block}
 
 {block name="asu_right"}
-{include file="_students/index.right.tpl"}
+{include file="_students/common.right.tpl"}
 {/block}

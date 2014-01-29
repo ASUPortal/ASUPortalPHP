@@ -9,5 +9,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_students/add.right.tpl"}
+{include file="_students/common.right.tpl"}
 {/block}

@@ -31,6 +31,23 @@ class CStudentController extends CBaseController {
             $student = new CStudent($item);
             $students->add($student->getId(), $student);
         }
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Добавить студента",
+                "link" => "?action=add",
+                "icon" => "actions/list-add.png"
+            ),
+            array(
+                "title" => "Дипломы",
+                "link" => WEB_ROOT."diploms_view.php",
+                "icon" => "devices/network-wired.png"
+            ),
+            array(
+                "title" => "Импорт",
+                "link" => "?action=import",
+                "icon" => "actions/document-save.png"
+            )
+        ));
         $this->setData("students", $students);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_students/index.tpl");
@@ -50,6 +67,13 @@ class CStudentController extends CBaseController {
         );
         $this->setData("forms", $forms);
         $this->setData("groups", $groups);
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "?action=index",
+                "icon" => "actions/edit-undo.png"
+            )
+        ));
         $this->setData("student", $student);
         $this->renderView("_students/add.tpl");
     }
@@ -69,6 +93,24 @@ class CStudentController extends CBaseController {
         $this->setData("forms", $forms);
         $this->setData("groups", $groups);
         $this->setData("student", $student);
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "?action=index",
+                "icon" => "actions/edit-undo.png"
+            ),
+            array(
+                "title" => "Успеваемость",
+                "link" => WEB_ROOT."_modules/_gradebook/?action=index&filter=student:".$student->getId(),
+                "icon" => "actions/address-book-new.png"
+            ),
+            array(
+                "title" => "Печать по шаблону",
+                "link" => "#",
+                "icon" => "devices/printer.png",
+                "template" => "formset_students"
+            )
+        ));
         $this->renderView("_students/edit.tpl");
     }
     public function actionSave() {
@@ -221,6 +263,13 @@ class CStudentController extends CBaseController {
         $form->setAttributes(CRequest::getArray($form::getClassName()));
         $res = new CArrayList();
         $res = $form->importStudents();
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "?action=index",
+                "icon" => "actions/edit-undo.png"
+            )
+        ));
         $this->setData("results", $res);
         $this->renderView("_students/imported.tpl");
     }
