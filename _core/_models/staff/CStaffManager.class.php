@@ -1161,4 +1161,19 @@ class CStaffManager{
         }
         return $paper;
     }
+
+    /**
+     * История изменений группы у студента
+     *
+     * @param $key
+     * @return CStudentGroupChangeHistory|null
+     */
+    public static function getStudentGroupChangeHistory($key) {
+        $history = null;
+        $ar = CActiveRecordProvider::getById(TABLE_STUDENT_GROUP_HISTORY, $key);
+        if (!is_null($ar)) {
+            $history = new CStudentGroupChangeHistory($ar);
+        }
+        return $history;
+    }
 }

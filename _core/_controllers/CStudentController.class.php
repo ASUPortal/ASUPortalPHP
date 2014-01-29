@@ -398,7 +398,11 @@ class CStudentController extends CBaseController {
             foreach ($form->students as $id) {
                 $student = CStaffManager::getStudent($id);
                 if (!is_null($student)) {
-                    $student->moveToGroup($group);
+                    $source = $student->group;
+                    $student->group_id = $group->getId();
+                    $student->save();
+
+                    $student->createGroupChangeHistoryPoint($source, $group);
                 }
             }
             $this->redirect("?action=index");

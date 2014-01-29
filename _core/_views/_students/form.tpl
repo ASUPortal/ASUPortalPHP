@@ -54,6 +54,7 @@
         <li><a href="#tab-basic-education">Начальное образование</a></li>
         <li><a href="#tab-secondary-education">Высшее образование</a></li>
         <li><a href="#tab-work">Работа</a></li>
+        <li><a href="#tab-history">История смены групп</a></li>
     </ul>
 
     <div class="tab-content">
@@ -68,6 +69,9 @@
         </div>
         <div class="tab-pane" id="tab-work">
             {include file="_students/subform.work.tpl"}
+        </div>
+        <div class="tab-pane" id="tab-history">
+            {include file="_students/subform.history.tpl"}
         </div>
     </div>
 

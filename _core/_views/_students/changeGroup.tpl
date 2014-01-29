@@ -1,7 +1,7 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-    <h2>Импорт студентов</h2>
+    <h2>Перенос студентов между группами</h2>
 
     {CHtml::helpForCurrentPage()}
 

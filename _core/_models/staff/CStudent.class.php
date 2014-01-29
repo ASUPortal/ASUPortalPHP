@@ -32,7 +32,9 @@ class CStudent extends CActiveModel {
     protected $_markInternship = null;
     protected $_markUndergraduate = null;
     protected $_complexExamMark = null;
+    protected $_groupChangeHistory = null;
     private $_corriculum = null;
+
     public function attributeLabels() {
         return array(
             "fio" => "ФИО",
@@ -68,7 +70,7 @@ class CStudent extends CActiveModel {
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_diploms",
                 "storageTable" => TABLE_DIPLOMS,
-                "storageCondition" => "student_id = " . $this->id,
+                "storageCondition" => "student_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getDiplom"
             ),
@@ -141,6 +143,14 @@ class CStudent extends CActiveModel {
                 "storageField" => "exam_complex_mark_id",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getMark"
+            ),
+            "groupChangeHistory" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_groupChangeHistory",
+                "storageTable" => TABLE_STUDENT_GROUP_HISTORY,
+                "storageCondition" => "student_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "managerClass" => "CStaffManager",
+                "managerGetObject" => "getStudentGroupChangeHistory"
             )
         );
     }
@@ -227,22 +237,39 @@ class CStudent extends CActiveModel {
         }
         return $this->_secondaryEducationEndType;
     }
-    /**
-     * Перемещение студента в указанную группу
-     *
-     * @param CStudentGroup $target
-     */
-    public function moveToGroup(CStudentGroup $target) {
-        $history = new CStudentGroupHistory();
+    public function createGroupChangeHistoryPoint(CStudentGroup $source = null, CStudentGroup $target = null) {
+        $history = new CStudentGroupChangeHistory();
         $history->student_id = $this->getId();
-        if (!is_null($this->group)) {
-            $history->source_id = $this->group->getId();
+        $history->source_id = 0;
+        if (!is_null($source)) {
+            $history->source_id = $source->getId();
         }
-        $history->target_id = $target->getId();
+        $history->target_id = 0;
+        if (!is_null($target)) {
+            $history->target_id = $target->getId();
+        }
         $history->date = date("d.m.Y");
+        $history->person_id = CSession::getCurrentPerson()->getId();
         $history->save();
-
-        $this->group_id = $target->getId();
-        $this->save();
     }
+
+    public function save() {
+        $sourceGroup = null;
+        if (!is_null($this->getId())) {
+            $student = CStaffManager::getStudent($this->getId());
+            $sourceGroup = $student->group;
+        }
+
+        parent::save();
+
+        $this->_group = null;
+        $targetGroup = $this->group;
+        if (is_null($sourceGroup)) {
+            $this->createGroupChangeHistoryPoint(null, $targetGroup);
+        } elseif ($sourceGroup->getId() != $targetGroup->getId()) {
+            $this->createGroupChangeHistoryPoint($sourceGroup, $targetGroup);
+        }
+    }
+
+
 }
