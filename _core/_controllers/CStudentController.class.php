@@ -394,7 +394,14 @@ class CStudentController extends CBaseController {
         $form = new CStudentChangeGroupForm();
         $form->setAttributes(CRequest::getArray(CStudentChangeGroupForm::getClassName()));
         if ($form->validate()) {
-            
+            $group = CStaffManager::getStudentGroup($form->group_id);
+            foreach ($form->students as $id) {
+                $student = CStaffManager::getStudent($id);
+                if (!is_null($student)) {
+                    $student->moveToGroup($group);
+                }
+            }
+            $this->redirect("?action=index");
             return false;
         }
         $this->setData("form", $form);

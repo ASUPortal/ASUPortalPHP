@@ -24,8 +24,6 @@
                 {CHtml::submit("Перенести", false)}
             </div>
         </div>
-
-        {$form|var_dump}
     </form>
 {/block}
 

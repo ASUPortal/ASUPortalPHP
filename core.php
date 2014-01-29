@@ -213,6 +213,7 @@
     define("TABLE_PRINT_FIELDS", "print_field");
     define("TABLE_STUDENTS_ACTIVITY", "study_activity");
     define("TABLE_STUDENTS_CONTROL_TYPES", "study_act");
+    define("TABLE_STUDENT_GROUP_HISTORY", "student_group_history");
     define("TABLE_GRADEBOOKS", "study_gradebook");
     define("TABLE_DASHBOARD", "dashboard");
     define("TABLE_USER_SETTINGS", "user_settings");

@@ -227,4 +227,22 @@ class CStudent extends CActiveModel {
         }
         return $this->_secondaryEducationEndType;
     }
+    /**
+     * Перемещение студента в указанную группу
+     *
+     * @param CStudentGroup $target
+     */
+    public function moveToGroup(CStudentGroup $target) {
+        $history = new CStudentGroupHistory();
+        $history->student_id = $this->getId();
+        if (!is_null($this->group)) {
+            $history->source_id = $this->group->getId();
+        }
+        $history->target_id = $target->getId();
+        $history->date = date("d.m.Y");
+        $history->save();
+
+        $this->group_id = $target->getId();
+        $this->save();
+    }
 }

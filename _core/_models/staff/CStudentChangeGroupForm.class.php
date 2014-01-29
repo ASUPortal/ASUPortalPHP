@@ -9,6 +9,7 @@
 
 class CStudentChangeGroupForm extends CFormModel{
     public $students;
+    public $group_id;
 
     public function attributeLabels() {
         return array(
