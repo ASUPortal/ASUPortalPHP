@@ -253,23 +253,4 @@ class CStudent extends CActiveModel {
         $history->save();
     }
 
-    public function save() {
-        $sourceGroup = null;
-        if (!is_null($this->getId())) {
-            $student = CStaffManager::getStudent($this->getId());
-            $sourceGroup = $student->group;
-        }
-
-        parent::save();
-
-        $this->_group = null;
-        $targetGroup = $this->group;
-        if (is_null($sourceGroup)) {
-            $this->createGroupChangeHistoryPoint(null, $targetGroup);
-        } elseif ($sourceGroup->getId() != $targetGroup->getId()) {
-            $this->createGroupChangeHistoryPoint($sourceGroup, $targetGroup);
-        }
-    }
-
-
 }
