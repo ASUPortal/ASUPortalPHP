@@ -73,10 +73,7 @@
 <div class="control-group">
     {CHtml::activeLabel("recenz_id", $diplom)}
     <div class="controls">
-        {CHtml::activeDropDownList("recenz_id", $diplom, $reviewers)}
-        <span><a href="{$web_root}_modules/_staff/" target="_blank">
-                <img src="{$web_root}images/toupdate.png">
-            </a></span>
+        {CHtml::activeLookup("recenz_id", $diplom, "staff")}
         {CHtml::error("recenz_id", $diplom)}
     </div>
 </div>
@@ -84,7 +81,7 @@
 <div class="control-group">
     {CHtml::activeLabel("gak_num", $diplom)}
     <div class="controls">
-        {CHtml::activeDropDownList("gak_num", $diplom, $commissions)}
+        {CHtml::activeLookup("gak_num", $diplom, "sab_commissions")}
         {CHtml::error("gak_num", $diplom)}
     </div>
 </div>

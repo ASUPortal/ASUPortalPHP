@@ -37,28 +37,6 @@ class CDiplomsController extends CBaseController {
     }
     public function actionAdd() {
         $diplom = new CDiplom();
-        $commissions = array();
-        foreach (CSABManager::getCommissionsList() as $id=>$c) {
-            $commission = CSABManager::getCommission($id);
-            $nv = $commission->title;
-            if (!is_null($commission->manager)) {
-                $nv .= " ".$commission->manager->getName();
-            }
-            if (!is_null($commission->secretar)) {
-                $nv .= " (".$commission->secretar->getName().")";
-            }
-            $cnt = 0;
-            foreach ($commission->diploms->getItems() as $d) {
-                if (strtotime($diplom->date_act) == strtotime($d->date_act)) {
-                    $cnt++;
-                }
-            }
-            $nv .= " ".$cnt;
-            $commissions[$commission->getId()] = $nv;
-        }
-        $reviewers = CStaffManager::getPersonsListWithType(TYPE_REVIEWER);
-        $this->setData("reviewers", $reviewers);
-        $this->setData("commissions", $commissions);
         $this->setData("diplom", $diplom);
         $this->renderView("_diploms/add.tpl");
     }
@@ -66,37 +44,6 @@ class CDiplomsController extends CBaseController {
         $diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
         // сконвертим дату из MySQL date в нормальную дату
         $diplom->date_act = date("d.m.Y", strtotime($diplom->date_act));
-        $commissions = array();
-        foreach (CSABManager::getCommissionsList() as $id=>$c) {
-            $commission = CSABManager::getCommission($id);
-            $nv = $commission->title;
-            if (!is_null($commission->manager)) {
-                $nv .= " ".$commission->manager->getName();
-            }
-            if (!is_null($commission->secretar)) {
-                $nv .= " (".$commission->secretar->getName().")";
-            }
-            $cnt = 0;
-            foreach ($commission->diploms->getItems() as $d) {
-                if (strtotime($diplom->date_act) == strtotime($d->date_act)) {
-                    $cnt++;
-                }
-            }
-            $nv .= " ".$cnt;
-            $commissions[$commission->getId()] = $nv;
-        }
-        if (!array_key_exists($diplom->gak_num, $commissions)) {
-        	$diplom->gak_num = null;
-        }
-        $reviewers = CStaffManager::getPersonsListWithType(TYPE_REVIEWER);
-        if (!array_key_exists($diplom->recenz_id, $reviewers)) {
-            $reviewer = CStaffManager::getPerson($diplom->recenz_id);
-            if (!is_null($reviewer)) {
-                $reviewers[$reviewer->getId()] = $reviewer->getName();
-            }
-        }
-        $this->setData("reviewers", $reviewers);
-        $this->setData("commissions", $commissions);
         $this->setData("diplom", $diplom);
         $this->renderView("_diploms/edit.tpl");
     }

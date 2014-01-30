@@ -228,6 +228,24 @@ class CSearchController extends CBaseController{
             foreach ($query->execute()->getItems() as $item) {
                 $result[$item["id"]] = $item["name"];
             }
+        } elseif ($catalog == "sab_commissions") {
+            // комиссии по защите дипломов. показываем только комиссии этого года
+            $query = new CQuery();
+            $query->select("distinct(comm.id) as id, comm.title as name")
+                ->from(TABLE_SAB_COMMISSIONS." as comm")
+                ->condition("comm.title like '%".$lookup."%' and year_id=".CUtils::getCurrentYear()->getId())
+                ->limit(0, 10);
+            foreach ($query->execute()->getItems() as $item) {
+                $comm = new CSABCommission(new CActiveRecord($item));
+                $value = $comm->title;
+                if (!is_null($comm->manager)) {
+                    $value .= " ".$comm->manager->getName();
+                }
+                if (!is_null($comm->secretar)) {
+                    $value .= " ".$comm->secretar->getName();
+                }
+                $result[$comm->getId()] = $value;
+            }
         } elseif (!is_null(CTaxonomyManager::getLegacyTaxonomy($catalog))) {
             // унаследованная таксономия
             $taxonomy = CTaxonomyManager::getLegacyTaxonomy($catalog);
@@ -268,6 +286,19 @@ class CSearchController extends CBaseController{
             if (!is_null($group)) {
                 $result[$group->getId()] = $group->getName();
             }
+        } elseif ($catalog == "sab_commissions") {
+            // комиссии по защите дипломов
+            $commission = CSABManager::getCommission($id);
+            if (!is_null($commission)) {
+                $value = $commission->title;
+                if (!is_null($commission->manager)) {
+                    $value .= " ".$commission->manager->getName();
+                }
+                if (!is_null($commission->secretar)) {
+                    $value .= " (".$commission->secretar->getName().")";
+                }
+                $result[$commission->getId()] = $value;
+            }
         } elseif (!is_null(CTaxonomyManager::getLegacyTaxonomy($catalog))) {
             // унаследованная таксономия
             $taxonomy = CTaxonomyManager::getLegacyTaxonomy($catalog);
@@ -298,6 +329,19 @@ class CSearchController extends CBaseController{
             // выбор студенческих групп
             foreach (CStaffManager::getAllStudentGroups()->getItems() as $group) {
                 $result[$group->getId()] = $group->getName();
+            }
+        } elseif ($catalog == "sab_commissions") {
+            // комиссии по защите дипломов. показываем только комиссии этого года
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_SAB_COMMISSIONS, "year_id=".CUtils::getCurrentYear()->getId())->getItems() as $ar) {
+                $comm = new CSABCommission($ar);
+                $value = $comm->title;
+                if (!is_null($comm->manager)) {
+                    $value .= " ".$comm->manager->getName();
+                }
+                if (!is_null($comm->secretar)) {
+                    $value .= " ".$comm->secretar->getName();
+                }
+                $result[$comm->getId()] = $value;
             }
         } elseif (!is_null(CTaxonomyManager::getLegacyTaxonomy($catalog))) {
             // унаследованная таксономия
