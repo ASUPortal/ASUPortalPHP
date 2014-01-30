@@ -8,6 +8,9 @@
  */
 
 class CSearchController extends CBaseController{
+    protected $allowedAnonymous = array(
+        "updateIndex"
+    );
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -159,6 +162,29 @@ class CSearchController extends CBaseController{
             }
         }
         echo json_encode($result);
+    }
+    public function actionUpdateIndex() {
+        $models = CCoreObjectsManager::getAllExportableModels();
+        foreach ($models->getItems() as $metaModel) {
+            if ($metaModel->isExportable()) {
+                $modelClass = $metaModel->class_name;
+                $model = new $modelClass();
+                $records = CActiveRecordProvider::getAllFromTable($model->getRecord()->getTable());
+                foreach ($records->getItems() as $record) {
+                    $model = new $modelClass($record);
+                    CSolr::addObject($model);
+                }
+                CSolr::commit();
+            }
+        }
+    }
+    protected function onActionBeforeExecute() {
+        if ($this->getAction() == "updateIndex") {
+            if (CRequest::getString("key") == CSettingsManager::getSettingValue("solr_key")) {
+                return true;
+            }
+        }
+        parent::onActionBeforeExecute();
     }
     public function actionGetExportableModels() {
         $result = array();
