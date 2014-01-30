@@ -32,7 +32,8 @@ class CPerson extends CActiveModel{
     protected $_degree = null;
     protected $_orders_sab = null;
     protected $_indPlanLoads = null;
-    public $to_tabel = "0";
+    public $to_tabel = 0;
+    public $is_slave = 0;
 
     protected function relations() {
         return array(
@@ -82,7 +83,7 @@ class CPerson extends CActiveModel{
                 "storageProperty" => "_degree",
                 "storageField" => "stepen",
                 "managerClass" => "CTaxonomyManager",
-                "managerGetObject" => "getPersonDegree"
+                "managerGetObject" => "getDegree"
             ),
             "degrees" => array(
                 "relationPower" => RELATION_HAS_MANY,
@@ -90,7 +91,7 @@ class CPerson extends CActiveModel{
                 "storageTable" => TABLE_PERSON_DISSER,
                 "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and disser_type = 'степень'",
                 "managerClass" => "CStaffManager",
-                "managerGetObject" => "getPersonDegree"
+                "managerGetObject" => "getPersonPaper"
             ),
             "types" => array(
                 "relationPower" => RELATION_COMPUTED,
