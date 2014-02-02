@@ -472,4 +472,7 @@ class CSearchController extends CBaseController{
         $this->setData("results", $outResults);
         $this->renderView("_search/results.tpl");
     }
+    public function actionGetGlobalSearchSubform() {
+        $this->renderView("_search/subform.globalsearch.tpl");
+    }
 }
