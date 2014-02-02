@@ -28,6 +28,16 @@ class CSearchController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Настройки",
+                "link" => "index.php?action=settings",
+                "icon" => "places/network-workgroup.png"
+            )
+        ));
+        $this->renderView("_search/index.tpl");
+    }
+    public function actionSettings() {
         $config = array();
         /**
          * Формируем конфиг выгрузки на основе списка выгружаемых полей
@@ -45,9 +55,9 @@ class CSearchController extends CBaseController{
                         $config[$field->field_name] = '<field name="'.$field->field_name.'" type="text_general" indexed="true" stored="true" />';
                         /**
                         if ($fields[$field->field_name]) {
-                            $config[$field->field_name] = '<field name="'.$field->field_name.'" type="text_general" indexed="true" stored="true" />';
+                        $config[$field->field_name] = '<field name="'.$field->field_name.'" type="text_general" indexed="true" stored="true" />';
                         } else {
-                            $config[$field->field_name] = '<field name="'.$field->field_name.'" type="int" indexed="true" stored="true" />';
+                        $config[$field->field_name] = '<field name="'.$field->field_name.'" type="int" indexed="true" stored="true" />';
                         }
                          */
                     }
@@ -67,7 +77,19 @@ class CSearchController extends CBaseController{
         $config["_doc_id_"] = '<field name="_doc_id_" type="int" indexed="true" stored="true" />';
 
         $this->setData("config", $config);
-        $this->renderView("_search/index.tpl");
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "index.php?action=index",
+                "icon" => "actions/edit-undo.png"
+            ),
+            array(
+                "title" => "Обновить индекс",
+                "icon" => "actions/document-print-preview.png",
+                "link" => "index.php?action=updateIndex&redirect=index"
+            )
+        ));
+        $this->renderView("_search/settings.tpl");
     }
     public function actionSearch() {
         $userQuery = mb_strtolower($_GET["query"]);
@@ -176,6 +198,9 @@ class CSearchController extends CBaseController{
                 }
                 CSolr::commit();
             }
+        }
+        if (CRequest::getString("redirect") != "") {
+            $this->redirect("?action=".CRequest::getString("redirect"));
         }
     }
     protected function onActionBeforeExecute() {
