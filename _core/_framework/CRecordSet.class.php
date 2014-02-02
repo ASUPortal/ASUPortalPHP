@@ -201,7 +201,7 @@ class CRecordSet {
                     if (is_numeric($globalFilter["value"])) {
                         $query->condition($globalFilter["field"].'='.$globalFilter["value"]);
                     } else {
-                        $query->condition($globalFilter["field"]."='".$globalFilter["value"]."'");
+                        $query->condition($globalFilter["field"]." like '%".$globalFilter["value"]."%'");
                     }
                 }
                 // глобальные сортировки

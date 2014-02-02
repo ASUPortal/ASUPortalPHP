@@ -111,7 +111,8 @@ class CSearchController extends CBaseController{
         /**
          * Выполняем поиск
          */
-        $docs = CSolr::search($userQuery, $params);
+        $resultObj = CSolr::search($userQuery, $params);
+        $docs = $resultObj->getDocuments();
         /**
          * В зависимости от класса модели берем данные только
          * из полей, которые описаны в метаданных модели
@@ -376,5 +377,99 @@ class CSearchController extends CBaseController{
             }
         }
         echo json_encode($result);
+    }
+    public function actionGlobalSearch() {
+        /**
+         * Запрос, который отправил пользователь
+         */
+        $userQuery = CRequest::getString("keyword");
+        /**
+         * Задачи, в которые у него есть доступ
+         */
+        $tasks = array();
+        foreach (CSession::getCurrentUser()->getRoles()->getItems() as $role) {
+            $tasks[] = $role->getId();
+        }
+        /**
+         * Непосредственно, поиск
+         */
+        $params = array(
+            "_is_main_" => 1,
+            "_highlight_" => "doc_body"
+        );
+        $resultObj = CSolr::search($userQuery, $params);
+        /**
+         * Формируем модель данных для рисования результата
+         */
+        $result = array();
+        $userQuery = mb_strtolower($userQuery);
+        foreach ($resultObj->getDocuments() as $doc) {
+            $hl = $resultObj->getHighlighingByDocument($doc);
+            $res = array(
+                "text" => implode(", ", $hl)
+            );
+            /**
+             * Получаем метамодель для этого типа объекта
+             * Смотрим, какие задачи с ней связны
+             */
+            $model = CCoreObjectsManager::getCoreModel($doc->_class_);
+            $tasks = array();
+            if (!is_null($model)) {
+                foreach ($model->tasks->getItems() as $task) {
+                    /**
+                     * Для каждой задачи формируем URL с фильтром
+                     */
+                    $title = $task->name;
+                    $url = $task->url;
+
+                    $urlParams = array();
+                    $urlParams[] = "filterClass=".$doc->_class_;
+                    $urlParams[] = "filterLabel=".str_replace("</em>", "", str_replace("<em>", "", implode(", ", $hl)));
+
+                    foreach ($model->fields->getItems() as $field) {
+                        if (property_exists($doc, $field->field_name)) {
+                            $fieldName = $field->field_name;
+                            $fieldValue = mb_strtolower($doc->$fieldName);
+                            if (mb_strpos($fieldValue, $userQuery) !== false) {
+                                if (mb_strlen($fieldValue) < 100) {
+                                    $urlParams[] = "filter=".$fieldName.":".$fieldValue;
+                                } else {
+                                    $urlParams[] = "filter=".$fieldName.":".$userQuery;
+                                }
+                            }
+                        }
+                    }
+
+                    $url .= "?".implode("&", $urlParams);
+
+                    $tasks[$url] = $title;
+                }
+            }
+            $res["tasks"] = $tasks;
+            $result[] = $res;
+        }
+        /**
+         * Склеиваем результаты с одинаковым текстом
+         */
+        $outResults = array();
+        foreach ($result as $res) {
+            $key = $res["text"];
+            if (array_key_exists($key, $outResults)) {
+                $obj = $outResults[$key];
+                $tasks = $obj["tasks"];
+                foreach ($res["tasks"] as $url=>$title) {
+                    $tasks[$url] = $title;
+                }
+                $obj["tasks"] = $tasks;
+            } else {
+                $obj = $res;
+            }
+            $outResults[$key] = $obj;
+        }
+        /**
+         * Отображением
+         */
+        $this->setData("results", $outResults);
+        $this->renderView("_search/results.tpl");
     }
 }
