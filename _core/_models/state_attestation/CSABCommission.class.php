@@ -99,7 +99,7 @@ class CSABCommission extends CActiveModel {
                 $persons->add($this->manager->getId(), $this->manager);
             }
             foreach ($persons->getItems() as $person) {
-                if (is_null($person->getSABOrderByYear($this->year))) {
+                if (is_null($person->getSABOrdersByYear($this->year))) {
                     $ar = new CActiveRecord(array(
                         "id" => null,
                         "person_id" => $person->getId(),
