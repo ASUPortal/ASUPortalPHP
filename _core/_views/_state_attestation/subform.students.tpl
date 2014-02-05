@@ -1,17 +1,52 @@
 <script>
     jQuery(document).ready(function(){
-        jQuery("#search").autocomplete({
-            source: web_root + "_modules/_state_attestation/index.php?action=searchDiplom",
-            minLength: 2,
-            select: function(event, ui) {
-                // добавляем в текущую комиссию студента
-                jQuery.ajax({
+		var searchResults = new Object();
+        jQuery("#search").typeahead({
+			minLength: 3,
+			source: function(query, process){
+				return jQuery.ajax({
+					url: web_root + "_modules/_state_attestation/",
+                    type: "get",
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        "term": query,
+                        "action": "searchDiplom"
+                    },
+                    beforeSend: function(){
+                        /**
+                         * Показываем индикатор активности
+                         */
+                        jQuery("#search").css({
+                            "background-image": 'url({$web_root}images/ajax-loader.gif)',
+                            "background-repeat": "no-repeat",
+                            "background-position": "95% center"
+                        });
+                    },
+                    success: function(data){
+                        var lookup = new Array();
+                        searchResults = new Object();
+                        for (var i = 0; i < data.length; i++) {
+                            lookup.push(data[i].label);
+                            searchResults[data[i].label] = data[i].object_id;
+                        }
+                        process(lookup);
+                        jQuery("#search").css("background-image", "none");
+                    }					
+				});
+			},
+			updater: function(item){
+				var value = searchResults[item];
+				/**
+				 * Добавляем диплом в текущую комиссию
+				 */
+				jQuery.ajax({
                     url: "{$web_root}_modules/_state_attestation/index.php",
                     cache: false,
                     data: {
                         action: "addDiplom",
                         commission_id: {$form->commission->getId()},
-                        diplom_id: ui.item.object_id
+                        diplom_id: value
                     },
                     type: "post",
                     beforeSend: function(){
@@ -20,7 +55,7 @@
                 }).done(function(data){
                     jQuery("#diploms_list").load("{$web_root}_modules/_state_attestation/index.php?action=loadDiplomsSubform&id={$form->commission->getId()}");
                 });
-            }
+			}
         });
         jQuery("#search").keypress(function(e){
             if (e.which == 13) {
@@ -48,7 +83,7 @@
 </script>
 
 <div id="diploms_list">
-<table border="0" cellpadding="2" cellspacing="0" class="tableBlank">
+<table border="0" cellpadding="2" cellspacing="0" class="tableBlank" width="90%">
     <tr>
         <td>
             <p>
