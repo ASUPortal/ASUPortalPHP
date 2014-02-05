@@ -1,4 +1,4 @@
-<form action="index.php" method="post">
+<form action="index.php" method="post" class="form-horizontal" >
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("commission[id]", $form)}
 	
