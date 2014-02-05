@@ -19,6 +19,9 @@ class CSABCommissionForm extends CFormModel {
         $commObj = new CSABCommission();
         $commObj->setAttributes($commission);
         $commObj->save();
+		
+		$this->commission = $commObj;
+		
         foreach (CActiveRecordProvider::getWithCondition(TABLE_SAB_COMMISSION_MEMBERS, "commission_id=".$commObj->getId())->getItems() as $ar) {
             $ar->remove();
         }
