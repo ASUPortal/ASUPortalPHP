@@ -42,8 +42,6 @@ class CSABComissionController extends CBaseController {
             $commission = new CSABCommission($ar);
             $items->add($commission->getId(), $commission);
         }
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("showAll", $showAll);
         $this->setData("commissions", $items);
         $this->setData("paginator", $set->getPaginator());
@@ -53,8 +51,6 @@ class CSABComissionController extends CBaseController {
         $commission = CSABManager::getCommission(CRequest::getInt("id"));
         $form = new CSABCommissionForm();
         $form->commission = $commission;
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("form", $form);
         $this->renderView("_state_attestation/edit.tpl");
     }
@@ -63,8 +59,6 @@ class CSABComissionController extends CBaseController {
         $form = new CSABCommissionForm();
         $commission->year_id = CUtils::getCurrentYear()->getId();
         $form->commission = $commission;
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("form", $form);
         $this->renderView("_state_attestation/add.tpl");
     }
@@ -73,11 +67,13 @@ class CSABComissionController extends CBaseController {
         $form->setAttributes(CRequest::getArray($form::getClassName()));
         if ($form->validate()) {
             $form->save();
-            $this->redirect("?action=index");
+			if ($this->continueEdit()) {
+                $this->redirect("?action=edit&id=".$form->commission->getId());
+            } else {
+                $this->redirect("?action=index");
+            }
             return true;
         }
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("form", $form);
         $this->renderView("_state_attestation/edit.tpl");
     }
