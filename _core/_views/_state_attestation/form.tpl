@@ -1,12 +1,16 @@
 <form action="index.php" method="post">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("commission[id]", $form)}
-
-    <div data-dojo-type="dijit/layout/TabContainer" doLayout="false">
-        <div data-dojo-type="dijit/layout/ContentPane" title="Общая информация">
+	
+	<ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#tab-common">Общая информация</a></li>
+        <li><a data-toggle="tab" href="#tab-students">Студенты</a></li>
+    </ul>
+	<div class="tab-content">
+        <div class="tab-pane active" id="tab-common">
             {include file="_state_attestation/subform.common.tpl"}
         </div>
-        <div data-dojo-type="dijit/layout/ContentPane" title="Студенты">
+        <div class="tab-pane" id="tab-students">
             {if is_null($form->commission->getId())}
                 Сохранить комиссию перед добавлением студентов
             {else}
@@ -15,7 +19,9 @@
         </div>
     </div>
 
-    <p>
+    <div class="control-group">
+        <div class="controls">
         {CHtml::submit("Сохранить")}
-    </p>
+        </div>
+    </div>
 </form>
