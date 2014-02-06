@@ -81,7 +81,8 @@
 <div class="control-group">
     {CHtml::activeLabel("gak_num", $diplom)}
     <div class="controls">
-        {CHtml::activeLookup("gak_num", $diplom, "sab_commissions")}
+		{assign var=properties value=['diplom_id'=>{$diplom->getId()}]}
+        {CHtml::activeLookup("gak_num", $diplom, "sab_commissions", false, $properties)}
         {CHtml::error("gak_num", $diplom)}
     </div>
 </div>
