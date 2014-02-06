@@ -45,6 +45,19 @@ class CSABComissionController extends CBaseController {
         $this->setData("showAll", $showAll);
         $this->setData("commissions", $items);
         $this->setData("paginator", $set->getPaginator());
+		$this->addActionsMenuItem(array(
+            array(
+                "title" => "Добавить комиссию",
+                "link" => "?action=add",
+                "icon" => "actions/list-add.png"
+            ),
+            array(
+                "title" => "Печать по шаблону",
+                "link" => "#",
+                "icon" => "devices/printer.png",
+                "template" => "formset_state_attestation_group"
+            )
+        ));			
         $this->renderView("_state_attestation/index.tpl");
     }
     public function actionEdit() {
@@ -52,6 +65,19 @@ class CSABComissionController extends CBaseController {
         $form = new CSABCommissionForm();
         $form->commission = $commission;
         $this->setData("form", $form);
+		$this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "index.php?action=index",
+                "icon" => "actions/edit-undo.png"
+            ),
+            array(
+                "title" => "Печать по шаблону",
+                "link" => "#",
+                "icon" => "devices/printer.png",
+                "template" => "formset_state_attestation"
+            )
+        ));
         $this->renderView("_state_attestation/edit.tpl");
     }
     public function actionAdd() {
@@ -60,6 +86,13 @@ class CSABComissionController extends CBaseController {
         $commission->year_id = CUtils::getCurrentYear()->getId();
         $form->commission = $commission;
         $this->setData("form", $form);
+		$this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "index.php?action=index",
+                "icon" => "actions/edit-undo.png"
+            )
+        ));
         $this->renderView("_state_attestation/add.tpl");
     }
     public function actionSave() {
