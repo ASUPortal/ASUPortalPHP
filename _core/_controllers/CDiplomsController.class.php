@@ -38,6 +38,13 @@ class CDiplomsController extends CBaseController {
     public function actionAdd() {
         $diplom = new CDiplom();
         $this->setData("diplom", $diplom);
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => WEB_ROOT."diploms_view.php",
+                "icon" => "actions/edit-undo.png"
+            )
+        ));		
         $this->renderView("_diploms/add.tpl");
     }
     public function actionEdit() {
@@ -45,6 +52,19 @@ class CDiplomsController extends CBaseController {
         // сконвертим дату из MySQL date в нормальную дату
         $diplom->date_act = date("d.m.Y", strtotime($diplom->date_act));
         $this->setData("diplom", $diplom);
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => WEB_ROOT."diploms_view.php",
+                "icon" => "actions/edit-undo.png"
+            ),
+            array(
+                "title" => "Печать по шаблону",
+                "link" => "#",
+                "icon" => "devices/printer.png",
+                "template" => "formset_diploms"
+            )
+        ));	
         $this->renderView("_diploms/edit.tpl");
     }
     public function actionSave() {
