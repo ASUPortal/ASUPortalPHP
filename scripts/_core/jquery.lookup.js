@@ -13,20 +13,22 @@
         var _isMultiple = false;
         var _values = null;
         var _placeholder = null;
+		var _properties = null;
 
         // обработка пользовательского ввода
         this._onTypeAhead = function(query, process){
             var context = this.options.context;
+			
+			xhrData = context._properties;
+			xhrData["action"] = "LookupTypeAhead";
+			xhrData["query"] = query;
+			xhrData["catalog"] = context._catalog;
 
             jQuery.ajax({
                 cache: false,
                 url: web_root + "_modules/_search/",
                 dataType: "json",
-                data: {
-                    "action": "LookupTypeAhead",
-                    "query": query,
-                    "catalog": context._catalog
-                },
+                data: xhrData,
                 context: context,
                 success: function(data){
                     this._lookupItems = data;
@@ -44,13 +46,14 @@
         this._onGlassButtonClick = function(event){
             // показываем диалог, загружаем туда данные из каталога
             var parentObj = event.data;
+			
             jQuery.ajax({
                 cache: false,
                 url: web_root + "_modules/_search/",
                 dataType: "html",
                 data: {
-                    "action": "LookupGetDialog"
-                },
+					action: "LookupGetDialog"
+				},
                 context: parentObj,
                 success: function(data){
                     var lookupDialog = jQuery(data);
@@ -102,14 +105,15 @@
         // загрузка данных в диалог
         this._onDialogShown = function(event){
             this.parentObject = event.data;
+			var xhrData = this.parentObject._properties;
+			xhrData["action"] = "LookupViewData";
+			xhrData["catalog"] = this.parentObject._catalog;
+					
             jQuery.ajax({
                 cache: false,
                 url: web_root + "_modules/_search/",
                 dataType: "json",
-                data: {
-                    "action": "LookupViewData",
-                    "catalog": event.data._catalog
-                },
+                data: xhrData,
                 context: this,
                 success: function(data){
                     var parentObject = this.parentObject;
@@ -192,15 +196,16 @@
             jQuery(this._placeholder).empty();
             // создаем новые
             for (var i = 0; i < this._values.length; i++) {
+				xhrData = this._properties;
+				xhrData["action"] = "LookupGetItem";
+				xhrData["id"] = this._values[i];
+				xhrData["catalog"] = this._catalog;
+			
                 jQuery.ajax({
                     cache: false,
                     url: web_root + "_modules/_search/",
                     dataType: "json",
-                    data: {
-                        "action": "LookupGetItem",
-                        "id": this._values[i],
-                        "catalog": this._catalog
-                    },
+                    data: xhrData,
                     context: this,
                     success: function(data){
                         if (jQuery.isPlainObject(data)) {
@@ -278,6 +283,16 @@
 
             // множественный выбор
             this._isMultiple = (jQuery(this).attr("asu-multiple") == "true");
+			
+			// свойства
+			this._properties = new Object();
+			var properties = jQuery("[asu-type=property]", this);
+			for (var i = 0; i < properties.length; i++) {
+				var key = jQuery(properties[i]).attr("asu-property-key");
+				var value = jQuery(properties[i]).val();
+				
+				this._properties[key] = value;
+			}
 
             // инициализируем исходные данные
             this._placeholder = jQuery("[asu-type=placeholder]", this);
