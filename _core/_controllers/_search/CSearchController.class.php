@@ -270,6 +270,16 @@ class CSearchController extends CBaseController{
                 if (!is_null($comm->secretar)) {
                     $value .= " (".$comm->secretar->getName().")";
                 }
+				$diplom = CStaffManager::getDiplom(CRequest::getInt("diplom_id"));
+				if (!is_null($diplom)) {
+					$cnt = 0;
+					foreach ($commission->diploms->getItems() as $d) {
+						if (strtotime($diplom->date_act) == strtotime($d->date_act)) {
+							$cnt++;
+						}
+					}
+					$value .= " ".$cnt;
+				}
                 $result[$comm->getId()] = $value;
             }
         } elseif (!is_null(CTaxonomyManager::getLegacyTaxonomy($catalog))) {
@@ -323,6 +333,16 @@ class CSearchController extends CBaseController{
                 if (!is_null($commission->secretar)) {
                     $value .= " (".$commission->secretar->getName().")";
                 }
+				$diplom = CStaffManager::getDiplom(CRequest::getInt("diplom_id"));
+				if (!is_null($diplom)) {
+					$cnt = 0;
+					foreach ($commission->diploms->getItems() as $d) {
+						if (strtotime($diplom->date_act) == strtotime($d->date_act)) {
+							$cnt++;
+						}
+					}
+					$value .= " ".$cnt;
+				}
                 $result[$commission->getId()] = $value;
             }
         } elseif (!is_null(CTaxonomyManager::getLegacyTaxonomy($catalog))) {
@@ -367,6 +387,16 @@ class CSearchController extends CBaseController{
                 if (!is_null($comm->secretar)) {
                     $value .= " (".$comm->secretar->getName().")";
                 }
+				$diplom = CStaffManager::getDiplom(CRequest::getInt("diplom_id"));
+				if (!is_null($diplom)) {
+					$cnt = 0;
+					foreach ($comm->diploms->getItems() as $d) {
+						if (strtotime($diplom->date_act) == strtotime($d->date_act)) {
+							$cnt++;
+						}
+					}
+					$value .= " ".$cnt;
+				}
                 $result[$comm->getId()] = $value;
             }
         } elseif (!is_null(CTaxonomyManager::getLegacyTaxonomy($catalog))) {
