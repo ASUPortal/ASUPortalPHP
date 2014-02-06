@@ -126,6 +126,8 @@ class CMenuManager {
              * 3. Выберем пункты меню из нужной таблицы и добавим их как обычные пункты.
              * 4. Добавим недостающие
              * 5. Исключим недоступные текущему пользователю
+			 *
+			 * Обновление от 06.02.2014 - все пункты меню хранятся в базе
              */
             // дополнительный пункт "Прочее"
             $arr = array();
@@ -162,15 +164,6 @@ class CMenuManager {
             $menuItem = new CMenuItem(new CActiveRecord($arr));
             $menu->addMenuItem($menuItem);
             // дополнительные пункты меню в справочниках
-            $arr = array();
-            $arr['id'] = 200001;
-            $arr['title'] = "Справочники все";
-            $arr['anchor'] = "_modules/_taxonomy/";
-            $arr['menu_id'] = $menu->getId();
-            $arr['parent_id'] = 100003;
-            $menuItem = new CMenuItem(new CActiveRecord($arr));
-            $menu->addMenuItem($menuItem);
-            //
             $arr = array();
             $arr['id'] = 200002;
             $arr['title'] = "Сотрудники";
