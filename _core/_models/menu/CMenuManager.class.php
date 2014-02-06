@@ -157,7 +157,7 @@ class CMenuManager {
             // дополнительный пункт "Прочее"
             $arr = array();
             $arr['id'] = 100000;
-            $arr['title'] = "Прочее";
+            $arr['title'] = CUtils::getTextStringInCorrectEncoding("Прочее");
             $arr['anchor'] = "#";
             $arr['menu_id'] = $menu->getId();
             $arr['parent_id'] = 0;
@@ -166,7 +166,7 @@ class CMenuManager {
             // дополнительные пункты меню в справочниках
             $arr = array();
             $arr['id'] = 200002;
-            $arr['title'] = "Сотрудники";
+            $arr['title'] = CUtils::getTextStringInCorrectEncoding("Сотрудники");
             $arr['anchor'] = "spravochnik.php?spr_type=1";
             $arr['menu_id'] = $menu->getId();
             $arr['parent_id'] = 100003;
@@ -175,7 +175,7 @@ class CMenuManager {
             //
             $arr = array();
             $arr['id'] = 200003;
-            $arr['title'] = "Приказы";
+            $arr['title'] = CUtils::getTextStringInCorrectEncoding("Приказы");
             $arr['anchor'] = "spravochnik.php?spr_type=2";
             $arr['menu_id'] = $menu->getId();
             $arr['parent_id'] = 100003;
@@ -184,7 +184,7 @@ class CMenuManager {
             //
             $arr = array();
             $arr['id'] = 200004;
-            $arr['title'] = "Учеба";
+            $arr['title'] = CUtils::getTextStringInCorrectEncoding("Учеба");
             $arr['anchor'] = "spravochnik.php?spr_type=3";
             $arr['menu_id'] = $menu->getId();
             $arr['parent_id'] = 100003;
@@ -193,7 +193,7 @@ class CMenuManager {
             //
             $arr = array();
             $arr['id'] = 200005;
-            $arr['title'] = "Индивидуальный план преподавателя";
+            $arr['title'] = CUtils::getTextStringInCorrectEncoding("Индивидуальный план преподавателя");
             $arr['anchor'] = "spravochnik.php?spr_type=4";
             $arr['menu_id'] = $menu->getId();
             $arr['parent_id'] = 100003;
@@ -202,7 +202,7 @@ class CMenuManager {
             //
             $arr = array();
             $arr['id'] = 200006;
-            $arr['title'] = "Прочие";
+            $arr['title'] = CUtils::getTextStringInCorrectEncoding("Прочие");
             $arr['anchor'] = "spravochnik.php?spr_type=0";
             $arr['menu_id'] = $menu->getId();
             $arr['parent_id'] = 100003;
@@ -243,7 +243,7 @@ class CMenuManager {
             // дополнительный пункт меню "Выход"
             $arr = array();
             $arr['id'] = 200000;
-            $arr['title'] = "Выход";
+            $arr['title'] = CUtils::getTextStringInCorrectEncoding("Выход");
             $arr['anchor'] = "p_administration.php?exit=1";
             $arr['menu_id'] = $menu->getId();
             $arr['parent_id'] = 0;
