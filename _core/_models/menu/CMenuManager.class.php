@@ -163,61 +163,7 @@ class CMenuManager {
             $arr['parent_id'] = 0;
             $menuItem = new CMenuItem(new CActiveRecord($arr));
             $menu->addMenuItem($menuItem);
-            // дополнительные пункты меню в справочниках
-            $arr = array();
-            $arr['id'] = 200002;
-            $arr['title'] = CUtils::getTextStringInCorrectEncoding("Сотрудники");
-            $arr['anchor'] = "spravochnik.php?spr_type=1";
-            $arr['menu_id'] = $menu->getId();
-            $arr['parent_id'] = 100003;
-            $menuItem = new CMenuItem(new CActiveRecord($arr));
-            $menu->addMenuItem($menuItem);
-            //
-            $arr = array();
-            $arr['id'] = 200003;
-            $arr['title'] = CUtils::getTextStringInCorrectEncoding("Приказы");
-            $arr['anchor'] = "spravochnik.php?spr_type=2";
-            $arr['menu_id'] = $menu->getId();
-            $arr['parent_id'] = 100003;
-            $menuItem = new CMenuItem(new CActiveRecord($arr));
-            $menu->addMenuItem($menuItem);
-            //
-            $arr = array();
-            $arr['id'] = 200004;
-            $arr['title'] = CUtils::getTextStringInCorrectEncoding("Учеба");
-            $arr['anchor'] = "spravochnik.php?spr_type=3";
-            $arr['menu_id'] = $menu->getId();
-            $arr['parent_id'] = 100003;
-            $menuItem = new CMenuItem(new CActiveRecord($arr));
-            $menu->addMenuItem($menuItem);
-            //
-            $arr = array();
-            $arr['id'] = 200005;
-            $arr['title'] = CUtils::getTextStringInCorrectEncoding("Индивидуальный план преподавателя");
-            $arr['anchor'] = "spravochnik.php?spr_type=4";
-            $arr['menu_id'] = $menu->getId();
-            $arr['parent_id'] = 100003;
-            $menuItem = new CMenuItem(new CActiveRecord($arr));
-            $menu->addMenuItem($menuItem);
-            //
-            $arr = array();
-            $arr['id'] = 200006;
-            $arr['title'] = CUtils::getTextStringInCorrectEncoding("Прочие");
-            $arr['anchor'] = "spravochnik.php?spr_type=0";
-            $arr['menu_id'] = $menu->getId();
-            $arr['parent_id'] = 100003;
-            $menuItem = new CMenuItem(new CActiveRecord($arr));
-            $menu->addMenuItem($menuItem);
-            //
-            $arr = array();
-            $arr['id'] = 200007;
-            $arr['title'] = "<hr />";
-            $arr['anchor'] = "#";
-            $arr['menu_id'] = $menu->getId();
-            $arr['parent_id'] = 100003;
-            $menuItem = new CMenuItem(new CActiveRecord($arr));
-            $menu->addMenuItem($menuItem);
-
+            
             foreach (CActiveRecordProvider::getWithCondition("tasks", "hidden=0 order by name asc")->getItems() as $i) {
                 $arr = $i->getItems();
 
