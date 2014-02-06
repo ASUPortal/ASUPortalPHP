@@ -268,7 +268,7 @@ class CSearchController extends CBaseController{
                     $value .= " ".$comm->manager->getName();
                 }
                 if (!is_null($comm->secretar)) {
-                    $value .= " ".$comm->secretar->getName();
+                    $value .= " (".$comm->secretar->getName().")";
                 }
                 $result[$comm->getId()] = $value;
             }
@@ -365,7 +365,7 @@ class CSearchController extends CBaseController{
                     $value .= " ".$comm->manager->getName();
                 }
                 if (!is_null($comm->secretar)) {
-                    $value .= " ".$comm->secretar->getName();
+                    $value .= " (".$comm->secretar->getName().")";
                 }
                 $result[$comm->getId()] = $value;
             }
