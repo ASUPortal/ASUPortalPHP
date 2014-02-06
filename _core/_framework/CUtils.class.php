@@ -863,4 +863,11 @@ class CUtils {
         }
         return $filetype;
     }
+	public static function getTextStringInCorrectEncoding($text) {
+		if (is_null(CSession::getCurrentController())) {
+			return mb_convert_encoding($text, "Windows-1251");
+		} else {
+			return $text;
+		}
+	}
 }
