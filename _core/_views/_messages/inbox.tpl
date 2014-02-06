@@ -4,6 +4,9 @@
 
     <h2>Мои входящие сообщения</h2>
 
+    {CHtml::helpForCurrentPage()}
+
+    {include file="_core.search.tpl"}
     {include file="_messages/subform.subscription.tpl"}
 
 
