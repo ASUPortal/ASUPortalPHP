@@ -51,7 +51,7 @@
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_controllers'.CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS,
         CORE_CWD.CORE_DS.'_core'.CORE_DS.'_framework'.CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_mailer'.CORE_DS,
+        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_external'.CORE_DS.'phpmailer'.CORE_DS,
         SMARTY_DIR,
         PHPMAILER_DIR,
         PRINT_ENGINE_WORD
