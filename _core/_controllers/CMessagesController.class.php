@@ -77,12 +77,12 @@ class CMessagesController extends CBaseController {
         $mail = CStaffManager::getMessage(CRequest::getInt("id"));
         $isMy = false;
         if (!is_null($mail->getSender())) {
-            if ($mail->getSender()->getId() == CSession::getCurrentPerson()->getId()) {
+            if ($mail->getSender()->getId() == CSession::getCurrentUser()->getId()) {
                 $isMy = true;
             }
         }
         if (!is_null($mail->getRecipient())) {
-            if ($mail->getRecipient()->getId() == CSession::getCurrentPerson()->getId()) {
+            if ($mail->getRecipient()->getId() == CSession::getCurrentUser()->getId()) {
                 $isMy = true;
             }
         }
@@ -91,7 +91,7 @@ class CMessagesController extends CBaseController {
         }
         if (!$mail->isRead()) {
             if (!is_null($mail->getRecipient())) {
-                if ($mail->getRecipient()->getId() == CSession::getCurrentPerson()->getId()) {
+                if ($mail->getRecipient()->getId() == CSession::getCurrentUser()->getId()) {
                     $mail->read_status = 1;
                     $mail->save();
                 }
@@ -120,7 +120,7 @@ class CMessagesController extends CBaseController {
                 if (!is_null($mail->getRecipient()->getUser())) {
                     if (!is_null($mail->getRecipient()->getUser()->getSubscription())) {
                         if ($mail->getRecipient()->e_mail !== "") {
-                            CUtils::sendEmail($mail->getRecipient()->e_mail, $mail->getTheme(), $mail->getBody());
+                            // CUtils::sendEmail($mail->getRecipient()->e_mail, $mail->getTheme(), $mail->getBody());
                         }
                     }
                 }
