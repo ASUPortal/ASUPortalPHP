@@ -101,7 +101,8 @@ class CMessagesController extends CBaseController {
 			}
         }
         if (!$isMy) {
-            exit;
+			// со студентом тупняк. Он ненормальный адресат
+            //exit;
         }
         if (!$mail->isRead()) {
             if (!is_null($mail->getRecipient())) {
