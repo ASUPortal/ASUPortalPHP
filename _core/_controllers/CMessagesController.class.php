@@ -86,6 +86,20 @@ class CMessagesController extends CBaseController {
                 $isMy = true;
             }
         }
+		if (!is_null($mail->getSender())) {
+			if (!is_null(CSession::getCurrentPerson())) {
+				if ($mail->getSender()->getId() == CSession::getCurrentPerson()->getId()) {
+					$isMy = true;
+				}			
+			}
+        }
+		if (!is_null($mail->getRecipient())) {
+			if (!is_null(CSession::getCurrentPerson())) {
+				if ($mail->getRecipient()->getId() == CSession::getCurrentPerson()->getId()) {
+					$isMy = true;
+				}			
+			}
+        }
         if (!$isMy) {
             exit;
         }
