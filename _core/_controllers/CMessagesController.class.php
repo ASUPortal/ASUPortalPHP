@@ -169,6 +169,11 @@ class CMessagesController extends CBaseController {
         $res["unread"] = $messages->getCount();
         echo json_encode($res);
     }
+	public function actionDelete(){
+	    $mail = CStaffManager::getMessage(CRequest::getInt("id"));
+        $mail->remove();
+		$this->redirect("?action=inbox");
+	}
     public function actionReply() {
         $mail = CStaffManager::getMessage(CRequest::getInt("id"));
         $mail->mail_title = "В ответ на: ".$mail->mail_title;
