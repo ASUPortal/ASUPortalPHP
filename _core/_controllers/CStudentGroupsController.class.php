@@ -178,4 +178,9 @@ class CStudentGroupsController extends CBaseController {
         }
         return (count($el1) > count($el2)) ? -1 : 1;
     }
+    public function actionDelete(){
+		$group = CStaffManager::getStudentGroup(CRequest::getInt("id"));
+        $group->remove();
+		$this->redirect("?action=index");
+	}
 }
