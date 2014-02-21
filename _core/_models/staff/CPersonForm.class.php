@@ -10,7 +10,8 @@
 class CPersonForm extends CFormModel{
     public $person = null;
     private $_types = array();
-    public function save() {
+    public function save() {     
+        
         $personArr = $this->person;
         /**
          * Сохраняем сотрудника
@@ -48,6 +49,12 @@ class CPersonForm extends CFormModel{
         }
         $this->person = new CPerson();
         $this->person->setAttributes($personArr);
+        if (!is_null($this->to_tabel)) {
+            $this->person->to_tabel = $this->to_tabel;            
+        }
+        if (!is_null($this->is_slave)) {
+            $this->person->is_slave = $this->is_slave;            
+        }
     }
 
 }
