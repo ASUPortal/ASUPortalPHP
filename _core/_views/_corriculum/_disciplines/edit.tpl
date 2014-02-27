@@ -6,10 +6,14 @@
 
     <ul class="nav nav-tabs">
         <li class="active"><a href="#labor" data-toggle="tab">Распределение нагрузки по видам занятий</a></li>
+        <li><a href="#competentions" data-toggle="tab">Компетенции</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="labor">
             {include file="_corriculum/_disciplines/subform.labor.tpl"}
+        </div>
+        <div class="tab-pane" id="competentions">
+            {include file="_corriculum/_disciplines/subform.competentions.tpl"}
         </div>
     </div>
 {/block}

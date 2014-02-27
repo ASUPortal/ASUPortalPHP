@@ -15,6 +15,7 @@ class CCorriculumDiscipline extends CActiveModel {
     protected $_controls = null;
     protected $_hours = null;
     protected $_parent = null;
+    protected $_competentions = null;
 
     /**
      * Разнообразные публичные свойства
@@ -76,6 +77,14 @@ class CCorriculumDiscipline extends CActiveModel {
                 "storageCondition" => "discipline_id=".$this->id,
                 "managerClass" => "CCorriculumsManager",
                 "managerGetObject" => "getHour"
+            ),
+            "competentions" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_competentions",
+                "storageTable" => TABLE_CORRICULUM_DISCIPLINE_COMPETENTIONS,
+                "storageCondition" => "discipline_id=".$this->id,
+                "managerClass" => "CCorriculumsManager",
+                "managerGetObject" => "getCompetention"
             ),
         );
     }

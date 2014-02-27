@@ -41,6 +41,7 @@
             </td>
         {/foreach}
         <!-- Распределение по видам занятий -->
+        <td>&nbsp;</td>
     </tr>
 {/function}
 <table class="table table-striped table-bordered table-hover table-condensed">
@@ -56,27 +57,27 @@
         <td>№</td>
         <td>Наименование дисциплины</td>
         <td>Всего</td>
-    {foreach $labors->getItems() as $labor}
-        <td>
-            {if !is_null($labor->type)}
-                                {$labor->type->getValue()}
-                            {/if}
-        </td>
-    {/foreach}
+        {foreach $labors->getItems() as $labor}
+            <td>
+                {if !is_null($labor->type)}
+                    {$labor->type->getValue()}
+                {/if}
+            </td>
+        {/foreach}
         <td>&nbsp;</td>
     </tr>
     </thead>
-{foreach $corriculum->cycles->getItems() as $cycle}
-    <tr>
-        <td colspan="{(8 + $labors->getCount())}">
-            <a href="cycles.php?action=edit&id={$cycle->getId()}">{$cycle->title}</a>
-        </td>
-    </tr>
-    {foreach $cycle->disciplines->getItems() as $discipline}
-        {print_discipline_row discipline=$discipline level=0}
-        {foreach $discipline->children->getItems() as $child}
-            {print_discipline_row discipline=$child level=1}
+    {foreach $corriculum->cycles->getItems() as $cycle}
+        <tr>
+            <td colspan="{(8 + $labors->getCount())}">
+                <a href="cycles.php?action=edit&id={$cycle->getId()}">{$cycle->title}</a>
+            </td>
+        </tr>
+        {foreach $cycle->disciplines->getItems() as $discipline}
+            {print_discipline_row discipline=$discipline level=0}
+            {foreach $discipline->children->getItems() as $child}
+                {print_discipline_row discipline=$child level=1}
+            {/foreach}
         {/foreach}
     {/foreach}
-{/foreach}
 </table>
