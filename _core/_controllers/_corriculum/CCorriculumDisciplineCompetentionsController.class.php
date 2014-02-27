@@ -25,7 +25,7 @@ class CCorriculumDisciplineCompetentionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "competentions.php?action=index",
+            "link" => "disciplines.php?action=edit&id=".$object->discipline_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
