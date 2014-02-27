@@ -603,11 +603,17 @@ class CStaffManager{
      */
     public static function getUserGroup($key) {
         if (!self::getCacheUserGroups()->hasElement($key)) {
-            $ar = CActiveRecordProvider::getById(TABLE_USER_GROUPS, $key);
-            if (!is_null($ar)) {
-                $group = new CUserGroup($ar);
-                self::getCacheUserGroups()->add($group->getId(), $group);
+            $cache_id = "staff_user_group_".$key;
+            if (is_null(CApp::getApp()->cache->get($cache_id))) {
+                $ar = CActiveRecordProvider::getById(TABLE_USER_GROUPS, $key);
+                $group = null;
+                if (!is_null($ar)) {
+                    $group = new CUserGroup($ar);
+                    CApp::getApp()->cache->set($cache_id, $group, 3600);
+                }
             }
+            $group = CApp::getApp()->cache->get($cache_id);
+            self::getCacheUserGroups()->add($group->getId(), $group);
         }
         return self::getCacheUserGroups()->getItem($key);
     }
