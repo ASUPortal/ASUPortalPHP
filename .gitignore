@@ -19,3 +19,5 @@ tmp/smarty/*
 tmp/timthumb/*
 news/attachement/*
 images/lects/*
+
+*.cache
