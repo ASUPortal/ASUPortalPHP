@@ -6,6 +6,8 @@
  * Time: 16:12
  * To change this template use File | Settings | File Templates.
  */
+define("CACHE_APPLICATION_SETTINGS", "application_settings");
+
 class CSettingsManager {
     private static $_cacheSettings = null;
 
@@ -16,10 +18,16 @@ class CSettingsManager {
         if (is_null(self::$_cacheSettings)) {
             self::$_cacheSettings = new CArrayList();
             if (CSettingsManager::getSettingValue("preload_settings")) {
-                foreach (CActiveRecordProvider::getAllFromTable(TABLE_SETTINGS)->getItems() as $item) {
-                    $setting = new CSetting($item);
-                    self::getCacheSettings()->add($setting->getId(), $setting);
-                    self::getCacheSettings()->add(strtoupper($setting->alias), $setting);
+                // будет с поддержкой кеша
+                if (is_null(CApp::getApp()->cache->get(CACHE_APPLICATION_SETTINGS))) {
+                    foreach (CActiveRecordProvider::getAllFromTable(TABLE_SETTINGS)->getItems() as $item) {
+                        $setting = new CSetting($item);
+                        self::getCacheSettings()->add($setting->getId(), $setting);
+                        self::getCacheSettings()->add(strtoupper($setting->alias), $setting);
+                    }
+                    CApp::getApp()->cache->set(CACHE_APPLICATION_SETTINGS, self::$_cacheSettings, 3600);
+                } else {
+                    self::$_cacheSettings = CApp::getApp()->cache->get(CACHE_APPLICATION_SETTINGS);
                 }
             }
         }
