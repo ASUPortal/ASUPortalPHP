@@ -89,30 +89,15 @@
             "CSetting",
             "CSettingManager"
         ),
-        "cache" => array(
-            "class" => "CCacheDummy",
-            "cacheDir" => CORE_CWD.CORE_DS.'tmp'.CORE_DS.'cache'.CORE_DS,
-            "timeout" => 360
+        "components" => array(
+            "cache" => array(
+                "class" => "CCacheFile",
+                "cacheDir" => CORE_CWD.CORE_DS.'tmp'.CORE_DS.'cache'.CORE_DS,
+                "timeout" => 60
+            ),
         ),
         "smarty" => array(
             "cacheEnabled" => false
-        ),
-        "crud" => array(
-            "create" => array(
-                "add"
-            ),
-            "read" => array(
-                "edit",
-                "view",
-                "index"
-            ),
-            "update" => array(
-                "save"
-            ),
-            "delete" => array(
-                "del",
-                "delete"
-            )
         )
     );
     /**

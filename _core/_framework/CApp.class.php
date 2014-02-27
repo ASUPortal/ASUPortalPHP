@@ -6,17 +6,23 @@
  * Time: 16:30
  * To change this template use File | Settings | File Templates.
  */
-class CApp {
+class CApp extends CComponent{
     private static $_inst = null;
     private $_config = null;
     private $_cache = null;
     private static $_log = array();
     private $_dbLogConnection = null;
+
+    protected $preload = array();
+    protected $components = array();
+    protected $smarty = null;
     /**
      * @param array $config
      */
-    private function __construct(array $config) {
+    public function __construct(array $config) {
         $this->_config = $config;
+
+        parent::__construct($config);
     }
     /**
      * Синглтон приложения
@@ -41,11 +47,8 @@ class CApp {
     public function run() {
         // @todo перенести код из конструктора базового контроллера сюда
         // прелоад классов
-        if (array_key_exists("preload", $this->_config)) {
-            $preload = $this->_config["preload"];
-            foreach($preload as $p) {
-                classAutoload($p);
-            }
+        foreach($this->preload as $p) {
+            classAutoload($p);
         }
         // инициализируем соединение с базой, если этого еще не сделано
         global $sql_connect;
@@ -120,22 +123,31 @@ class CApp {
         }
         return $this->_dbLogConnection;
     }
-    /**
-     * Работа с кешем
-     *
-     * @return CCache
-     */
-    public function getCache() {
-        if (is_null($this->_cache)) {
-            if (array_key_exists("cache", $this->_config)) {
-                $cacheConfig = $this->_config["cache"];
-                $cacheClass = $cacheConfig["class"];
-                $this->_cache = new $cacheClass($cacheConfig);
-            }
-        }
-        return $this->_cache;
-    }
     public function getConfig() {
         return $this->_config;
+    }
+
+    /**
+     * Автозагрузка компонентов приложений
+     *
+     * @param $name
+     * @return CComponent
+     * @throws Exception
+     */
+    public function __get($name) {
+        // пробуем загрузить компонент, к которому пользователь обратился
+        if (!array_key_exists($name, $this->components)) {
+            throw new Exception("Приложение не поддерживает компонент ".$name);
+        }
+        // если компонент еще не был инициализирован, то в свойстве лежит
+        // массив, а не объект
+        if (is_array($this->components[$name])) {
+            $config = $this->components[$name];
+            $class = $config["class"];
+            unset($config["class"]);
+            $object = new $class($config);
+            $this->components[$name] = $object;
+        }
+        return $this->components[$name];
     }
 }
