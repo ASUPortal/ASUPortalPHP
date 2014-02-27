@@ -482,24 +482,9 @@ class CBaseController {
             $this->_smarty->setCompileDir(SMARTY_COMPILE);
             $this->_smarty->setCacheDir(SMARTY_CACHE);
 
-            // подключаем очищающий плагинчик
-            //$this->_smarty->loadFilter("output", "trimwhitespace");
-
             // постоянно нужная ерунда типа управлялки меню,
             // нет другого места, откуда ее можно хорошо подцепить
             $this->addCSSInclude("_core/core.css");
-            /*
-            $this->addCSSInclude("_modules/_sdmenu/sdmenu.css");
-            $this->addJSInclude("_modules/_sdmenu/sdmenu.js");
-            $this->addJQInlineInclude('
-                if ($("#mainMenu").length) {
-                    myMenu = new SDMenu("mainMenu");
-                    myMenu.oneSmOnly = true;
-                    myMenu.init();
-                }
-            ');
-            */
-
         }
         return $this->_smarty;
     }
