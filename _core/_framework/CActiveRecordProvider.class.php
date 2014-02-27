@@ -46,7 +46,7 @@ class CActiveRecordProvider {
      */
     public static function getById($table, $id) {
         $key = $table."_".$id;
-        if (!CApp::getApp()->getCache()->hasCache($key)) {
+        if (!self::getCache()->hasElement($key)) {
             $q = new CQuery();
             $r = $q->select("*")
                 ->from($table)
@@ -55,10 +55,10 @@ class CActiveRecordProvider {
             if ($r->getCount() == 1) {
                 $record = new CActiveRecord($r->getItem(0));
                 $record->setTable($table);
-                CApp::getApp()->getCache()->set($key, $record);
+                self::getCache()->add($key, $record);
             }
         }
-        return CApp::getApp()->getCache()->get($key);
+        return self::getCache()->getItem($key);
     }
     /**
      * Лист записей из какой-либо таблицы
@@ -112,7 +112,7 @@ class CActiveRecordProvider {
      */
     public static function getDistinctWithCondition($table, $condition, $field) {
         $key = $table."_".$condition."_distinct_".$field;
-        if (!CApp::getApp()->getCache()->hasCache($key)) {
+        if (!self::getCache()->hasElement($key)) {
             $q = new CQuery();
             $res = new CRecordSet();
             $res->setManualAdd(true);
@@ -127,9 +127,9 @@ class CActiveRecordProvider {
                 $res->add($res->getCount(), $distinct);
             }
 
-            CApp::getApp()->getCache()->set($key, $res);
+            self::getCache()->add($key, $res);
         }
-        return CApp::getApp()->getCache()->get($key);
+        return self::getCache()->getItem($key);
     }
     public static function removeFromCache($table, $id) {
         self::getCache()->removeItem($table."_".$id);
