@@ -14,32 +14,48 @@ class CSearchCatalogTaxonomy implements ISearchCatalogInterface{
     {
         $result = array();
         // таксономия
-        $taxonomy = CTaxonomyManager::getTaxonomy($this->_catalog);
-        $query = new CQuery();
-        $query->select("distinct(taxonomy.id) as id, taxonomy.name as name, taxonomy.taxonomy_id as tax")
-            ->from(TABLE_TAXONOMY_TERMS." as taxonomy")
-            ->condition("taxonomy.name like '%".$lookup."%' and taxonomy.taxonomy_id =".$taxonomy->getId())
-            ->limit(0, 10);
-        foreach ($query->execute()->getItems() as $item) {
-            $result[$item["id"]] = $item["name"];
+        // будет с поддержкой кеша
+        $cache_id = $this->_catalog."_".md5($lookup);
+        if (is_null(CApp::getApp()->cache->get($cache_id))) {
+            $taxonomy = CTaxonomyManager::getTaxonomy($this->_catalog);
+            $query = new CQuery();
+            $query->select("distinct(taxonomy.id) as id, taxonomy.name as name, taxonomy.taxonomy_id as tax")
+                ->from(TABLE_TAXONOMY_TERMS." as taxonomy")
+                ->condition("taxonomy.name like '%".$lookup."%' and taxonomy.taxonomy_id =".$taxonomy->getId())
+                ->limit(0, 10);
+            foreach ($query->execute()->getItems() as $item) {
+                $result[$item["id"]] = $item["name"];
+            }
+            CApp::getApp()->cache->set($cache_id, $result);
         }
-        return $result;
+        return CApp::getApp()->cache->get($cache_id);
     }
 
     public function actionGetItem($id)
     {
         $result = array();
-        $term = CTaxonomyManager::getTerm($id);
-        if (!is_null($term)) {
-            $result[$term->getId()] = $term->getValue();
+        // теперь будет с поддержкой кэша
+        $cache_id = $this->_catalog."_".$id;
+        if (is_null(CApp::getApp()->cache->get($cache_id))) {
+            $term = CTaxonomyManager::getTerm($id);
+            if (!is_null($term)) {
+                $result[$term->getId()] = $term->getValue();
+            }
+            CApp::getApp()->cache->set($cache_id, $result, 30);
         }
-        return $result;
+        var_dump(CLog::dump(true));
+        return CApp::getApp()->cache->get($cache_id);
     }
 
     public function actionGetViewData()
     {
-        $taxonomy = CTaxonomyManager::getTaxonomy($this->_catalog);
-        return $taxonomy->getTermsList();
+        $cache_id = $this->_catalog."_getViewData";
+        if (is_null(CApp::getApp()->cache->get($cache_id))) {
+            $taxonomy = CTaxonomyManager::getTaxonomy($this->_catalog);
+            $result = $taxonomy->getTermsList();
+            CApp::getApp()->cache->set($cache_id, $result);
+        }
+        return CApp::getApp()->cache->get($cache_id);
     }
 
     function __construct($catalog)
