@@ -43,7 +43,6 @@ class CSearchCatalogTaxonomy implements ISearchCatalogInterface{
             }
             CApp::getApp()->cache->set($cache_id, $result, 30);
         }
-        var_dump(CLog::dump(true));
         return CApp::getApp()->cache->get($cache_id);
     }
 
