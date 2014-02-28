@@ -9,6 +9,7 @@
 class CPublication extends CActiveModel {
     protected $_table = TABLE_PUBLICATIONS;
     protected $_authors = null;
+    protected $_type = null;
 
     public function relations() {
         return array(
@@ -20,7 +21,12 @@ class CPublication extends CActiveModel {
                 "rightKey" => "kadri_id",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPerson"
-            )
+            ),
+            "type" => array(
+                "relationPower" => RELATION_COMPUTED,
+                "storageProperty" => "_type",
+                "relationFunction" => "getType"
+            ),
         );
     }
 
@@ -31,5 +37,11 @@ class CPublication extends CActiveModel {
                 "upload_dir" => CORE_CWD.CORE_DS."library".CORE_DS."izdan".CORE_DS
             )
         );
+    }
+    public function getType() {
+        if (is_null($this->_type)) {
+            $this->_type = CTaxonomyManager::getLegacyTerm($this->type_book, "izdan_type");
+        }
+        return $this->_type;
     }
 }
