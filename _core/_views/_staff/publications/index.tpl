@@ -12,19 +12,17 @@
                     <th width="16">&nbsp;</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("kadri_id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("name", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("grif", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("publisher", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("volume", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("year", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("copy", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("type_book", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("bibliografya", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("authors_all", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("page_range", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("approve_date", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("name", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("page_range", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("bibliografya", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("authors_all", $objects->getFirstItem())}</th>
+                    <th>В том числе с кафедры</th>
+                    <th>{CHtml::tableOrder("grif", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("publisher", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("year", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("approve_date", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("type_book", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("copy", $objects->getFirstItem())}</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,19 +32,32 @@
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить публикация')) { location.href='publications.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{counter}</td>
                     <td><a href="publications.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>{$object->id}</td>
-<td>{$object->kadri_id}</td>
-<td>{$object->name}</td>
-<td>{$object->grif}</td>
-<td>{$object->publisher}</td>
-<td>{$object->volume}</td>
-<td>{$object->year}</td>
-<td>{$object->copy}</td>
-<td>{$object->type_book}</td>
-<td>{$object->bibliografya}</td>
-<td>{$object->authors_all}</td>
-<td>{$object->page_range}</td>
-<td>{$object->approve_date}</td>
+                    <td>{$object->name}</td>
+                    <td>{$object->page_range}</td>
+                    <td>{$object->bibliografya}</td>
+                    <td>
+                        {$object->authors_all}
+                        <ol>
+                        {foreach $object->authors->getItems() as $author}
+                            <li>{$author->getName()}</li>
+                        {/foreach}
+                        </ol>
+                    </td>
+                    <td>
+                        {if $object->authors->getCount() > 0}
+                            {$object->authors->getCount()}
+                        {/if}
+                    </td>
+                    <td>{$object->grif}</td>
+                    <td>{$object->publisher}</td>
+                    <td>{$object->year}</td>
+                    <td>{$object->approve_date}</td>
+                    <td>
+                        {if !is_null($object->type)}
+                            {$object->type->getValue()}
+                        {/if}
+                    </td>
+                    <td>{CHtml::activeAttachPreview("copy", $object, true)}</td>
                 </tr>
             {/foreach}
             </tbody>
