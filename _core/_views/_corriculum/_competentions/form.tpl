@@ -20,8 +20,23 @@
             {CHtml::error("knowledge_id", $object)}
         </div>
     </div>
-
-
+        
+    <div class="control-group">
+        {CHtml::activeLabel("skill_id", $object)}
+        <div class="controls">
+            {CHtml::activeLookup("skill_id", $object, "corriculum_knowledges")}
+            {CHtml::error("skill_id", $object)}
+        </div>
+    </div>
+        
+    <div class="control-group">
+        {CHtml::activeLabel("experience_id", $object)}
+        <div class="controls">
+            {CHtml::activeLookup("experience_id", $object, "corriculum_knowledges")}
+            {CHtml::error("experience_id", $object)}
+        </div>
+    </div>
+        
     <div class="control-group">
         <div class="controls">
             {CHtml::submit("Сохранить")}
