@@ -105,12 +105,12 @@ class CMessagesController extends CBaseController {
             //exit;
         }
         if (!$mail->isRead()) {
-            if (!is_null($mail->getRecipient())) {
-                if ($mail->getRecipient()->getId() == CSession::getCurrentUser()->getId()) {
+         //   if (!is_null($mail->getRecipient())) {
+         //       if ($mail->getRecipient()->getId() == CSession::getCurrentUser()->getId()) {
                     $mail->read_status = 1;
                     $mail->save();
-                }
-            }
+         //       }
+         //   }
         }
         $this->setData("mail", $mail);
         $this->renderView("_messages/view.tpl");
