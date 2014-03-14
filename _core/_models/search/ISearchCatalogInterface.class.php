@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-interface ISearchCatalogInterface {
+interface ISearchCatalogInterface{
     public function actionTypeAhead($lookup);
     public function actionGetItem($id);
     public function actionGetViewData();

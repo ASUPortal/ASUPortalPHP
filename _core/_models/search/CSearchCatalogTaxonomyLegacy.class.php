@@ -7,18 +7,14 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class CSearchCatalogTaxonomyLegacy implements ISearchCatalogInterface {
-    private $_catalog;
-    function __construct($catalog)
-    {
-        $this->_catalog = $catalog;
-    }
+class CSearchCatalogTaxonomyLegacy extends CComponent implements ISearchCatalogInterface {
+    public $taxonomy;
 
     public function actionTypeAhead($lookup)
     {
         $result = array();
         // унаследованная таксономия
-        $taxonomy = CTaxonomyManager::getLegacyTaxonomy($this->_catalog);
+        $taxonomy = CTaxonomyManager::getLegacyTaxonomy($this->taxonomy);
         $query = new CQuery();
         $query->select("distinct(taxonomy.id) as id, taxonomy.name as name")
             ->from($taxonomy->getTableName()." as taxonomy")
@@ -34,7 +30,7 @@ class CSearchCatalogTaxonomyLegacy implements ISearchCatalogInterface {
     {
         $result = array();
         // унаследованная таксономия
-        $taxonomy = CTaxonomyManager::getLegacyTaxonomy($this->_catalog);
+        $taxonomy = CTaxonomyManager::getLegacyTaxonomy($this->taxonomy);
         $term = $taxonomy->getTerm($id);
         if (!is_null($term)) {
             $result[$term->getId()] = $term->getValue();
@@ -46,7 +42,7 @@ class CSearchCatalogTaxonomyLegacy implements ISearchCatalogInterface {
     {
         $result = array();
         // унаследованная таксономия
-        $taxonomy = CTaxonomyManager::getLegacyTaxonomy($this->_catalog);
+        $taxonomy = CTaxonomyManager::getLegacyTaxonomy($this->taxonomy);
         foreach ($taxonomy->getTerms()->getItems() as $term) {
             $result[$term->getId()] = $term->getValue();
         }

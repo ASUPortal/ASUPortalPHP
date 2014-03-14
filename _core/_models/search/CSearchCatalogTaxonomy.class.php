@@ -7,17 +7,17 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class CSearchCatalogTaxonomy implements ISearchCatalogInterface{
-    private $_catalog;
+class CSearchCatalogTaxonomy extends CComponent implements ISearchCatalogInterface{
+    public $taxonomy;
 
     public function actionTypeAhead($lookup)
     {
         $result = array();
         // таксономия
         // будет с поддержкой кеша
-        $cache_id = $this->_catalog."_".md5($lookup);
+        $cache_id = $this->taxonomy."_".md5($lookup);
         if (is_null(CApp::getApp()->cache->get($cache_id))) {
-            $taxonomy = CTaxonomyManager::getTaxonomy($this->_catalog);
+            $taxonomy = CTaxonomyManager::getTaxonomy($this->taxonomy);
             $query = new CQuery();
             $query->select("distinct(taxonomy.id) as id, taxonomy.name as name, taxonomy.taxonomy_id as tax")
                 ->from(TABLE_TAXONOMY_TERMS." as taxonomy")
@@ -35,7 +35,7 @@ class CSearchCatalogTaxonomy implements ISearchCatalogInterface{
     {
         $result = array();
         // теперь будет с поддержкой кэша
-        $cache_id = $this->_catalog."_".$id;
+        $cache_id = $this->taxonomy."_".$id;
         if (is_null(CApp::getApp()->cache->get($cache_id))) {
             $term = CTaxonomyManager::getTerm($id);
             if (!is_null($term)) {
@@ -48,18 +48,12 @@ class CSearchCatalogTaxonomy implements ISearchCatalogInterface{
 
     public function actionGetViewData()
     {
-        $cache_id = $this->_catalog."_getViewData";
+        $cache_id = $this->taxonomy."_getViewData";
         if (is_null(CApp::getApp()->cache->get($cache_id))) {
-            $taxonomy = CTaxonomyManager::getTaxonomy($this->_catalog);
+            $taxonomy = CTaxonomyManager::getTaxonomy($this->taxonomy);
             $result = $taxonomy->getTermsList();
             CApp::getApp()->cache->set($cache_id, $result);
         }
         return CApp::getApp()->cache->get($cache_id);
     }
-
-    function __construct($catalog)
-    {
-        $this->_catalog = $catalog;
-    }
-
 }

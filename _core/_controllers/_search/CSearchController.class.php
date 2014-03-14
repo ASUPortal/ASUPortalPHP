@@ -221,20 +221,24 @@ class CSearchController extends CBaseController{
     }
     private function searchObjectsFactory($catalog) {
         if ($catalog == "staff") {
-            return new CSearchCatalogStaff();
+            return new CSearchCatalogStaff(array());
         } elseif ($catalog == "student") {
-            return new CSearchCatalogStudent();
+            return new CSearchCatalogStudent(array());
         } elseif ($catalog == "studentgroup") {
-            return new CSearchCatalogStudentGroup();
+            return new CSearchCatalogStudentGroup(array());
         } elseif ($catalog == "sab_commissions") {
-            return new CSearchCatalogSABCommission();
+            return new CSearchCatalogSABCommission(array());
         } elseif (CUtils::strLeft($catalog, ".") == "class") {
             $class = CUtils::strRight($catalog, ".");
-            return new $class();
+            return new $class(array());
         } elseif (!is_null(CTaxonomyManager::getTaxonomy($catalog))) {
-            return new CSearchCatalogTaxonomy($catalog);
+            return new CSearchCatalogTaxonomy(array(
+                "taxonomy" => $catalog
+            ));
         } elseif (!is_null(CTaxonomyManager::getLegacyTaxonomy($catalog))) {
-            return new CSearchCatalogTaxonomyLegacy($catalog);
+            return new CSearchCatalogTaxonomyLegacy(array(
+                "taxonomy" => $catalog
+            ));
         } else {
             throw new Exception("Не могу найти каталог для поиска ".$catalog);
         }
