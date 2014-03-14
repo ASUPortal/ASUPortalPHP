@@ -82,7 +82,9 @@ class CCorriculumCycle extends CActiveModel {
     public function getDisciplinesList() {
         $res = array();
         foreach ($this->disciplines->getItems() as $item) {
-            $res[$item->id] = $item->number." ".$item->discipline->getValue();
+            if (!is_null($item->discipline)) {
+                $res[$item->id] = $item->number." ".$item->discipline->getValue();
+            }
         }
         return $res;
     }
