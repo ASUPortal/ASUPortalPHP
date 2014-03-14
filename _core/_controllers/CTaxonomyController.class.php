@@ -62,7 +62,9 @@ class CTaxonomyController extends CBaseController {
      */
     public function actionAdd() {
         $taxonomy = CTaxonomyManager::getTaxonomy(CRequest::getInt("taxonomy_id"));
-        $this->setData("taxonomy", $taxonomy);
+        $term = new CTerm();
+        $term->taxonomy_id = $taxonomy->getId();
+        $this->setData("term", $term);
         $this->renderView("_taxonomy/add.tpl");
     }
     /**

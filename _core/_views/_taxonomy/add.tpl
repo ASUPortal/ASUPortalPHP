@@ -3,7 +3,7 @@
 {block name="asu_center"}
 <h2>Добавление термина таксономии</h2>
 
-{include file="_taxonomy/form.tpl"}
+    {include file="_taxonomy/form.term.tpl"}
 {/block}
 
 {block name="asu_right"}

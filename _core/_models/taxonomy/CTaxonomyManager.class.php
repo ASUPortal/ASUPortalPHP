@@ -9,8 +9,6 @@
  * Менеджер по работе со словарями и справочниками
  */
 
-    define("TAXONOMY_DEPARTMENT_ROLES", "department_roles");
-
 class CTaxonomyManager {
     private static $_cachePosts = null;
     private static $_cacheTerms = null;

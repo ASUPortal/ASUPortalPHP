@@ -27,7 +27,11 @@ class CTaxonomy extends CActiveModel {
         if (is_null($this->_cacheTerms)) {
             $this->_cacheTerms = new CArrayList();
             foreach (CActiveRecordProvider::getWithCondition(TABLE_TAXONOMY_TERMS, "taxonomy_id=".$this->getId(), "id asc")->getItems() as $item) {
-                $term = new CTerm($item);
+                if ($this->alias == TAXONOMY_COMPETENTIONS) {
+                    $term = new CCorriculumCompetention($item);
+                } else {
+                    $term = new CTerm($item);
+                }
                 $this->_cacheTerms->add($term->getId(), $term);
             }
         }

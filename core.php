@@ -124,6 +124,13 @@
             // пока оставим так
         }
     }
+
+    /**
+     * Особые таксономии
+     */
+    define("TAXONOMY_DEPARTMENT_ROLES", "department_roles");
+    define("TAXONOMY_COMPETENTIONS", "corriculum_competentions");
+    define("TAXONOMY_SPECIALITY", "specialities");
     /**
      * Импорт отсальных констант. Там уже можно использовать настройки
      * из базы данных, так как автолоадер уже запущен
