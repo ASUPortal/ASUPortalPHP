@@ -1,5 +1,5 @@
 <div class="control-group">
-    {CHtml::activeLabel("alias", $term)}
+    Специальность
     <div class="controls">
         {CHtml::activeLookup("alias", $term, "specialities")}
         {CHtml::error("alias", $term)}
