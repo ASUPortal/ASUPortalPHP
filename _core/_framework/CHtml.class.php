@@ -1159,7 +1159,7 @@ class CHtml {
     private static function requiredStar() {
         echo '<span class="field_required">*</span>';
     }
-    public static function activeLookup($name, CModel $model, $catalog = "", $isMultiple = false, $properties = array()) {
+    public static function activeLookup($name, CModel $model, $catalog = "", $isMultiple = false, $properties = array(), $allowCreation = false) {
         /**
          * Безумно полезная штука для работы со связанными
          * моделями. Если в названии поля есть скобки, то производится
@@ -1190,7 +1190,7 @@ class CHtml {
         $inline .= ' class="'.$class.'"';
         $data = $model->$name;
         ?>
-        <div class="catalogLookup" asu-catalog="<?php echo $catalog; ?>" asu-multiple="<?php echo ($isMultiple) ? "true":"false" ;?>" asu-value-name="<?php echo $field; ?>">
+        <div class="catalogLookup" asu-catalog="<?php echo $catalog; ?>" asu-multiple="<?php echo ($isMultiple) ? "true":"false" ;?>" asu-value-name="<?php echo $field; ?>" asu-creation="<?php echo ($allowCreation) ? "true":"false" ;?>">
 
         <?php if (is_object($data)) : ?>
             <?php foreach ($data->getItems() as $val) : ?>

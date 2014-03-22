@@ -14,6 +14,8 @@
         var _values = null;
         var _placeholder = null;
 		var _properties = null;
+        var _allowCreation = false;
+        var _lookupDialog = null;
 
         // обработка пользовательского ввода
         this._onTypeAhead = function(query, process){
@@ -52,15 +54,17 @@
                 url: web_root + "_modules/_search/",
                 dataType: "html",
                 data: {
-					action: "LookupGetDialog"
+					action: "LookupGetDialog",
+                    allowCreation: parentObj._allowCreation
 				},
                 context: parentObj,
                 success: function(data){
-                    var lookupDialog = jQuery(data);
-                    jQuery(lookupDialog).on("show", this, this._onDialogShow);
-                    jQuery(lookupDialog).on("shown", this, this._onDialogShown);
-                    jQuery("[asu-action=ok]", lookupDialog).on("click", this, this._onDialogOkClick);
-                    jQuery(lookupDialog).modal();
+                    this._lookupDialog = jQuery(data);
+                    jQuery(this._lookupDialog).on("show", this, this._onDialogShow);
+                    jQuery(this._lookupDialog).on("shown", this, this._onDialogShown);
+                    jQuery("[asu-action=ok]", this._lookupDialog).on("click", this, this._onDialogOkClick);
+                    jQuery("[asu-action=create]", this._lookupDialog).on("click", this, this._onDialogCreateClick);
+                    jQuery(this._lookupDialog).modal();
                 }
             });
         };
@@ -84,6 +88,179 @@
             // выбираем чекбокс в текущей строке
             var checkbox = jQuery(this).find("input[type=checkbox]");
             jQuery(checkbox).attr("checked", true);
+        };
+
+        // создать в диалоге
+        this._onDialogCreateClick = function(event){
+            var parentObj = event.data;
+
+            // будем загружать новый диалог с формой
+            var dialog = bootbox.dialog('<div style="text-align: center;"><img src="' + web_root + 'images/loader.gif"></div>', [{
+                "label": "Отмена",
+                "class": "btn",
+                "callback": function(){
+                    // при отмене ничего не происходит
+                }
+            }, {
+                "label": "ОК",
+                "class": "btn-primary",
+                "callback": function(event){
+                    parentObj.handlerOnCreationDialogOkClick();
+                    // диалог мы будем закрывать самостоятельно
+                    return false;
+                }
+            }]);
+
+            // прицепляем функции
+            parentObj.handlerGetCreationForm = getCreationForm;
+            parentObj.handlerPrepareFormHTMLFormDisplay = prepareFormHTMLFormDisplay;
+            parentObj.handlerInsertHTHMLToDialog = insertHTHMLToDialog;
+            parentObj.handlerDialog = dialog;
+            parentObj.handlerOnCreationDialogOkClick = onCreationDialogOkClick;
+            parentObj.handlerForm = null;
+            parentObj.handlerFormTargetURL = "";
+            parentObj.handlerAfterFormSend = afterFormSend;
+            parentObj.sourceDialogURL = "";
+            parentObj.sourceAddAction = "save";
+            parentObj.handlerCloseDialogAndRefreshParent = closeDialogAndRefreshParent;
+
+            // запускаем их
+            jQuery(dialog).on("shown", null, this, getCreationFormURL);
+            jQuery(dialog).on("shown", null, dialog, function(e){
+                // фиксим размер диалога
+                jQuery(this).animate({
+                    width: "800px",
+                    "margin-left": "-400px"
+                });
+            });
+
+            /**
+             * Получаем адрес страницы, с которой нужно получить форму
+             * для добавления
+             */
+            function getCreationFormURL(event) {
+                jQuery.ajax({
+                    cache: false,
+                    url: web_root + "_modules/_search/",
+                    dataType: "html",
+                    data: {
+                        action: "LookupGetCreationDialog",
+                        catalog: parentObj._catalog
+                    },
+                    success: function(data){
+                        parentObj.handlerGetCreationForm(data);
+                    }
+                });
+            };
+            /**
+             * Получаем форму с указанной страницы и загружаем ее
+             * в диалог
+             *
+             * @param url
+             */
+            function getCreationForm(url) {
+                jQuery.ajax({
+                    cache: false,
+                    url: url,
+                    dataType: "html",
+                    success: function(data){
+                        parentObj.handlerPrepareFormHTMLFormDisplay(data, url);
+                    }
+                });
+            };
+            /**
+             * Подготавливаем форму к отображению
+             *
+             * @param html
+             * @param sourceURL
+             */
+            function prepareFormHTMLFormDisplay(html, sourceURL) {
+                var targetHtml = jQuery("#asu_body_content form", html);
+                // убиваем дополнительные кнопки
+                var buttons = jQuery(".btn-group", targetHtml);
+                var buttonsRow = jQuery(buttons).parents(".control-group");
+                jQuery(buttonsRow).remove();
+                // формируем адрес, на который нужно оптравить форму теперь
+                parentObj.handlerFormTargetURL = sourceURL.substring(0, sourceURL.lastIndexOf("/"));
+                parentObj.handlerFormTargetURL += "/" + jQuery(targetHtml).attr("action");
+                // на всякий случай сохраним исходный адрес диалога
+                parentObj.sourceDialogURL = sourceURL;
+                // отпределяем, какое действие используется в диалоге для сохранения результата
+                parentObj.sourceAddAction = jQuery("input[name=action]", targetHtml).val();
+
+                parentObj.handlerInsertHTHMLToDialog(targetHtml);
+            };
+            /**
+             * Вклеиваем форму создания в диалог
+             *
+             * @param html
+             */
+            function insertHTHMLToDialog(html){
+                parentObj.handlerForm = html;
+                jQuery(".modal-body", parentObj.handlerDialog).html(html);
+            };
+            /**
+             * Слушалка нажатия на ОК в диалоге создания
+             */
+            function onCreationDialogOkClick(){
+                // затемняем диалог, чтобы пользователь 20 раз ОК не нажал
+                jQuery(jQuery(".modal-body", parentObj.handlerDialog)).animate({
+                    opacity: 0.1
+                });
+                jQuery("a.btn", parentObj.handlerDialog).addClass("disabled");
+                // нам надо, чтобы action сменился при успешной отправке формы
+                var formData = jQuery(parentObj.handlerForm).serialize();
+                formData["_continueEdit"] = "0";
+                jQuery.ajax({
+                    url: parentObj.handlerFormTargetURL,
+                    data: formData,
+                    dataType: "html",
+                    type: "POST",
+                    success: function(data, status, xhr){
+                        parentObj.handlerAfterFormSend(data);
+                    }
+                });
+            };
+            /**
+             * Отрабатывает, когда пришли данные сохранения
+             * данных в диалоге
+             *
+             * @param html
+             */
+            function afterFormSend(html){
+                // если в форме есть action, совпадающий с исходным action-ом добавления,
+                // то форма не была успешно отправлена
+                var isSuccess = true;
+                var form = jQuery("#asu_body_content form", html);
+                if (form.length > 0) {
+                    var input = jQuery("input[name=action]", form);
+                    isSuccess = jQuery(input).val() != parentObj.sourceAddAction;
+                }
+                if (!isSuccess) {
+                    // делаем форму нормальной обратно
+                    jQuery(jQuery(".modal-body", parentObj.handlerDialog)).animate({
+                        opacity: 1
+                    });
+                    jQuery("a.btn", parentObj.handlerDialog).removeClass("disabled");
+                    parentObj.handlerPrepareFormHTMLFormDisplay(html, parentObj.sourceDialogURL);
+                    return false;
+                }
+                // а тут успешное завершение диалога
+                parentObj.handlerCloseDialogAndRefreshParent();
+            };
+            /**
+             * Закрываем диалог и обновляем родительский диалог выбора
+             * из представления
+             */
+            function closeDialogAndRefreshParent() {
+                // костылик для совместимости со старыми функциями
+                var event = {
+                    data: parentObj
+                };
+
+                parentObj._onDialogShown(event);
+                jQuery(parentObj.handlerDialog).modal("hide");
+            };
         };
 
         // ок в диалоге
@@ -118,7 +295,8 @@
                 success: function(data){
                     var parentObject = this.parentObject;
                     // загружаем полученные данные
-                    var container = jQuery(".modal-body", this);
+                    // var container = jQuery(".modal-body", this);
+                    var container = jQuery(".modal-body", this._lookupDialog);
                     jQuery(container).empty();
                     var table = jQuery("<table/>",{
                         "class": "table table-hover table-condensed"
@@ -283,6 +461,9 @@
 
             // множественный выбор
             this._isMultiple = (jQuery(this).attr("asu-multiple") == "true");
+
+            // возможность создания
+            this._allowCreation = (jQuery(this).attr("asu-creation") == "true");
 			
 			// свойства
 			this._properties = new Object();

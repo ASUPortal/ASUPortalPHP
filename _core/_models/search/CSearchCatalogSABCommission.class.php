@@ -96,5 +96,8 @@ class CSearchCatalogSABCommission extends CComponent implements ISearchCatalogIn
         }
         return $result;
     }
-
+    public function actionGetCreationActionUrl()
+    {
+        // TODO: Implement actionGetCreationActionUrl() method.
+    }
 }

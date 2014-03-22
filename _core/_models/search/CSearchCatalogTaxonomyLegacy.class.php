@@ -48,5 +48,8 @@ class CSearchCatalogTaxonomyLegacy extends CComponent implements ISearchCatalogI
         }
         return $result;
     }
-
+    public function actionGetCreationActionUrl()
+    {
+        // TODO: Implement actionGetCreationActionUrl() method.
+    }
 }

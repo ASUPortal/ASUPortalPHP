@@ -48,12 +48,18 @@ class CSearchCatalogTaxonomy extends CComponent implements ISearchCatalogInterfa
 
     public function actionGetViewData()
     {
-        $cache_id = $this->taxonomy."_getViewData";
-        if (is_null(CApp::getApp()->cache->get($cache_id))) {
-            $taxonomy = CTaxonomyManager::getTaxonomy($this->taxonomy);
-            $result = $taxonomy->getTermsList();
-            CApp::getApp()->cache->set($cache_id, $result);
+        // тут без кеша, так как иначе проблемы с добавлением
+        // из диалога выбора из списка
+        $taxonomy = CTaxonomyManager::getTaxonomy($this->taxonomy);
+        $result = $taxonomy->getTermsList();
+        return $result;
+    }
+
+    public function actionGetCreationActionUrl()
+    {
+        $taxonomy = CTaxonomyManager::getTaxonomy($this->taxonomy);
+        if (!is_null($taxonomy)) {
+            return WEB_ROOT."_modules/_taxonomy/?action=add&taxonomy_id=".$taxonomy->getId();
         }
-        return CApp::getApp()->cache->get($cache_id);
     }
 }

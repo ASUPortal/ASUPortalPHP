@@ -11,4 +11,5 @@ interface ISearchCatalogInterface{
     public function actionTypeAhead($lookup);
     public function actionGetItem($id);
     public function actionGetViewData();
+    public function actionGetCreationActionUrl();
 }

@@ -219,6 +219,12 @@ class CSearchController extends CBaseController{
         }
         echo json_encode($result);
     }
+
+    /**
+     * @param $catalog
+     * @return ISearchCatalogInterface
+     * @throws Exception
+     */
     private function searchObjectsFactory($catalog) {
         if ($catalog == "staff") {
             return new CSearchCatalogStaff(array());
@@ -262,6 +268,7 @@ class CSearchController extends CBaseController{
         echo json_encode($result);
     }
     public function actionLookupGetDialog() {
+        $this->setData("allowCreation", CRequest::getString("allowCreation"));
         $this->renderView("_search/subform.lookupdialog.tpl");
     }
     public function actionLookupViewData() {
@@ -368,5 +375,15 @@ class CSearchController extends CBaseController{
     }
     public function actionGetGlobalSearchSubform() {
         $this->renderView("_search/subform.globalsearch.tpl");
+    }
+
+    /**
+     * Получаем адрес диалога создания нового элемента справочника
+     */
+    public function actionLookupGetCreationDialog() {
+        $catalog = CRequest::getString("catalog");
+        $obj = $this->searchObjectsFactory($catalog);
+
+        echo $obj->actionGetCreationActionUrl();
     }
 }

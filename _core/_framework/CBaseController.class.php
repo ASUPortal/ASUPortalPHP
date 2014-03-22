@@ -169,6 +169,7 @@ class CBaseController {
          * Поиск по каталогам
          */
         $this->addJSInclude("_core/jquery.lookup.js");
+        $this->addJSInclude("_core/jquery.bootbox.js");
         /**
          * Загрузка файлов
          */

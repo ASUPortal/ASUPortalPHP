@@ -7,6 +7,9 @@
 
     </div>
     <div class="modal-footer">
+        {if $allowCreation == "true"}
+            <span class="btn" asu-action="create">Добавить</span>
+        {/if}
         <span class="btn" data-dismiss="modal" aria-hidden="true">Отмена</span>
         <span class="btn btn-primary" asu-action="ok">ОК</span>
     </div>

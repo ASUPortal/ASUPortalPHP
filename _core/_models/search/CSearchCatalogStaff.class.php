@@ -44,4 +44,8 @@ class CSearchCatalogStaff extends CComponent implements ISearchCatalogInterface{
         return $result;
     }
 
+    public function actionGetCreationActionUrl()
+    {
+        // TODO: Implement actionGetCreationActionUrl() method.
+    }
 }

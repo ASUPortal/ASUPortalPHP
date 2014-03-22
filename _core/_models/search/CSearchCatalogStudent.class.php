@@ -43,5 +43,8 @@ class CSearchCatalogStudent extends CComponent implements ISearchCatalogInterfac
         }
         return $result;
     }
-
+    public function actionGetCreationActionUrl()
+    {
+        // TODO: Implement actionGetCreationActionUrl() method.
+    }
 }
