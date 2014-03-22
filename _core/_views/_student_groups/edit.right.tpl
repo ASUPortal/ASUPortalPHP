@@ -19,14 +19,22 @@
     </center></a>
 </p>
 
-{if (false)}
 <p>
-    <a href="#" onclick="showStudentsWithoutMarks(); return false;"><center>
-            <img src="{$web_root}images/{$icon_theme}/32x32/apps/system-file-manager.png"><br>
-            Студенты без оценок
-        </center></a>
+    <a href="#studentsWithoutMarks" data-toggle="modal"><center>
+        <img src="{$web_root}images/{$icon_theme}/32x32/apps/system-file-manager.png"><br>
+        Студенты без оценок
+    </center></a>
 </p>
-{/if}
+
+<div id="studentsWithoutMarks" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Студенты без оценок</h3>
+    </div>
+    <div class="modal-body">
+
+    </div>
+</div>
 
 <div id="printDialog" class="modal hide fade">
     <div class="modal-header">
@@ -54,15 +62,23 @@
 </div>
 
 <script>
-    function showStudentsWithoutMarks(){
-        dojo.require("dijit.Dialog");
-        var dialog = new dijit.Dialog({
-            title: "Студенты без оценок по дисциплинам учебного плана",
-            href: "{$web_root}_modules/_student_groups/?action=GetStudentsWithoutMarks&id={$group->getId()}"
+    jQuery("#studentsWithoutMarks").on("show", function(){
+        var place = jQuery(".modal-body", this);
+        jQuery(place).html('<div style="text-align: center;"><img src="' + web_root + 'images/loader.gif"></div>');
+    });
+    jQuery("#studentsWithoutMarks").on("shown", function(){
+        var place = jQuery(".modal-body", this);
+        jQuery.ajax({
+            url: "{$web_root}_modules/_student_groups/?action=GetStudentsWithoutMarks&id={$group->getId()}",
+            type: "GET",
+            cache: false,
+            context: this,
+            success: function(data){
+                jQuery(this).find(".modal-body").html(data);
+            }
         });
-        dialog.show();
-        return false;
-    };
+    });
+
     function printWithTemplate(manager, method, template_id) {
         /**
          * Закрываем диалог чтобы не мешался
