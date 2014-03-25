@@ -9,6 +9,7 @@
 <ul class="nav nav-tabs">
     <li class="active"><a href="#tab-list" data-toggle="tab">Термины таксономии</a></li>
     <li><a href="#tab-common" data-toggle="tab">Общая информация</a></li>
+    <li><a href="#tab-import" data-toggle="tab">Групповое добавление</a></li>
 </ul>
 <div class="tab-content">
     <div id="tab-list" class="tab-pane active">
@@ -20,6 +21,9 @@
     </div>
     <div id="tab-common" class="tab-pane">
         {include file="_taxonomy/form.Taxonomy.tpl"}
+    </div>
+    <div id="tab-import" class="tab-pane">
+        {include file="_taxonomy/form.import.tpl"}
     </div>
 </div>
 {/block}
