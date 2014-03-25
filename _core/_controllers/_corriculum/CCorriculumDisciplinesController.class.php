@@ -41,7 +41,7 @@ class CCorriculumDisciplinesController extends CBaseController {
         if ($discipline->validate()) {
             $discipline->save();
             if ($this->continueEdit()) {
-                $this->redirect("discipines.php?action=edit&id=".$discipline->getId());
+                $this->redirect("disciplines.php?action=edit&id=".$discipline->getId());
             } else {
                 $this->redirect("cycles.php?action=edit&id=".$discipline->cycle_id);
             }
