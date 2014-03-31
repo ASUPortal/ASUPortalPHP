@@ -121,6 +121,21 @@ class CCorriculumsController extends CBaseController {
                     $newLabor->discipline_id = $newDiscipline->getId();
                     $newLabor->save();
                 }
+				// копируем дочерние дисциплины
+				foreach ($discipline->children->getItems() as $child) {
+					$newChildDiscipline = $child->copy();
+					$newChildDiscipline->parent_id = $newDiscipline->getId();
+					$newChildDiscipline->cycle_id = $newCycle->getId();
+					$newChildDiscipline->save();
+					/**
+					 * Клонируем нагрузку из дисциплин
+					 */
+					foreach ($child->labors->getItems() as $labor) {
+						$newLabor = $labor->copy();
+						$newLabor->discipline_id = $newChildDiscipline->getId();
+						$newLabor->save();
+					}
+				}
             }
         }
         /**
