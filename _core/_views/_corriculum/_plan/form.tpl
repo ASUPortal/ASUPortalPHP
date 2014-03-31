@@ -88,6 +88,14 @@
             {CHtml::error("load_total", $corriculum)}
         </div>
     </div>
+	
+    <div class="control-group">
+        {CHtml::activeLabel("load_as_fullday", $corriculum)}
+        <div class="controls">
+            {CHtml::activeTextField("load_as_fullday", $corriculum)}
+            {CHtml::error("load_as_fullday", $corriculum)}
+        </div>
+    </div>	
 
     <div class="control-group">
         <div class="controls">
