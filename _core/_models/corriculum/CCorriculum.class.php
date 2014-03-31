@@ -74,7 +74,8 @@ class CCorriculum extends CActiveModel{
             "final_exam_title" => "Название итогового экзамена",
         	"load_classroom" => "Аудиторная нагрузка",
         	"load_total" => "Общая нагрузка",
-            "form_id" => "Форма обучения"
+            "form_id" => "Форма обучения",
+			"load_as_fullday" => "Срок обучения по очной форме"
         );
     }
     public function validationRules() {
