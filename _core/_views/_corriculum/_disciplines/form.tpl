@@ -18,6 +18,14 @@
             {CHtml::error("parent_id", $discipline)}
         </div>
     </div>
+	
+    <div class="control-group">
+        {CHtml::activeLabel("component_type_id", $discipline)}
+        <div class="controls">
+            {CHtml::activeLookup("component_type_id", $discipline, "corriculum_discipline_type")}
+            {CHtml::error("component_type_id", $discipline)}
+        </div>
+    </div>	
 
     <div class="control-group">
         {CHtml::activeLabel("ordering", $discipline)}
