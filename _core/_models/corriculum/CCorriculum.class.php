@@ -75,7 +75,8 @@ class CCorriculum extends CActiveModel{
         	"load_classroom" => "Аудиторная нагрузка",
         	"load_total" => "Общая нагрузка",
             "form_id" => "Форма обучения",
-			"load_as_fullday" => "Срок обучения по очной форме"
+			"load_as_fullday" => "Срок обучения по очной форме",
+			"speciality_direction_id" => "Специальность/направление по уч. плану"
         );
     }
     public function validationRules() {
