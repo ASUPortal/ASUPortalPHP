@@ -41,6 +41,14 @@
             {CHtml::error("profile_id", $corriculum)}
         </div>
     </div>
+	
+    <div class="control-group">
+        {CHtml::activeLabel("speciality_direction_id", $corriculum)}
+        <div class="controls">
+            {CHtml::activeLookup("speciality_direction_id", $corriculum, "corriculum_speciality_directions")}
+            {CHtml::error("speciality_direction_id", $corriculum)}
+        </div>
+    </div>	
 
     <div class="control-group">
         {CHtml::activeLabel("qualification_id", $corriculum)}
@@ -49,6 +57,7 @@
             {CHtml::error("qualification_id", $corriculum)}
         </div>
     </div>
+	
     <div class="control-group">
         {CHtml::activeLabel("form_id", $corriculum)}
         <div class="controls">
