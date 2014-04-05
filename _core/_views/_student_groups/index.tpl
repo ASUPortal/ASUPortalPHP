@@ -5,7 +5,7 @@
 
     {CHtml::helpForCurrentPage()}
     
-    {include file="_core.search.tpl"} 
+    {include file="_core.searchLocal.tpl"}
 
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>

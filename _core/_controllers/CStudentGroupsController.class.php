@@ -78,7 +78,7 @@ class CStudentGroupsController extends CBaseController {
     }
     public function actionSearch() {
         $res = array();
-        $term = CRequest::getString("term");
+        $term = CRequest::getString("query");
         /**
          * Ищем группу по названию
          */
@@ -89,10 +89,10 @@ class CStudentGroupsController extends CBaseController {
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "type" => "1",
+                "field" => "id",
+                "value" => $item["id"],
                 "label" => $item["name"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
+                "class" => "CStudentGroup"
             );
         }
         echo json_encode($res);
