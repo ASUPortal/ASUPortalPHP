@@ -81,9 +81,9 @@
         <td valign="top">
 
         </td>
-        <td valign="top" width="200px">
+        <td valign="top" width="300px">
             <p>
-                <input type="text" id="search" style="width: 100%; " placeholder="Поиск">
+                <input type="text" id="search" style="width: 95%; " placeholder="Поиск">
             </p>
         </td>
     </tr>

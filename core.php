@@ -338,7 +338,7 @@
     /**
      * Адрес страницы авторизации
      */
-    define("NO_ACCESS_URL", WEB_ROOT."/p_administration.php");
+    define("NO_ACCESS_URL", WEB_ROOT."p_administration.php");
     /**
      * Псевдонимы ролей пользователей
      *
