@@ -25,6 +25,7 @@ class CStudentController extends CBaseController {
         $query->select("student.*")
             ->from(TABLE_STUDENTS." as student")
             ->order("student.id desc");
+        // выборка финишных данных и их показ пользователю
         $set->setQuery($query);
         $students = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $item) {
@@ -166,7 +167,7 @@ class CStudentController extends CBaseController {
      */
     public function actionSearch() {
         $res = array();
-        $term = CRequest::getString("term");
+        $term = CRequest::getString("query");
         /**
          * Сначала поищем по названию группы
          */
@@ -178,10 +179,10 @@ class CStudentController extends CBaseController {
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
+                "field" => "group_id",
+                "value" => $item["id"],
                 "label" => $item["name"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
-                "type" => 1
+                "class" => "CStudent"
             );
         }
         /**
@@ -194,10 +195,10 @@ class CStudentController extends CBaseController {
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
+                "field" => "id",
+                "value" => $item["id"],
                 "label" => $item["name"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
-                "type" => 2
+                "class" => "CStudent"
             );
         }
         /**
@@ -210,10 +211,10 @@ class CStudentController extends CBaseController {
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "label" => $item["name"]." - ".$item["phone"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
-                "type" => 2
+                "field" => "id",
+                "value" => $item["id"],
+                "label" => $item["phone"],
+                "class" => "CStudent"
             );
         }
         /**
@@ -226,10 +227,10 @@ class CStudentController extends CBaseController {
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "label" => $item["name"]." - ".$item["number"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
-                "type" => 2
+                "field" => "id",
+                "value" => $item["id"],
+                "label" => $item["number"],
+                "class" => "CStudent"
             );
         }
         /**
@@ -242,15 +243,16 @@ class CStudentController extends CBaseController {
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "label" => $item["name"]." - ".$item["comment"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
-                "type" => 2
+                "field" => "id",
+                "value" => $item["id"],
+                "label" => $item["comment"],
+                "class" => "CStudent"
             );
         }
         /**
          * Теперь по теме диплома
          */
+        /*
         $query = new CQuery();
         $query->select("distinct(diplom.id) as id, diplom.dipl_name as name")
             ->from(TABLE_STUDENTS." as student")
@@ -265,6 +267,7 @@ class CStudentController extends CBaseController {
                 "type" => 3
             );
         }
+        */
         echo json_encode($res);
     }
     public function actionImport() {
