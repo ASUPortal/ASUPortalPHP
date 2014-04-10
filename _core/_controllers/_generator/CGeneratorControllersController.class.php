@@ -55,7 +55,7 @@ class CGeneratorControllersController extends CBaseController {
             /**
              * Создаем модуль, которым этот контроллер рулит
              */
-            $templateModule = file_get_contents(CORE_CWD."/_core/_models/generator/templates/module.tpl");
+            $templateModule = file_get_contents(CORE_CWD.CORE_DS."_core".CORE_DS."_models".CORE_DS."generator".CORE_DS."templates".CORE_DS."module.tpl");
             $moduleFields = array(
                 "controllerName" => $params->controllerName
             );
@@ -71,7 +71,7 @@ class CGeneratorControllersController extends CBaseController {
              * Модель данных, тоже пусть будет для полноты картины
              */
             if ($params->modelGenerate == 1) {
-                $templateModel = file_get_contents(CORE_CWD."/_core/_models/generator/templates/model.tpl");
+                $templateModel = file_get_contents(CORE_CWD.CORE_DS."_core".CORE_DS."_models".CORE_DS."generator".CORE_DS."templates".CORE_DS."model.tpl");
                 $modelFields = array(
                     "modelName" => $params->modelName,
                     "modelTable" => $params->modelTable
@@ -101,7 +101,7 @@ class CGeneratorControllersController extends CBaseController {
             $viewTableHeadFields = array();
             $viewTableBodyFields = array();
             foreach ($fields as $field) {
-                $templateField = file_get_contents(CORE_CWD."/_core/_models/generator/templates/field.text.tpl");
+                $templateField = file_get_contents(CORE_CWD.CORE_DS."_core".CORE_DS."_models".CORE_DS."generator".CORE_DS."templates".CORE_DS."field.text.tpl");
                 $fieldFields = array(
                     "fieldTitle" => $field
                 );
@@ -110,7 +110,7 @@ class CGeneratorControllersController extends CBaseController {
                 }
                 $viewFormFields[] = $templateField;
 
-                $templateField = file_get_contents(CORE_CWD."/_core/_models/generator/templates/field.tablebody.tpl");
+                $templateField = file_get_contents(CORE_CWD.CORE_DS."_core".CORE_DS."_models".CORE_DS."generator".CORE_DS."templates".CORE_DS."field.tablebody.tpl");
                 $fieldFields = array(
                     "fieldTitle" => $field
                 );
@@ -119,7 +119,7 @@ class CGeneratorControllersController extends CBaseController {
                 }
                 $viewTableBodyFields[] = $templateField;
 
-                $templateField = file_get_contents(CORE_CWD."/_core/_models/generator/templates/field.tablehead.tpl");
+                $templateField = file_get_contents(CORE_CWD.CORE_DS."_core".CORE_DS."_models".CORE_DS."generator".CORE_DS."templates".CORE_DS."field.tablehead.tpl");
                 $fieldFields = array(
                     "fieldTitle" => $field
                 );
@@ -137,11 +137,11 @@ class CGeneratorControllersController extends CBaseController {
              */
             CUtils::createFoldersToPath(CORE_CWD.CORE_DS."_core".CORE_DS."_views".CORE_DS.$params->viewPath);
             $viewFiles = array(
-                CORE_CWD."/_core/_models/generator/templates/index.tpl",
-                CORE_CWD."/_core/_models/generator/templates/common.right.tpl",
-                CORE_CWD."/_core/_models/generator/templates/add.tpl",
-                CORE_CWD."/_core/_models/generator/templates/edit.tpl",
-                CORE_CWD."/_core/_models/generator/templates/form.tpl",
+                CORE_CWD.CORE_DS."_core".CORE_DS."_models".CORE_DS."generator".CORE_DS."templates".CORE_DS."index.tpl",
+                CORE_CWD.CORE_DS."_core".CORE_DS."_models".CORE_DS."generator".CORE_DS."templates".CORE_DS."common.right.tpl",
+                CORE_CWD.CORE_DS."_core".CORE_DS."_models".CORE_DS."generator".CORE_DS."templates".CORE_DS."add.tpl",
+                CORE_CWD.CORE_DS."_core".CORE_DS."_models".CORE_DS."generator".CORE_DS."templates".CORE_DS."edit.tpl",
+                CORE_CWD.CORE_DS."_core".CORE_DS."_models".CORE_DS."generator".CORE_DS."templates".CORE_DS."form.tpl",
             );
             $viewFields = array(
                 "viewIndexTitle" => $params->viewIndexTitle,

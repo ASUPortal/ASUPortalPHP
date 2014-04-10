@@ -355,11 +355,19 @@ class CUtils {
     public static function createFoldersToPath($path) {
         $arr = explode(CORE_DS, $path);
         $currentPath = CORE_DS;
+        if (PHP_OS == "WINNT") {
+            $currentPath = $arr[0];
+        }
         foreach ($arr as $path) {
             if ($currentPath == CORE_DS) {
                 $currentPath .= $path;
+            } elseif ($currentPath == $path)  {
+                $currentPath .= CORE_DS;
             } else {
-                $currentPath .= CORE_DS.$path;
+                if (PHP_OS == "WINNT") {
+                    $currentPath .= CORE_DS;
+                }
+                $currentPath .= $path;
             }
             if (!file_exists($currentPath)) {
                 mkdir($currentPath);
