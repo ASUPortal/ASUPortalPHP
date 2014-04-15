@@ -1,0 +1,25 @@
+.documents_container {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.documents_item {
+    border: 1px solid #c0c0c0;
+    width: 150px;
+    height: 150px;
+    padding: 5px;
+    float: left;
+    margin: 10px;
+    border-radius: 3px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.documents_item .item_icon {
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+.documents_item .item_title {
+    text-align: center;
+}

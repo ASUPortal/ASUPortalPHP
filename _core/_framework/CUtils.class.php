@@ -861,7 +861,7 @@ class CUtils {
                 'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
             );
 
-            $ext = strtolower(array_pop(explode('.',$filename)));
+            $ext = strtolower(array_pop(explode('.', $filename)));
             if (array_key_exists($ext, $mime_types)) {
                 $filetype = $mime_types[$ext];
                 $filetype = str_replace("/", "-", $filetype);

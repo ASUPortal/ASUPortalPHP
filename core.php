@@ -249,6 +249,8 @@
     define("TABLE_IND_PLAN_WORKS", "ip_works");
     define("TABLE_IND_PLAN_PLANNED", "hours_kind");
     define("TABLE_ACCESS_LEVELS", "task_rights");
+    define("TABLE_DOCUMENT_FOLDERS", "files_folders");
+    define("TABLE_DOCUMENTS", "files");
     /**
      * Константы пагинатора
      */

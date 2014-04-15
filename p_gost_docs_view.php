@@ -39,23 +39,6 @@ echo '<div class=text style="text-align:center;"> для увеличения с
 	  {
       echo '<p><table border="0" cellspacing="5" cellpadding="5" align="center" bgcolor="#FFFFFF" width=99%>';
       $i=0;
-      /*for ($i=count($folders)-1;$i>0;$i--)
-      {	
-		  echo "<tr><td colspan=4><a href=# onclick=javascript:hide_show('gost".$i."');>".$folders[$i][1].'</a></td></tr>';
-		  $query='select * from files where nameFolder="'.'gost'.$i.'" order by browserFile_trans';
-		  $res=mysql_query ($query);
-		  echo '<tr><td colspan=4><div style="display:none;" id="gost'.$i.'" name="gost'.$i.'"><table class="middle_lite_other" width="100%">';
-
-		  while($g1=mysql_fetch_array($res6))
-	       {  $i++;
-	          echo '<tr align="left" height="20"><td width=10>'.$i.'</td>
-			  <td><div class="middle_lite_library"><a href="library/gost/'.$g1['nameFile'].'" title="Скачать" >';
-	
-				file_type_img($g1['nameFile']);
-				
-			  echo' &nbsp '.$g1['browserFile'].'</a></div></td></tr>';
-	         }
-      }*/
       for ($i=count($folders)-1;$i>0;$i--)
       	{
 		  
@@ -78,7 +61,6 @@ echo '<div class=text style="text-align:center;"> для увеличения с
 		$id= substr($g1['nameFolder'],4,1);
 		
 		$dir_name=$folders[$id][0];
-		//echo 'id='.$id.', dir_name='.$dir_name;
 		
 		if ($dir_name!='') {$dir_name=$dir_name.'/';}
 	          
