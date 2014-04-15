@@ -77,6 +77,15 @@ class CActiveRecord {
     public static function getPk() {
         return static::$_pk;
     }
+
+    /**
+     * Установим имя поля первичного ключа
+     *
+     * @param $key
+     */
+    public static function setPk($key) {
+        self::$_pk = $key;
+    }
     /**
      * Имя класса текущего объекта
      *

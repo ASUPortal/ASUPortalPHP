@@ -8,7 +8,7 @@
     {else}
         <div class="documents_container">
             {foreach $objects->getItems() as $object}
-            <div class="documents_item">
+            <div class="documents_item" objid="{$object->getId()}" type="{if $object->isFolder()}folder{else}file{/if}">
                 <div class="item_icon">
                     {if $object->isFolder()}
                         <a href="index.php?action=index&parent={$object->getId()}">
@@ -38,6 +38,33 @@
             </div>
             {/foreach}
         </div>
+    {/if}
+
+    {if $canEdit}
+        <script>
+            jQuery(document).ready(function(){
+                // добавляем выпадающие кнопки редактирования документа
+                jQuery(".documents_item[type=file]").prepend('<div class="item_manage">' +
+                        '<i class="icon-pencil documents_item_manage" style="cursor: pointer;"></i>' +
+                        '</div>');
+
+                // управляшки
+                jQuery(".documents_item_manage").popover({
+                    html: true,
+                    placement: "left",
+                    title: "Управление",
+                    content: function(){
+                        var parent = jQuery(this).parents(".documents_item").first();
+                        var links = new Array();
+                        if (jQuery(parent).attr("type") == "file") {
+                            links[links.length] = '<li><a href="files.php?action=delete&id=' + jQuery(parent).attr("objid") + '">Удалить</a></li>';
+                            links[links.length] = '<li><a href="files.php?action=edit&id=' + jQuery(parent).attr("objid") + '">Редактировать</a></li>';
+                        }
+                        return '<ul class="nav nav-pills nav-stacked">' + links.join("") + "</ul>";
+                    }
+                });
+            });
+        </script>
     {/if}
 {/block}
 

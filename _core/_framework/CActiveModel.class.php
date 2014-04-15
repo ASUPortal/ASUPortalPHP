@@ -109,7 +109,17 @@ class CActiveModel extends CModel{
      * @param $id
      */
     public function setId($id) {
-        $this->getRecord()->setItemValue("id", $id);
+        $this->getRecord()->setItemValue($this->getRecord()->getPk(), $id);
+    }
+
+    /**
+     * Установить название первичного ключа
+     *
+     * @param $key
+     */
+    public function setPk($key) {
+        $record = $this->getRecord();
+        $record::setPk($key);
     }
     /**
      * Удаление текущей записи из БД

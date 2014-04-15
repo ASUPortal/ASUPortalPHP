@@ -1,7 +1,6 @@
 <form action="files.php" method="post" enctype="multipart/form-data" class="form-horizontal">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id_file", $object)}
-    {CHtml::activeHiddenField("folder_id", $object)}
 
     {CHtml::errorSummary($object)}
 
@@ -10,6 +9,14 @@
         <div class="controls">
             {CHtml::activeTextField("browserFile", $object)}
             {CHtml::error("browserFile", $object)}
+        </div>
+    </div>
+
+    <div class="control-group">
+        {CHtml::activeLabel("folder_id", $object)}
+        <div class="controls">
+            {CHtml::activeLookup("folder_id", $object, "class.CDocumentFoldersLookup")}
+            {CHtml::error("folder_id", $object)}
         </div>
     </div>
 

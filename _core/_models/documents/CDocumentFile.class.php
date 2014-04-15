@@ -21,6 +21,7 @@ class CDocumentFile extends CDocumentFolder{
         "gost"  => ""
     );
     public $nameFolder = "gost";
+    public $folder_id = 0;
 
     public function fieldsProperty() {
         return array(
@@ -41,7 +42,13 @@ class CDocumentFile extends CDocumentFolder{
      * @return bool
      */
     public function isFileExists() {
-        if (file_exists(CORE_CWD.CORE_DS.'library'.CORE_DS.'gost'.CORE_DS.$this->nameFile)) {
+        if (!array_key_exists($this->nameFolder, $this->foldersLookup)) {
+            return false;
+        }
+        if ($this->nameFile == "") {
+            return false;
+        }
+        if (file_exists(CORE_CWD.CORE_DS.'library'.CORE_DS.'gost'.CORE_DS.$this->foldersLookup[$this->nameFolder].CORE_DS.$this->nameFile)) {
             return true;
         }
         return false;

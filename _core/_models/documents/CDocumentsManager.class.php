@@ -31,6 +31,17 @@ class CDocumentsManager {
     }
 
     /**
+     * @return CArrayList
+     */
+    public static function getFoldersTopLevel() {
+        $result = new CArrayList();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_DOCUMENT_FOLDERS, "parent_id=0")->getItems() as $ar) {
+            $folder = new CDocumentFolder($ar);
+            $result->add($folder->getId(), $folder);
+        }
+        return $result;
+    }
+    /**
      * @param int $key
      * @return CDocumentFolder
      */
@@ -53,6 +64,7 @@ class CDocumentsManager {
         if (!self::getCacheFiles()->hasElement($key)) {
             foreach (CActiveRecordProvider::getWithCondition(TABLE_DOCUMENTS, "id_file=".$key)->getItems() as $ar) {
                 $dar = new CDocumentActiveRecord($ar->getItems());
+                $dar->setTable(TABLE_DOCUMENTS);
                 $obj = new CDocumentFile($dar);
                 self::getCacheFiles()->add($obj->getId(), $obj);
             }

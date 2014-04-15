@@ -51,17 +51,27 @@ class CDocumentFilesController extends CBaseController{
     }
     public function actionDelete() {
         $object = CDocumentsManager::getFile(CRequest::getInt("id"));
+        $parent = $object->folder_id;
         $object->remove();
-        $this->redirect("files.php?action=index");
+        $this->redirect("index.php?action=index&parent=".$parent);
     }
     public function actionSave() {
         $object = new CDocumentFile();
         $object->setAttributes(CRequest::getArray($object::getClassName()));
+        $object->setPk("id_file");
         if ($object->validate()) {
             $object->save();
             $this->redirect("index.php?action=index&parent=".$object->folder_id);
             return true;
         }
+        /**
+         * Генерация меню
+         */
+        $this->addActionsMenuItem(array(
+            "title" => "Назад",
+            "link" => "index.php?action=index&parent=".$object->folder_id,
+            "icon" => "actions/edit-undo.png"
+        ));
         $this->setData("object", $object);
         $this->renderView("_documents/_file/edit.tpl");
     }

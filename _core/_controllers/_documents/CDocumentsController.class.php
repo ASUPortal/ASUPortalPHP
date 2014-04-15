@@ -47,7 +47,7 @@ class CDocumentsController extends CBaseController{
             ->condition("f.folder_id = ".$parent." and f.nameFolder like 'gost%'")
             ->order("f.browserFile asc");
         foreach ($query->execute()->getItems() as $ar) {
-            $file = new CDocumentFile(new CActiveRecord($ar));
+            $file = new CDocumentFile(new CDocumentActiveRecord($ar));
             $objects->add($objects->getCount(), $file);
         }
         $this->setData("title", $title);
@@ -67,6 +67,7 @@ class CDocumentsController extends CBaseController{
             }
         }
         // если пользователь может чего-нибудь добавлять, то пусть добавит
+        $this->setData("canEdit", false);
         if (CSession::isAuth()) {
             if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_ALL ||
                 CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
@@ -82,6 +83,8 @@ class CDocumentsController extends CBaseController{
                     "link" => "files.php?action=add&parent=".$parent,
                     "icon" => "actions/bookmark-new.png"
                 ));
+
+                $this->setData("canEdit", true);
             }
         }
         /**

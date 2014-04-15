@@ -21,3 +21,4 @@ news/attachement/*
 images/lects/*
 
 *.cache
+*.db
