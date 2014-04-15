@@ -178,4 +178,46 @@ class CDocumentsController extends CBaseController{
         }
         $this->redirect("?action=index");
     }
+    public function actionSearch() {
+        $term = CRequest::getString("query");
+        $result = array();
+        // извлекаем все папки и файлы, у которых что-то совпадает
+        $query = new CQuery();
+        $query->select("f.*")
+            ->from(TABLE_DOCUMENT_FOLDERS." as f")
+            ->condition("f.title like '%".$term."%'")
+            ->order("f.title asc");
+        $objects = new CArrayList();
+        foreach ($query->execute()->getItems() as $ar) {
+            $folder = new CDocumentFolder(new CActiveRecord($ar));
+            $objects->add($objects->getCount(), $folder);
+        }
+        // теперь извлекаем все файлы
+        $query = new CQuery();
+        $query->select("f.*")
+            ->from(TABLE_DOCUMENTS." as f")
+            ->condition("f.nameFolder like 'gost%' and f.browserFile like '%".$term."%'")
+            ->order("f.browserFile asc");
+        foreach ($query->execute()->getItems() as $ar) {
+            $file = new CDocumentFile(new CDocumentActiveRecord($ar));
+            $objects->add($objects->getCount(), $file);
+        }
+        foreach ($objects->getItems() as $obj) {
+            $arr = array(
+                "id" => $obj->getId()
+            );
+            if ($obj->isFolder()) {
+                $arr["type"] = "folder";
+                $arr["title"] = $obj->title;
+            } else {
+                $arr["type"] = "file";
+                $arr["icon"] = $obj->getIconLink();
+                $arr["title"] = $obj->browserFile;
+                $arr["exists"] = $obj->isFileExists();
+                $arr["link"] = $obj->getFileLink();
+            }
+            $result[] = $arr;
+        }
+        echo json_encode($result);
+    }
 }
