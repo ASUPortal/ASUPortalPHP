@@ -1,7 +1,8 @@
 <?php
 class CDocumentsController extends CBaseController{
     protected $allowedAnonymous = array(
-        "index"
+        "index",
+        "search"
     );
     public function __construct() {
         if (!CSession::isAuth()) {
@@ -200,7 +201,9 @@ class CDocumentsController extends CBaseController{
             ->order("f.browserFile asc");
         foreach ($query->execute()->getItems() as $ar) {
             $file = new CDocumentFile(new CDocumentActiveRecord($ar));
-            $objects->add($objects->getCount(), $file);
+            if ($file->isFileExists()) {
+                $objects->add($objects->getCount(), $file);
+            }
         }
         foreach ($objects->getItems() as $obj) {
             $arr = array(
@@ -213,7 +216,6 @@ class CDocumentsController extends CBaseController{
                 $arr["type"] = "file";
                 $arr["icon"] = $obj->getIconLink();
                 $arr["title"] = $obj->browserFile;
-                $arr["exists"] = $obj->isFileExists();
                 $arr["link"] = $obj->getFileLink();
             }
             $result[] = $arr;
