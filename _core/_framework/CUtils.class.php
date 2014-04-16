@@ -364,9 +364,9 @@ class CUtils {
             } elseif ($currentPath == $path)  {
                 $currentPath .= CORE_DS;
             } else {
-                if (PHP_OS == "WINNT") {
+                // if (PHP_OS == "WINNT") {
                     $currentPath .= CORE_DS;
-                }
+                // }
                 $currentPath .= $path;
             }
             if (!file_exists($currentPath)) {

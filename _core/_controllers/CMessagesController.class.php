@@ -127,6 +127,7 @@ class CMessagesController extends CBaseController {
             $mailCopy = new CMessage();
             $mailCopy->setAttributes(CRequest::getArray($mail::getClassName()));
             $mailCopy->mail_type = "out";
+			$mailCopy->date_send = date("Y-m-d H:i:s");
             $mailCopy->read_status = "1";
             $mailCopy->save();
             // если пользователь-получатель подписан на сообщения, то
