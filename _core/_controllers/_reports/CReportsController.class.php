@@ -95,4 +95,28 @@ class CReportsController extends CBaseController{
         $this->setData("object", $object);
         $this->renderView("_reports/report/edit.tpl");
     }
+    public function actionRenderParams() {
+        $id = CRequest::getInt("id");
+        $report = CReportManager::getReport($id);
+        $object = $report->getReportObject();
+        $template = $object->getParamsTemplate();
+
+        $this->setData("report", $object);
+        $this->renderView($template);
+    }
+    public function actionRenderReport() {
+        $id = CRequest::getInt("id");
+        $report = CReportManager::getReport($id);
+        $object = $report->getReportObject();
+        $object->setAttributes(CRequest::getArray($object::getClassName()));
+        $template = $object->getDataTemplate();
+
+        if ($object->useSmarty()) {
+            $this->setData("report", $object);
+            $this->setData("data", $object->getReportData());
+            $this->renderView($template);
+        } else {
+            $object->renderReport();
+        }
+    }
 }

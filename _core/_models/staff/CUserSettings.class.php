@@ -8,6 +8,23 @@
  */
 class CUserSettings extends CActiveModel {
     protected $_table = TABLE_USER_SETTINGS;
+
+    protected $_reports = null;
+
+    public function relations() {
+        return array(
+            "reports" => array(
+                "relationPower" => RELATION_MANY_TO_MANY,
+                "storageProperty" => "_reports",
+                "joinTable" => TABLE_DASHBOARD_REPORTS,
+                "leftCondition" => "settings_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "rightKey" => "report_id",
+                "managerClass" => "CReportManager",
+                "managerGetObject" => "getReport"
+            ),
+        );
+    }
+
     public static function getClassName() {
         return __CLASS__;
     }

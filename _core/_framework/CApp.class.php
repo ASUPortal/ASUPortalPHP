@@ -105,7 +105,7 @@ class CApp extends CComponent{
      *
      * @return PDO
      */
-    private function getDbLogConnection() {
+    public function getDbLogConnection() {
         if (is_null($this->_dbLogConnection)) {
             try {
                 $this->_dbLogConnection = new PDO(

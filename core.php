@@ -252,6 +252,7 @@
     define("TABLE_DOCUMENT_FOLDERS", "files_folders");
     define("TABLE_DOCUMENTS", "files");
     define("TABLE_REPORTS", "reports");
+    define("TABLE_DASHBOARD_REPORTS", "dashboard_reports");
     /**
      * Константы пагинатора
      */

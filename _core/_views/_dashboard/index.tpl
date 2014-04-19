@@ -34,6 +34,18 @@
 			<div style="clear: both;"></div>
 		</div>
 	{/foreach}
+    {foreach $settings->reports->getItems() as $report}
+        <div class="dashboard_item dashboard_report" report_id="{$report->getId()}">
+            <div class="item_hover"></div>
+            <div class="item_icon">
+                <img src="{$web_root}images/{$icon_theme}/64x64/apps/devhelp.png">
+            </div>
+            <div class="item_content">
+                <h4>{$report->title}</h4>
+
+            </div>
+        </div>
+    {/foreach}
 </div>
 {/block}
 

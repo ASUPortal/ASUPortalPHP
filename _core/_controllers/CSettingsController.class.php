@@ -28,6 +28,11 @@ class CSettingsController extends CBaseController {
         );
         $this->setData("sizes", $sizes);
         $this->setData("settings", $settings);
+        $this->addActionsMenuItem(array(
+            "title" => "Добавить инфографику",
+            "link" => "reports.php?action=add&id=".$settings->getId(),
+            "icon" => "actions/list-add.png"
+        ));
         $this->renderView("_settings/index.tpl");
     }
     public function actionSave() {

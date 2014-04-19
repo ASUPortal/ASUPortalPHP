@@ -9,6 +9,7 @@
         <li class="active"><a href="#common" data-toggle="tab">Общие настройки</a></li>
         <li><a href="#dashboard" data-toggle="tab">Рабочий стол</a></li>
         <li><a href="#portal" data-toggle="tab">Настройки портала</a></li>
+        <li><a href="#reports" data-toggle="tab">Инфографика</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="common">
@@ -61,6 +62,9 @@
                     {CHtml::error("portal_input_size", $settings)}
                 </div>
             </div>
+        </div>
+        <div class="tab-pane" id="reports">
+            {include file="_settings/subform.reports.tpl"}
         </div>
     </div>
 
