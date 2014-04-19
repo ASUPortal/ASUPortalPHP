@@ -21,7 +21,7 @@ class CCacheFile extends CCache {
     }
     public function hasCache($key) {
         $filename = md5($key);
-
+        CUtils::createFoldersToPath($this->cacheDir);
         if (file_exists($this->cacheDir.$filename.".cache")) {
             $now = time();
             $created = filemtime($this->cacheDir.$filename.".cache");
