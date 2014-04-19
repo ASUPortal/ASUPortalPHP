@@ -251,6 +251,7 @@
     define("TABLE_ACCESS_LEVELS", "task_rights");
     define("TABLE_DOCUMENT_FOLDERS", "files_folders");
     define("TABLE_DOCUMENTS", "files");
+    define("TABLE_REPORTS", "reports");
     /**
      * Константы пагинатора
      */
