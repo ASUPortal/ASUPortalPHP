@@ -21,6 +21,14 @@ class CReportSearchStatistics extends CReportObjectAbstract {
         $this->end = $this->end->format("d.m.Y");
     }
 
+    public function attributeLabels()
+    {
+        return array(
+            "start" => "Дата начала",
+            "end" => "Дата окончания"
+        );
+    }
+
 
     public function getReportData()
     {
