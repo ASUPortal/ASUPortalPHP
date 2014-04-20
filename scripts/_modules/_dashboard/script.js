@@ -49,6 +49,7 @@ jQuery(document).ready(function(){
                 cache: false,
                 type: "get",
                 success: function(data){
+                    jQuery(parent).css("min-height", "300px");
                     jQuery(parent).html(data);
                     postParamsRendered(parent);
                 }

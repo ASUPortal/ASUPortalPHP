@@ -41,9 +41,9 @@ class CReportSearchStatistics extends CReportObjectAbstract implements IReportOb
         $query->select($select)
             ->from("stats as s")
             ->condition($condition)
-            ->group("t_stamp_m");
+            ->group("t_stamp_m")
+            ->order("t_stamp_y desc, t_stamp_m desc");
         $result = $query->execute()->getItems();
-        var_dump($query->getQueryString());
         return $result;
     }
 }
