@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-abstract class CReportObjectAbstract extends CFormModel implements IReportObject{
+abstract class CReportObjectAbstract extends CFormModel{
     public function getParamsTemplate()
     {
         return "_reports/custom/".get_class($this)."/report.params.tpl";

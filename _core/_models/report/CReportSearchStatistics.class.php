@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class CReportSearchStatistics extends CReportObjectAbstract implements IReportObject {
+class CReportSearchStatistics extends CReportObjectAbstract {
     public $start;
     public $end;
 
