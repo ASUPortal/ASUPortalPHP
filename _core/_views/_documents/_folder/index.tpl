@@ -41,7 +41,7 @@
                             {$object->title}
                         </a>
                     {elseif ($object->isFileExists())}
-                        <a href="{$web_root}library/gost/{$object->nameFile}" target="_blank">
+                        <a href="{$object->getFileLink()}" target="_blank">
                             {$object->browserFile}
                         </a>
                     {else}
