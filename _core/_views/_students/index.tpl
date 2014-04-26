@@ -24,7 +24,7 @@
         {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $students->getItems() as $student}
         <tr>
-            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить стедунта {$student->fio}')) { location.href='?action=delete&id={$student->id}'; }; return false;"></a></td>
+            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить студента {$student->fio}')) { location.href='?action=delete&id={$student->id}'; }; return false;"></a></td>
             <td>{CHtml::activeViewGroupSelect("id", $student)}</td>
             <td>{counter}</td>
             <td><a href="?action=edit&id={$student->getId()}">{$student->getName()}</a></td>
