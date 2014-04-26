@@ -1,73 +1,55 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-
-    <h2>Мои входящие сообщения</h2>
+<h2>Студенты</h2>
 
     {CHtml::helpForCurrentPage()}
 
-    {include file="_core.search.tpl"}
-    {include file="_messages/subform.subscription.tpl"}
+    {include file="_core.searchLocal.tpl"}
 
+    <form action="index.php" method="post" id="MainView">
+    <table class="table table-striped table-bordered table-hover table-condensed">
+        <tr>
+            <th></th>
+            <th>{CHtml::activeViewGroupSelect("id", $students->getFirstItem(), true)}</th>
+            <th>#</th>
+            <th>{CHtml::tableOrder("fio", $students->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("stud_num", $students->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("group_id", $students->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("bud_contract", $students->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("telephone", $students->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("diploms", $students->getFirstItem())}</th>
+            <th>Комментарий</th>
+        </tr>
+        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+        {foreach $students->getItems() as $student}
+        <tr>
+            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить студента {$student->fio}')) { location.href='?action=delete&id={$student->id}'; }; return false;"></a></td>
+            <td>{CHtml::activeViewGroupSelect("id", $student)}</td>
+            <td>{counter}</td>
+            <td><a href="?action=edit&id={$student->getId()}">{$student->getName()}</a></td>
+            <td>{$student->stud_num}</td>
+            <td>
+                {if !is_null($student->getGroup())}
+                    {$student->getGroup()->getName()}
+                {/if}
+            </td>
+            <td>{$student->getMoneyForm()}</td>
+            <td>{$student->telephone}</td>
+            <td>
+                {foreach $student->diploms->getItems() as $diplom}
+                    <p><a href="{$web_root}_modules/_diploms/?action=edit&id={$diplom->getId()}">{$diplom->dipl_name}</a></p>
+                {/foreach}
+            </td>
+            <td>{$student->comment}</td>
+        </tr>
+        {/foreach}
+    </table>
+    </form>
 
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab-inbox" data-toggle="tab">Входящие</a></li>
-            <li><a href="?action=outbox">Исходящие</a></li>
-            <li><a href="#tab-new" data-toggle="tab">Написать сообщение</a></li>
-        </ul>
-    <div class="tab-content">
-        <div class="tab-pane active" id="tab-inbox">
-            {if $messages->getCount() == 0}
-                Вам никто ничего еще не написал.
-            {else}
-                <table class="table table-striped table-bordered table-hover table-condensed">
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
-                        <th>{CHtml::tableOrder("mail_title", $messages->getFirstItem())}</th>
-                        <th>{CHtml::tableOrder("from_user_id", $messages->getFirstItem())}</th>
-                        <th>{CHtml::tableOrder("date_send", $messages->getFirstItem())}</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                    {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
-                    {foreach $messages->getItems() as $mail}
-                        <tr>
-                            <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить сообщение {$mail->getTheme()}')) { location.href='?action=delete&id={$mail->getId()}'; }; return false;"></a></td>
-                            <td>{counter}</td>
-                            <td>
-                                <a href="?action=view&id={$mail->getId()}">
-                                    {if ($mail->isRead())}
-                                        {$mail->getTheme()}
-                                    {else}
-                                        <b>{$mail->getTheme()}</b>
-                                    {/if}
-                                </a>
-                            </td>
-                            <td>
-                                {if !is_null($mail->getSender())}
-                                    {$mail->getSender()->getName()}
-                                {/if}
-                            </td>
-                            <td>{$mail->getSendDate()}</td>
-                            <td>
-                                {if $mail->file_name !== ""}
-                                    <a href="{$web_root}f_mails/{$mail->file_name}">
-                                        <img src="{$web_root}images/tango/16x16/devices/media-floppy.png">
-                                    </a>
-                                {/if}
-                            </td>
-                        </tr>
-                    {/foreach}
-                </table>
-                {CHtml::paginator($paginator, "?action=inbox")}
-            {/if}
-        </div>
-        <div class="tab-pane" id="tab-new">
-            {include file="_messages/subform.new.tpl"}
-        </div>
-    </div>
+    {CHtml::paginator($paginator, "?action=index")}
 {/block}
 
 {block name="asu_right"}
-    {include file="_messages/inbox.right.tpl"}
+{include file="_students/common.right.tpl"}
 {/block}
