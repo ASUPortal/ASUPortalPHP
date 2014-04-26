@@ -47,6 +47,15 @@ class CMessagesController extends CBaseController {
         $this->setData("message", $message);
         $this->setData("messages", $messages);
         $this->setData("paginator", $set->getPaginator());
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Удалить выделенные",
+                "icon" => "actions/edit-delete.png",
+                "form" => "#MainView",
+                "link" => "index.php",
+                "action" => "Delete"
+            )
+        ));
         $this->renderView("_messages/inbox.tpl");
     }
     public function actionOutbox() {
@@ -170,11 +179,18 @@ class CMessagesController extends CBaseController {
         $res["unread"] = $messages->getCount();
         echo json_encode($res);
     }
-	public function actionDelete(){
-	    $mail = CStaffManager::getMessage(CRequest::getInt("id"));
-        $mail->remove();
-		$this->redirect("?action=inbox");
-	}
+    public function actionDelete(){
+        $mail = CStaffManager::getMessage(CRequest::getInt("id"));
+        if (!is_null($mail)) {
+            $mail->remove();
+        }
+        $items = CRequest::getArray("selectedInView");
+        foreach ($items as $id){
+            $mail = CStaffManager::getMessage($id);
+            $mail->remove();
+        }
+	$this->redirect("?action=inbox");
+    }
     public function actionReply() {
         $mail = CStaffManager::getMessage(CRequest::getInt("id"));
         $mail->mail_title = "В ответ на: ".$mail->mail_title;
