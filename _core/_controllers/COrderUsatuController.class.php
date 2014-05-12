@@ -18,7 +18,7 @@ class COrderUsatuController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
+        $set = new CRecordSet(false);
         $query = new CQuery();
         $query->select("usatu_order.*")
             ->from(TABLE_USATU_ORDERS." as usatu_order")
@@ -49,6 +49,11 @@ class COrderUsatuController extends CBaseController {
             $query->condition("usatu_order.id = ".CRequest::getFilter("order"));
             $selectedOrder = CStaffManager::getUsatuOrder(CRequest::getFilter("order"));
         }
+        $selectedType = null;
+        if (!is_null(CRequest::getFilter("type"))) {
+            $query->condition("orders_type = ".CRequest::getFilter("type"));
+            $selectedType = CTaxonomyManager::getUsatuOrderType(CRequest::getFilter("type"))->getId();
+        }
         /**
          * Выборка приказов
          */
@@ -58,6 +63,7 @@ class COrderUsatuController extends CBaseController {
             $orders->add($order->getId(), $order);
         }
         $this->setData("selectedOrder", $selectedOrder);
+        $this->setData("selectedType", $selectedType);
         $this->setData("orders", $orders);
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
@@ -69,7 +75,47 @@ class COrderUsatuController extends CBaseController {
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("order", $order);
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "index.php?action=index",
+                "icon" => "actions/edit-undo.png"
+            ),
+            array(
+                "title" => "Добавить новость",
+                "link" => "index.php?action=addNewsItem&id=".$order->getId(),
+                "icon" => "actions/list-add.png"
+            )
+        ));
         $this->renderView("_orders_usatu/edit.tpl");
+    }
+    public function actionAddNewsItem() {
+        $order = CStaffManager::getUsatuOrder(CRequest::getInt("id"));
+
+        $newsItem = new CNewsItem();
+        $newsItem->user_id_insert = CSession::getCurrentUser()->getId();
+        $newsItem->date_time = date("Y-m-d H:i:s");
+        $newsItem->news_type = "notice";
+        $newsItem->related_id = $order->getId();
+        $newsItem->related_type_name = get_class($order);
+        $newsItem->title = "Добавлен приказ №".$order->num." от ".$order->date.": ".$order->title;
+        $newsItem->file = $order->text;
+        // скопируем файл, если он есть
+        if ($order->attachment != "") {
+            $propOrder = $order->fieldsProperty();
+            $propNews = $newsItem->fieldsProperty();
+            copy($propOrder["attachment"]["upload_dir"].$order->attachment, $propNews["file_attach"]["upload_dir"].$order->attachment);
+            $newsItem->file_attach = $order->attachment;
+        }
+        $newsItem->save();
+
+        $this->redirect("?action=edit&id=".$order->getId());
+    }
+    public function actionDeleteNewsItem() {
+        $item = CNewsManager::getNewsItem(CRequest::getInt("id"));
+        $order = $item->related_id;
+        $item->remove();
+        $this->redirect("?action=edit&id=".$order);
     }
     public function actionAdd() {
         $order = new COrderUsatu();
@@ -83,7 +129,11 @@ class COrderUsatuController extends CBaseController {
         $order->setAttributes(CRequest::getArray($order::getClassName()));
         if ($order->validate()) {
             $order->save();
-            $this->redirect("?action=index");
+            if ($this->continueEdit()) {
+                $this->redirect("?action=edit&id=".$order->getId());
+            } else {
+                $this->redirect("?action=index");
+            }
             return true;
         }
         $this->addJSInclude(JQUERY_UI_JS_PATH);

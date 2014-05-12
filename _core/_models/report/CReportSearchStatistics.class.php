@@ -52,6 +52,30 @@ class CReportSearchStatistics extends CReportObjectAbstract {
             ->group("t_stamp_m")
             ->order("t_stamp_y desc, t_stamp_m desc");
         $result = $query->execute()->getItems();
-        return $result;
+        $res = array();
+        foreach ($result as $row) {
+            $data = array(
+                "t_stamp" => $row["t_stamp"],
+                "cnt" => $row["cnt"],
+                "total" => 0
+            );
+            $res[$row["t_stamp"]] = $data;
+        }
+        $condition = "time_stamp BETWEEN '".date("Y-m-d", strtotime($this->start))."' AND '".date("Y-m-d", strtotime($this->end))."'";
+        $query = new CQuery(CApp::getApp()->getDbLogConnection());
+        $select = "month(s.time_stamp) as t_stamp_m, year(s.time_stamp) as t_stamp_y, count(id) as cnt";
+        $select .= ", concat(month(s.time_stamp), '.', year(s.time_stamp)) as t_stamp";
+        $query->select($select)
+            ->from("stats as s")
+            ->condition($condition)
+            ->group("t_stamp_m")
+            ->order("t_stamp_y desc, t_stamp_m desc");
+        $result = $query->execute()->getItems();
+        foreach ($result as $row) {
+            if (array_key_exists($row["t_stamp"], $res)) {
+                $res[$row["t_stamp"]]["total"] = $row["cnt"];
+            }
+        }
+        return $res;
     }
 }

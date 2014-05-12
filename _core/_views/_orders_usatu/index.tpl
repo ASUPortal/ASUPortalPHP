@@ -102,6 +102,13 @@
                         <span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('order'); return false; "/></span>
                     </p>
                 {/if}
+                <p>
+                    <label for="type">Тип приказа</label>
+                    {CHtml::dropDownList("type", CTaxonomyManager::getUsatuOrderTypesList(), $selectedType, "type")}
+                    {if !is_null($selectedType)}
+                        <span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('type'); return false; "/></span>
+                    {/if}
+                </p>
             </form>
         </td>
         <td valign="top" width="200px">
