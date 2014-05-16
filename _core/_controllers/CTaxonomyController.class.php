@@ -221,4 +221,19 @@ class CTaxonomyController extends CBaseController {
         $taxonomy->remove();
         $this->redirect("?action=index");
     }
+    public function actionImportTerms() {
+        $arr = CRequest::getArray(CTaxonomy::getClassName());
+        $taxonomy = CTaxonomyManager::getTaxonomy($arr["id"]);
+        $terms = $arr["terms"];
+        $terms = explode("\n", $terms);
+        foreach ($terms as $t) {
+            if (trim($t) != "") {
+                $term = new CTerm();
+                $term->setTaxonomy($taxonomy);
+                $term->setValue($t);
+                $term->save();
+            }
+        }
+        $this->redirect("index.php?action=index&id=".$taxonomy->getId());
+    }
 }
