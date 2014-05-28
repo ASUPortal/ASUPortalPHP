@@ -253,6 +253,10 @@
     define("TABLE_DOCUMENTS", "files");
     define("TABLE_REPORTS", "reports");
     define("TABLE_DASHBOARD_REPORTS", "dashboard_reports");
+    define("TABLE_NMS_PROTOCOL", "protocols_nms");
+    define("TABLE_NMS_PROTOCOL_AGENDA", "protocol_nms_details");
+    define("TABLE_PROTOCOL_OPINIONS", "protocol_opinions");
+    define("TABLE_NMS_PROTOCOL_AGENDA_MEMBERS", "protocol_nms_detail_members");
     /**
      * Константы пагинатора
      */

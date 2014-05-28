@@ -13,6 +13,9 @@ class CProtocolManager {
     private static $_cacheSebProtocols = null;
     private static $_cacheSebProtocolsInit = false;
     private static $_cacheDepProtocolsInit = false;
+    private static $_cacheNMSProtocols = null;
+    private static $_cacheNMSProtocolPoints = null;
+    private static $_cacheProtocolOpinions = null;
     /**
      * Кэш протоколов заседния кафедры
      *
@@ -121,5 +124,80 @@ class CProtocolManager {
             }
         }
         return self::getCacheSebProtocols()->getItem($key);
+    }
+
+    /**
+     * @return CArrayList|null
+     */
+    private static function getCacheNMSProtocols() {
+        if (is_null(self::$_cacheNMSProtocols)) {
+            self::$_cacheNMSProtocols = new CArrayList();
+        }
+        return self::$_cacheNMSProtocols;
+    }
+
+    /**
+     * @param $key
+     * @return CNMSProtocol
+     */
+    public static function getNMSProtocol($key) {
+        if (!self::getCacheNMSProtocols()->hasElement($key)) {
+            $ar = CActiveRecordProvider::getById(TABLE_NMS_PROTOCOL, $key);
+            if (!is_null($ar)) {
+                $protocol = new CNMSProtocol($ar);
+                self::getCacheNMSProtocols()->add($protocol->getId(), $protocol);
+            }
+        }
+        return self::getCacheNMSProtocols()->getItem($key);
+    }
+
+    /**
+     * @return CArrayList|null
+     */
+    private static function getCacheNMSProtocolPoints() {
+        if (is_null(self::$_cacheNMSProtocolPoints)) {
+            self::$_cacheNMSProtocolPoints = new CArrayList();
+        }
+        return self::$_cacheNMSProtocolPoints;
+    }
+
+    /**
+     * @param $key
+     * @return CNMSProtocolAgendaPoint
+     */
+    public static function getNMSProtocolAgendaPoint($key) {
+        if (!self::getCacheNMSProtocolPoints()->hasElement($key)) {
+            $ar = CActiveRecordProvider::getById(TABLE_NMS_PROTOCOL_AGENDA, $key);
+            if (!is_null($ar)) {
+                $protocol = new CNMSProtocolAgendaPoint($ar);
+                self::getCacheNMSProtocolPoints()->add($protocol->getId(), $protocol);
+            }
+        }
+        return self::getCacheNMSProtocolPoints()->getItem($key);
+    }
+
+    /**
+     * @return CArrayList|null
+     */
+    private static function getCacheProtocolOpinion() {
+        if (is_null(self::$_cacheProtocolOpinions)) {
+            self::$_cacheProtocolOpinions = new CArrayList();
+        }
+        return self::$_cacheProtocolOpinions;
+    }
+
+    /**
+     * @param $key
+     * @return CProtocolOpinion
+     */
+    public static function getProtocolOpinion($key) {
+        if (!self::getCacheProtocolOpinion()->hasElement($key)) {
+            $ar = CActiveRecordProvider::getById(TABLE_PROTOCOL_OPINIONS, $key);
+            if (!is_null($ar)) {
+                $protocol = new CProtocolOpinion($ar);
+                self::getCacheProtocolOpinion()->add($protocol->getId(), $protocol);
+            }
+        }
+        return self::getCacheProtocolOpinion()->getItem($key);
     }
 }

@@ -90,6 +90,27 @@ class CActiveModel extends CModel{
         } else {
             $this->updateModel();
         }
+        // попытаемся сразу сохранить многие-ко-многим отношения
+        foreach ($this->relations() as $field=>$relation) {
+            if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
+                // сохраним старое значение на всякий случай
+                $currentValue = $this->$field;
+                // удалим все старые
+                foreach (CActiveRecordProvider::getWithCondition($relation['joinTable'], $relation['leftCondition'])->getItems() as $ar) {
+                    $ar->remove();
+                }
+                // теперь сохраним новые
+                foreach ($currentValue->getItems() as $key=>$value) {
+                    $ar = new CActiveRecord(array(
+                        CUtils::strLeft($relation['leftCondition'], " ") => $this->getId(),
+                        $relation['rightKey'] => $key,
+                        "id" => null
+                    ));
+                    $ar->setTable($relation['joinTable']);
+                    $ar->insert();
+                }
+            }
+        }
     }
     /**
      * Сохранение новой модели
@@ -326,6 +347,25 @@ class CActiveModel extends CModel{
                 }
             }
         }
+        // поля многие-ко-многим тоже, почему бы и нет
+        foreach ($this->relations() as $field=>$relation) {
+            if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
+                if (array_key_exists($field, $array)) {
+                    $values = $array[$field];
+                    $manager = $relation['managerClass'];
+                    $getter = $relation['managerGetObject'];
+                    $property = $relation['storageProperty'];
+                    $this->$property = new CArrayList();
+                    foreach ($values as $value) {
+                        $related = $manager::$getter($value);
+                        if (!is_null($related)) {
+                            $this->$property->add($related->getId(), $related);
+                        }
+                    }
+                }
+            }
+        }
+        // поля из базы
         foreach ($array as $key=>$value) {
             if ($this->getDbTable()->getFields()->hasElement($key)) {
                 $this->getRecord()->setItemValue($key, $value);
