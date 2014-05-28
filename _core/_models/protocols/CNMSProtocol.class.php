@@ -24,4 +24,12 @@ class CNMSProtocol extends CActiveModel{
             ),
         );
     }
+    public function fieldsProperty() {
+        return array(
+            'original' => array(
+                'type'  => FIELD_UPLOADABLE,
+                'upload_dir' => CORE_CWD.CORE_DS."library".CORE_DS."protocols".CORE_DS
+            )
+        );
+    }
 }

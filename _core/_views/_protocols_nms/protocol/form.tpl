@@ -29,6 +29,14 @@
     </div>
 
     <div class="control-group">
+        {CHtml::activeLabel("original", $object)}
+        <div class="controls">
+            {CHtml::activeUpload("original", $object)}
+            {CHtml::error("original", $object)}
+        </div>
+    </div>
+
+    <div class="control-group">
         {CHtml::activeLabel("comment", $object)}
         <div class="controls">
             {CHtml::activeTextBox("comment", $object)}
