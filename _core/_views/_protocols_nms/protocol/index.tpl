@@ -13,8 +13,8 @@
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
                     <th>{CHtml::tableOrder("date_text", $objects->getFirstItem())}</th>
-                    <th>{CHtml::tableOrder("program_content", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("num", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("program_content", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("comment", $objects->getFirstItem())}</th>
                 </tr>
             </thead>
@@ -26,8 +26,8 @@
                     <td>{counter}</td>
                     <td><a href="index.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
                     <td>{$object->date_text}</td>
-                    <td>{$object->program_content}</td>
                     <td>{$object->num}</td>
+                    <td>{$object->program_content}</td>
                     <td>{$object->comment}</td>
                 </tr>
             {/foreach}
