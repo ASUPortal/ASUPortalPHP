@@ -12,27 +12,19 @@ class CUserGroupForm extends CFormModel{
     public function save() {
         $group = $this->group;
         $roles = array();
-        $members = array();
         if (array_key_exists("roles", $group)) {
             $roles = $group["roles"];
             unset($group["roles"]);
         }
-        if (array_key_exists("members", $group)) {
-            $members = $group["members"];
-            unset($group["members"]);
-        }
         $groupObj = new CUserGroup();
         $groupObj->setAttributes($group);
-        $groupObj->save();
         /**
          * Удаляем старые задачи группы и пользователей
          */
         foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_GROUP_HAS_ROLES, "user_group_id = ".$groupObj->getId())->getItems() as $ar) {
             $ar->remove();
         }
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_IN_GROUPS, "group_id = ".$groupObj->getId())->getItems() as $ar) {
-            $ar->remove();
-        }
+        $groupObj->save();
         /**
          * Создаем новые задачи группы и пользователей
          */
@@ -47,15 +39,6 @@ class CUserGroupForm extends CFormModel{
                 $ar->setTable(TABLE_USER_GROUP_HAS_ROLES);
                 $ar->insert();
             }
-        }
-        foreach ($members as $member) {
-            $ar = new CActiveRecord(array(
-                "id" => null,
-                "group_id" => $groupObj->getId(),
-                "user_id" => $member
-            ));
-            $ar->setTable(TABLE_USER_IN_GROUPS);
-            $ar->insert();
         }
     }
 }

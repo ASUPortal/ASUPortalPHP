@@ -1,6 +1,6 @@
 <div class="control-group">
     <div class="controls">
-    {CHtml::activeCheckBoxGroup("group[members]", $form, CStaffManager::getAllUsersList())}
-    {CHtml::error("group[members]", $form)}
+    {CHtml::activeLookup("group[users]", $form, "class.CSearchCatalogUsers", true)}
+    {CHtml::error("group[users]", $form)}
     </div>
 </div>
