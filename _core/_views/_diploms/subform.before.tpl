@@ -77,7 +77,15 @@
         {CHtml::error("recenz_id", $diplom)}
     </div>
 </div>
-
+    
+<div class="control-group">
+    {CHtml::activeLabel("normokontroler_id", $diplom)}
+    <div class="controls">
+        {CHtml::activeLookup("normokontroler_id", $diplom, "staff")}
+        {CHtml::error("normokontroler_id", $diplom)}
+    </div>
+</div>
+    
 <div class="control-group">
     {CHtml::activeLabel("gak_num", $diplom)}
     <div class="controls">
