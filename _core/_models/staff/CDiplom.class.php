@@ -19,6 +19,7 @@ class CDiplom extends CActiveModel {
     protected $_reviewer = null;
     protected $_commission = null;
     private $_averageMark = null;
+    protected $_normokontroler = null;
 
     public $aspire_recomendation = 0;
 
@@ -91,7 +92,14 @@ class CDiplom extends CActiveModel {
                 "storageField" => "gak_num",
                 "managerClass" => "CSABManager",
                 "managerGetObject" => "getCommission"
-            )
+            ),
+            "normokontroler" => array(
+                  "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_normokontroler",
+                "storageField" => "normokontroler_id",
+                "managerClass" => "CStaffManager",
+                "managerGetObject" => "getPerson"
+            ),
         );
     }
     public function validationRules() {
