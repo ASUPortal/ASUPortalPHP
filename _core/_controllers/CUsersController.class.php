@@ -65,11 +65,6 @@ class CUsersController extends CBaseController{
             }
         }
         /**
-         * Подключаем скрипты красивости
-         */
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
-        /**
          * Все передаем в представление
          */
         $this->setData("fromGroups", json_encode($fromGroups));
@@ -102,11 +97,6 @@ class CUsersController extends CBaseController{
             }
         }
         /**
-         * Подключаем скрипты красивости
-         */
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
-        /**
          * Все передаем в представление
          */
         $this->setData("fromGroups", json_encode($fromGroups));
@@ -123,7 +113,7 @@ class CUsersController extends CBaseController{
         if ($form->validate()) {
             $form->save();
             if ($this->continueEdit()) {
-                $this->redirect("?action=edit&id=".$form->user["id"]);
+                $this->redirect("?action=edit&id=".$form->user->getId());
             } else {
                 $this->redirect("?action=index");
             }
@@ -148,11 +138,6 @@ class CUsersController extends CBaseController{
             }
         }
         /**
-         * Подключаем скрипты красивости
-         */
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
-        /**
          * Все передаем в представление
          */
         $this->setData("fromGroups", json_encode($fromGroups));
@@ -164,5 +149,12 @@ class CUsersController extends CBaseController{
         $user = CStaffManager::getUser(CRequest::getInt("id"));
         $user->remove();
         $this->redirect("?action=index");
+    }
+    public function actionRemoveRoles() {
+        $user = CStaffManager::getUser(CRequest::getInt("id"));
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_HAS_ROLES, "user_id=".$user->getId())->getItems() as $ar) {
+            $ar->remove();
+        }
+        $this->redirect("?action=edit&id=".$user->getId());
     }
 }

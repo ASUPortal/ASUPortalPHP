@@ -146,6 +146,14 @@ class CStudentGroupsController extends CBaseController {
                 }
             }
             /**
+             * Аттестации
+             */
+            foreach ($corriculum->attestations->getItems() as $attestation) {
+                if (!is_null($attestation->discipline)) {
+                    $disciplines[$attestation->discipline_id] = $attestation->discipline->getValue();
+                }
+            }
+            /**
              * Проверяем, по каким дисциплинам у студентов нет оценок
              */
             foreach ($disciplines as $d_id => $d_name) {

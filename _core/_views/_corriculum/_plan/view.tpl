@@ -14,6 +14,12 @@
             {include file="_corriculum/_plan/subview.practice.tpl"}
         </td>
     </tr>
+    
+    <tr>
+        <td valign="top" colspan="2">
+            {include file="_corriculum/_plan/subview.attestation.tpl"}
+        </td>
+    </tr>
 </table>
 {/block}
 

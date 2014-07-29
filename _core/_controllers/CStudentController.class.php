@@ -306,7 +306,7 @@ class CStudentController extends CBaseController {
     					->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
     					->order("act.id asc");
     					if ($query->execute()->getCount() > 0) {
-    						$hours += $disc->getLaborValue();
+    						$hours += $disc->getLaborByType("total")->value;
     					}
                         /**
                          * А дочерние дисциплины куда?)
@@ -320,7 +320,7 @@ class CStudentController extends CBaseController {
                                 ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
                                 ->order("act.id asc");
                             if ($query->execute()->getCount() > 0) {
-                                $hours += $child->getLaborValue();
+                                $hours += $child->getLaborByType("total")->value;
                             }
                         }
     				}
@@ -350,7 +350,7 @@ class CStudentController extends CBaseController {
                             ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
                             ->order("act.id asc");
                         if ($query->execute()->getCount() > 0) {
-                            $hours += $disc->getLaborValue();
+                            $hours += $disc->getLaborByType("total")->value;
                         }
                         foreach ($disc->children->getItems() as $child) {
                             // здесь нужно проверить, что у студента по этой дисциплине есть оценка
@@ -361,7 +361,7 @@ class CStudentController extends CBaseController {
                                 ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
                                 ->order("act.id asc");
                             if ($query->execute()->getCount() > 0) {
-                                $hours += $child->getLaborValue();
+                                $hours += $child->getLaborByType("total")->value;
                             }
                         }
                     }

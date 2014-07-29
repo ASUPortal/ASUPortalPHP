@@ -46,6 +46,7 @@ class CUserForm extends CFormModel{
             }
         }
         $userObj->save();
+        $this->user = $userObj;
         /**
          * Удаляем старые упоминания о группах, в которых
          * пользователь состоял

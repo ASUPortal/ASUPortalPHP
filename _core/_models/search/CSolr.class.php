@@ -148,9 +148,14 @@ class CSolr {
                 $solrQuery->addFilterQuery($key.":".$value);
             }
         }
-
-        $query_response = self::getClient()->query($solrQuery);
-        $response = $query_response->getResponse();
+		try {
+			$query_response = self::getClient()->query($solrQuery);
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			var_dump(self::getClient()->getDebug());
+			break;
+		}
+		$response = $query_response->getResponse();
 
         $result = new CSolrQueryResults($response);
         return $result;

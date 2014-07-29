@@ -14,6 +14,7 @@ class CCorriculumsManager {
     private static $_cacheHours = null;
     private static $_cachePractices = null;
     private static $_cacheCompetentions = null;
+    private static $_cacheAttestations = null;
     /**
      * Кэш учебных планов
      * @return CArrayList 
@@ -268,6 +269,30 @@ class CCorriculumsManager {
         }
         return self::getCacheCompetention()->getItem($key);
     }
+    /**
+     * 
+     * @return CArrayList
+     */
+    private static function getCacheAttestations() {
+        if (is_null(self::$_cacheAttestations)) {
+            self::$_cacheAttestations = new CArrayList();
+        }
+        return self::$_cacheAttestations;
+    }
+    /**
+     * 
+     * @param type $key
+     * @return CCorriculumAttestation
+     */
+    public static function getAttestation($key) {
+        if (!self::getCacheAttestations()->hasElement($key)) {
+            $ar = CActiveRecordProvider::getById(TABLE_CORRICULUM_ATTESTATIONS, $key);
+            $obj = null;
+            if (!is_null($ar)) {
+                $obj = new CCorriculumAttestation($ar);
+                self::getCacheAttestations()->add($key, $obj);
+            }
+        }
+        return self::getCacheAttestations()->getItem($key);
+    }
 }
-
-?>

@@ -14,7 +14,7 @@
     <div class="control-group">
         {CHtml::activeLabel("discipline_id", $practice)}
         <div class="controls">
-        {CHtml::activeDropDownList("discipline_id", $practice, CTaxonomyManager::getDisciplinesList())}
+        {CHtml::activeLookup("discipline_id", $practice, "subjects")}
         {CHtml::error("discipline_id", $practice)}
         </div>
     </div>
@@ -34,6 +34,22 @@
         {CHtml::error("length", $practice)}
         </div>
     </div>
+        
+    <div class="control-group">
+        {CHtml::activeLabel("length_credits", $practice)}
+        <div class="controls">
+        {CHtml::activeTextField("length_credits", $practice)}
+        {CHtml::error("length_credits", $practice)}
+        </div>
+    </div>        
+        
+    <div class="control-group">
+        {CHtml::activeLabel("length_hours", $practice)}
+        <div class="controls">
+        {CHtml::activeTextField("length_hours", $practice)}
+        {CHtml::error("length_hours", $practice)}
+        </div>
+    </div>        
 
     <div class="control-group">
         <div class="controls">

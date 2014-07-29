@@ -28,6 +28,8 @@ class CCorriculumPractice extends CActiveModel {
             "type_id" => "Тип",
             "alias" => "Короткое имя для поиска",
             "length" => "Длительность (недель)",
+            "length_hours" => "Длительность (в часах)",
+            "length_credits" => "Длительность (зачетных единицы)",
             "discipline_id" => "Дисциплина"
         );
     }

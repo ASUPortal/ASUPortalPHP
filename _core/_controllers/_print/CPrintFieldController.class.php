@@ -133,7 +133,11 @@ class CPrintFieldController extends CBaseController {
         $field->setAttributes(CRequest::getArray($field::getClassName()));
         if ($field->validate()) {
         	$field->save();
-        	$this->redirect("?action=index");
+                if ($this->continueEdit()) {
+                    $this->redirect("?action=edit&id=".$field->getId());
+                } else {
+                    $this->redirect("?action=index");   
+                }
         	return true;
         }
         $formsets = array();

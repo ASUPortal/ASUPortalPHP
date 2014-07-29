@@ -22,3 +22,7 @@ images/lects/*
 
 *.cache
 *.db
+.svn
+.htaccess
+.httaccess
+.htacces

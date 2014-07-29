@@ -3,7 +3,9 @@
         <th>#</th>
         <th>&nbsp;</th>
         <th>Вид практики</th>
-        <th>Длительность</th>
+        <th>Длительность (недель)</th>
+        <th>Длительность (з.е.)</th>
+        <th>Длительность (часов)</th>
         <th>Семестр</th>
     </tr>
     {foreach $corriculum->practices->getItems() as $p}
@@ -16,6 +18,8 @@
             {/if}
         </td>
         <td>{$p->length}</td>
+        <td>{$p->length_credits}</td>
+        <td>{$p->length_hours}</td>
         <td>&nbsp;</td>
     </tr>
     {/foreach}
