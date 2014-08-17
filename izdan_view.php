@@ -211,6 +211,7 @@ function authors_sec($izdan_id,$authors_all,$fio_short,$auth_id) {
 	if (isset($_GET['save']) || isset($_GET['print'])) {
         echo '<div align=center>'.$fio.'</div><br>';
     } else {
+        /*
         $listQuery='select id, IF(cnt>0,concat(fio," (",role,")"," - ",cnt), concat(fio," (",role,")") ) as fio
             from
             (select id, k.fio,kadri_role(k.id,",") as role,
@@ -219,9 +220,13 @@ function authors_sec($izdan_id,$authors_all,$fio_short,$auth_id) {
             where SUBSTRING(fio,1,1)!="_"
             )t
         order by 2';
+        */
 	    echo 'Преподаватель:
 	        <select name="kadri_id" id="kadri_id" style="width:300px"   onChange="javascript:window.location.href=\'?kadri_id=\'+this.options[this.selectedIndex].value;">';
-	    echo getFrom_ListItemValue($listQuery,'id','fio','kadri_id');
+	    //echo getFrom_ListItemValue($listQuery,'id','fio','kadri_id');
+        foreach (CStaffManager::getAllPersons()->getItems() as $person) {
+            echo '<option value="'.$person->getId().'">'.$person->getName().'</option>';
+        }
 	    echo '</select>';
     }
 
