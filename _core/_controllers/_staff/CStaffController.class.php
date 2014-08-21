@@ -132,9 +132,26 @@ class CStaffController extends CBaseController{
                 )
             ),
             array(
-                "title" => "Добавить приказ ГЭК",
-                "link" => "orderssab.php?action=add&id=".$person->getId(),
-                "icon" => "actions/bookmark-new.png"
+                "title" => "Приказы",
+                "link" => "#",
+                "icon" => "actions/bookmark-new.png",
+                "child" => array(
+                    array(
+                        "title" => "Добавить приказ ГЭК",
+                        "link" => "orderssab.php?action=add&id=".$person->getId(),
+                        "icon" => "actions/bookmark-new.png"
+                    ),
+                    array(
+                        "title" => "Приказы по преподавательской деятельности",
+                        "link" => WEB_ROOT."_modules/_orders/index.php?action=view&id=".$person->getId(),
+                        "icon" => "actions/address-book-new.png"
+                    ),
+                    array(
+                        "title" => "Добавить приказ по преподавательской деятельности",
+                        "link" => WEB_ROOT."_modules/_orders/index.php?action=add&id=".$person->getId(),
+                        "icon" => "actions/list-add.png"
+                    ),
+                )
             ),
             array(
                 "title" => "Печать по шаблону",
