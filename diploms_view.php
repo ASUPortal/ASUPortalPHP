@@ -268,12 +268,17 @@ if (isset($_GET['type']) && ($_GET['type']=='add' || $_GET['type']=='edit') && $
 
 Преподаватель<span class=warning>*</span> <select name="kadri_id" id="kadri_id" style="width:300;"> 
 		<?php
+        foreach (CStaffManager::getAllPersons()->getItems() as $person) {
+            echo '<option value="'.$person->getId().'">'.$person->getName().'</option>';
+        }
+        /*
 		$query='SELECT kadri.id  as id,concat(kadri.fio," (",(select count(*) from `diploms` where diploms.kadri_id=kadri.id),")") as fio 
 			FROM kadri ';
 		if (!$view_all_mode) {$query.=' where kadri.id="'.$kadri_id.'"';}
 		$query.=' order by 2';
 		
 		echo getFrom_ListItemValue($query,'id','fio','kadri_id');
+        */
 		?>
 </select> <?php echo sprav_edit_link('kadri');?>
 <p>
@@ -663,7 +668,7 @@ if (!isset($_GET['save']) && !isset($_GET['print'])) {
 	  	?>
 	Преподаватель <select name="kadri_id" id="kadri_id" style="width:300;" onChange="javascript:window.location.href='?<?php echo reset_param_name($query_string,'kadri_id');?>&kadri_id='+this.options[this.selectedIndex].value;"> 
 	<?php
-
+        /*
 		$query_='SELECT kadri.id, concat(kadri.fio, " (",count(*),") ", " - ", kadri_role(kadri.id,",")) AS fio
   FROM    (   kadri 
            INNER JOIN
@@ -673,6 +678,10 @@ WHERE kadri.id is not null '.$archiv_query.'
 GROUP by kadri.id
 ORDER BY kadri.fio ASC';
 echo getFrom_ListItemValue($query_,'id','fio','kadri_id');
+        */
+            foreach (CStaffManager::getAllPersons()->getItems() as $person) {
+                echo '<option value="'.$person->getId().'">'.$person->getName().'</option>';
+            }
 		?>
 </select>
 	<?php
