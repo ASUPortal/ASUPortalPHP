@@ -867,9 +867,12 @@ function persons_select($queryString)
 		if ($view_all_mode===true) {
 		 echo '<option value="0">...выберите преподавателя ...</option>';
 		 if ($tab_name!='users') {
-		 $query='select k.id,concat(k.fio," (",kadri_role(k.id,","),")") as fio 
-		 	from kadri k order by k.fio';}
-		 else {$query='select id,fio from '.$tab_name.' where status="преподаватель" order by fio';}
+		    $query='select k.id,concat(k.fio," (",kadri_role(k.id,","),")") as fio
+		 	from kadri k order by k.fio';
+         } else {
+             // $query='select id,fio from '.$tab_name.' where status="преподаватель" order by fio';
+             $query='select id,fio from '.$tab_name.' order by fio';
+         }
 		 
 		 
 		 }
