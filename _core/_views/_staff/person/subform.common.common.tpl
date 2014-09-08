@@ -73,7 +73,7 @@
 <div class="control-group">
     {CHtml::activeLabel("person[date_rogd]", $form)}
     <div class="controls">
-    {CHtml::activeTextField("person[date_rogd]", $form, "date_rorg")}
+    {CHtml::activeTextField("person[date_rogd]", $form, "date_rogd")}
     {CHtml::error("person[date_rogd]", $form)}
     </div>
 </div>
@@ -147,6 +147,14 @@
     <div class="controls">
     {CHtml::activeTextBox("person[passp_place]", $form)}
     {CHtml::error("person[passp_place]", $form)}
+    </div>
+</div>
+
+<div class="control-group">
+    {CHtml::activeLabel("person[passp_date]", $form)}
+    <div class="controls">
+        {CHtml::activeDateField("person[passp_date]", $form)}
+        {CHtml::error("person[passp_date]", $form)}
     </div>
 </div>
 
