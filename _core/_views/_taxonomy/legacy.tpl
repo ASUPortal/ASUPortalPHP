@@ -27,7 +27,7 @@
 
             {foreach $taxonomy->getTerms()->getItems() as $item}
                 <tr class="text" bgcolor="#DFEFFF">
-                    <td><a href="?action=deleteLegacyTerm&id={$item->id}&taxonomy_id={$taxonomy->getId()}" onclick="if (!confirm('Вы действительно хотите удалить термин {$item->getValue()}?')){ return false }"></a></td>
+                    <td><a class="icon-trash" href="?action=deleteLegacyTerm&id={$item->id}&taxonomy_id={$taxonomy->getId()}" onclick="if (!confirm('Вы действительно хотите удалить термин {$item->getValue()}?')){ return false }"></a></td>
                     <td>{counter}</td>
                     <td><a href="?action=editLegacyTerm&id={$item->id}&taxonomy_id={$taxonomy->getId()}">{$item->getValue()}</a></td>
                     <td>{$item->getAlias()}</td>
