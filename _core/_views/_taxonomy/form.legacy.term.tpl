@@ -8,6 +8,16 @@
         {CHtml::activeTextField("name", $term)}
         {CHtml::error("name", $term)}
     </p>
+    <p>
+        {CHtml::activeLabel("name_short", $term)}
+        {CHtml::activeTextField("name_short", $term)}
+        {CHtml::error("name_short", $term)}
+    </p>
+    <p>
+        {CHtml::activeLabel("comment", $term)}
+        {CHtml::activeTextBox("comment", $term)}
+        {CHtml::error("comment", $term)}
+    </p>
 
     <p>
         {CHtml::submit("Сохранить")}
