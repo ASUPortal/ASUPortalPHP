@@ -344,7 +344,21 @@ class CHtml {
         }
     }
     public static function activeDateField($name, CModel $model, $format = "dd.mm.yyyy", $id = "", $class = "", $html = "") {
-        $field = $model::getClassName()."[".$name."]";
+        $submodelName = "";
+        if (strpos($name, "[") !== false) {
+            $submodelName = substr($name, 0, strpos($name, "["));
+            $name = substr($name, strpos($name, "[") + 1);
+            $name = substr($name, 0, strlen($name) - 1);
+            $model = $model->$submodelName;
+        }
+        $field = $model::getClassName();
+        if ($multiple_key !== "") {
+            $field .= "[".$multiple_key."]";
+        }
+        if ($submodelName !== "") {
+            $field .= "[".$submodelName."]";
+        }
+        $field .= "[".$name."]";
         if ($id == "") {
             $id = $field;
         }
