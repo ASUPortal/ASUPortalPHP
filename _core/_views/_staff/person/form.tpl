@@ -1,15 +1,3 @@
-<script>
-    jQuery(document).ready(function(){
-        jQuery("#date_rogd").datepicker({
-            dateFormat: "dd.mm.yy",
-            showOn: "both",
-            buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
-            buttonImageOnly: true,
-            changeYear: true
-        });
-    });
-</script>
-
 <form action="index.php" method="post" class="form-horizontal" enctype="multipart/form-data">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("person[id]", $form)}
