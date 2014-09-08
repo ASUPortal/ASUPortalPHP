@@ -184,13 +184,16 @@ class CTaxonomyController extends CBaseController {
     }
     public function actionSaveLegacyTerm() {
         $term = new CTerm();
+        //
+        $postData = CRequest::getArray($term::getClassName());
+        $taxonomy = CTaxonomyManager::getLegacyTaxonomy($postData['taxonomy_id']);
+        // $taxonomy = CTaxonomyManager::getLegacyTaxonomy($term->taxonomy_id);
+        $term->setTable($taxonomy->getTableName());
         $term->setAttributes(CRequest::getArray($term::getClassName()));
         /**
          * А теперь перекомпановываем запись для работы с унаследованными
          * таксономиями
          */
-        $taxonomy = CTaxonomyManager::getLegacyTaxonomy($term->taxonomy_id);
-        $term->setTable($taxonomy->getTableName());
         $term->getRecord()->unsetItem("taxonomy_id");
         if ($term->validate()) {
             $term->save();
