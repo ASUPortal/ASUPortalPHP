@@ -180,6 +180,7 @@
     define("TABLE_CORRICULUM_CYCLES", "pl_corriculum_cycles");
     define("TABLE_CORRICULUM_PRACTICES", "pl_corriculum_practices");
     define("TABLE_CORRICULUM_DISCIPLINE_COMPETENTIONS", "pl_corriculum_discipline_competentions");
+    define("TABLE_CORRICULUM_ATTESTATIONS", "pl_corriculum_attestations");
     define("TABLE_TAXONOMY", "taxonomy");
     define("TABLE_TAXONOMY_TERMS", "taxonomy_terms");
     define("TABLE_EDUCATION_FORMS", "study_forms");
