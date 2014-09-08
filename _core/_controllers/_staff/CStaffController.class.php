@@ -82,8 +82,6 @@ class CStaffController extends CBaseController{
         /**
          * Подключаем красивые элементы
          */
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("form", $form);
         /**
          * Собираем меню
