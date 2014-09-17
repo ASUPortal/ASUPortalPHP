@@ -157,4 +157,41 @@ class CUsersController extends CBaseController{
         }
         $this->redirect("?action=edit&id=".$user->getId());
     }
+    public function actionSearch() {
+        $res = array();
+        $term = CRequest::getString("query");
+        /**
+         * Сначала поищем по названию группы
+         */
+        $query = new CQuery();
+        $query->select("distinct(user.id) as id, user.fio as name")
+            ->from(TABLE_USERS." as user")
+            ->condition("user.fio like '%".$term."%'")
+            ->limit(0, 5);
+        foreach ($query->execute()->getItems() as $item) {
+            $res[] = array(
+                "field" => "id",
+                "value" => $item["id"],
+                "label" => $item["name"],
+                "class" => "CUser"
+            );
+        }
+        /**
+         * Теперь по логину
+         */
+        $query = new CQuery();
+        $query->select("distinct(user.id) as id, user.fio as name, user.login as login")
+            ->from(TABLE_USERS." as user")
+            ->condition("user.login like '%".$term."%'")
+            ->limit(0, 5);
+        foreach ($query->execute()->getItems() as $item) {
+            $res[] = array(
+                "field" => "id",
+                "value" => $item["id"],
+                "label" => $item["name"]." (".$item["login"].")",
+                "class" => "CUser"
+            );
+        }
+        echo json_encode($res);
+    }
 }
