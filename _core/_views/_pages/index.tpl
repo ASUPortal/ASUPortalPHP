@@ -3,10 +3,14 @@
 {block name="asu_center"}
     <h2>Страницы</h2>
 
+    {CHtml::helpForCurrentPage()}
+
     {if ($pages->getCount() == 0)}
         У Вас еще нет страниц!
     {else}
-        <table width="100%" border="1" cellpadding="0" cellspacing="0">
+        {include file="_core.searchLocal.tpl"}
+
+        <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
                 <th></th>
                 <th>#</th>

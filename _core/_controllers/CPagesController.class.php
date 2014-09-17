@@ -25,15 +25,18 @@ class CPagesController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
+        $set = new CRecordSet(true);
         $query = new CQuery();
-        $set->setQuery($query);
         $query->select("page.*")
-            ->from(TABLE_PAGES." as page");
-        if (!CSession::getCurrentUser()->hasRole(ROLE_PAGES_ADMIN)) {
+            ->from(TABLE_PAGES." as page")
+            ->order("page.title asc");
+        $pages = new CArrayList();
+        $set->setQuery($query);
+        if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY or
+            CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
+
             $query->condition("page.user_id_insert = ".CSession::getCurrentUser()->getId());
         }
-        $pages = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $page = new CPage($ar);
             $pages->add($page->getId(), $page);
@@ -61,6 +64,32 @@ class CPagesController extends CBaseController{
         $this->setData("page", $page);
         $this->renderView("_pages/edit.tpl");
     }
+    public function actionSearch() {
+        $res = array();
+        $term = CRequest::getString("query");
+        /**
+         * Сначала поищем по названию группы
+         */
+        $query = new CQuery();
+        $query->select("distinct(page.id) as id, page.title as name")
+            ->from(TABLE_PAGES." as page")
+            ->condition("page.title like '%".$term."%'")
+            ->limit(0, 5);
+        if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY or
+            CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
+
+            $query->condition("page.title like '%".$term."%' AND page.user_id_insert = ".CSession::getCurrentUser()->getId());
+        }
+        foreach ($query->execute()->getItems() as $item) {
+            $res[] = array(
+                "field" => "id",
+                "value" => $item["id"],
+                "label" => $item["name"],
+                "class" => "CPage"
+            );
+        }
+        echo json_encode($res);
+    }
     public function actionDelete() {
         $page = CPageManager::getPage(CRequest::getInt("id"));
         $page->remove();
@@ -71,7 +100,11 @@ class CPagesController extends CBaseController{
         $page->setAttributes(CRequest::getArray($page::getClassName()));
         if ($page->validate()) {
             $page->save();
-            $this->redirect("admin.php?action=index");
+            if ($this->continueEdit()) {
+                $this->redirect("?action=edit&id=".$page->getId());
+            } else {
+                $this->redirect("admin.php?action=index");
+            }
             return true;
         }
         $this->addJSInclude(JQUERY_UI_JS_PATH);

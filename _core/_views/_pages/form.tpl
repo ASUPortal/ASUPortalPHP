@@ -6,23 +6,27 @@
     });
 </script>
 
-<form action="admin.php" method="post" enctype="multipart/form-data">
+<form action="admin.php" class="form-horizontal" method="post" enctype="multipart/form-data">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $page)}
     {CHtml::activeHiddenField("user_id_insert", $page)}
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("title", $page)}
-        {CHtml::activeTextField("title", $page)}
-        {CHtml::error("title", $page)}
-    </p>
+        <div class="controls">
+            {CHtml::activeTextField("title", $page)}
+            {CHtml::error("title", $page)}
+        </div>
+    </div>
 
     <p>
         {CHtml::activeTextBox("page_content", $page, "page_content")}
         {CHtml::error("page_content", $page)}
     </p>
 
-    <p>
-        {CHtml::submit("Сохранить")}
-    </p>
+    <div class="control-group">
+        <div class="controls">
+            {CHtml::submit("Сохранить")}
+        </div>
+    </div>
 </form>
