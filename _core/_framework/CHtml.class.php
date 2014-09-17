@@ -352,9 +352,6 @@ class CHtml {
             $model = $model->$submodelName;
         }
         $field = $model::getClassName();
-        if ($multiple_key !== "") {
-            $field .= "[".$multiple_key."]";
-        }
         if ($submodelName !== "") {
             $field .= "[".$submodelName."]";
         }
