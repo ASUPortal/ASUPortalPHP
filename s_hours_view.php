@@ -509,75 +509,83 @@ else { echo '<div class=success>за <u>'.$part.'</u> семестр  свере
 
 //------------------------------------------------------------------------------------
 
-if (isset($_GET['export'])){//print_r($_POST); echo '';
+if (isset($_GET['export'])){
+    //print_r($_POST); echo '';
+    $max_id=0;
+    $query='select max(id) as max_id from hours_kind';
+    $res=mysql_query($query);
+    $a=mysql_fetch_array($res);
+    $max_id=$a['max_id'];
 
-$max_id=0;
-$query='select max(id) as max_id from hours_kind';
-$res=mysql_query($query);
-$a=mysql_fetch_array($res);
-$max_id=$a['max_id'];
+    $err=false;
+    while (list($key, $value) = each ($_POST)) {
+ 	    if (strstr($key,"checkbox_h_copy_")) {
+            $mail_id=substr($key,strpos($key,'copy_')+5);	//выбираем ID из названий чекбоксов
 
-$err=false;
-while (list($key, $value) = each ($_POST)) {
- 	if 	  (strstr($key,"checkbox_h_copy_")) {
-	$mail_id=substr($key,strpos($key,'copy_')+5);	//выбираем ID из названий чекбоксов
-	  
-	// выборка необходимых полей для экспорта нагрузки
-		$query='SELECT `subject_id` , `spec_id` , `level_id` , `group_id` , `hours_kind_type` , `groups_cnt` , 
-		`stud_cnt` ';
-		for ($i=0;$i<sizeof($hour_kind_code);$i++)
-			$query.=', '.$hour_kind_code[$i].', '.$hour_kind_code[$i].'_add';
-		$query.=' FROM `hours_kind` WHERE `id` ='.$mail_id.' limit 0,1';	
-	if (! ($res=mysql_query($query)) ) {$err=true;};
-	$a=mysql_fetch_array($res,MYSQL_ASSOC);
+            // выборка необходимых полей для экспорта нагрузки
+            $query='SELECT `subject_id` , `spec_id` , `level_id` , `group_id` , `hours_kind_type` , `groups_cnt` , `stud_cnt`, `stud_cnt_add` ';
+            for ($i = 0; $i < sizeof($hour_kind_code); $i++) {
+                $query.=', '.$hour_kind_code[$i].', '.$hour_kind_code[$i].'_add';
+            }
+            $query.=' FROM `hours_kind` WHERE `id` ='.$mail_id.' limit 0,1';
+            if (!($res=mysql_query($query)) ) {
+                $err=true;
+            };
+            $a=mysql_fetch_array($res,MYSQL_ASSOC);
 
-	//echo '<p>'.$query;
-	$query='SELECT kadri.fio_short, time_intervals.name as year_name , time_parts.name as part_name, `hours_kind`.`comment`,`hours_kind`.`id` 
-	FROM `hours_kind` 
-	left join kadri on kadri.id=hours_kind.kadri_id 
-	left join time_intervals on time_intervals.id=hours_kind.year_id
-	left join time_parts on time_parts.id=hours_kind.part_id 
-	  WHERE hours_kind.id ='.$mail_id.' limit 0,1';
-	//$res=mysql_query($query);
-	if (! ($res=mysql_query($query)) ) {$err=true;};
+            //echo '<p>'.$query;
+            $query='SELECT kadri.fio_short, time_intervals.name as year_name , time_parts.name as part_name, `hours_kind`.`comment`,`hours_kind`.`id`
+            FROM `hours_kind`
+            left join kadri on kadri.id=hours_kind.kadri_id
+            left join time_intervals on time_intervals.id=hours_kind.year_id
+            left join time_parts on time_parts.id=hours_kind.part_id
+              WHERE hours_kind.id ='.$mail_id.' limit 0,1';
+            //$res=mysql_query($query);
+            if (! ($res=mysql_query($query)) ) {
+                $err=true;
+            };
 
-	$a_new_val=mysql_fetch_array($res,MYSQL_ASSOC);
-	//print_r($a_new_val);
-	
-	// формирование списка полей для вставки
-	$str_fields='';$str_values='';
-	while (list($key_, $value_) = each ($a)) {
-		$str_fields.=', `'.$key_.'`';
-		$str_values.=', "'.$value_.'"';
-		}
-	//print_r($a);
-	//echo ' <b>str_fields</b>='.$str_fields.'<br> <b>str_values</b>='.$str_values.'<br>';
-	
-	$max_id++;
-	$comment='';
-	$comment=$a_new_val['comment'].' копия от '.$a_new_val['fio_short'].', '.$a_new_val['year_name'].','.$a_new_val['part_name'].';';
-	$query='insert into hours_kind (id,kadri_id,year_id,part_id,comment'.$str_fields.') 
-		values("'.$max_id.'", "'.$_POST['teach_name'].'","'.$_POST['year_list'].'", "'.$_POST['part_list'].'", "'.$comment.'" '.$str_values.')';
-	//echo $query;
-	//mysql_query($query);	
-	if (!mysql_query($query)) {$err=true;echo '<div class=warning> ошибки добавления при экспорте, вожможно производится копирование только с одним сотрудником</div>';};
-	
-	if ($_POST['type_copy']==0 && !$err) // копировать с перемещением, т.е. у источника удаляем
-	{	$query='delete from hours_kind where id='.$a_new_val['id'].''; 
-		//mysql_query($query);
-		if (!mysql_query($query)) {$err=true;echo '<div class=warning> ошибки удаления при экспорте.</div>';};	
-	}
-	//echo ' id='.$a['id'].'<br>';
-	/*$query='insert into hours_kind() 
-		values('.($mail_id+1).', select * from hours_kind where id='.$mail_id.')';*/
+            $a_new_val=mysql_fetch_array($res,MYSQL_ASSOC);
+            //print_r($a_new_val);
 
-	  //echo $query.'<br>'; 
-	  //if (mysql_query($query)) {/*echo 'Письма удалены';*/}
-	}	   }
+            // формирование списка полей для вставки
+            $str_fields='';$str_values='';
+            while (list($key_, $value_) = each ($a)) {
+                $str_fields .= ', `'.$key_.'`';
+                $str_values .= ', "'.$value_.'"';
+            }
+            //print_r($a);
+            //echo ' <b>str_fields</b>='.$str_fields.'<br> <b>str_values</b>='.$str_values.'<br>';
 
-if ($err==true)	{echo '<div class=warning> Произошли ошибки при копировании нагрузки </div>';}
-else {echo '<div class=success> Копировании нагрузки успешно</div>';}
-					}
+            $max_id++;
+            $comment='';
+            $comment=$a_new_val['comment'].' копия от '.$a_new_val['fio_short'].', '.$a_new_val['year_name'].','.$a_new_val['part_name'].';';
+            $query='insert into hours_kind (id,kadri_id,year_id,part_id,comment'.$str_fields.')
+                values("'.$max_id.'", "'.$_POST['teach_name'].'","'.$_POST['year_list'].'", "'.$_POST['part_list'].'", "'.$comment.'" '.$str_values.')';
+            //echo $query;
+            //mysql_query($query);
+            if (!mysql_query($query)) {
+                $err=true;
+                echo '<div class=warning> ошибки добавления при экспорте, вожможно производится копирование только с одним сотрудником</div>';
+            };
+
+            if ($_POST['type_copy']==0 && !$err) // копировать с перемещением, т.е. у источника удаляем
+            {	$query='delete from hours_kind where id='.$a_new_val['id'].'';
+                //mysql_query($query);
+                if (!mysql_query($query)) {
+                    $err=true;
+                    echo '<div class=warning> ошибки удаления при экспорте.</div>';
+                };
+            }
+        }
+    }
+
+    if ($err==true)	{
+        echo '<div class=warning> Произошли ошибки при копировании нагрузки </div>';
+    } else {
+        echo '<div class=success> Копировании нагрузки успешно</div>';
+    }
+}
 
 //-----------------------------------------------------------------------------------------
 
@@ -625,6 +633,7 @@ $query_all='SELECT time_intervals.id as year_id,time_intervals.name as year_name
 //---------------------------
 
 if ( $res_all=mysql_query($query_all) and mysql_numrows($res_all)>0) {$def_settings=mysql_fetch_array($res_all);}
+$year_name = "";
 if ($year>0) $year_name=getScalarVal('SELECT ti.name FROM time_intervals ti WHERE (ti.id = '.$year.')');
 
 if (isset($def_settings)) {
@@ -725,12 +734,11 @@ if (!isset($_GET['save']) && !isset($_GET['print'])) {
 //-------------------------------------------------------------------------------------------------------------
 	//найстройки по умолчанию из сохраненной таблицы
 	
-	if ($year_name!='') {
+	if ($year_name != '') {
 		print_hours($year_name,'осенний');
 		echo '<br>';
 		print_hours($year_name,'весенний');
-	}
-	else {
+	} else {
 		print_hours($def_settings['year_name'],'осенний');
 		echo '<br>';
 		print_hours($def_settings['year_name'],'весенний');
