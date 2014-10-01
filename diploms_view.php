@@ -43,7 +43,10 @@ $query_string=$_SERVER['QUERY_STRING'];
 if (isset($_GET['kadri_id']) && intval($_GET['kadri_id']>0) ) {$kadri_id=intval($_GET['kadri_id']);$filt_str_display.=' преподавателю;'.del_filter_item('kadri_id');}
 if (isset($_GET['sort'])) {$sort=intval($_GET['sort']);}
 
-if (isset($_GET['q']) && trim($_GET['q'])!='') {$q=f_ri($_GET['q']);$filt_str_display=$filt_str_display.'  поиску;'.del_filter_item('q');}
+if (isset($_GET['q']) && trim($_GET['q'])!='') {
+    $q=f_ri($_GET['q']);
+    $filt_str_display=$filt_str_display.'  поиску;'.del_filter_item('q');
+}
 
 if (isset($_GET['page']) && intval($_GET['page'])>1) {$page=intval($_GET['page']);$filt_str_display=$filt_str_display.'  странице;';}
 if (isset($_GET['pgVals']) && intval($_GET['pgVals'])<=999 && intval($_GET['pgVals'])>=1) {$pgVals=intval($_GET['pgVals']);$filt_str_display=$filt_str_display.' числу записей;';}
@@ -199,20 +202,21 @@ if (isset($_POST['kadri_id']) && $write_mode) {
 		 //echo $query;
 	 }
 	 
-	 //новая тема
-	 if (isset($_GET['type']) & $_GET['type']=='add') {		 
-		 $err=false;
-		 if ($_POST['student_fio']!='') {//добавление студента в список студентов		  	
-		  	$query="select max(id) as max_id from students";
-		  	$res=mysql_query($query);$a=mysql_fetch_array($res);$id=$a['max_id']+1;
+    //новая тема
+    if (isset($_GET['type']) & $_GET['type']=='add') {
+        $err=false;
+        if ($_POST['student_fio']!='') {//добавление студента в список студентов
+            $query="select max(id) as max_id from students";
+		  	$res=mysql_query($query);
+             $a=mysql_fetch_array($res);$id=$a['max_id']+1;
 		  	
 		  	$query="insert into students(id,fio) values('".$id."','".$_POST['student_fio']."')";
 		  	//echo $query;
 		  	if (mysql_query($query)) {echo ' Студент добавлен в список ';$_POST["student_id"]=$id;}
 		  	else {echo '<div class="warning"> Ошибка добавления студента в список. Возможно такие ФИО там уже есть. Запись не добавлена.</div>';$err=true;}
 			
-		  }
-		 if ($err==false) {
+        }
+        if ($err==false) {
 		 $query="insert into diploms(dipl_name,student_id,kadri_id,pract_place_id,comment,date_act,foreign_lang,recenz,study_mark,gak_num,recenz_id,protocol_2aspir_id,diplom_confirm) 
 		 	values('".f_ri($_POST["dipl_name"])."',
 			'".intval($_POST["student_id"])."',
@@ -228,23 +232,22 @@ if (isset($_POST['kadri_id']) && $write_mode) {
 			 '".intval($_POST["diplom_confirm"])."' 
 			 )";
 		 $res_news=true;
-		 if ($res_news & $res=mysql_query($query)) {
-
-
-		  	echo '<div class=success> Запись "'.$_POST['dipl_name'].'" добавлена успешно.'.$onEditRemain_text.'</div><br>';
-			}
-		 else {echo '<div class="warning">Запись не добавлена. Возможно пара значений:студент-преподаватель там уже есть</div><br>';$err=true;}
-		 
-			 }	
+            if ($res_news & $res=mysql_query($query)) {
+                echo '<div class=success> Запись "'.$_POST['dipl_name'].'" добавлена успешно.'.$onEditRemain_text.'</div><br>';
+            } else {
+                echo '<div class="warning">Запись не добавлена. Возможно пара значений:студент-преподаватель там уже есть</div><br>';$err=true;
+            }
+        }
 	//echo $query;
-	 }
+    }
 	 
-	 }
-	else {echo '<div class="warning">Часть обязательных данных не заполнено .<br>&nbsp;</div>';$err=true;}
-if (!$err && !$onEditRemain) {
- 	$query_string=reset_param_name(reset_param_name($query_string,'type'),'item_id');
- 	echo '<script language="Javascript">setTimeout("window.location.href=\"'.$curpage.'?'.$query_string.'\"",2000);</script>';}	
-} 
+    } else {
+        echo '<div class="warning">Часть обязательных данных не заполнено .<br>&nbsp;</div>';$err=true;
+    }
+    if (!$err && !$onEditRemain) {
+ 	    $query_string=reset_param_name(reset_param_name($query_string,'type'),'item_id');
+ 	    echo '<script language="Javascript">setTimeout("window.location.href=\"'.$curpage.'?'.$query_string.'\"",2000);</script>';}
+    }
 
 if (isset($_GET['type']) && $_GET['type']=='edit' && $write_mode)	//Правка темы
 {
@@ -441,9 +444,7 @@ c рецензент вне списка <a class=help title="автозапол
 </form>
 </div> 
 <?php
-}
-
-else {
+} else {
 	if (!isset($_GET['archiv'])) {
 		$query_='select count(id) from `diploms` where 1 and (date_act<"'.$def_settings['date_start'].'") ';
 		if ($kadri_id>0) {
@@ -572,7 +573,14 @@ $query='
 	    diploms.protocol_2aspir_id,
 	    k2.fio_short as rez_fio,
 	    study_marks.name_short as study_mark, diploms.gak_num,
-kadri.id as kadri_id,diploms.comment,diploms.id,students.id as student_id,users.id as user_id,recenz_id,diploms.recenz,dc.color_mark as dc_color_mark        
+        kadri.id as kadri_id,
+        diploms.comment,
+        diploms.id,
+        students.id as student_id,
+        users.id as user_id,
+        recenz_id,
+        diploms.recenz,
+        dc.color_mark as dc_color_mark
 	FROM diploms
 	    left join students on diploms.student_id=students.id
 		left join kadri on diploms.kadri_id=kadri.id
@@ -599,6 +607,8 @@ if ($notconfirm) {
 }
 
 $query=$query." where 1 ".$archiv_query."".$search_query;
+
+    var_dump($query);
 
     /**
      * Сортировки разнообразные

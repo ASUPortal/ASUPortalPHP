@@ -30,14 +30,11 @@ class CGrantsController extends CBaseController{
         $query->select("gr.*")
             ->from(TABLE_GRANTS." as gr")
             ->order("gr.id desc");
-        /**
-         * Если пользователь не админ грантов, то
-         * видит только свои и те, в которых
-         * он участник
-         */
-        if (!CSession::getCurrentUser()->hasRole(ROLE_GRANTS_ADMIN)) {
+        if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY ||
+            CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
+
             $query->leftJoin(TABLE_GRANT_MEMBERS." as m", "m.grant_id = gr.id");
-            $query->condition("gr.author_id=".CSession::getCurrentPerson()->getId()." OR m.person_id=".CSession::getCurrentPerson()->getId());
+            $query->condition("gr.author_id=".CSession::getCurrentPerson()->getId()." OR m.person_id=".CSession::getCurrentPerson()->getId()." or gr.manager_id=".CSession::getCurrentUser()->getId());
         }
         $set->setQuery($query);
         $grants = new CArrayList();
