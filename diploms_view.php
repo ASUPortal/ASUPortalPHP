@@ -608,7 +608,7 @@ if ($notconfirm) {
 
 $query=$query." where 1 ".$archiv_query."".$search_query;
 
-    var_dump($query);
+    /// var_dump($query);
 
     /**
      * Сортировки разнообразные
