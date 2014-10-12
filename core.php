@@ -101,6 +101,11 @@
         )
     );
     /**
+     * Сделаем небольшую оптимизацию для загрузки классов
+     */
+    global $classAutoloadMapping;
+    $classAutoloadMapping = array();
+    /**
      * Автолоадер
      */
     foreach ($import as $i) {
@@ -111,9 +116,19 @@
     spl_autoload_register('classAutoload');
 
     function classAutoload($className) {
+        global $classAutoloadMapping;
+        //
         $hasFile = false;
+        if (array_key_exists($className, $classAutoloadMapping)) {
+            if (file_exists($classAutoloadMapping[$className])) {
+                $hasFile = true;
+                require_once($classAutoloadMapping[$className]);
+                return true;
+            }
+        }
         foreach (explode(PATH_SEPARATOR, get_include_path()) as $path) {
             if (file_exists($path.$className.".class.php")) {
+                $classAutoloadMapping[$className] = $path.$className.".class.php";
                 $hasFile = true;
                 require_once($className.".class.php");
                 break;
