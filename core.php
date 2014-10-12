@@ -57,24 +57,31 @@
         PRINT_ENGINE_WORD
     );
     /**
-     * Добавляем все папки моделей
+     * Сделаем небольшую оптимизацию для загрузки классов
      */
-    $modelsDir = opendir(CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models');
-    while (false !== ($dir = readdir($modelsDir))) {
-        if ($dir != "." && $dir != "..") {
-            if (is_dir(CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS.$dir)) {
-                $import[] = CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS.$dir.CORE_DS;
-            }
-        }
-    }
+    global $classAutoloadMapping;
+    $classAutoloadMapping = array();
     /**
-     * Дадим возможность группировать контроллеры по папками
+     * Добавляем подпапки
      */
-    $controllersDir = opendir(CORE_CWD.CORE_DS.'_core'.CORE_DS.'_controllers');
-    while (false !== ($dir = readdir($controllersDir))) {
-        if ($dir != "." && $dir != "..") {
-            if (is_dir(CORE_CWD.CORE_DS.'_core'.CORE_DS.'_controllers'.CORE_DS.$dir)) {
-                $import[] = CORE_CWD.CORE_DS.'_core'.CORE_DS.'_controllers'.CORE_DS.$dir.CORE_DS;
+    $subfoldersToLoad = array(
+        "_models" => CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models',
+        "_controllers" => CORE_CWD.CORE_DS.'_core'.CORE_DS.'_controllers',
+        "_framework" => CORE_CWD.CORE_DS.'_core'.CORE_DS.'_framework',
+    );
+    foreach ($subfoldersToLoad as $folder) {
+        $modelsDir = opendir($folder);
+        while (false !== ($dir = readdir($modelsDir))) {
+            if ($dir != "." && $dir != "..") {
+                if (is_dir($folder.CORE_DS.$dir)) {
+                    $import[] = $folder.CORE_DS.$dir.CORE_DS;
+                } else if (is_file($folder.CORE_DS.$dir)) {
+                    $filename = $folder.CORE_DS.$dir;
+                    if (mb_substr($filename, mb_strlen($filename) - 10) == ".class.php") {
+                        $className = mb_substr($filename, 0, mb_strlen($filename) - 10);
+                        $classAutoloadMapping[$className] = $filename;
+                    }
+                }
             }
         }
     }
@@ -100,11 +107,6 @@
             "cacheEnabled" => false
         )
     );
-    /**
-     * Сделаем небольшую оптимизацию для загрузки классов
-     */
-    global $classAutoloadMapping;
-    $classAutoloadMapping = array();
     /**
      * Автолоадер
      */
