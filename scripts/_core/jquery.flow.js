@@ -109,7 +109,8 @@
                     // передача управления следующему действию
                     Flow.init({
                         targetClass: params.targetClass,
-                        targetMethod: params.targetMethod
+                        targetMethod: params.targetMethod,
+                        beanId: params.beanId
                     });
                     Flow.startNextAction();
                 } else {

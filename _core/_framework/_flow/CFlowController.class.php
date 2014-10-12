@@ -12,6 +12,8 @@
 
 class CFlowController extends CBaseController{
     private static $_alreadyInstantiated = false;
+    private static $_statefullBean = null;
+    private static $_statefullBeanId = "";
 
     public function __construct() {
         // если нет параметра запуска флоу, то ведем себя как обычный контроллер
@@ -24,6 +26,15 @@ class CFlowController extends CBaseController{
         if (self::$_alreadyInstantiated) {
             return true;
         }
+
+        // инициализируем бин
+        if (CRequest::getString("beanId") != "") {
+            self::$_statefullBeanId = CRequest::getString("beanId");
+        }
+
+        // включим смарти, нельзя без него
+        $this->_smartyEnabled = true;
+
         // передаем управление другому объекту
         $controllerClass = CRequest::getString("targetClass");
         $controllerMethod = "action".CRequest::getString("targetMethod");
@@ -32,6 +43,24 @@ class CFlowController extends CBaseController{
 
         $controller = new $controllerClass();
         $controller->$controllerMethod();
+    }
+
+    /**
+     * Текущий бин состояния
+     *
+     * @return CStatefullBean
+     */
+    public static function getStatefullBean() {
+        if (is_null(self::$_statefullBean)) {
+            self::$_statefullBean = new CStatefullBean();
+            if (self::$_statefullBeanId != "") {
+                $bean = CApp::getApp()->beans->getStatefullBean(self::$_statefullBeanId);
+                if (!is_null($bean)) {
+                    self::$_statefullBean = $bean;
+                }
+            }
+        }
+        return self::$_statefullBean;
     }
 
     /**
@@ -74,10 +103,12 @@ class CFlowController extends CBaseController{
         if (!self::$_useFlowController) {
             parent::redirect($url, $message);
         }
+        CApp::getApp()->beans->serializeBean(self::getStatefullBean());
         echo json_encode(array(
             "action" => "redirect",
             "url" => $url,
-            "message" => $message
+            "message" => $message,
+            "beanId" => self::getStatefullBean()->getBeanId()
         ));
     }
 
@@ -88,10 +119,33 @@ class CFlowController extends CBaseController{
      * @param $targetMethod
      */
     public function redirectNextAction($targetClass, $targetMethod) {
+        CApp::getApp()->beans->serializeBean(self::getStatefullBean());
         echo json_encode(array(
             "action" => "redirectNextAction",
             "targetClass" => $targetClass,
-            "targetMethod" => $targetMethod
+            "targetMethod" => $targetMethod,
+            "beanId" => self::getStatefullBean()->getBeanId()
         ));
+    }
+
+    /**
+     * Отрисовать представление, результаты будут переданы указанному
+     * классу и его методу
+     *
+     * @param $view
+     * @param $targetClass
+     * @param $targetMethod
+     */
+    public function renderView($view, $targetClass = "", $targetMethod = "") {
+        if ($targetClass != "") {
+            $this->setData("targetClass", $targetClass);
+        }
+        if ($targetMethod != "") {
+            $this->setData("targetMethod", $targetMethod);
+        }
+        CApp::getApp()->beans->serializeBean(self::getStatefullBean());
+        $this->setData("beanId", self::getStatefullBean()->getBeanId());
+
+        parent::renderView($view);
     }
 }

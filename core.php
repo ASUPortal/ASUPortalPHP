@@ -102,6 +102,10 @@
                 "cacheDir" => CORE_CWD.CORE_DS.'tmp'.CORE_DS.'cache'.CORE_DS,
                 "timeout" => 60
             ),
+            "beans" => array(
+                "class" => "CBeanManager",
+                "cacheDir" => CORE_CWD.CORE_DS.'tmp'.CORE_DS.'beans'.CORE_DS
+            )
         ),
         "smarty" => array(
             "cacheEnabled" => false
