@@ -4,67 +4,16 @@
 
     {CHtml::errorSummary($form)}
 
-    <div class="control-group">
-        {CHtml::activeLabel("title", $form)}
-        <div class="controls">
-        {CHtml::activeTextField("title", $form)}
-        {CHtml::error("title", $form)}
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#tab-common">Общие сведения</a></li>
+        <li><a data-toggle="tab" href="#tab-properties">Параметры печати</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab-common">
+            {include file="_print/form/subform.common.tpl"}
         </div>
-    </div>
-
-    <div class="control-group">
-        {CHtml::activeLabel("alias", $form)}
-        <div class="controls">
-        {CHtml::activeTextField("alias", $form)}
-        {CHtml::error("alias", $form)}
-        </div>
-    </div>
-
-    <div class="control-group">
-        {CHtml::activeLabel("description", $form)}
-        <div class="controls">
-        {CHtml::activeTextBox("description", $form)}
-        {CHtml::error("description", $form)}
-        </div>
-    </div>
-
-    <div class="control-group">
-        {CHtml::activeLabel("formset_id", $form)}
-        <div class="controls">
-        {CHtml::activeDropDownList("formset_id", $form, $formsets)}
-        {CHtml::error("context_evaluate", $form)}
-        </div>
-    </div>
-
-    <div class="control-group">
-        {CHtml::activeLabel("form_format", $form)}
-        <div class="controls">
-        {CHtml::activeDropDownList("form_format", $form, $types)}
-        {CHtml::error("form_format", $form)}
-        </div>
-    </div>
-
-    <div class="control-group">
-        {CHtml::activeLabel("template_file", $form)}
-        <div class="controls">
-        {CHtml::activeUpload("template_file", $form)}
-        {CHtml::error("template_file", $form)}
-        </div>
-    </div>
-
-    <div class="control-group">
-        {CHtml::activeLabel("isActive", $form)}
-        <div class="controls">
-        {CHtml::activeCheckBox("isActive", $form, 1)}
-        {CHtml::error("isActive", $form)}
-        </div>
-    </div>
-
-    <div class="control-group">
-        {CHtml::activeLabel("debug", $form)}
-        <div class="controls">
-        {CHtml::activeCheckBox("debug", $form, 1)}
-        {CHtml::error("debug", $form)}
+        <div class="tab-pane" id="tab-properties">
+            {include file="_print/form/subform.properties.tpl"}
         </div>
     </div>
 

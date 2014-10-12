@@ -6,7 +6,7 @@
  * Time: 20:28
  * To change this template use File | Settings | File Templates.
  */
-class CPrintController extends CBaseController {
+class CPrintController extends CFlowController {
     private $_isDebug = false;
 
     public function __construct() {
@@ -485,5 +485,42 @@ if (is_null($object->group)) {
             echo '</tr>';
         }
         echo '</table>';
+    }
+    public function actionShowForms() {
+        $formsetName = CRequest::getString("template");
+        $formset = CPrintManager::getFormset($formsetName);
+        if (!is_null($formset)) {
+            $forms = new CArrayList();
+            foreach ($formset->forms->getItems() as $form) {
+                $forms->add($form->getId(), $form->title);
+            }
+            $this->showPickList($forms, get_class($this), "PrePrintWithTemplate");
+        }
+    }
+    public function actionPrePrintWithTemplate() {
+        if ($this->getSelectedInPickListDialog()->getCount() == 0) {
+            return true;
+        }
+        $selectedForm = CPrintManager::getForm($this->getSelectedInPickListDialog()->getFirstItem());
+        if (!is_null($selectedForm)) {
+            /**
+             * Если это форма без диалога параметров, то просто перекинем
+             * пользователя на страницу генерации документа
+             */
+            if ($selectedForm->properties_show_dialog != "1") {
+                $formset = $selectedForm->formset;
+                $variables = $formset->computeTemplateVariables();
+                $url = WEB_ROOT."_modules/_print/?action=print".
+                    "&manager=".$variables['manager'].
+                    "&method=".$variables['method'].
+                    "&id=".$variables['id'].
+                    "&template=".$selectedForm->getId();
+
+                $this->redirect($url);
+            } else {
+                // тут с диалогом, передадим ему управление
+                $this->redirectNextAction($selectedForm->properties_controller, $selectedForm->properties_method);
+            }
+        }
     }
 }
