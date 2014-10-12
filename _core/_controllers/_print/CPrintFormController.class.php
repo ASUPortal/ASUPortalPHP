@@ -50,7 +50,11 @@ class CPrintFormController extends CBaseController {
         $form->setAttributes(CRequest::getArray(CPrintForm::getClassName()));
         if ($form->validate()) {
             $form->save();
-            $this->redirect("?action=index");
+            if ($this->continueEdit()) {
+                $this->redirect("?action=edit&id=".$form->getId());
+            } else {
+                $this->redirect("?action=index");
+            }
         }
         $formsets = array();
         foreach (CPrintManager::getAllFormsets()->getItems() as $formset) {

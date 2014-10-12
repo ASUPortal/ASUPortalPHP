@@ -4,86 +4,9 @@
 <h2>Описатели полей</h2>
 
     <script>
-        function getFilters() {
-            filters = new Object();
-            var items = jQuery("#filters p");
-            jQuery.each(items, function(key, value){
-                // получаем название фильтра, он хранится в label-е
-                var label = jQuery(value).find("label");
-                var filter_name = "";
-                if (label.length > 0) {
-                    filter_name = jQuery(label[0]).attr("for");
-                }
-                var filter_value = "";
-                var val = jQuery(value).find("select");
-                if (val.length > 0) {
-                    filter_value = jQuery(val[0]).val();
-                } else {
-                    val = jQuery(value).find("input");
-                    if (val.length > 0) {
-                        filter_value = jQuery(val[0]).val();
-                    }
-                }
-                /**
-                 * Если есть что добавлять, то добавляем
-                 */
-                if (filter_name !== "") {
-                    filters[filter_name] = filter_value;
-                }
-            });
-            return filters;
-        }
-        /**
-         * Очистка указанного фильтра
-         * @param type
-         */
-        function removeFilter(type) {
-            var filters = getFilters();
-            var action = "field.php?action=index&filter=";
-            var actions = new Array();
-            jQuery.each(filters, function(key, value){
-                if (key !== type) {
-                    actions[actions.length] = key + ":" + value;
-                }
-            });
-            action = action + actions.join("_");
-            window.location.href = action;
-        }
-        function addFilter(key, value) {
-            var filters = getFilters();
-            var action = "field.php?action=index&filter=";
-            var actions = new Array();
-            filters[key] = value;
-            jQuery.each(filters, function(filter_key, filter_value){
-                actions[actions.length] = filter_key + ":" + filter_value;
-            });
-            action = action + actions.join("_");
-            window.location.href = action;
-        }
         jQuery(document).ready(function(){
-            /**
-             * Добавляем автопоиск
-             */
-            jQuery("#search").autocomplete({
-                source: web_root + "_modules/_print/field.php?action=search",
-                minLength: 2,
-                select: function(event, ui) {
-                    window.location.href= "?action=index&filter=" + ui.item.filter + ":" + ui.item.object_id;
-                }
-            });
-            /**
-             * Для всех опубликованных фильтров добавляем
-             * автоматический переключатель
-             */
-            var items = jQuery("#filters p");
-            jQuery.each(items, function(key, value){
-                var input = jQuery(value).find("select");
-                if (input.length > 0) {
-                    input = input[0];
-                    jQuery(input).change(function(){
-                        addFilter(jQuery(this).attr("id"), jQuery(this).val());
-                    });
-                }
+            jQuery("#formset").on("change", function(){
+                window.location.href="field.php?action=index&filter=formset:" + this.value;
             });
         });
     </script>
@@ -110,14 +33,13 @@
                 </form>
             </td>
             <td valign="top" width="200px">
-                <p>
-                    <input type="text" id="search" style="width: 100%; " placeholder="Поиск">
-                </p>
             </td>
         </tr>
     </table>
 
-<table width="100%" cellpadding="2" cellspacing="0" border="1" id="table">
+    {include file="_core.searchLocal.tpl"}
+
+    <table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th>&nbsp;</th>
         <th>#</th>

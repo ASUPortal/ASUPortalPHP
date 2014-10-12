@@ -1,58 +1,76 @@
-<form action="form.php" method="post" enctype="multipart/form-data">
+<form action="form.php" method="post" enctype="multipart/form-data" class="form-horizontal">
 {CHtml::hiddenField("action", "save")}
 {CHtml::activeHiddenField("id", $form)}
 
-    <p>{CHtml::errorSummary($form)}</p>
+    {CHtml::errorSummary($form)}
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("title", $form)}
+        <div class="controls">
         {CHtml::activeTextField("title", $form)}
         {CHtml::error("title", $form)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("alias", $form)}
+        <div class="controls">
         {CHtml::activeTextField("alias", $form)}
         {CHtml::error("alias", $form)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("description", $form)}
+        <div class="controls">
         {CHtml::activeTextBox("description", $form)}
         {CHtml::error("description", $form)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("formset_id", $form)}
+        <div class="controls">
         {CHtml::activeDropDownList("formset_id", $form, $formsets)}
         {CHtml::error("context_evaluate", $form)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("form_format", $form)}
+        <div class="controls">
         {CHtml::activeDropDownList("form_format", $form, $types)}
         {CHtml::error("form_format", $form)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("template_file", $form)}
+        <div class="controls">
         {CHtml::activeUpload("template_file", $form)}
         {CHtml::error("template_file", $form)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("isActive", $form)}
+        <div class="controls">
         {CHtml::activeCheckBox("isActive", $form, 1)}
         {CHtml::error("isActive", $form)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("debug", $form)}
+        <div class="controls">
         {CHtml::activeCheckBox("debug", $form, 1)}
         {CHtml::error("debug", $form)}
-    </p>
+        </div>
+    </div>
 
-    <p>
-    {CHtml::submit("Сохранить")}
-    </p>    
+    <div class="control-group">
+        <div class="controls">
+        {CHtml::submit("Сохранить")}
+        </div>
+    </div>
 </form>

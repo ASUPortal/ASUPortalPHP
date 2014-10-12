@@ -75,8 +75,6 @@ class CPrintFieldController extends CBaseController {
         foreach ($queryFormset->execute()->getItems() as $item) {
             $formsets[$item["id"]] = $item["title"];
         }
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("fields", $fields);
         $this->setData("formsets", $formsets);
         $this->setData("selectedFormset", $selectedFormset);
@@ -263,10 +261,10 @@ class CPrintFieldController extends CBaseController {
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
+                "field" => "id",
+                "value" => $item["id"],
                 "label" => $item["title"]." (".$item["alias"].")",
-                "value" => $item["title"]." (".$item["alias"].")",
-                "object_id" => $item["id"],
-                "filter" => "field"
+                "class" => "CPrintField"
             );
         }
         echo json_encode($res);
