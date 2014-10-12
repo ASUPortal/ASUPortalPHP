@@ -519,8 +519,16 @@ if (is_null($object->group)) {
                 $this->redirect($url);
             } else {
                 // тут с диалогом, передадим ему управление
+                self::getStatefullBean()->add("template", $selectedForm->getId());
                 $this->redirectNextAction($selectedForm->properties_controller, $selectedForm->properties_method);
             }
         }
+    }
+    public function actionPrintWithBeanData() {
+        $url = WEB_ROOT."_modules/_print/?action=print";
+        foreach (self::getStatefullBean()->getItems() as $key=>$value) {
+            $url .= "&".$key."=".$value;
+        }
+        $this->redirect($url);
     }
 }

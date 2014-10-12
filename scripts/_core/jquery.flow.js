@@ -54,6 +54,11 @@
                 var obj = items[i];
                 properties[obj.name] = obj.value;
             }
+            var items = jQuery("select", dialogContainer).serializeArray();
+            for (var i = 0; i < items.length; i++) {
+                var obj = items[i];
+                properties[obj.name] = obj.value;
+            }
 
             // закрываем диалог
             jQuery("#flowDialogPlaceholder>div>div").modal("hide");
@@ -105,6 +110,8 @@
                 if (params.action == "redirect") {
                     // редирект
                     window.location.href = params.url;
+                    // скрыть оверлей
+                    this._hideOverlay();
                 } else if (params.action == "redirectNextAction") {
                     // передача управления следующему действию
                     Flow.init({
@@ -125,6 +132,9 @@
             var ajax = jQuery.ajax({
                 cache: false,
                 url: this._params.url,
+                data: {
+                    beanData: this._params.beanData
+                },
                 success: jQuery.proxy(this._onAjaxRequestComplete, this)
             });
         },
@@ -163,8 +173,14 @@
          * @private
          */
         _onLinkClick = function(){
+            var beanData = {};
+            var properties = jQuery("[asu-type=flow-property]", this._link);
+            jQuery.each(properties, function(key, value){
+                beanData[jQuery(value).attr("name")] = jQuery(value).attr("value");
+            });
             Flow.init({
-                url: this._link.href
+                url: this._link.href,
+                beanData: beanData
             });
             Flow.startFirstFromUrl();
             return false;

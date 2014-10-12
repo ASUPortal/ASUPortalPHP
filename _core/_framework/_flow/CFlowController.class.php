@@ -16,6 +16,18 @@ class CFlowController extends CBaseController{
     private static $_statefullBeanId = "";
 
     public function __construct() {
+        // инициализируем бин
+        if (CRequest::getString("beanId") != "") {
+            self::$_statefullBeanId = CRequest::getString("beanId");
+        }
+        // если пришли параметры инициализации бина - инициализируем бин
+        if (is_array(CRequest::getArray("beanData"))) {
+            $params = CRequest::getArray("beanData");
+            foreach ($params as $key=>$value) {
+                self::getStatefullBean()->add($key, $value);
+            }
+        }
+
         // если нет параметра запуска флоу, то ведем себя как обычный контроллер
         if (CRequest::getString("flow") == "") {
             parent::__construct();
@@ -25,11 +37,6 @@ class CFlowController extends CBaseController{
         // флоу-контроллеров
         if (self::$_alreadyInstantiated) {
             return true;
-        }
-
-        // инициализируем бин
-        if (CRequest::getString("beanId") != "") {
-            self::$_statefullBeanId = CRequest::getString("beanId");
         }
 
         // включим смарти, нельзя без него

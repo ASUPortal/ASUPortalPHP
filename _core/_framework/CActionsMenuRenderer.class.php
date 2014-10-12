@@ -72,20 +72,17 @@ class CActionsMenuRenderer {
     private function renderMenuItemPrint(array $item) {
         // кнопка печати по шаблону
         echo '<div class="menu_item_container">';
-        echo '<a href="#print_'.self::$childContainers.'" data-toggle="modal">';
+        echo '<a href="'.WEB_ROOT.'_modules/_print/?action=ShowForms&template='.$item['template'].'" asu-action="flow">';
+        $formset = CPrintManager::getFormset($item["template"]);
+        if (!is_null($formset)) {
+            $var = $formset->computeTemplateVariables();
+            foreach ($var as $key=>$value) {
+                echo '<div asu-type="flow-property" name="'.$key.'" value="'.$value.'"></div>';
+            }
+        }
         echo '<img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'">';
         echo $item['title'];
         echo '</a>';
-        echo '</div>';
-        // диалог с выбором шаблонов
-        echo '<div id="print_'.self::$childContainers.'" class="modal hide fade">';
-        echo '<div class="modal-header">';
-        echo '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>';
-        echo '<h3 id="myModalLabel">'.$item["title"].'</h3>';
-        echo '</div>';
-        echo '<div class="modal-body">';
-        CHtml::printOnTemplate($item["template"]);
-        echo '</div>';
         echo '</div>';
         self::$childContainers++;
     }

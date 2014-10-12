@@ -17,7 +17,7 @@ class CBaseController {
     private $_css = null;
     private $_jsInline = null;
     private $_data = null;
-    protected $_smartyEnabled = false;
+    protected $_smartyEnabled = true;
     private $_smarty = null;
     private $_jqInline = null;
     private $_datePickers = null;
@@ -25,6 +25,8 @@ class CBaseController {
     private $_cssAbs = null;
     protected $_useDojo = false;
     private $_actionsMenuContent = array();
+
+    protected static $_useFlowController = false;
 
     /**
      * Конструктор базового класса. Определяет, какой метод
@@ -159,6 +161,10 @@ class CBaseController {
          * AJAX для портала
          */
         $this->addJSInclude("_core/jquery.ajax.js");
+        /**
+         * Рабочие процессы - последовательности действий
+         */
+        $this->addJSInclude("_core/jquery.flow.js");
         /**
          * Bootstrap для красоты
          */
@@ -315,6 +321,9 @@ class CBaseController {
         $this->getJSInlineIncludes()->add($this->getJSInlineIncludes()->getCount(), $code);
     }
     private function preventJsAndCssCache() {
+        if (CSettingsManager::getSettingValue("debug_javascript") == "true") {
+            return true;
+        }
         foreach ($this->getCSSIncludes()->getItems() as $key=>$value) {
             $value .= "?_noCache=".time();
             $this->getCSSIncludes()->add($key, $value);
