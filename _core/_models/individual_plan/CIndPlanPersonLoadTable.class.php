@@ -124,6 +124,9 @@ class CIndPlanPersonLoadTable extends CFormModel{
                 $row[0] = "Итого";
                 foreach ($result as $dataRow) {
                     for ($i = 1; $i < 35; $i++) {
+                        if (!array_key_exists($i, $row)) {
+                            $row[$i] = 0;
+                        }
                         $row[$i] += $dataRow[$i];
                     }
                 }
@@ -168,6 +171,9 @@ class CIndPlanPersonLoadTable extends CFormModel{
                 $row[0] = "Итого";
                 foreach ($result as $dataRow) {
                     for ($i = 1; $i < 18; $i++) {
+                        if (!array_key_exists($i, $row)) {
+                            $row[$i] = 0;
+                        }
                         $row[$i] += $dataRow[$i];
                     }
                 }
