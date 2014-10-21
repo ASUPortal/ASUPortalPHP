@@ -194,7 +194,7 @@ class CPrintFieldController extends CBaseController {
     }
     public function actionImport() {
         $import_data = CRequest::getString("export_data");
-		$import_data = stripsplashes($import_data);
+		// $import_data = stripsplashes($import_data);
         $import_data = unserialize($import_data);
         /**
          * Первый проход

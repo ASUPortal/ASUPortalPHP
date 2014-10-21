@@ -32,10 +32,7 @@
 
 <script>
     function showExportDialog() {
-        jQuery("#export_dialog").dialog({
-            width: 500,
-            height: 500
-        });
+        jQuery("#export_dialog").modal("toggle");
         jQuery("#loading").show();
         jQuery("#export_data").hide();
         var boxes = new Array();
@@ -57,21 +54,35 @@
         });
     }
     function showImportDialog() {
-        jQuery('#import_dialog').dialog({
-            width: 500, height: 500
-        });
+        jQuery('#import_dialog').modal("toggle");
     }
 </script>
 
-<div id="export_dialog" title="Экспорт описателей полей" style="display: none;">
-    <div id="loading">Выполняется экспорт, подождите <img src="{$web_root}images/autocomplete_indicator.gif"></div>
-    <textarea id="export_data" style="display: none; width: 470px; height: 440px; "></textarea>
+<div id="export_dialog" title="Экспорт описателей полей" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Экспорт полей</h3>
+    </div>
+    <div class="modal-body">
+        <div id="loading">Выполняется экспорт, подождите <img src="{$web_root}images/autocomplete_indicator.gif"></div>
+        <textarea id="export_data" style="display: none; width: 470px; height: 440px; "></textarea>
+    </div>
+    <div class="modal-footer">
+    </div>
 </div>
 
-<div id="import_dialog" title="Импорт описателей полей" style="display: none;">
-    <form action="field.php" method="post">
-        <input type="hidden" name="action" value="import">
-        <textarea id="import_data" style="width: 470px; height: 400px; " name="export_data"></textarea>
-        <input type="submit" value="Импортировать">
-    </form>
+<div id="import_dialog" title="Импорт описателей полей" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Импорт полей</h3>
+    </div>
+    <div class="modal-body">
+        <form action="field.php" method="post">
+            <input type="hidden" name="action" value="import">
+            <textarea id="import_data" style="width: 470px; height: 200px; " name="export_data"></textarea>
+            <input type="submit" value="Импортировать">
+        </form>
+    </div>
+    <div class="modal-footer">
+    </div>
 </div>

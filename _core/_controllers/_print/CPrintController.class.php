@@ -72,47 +72,15 @@ class CPrintController extends CFlowController {
              * Это место для экспериментов и написания отладочного кода
              */
             $value = array();
-            $value = array();
-$exclude = array(
-    "ВКР"
-);
-if (is_null($object->group)) {
-	$value = array();
-} elseif (is_null($object->group->corriculum)) {
-	$value = array();
-} else {
-	foreach ($object->group->corriculum->practices->getItems() as $pract) {
-            if (!in_array($pract->alias, $exclude)) {
-			$arr = array();
-			// тип практики
-			$arr[0] = "_____";
-			if (!is_null($pract->type)) {
-				$arr[0] = $pract->type->getValue();
-			}
-			// длительность практики
-			$arr[1] = $pract->length_credits." з.е.";
-			// оценка по дисциплине за практику
-			$arr[2] = "_____";
-			/**
-			* Получаем оценку студента по выбранной дисциплине.
-			* Пока получаем просто последнюю оценку вне зависимости
-			* от формы контроля по дисциплине
-			*/
-			$discipline = $pract->discipline_id;
-			$query = new CQuery();
-			$query->select("act.id, mark.name as name")
-			->from(TABLE_STUDENTS_ACTIVITY." as act")
-			->condition("act.student_id = ".$object->getId()." and act.kadri_id = 380 and act.subject_id = ".$discipline." and act.study_act_id in (1, 2, 12, 14)")
-			->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
-			->order("act.id asc");
-			foreach ($query->execute()->getItems() as $item) {
-				$arr[2] = $item["name"];
-			}  
-			$value[] = $arr;                
+
+            $value = "_____";
+            $plan = CIndPlanManager::getLoad(CRequest::getInt("plan"));
+            if (!is_null($plan->year)) {
+                $value = $plan->year->name;
             }
-	}
-}           
-            $this->debugTable($value);
+
+            var_dump($plan->year->name);
+            // $this->debugTable($value);
         }
         /**
          * Еще один вариант. Надеюсь, этот заработает нормально
