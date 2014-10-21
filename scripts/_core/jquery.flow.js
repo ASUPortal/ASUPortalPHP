@@ -200,7 +200,7 @@
 
     $.fn.ajaxFlow = function(){
         jQuery.each(this, function(key, value){
-            if (value.hasOwnProperty("innerHTML")) {
+            if (jQuery(value).is("a")) {
                 var ajaxFlow = FlowFromLink(jQuery(value));
             }
         });
