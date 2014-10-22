@@ -176,7 +176,15 @@
             var beanData = {};
             var properties = jQuery("[asu-type=flow-property]", this._link);
             jQuery.each(properties, function(key, value){
-                beanData[jQuery(value).attr("name")] = jQuery(value).attr("value");
+                if (jQuery(value).attr("value") == "selectedInView") {
+                    var selectedItems = new Array();
+                    jQuery.each(jQuery("input[name='selectedDoc']:checked"), function(key, value){
+                        selectedItems.push(jQuery(value).val());
+                    });
+                    beanData[jQuery(value).attr("name")] = selectedItems.join(":");
+                } else {
+                    beanData[jQuery(value).attr("name")] = jQuery(value).attr("value");
+                }
             });
             Flow.init({
                 url: this._link.href,

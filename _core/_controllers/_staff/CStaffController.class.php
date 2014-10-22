@@ -47,11 +47,21 @@ class CStaffController extends CBaseController{
         /**
          * Генерация меню
          */
-        $this->addActionsMenuItem(array(
-            "title" => "Добавить сотрудника",
-            "link" => "index.php?action=add",
-            "icon" => "actions/list-add.png"
-        ));
+        $this->addActionsMenuItem(
+            array(
+                array(
+                    "title" => "Добавить сотрудника",
+                    "link" => "index.php?action=add",
+                    "icon" => "actions/list-add.png"
+                ),
+                array(
+                    "title" => "Печать по шаблону",
+                    "link" => "#",
+                    "icon" => "devices/printer.png",
+                    "template" => "formset_person_view"
+                )
+            )
+        );
         /**
          * Отображение представления
          */

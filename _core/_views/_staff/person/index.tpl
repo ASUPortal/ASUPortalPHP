@@ -7,6 +7,17 @@
 
     {include file="_core.search.tpl"}
 
+    <script>
+        jQuery(document).ready(function(){
+            jQuery("#selectAll").change(function(){
+                var items = jQuery("input[name=selectedDoc]")
+                for (var i = 0; i < items.length; i++) {
+                    items[i].checked = this.checked;
+                }
+            });
+        });
+    </script>
+
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th></th>
@@ -14,6 +25,7 @@
             <th width="100"><i class="icon-camera"></i></th>
             <th>{CHtml::tableOrder("fio", $persons->getFirstItem())}</th>
             <th>{CHtml::tableOrder("types", $persons->getFirstItem())}</th>
+            <th><input type="checkbox" id="selectAll"></th>
         </tr>
         {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $persons->getItems() as $person}
@@ -33,6 +45,9 @@
                         {$type->getValue()}
                         {$needSeparation = true}
                     {/foreach}
+                </td>
+                <td>
+                    <input type="checkbox" value="{$person->getId()}" name="selectedDoc">
                 </td>
             </tr>
         {/foreach}
