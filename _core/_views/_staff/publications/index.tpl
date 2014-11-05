@@ -6,6 +6,8 @@
     {if ($objects->getCount() == 0)}
         Нет объектов для отображения
     {else}
+        {CHtml::helpForCurrentPage()}
+        {include file="_core.searchLocal.tpl"}
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
                 <tr>
