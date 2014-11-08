@@ -10,6 +10,7 @@
         <th>{CHtml::tableOrder("is_readers", $model->fields->getFirstItem())}</th>
         <th>{CHtml::tableOrder("is_authors", $model->fields->getFirstItem())}</th>
         <th>{CHtml::tableOrder("defaultTranslation", $model->fields->getFirstItem())}</th>
+        <th>{CHtml::tableOrder("defaultTableTranslation", $model->fields->getFirstItem())}</th>
     </tr>
     {foreach $model->fields->getItems() as $field}
     <tr>
@@ -42,6 +43,7 @@
             {/if}
         </td>
         <td>{$field->getTranslationDefault()}</td>
+        <td>{$field->getTranslationTableDefault()}</td>
     </tr>
     {/foreach}
 </table>

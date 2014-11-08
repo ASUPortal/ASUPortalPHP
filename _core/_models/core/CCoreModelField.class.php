@@ -88,7 +88,21 @@ class CCoreModelField extends CActiveModel{
         }
         return $value;
     }
-
+    /**
+     * Получить значение для столбца заголовков таблицы 
+     * @param $id
+     * @return string
+     */
+    public function getTranslationTableByLangId($id) {
+    	$value = "";
+    	foreach ($this->translations->getItems() as $t) {
+    		if ($t->language_id = $id) {
+    			$value = $t->table_value; 
+    		}
+    	}
+    	return $value;
+    }
+    
     /**
      * Перевод на текущий язык
      *
@@ -96,5 +110,12 @@ class CCoreModelField extends CActiveModel{
      */
     public function getTranslationDefault() {
         return $this->getTranslationByLangId(CSettingsManager::getSettingValue("system_language_default"));
+    }
+    /**
+     * Перевод столбца таблицы на текущий язык
+     * @return string
+     */
+    public function getTranslationTableDefault() {
+    	return $this->getTranslationTableByLangId(CSettingsManager::getSettingValue("system_language_default"));
     }
 }

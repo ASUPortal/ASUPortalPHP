@@ -22,6 +22,14 @@
     </div>
 
     <div class="control-group">
+        {CHtml::activeLabel("table_value", $translation)}
+        <div class="controls">
+            {CHtml::activeTextField("table_value", $translation)}
+            {CHtml::error("table_value", $translation)}
+        </div>
+    </div>
+    
+    <div class="control-group">
         <div class="controls">
             {CHtml::submit("Сохранить")}
         </div>

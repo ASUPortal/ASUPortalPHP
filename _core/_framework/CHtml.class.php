@@ -1094,7 +1094,10 @@ class CHtml {
             return "";
         }
         $labels = CCoreObjectsManager::getAttributeLabels($model);
-        if (array_key_exists($field, $labels)) {
+        $columnLabels = CCoreObjectsManager::getAttributeTableLabels($model);
+        if (array_key_exists($field, $columnLabels)) {
+        	$label = $columnLabels[$field];
+        } elseif (array_key_exists($field, $labels)) {
             $label = $labels[$field];
         } else {
             $label = $field;
