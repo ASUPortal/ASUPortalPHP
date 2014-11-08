@@ -642,7 +642,9 @@ class CHtml {
         $roles = $model->$name;
         foreach ($values as $key=>$value) {
             $level = 0;
+            $hasRole = false;
             if ($roles->hasElement($key)) {
+                $hasRole = true;
                 $level = ACCESS_LEVEL_READ_OWN_ONLY;
                 $role = $roles->getItem($key);
                 /**
@@ -661,10 +663,10 @@ class CHtml {
                 $inputName .= "[".$submodelName."]";
             }
             $inputName .= "[".$name."][".$key."]";
-            echo '<div class="control-group">';
+            echo '<div class="control-group form-inline">';
             echo '<label class="control-label">'.$value.'</label>';
             echo '<div class="controls">';
-            echo '<select name="'.$inputName.'">';
+            echo '<select name="'.$inputName.'" asu-attr="role_'.$key.'">';
             foreach ($selectValues as $selectKey=>$selectValue) {
                 echo '<option value="'.$selectKey.'" ';
                 if ($level == $selectKey) {
@@ -673,6 +675,13 @@ class CHtml {
                 echo '>'.$selectValue.'</option>';
             }
             echo '</select>';
+            echo '&nbsp;<label class="checkbox">';
+            echo '<input type="checkbox" class="roleDisabler" asu-attr="disabler_'.$key.'" ';
+            if (!$hasRole) {
+                echo 'checked';
+            }
+            echo ' value="'.$key.'">Наследовать из групп';
+            echo '</label>';
             echo '</div>';
             echo '</div>';
         }
