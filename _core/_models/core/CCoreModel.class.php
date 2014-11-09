@@ -106,7 +106,23 @@ class CCoreModel extends CActiveModel {
         }
         return $translation;
     }
-
+	/**
+	 * Получить перевод названий столбцов модели на указанный язык
+	 * @param $lang
+	 * @return array
+	 */
+    private function getTranslationTableByLangId($lang) {
+    	$translation = array();
+    	if ($lang !== "") {
+    		foreach ($this->fields->getItems() as $field) {
+    			if ($field->getTranslationTableByLangId($lang) !== "") {
+    				$translation[$field->field_name] = $field->getTranslationTableByLangId($lang);
+    			}
+    		}
+    	}
+    	return $translation;
+    }
+    
     /**
      * Перевод полей модели на язык по умолчанию
      *
@@ -118,7 +134,17 @@ class CCoreModel extends CActiveModel {
         $translation = $this->getTranslationByLangId($lang);
         return $translation;
     }
-
+    /**
+     * Перевод на язык по умолчанию столбца таблицы
+     * @return array
+     */
+    public function getTranslationTableDefault() {
+    	$translation = array();
+    	$lang = CSettingsManager::getSettingValue("system_language_default");
+    	$translation = $this->getTranslationTableByLangId($lang);
+    	return $translation;
+    }
+    
     /**
      * Перевод полей модели на текущий язык системы
      *
@@ -130,7 +156,17 @@ class CCoreModel extends CActiveModel {
         $translation = $this->getTranslationByLangId($lang);
         return $translation;
     }
-
+    /**
+     * Получение перевода столбца заголовков таблицы на текущий язык
+     * @return array
+     */
+    public function getTranslationTableCurrent() {
+    	$translation = array();
+    	$lang = CSettingsManager::getSettingValue("system_language_current");
+    	$translation = $this->getTranslationTableByLangId($lang);
+    	return $translation;
+    }
+    
     /**
      * Поддерживаем ли модель выгрузку в поиск
      *

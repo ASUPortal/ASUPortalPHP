@@ -178,6 +178,34 @@ class CCoreObjectsManager {
         }
         return $translation;
     }
+    /**
+     * Получаем перевод названий столбцов таблицы
+     * @param CModel $model
+     * @return array
+     */
+    public static function getAttributeTableLabels(CModel $model) {
+    	$translation = array();
+    	$descriptionModel = self::getCoreModel(get_class($model));
+    	if (!is_null($descriptionModel)) {
+    		/**
+    		 * Получаем все поля и переводы для них
+    		 * для языка системы по умолчанию
+    		 */
+    		$tr = $descriptionModel->getTranslationTableDefault();
+    		foreach ($tr as $key=>$value) {
+    			$translation[$key] = $value;
+    		}
+    		/**
+    		 * Теперь для текущего языка
+    		 */
+    		$tr = $descriptionModel->getTranslationTableCurrent();
+    		foreach ($tr as $key=>$value) {
+    			$translation[$key] = $value;
+    		}
+    		
+    	}
+    	return $translation;
+    }
 
     /**
      * Получаем валидаторы из модели
