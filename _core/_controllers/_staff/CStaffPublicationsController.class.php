@@ -23,6 +23,12 @@ class CStaffPublicationsController extends CBaseController{
         $query->select("t.*")
             ->from(TABLE_PUBLICATIONS." as t")
             ->order("t.id asc");
+        if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY or
+            CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
+
+            $query->innerJoin(TABLE_PUBLICATION_BY_PERSONS." as p", "p.izdan_id = t.id");
+            $query->condition("p.kadri_id=".CSession::getCurrentPerson()->getId());
+        }
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CPublication($ar);
@@ -99,52 +105,24 @@ class CStaffPublicationsController extends CBaseController{
         $res = array();
         $term = CRequest::getString("query");
         /**
-         * Сначала поищем по названию группы
+         * Сначала поищем по названию публикации
          */
         $query = new CQuery();
         $query->select("distinct(pub.id) as id, pub.name as title")
             ->from(TABLE_PUBLICATIONS." as pub")
             ->condition("pub.name like '%".$term."%'")
             ->limit(0, 5);
+        if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY or
+            CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
+
+            $query->innerJoin(TABLE_PUBLICATION_BY_PERSONS." as p", "p.izdan_id = pub.id");
+            $query->condition("p.kadri_id=".CSession::getCurrentPerson()->getId());
+        }
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "field" => "id",
+                "field" => "t.id",
                 "value" => $item["id"],
                 "label" => $item["title"],
-                "class" => "CPublication"
-            );
-        }
-        /*
-         * Теперь по автору документа
-         */
-        $query = new CQuery();
-        $query->select("distinct(pub.id) as id, pub.authors_all as author")
-            ->from(TABLE_PUBLICATIONS." as pub")
-            ->condition("pub.authors_all like '%".$term."%'")
-            ->limit(0, 5);
-        foreach ($query->execute()->getItems() as $item) {
-            $res[] = array(
-                "field" => "id",
-                "value" => $item["id"],
-                "label" => $item["author"],
-                "class" => "CPublication"
-            );
-        }
-        /*
-         * Теперь по соавторам
-         */
-        $query = new CQuery();
-        $query->select("distinct(person.id) as person_id, pub.id as id, person.fio as author")
-            ->from(TABLE_PUBLICATIONS." as pub")
-            ->innerJoin(TABLE_PUBLICATION_BY_PERSONS." as person_work", "person_work.izdan_id = pub.id")
-            ->innerJoin(TABLE_PERSON." as person", "person.id = person_work.kadri_id")
-            ->condition("person.fio like '%".$term."%'")
-            ->limit(0, 5);
-        foreach ($query->execute()->getItems() as $item) {
-            $res[] = array(
-                "field" => "id",
-                "value" => $item["id"],
-                "label" => $item["author"],
                 "class" => "CPublication"
             );
         }
