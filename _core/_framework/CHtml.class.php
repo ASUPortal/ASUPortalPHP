@@ -675,13 +675,15 @@ class CHtml {
                 echo '>'.$selectValue.'</option>';
             }
             echo '</select>';
-            echo '&nbsp;<label class="checkbox">';
-            echo '<input type="checkbox" class="roleDisabler" asu-attr="disabler_'.$key.'" ';
-            if (!$hasRole) {
-                echo 'checked';
+            if (get_class($model) == "CUser") {
+                echo '&nbsp;<label class="checkbox">';
+            	echo '<input type="checkbox" class="roleDisabler" asu-attr="disabler_'.$key.'" ';
+            	if (!$hasRole) {
+                	echo 'checked';
+            	}
+            	echo ' value="'.$key.'">Наследовать из групп';
+            	echo '</label>';
             }
-            echo ' value="'.$key.'">Наследовать из групп';
-            echo '</label>';
             echo '</div>';
             echo '</div>';
         }
