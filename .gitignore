@@ -1,7 +1,6 @@
 _core/_external/smarty/compile/*
 *.DS_Store
 *.odt
-sql_connect_credentials.php
 .idea
 *.zip
 _core/_cache/*
@@ -26,5 +25,5 @@ images/lects/*
 .htaccess
 .httaccess
 .htacces
-.vagrant
+.vagrant/*
 tmp/beans/*
