@@ -20,6 +20,8 @@ class CStaffPublicationsController extends CBaseController{
         $set = new CRecordSet();
         $query = new CQuery();
         $set->setQuery($query);
+        $personList = array();
+        $currentPerson = 0;
         $query->select("t.*")
             ->from(TABLE_PUBLICATIONS." as t")
             ->order("t.id asc");
@@ -28,19 +30,30 @@ class CStaffPublicationsController extends CBaseController{
 
             $query->innerJoin(TABLE_PUBLICATION_BY_PERSONS." as p", "p.izdan_id = t.id");
             $query->condition("p.kadri_id=".CSession::getCurrentPerson()->getId());
+            $currentPerson = CSession::getCurrentPerson()->getId();
+            $personList[$currentPerson] = CSession::getCurrentPerson()->getName();
+        } else {
+            $personList = CStaffManager::getPersonsList();
+            if (CRequest::getInt("person") != 0) {
+                $currentPerson = CRequest::getInt("person");
+                $query->innerJoin(TABLE_PUBLICATION_BY_PERSONS." as p", "p.izdan_id = t.id");
+                $query->condition("p.kadri_id=".$currentPerson);
+            }
         }
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CPublication($ar);
             $objects->add($object->getId(), $object);
         }
+        $this->setData("currentPerson", $currentPerson);
+        $this->setData("personList", $personList);
         $this->setData("objects", $objects);
         $this->setData("paginator", $set->getPaginator());
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
-            "title" => "Добавить сотрудника",
+            "title" => "Добавить публикацию",
             "link" => "publications.php?action=add",
             "icon" => "actions/list-add.png"
         ));
