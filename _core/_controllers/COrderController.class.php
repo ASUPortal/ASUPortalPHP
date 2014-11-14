@@ -72,8 +72,6 @@ class COrderController extends CBaseController {
     }
     public function actionView() {
         $person = CStaffManager::getPerson(CRequest::getInt("id"));
-        $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-        $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
         $this->setData("person", $person);
         $this->renderView("_orders/view.tpl");
     }
@@ -94,8 +92,6 @@ class COrderController extends CBaseController {
     }
     public function actionViewOrder() {
         $order = CStaffManager::getOrder(CRequest::getInt("id"));
-        $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-        $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");		
         $this->setData("order", $order);
         $this->setData("type_money", array(
             2 => "Бюджет",
@@ -113,7 +109,11 @@ class COrderController extends CBaseController {
         $order->setAttributes(CRequest::getArray($order::getClassName()));
         if ($order->validate()) {
             $order->save();
-            $this->redirect("?action=view&id=".$order->person->getId());
+            if ($this->continueEdit()) {
+                $this->redirect("?action=viewOrder&id=".$order->getId());
+            } else {
+                $this->redirect("?action=view&id=".$order->person->getId());
+            }
             return true;
         }
         $this->setData("order", $order);
