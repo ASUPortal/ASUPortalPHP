@@ -26,4 +26,5 @@ images/lects/*
 .httaccess
 .htacces
 .vagrant/*
+vagrant
 tmp/beans/*
