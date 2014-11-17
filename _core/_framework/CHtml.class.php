@@ -1100,7 +1100,7 @@ class CHtml {
             echo "</ul>";
         }
     }
-    public static function tableOrder($field, CModel $model = null) {
+    public static function tableOrder($field, CModel $model = null, $manualSort = false) {
         if (is_null($model)) {
             return "";
         }
@@ -1128,7 +1128,7 @@ class CHtml {
         /**
          * Позволяем сортировать только если поле есть в модели
          */
-        $showLink = false;
+        $showLink = $manualSort;
         if (is_a($model, "CActiveModel")) {
             if ($model->getDbTableFields()->hasElement($field)) {
                 $showLink = true;
