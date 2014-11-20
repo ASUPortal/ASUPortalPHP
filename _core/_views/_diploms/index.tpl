@@ -2,20 +2,21 @@
 
 {block name="asu_center"}
 <h2>Дипломные темы студентов</h2>
-
+<h4><a href="{$web_root}_modules/_students/">список студентов</a></h4>
     {CHtml::helpForCurrentPage()}
-
+    {include file="_core.searchLocal.tpl"}
+    
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th></th>
-            <th>#</th>
+            <th>№</th>
             <th>{CHtml::tableOrder("diplom_confirm", $diploms->getFirstItem())}</th>
             <th>{CHtml::tableOrder("dipl_name", $diploms->getFirstItem())}</th>
             <th>{CHtml::tableOrder("pract_place", $diploms->getFirstItem())}</th>
             <th>{CHtml::tableOrder("kadri_id", $diploms->getFirstItem())}</th>
             <th>{CHtml::tableOrder("student_id", $diploms->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("group_id", $diploms->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("diplom_preview", $diploms->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("st_group.name", $diploms->getFirstItem(), true)}</th>
+            <th>{CHtml::tableOrder("dipl_prew.date_preview", $diploms->getFirstItem(), true)}</th>
             <th>{CHtml::tableOrder("date_act", $diploms->getFirstItem())}</th>
             <th>{CHtml::tableOrder("foreign_lang", $diploms->getFirstItem())}</th>
             <th>{CHtml::tableOrder("protocol_2aspir_id", $diploms->getFirstItem())}</th>
@@ -34,7 +35,7 @@
                     {$diplom->confirmation->getValue()}
                 {/if}
             </td>
-            <td><a href="?action=edit&id={$diplom->getId()}">{$diplom->dipl_name}</a></td>
+            <td><a href="?action=edit&id={$diplom->getId()}">{$diplom->dipl_name}</a></td>                       
             <td>
                 {if is_null($diplom->practPlace)}
                     {$diplom->pract_place}
@@ -44,12 +45,12 @@
             </td>
             <td>
                 {if !is_null($diplom->person)}
-                    {$diplom->person->getName()}
+                    <a href="{$web_root}_modules/_staff/?action=edit&id={$diplom->person->getId()}" title="о преподавателе">{$diplom->person->getName()}</a></td>
                 {/if}
             </td>
             <td>
                 {if !is_null($diplom->student)}
-                    <a href="{$web_root}_modules/_students/?action=edit&id={$diplom->student->getId()}">{$diplom->student->getName()}</a>
+                    <a href="{$web_root}_modules/_students/?action=edit&id={$diplom->student->getId()} title="о студенте"">{$diplom->student->getName()}</a>
                 {/if}
             </td>
             <td>
@@ -88,7 +89,7 @@
                 {/if}
             </td>
             <td>
-                {$diplom->gak_num}
+                <a href="{$web_root}_modules/_state_attestation/?action=edit&id={$diplom->gak_num}">{$diplom->gak_num}</a>
             </td>
             <td>
                 {$diplom->comment}
