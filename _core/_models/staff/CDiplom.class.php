@@ -115,7 +115,7 @@ class CDiplom extends CActiveModel {
             "dipl_name" => "Тема диплома",
             "pract_place" => "Место практики",
             "pract_place_id" => "Место практики",
-            "kadri_id" => "Дипломный руководитель",
+            "prepod.fio" => "Дипломный руководитель",
             "student_id" => "Студент",
             "st_group.name" => "Группа",
             "dipl_prew.date_preview" => "Дата предзащиты",
@@ -136,7 +136,7 @@ class CDiplom extends CActiveModel {
             "pages_attach" => "Страниц чертежей (таблиц)",
             "aspire_recomendation" => "Рекомендован в аспирантуру",
             "average_mark" => "Средний балл",
-        	"normokontroler_id" => "Нормоконтролер",
+			"normokontroler_id" => "Нормоконтролер",
         );
     }
 

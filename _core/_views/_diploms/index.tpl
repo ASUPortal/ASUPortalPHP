@@ -1,10 +1,17 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
+<script>
+    jQuery(document).ready(function(){
+       jQuery("#tabs").tabs();
+    });
+</script>
 <h2>Дипломные темы студентов</h2>
 <h4><a href="{$web_root}_modules/_students/">список студентов</a></h4>
     {CHtml::helpForCurrentPage()}
     {include file="_core.searchLocal.tpl"}
+      
+Преподаватель {CHtml::dropDownList("kadri_id", CStaffManager::getPersonsList(), $diploms->getFirstItem(), "kadri_id")}   
     
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
@@ -12,8 +19,8 @@
             <th>№</th>
             <th>{CHtml::tableOrder("diplom_confirm", $diploms->getFirstItem())}</th>
             <th>{CHtml::tableOrder("dipl_name", $diploms->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("pract_place", $diploms->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("kadri_id", $diploms->getFirstItem())}</th>
+            <th align="center">{CHtml::tableOrder("pract_place", $diploms->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("prepod.fio", $diploms->getFirstItem(), true)}</th>
             <th>{CHtml::tableOrder("student_id", $diploms->getFirstItem())}</th>
             <th>{CHtml::tableOrder("st_group.name", $diploms->getFirstItem(), true)}</th>
             <th>{CHtml::tableOrder("dipl_prew.date_preview", $diploms->getFirstItem(), true)}</th>
@@ -30,7 +37,7 @@
         <tr>
             <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить диплом {$diplom->dipl_name}')) { location.href='?action=delete&id={$diplom->id}'; }; return false;"></a></td>
             <td>{counter}</td>
-            <td>
+            <td style="background-color:">
                 {if !is_null($diplom->confirmation)}
                     {$diplom->confirmation->getValue()}
                 {/if}
@@ -45,12 +52,12 @@
             </td>
             <td>
                 {if !is_null($diplom->person)}
-                    <a href="{$web_root}_modules/_staff/?action=edit&id={$diplom->person->getId()}" title="о преподавателе">{$diplom->person->getName()}</a></td>
+                    <a href="{$web_root}_modules/_staff/?action=edit&id={$diplom->person->getId()}" title="о преподавателе">{$diplom->person->getName()}</a>
                 {/if}
             </td>
             <td>
                 {if !is_null($diplom->student)}
-                    <a href="{$web_root}_modules/_students/?action=edit&id={$diplom->student->getId()} title="о студенте"">{$diplom->student->getName()}</a>
+                    <a href="{$web_root}_modules/_students/?action=edit&id={$diplom->student->getId()}" title="о студенте">{$diplom->student->getName()}</a>
                 {/if}
             </td>
             <td>

@@ -22,19 +22,6 @@ class CDiplomsController extends CBaseController {
     public function actionIndex() {
         $set = new CRecordSet();
         $query = new CQuery();
-        
-        //$query->select("diplom.*", "TABLE_STUDENT_GROUPS.name")
-       // ->from(TABLE_DIPLOMS." as diplom", TABLE_STUDENT_GROUPS." as studGroup")
-        //->innerJoin(TABLE_STUDENTS." as stud", "stud.group_id=studGroup.id")
-        //->innerJoin(TABLE_STUDENTS." as stud", "diplom.student_id=stud.id")
-        //->order("diplom.dipl_name asc");
-        
-        //$query->select("diplom.*")
-       // ->from(TABLE_DIPLOMS." as diplom")
-        //->innerJoin(TABLE_STUDENT_GROUPS." as stGroup", "TABLE_STUDENTS.group_id=stGroup.group_id")
-        //->innerJoin(diplom, "TABLE_STUDENTS.id=TABLE_DIPLOMS.student_id")
-        //->order("diplom.id desc");
-              
         $query->select("diplom.*")
         ->from(TABLE_DIPLOMS." as diplom")
         ->order("diplom.dipl_name asc");
@@ -56,12 +43,50 @@ class CDiplomsController extends CBaseController {
         		$query->innerJoin(TABLE_DIPLOM_PREVIEWS." as dipl_prew", "student.id = dipl_prew.student_id");
         		$query->order("dipl_prew.date_preview ".$direction);
         }
-                
+        elseif (CRequest::getString("order") == "prepod.fio") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id");
+        		$query->innerJoin(TABLE_PERSON." as prepod", "diplom.kadri_id = prepod.id");
+        		$query->order("prepod.fio ".$direction);
+        }        
         $diploms = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $item) {
             $diplom = new CDiplom($item);
             $diploms->add($diplom->getId(), $diplom);
-        }
+        }  
+        /**
+         * Просмотр тем выбранных преподавателей
+         */
+		$this->addJQInlineInclude('
+        $("#kadri_id").change(function(){
+        if ($("#kadri_id").val() != 0) {
+			window.location.href = "?action=index&filter=kadri_id:" + $("#kadri_id").val();
+			}
+                });
+            ');
+		
+		// запросы для фильтров
+		$queryGroups = new CQuery();
+		$queryGroups->select("diplom.*")
+		->from(TABLE_DIPLOMS." as diplom")
+		->order("diplom.kadri_id asc");
+		// фильтры
+		$selectedPerson = null;
+		// фильтр по руководителю
+		if (!is_null(CRequest::getFilter("kadri_id"))) {
+			$query->innerJoin(TABLE_PERSON." as prepod", "diplom.kadri_id = prepod.id".CRequest::getFilter("kadri_id"));
+			$selectedPerson = CRequest::getFilter("kadri_id");
+		}
+		// параметры фильтров
+		$groups = array();
+		foreach ($queryGroups->execute()->getItems() as $item) {
+			$groups[$item["id"]] = $item["kadri_id"];
+		}
+		
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);      
         $this->setData("diploms", $diploms);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_diploms/index.tpl");
@@ -168,14 +193,13 @@ class CDiplomsController extends CBaseController {
     	$res = array();
     	$term = CRequest::getString("query");
     	/**
-    	 * Сначала поищем по названию группы
+    	 * Поиск по теме диплома
     	*/
     	$query = new CQuery();
     	$query->select("distinct(diplom.id) as id, diplom.dipl_name as title")
     	->from(TABLE_DIPLOMS." as diplom")
     	->condition("diplom.dipl_name like '%".$term."%'")
     	->limit(0, 5);
-
     			foreach ($query->execute()->getItems() as $item) {
     				$res[] = array(
     						"field" => "id",
@@ -184,9 +208,93 @@ class CDiplomsController extends CBaseController {
     						"class" => "CDiplom"
     				);
     			}
+    	/**
+    	* Поиск по ФИО студента
+    	*/
+    	$query = new CQuery();
+    	$query->select("distinct(student.id) as id, student.fio as name")
+    	->from(TABLE_STUDENTS." as student")
+    	->condition("student.fio like '%".$term."%'")
+    	->limit(0, 5);
+    			foreach ($query->execute()->getItems() as $item) {
+    				$res[] = array(
+    						"field" => "id",
+    						"value" => $item["id"],
+    						"label" => $item["name"],
+    						"class" => "CStudent"
+    				);
+    			}
+    	/**
+    	 * Поиск по степени утверждения диплома
+    	*/
+    	/*$query = new CQuery();
+    	$query->select("distinct(diplom_confirms.id) as id, diplom_confirms.name as title")
+    	->from(TABLE_DIPLOM_CONFIRMATIONS." as diplomConf")
+    	->condition("diplomConf.name like '%".$term."%'")
+    	->limit(0, 5);
+    			foreach ($query->execute()->getItems() as $item) {
+    				$res[] = array(
+    						"field" => "id",
+    						"value" => $item["id"],
+    						"label" => $item["title"],
+    						"class" => "CDiplom"
+    				);
+    			}*/
+    	/**
+    	* Поиск по месту практики
+    	*/
+    	$query = new CQuery();
+    	$query->select("distinct(diplom.id) as id, diplom.pract_place as title")
+    	->from(TABLE_DIPLOMS." as diplom")
+    	->condition("diplom.pract_place like '%".$term."%'")
+    	->limit(0, 5);
+    			foreach ($query->execute()->getItems() as $item) {
+    				$res[] = array(
+    						"field" => "id",
+    						"value" => $item["id"],
+    						"label" => $item["title"],
+    						"class" => "CDiplom"
+    				);
+    			}
+    	/**
+    	* Поиск по преподавателю
+    	*/
+		/*$query = new CQuery();
+    	$query->select("distinct(diplom.kadri_id) as id, prepod.fio as title");
+    	$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id");
+    	$query->innerJoin(TABLE_PERSON." as prepod", "diplom.kadri_id = prepod.id")
+    	->from(TABLE_DIPLOMS." as diplom")
+    	->condition("prepod.fio like '%".$term."%'")
+    	->limit(0, 5);
+    			foreach ($query->execute()->getItems() as $item) {
+    				$res[] = array(
+    						"field" => "id",
+    						"value" => $item["id"],
+    						"label" => $item["title"],
+    						"class" => "CDiplom"
+    				);
+    			}
+    			
+    	/**
+    	* Поиск по группе
+    	*/
+    	/*$query = new CQuery();
+    	$query->select("distinct(study_groups.id) as id, study_groups.name as title")
+    	->from(TABLE_STUDENT_GROUPS." as group")
+    	->condition("group.name like '%".$term."%'")
+    	->limit(0, 5);
+    			foreach ($query->execute()->getItems() as $item) {
+    				$res[] = array(
+    						"field" => "id",
+    						"value" => $item["id"],
+    						"label" => $item["title"],
+    						"class" => "CStudentGroup"
+    				);
+    			}*/
+    			
+
+    			
     	echo json_encode($res);
-    }
-    
-    
+    }  
 }
 
