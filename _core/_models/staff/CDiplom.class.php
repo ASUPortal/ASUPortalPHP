@@ -19,8 +19,8 @@ class CDiplom extends CActiveModel {
     protected $_reviewer = null;
     protected $_commission = null;
     private $_averageMark = null;
-    protected $_normokontroler = null;
-
+    protected $_normocontroller = null;
+    
     public $aspire_recomendation = 0;
 
     protected function relations() {
@@ -93,9 +93,9 @@ class CDiplom extends CActiveModel {
                 "managerClass" => "CSABManager",
                 "managerGetObject" => "getCommission"
             ),
-            "normokontroler" => array(
-                  "relationPower" => RELATION_HAS_ONE,
-                "storageProperty" => "_normokontroler",
+            "normocontroller" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_normocontroller",
                 "storageField" => "normokontroler_id",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPerson"
@@ -111,17 +111,18 @@ class CDiplom extends CActiveModel {
     }
     public function attributeLabels() {
         return array(
-            "diplom_confirm" => "Утвержден",
+			"diplom_confirm" => "Утвержден",
             "dipl_name" => "Тема диплома",
             "pract_place" => "Место практики",
             "pract_place_id" => "Место практики",
+            "prepod.fio" => "Дипломный руководитель",
             "kadri_id" => "Дипломный руководитель",
             "student_id" => "Студент",
-            "group_id" => "Группа",
-            "diplom_preview" => "Дата предзащиты",
+            "st_group.name" => "Группа",
+            "dipl_prew.date_preview" => "Дата предзащиты",
             "date_act" => "Дата защиты",
             "foreign_lang" => "Иностранный язык",
-            "protocol_2aspir_id" => "Протокол рекомендации в асипрантуру",
+            "protocol_2aspir_id" => "Протокол рекомендации в аспирантуру",
             "recenz_id" => "Рецензент",
             "study_mark" => "Оценка",
             "gak_num" => "Номер ГЭК",
@@ -135,7 +136,8 @@ class CDiplom extends CActiveModel {
             "pages_diplom" => "Страниц в пояснительной записке",
             "pages_attach" => "Страниц чертежей (таблиц)",
             "aspire_recomendation" => "Рекомендован в аспирантуру",
-            "average_mark" => "Средний балл"
+            "average_mark" => "Средний балл",
+			"normokontroler_id" => "Нормоконтролер",
         );
     }
 
