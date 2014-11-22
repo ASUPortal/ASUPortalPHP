@@ -89,3 +89,11 @@
         {CHtml::error("birth_date", $student)}
     </div>
 </div>
+
+<div class="control-group">
+    {CHtml::activeLabel("e-mail", $student)}
+    <div class="controls">
+        {CHtml::activeTextField("e-mail", $student, "e-mail")}
+        {CHtml::error("e-mail", $student)}
+    </div>
+</div>
