@@ -111,15 +111,15 @@ class CDiplom extends CActiveModel {
     }
     public function attributeLabels() {
         return array(
-			"diplom_confirm" => "Утвержден",
+            "diplom_confirm" => "Утвержден",
             "dipl_name" => "Тема диплома",
             "pract_place" => "Место практики",
             "pract_place_id" => "Место практики",
             "prepod.fio" => "Дипломный руководитель",
             "kadri_id" => "Дипломный руководитель",
             "student_id" => "Студент",
-            "st_group.name" => "Группа",
-            "dipl_prew.date_preview" => "Дата предзащиты",
+            "group_id" => "Группа",
+            "diplom_preview" => "Дата предзащиты",
             "date_act" => "Дата защиты",
             "foreign_lang" => "Иностранный язык",
             "protocol_2aspir_id" => "Протокол рекомендации в аспирантуру",

@@ -116,11 +116,11 @@ class CDiplomsController extends CBaseController {
 				"icon" => "apps/accessories-text-editor.png",
 				"child" => array(
 					array(
-						"title" => "Утвердили полностью",
-						"icon" => "actions/edit-find-replace.png",
-						"form" => "#MainView",
-						"link" => "index.php?type=1",
-						"action" => "approveTheme"
+							"title" => "Утвердили полностью",
+							"icon" => "actions/edit-find-replace.png",
+							"form" => "#MainView",
+							"link" => "index.php?type=1",
+							"action" => "approveTheme"
 					),
 					array(
 							"title" => "Утвердили c правкой",
@@ -142,6 +142,13 @@ class CDiplomsController extends CBaseController {
 							"form" => "#MainView",
 							"link" => "index.php?type=4",
 							"action" => "approveTheme"
+					),
+					array(
+							"title" => "Отменить утверждение темы",
+							"icon" => "actions/edit-find-replace.png",
+							"form" => "#MainView",
+							"link" => "index.php?type=0",
+							"action" => "approveTheme"
 					)
 				)
 			)
@@ -157,7 +164,7 @@ class CDiplomsController extends CBaseController {
     	foreach (CRequest::getArray("selectedInView") as $id) {
     		$diplom = CStaffManager::getDiplom($id);
     		if (!is_null($diplom)) {
-    			$diplom->confirmation = $type;
+    			$diplom->diplom_confirm = $type;
     			$diplom->save();
     		}
     	}
@@ -486,4 +493,3 @@ class CDiplomsController extends CBaseController {
     	echo json_encode($res);
     }  
 }
-
