@@ -1,7 +1,28 @@
 {extends file="_core.3col.tpl"}
 
+{block name="localSearchContent"}
+    <script>
+        jQuery(document).ready(function(){
+            jQuery("#person_selector").change(function(){
+                window.location.href=web_root + "_modules/_staff/publications.php?person=" + jQuery(this).val();
+            });
+        });
+    </script>
+    <div class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label" for="person">Сотрудник</label>
+            <div class="controls">
+                {CHtml::dropDownList("person", $personList, $currentPerson, "person_selector", "span12")}
+            </div>
+        </div>
+    </div>
+{/block}
+
 {block name="asu_center"}
     <h2>Список публикаций</h2>
+
+    {CHtml::helpForCurrentPage()}
+    {include file="_core.searchLocal.tpl"}
 
     {if ($objects->getCount() == 0)}
         Нет объектов для отображения

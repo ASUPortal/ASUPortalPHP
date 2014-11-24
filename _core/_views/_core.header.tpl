@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" ng-app="asuApplication">
 <head>
     <meta charset="UTF-8" />
     <title>{$page_title} - Официальный портал кафедры АСУ</title>

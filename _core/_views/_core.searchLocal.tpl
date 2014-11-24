@@ -79,7 +79,7 @@
 <table border="0" width="100%" class="tableBlank">
     <tr>
         <td valign="top">
-
+            {block name="localSearchContent"}{/block}
         </td>
         <td valign="top" width="300px">
             <p>

@@ -478,12 +478,18 @@ class CPrintController extends CFlowController {
             if ($selectedForm->properties_show_dialog != "1") {
                 $formset = $selectedForm->formset;
                 $variables = $formset->computeTemplateVariables();
+                /*
                 $url = WEB_ROOT."_modules/_print/?action=print".
                     "&manager=".$variables['manager'].
                     "&method=".$variables['method'].
                     "&id=".$variables['id'].
                     "&template=".$selectedForm->getId();
-
+                    */
+                $url = WEB_ROOT."_modules/_print/?action=print".
+                        "&template=".$selectedForm->getId();
+                foreach (self::getStatefullBean()->getItems() as $key=>$value) {
+                    $url .= "&".$key."=".$value;
+                }
                 $this->redirect($url);
             } else {
                 // тут с диалогом, передадим ему управление

@@ -179,7 +179,7 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase {
         // compile locking
         if ($this->smarty->compile_locking && !$this->source->recompiled) {
             if ($saved_timestamp = $this->compiled->timestamp) {
-                touch($this->compiled->filepath);
+                @touch($this->compiled->filepath);
             }
         }
         // call compiler

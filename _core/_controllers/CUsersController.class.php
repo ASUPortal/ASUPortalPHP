@@ -47,28 +47,6 @@ class CUsersController extends CBaseController{
         $user = new CUser();
         $form = new CUserForm();
         $form->user = $user;
-        /**
-         * Получаем список групп
-         */
-        $groups = array();
-        foreach (CStaffManager::getAllUserGroups()->getItems() as $group) {
-            $groups[$group->getId()] = $group->comment;
-        }
-        /**
-         * Получаем список ролей, полученных от участия
-         * в группах
-         */
-        $fromGroups = array();
-        foreach ($user->getGroups()->getItems() as $group) {
-            foreach ($group->getRoles()->getItems() as $role) {
-                $fromGroups[$role->getId()] = $group->comment;
-            }
-        }
-        /**
-         * Все передаем в представление
-         */
-        $this->setData("fromGroups", json_encode($fromGroups));
-        $this->setData("groups", $groups);
         $this->setData("form", $form);
         $this->renderView("_users/users/add.tpl");
     }
@@ -94,6 +72,17 @@ class CUsersController extends CBaseController{
         foreach ($user->getGroups()->getItems() as $group) {
             foreach ($group->getRoles()->getItems() as $role) {
                 $fromGroups[$role->getId()] = $group->comment;
+            }
+        }
+        /**
+         * Исключаем оттуда личные права
+         */
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_HAS_ROLES, "user_id=".$user->getId())->getItems() as $ar) {
+            $role = CStaffManager::getUserRole($ar->getItemValue("task_id"));
+            if (!is_null($role)) {
+                if (array_key_exists($role->getId(), $fromGroups)) {
+                    unset($fromGroups[$role->getId()]);
+                }
             }
         }
         /**

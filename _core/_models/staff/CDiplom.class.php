@@ -19,10 +19,9 @@ class CDiplom extends CActiveModel {
     protected $_reviewer = null;
     protected $_commission = null;
     private $_averageMark = null;
-    protected $_normokontroler = null;  
+    protected $_normocontroller = null;
     
     public $aspire_recomendation = 0;
-
     protected function relations() {
         return array(
             "mark" => array(
@@ -93,9 +92,9 @@ class CDiplom extends CActiveModel {
                 "managerClass" => "CSABManager",
                 "managerGetObject" => "getCommission"
             ),
-            "normokontroler" => array(
+            "normocontroller" => array(
                 "relationPower" => RELATION_HAS_ONE,
-                "storageProperty" => "_normokontroler",
+                "storageProperty" => "_normocontroller",
                 "storageField" => "normokontroler_id",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPerson"
@@ -111,14 +110,15 @@ class CDiplom extends CActiveModel {
     }
     public function attributeLabels() {
         return array(
-			"diplom_confirm" => "Утвержден",
+            "diplom_confirm" => "Утвержден",
             "dipl_name" => "Тема диплома",
             "pract_place" => "Место практики",
             "pract_place_id" => "Место практики",
             "prepod.fio" => "Дипломный руководитель",
+            "kadri_id" => "Дипломный руководитель",
             "student_id" => "Студент",
-            "st_group.name" => "Группа",
-            "dipl_prew.date_preview" => "Дата предзащиты",
+            "group_id" => "Группа",
+            "diplom_preview" => "Дата предзащиты",
             "date_act" => "Дата защиты",
             "foreign_lang" => "Иностранный язык",
             "protocol_2aspir_id" => "Протокол рекомендации в аспирантуру",
@@ -139,7 +139,6 @@ class CDiplom extends CActiveModel {
 			"normokontroler_id" => "Нормоконтролер",
         );
     }
-
     /**
      * @return CArrayList|null
      */
@@ -167,7 +166,6 @@ class CDiplom extends CActiveModel {
         }
         return $this->_previews;
     }
-
     /**
      * Дата последнего предпросмотра диплома в формате unix timestamp
      *

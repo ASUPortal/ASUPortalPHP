@@ -40,6 +40,14 @@ class CUser extends CActiveModel {
             )
         );
     }
+    public function validationRules() {
+        return array(
+            "required" => array(
+                "FIO",
+                "login"
+            )
+        );
+    }
     /**
      * Статус пользователя
      *

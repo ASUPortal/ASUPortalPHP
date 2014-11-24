@@ -20,21 +20,40 @@ class CStaffPublicationsController extends CBaseController{
         $set = new CRecordSet();
         $query = new CQuery();
         $set->setQuery($query);
+        $personList = array();
+        $currentPerson = 0;
         $query->select("t.*")
             ->from(TABLE_PUBLICATIONS." as t")
             ->order("t.id asc");
+        if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY or
+            CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
+
+            $query->innerJoin(TABLE_PUBLICATION_BY_PERSONS." as p", "p.izdan_id = t.id");
+            $query->condition("p.kadri_id=".CSession::getCurrentPerson()->getId());
+            $currentPerson = CSession::getCurrentPerson()->getId();
+            $personList[$currentPerson] = CSession::getCurrentPerson()->getName();
+        } else {
+            $personList = CStaffManager::getPersonsList();
+            if (CRequest::getInt("person") != 0) {
+                $currentPerson = CRequest::getInt("person");
+                $query->innerJoin(TABLE_PUBLICATION_BY_PERSONS." as p", "p.izdan_id = t.id");
+                $query->condition("p.kadri_id=".$currentPerson);
+            }
+        }
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CPublication($ar);
             $objects->add($object->getId(), $object);
         }
+        $this->setData("currentPerson", $currentPerson);
+        $this->setData("personList", $personList);
         $this->setData("objects", $objects);
         $this->setData("paginator", $set->getPaginator());
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
-            "title" => "Добавить сотрудника",
+            "title" => "Добавить публикацию",
             "link" => "publications.php?action=add",
             "icon" => "actions/list-add.png"
         ));
@@ -95,4 +114,31 @@ class CStaffPublicationsController extends CBaseController{
         $this->setData("object", $object);
         $this->renderView("_staff/publications/edit.tpl");
     }
+    public function actionSearch() {
+        $res = array();
+        $term = CRequest::getString("query");
+        /**
+         * Сначала поищем по названию публикации
+         */
+        $query = new CQuery();
+        $query->select("distinct(pub.id) as id, pub.name as title")
+            ->from(TABLE_PUBLICATIONS." as pub")
+            ->condition("pub.name like '%".$term."%'")
+            ->limit(0, 5);
+        if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY or
+            CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
+
+            $query->innerJoin(TABLE_PUBLICATION_BY_PERSONS." as p", "p.izdan_id = pub.id");
+            $query->condition("p.kadri_id=".CSession::getCurrentPerson()->getId());
+        }
+        foreach ($query->execute()->getItems() as $item) {
+            $res[] = array(
+                "field" => "t.id",
+                "value" => $item["id"],
+                "label" => $item["title"],
+                "class" => "CPublication"
+            );
+        }
+        echo json_encode($res);
+   }
 }

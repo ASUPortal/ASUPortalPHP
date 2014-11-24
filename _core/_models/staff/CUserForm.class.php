@@ -66,7 +66,11 @@ class CUserForm extends CFormModel{
         /**
          * Исключаем из личных прав пользователей те, которые совпадают с правами
          * на задачу
-         */
+         *
+         * 08.11.2014
+         * Больше так не делаем - пусть система работает тривиально. Если это
+         * личные права, то они до конца личные
+         * 
         foreach ($userObj->getGroups()->getItems() as $group) {
             foreach ($group->getRoles()->getItems() as $role) {
                 if (array_key_exists($role->getId(), $roles)) {
@@ -76,6 +80,7 @@ class CUserForm extends CFormModel{
                 }
             }
         }
+         */
         /**
          * Удаляем старые и сохраняем отличающиеся
          */

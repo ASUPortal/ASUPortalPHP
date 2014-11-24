@@ -115,9 +115,11 @@ class CCoreModel extends CActiveModel {
     	$translation = array();
     	if ($lang !== "") {
     		foreach ($this->fields->getItems() as $field) {
-    			if ($field->getTranslationTableByLangId($lang) !== "") {
-    				$translation[$field->field_name] = $field->getTranslationTableByLangId($lang);
-    			}
+                if (!is_null($field->getTranslationTableByLangId($lang))) {
+                    if ($field->getTranslationTableByLangId($lang) !== "") {
+                        $translation[$field->field_name] = $field->getTranslationTableByLangId($lang);
+                    }
+                }
     		}
     	}
     	return $translation;

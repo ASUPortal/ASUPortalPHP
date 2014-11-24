@@ -9,6 +9,7 @@
 class COrder extends CActiveModel {
     protected $_person = null;
     protected $_table = TABLE_STAFF_ORDERS;
+    public $order_active = 0;
     /**
      * Действует ли сейчас
      *
@@ -16,7 +17,9 @@ class COrder extends CActiveModel {
      */
     public function isActive() {
         if ((time() > strtotime($this->date_begin)) and strtotime($this->date_end) > time()) {
-            return true;
+            if ($this->order_active == 1) {
+                return true;
+            }
         }
         return false;
     }

@@ -198,11 +198,21 @@ class CRecordSet {
                 // глобальный поиск
                 $globalFilter = CRequest::getGlobalFilter();
                 if ($globalFilter["field"] !== false) {
+                    $condition = $query->getCondition();
                     if (is_numeric($globalFilter["value"])) {
-                        $query->condition($globalFilter["field"].'='.$globalFilter["value"]);
+                        if ($condition != "") {
+                            $condition .= " AND ".$globalFilter["field"].'='.$globalFilter["value"];
+                        } else {
+                            $condition = $globalFilter["field"].'='.$globalFilter["value"];
+                        }
                     } else {
-                        $query->condition($globalFilter["field"]." like '%".$globalFilter["value"]."%'");
+                        if ($condition != "") {
+                            $condition .= " AND ".$globalFilter["field"]." like '%".$globalFilter["value"]."%'";
+                        } else {
+                            $condition = $globalFilter["field"]." like '%".$globalFilter["value"]."%'";
+                        }
                     }
+                    $query->condition($condition);
                 }
                 // глобальные сортировки
                 $globalOrder = CRequest::getGlobalOrder();

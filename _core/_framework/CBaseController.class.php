@@ -119,6 +119,9 @@ class CBaseController {
         $this->addJSInclude(CSettingsManager::getSettingValue("jquery_migrate_path"));
         $this->addJSInclude("_core/jquery.cookie.js");
         $this->addJSInlineInclude("var web_root = '".WEB_ROOT."';");
+        // angular
+        $this->addJSInclude("_core/angular/angular.js");
+        $this->addJSInclude("_core/angular.application.js");
         // ядреные модули
         $this->addJSInclude("_core/core.js");
         $this->setData("wap_mode", false);

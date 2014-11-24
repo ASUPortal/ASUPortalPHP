@@ -26,71 +26,97 @@
 	});
 </script>
 
-<form action="index.php" method="post">
+<form action="index.php" method="post" class="form-horizontal">
     <input type="hidden" name="action" value="save">
     {CHtml::activeHiddenField("id", $order)}
     {CHtml::activeHiddenField("kadri_id", $order)}
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("type_money", $order)}
+        <div class="controls">
         {CHtml::activeDropDownList("type_money", $order, $type_money)}
         {CHtml::error("type_money", $order)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("type_order", $order)}
+        <div class="controls">
         {CHtml::activeDropDownList("type_order", $order, $type_order)}
         {CHtml::error("type_order", $order)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("order", $order)}
+        <div class="controls">
         № {CHtml::activeTextField("num_order", $order, "", "", 'style="width: 100px;"')}
         {CHtml::error("num_order", $order)}
 
         от {CHtml::activeTextField("date_order", $order, "date_order", "", 'style="width: 100px;"')}
         {CHtml::error("date_order", $order)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("order_period", $order)}
+        <div class="controls">
         с {CHtml::activeTextField("date_begin", $order, "date_begin", "", 'style="width: 100px;"')}
         {CHtml::error("num_order", $order)}
 
         по {CHtml::activeTextField("date_end", $order, "date_end", "", 'style="width: 100px;"')}
         {CHtml::error("date_order", $order)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
+        {CHtml::activeLabel("order_active", $order)}
+        <div class="controls">
+            {CHtml::activeCheckBox("order_active", $order)}
+            {CHtml::error("order_active", $order)}
+        </div>
+    </div>
+
+    <div class="control-group">
         {CHtml::activeLabel("main_work_place", $order)}
+        <div class="controls">
         {CHtml::activeTextField("main_work_place", $order)}
         {CHtml::error("main_work_place", $order)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("prev_order", $order)}
+        <div class="controls">
         {CHtml::activeTextField("prev_order", $order)}
         {CHtml::error("prev_order", $order)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("etc", $order)}
+        <div class="controls">
         ЕТС {CHtml::activeTextField("rank_ets", $order, "", "", 'style="width: 100px;"')}
         {CHtml::error("rank_ets", $order)}
 
         ставка {CHtml::activeTextField("rate", $order, "", "", 'style="width: 100px;"')}
         {CHtml::error("rate", $order)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
         {CHtml::activeLabel("conditions", $order)}
+        <div class="controls">
         {CHtml::activeTextField("conditions", $order)}
         {CHtml::error("conditions", $order)}
-    </p>
+        </div>
+    </div>
 
-    <p>
+    <div class="control-group">
+        <div class="controls">
         {CHtml::submit("Сохранить")}
-    </p>
+        </div>
+    </div>
 </form>
 {/block}
 

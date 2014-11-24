@@ -81,7 +81,7 @@ $head='
 <html>
 <head>
 <title>'.del_HTMLTags($head_title).'</title>
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta charset="UTF-8" />
 <meta name="author" content="'.$pg_author.'">
 <meta name="keywords" content="'.$metaKeywords.'">
 <meta name="DESCRIPTION" content="'.$pg_description.'">
