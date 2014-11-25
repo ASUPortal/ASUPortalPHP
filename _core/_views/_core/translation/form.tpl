@@ -22,7 +22,7 @@
     </div>
 
     <div class="control-group">
-        {CHtml::activeLabel("Значение в заголовке таблицы", $translation)}
+        {CHtml::activeLabel("value_table", $translation)}
         <div class="controls">
             {CHtml::activeTextField("value_table", $translation)}
             {CHtml::error("value_table", $translation)}
