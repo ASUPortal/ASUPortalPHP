@@ -26,12 +26,11 @@ class CDiplomsController extends CBaseController {
         ->from(TABLE_DIPLOMS." as diplom")
          ->order("diplom.dipl_name asc");
         $set->setQuery($query);
-        
+        $isApprove = (CRequest::getString("isApprove") == "1");
         $isArchive = (CRequest::getString("isArchive") == "1");
         if (!$isArchive) {
         	$query->condition('diplom.date_act between "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_start)).'" and "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_end)).'"');
         }
-
         if (CRequest::getString("order") == "st_group.name") {
         	$direction = "asc";
         	if (CRequest::getString("direction") != "") {
@@ -55,6 +54,13 @@ class CDiplomsController extends CBaseController {
         		$query->innerJoin(TABLE_PERSON." as prepod", "diplom.kadri_id = prepod.id");
         		$query->order("prepod.fio ".$direction);
         }        
+        elseif (CRequest::getString("order") == "student.fio") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id");
+        		$query->order("student.fio ".$direction);
+        }
         $diploms = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $item) {
             $diplom = new CDiplom($item);
@@ -153,11 +159,33 @@ class CDiplomsController extends CBaseController {
 				)
 			)
 		));
-		$this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);      
-        $this->setData("diploms", $diploms);
-        $this->setData("paginator", $set->getPaginator());
-        $this->renderView("_diploms/index.tpl");
+		if (!$isApprove) {
+			$this->addActionsMenuItem(array(
+					array(
+							"title" => "Утверждение тем ВКР",
+							"link" => "?action=index&isApprove=1",
+							"icon" => "apps/accessories-text-editor.png"
+					),
+			));
+			$this->addJSInclude(JQUERY_UI_JS_PATH);
+			$this->addCSSInclude(JQUERY_UI_CSS_PATH);
+			$this->setData("diploms", $diploms);
+			$this->setData("paginator", $set->getPaginator());
+			$this->renderView("_diploms/index.tpl");
+		} else {
+			$this->addActionsMenuItem(array(
+					array(
+							"title" => "Список тем ВКР",
+							"link" => "?action=index",
+							"icon" => "apps/accessories-text-editor.png"
+					),
+			));
+			$this->addJSInclude(JQUERY_UI_JS_PATH);
+			$this->addCSSInclude(JQUERY_UI_CSS_PATH);
+			$this->setData("diploms", $diploms);
+			$this->setData("paginator", $set->getPaginator());
+			$this->renderView("_diploms/approve.tpl");
+		}
     }
     public function actionApproveTheme() {
     	$type = CRequest::getInt("type");
@@ -169,6 +197,41 @@ class CDiplomsController extends CBaseController {
     		}
     	}
     	$this->redirect("?action=index");
+    }
+    public function actionChangeConfirm() {
+    	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
+    	$diplom->diplom_confirm = 1;
+    	$diplom->save();
+    
+    	echo $diplom->diplom_confirm;
+    }
+    public function actionChangeConfirmEdit() {
+    	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
+    	$diplom->diplom_confirm = 2;
+    	$diplom->save();
+    
+    	echo $diplom->diplom_confirm;
+    }
+    public function actionChangeConfirmReformul() {
+    	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
+    	$diplom->diplom_confirm = 3;
+    	$diplom->save();
+    
+    	echo $diplom->diplom_confirm;
+    }
+    public function actionChangeConfirmLook() {
+    	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
+    	$diplom->diplom_confirm = 4;
+    	$diplom->save();
+    
+    	echo $diplom->diplom_confirm;
+    }
+    public function actionChangeConfirmCancel() {
+    	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
+    	$diplom->diplom_confirm = 0;
+    	$diplom->save();
+    
+    	echo $diplom->diplom_confirm;
     }
     public function actionAdd() {
         $diplom = new CDiplom();
@@ -268,7 +331,7 @@ class CDiplomsController extends CBaseController {
     		echo $mark;
     	}
     }
- public function actionSearch() {
+ 	public function actionSearch() {
     	$res = array();
     	$term = CRequest::getString("query");
     	/**
