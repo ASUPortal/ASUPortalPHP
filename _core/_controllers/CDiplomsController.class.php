@@ -554,6 +554,22 @@ class CDiplomsController extends CBaseController {
     				);
     			}
     	echo json_encode($res);
-    }  
+    }
+    public function actionUpdateThemeApprove() {
+    	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
+    	$result = array(
+    			"title" => "не рассматривали",
+    			"color" => "white"
+    	);
+    	// меняем на следующий статус утверждения
+    	$diplom->diplom_confirm += 1;
+    	if (is_null($diplom->confirmation)) {
+    		$diplom->diplom_confirm = 0;
+    	} else {
+    		$result["title"] = $diplom->confirmation->getValue();
+    		$result["color"] = $diplom->confirmation->color_mark;
+    	}
+    	$diplom->save();
+    	echo json_encode($result);
+    }
 }
-

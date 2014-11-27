@@ -1,4 +1,23 @@
 {extends file="_core.3col.tpl"}
+{block name="localSearchContent"}
+    <script>
+    jQuery(document).ready(function(){
+		$("#kadri_id").change(function(){
+			if ($("#kadri_id").val() != 0) {
+				window.location.href = "?action=index&filter=kadri_id:" + $("#kadri_id").val();
+			}
+		});
+    });
+	</script>
+    <div class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label" for="person">Преподаватель</label>
+            <div class="controls">
+                {CHtml::dropDownList("kadri_id", CStaffManager::getPersonsList(), "", "kadri_id", "span12")}  
+            </div>
+        </div>
+    </div>
+{/block}
 {block name="asu_center"}
 
 <h2>Утверждение тем ВКР</h2>
@@ -7,6 +26,58 @@
 	{if $diploms->getCount() == 0}
 		Нет дипломов для отображения
 	{else}
+	<script>
+            /**
+             * Функция раскрашивания ячейки
+             *
+             * @param value
+             */
+            function colorizeCell(value) {
+                var color = jQuery(value).attr("asu-color");
+                var cell = jQuery(value).parents("td");
+                jQuery(cell).css("background-color", color);
+            }
+            jQuery(document).ready(function(){
+                jQuery.each(jQuery(".approveTheme"), function(key, value){
+                    // раскрашиваем ячейку
+                    colorizeCell(value);
+                });
+                /**
+                 * Обрабатываем смену статуса утвержденности
+                 */
+                jQuery(".approveTheme").on("click", function(item){
+                    var container = item.srcElement;
+                    var id = jQuery(container).attr("asu-id");
+                    jQuery.ajax({
+                        url: web_root + "_modules/_diploms/",
+                        beforeSend: function(){
+                            jQuery(container).html('<i class="icon-signal"></i>');
+                        },
+                        cache: false,
+                        context: item,
+                        data: {
+                            action: "updateThemeApprove",
+                            id: id
+                        },
+                        dataType: "json",
+                        method: "GET",
+                        success: function(data){
+                            jQuery(container).attr("asu-color", data.color);
+                            jQuery(container).html(data.title);
+                            colorizeCell(container);
+                        }
+                    });
+                });
+            });
+        </script>
+        <style>
+            .approveTheme {
+                cursor: pointer;
+            }
+            .approveTheme:hover {
+                text-decoration: underline;
+            }
+        </style>
 		<form action="index.php" method="post" id="MainView">
 	    <table class="table table-striped table-bordered table-hover table-condensed">
 	        <tr>
@@ -16,7 +87,6 @@
 	            <th>{CHtml::tableOrder("diplom_confirm", $diploms->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("dipl_name", $diploms->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("pract_place_id", $diploms->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("prepod.fio", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("student.fio", $diploms->getFirstItem(),true)}</th>
 	            <th>{CHtml::tableOrder("st_group.name", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("recenz_id", $diploms->getFirstItem())}</th>
@@ -27,24 +97,16 @@
 	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить диплом {$diplom->dipl_name}')) { location.href='?action=delete&id={$diplom->id}'; }; return false;"></a></td>
 	            <td>{CHtml::activeViewGroupSelect("id", $diplom)}</td>
 	            <td>{counter}</td>
-
-	            
-	                {if !is_null($diplom->confirmation)}
-	      
-	                	<td style="background-color:{$diplom->confirmation->color_mark}">
-	                	{assign var="type" value={$diplom->confirmation->id}}
-	                	{if $type == '1'}	
-                			<i class="icon-off confirmEditSwitch" id="{$diplom->getId()}"></i>
-                		{elseif $type == '2'}
-                			<i class="icon-ok confirmReformulSwitch" id="{$diplom->getId()}"></i>
-                		{elseif $type == '3'}
-                			<i class="icon-off confirmLookSwitch" id="{$diplom->getId()}"></i>
-                		{elseif $type == '4'}
-                			<i class="icon-ok confirmCancelSwitch" id="{$diplom->getId()}"></i>
-	                	{/if}
-	                {else}
-	                	<td><i class="icon-ok confirmSwitch" id="{$diplom->getId()}"></i> 
-	                {/if}
+				<td>
+                    <span>
+                        <span class="approveTheme" asu-id="{$diplom->getId()}" asu-color="{if is_null($diplom->confirmation)}white{else}{$diplom->confirmation->color_mark}{/if}">
+                            {if is_null($diplom->confirmation)}
+                                Не рассматривали
+                            {else}
+                                {$diplom->confirmation->getValue()}
+                            {/if}
+                        </span>
+                    </span>
 	            </td>
 	            <td><a href="?action=edit&id={$diplom->getId()}">{$diplom->dipl_name}</a></td>                       
 	            <td>
@@ -52,11 +114,6 @@
 	                    {$diplom->pract_place}
 	                {else}
 	                    {$diplom->practPlace->getValue()}
-	                {/if}
-	            </td>
-	            <td>
-	                {if !is_null($diplom->person)}
-	                    <a href="{$web_root}_modules/_staff/?action=edit&id={$diplom->person->getId()}" title="о преподавателе">{$diplom->person->getName()}</a>
 	                {/if}
 	            </td>
 	            <td>
@@ -83,51 +140,6 @@
         {CHtml::paginator($paginator, "?action=index")}
         
     {/if}
-<script>
-    jQuery(document).ready(function(){
-        jQuery(".confirmSwitch").css("cursor", "pointer");
-        function onStateChange(that, action) {
-            var id = jQuery(that).attr("id");
-            var image = jQuery(that);
-            jQuery.ajax({
-                url: "{$web_root}_modules/_diploms/index.php",
-                cache: false,
-                type: "GET",
-                async: true,
-                data: {
-                    "action": action,
-                    "id": id
-                },
-                beforeSend: function() {
-                    if (jQuery(image).hasClass("icon-ok")) {
-                        jQuery(image).removeClass("icon-ok");
-                    } else if (jQuery(image).hasClass("icon-off")) {
-                        jQuery(image).removeClass("icon-off");
-                    }
-                    jQuery(image).addClass("icon-signal");
-                },
-                success: function(data){
-                    $("#diplom_confirm").append(data);
-                }
-            });
-        }
-        jQuery(".confirmSwitch").on("click", function(){
-            onStateChange(this, "ChangeConfirm");
-		});
-		jQuery(".confirmEditSwitch").on("click", function(){
-            onStateChange(this, "ChangeConfirmEdit");
-		});
-		jQuery(".confirmReformulSwitch").on("click", function(){
-            onStateChange(this, "ChangeConfirmReformul");
-		});
-		jQuery(".confirmLookSwitch").on("click", function(){
-            onStateChange(this, "ChangeConfirmLook");
-		});
-		jQuery(".confirmCancelSwitch").on("click", function(){
-            onStateChange(this, "ChangeConfirmCancel");
-        });
-    });
-</script>
 {/block}
 
 {block name="asu_right"}

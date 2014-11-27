@@ -29,6 +29,58 @@
 	{if $diploms->getCount() == 0}
 		Нет дипломов для отображения
 	{else}
+	<script>
+            /**
+             * Функция раскрашивания ячейки
+             *
+             * @param value
+             */
+            function colorizeCell(value) {
+                var color = jQuery(value).attr("asu-color");
+                var cell = jQuery(value).parents("td");
+                jQuery(cell).css("background-color", color);
+            }
+            jQuery(document).ready(function(){
+                jQuery.each(jQuery(".approveTheme"), function(key, value){
+                    // раскрашиваем ячейку
+                    colorizeCell(value);
+                });
+                /**
+                 * Обрабатываем смену статуса утвержденности
+                 */
+                jQuery(".approveTheme").on("click", function(item){
+                    var container = item.srcElement;
+                    var id = jQuery(container).attr("asu-id");
+                    jQuery.ajax({
+                        url: web_root + "_modules/_diploms/",
+                        beforeSend: function(){
+                            jQuery(container).html('<i class="icon-signal"></i>');
+                        },
+                        cache: false,
+                        context: item,
+                        data: {
+                            action: "updateThemeApprove",
+                            id: id
+                        },
+                        dataType: "json",
+                        method: "GET",
+                        success: function(data){
+                            jQuery(container).attr("asu-color", data.color);
+                            jQuery(container).html(data.title);
+                            colorizeCell(container);
+                        }
+                    });
+                });
+            });
+        </script>
+        <style>
+            .approveTheme {
+                cursor: pointer;
+            }
+            .approveTheme:hover {
+                text-decoration: underline;
+            }
+        </style>
 		<form action="index.php" method="post" id="MainView">
 	    <table class="table table-striped table-bordered table-hover table-condensed">
 	        <tr>
@@ -56,12 +108,16 @@
 	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить диплом {$diplom->dipl_name}')) { location.href='?action=delete&id={$diplom->id}'; }; return false;"></a></td>
 	            <td>{CHtml::activeViewGroupSelect("id", $diplom)}</td>
 	            <td>{counter}</td>
-	            
-	                {if !is_null($diplom->confirmation)}
-	                	<td style="background-color:{$diplom->confirmation->color_mark}">
-	                {else}
-	                	<td>
-	                {/if}
+				<td>
+                    <span>
+                        <span class="approveTheme" asu-id="{$diplom->getId()}" asu-color="{if is_null($diplom->confirmation)}white{else}{$diplom->confirmation->color_mark}{/if}">
+                            {if is_null($diplom->confirmation)}
+                                Не рассматривали
+                            {else}
+                                {$diplom->confirmation->getValue()}
+                            {/if}
+                        </span>
+                    </span>
 	            </td>
 	            <td><a href="?action=edit&id={$diplom->getId()}">{$diplom->dipl_name}</a></td>                       
 	            <td>
