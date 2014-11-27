@@ -44,7 +44,7 @@ class CDiplomsController extends CBaseController {
         	if (CRequest::getString("direction") != "") {
         		$direction = CRequest::getString("direction");}
         		$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id");
-        		$query->innerJoin(TABLE_DIPLOM_PREVIEWS." as dipl_prew", "student.id = dipl_prew.student_id");
+        		$query->leftJoin(TABLE_DIPLOM_PREVIEWS." as dipl_prew", "student.id = dipl_prew.student_id");
         		$query->order("dipl_prew.date_preview ".$direction);
         }
         elseif (CRequest::getString("order") == "prepod.fio") {
