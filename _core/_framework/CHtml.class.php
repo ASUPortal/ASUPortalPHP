@@ -18,7 +18,6 @@ class CHtml {
     private static $_clearboxInit = false;
     private static $_viewGroupSelectInit = false;
     private static $_widgetsIndex = 0;
-
     private static function getFielsizeClass() {
         $result = "span5";
         if (!is_null(CSession::getCurrentUser())) {
@@ -30,7 +29,6 @@ class CHtml {
         }
         return $result;
     }
-
     public static function button($value, $onClick = "") {
         echo '<input type="button" value="'.$value.'" onclick="'.$onClick.'">';
     }
@@ -364,7 +362,6 @@ class CHtml {
         }
         $id = str_replace("[", "_", $id);
         $id = str_replace("]", "_", $id);
-
         ?>
         <div class="input-append date <?php echo self::getFielsizeClass(); ?> datepicker" id="<?php echo $id; ?>" data-date="<?php echo $model->$name; ?>" data-date-format="<?php echo $format; ?>">
             <input name="<?php echo $field; ?>" class="<?php echo self::getFielsizeClass(); ?>" type="text" value="<?php echo $model->$name; ?>">
@@ -879,7 +876,6 @@ class CHtml {
         }
         echo '</ul>';
         echo '</div>';
-
         echo '<span>Текущая страница: '.$paginator->getCurrentPageNumber().' </span>';
         echo '<span>Всего: '.$paginator->getPagesCount().' </span>';
         echo '<span>Отображать: ';
@@ -973,7 +969,6 @@ class CHtml {
         $inline = "";
         $class = self::getFielsizeClass();
         $inline .= ' class="'.$class.'"';
-
         $uploadDir = "";
         if (array_key_exists($name, $model->fieldsProperty())) {
             $properties = $model->fieldsProperty();
@@ -1017,7 +1012,6 @@ class CHtml {
             </table>
         </div>
         <?php
-
         if (!self::$_uploadWidgetInit) {
             self::$_uploadWidgetInit = true;
             ?>
@@ -1077,7 +1071,6 @@ class CHtml {
     		echo '</ul>';
     	}
     }
-
     /**
      * Подготоваливает к вывод данные для печати группы
      * записей по указанному шаблону
@@ -1144,7 +1137,7 @@ class CHtml {
     			$actions[] = "direction=asc";
     		}
     	} else {
-    		$actions[] = "direction=desc";
+    		$actions[] = "direction=asc";
     	}
         if ($showLink) {
             $label = '<a href="?'.implode($actions, "&").'">'.$label.'</a>';
@@ -1177,7 +1170,6 @@ class CHtml {
             ';
         }
     }
-
     /**
      * Звездочка для отметки обязательности поля
      */
