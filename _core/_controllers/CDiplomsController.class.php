@@ -198,41 +198,6 @@ class CDiplomsController extends CBaseController {
     	}
     	$this->redirect("?action=index");
     }
-    public function actionChangeConfirm() {
-    	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
-    	$diplom->diplom_confirm = 1;
-    	$diplom->save();
-    
-    	echo $diplom->diplom_confirm;
-    }
-    public function actionChangeConfirmEdit() {
-    	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
-    	$diplom->diplom_confirm = 2;
-    	$diplom->save();
-    
-    	echo $diplom->diplom_confirm;
-    }
-    public function actionChangeConfirmReformul() {
-    	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
-    	$diplom->diplom_confirm = 3;
-    	$diplom->save();
-    
-    	echo $diplom->diplom_confirm;
-    }
-    public function actionChangeConfirmLook() {
-    	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
-    	$diplom->diplom_confirm = 4;
-    	$diplom->save();
-    
-    	echo $diplom->diplom_confirm;
-    }
-    public function actionChangeConfirmCancel() {
-    	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
-    	$diplom->diplom_confirm = 0;
-    	$diplom->save();
-    
-    	echo $diplom->diplom_confirm;
-    }
     public function actionAdd() {
         $diplom = new CDiplom();
         $this->setData("diplom", $diplom);
