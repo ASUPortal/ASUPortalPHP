@@ -49,7 +49,15 @@ class CImportMarksFromCSV implements IImportProvider{
                                     $activity->subject_id = $subject->getId();
                                     $activity->kadri_id = $source->person;
                                     $activity->student_id = $student->getId();
-                                    if (array_key_exists($cell, $marks)) {
+                                    $activity->date_act = date("Y-m-d", strtotime($source->created));
+                                    if (mb_strlen($cell) == 2 || strlen($cell) == 2) {
+                                        // это курсовой
+                                        $cell = mb_substr($cell, 0, 1);
+                                        $activity->study_act_id = 43;
+                                        if (array_key_exists($cell, $marks)) {
+                                            $activity->study_mark = $marks[$cell];
+                                        }
+                                    }elseif (array_key_exists($cell, $marks)) {
                                         // это экзамен
                                         $activity->study_act_id = 1;
                                         $activity->study_mark = $marks[$cell];
