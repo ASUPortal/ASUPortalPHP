@@ -42,15 +42,22 @@ class CImportMarksFromCSV implements IImportProvider{
                                         "2" => "4",
                                         "3" => "3",
                                         "4" => "2",
-                                        "5" => "1"
+                                        "5" => "1",
                                     );
                                     // создаем запись об оценке
                                     $activity = new CStudentActivity();
                                     $activity->subject_id = $subject->getId();
                                     $activity->kadri_id = $source->person;
                                     $activity->student_id = $student->getId();
-                                    $activity->study_act_id = 1;
-                                    $activity->study_mark = $marks[$cell];
+                                    if (array_key_exists($cell, $marks)) {
+                                        // это экзамен
+                                        $activity->study_act_id = 1;
+                                        $activity->study_mark = $marks[$cell];
+                                    } else {
+                                        // это зачет
+                                        $activity->study_act_id = 2;
+                                        $activity->study_mark = 5;
+                                    }
                                     $activity->save();
                                 }
                             }

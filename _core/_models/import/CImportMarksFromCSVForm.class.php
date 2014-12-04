@@ -20,7 +20,8 @@ class CImportMarksFromCSVForm extends CFormModel{
 
     public function attributeLabels(){
         return array(
-            "file" => "Файл для импорта"
+            "file" => "Файл для импорта",
+            "person" => "Сотрудник, которому будут записаны оценки"
         );
     }
 
