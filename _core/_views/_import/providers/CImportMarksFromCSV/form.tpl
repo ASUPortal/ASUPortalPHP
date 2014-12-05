@@ -13,3 +13,11 @@
         {CHtml::error("person", $form)}
     </div>
 </div>
+
+<div class="control-group">
+    {CHtml::activeLabel("created", $form)}
+    <div class="controls">
+        {CHtml::activeDateField("created", $form)}
+        {CHtml::error("created", $form)}
+    </div>
+</div>
