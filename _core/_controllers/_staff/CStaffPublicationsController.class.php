@@ -21,7 +21,7 @@ class CStaffPublicationsController extends CBaseController{
         $query = new CQuery();
         $set->setQuery($query);
         $personList = array();
-        $currentPerson = 0;
+        $currentPerson = null;
         $query->select("t.*")
             ->from(TABLE_PUBLICATIONS." as t")
             ->order("t.id asc");
@@ -33,7 +33,15 @@ class CStaffPublicationsController extends CBaseController{
             $currentPerson = CSession::getCurrentPerson()->getId();
             $personList[$currentPerson] = CSession::getCurrentPerson()->getName();
         } else {
-            $personList = CStaffManager::getPersonsList();
+            $personList = array();
+            $personQuery = new CQuery();
+            $personQuery->select("person.id, person.fio")
+                ->from(TABLE_PERSON." as person")
+                ->innerJoin(TABLE_PUBLICATION_BY_PERSONS." as p", "p.kadri_id = person.id")
+                ->order("person.fio asc");
+            foreach ($personQuery->execute()->getItems() as $arr) {
+                $personList[$arr["id"]] = $arr["fio"];
+            }
             if (CRequest::getInt("person") != 0) {
                 $currentPerson = CRequest::getInt("person");
                 $query->innerJoin(TABLE_PUBLICATION_BY_PERSONS." as p", "p.izdan_id = t.id");
