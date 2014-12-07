@@ -23,15 +23,14 @@ class CDiplomsController extends CBaseController {
     	$set = new CRecordSet();
         $query = new CQuery();
         $query->select("diplom.*")
-        ->from(TABLE_DIPLOMS." as diplom")
-         ->order("diplom.dipl_name asc");
+            ->from(TABLE_DIPLOMS." as diplom")
+             ->order("diplom.dipl_name asc");
         $set->setQuery($query);
-        
+        $isApprove = (CRequest::getString("isApprove") == "1");
         $isArchive = (CRequest::getString("isArchive") == "1");
         if (!$isArchive) {
         	$query->condition('diplom.date_act between "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_start)).'" and "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_end)).'"');
         }
-
         if (CRequest::getString("order") == "st_group.name") {
         	$direction = "asc";
         	if (CRequest::getString("direction") != "") {
@@ -45,7 +44,7 @@ class CDiplomsController extends CBaseController {
         	if (CRequest::getString("direction") != "") {
         		$direction = CRequest::getString("direction");}
         		$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id");
-        		$query->innerJoin(TABLE_DIPLOM_PREVIEWS." as dipl_prew", "student.id = dipl_prew.student_id");
+        		$query->leftJoin(TABLE_DIPLOM_PREVIEWS." as dipl_prew", "student.id = dipl_prew.student_id");
         		$query->order("dipl_prew.date_preview ".$direction);
         }
         elseif (CRequest::getString("order") == "prepod.fio") {
@@ -55,6 +54,13 @@ class CDiplomsController extends CBaseController {
         		$query->innerJoin(TABLE_PERSON." as prepod", "diplom.kadri_id = prepod.id");
         		$query->order("prepod.fio ".$direction);
         }        
+        elseif (CRequest::getString("order") == "student.fio") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id");
+        		$query->order("student.fio ".$direction);
+        }
         $diploms = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $item) {
             $diplom = new CDiplom($item);
@@ -63,8 +69,8 @@ class CDiplomsController extends CBaseController {
         // запрос для фильтра по руководителю
 		$queryPerson = new CQuery();
 		$queryPerson->select("diplom.*")
-		->from(TABLE_DIPLOMS." as diplom")
-		->order("diplom.kadri_id asc");
+		    ->from(TABLE_DIPLOMS." as diplom")
+		    ->order("diplom.kadri_id asc");
 		// фильтр
 		$selectedPerson = null;
 		// фильтр по руководителю
@@ -81,6 +87,12 @@ class CDiplomsController extends CBaseController {
 		 * Формируем меню
 		 */
 		$this->addActionsMenuItem(array(
+            array(
+                "title" => "Печать по шаблону",
+                "link" => "#",
+                "icon" => "devices/printer.png",
+                "template" => "formset_diploms"
+            ),
 			array(
                 "title" => "Добавить дипломную тему",
                 "link" => "?action=add",
@@ -153,11 +165,27 @@ class CDiplomsController extends CBaseController {
 				)
 			)
 		));
-		$this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);      
         $this->setData("diploms", $diploms);
         $this->setData("paginator", $set->getPaginator());
-        $this->renderView("_diploms/index.tpl");
+		if (!$isApprove) {
+			$this->addActionsMenuItem(array(
+					array(
+							"title" => "Утверждение тем ВКР",
+							"link" => "?action=index&isApprove=1",
+							"icon" => "actions/bookmark-new.png"
+					),
+			));
+			$this->renderView("_diploms/index.tpl");
+		} else {
+			$this->addActionsMenuItem(array(
+					array(
+							"title" => "Список тем ВКР",
+							"link" => "?action=index",
+							"icon" => "actions/format-justify-center.png"
+					),
+			));
+			$this->renderView("_diploms/approve.tpl");
+		}
     }
     public function actionApproveTheme() {
     	$type = CRequest::getInt("type");
@@ -268,7 +296,7 @@ class CDiplomsController extends CBaseController {
     		echo $mark;
     	}
     }
- public function actionSearch() {
+ 	public function actionSearch() {
     	$res = array();
     	$term = CRequest::getString("query");
     	/**
@@ -493,20 +521,20 @@ class CDiplomsController extends CBaseController {
     	echo json_encode($res);
     }
     public function actionUpdateThemeApprove() {
-        $diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
-        $result = array(
-            "title" => "не рассматривали",
-            "color" => "white"
-        );
-        // меняем на следующий статус утверждения
-        $diplom->diplom_confirm += 1;
-        if (is_null($diplom->confirmation)) {
-            $diplom->diplom_confirm = 0;
-        } else {
-            $result["title"] = $diplom->confirmation->getValue();
-            $result["color"] = $diplom->confirmation->color_mark;
-        }
-        $diplom->save();
-        echo json_encode($result);
+    	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
+    	$result = array(
+    			"title" => "не рассматривали",
+    			"color" => "white"
+    	);
+    	// меняем на следующий статус утверждения
+    	$diplom->diplom_confirm += 1;
+    	if (is_null($diplom->confirmation)) {
+    		$diplom->diplom_confirm = 0;
+    	} else {
+    		$result["title"] = $diplom->confirmation->getValue();
+    		$result["color"] = $diplom->confirmation->color_mark;
+    	}
+    	$diplom->save();
+    	echo json_encode($result);
     }
 }

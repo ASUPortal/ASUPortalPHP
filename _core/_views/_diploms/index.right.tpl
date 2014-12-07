@@ -1,1 +1,1 @@
-{CHtml::displayActionsMenu($_actions_menu)} 	
+{CHtml::displayActionsMenu($_actions_menu)}

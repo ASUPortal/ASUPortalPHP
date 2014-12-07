@@ -20,7 +20,7 @@
 <div id="average_mark" style="color: red; font-size: 150px; position: absolute; right: 5px; "></div>
 
 <div class="control-group">
-    {CHtml::activeLabel("kadri_id", $diplom)}
+    {CHtml::activeLabel("prepod.fio", $diplom)}
     <div class="controls">
         {CHtml::activeLookup("kadri_id", $diplom, "staff")}
         {CHtml::error("kadri_id", $diplom)}

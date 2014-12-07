@@ -22,7 +22,6 @@ class CDiplom extends CActiveModel {
     protected $_normocontroller = null;
     
     public $aspire_recomendation = 0;
-
     protected function relations() {
         return array(
             "mark" => array(
@@ -140,7 +139,6 @@ class CDiplom extends CActiveModel {
 			"normokontroler_id" => "Нормоконтролер",
         );
     }
-
     /**
      * @return CArrayList|null
      */
@@ -168,7 +166,6 @@ class CDiplom extends CActiveModel {
         }
         return $this->_previews;
     }
-
     /**
      * Дата последнего предпросмотра диплома в формате unix timestamp
      *

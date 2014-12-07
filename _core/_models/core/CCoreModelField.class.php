@@ -97,7 +97,7 @@ class CCoreModelField extends CActiveModel{
     	$value = "";
     	foreach ($this->translations->getItems() as $t) {
     		if ($t->language_id = $id) {
-    			$value = $t->table_value; 
+    			$value = $t->value_table; 
     		}
     	}
     	return $value;
