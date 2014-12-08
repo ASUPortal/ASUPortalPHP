@@ -155,6 +155,7 @@
     </tr>
 </table>
 
+<form action="index.php" id="gradebookForm">
 <table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th>&nbsp;</th>
@@ -167,6 +168,7 @@
         <th>№</th>
         <th>Оценка</th>
         <th>Комментарий</th>
+        <th>{CHtml::activeViewGroupSelect("id", $records->getFirstItem(), true)}</th>
     </tr>
 
     {foreach $records->getItems() as $record}
@@ -188,27 +190,32 @@
                 {/if}
             {/if}
         </td>
-        <td>{if (!is_null($record->student))}
-            <a href="{$web_root}_modules/_students/?action=edit&id={$record->student->getId()}">{$record->student->getName()}</a>
-        {else}&nbsp;{/if}</td>
         <td>
-        {if !Is_null($record->controlType)}
-        	{$record->controlType->getValue()}
-       	{else}&nbsp;{/if}</td>
+            {if (!is_null($record->student))}
+                <a href="{$web_root}_modules/_students/?action=edit&id={$record->student->getId()}">{$record->student->getName()}</a>
+            {else}&nbsp;{/if}
+        </td>
+        <td>
+            {if !Is_null($record->controlType)}
+                {$record->controlType->getValue()}
+            {else}&nbsp;{/if}
+        </td>
        	<td>{$record->study_act_comment}</td>
         <td>
-	{if !is_null($record->mark)}
-		{$record->mark->getValue()}
-	{else}&nbsp;{/if}
-	</td>
+            {if !is_null($record->mark)}
+                {$record->mark->getValue()}
+            {else}&nbsp;{/if}
+        </td>
         <td>{$record->comment}&nbsp;</td>
+        <td>{CHtml::activeViewGroupSelect("id", $record)}</td>
     </tr>
     {/foreach}
 </table>
+</form>
 
     {CHtml::paginator($paginator, "?action=index")}
 {/block}
 
 {block name="asu_right"}
-{include file="_gradebook/index.right.tpl"}
+    {include file="_gradebook/index.right.tpl"}
 {/block}

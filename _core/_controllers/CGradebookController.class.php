@@ -193,6 +193,20 @@ class CGradebookController extends CBaseController {
                 "icon" => "actions/mail-reply-all.png"
             ),
             array(
+                "title" => "Групповые операции",
+                "link" => "#",
+                "icon" => "actions/address-book-new.png",
+                "child" => array(
+                    array(
+                        "title" => "Удалить выбранные",
+                        "link" => "index.php",
+                        "action" => "removeGroup",
+                        "icon" => "actions/edit-clear",
+                        "form" => "#gradebookForm"
+                    )
+                )
+            ),
+            array(
                 "title" => "Мои журналы",
                 "link" => "index.php?action=myGradebooks",
                 "icon" => "actions/format-justify-fill.png"
