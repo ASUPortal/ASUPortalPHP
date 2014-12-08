@@ -80,7 +80,7 @@ class CActionsMenuRenderer {
                 echo '<div asu-type="flow-property" name="'.$key.'" value="'.$value.'"></div>';
             }
         }
-        echo '<img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'">';
+        echo '<div><img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'"></div>';
         echo $item['title'];
         echo '</a>';
         echo '</div>';
@@ -88,7 +88,7 @@ class CActionsMenuRenderer {
     }
     private function renderMenuItemDefault(array $item) {
         echo '<a href="'.$item["link"].'">';
-        echo '<img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'">';
+        echo '<div><img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'"></div>';
         echo $item['title'];
         echo '</a>';
     }
