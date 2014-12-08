@@ -226,6 +226,15 @@ class CGradebookController extends CBaseController {
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_gradebook/index.tpl");
     }
+    public function actionRemoveGroup() {
+        foreach (CRequest::getGlobalRequestVariables()->getItem("selectedInView") as $value) {
+            $record = CStaffManager::getStudentActivity($value);
+            if (!is_null($record)) {
+                $record->remove();
+            }
+        }
+        $this->redirect("?action=index");
+    }
     public function actionAdd() {
         $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
         $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
