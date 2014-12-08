@@ -1109,16 +1109,13 @@ class CHtml {
         } else {
             $label = $field;
         }
-        $inherit = array(
-            "action",
-            "page",
-            "filter",
-            "filterClass",
-            "filterLabel"
+        $exclude = array(
+            'order',
+            'direction'
         );
-        foreach ($inherit as $value) {
-            if (CRequest::getString($value) !== "") {
-                $actions[] = $value."=".CRequest::getString($value);
+        foreach (CRequest::getGlobalRequestVariables()->getItems() as $key=>$value) {
+            if (!in_array($key, $exclude)) {
+                $actions[] = $key."=".$value;
             }
         }
         /**
