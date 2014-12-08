@@ -212,8 +212,6 @@ class CGradebookController extends CBaseController {
                 "icon" => "actions/format-justify-fill.png"
             )
         ));
-        $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-        $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
         $this->setData("persons", $persons);
         $this->setData("selectedPerson", $selectedPerson);
         $this->setData("groups", $groups);
@@ -254,8 +252,6 @@ class CGradebookController extends CBaseController {
         $this->renderView("_gradebook/add.tpl");
     }
     public function actionEdit() {
-        $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-        $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
         $this->addJSInclude("_core/personTypeFilter.js");
 
         $activity = CStaffManager::getStudentActivity(CRequest::getInt("id"));
