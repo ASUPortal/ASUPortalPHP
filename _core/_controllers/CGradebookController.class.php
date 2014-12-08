@@ -178,6 +178,26 @@ class CGradebookController extends CBaseController {
             $a = new CStudentActivity($item);
             $items->add($a->getId(), $a);
         }
+        /**
+         * Формируем меню
+         */
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Добавить",
+                "link" => "?action=add",
+                "icon" => "actions/list-add.png"
+            ),
+            array(
+                "title" => "Групповое добавление",
+                "link" => "index.php?action=addGroup",
+                "icon" => "actions/mail-reply-all.png"
+            ),
+            array(
+                "title" => "Мои журналы",
+                "link" => "index.php?action=myGradebooks",
+                "icon" => "actions/format-justify-fill.png"
+            )
+        ));
         $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
         $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
         $this->setData("persons", $persons);
