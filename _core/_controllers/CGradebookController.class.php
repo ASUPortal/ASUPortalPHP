@@ -201,7 +201,7 @@ class CGradebookController extends CBaseController {
                         "title" => "Удалить выбранные",
                         "link" => "index.php",
                         "action" => "removeGroup",
-                        "icon" => "actions/edit-clear",
+                        "icon" => "actions/edit-clear.png",
                         "form" => "#gradebookForm"
                     )
                 )
