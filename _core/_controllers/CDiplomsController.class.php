@@ -22,12 +22,13 @@ class CDiplomsController extends CBaseController {
     public function actionIndex() {
     	$set = new CRecordSet();
         $query = new CQuery();
+        $currentPerson = CRequest::getFilter("kadri_id");
         $query->select("diplom.*")
         ->from(TABLE_DIPLOMS." as diplom")
-         ->order("diplom.dipl_name asc");
+        ->order("diplom.dipl_name asc");
         $set->setQuery($query);
         $isApprove = (CRequest::getString("isApprove") == "1");
-        $isArchive = (CRequest::getString("isArchive") == "1");
+        $isArchive = (CRequest::getString("isArchive") == "1");      
         if (!$isArchive) {
         	$query->condition('diplom.date_act between "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_start)).'" and "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_end)).'"');
         }
@@ -83,10 +84,20 @@ class CDiplomsController extends CBaseController {
 		foreach ($queryPerson->execute()->getItems() as $item) {
 			$groups[$item["id"]] = $item["kadri_id"];
 		}
+		if (CRequest::getInt("person") != 0) {
+			$currentPerson = CRequest::getInt("person");
+		}
+		//$currentPerson = CRequest::getFilter("kadri_id");
 		/**
 		 * Формируем меню
 		 */
 		$this->addActionsMenuItem(array(
+			array(
+				"title" => "Печать по шаблону",
+				"link" => "#",
+				"icon" => "devices/printer.png",
+				"template" => "formset_diploms"
+			),
 			array(
                 "title" => "Добавить дипломную тему",
                 "link" => "?action=add",
@@ -170,6 +181,7 @@ class CDiplomsController extends CBaseController {
 			$this->addJSInclude(JQUERY_UI_JS_PATH);
 			$this->addCSSInclude(JQUERY_UI_CSS_PATH);
 			$this->setData("diploms", $diploms);
+			$this->setData("currentPerson", $currentPerson);
 			$this->setData("paginator", $set->getPaginator());
 			$this->renderView("_diploms/index.tpl");
 		} else {
@@ -183,6 +195,7 @@ class CDiplomsController extends CBaseController {
 			$this->addJSInclude(JQUERY_UI_JS_PATH);
 			$this->addCSSInclude(JQUERY_UI_CSS_PATH);
 			$this->setData("diploms", $diploms);
+			$this->setData("currentPerson", $currentPerson);
 			$this->setData("paginator", $set->getPaginator());
 			$this->renderView("_diploms/approve.tpl");
 		}
