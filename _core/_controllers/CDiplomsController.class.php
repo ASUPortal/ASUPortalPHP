@@ -243,6 +243,11 @@ class CDiplomsController extends CBaseController {
         ));	
         $this->renderView("_diploms/edit.tpl");
     }
+    public function actionDelete() {
+    	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
+    	$diplom->remove();
+    	$this->redirect("?action=index");
+    }
     public function actionSave() {
         $diplom = new CDiplom();
         $diplom->setAttributes(CRequest::getArray($diplom::getClassName()));
