@@ -4,7 +4,7 @@
     jQuery(document).ready(function(){
 		$("#kadri_id").change(function(){
 			if ($("#kadri_id").val() != 0) {
-				window.location.href = "?action=index&filter=kadri_id:" + $("#kadri_id").val();
+				window.location.href = "?action=index&filter=kadri_id:" + $("#kadri_id").val() + "&person=" + $("#kadri_id").val();
 			}
 		});
     });
