@@ -49,7 +49,7 @@
                  * Обрабатываем смену статуса утвержденности
                  */
                 jQuery(".approveTheme").on("click", function(item){
-                    var container = item.srcElement;
+                    var container = item.target || item.srcElement;
                     var id = jQuery(container).attr("asu-id");
                     jQuery.ajax({
                         url: web_root + "_modules/_diploms/",
