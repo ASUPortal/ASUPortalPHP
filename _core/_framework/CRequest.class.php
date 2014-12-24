@@ -127,6 +127,22 @@ class CRequest {
     }
 
     /**
+     * Значения глобальных переменных запроса
+     *
+     * @return CArrayList
+     */
+    public static function getGlobalRequestVariables() {
+        $result = new CArrayList();
+        foreach ($_GET as $key=>$value) {
+            $result->add($key, $value);
+        }
+        foreach ($_POST as $key=>$value) {
+            $result->add($key, $value);
+        }
+        return $result;
+    }
+
+    /**
      * Получить значение фильтра
      *
      * @param $name

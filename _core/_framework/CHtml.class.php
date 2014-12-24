@@ -854,19 +854,18 @@ class CHtml {
     }
     public static function paginator(CPaginator $paginator, $action) {
         echo '<div class="pagination"><ul>';
+        $requestVariables = CRequest::getGlobalRequestVariables();
+        $toCheck = 1;
+        // какую страницу отметить по умолчанию
+        if ($requestVariables->hasElement("page")) {
+            $toCheck = $requestVariables->getItem("page");
+            $requestVariables->removeItem("page");
+            $requestVariables->removeItem("page_size");
+        }
         foreach ($paginator->getPagesList($action) as $page=>$link) {
-        	if (CRequest::getString("order") !== "") {
-        		$link = $link."&order=".CRequest::getString("order");
-        	}
-        	if (CRequest::getString("direction") !== "") {
-        		$link = $link."&direction=".CRequest::getString("direction");
-        	}
-            if (CRequest::getString("filter") !== "") {
-                $link = $link."&filter=".CRequest::getString("filter");
-            }
-            $toCheck = 1;
-            if (CRequest::getInt("page") !== 0) {
-                $toCheck = CRequest::getInt("page");
+            // добавляем параметры в запрос
+            foreach ($requestVariables->getItems() as $key=>$value) {
+                $link .= "&".$key."=".$value;
             }
             if ($toCheck == $page) {
                 echo '<li class="active"><a href="'.$link.'">'.$page.'</a></li>';
@@ -886,6 +885,10 @@ class CHtml {
         echo '<span class="caret"></span>';
         echo '</a>';
         echo '<ul class="dropdown-menu">';
+        // добавляем другие параметры, которые есть в запросе
+        foreach ($requestVariables->getItems() as $key=>$value) {
+            $action .= "&".$key."=".$value;
+        }
         foreach ($sizes as $key=>$name) {
             echo '<li>';
             echo '<a href="'.$action.'&page_size='.$key.'">'.$sizes[$key].'</a>';
@@ -1106,16 +1109,13 @@ class CHtml {
         } else {
             $label = $field;
         }
-        $inherit = array(
-            "action",
-            "page",
-            "filter",
-            "filterClass",
-            "filterLabel"
+        $exclude = array(
+            'order',
+            'direction'
         );
-        foreach ($inherit as $value) {
-            if (CRequest::getString($value) !== "") {
-                $actions[] = $value."=".CRequest::getString($value);
+        foreach (CRequest::getGlobalRequestVariables()->getItems() as $key=>$value) {
+            if (!in_array($key, $exclude)) {
+                $actions[] = $key."=".$value;
             }
         }
         /**

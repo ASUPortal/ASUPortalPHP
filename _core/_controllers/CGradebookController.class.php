@@ -178,8 +178,40 @@ class CGradebookController extends CBaseController {
             $a = new CStudentActivity($item);
             $items->add($a->getId(), $a);
         }
-        $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-        $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
+        /**
+         * Формируем меню
+         */
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Добавить",
+                "link" => "?action=add",
+                "icon" => "actions/list-add.png"
+            ),
+            array(
+                "title" => "Групповое добавление",
+                "link" => "index.php?action=addGroup",
+                "icon" => "actions/mail-reply-all.png"
+            ),
+            array(
+                "title" => "Групповые операции",
+                "link" => "#",
+                "icon" => "actions/address-book-new.png",
+                "child" => array(
+                    array(
+                        "title" => "Удалить выбранные",
+                        "link" => "index.php",
+                        "action" => "removeGroup",
+                        "icon" => "actions/edit-clear.png",
+                        "form" => "#gradebookForm"
+                    )
+                )
+            ),
+            array(
+                "title" => "Мои журналы",
+                "link" => "index.php?action=myGradebooks",
+                "icon" => "actions/format-justify-fill.png"
+            )
+        ));
         $this->setData("persons", $persons);
         $this->setData("selectedPerson", $selectedPerson);
         $this->setData("groups", $groups);
@@ -191,6 +223,15 @@ class CGradebookController extends CBaseController {
         $this->setData("records", $items);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_gradebook/index.tpl");
+    }
+    public function actionRemoveGroup() {
+        foreach (CRequest::getGlobalRequestVariables()->getItem("selectedInView") as $value) {
+            $record = CStaffManager::getStudentActivity($value);
+            if (!is_null($record)) {
+                $record->remove();
+            }
+        }
+        $this->redirect("?action=index");
     }
     public function actionAdd() {
         $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
@@ -211,8 +252,6 @@ class CGradebookController extends CBaseController {
         $this->renderView("_gradebook/add.tpl");
     }
     public function actionEdit() {
-        $this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-        $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
         $this->addJSInclude("_core/personTypeFilter.js");
 
         $activity = CStaffManager::getStudentActivity(CRequest::getInt("id"));

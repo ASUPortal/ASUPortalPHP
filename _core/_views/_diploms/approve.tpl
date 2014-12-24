@@ -13,7 +13,7 @@
         <div class="control-group">
             <label class="control-label" for="person">Преподаватель</label>
             <div class="controls">
-                {CHtml::dropDownList("person", CStaffManager::getPersonsList(), $currentPerson, "kadri_id", "span12")}  
+                {CHtml::dropDownList("person", CStaffManager::getPersonsList(), $currentPerson, "kadri_id", "span12")}
             </div>
         </div>
     </div>

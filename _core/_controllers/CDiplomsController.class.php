@@ -24,11 +24,11 @@ class CDiplomsController extends CBaseController {
         $query = new CQuery();
         $currentPerson = CRequest::getFilter("kadri_id");
         $query->select("diplom.*")
-        ->from(TABLE_DIPLOMS." as diplom")
-        ->order("diplom.dipl_name asc");
+            ->from(TABLE_DIPLOMS." as diplom")
+             ->order("diplom.dipl_name asc");
         $set->setQuery($query);
         $isApprove = (CRequest::getString("isApprove") == "1");
-        $isArchive = (CRequest::getString("isArchive") == "1");      
+        $isArchive = (CRequest::getString("isArchive") == "1");
         if (!$isArchive) {
         	$query->condition('diplom.date_act between "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_start)).'" and "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_end)).'"');
         }
@@ -70,8 +70,8 @@ class CDiplomsController extends CBaseController {
         // запрос для фильтра по руководителю
 		$queryPerson = new CQuery();
 		$queryPerson->select("diplom.*")
-		->from(TABLE_DIPLOMS." as diplom")
-		->order("diplom.kadri_id asc");
+		    ->from(TABLE_DIPLOMS." as diplom")
+		    ->order("diplom.kadri_id asc");
 		// фильтр
 		$selectedPerson = null;
 		// фильтр по руководителю
@@ -87,17 +87,16 @@ class CDiplomsController extends CBaseController {
 		if (CRequest::getInt("person") != 0) {
 			$currentPerson = CRequest::getInt("person");
 		}
-		//$currentPerson = CRequest::getFilter("kadri_id");
 		/**
 		 * Формируем меню
 		 */
 		$this->addActionsMenuItem(array(
-			array(
-				"title" => "Печать по шаблону",
-				"link" => "#",
-				"icon" => "devices/printer.png",
-				"template" => "formset_diploms"
-			),
+            array(
+                "title" => "Печать по шаблону",
+                "link" => "#",
+                "icon" => "devices/printer.png",
+                "template" => "formset_diploms"
+            ),
 			array(
                 "title" => "Добавить дипломную тему",
                 "link" => "?action=add",
@@ -170,33 +169,26 @@ class CDiplomsController extends CBaseController {
 				)
 			)
 		));
+        $this->setData("currentPerson", $currentPerson);
+        $this->setData("diploms", $diploms);
+        $this->setData("paginator", $set->getPaginator());
 		if (!$isApprove) {
 			$this->addActionsMenuItem(array(
 					array(
 							"title" => "Утверждение тем ВКР",
 							"link" => "?action=index&isApprove=1",
-							"icon" => "apps/accessories-text-editor.png"
+							"icon" => "actions/bookmark-new.png"
 					),
 			));
-			$this->addJSInclude(JQUERY_UI_JS_PATH);
-			$this->addCSSInclude(JQUERY_UI_CSS_PATH);
-			$this->setData("diploms", $diploms);
-			$this->setData("currentPerson", $currentPerson);
-			$this->setData("paginator", $set->getPaginator());
 			$this->renderView("_diploms/index.tpl");
 		} else {
 			$this->addActionsMenuItem(array(
 					array(
 							"title" => "Список тем ВКР",
 							"link" => "?action=index",
-							"icon" => "apps/accessories-text-editor.png"
+							"icon" => "actions/format-justify-center.png"
 					),
 			));
-			$this->addJSInclude(JQUERY_UI_JS_PATH);
-			$this->addCSSInclude(JQUERY_UI_CSS_PATH);
-			$this->setData("diploms", $diploms);
-			$this->setData("currentPerson", $currentPerson);
-			$this->setData("paginator", $set->getPaginator());
 			$this->renderView("_diploms/approve.tpl");
 		}
     }

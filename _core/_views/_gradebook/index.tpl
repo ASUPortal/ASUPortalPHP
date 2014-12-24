@@ -81,25 +81,62 @@
                 + "_student:{$selectedStudent->getId()}"
             {/if};
         });
-        jQuery("#search").autocomplete({
-            source: web_root + "_modules/_gradebook/?action=search",
-            minLength: 2,
-            select: function(event, ui) {
-                if (ui.item.type == 1) {
+        /**
+         * Это старый код адаптированный под Bootstrap
+         * Он не страшный, он оставлен таким, какой он есть, чтобы бэкэнд
+         * не переписывать
+         **/
+        var searchResults = new Object();
+        jQuery("#search").typeahead({
+            source: function (query, process) {
+                return jQuery.ajax({
+                    url: "#",
+                    type: "get",
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        "query": query,
+                        "action": "search"
+                    },
+                    beforeSend: function(){
+                        /**
+                         * Показываем индикатор активности
+                         */
+                        jQuery("#search").css({
+                            "background-image": 'url({$web_root}images/ajax-loader.gif)',
+                            "background-repeat": "no-repeat",
+                            "background-position": "95% center"
+                        });
+                    },
+                    success: function(data){
+                        var lookup = new Array();
+                        searchResults = new Object();
+                        for (var i = 0; i < data.length; i++) {
+                            lookup.push(data[i].label);
+                            searchResults[data[i].label] = data[i];
+                        }
+                        process(lookup);
+                        jQuery("#search").css("background-image", "none");
+                    }
+                });
+            },
+            updater: function(item){
+                var selected = searchResults[item];
+                if (selected.type == 1) {
                     // выбран преподаватель
-                    window.location.href = "?action=index&filter=person:" + ui.item.object_id;
-                } else if(ui.item.type == 2) {
+                    window.location.href = "?action=index&filter=person:" + selected.object_id;
+                } else if(selected.type == 2) {
                     // выбрана дисциплина
-                    window.location.href = "?action=index&filter=discipline:" + ui.item.object_id;
-                } else if(ui.item.type == 3) {
+                    window.location.href = "?action=index&filter=discipline:" + selected.object_id;
+                } else if(selected.type == 3) {
                     // студенческая группа
-                    window.location.href = "?action=index&filter=group:" + ui.item.object_id;
-                } else if(ui.item.type == 4) {
+                    window.location.href = "?action=index&filter=group:" + selected.object_id;
+                } else if(selected.type == 4) {
                     // студент
-                    window.location.href = "?action=index&filter=student:" + ui.item.object_id;
-                } else if(ui.item.type == 5) {
+                    window.location.href = "?action=index&filter=student:" + selected.object_id;
+                } else if(selected.type == 5) {
                     // вид контроля
-                    window.location.href = "?action=index&filter=control:" + ui.item.object_id;
+                    window.location.href = "?action=index&filter=control:" + selected.object_id;
                 }
             }
         });
@@ -155,6 +192,7 @@
     </tr>
 </table>
 
+<form action="index.php" id="gradebookForm">
 <table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th>&nbsp;</th>
@@ -167,6 +205,7 @@
         <th>№</th>
         <th>Оценка</th>
         <th>Комментарий</th>
+        <th>{CHtml::activeViewGroupSelect("id", $records->getFirstItem(), true)}</th>
     </tr>
 
     {foreach $records->getItems() as $record}
@@ -188,27 +227,32 @@
                 {/if}
             {/if}
         </td>
-        <td>{if (!is_null($record->student))}
-            <a href="{$web_root}_modules/_students/?action=edit&id={$record->student->getId()}">{$record->student->getName()}</a>
-        {else}&nbsp;{/if}</td>
         <td>
-        {if !Is_null($record->controlType)}
-        	{$record->controlType->getValue()}
-       	{else}&nbsp;{/if}</td>
+            {if (!is_null($record->student))}
+                <a href="{$web_root}_modules/_students/?action=edit&id={$record->student->getId()}">{$record->student->getName()}</a>
+            {else}&nbsp;{/if}
+        </td>
+        <td>
+            {if !Is_null($record->controlType)}
+                {$record->controlType->getValue()}
+            {else}&nbsp;{/if}
+        </td>
        	<td>{$record->study_act_comment}</td>
         <td>
-	{if !is_null($record->mark)}
-		{$record->mark->getValue()}
-	{else}&nbsp;{/if}
-	</td>
+            {if !is_null($record->mark)}
+                {$record->mark->getValue()}
+            {else}&nbsp;{/if}
+        </td>
         <td>{$record->comment}&nbsp;</td>
+        <td>{CHtml::activeViewGroupSelect("id", $record)}</td>
     </tr>
     {/foreach}
 </table>
+</form>
 
     {CHtml::paginator($paginator, "?action=index")}
 {/block}
 
 {block name="asu_right"}
-{include file="_gradebook/index.right.tpl"}
+    {include file="_gradebook/index.right.tpl"}
 {/block}
