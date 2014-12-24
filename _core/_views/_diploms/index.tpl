@@ -49,11 +49,8 @@
                  * Обрабатываем смену статуса утвержденности
                  */
                 jQuery(".approveTheme").on("click", function(item){
-<<<<<<< HEAD
                     var container = item.target || item.srcElement;
-=======
                     var container = item.srcElement;
->>>>>>> alexbarmin/master
                     var id = jQuery(container).attr("asu-id");
                     jQuery.ajax({
                         url: web_root + "_modules/_diploms/",
@@ -112,11 +109,7 @@
 	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить диплом {$diplom->dipl_name}')) { location.href='?action=delete&id={$diplom->id}'; }; return false;"></a></td>
 	            <td>{CHtml::activeViewGroupSelect("id", $diplom)}</td>
 	            <td>{counter}</td>
-<<<<<<< HEAD
 				<td>
-=======
-	            <td>
->>>>>>> alexbarmin/master
                     <span>
                         <span class="approveTheme" asu-id="{$diplom->getId()}" asu-color="{if is_null($diplom->confirmation)}white{else}{$diplom->confirmation->color_mark}{/if}">
                             {if is_null($diplom->confirmation)}
