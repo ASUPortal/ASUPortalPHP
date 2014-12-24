@@ -5,7 +5,7 @@
     jQuery(document).ready(function(){
 		$("#kadri_id").change(function(){
 			if ($("#kadri_id").val() != 0) {
-				window.location.href = "?action=index&filter=kadri_id:" + $("#kadri_id").val();
+				window.location.href = "?action=index&filter=kadri_id:" + $("#kadri_id").val() + "&person=" + $("#kadri_id").val();
 			}
 		});
     });
@@ -14,12 +14,12 @@
         <div class="control-group">
             <label class="control-label" for="person">Преподаватель</label>
             <div class="controls">
-                {CHtml::dropDownList("kadri_id", CStaffManager::getPersonsList(), "", "kadri_id", "span12")}  
+                {CHtml::dropDownList("person", CStaffManager::getPersonsList(), $currentPerson, "kadri_id", "span12")}  
             </div>
         </div>
     </div>
 {/block}
-
+			
 {block name="asu_center"}
 
 <h2>Дипломные темы студентов</h2>
@@ -49,7 +49,11 @@
                  * Обрабатываем смену статуса утвержденности
                  */
                 jQuery(".approveTheme").on("click", function(item){
+<<<<<<< HEAD
+                    var container = item.target || item.srcElement;
+=======
                     var container = item.srcElement;
+>>>>>>> alexbarmin/master
                     var id = jQuery(container).attr("asu-id");
                     jQuery.ajax({
                         url: web_root + "_modules/_diploms/",
@@ -108,7 +112,11 @@
 	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить диплом {$diplom->dipl_name}')) { location.href='?action=delete&id={$diplom->id}'; }; return false;"></a></td>
 	            <td>{CHtml::activeViewGroupSelect("id", $diplom)}</td>
 	            <td>{counter}</td>
+<<<<<<< HEAD
+				<td>
+=======
 	            <td>
+>>>>>>> alexbarmin/master
                     <span>
                         <span class="approveTheme" asu-id="{$diplom->getId()}" asu-color="{if is_null($diplom->confirmation)}white{else}{$diplom->confirmation->color_mark}{/if}">
                             {if is_null($diplom->confirmation)}
