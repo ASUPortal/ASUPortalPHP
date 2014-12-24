@@ -22,6 +22,7 @@ class CDiplomsController extends CBaseController {
     public function actionIndex() {
     	$set = new CRecordSet();
         $query = new CQuery();
+        $currentPerson = CRequest::getFilter("kadri_id");
         $query->select("diplom.*")
             ->from(TABLE_DIPLOMS." as diplom")
              ->order("diplom.dipl_name asc");
@@ -82,6 +83,9 @@ class CDiplomsController extends CBaseController {
 		$groups = array();
 		foreach ($queryPerson->execute()->getItems() as $item) {
 			$groups[$item["id"]] = $item["kadri_id"];
+		}
+		if (CRequest::getInt("person") != 0) {
+			$currentPerson = CRequest::getInt("person");
 		}
 		/**
 		 * Формируем меню
@@ -165,6 +169,7 @@ class CDiplomsController extends CBaseController {
 				)
 			)
 		));
+        $this->setData("currentPerson", $currentPerson);
         $this->setData("diploms", $diploms);
         $this->setData("paginator", $set->getPaginator());
 		if (!$isApprove) {
@@ -229,6 +234,11 @@ class CDiplomsController extends CBaseController {
             )
         ));	
         $this->renderView("_diploms/edit.tpl");
+    }
+    public function actionDelete() {
+    	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
+    	$diplom->remove();
+    	$this->redirect("?action=index");
     }
     public function actionSave() {
         $diplom = new CDiplom();
