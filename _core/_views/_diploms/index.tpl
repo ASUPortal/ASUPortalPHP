@@ -5,7 +5,7 @@
     jQuery(document).ready(function(){
 		$("#kadri_id").change(function(){
 			if ($("#kadri_id").val() != 0) {
-				window.location.href = "?action=index&filter=kadri_id:" + $("#kadri_id").val();
+                window.location.href = "?action=index&filter=kadri_id:" + $("#kadri_id").val() + "&person=" + $("#kadri_id").val();
 			}
 		});
     });
@@ -14,7 +14,7 @@
         <div class="control-group">
             <label class="control-label" for="person">Преподаватель</label>
             <div class="controls">
-                {CHtml::dropDownList("kadri_id", CStaffManager::getPersonsList(), "", "kadri_id", "span12")}  
+                {CHtml::dropDownList("kadri_id", CStaffManager::getPersonsList(), $currentPerson, "kadri_id", "span12")}
             </div>
         </div>
     </div>
