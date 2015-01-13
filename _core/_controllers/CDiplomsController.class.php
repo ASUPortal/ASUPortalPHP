@@ -103,7 +103,7 @@ class CDiplomsController extends CBaseController {
                 "title" => "Печать по шаблону",
                 "link" => "#",
                 "icon" => "devices/printer.png",
-                "template" => "formset_diploms"
+                "template" => "formset_diploms_theme"
             ),
 			array(
                 "title" => "Добавить дипломную тему",
