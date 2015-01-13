@@ -2,18 +2,54 @@
 {block name="localSearchContent"}
     <script>
     jQuery(document).ready(function(){
-		$("#kadri_id").change(function(){
-			if ($("#kadri_id").val() != 0) {
-				window.location.href = "?action=index&filter=kadri_id:" + $("#kadri_id").val() + "&person=" + $("#kadri_id").val();
-			}
-		});
+    	var filters = new Object();
+    	{if !is_null($currentPerson)}
+    		filters.person = {$currentPerson};
+    	{/if}
+    	var isArchive = false;
+    	{if $isArchive}
+    		isArchive = true;
+    	{/if}
+    	var isApprove = false;
+        {if $isApprove}
+        	isApprove = true;
+        {/if}
+    	function updateFilter() {
+    		var query = new Array();
+    		var filter = new Array();
+    		$.each(filters, function(key, value){
+    			if (value != 0) {
+        			query[query.length] = key + "=" + value;
+        			filter[filter.length] = key + ":" + value;	
+    			}
+    		});
+    		if (isArchive) {
+    			query[query.length] = "isArchive=1";
+    		}
+    		if (isApprove) {
+    			query[query.length] = "isApprove=1";
+    		}
+    		query[query.length] = "filter=" + filter.join("_");
+    		query[query.length] = "action=index";
+    		window.location.href = "index.php?" + query.join("&");
+    	}
+    	$("#kadri_id").change(function(){
+    		filters.person = $(this).val();
+    		updateFilter();
+    	});
+    	jQuery("#selectAll").change(function(){
+            var items = jQuery("input[name=selectedDoc]")
+            for (var i = 0; i < items.length; i++) {
+                items[i].checked = this.checked;
+            }
+        });
     });
 	</script>
     <div class="form-horizontal">
         <div class="control-group">
             <label class="control-label" for="person">Преподаватель</label>
             <div class="controls">
-                {CHtml::dropDownList("person", CStaffManager::getPersonsList(), $currentPerson, "kadri_id", "span12")}
+                {CHtml::dropDownList("person", $diplomManagers, $currentPerson, "kadri_id", "span12")}
             </div>
         </div>
     </div>
@@ -82,7 +118,7 @@
 	    <table class="table table-striped table-bordered table-hover table-condensed">
 	        <tr>
 	            <th></th>
-	            <th>{CHtml::activeViewGroupSelect("id", $diploms->getFirstItem(), true)}</th>
+	            <th><input type="checkbox" id="selectAll"></th>
 	            <th>№</th>
 	            <th>{CHtml::tableOrder("diplom_confirm", $diploms->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("dipl_name", $diploms->getFirstItem())}</th>
@@ -95,7 +131,9 @@
 	        {foreach $diploms->getItems() as $diplom}
 	        <tr>
 	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить диплом {$diplom->dipl_name}')) { location.href='?action=delete&id={$diplom->id}'; }; return false;"></a></td>
-	            <td>{CHtml::activeViewGroupSelect("id", $diplom)}</td>
+	            <td>
+                    <input type="checkbox" value="{$diplom->getId()}" name="selectedDoc">
+                </td>
 	            <td>{counter}</td>
 				<td>
                     <span>
