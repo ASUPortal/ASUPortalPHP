@@ -60,6 +60,12 @@
     		filters.group = $(this).val();
     		updateFilter();
     	});
+    	jQuery("#selectAll").change(function(){
+            var items = jQuery("input[name=selectedDoc]")
+            for (var i = 0; i < items.length; i++) {
+                items[i].checked = this.checked;
+            }
+        });
     });
 	</script>
     <div class="form-horizontal">
@@ -151,7 +157,7 @@
 	    <table class="table table-striped table-bordered table-hover table-condensed">
 	        <tr>
 	            <th></th>
-	            <th>{CHtml::activeViewGroupSelect("id", $diploms->getFirstItem(), true)}</th>
+	            <th><input type="checkbox" id="selectAll"></th>
 	            <th>№</th>
 	            <th>{CHtml::tableOrder("diplom_confirm", $diploms->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("dipl_name", $diploms->getFirstItem())}</th>
@@ -172,7 +178,9 @@
 	        {foreach $diploms->getItems() as $diplom}
 	        <tr>
 	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить диплом {$diplom->dipl_name}')) { location.href='?action=delete&id={$diplom->id}'; }; return false;"></a></td>
-	            <td>{CHtml::activeViewGroupSelect("id", $diplom)}</td>
+	            <td>
+                    <input type="checkbox" value="{$diplom->getId()}" name="selectedDoc">
+                </td>
 	            <td>{counter}</td>
 				<td>
                     <span>
