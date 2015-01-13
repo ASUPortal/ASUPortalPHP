@@ -117,18 +117,29 @@ class CDiplomsController extends CBaseController {
 			)
 		));
 		if ($isArchive) {
+			$requestParams = array();
+			foreach (CRequest::getGlobalRequestVariables()->getItems() as $key=>$value) {
+				if ($key != "isArchive") {
+					$requestParams[] = $key."=".$value;
+				}
+			}
 			$this->addActionsMenuItem(array(
 					array(
 							"title" => "Текущий год",
-							"link" => "?action=index",
+							"link" => "?".implode("&", $requestParams),
 							"icon" => "mimetypes/x-office-calendar.png"
 					),				
 			));
 		} else {
+			$requestParams = array();
+			foreach (CRequest::getGlobalRequestVariables()->getItems() as $key=>$value) {
+				$requestParams[] = $key."=".$value;
+			}
+			$requestParams[] = "isArchive=1";
 			$this->addActionsMenuItem(array(
 					array(
 							"title" => "Архив",
-							"link" => "?action=index&isArchive=1",
+							"link" => "?".implode("&", $requestParams),
 							"icon" => "devices/media-floppy.png"
 					),
 			));
