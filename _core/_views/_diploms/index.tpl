@@ -2,19 +2,85 @@
 
 {block name="localSearchContent"}
     <script>
+    /**
+     * Очистка указанного фильтра
+     * @param type
+     */
+    function removeFilter(type) {
+        var filters = new Object();
+        {if !is_null($currentPerson)}
+            filters.kadri_id = {$currentPerson};
+        {/if}
+        {if !is_null($currentGroup)}
+            filters.group_id = {$currentGroup};
+        {/if}
+        var action = "?action=index&filter=";
+        var actions = new Array();
+        jQuery.each(filters, function(key, value){
+            if (key !== type) {
+                actions[actions.length] = key + ":" + value;
+            }
+        });
+        action = action + actions.join("_");
+        window.location.href = action;
+    }
     jQuery(document).ready(function(){
-		$("#kadri_id").change(function(){
-			if ($("#kadri_id").val() != 0) {
-				window.location.href = "?action=index&filter=kadri_id:" + $("#kadri_id").val() + "&person=" + $("#kadri_id").val();
-			}
-		});
+    	var filters = new Object();
+    	{if !is_null($currentPerson)}
+    		filters.person = {$currentPerson};
+    	{/if}
+    	{if !is_null($currentGroup)}
+    		filters.group = {$currentGroup};
+    	{/if}
+    	var isArchive = false;
+    	{if $isArchive}
+    		isArchive = true;
+    	{/if}
+    	function updateFilter() {
+    		var query = new Array();
+    		var filter = new Array();
+    		$.each(filters, function(key, value){
+    			if (value != 0) {
+        			query[query.length] = key + "=" + value;
+        			filter[filter.length] = key + ":" + value;	
+    			}
+    		});
+    		if (isArchive) {
+    			query[query.length] = "isArchive=1";
+    		}
+    		query[query.length] = "filter=" + filter.join("_");
+    		query[query.length] = "action=index";
+    		window.location.href = "index.php?" + query.join("&");
+    	}
+    	$("#kadri_id").change(function(){
+    		filters.person = $(this).val();
+    		updateFilter();
+    	});
+    	$("#group_id").change(function(){
+    		filters.group = $(this).val();
+    		updateFilter();
+    	});
     });
 	</script>
     <div class="form-horizontal">
         <div class="control-group">
             <label class="control-label" for="person">Преподаватель</label>
             <div class="controls">
-                {CHtml::dropDownList("person", CStaffManager::getPersonsList(), $currentPerson, "kadri_id", "span12")}  
+                {CHtml::dropDownList("person", $diplomManagers, $currentPerson, "kadri_id", "span12")}
+                {if !is_null($currentPerson)}
+                    <span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('person'); return false; "/></span>
+                {/if}  
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label" for="group">Группа</label>
+            <div class="controls">
+                {CHtml::dropDownList("group", $studentGroups, $currentGroup, "group_id", "span12")}
+                {if !is_null($currentGroup)}
+                    <span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('group'); return false; "/></span>
+                {/if}  
             </div>
         </div>
     </div>
@@ -50,7 +116,6 @@
                  */
                 jQuery(".approveTheme").on("click", function(item){
                     var container = item.target || item.srcElement;
-                    var container = item.srcElement;
                     var id = jQuery(container).attr("asu-id");
                     jQuery.ajax({
                         url: web_root + "_modules/_diploms/",
@@ -92,7 +157,7 @@
 	            <th>{CHtml::tableOrder("dipl_name", $diploms->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("pract_place_id", $diploms->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("prepod.fio", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("student.fio", $diploms->getFirstItem(),true)}</th>
+	            <th>{CHtml::tableOrder("student.fio", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("st_group.name", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("dipl_prew.date_preview", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("date_act", $diploms->getFirstItem())}</th>
