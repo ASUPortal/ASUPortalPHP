@@ -20,12 +20,24 @@ class CDiplomsController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
-    	$set = new CRecordSet();
+    	$set = new CRecordSet(false);
         $query = new CQuery();
-        $currentPerson = CRequest::getFilter("kadri_id");
+        $currentPerson = null;
+        $currentGroup = null;
         $query->select("diplom.*")
             ->from(TABLE_DIPLOMS." as diplom")
-             ->order("diplom.dipl_name asc");
+			->order("diplom.dipl_name asc");
+        $managersQuery = new CQuery();
+        $managersQuery->select("person.*")
+        	->from(TABLE_PERSON." as person")
+        	->order("person.fio asc")
+        	->innerJoin(TABLE_DIPLOMS." as diplom", "person.id = diplom.kadri_id");
+        $groupsQuery = new CQuery();
+        $groupsQuery->select("stgroup.*")
+        	->from(TABLE_STUDENT_GROUPS." as stgroup")
+        	->order("stgroup.name asc")
+        	->innerJoin(TABLE_STUDENTS." as student", "stgroup.id = student.group_id")
+        	->innerJoin(TABLE_DIPLOMS." as diplom", "student.id =  diplom.student_id");
         $set->setQuery($query);
         $isApprove = (CRequest::getString("isApprove") == "1");
         $isArchive = (CRequest::getString("isArchive") == "1");
@@ -62,31 +74,27 @@ class CDiplomsController extends CBaseController {
         		$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id");
         		$query->order("student.fio ".$direction);
         }
+        // фильтр по руководителю
+        if (!is_null(CRequest::getFilter("person"))) {
+        	$query->innerJoin(TABLE_PERSON." as person", "diplom.kadri_id = person.id and person.id = ".CRequest::getFilter("person"));
+        	$currentPerson = CRequest::getFilter("person");
+        	// фильтруем еще и группы
+        	$groupsQuery->innerJoin(TABLE_PERSON." as person", "diplom.kadri_id = person.id and person.id = ".CRequest::getFilter("person"));
+        }
+        // фильтр по группе
+        if (!is_null(CRequest::getFilter("group"))) {
+        	$currentGroup = CRequest::getFilter("group");
+        	$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id");
+        	$query->innerJoin(TABLE_STUDENT_GROUPS." as st_group", "student.group_id = st_group.id and st_group.id = ".CRequest::getFilter("group"));
+        	$managersQuery->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id = student.id");
+        	$managersQuery->innerJoin(TABLE_STUDENT_GROUPS." as st_group", "student.group_id = st_group.id and st_group.id = ".CRequest::getFilter("group"));
+        }
+        // получение дипломных тем
         $diploms = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $item) {
             $diplom = new CDiplom($item);
             $diploms->add($diplom->getId(), $diplom);
         }  
-        // запрос для фильтра по руководителю
-		$queryPerson = new CQuery();
-		$queryPerson->select("diplom.*")
-		    ->from(TABLE_DIPLOMS." as diplom")
-		    ->order("diplom.kadri_id asc");
-		// фильтр
-		$selectedPerson = null;
-		// фильтр по руководителю
-		if (!is_null(CRequest::getFilter("kadri_id"))) {
-			$query->innerJoin(TABLE_PERSON." as prepod", "diplom.kadri_id = prepod.id".CRequest::getFilter("kadri_id"));
-			$selectedPerson = CRequest::getFilter("kadri_id");
-		}
-		// параметр фильтра
-		$groups = array();
-		foreach ($queryPerson->execute()->getItems() as $item) {
-			$groups[$item["id"]] = $item["kadri_id"];
-		}
-		if (CRequest::getInt("person") != 0) {
-			$currentPerson = CRequest::getInt("person");
-		}
 		/**
 		 * Формируем меню
 		 */
@@ -169,7 +177,22 @@ class CDiplomsController extends CBaseController {
 				)
 			)
 		));
+		$managers = array();
+		foreach ($managersQuery->execute()->getItems() as $ar) {
+			$person = new CPerson(new CActiveRecord($ar));
+			$managers[$person->getId()] = $person->getName();
+		}
+		$studentGroups = array();
+		foreach ($groupsQuery->execute()->getItems() as $ar) {
+			$group = new CStudentGroup(new CActiveRecord($ar));
+			$studentGroups[$group->getId()] = $group->getName();
+		}
+		$this->setData("isArchive", $isArchive);
+		$this->setData("isApprove", $isApprove);
+		$this->setData("studentGroups", $studentGroups);
+		$this->setData("diplomManagers", $managers);
         $this->setData("currentPerson", $currentPerson);
+        $this->setData("currentGroup", $currentGroup);
         $this->setData("diploms", $diploms);
         $this->setData("paginator", $set->getPaginator());
 		if (!$isApprove) {
