@@ -243,19 +243,30 @@ class CDiplomsController extends CBaseController {
         $this->setData("diploms", $diploms);
         $this->setData("paginator", $set->getPaginator());
 		if (!$isApprove) {
+			$requestParams = array();
+			foreach (CRequest::getGlobalRequestVariables()->getItems() as $key=>$value) {
+				$requestParams[] = $key."=".$value;
+			}
+			$requestParams[] = "isApprove=1";
 			$this->addActionsMenuItem(array(
 					array(
 							"title" => "Утверждение тем ВКР",
-							"link" => "?action=index&isApprove=1",
+							"link" => "?".implode("&", $requestParams),
 							"icon" => "actions/bookmark-new.png"
 					),
 			));
 			$this->renderView("_diploms/index.tpl");
 		} else {
+			$requestParams = array();
+			foreach (CRequest::getGlobalRequestVariables()->getItems() as $key=>$value) {
+				if ($key != "isApprove") {
+					$requestParams[] = $key."=".$value;
+				}
+			}
 			$this->addActionsMenuItem(array(
 					array(
 							"title" => "Список тем ВКР",
-							"link" => "?action=index",
+							"link" => "?".implode("&", $requestParams),
 							"icon" => "actions/format-justify-center.png"
 					),
 			));
