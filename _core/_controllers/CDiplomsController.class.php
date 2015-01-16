@@ -89,6 +89,42 @@ class CDiplomsController extends CBaseController {
         	$managersQuery->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id = student.id");
         	$managersQuery->innerJoin(TABLE_STUDENT_GROUPS." as st_group", "student.group_id = st_group.id and st_group.id = ".CRequest::getFilter("group"));
         }
+        // фильтр по теме
+        if (!is_null(CRequest::getFilter("theme"))) {
+        	$query->condition("diplom.id = ".CRequest::getFilter("theme"));	
+        }
+        // фильтр по студенту
+        if (!is_null(CRequest::getFilter("student"))) {
+        	$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id and student.id = ".CRequest::getFilter("student"));
+        }
+        // фильтр по степени утверждения
+        if (!is_null(CRequest::getFilter("confirm"))) {
+        	$query->innerJoin(TABLE_DIPLOM_CONFIRMATIONS." as confirm", "diplom.diplom_confirm = confirm.id and confirm.id = ".CRequest::getFilter("confirm"));
+        }
+        // фильтр по месту практики
+        if (!is_null(CRequest::getFilter("pract"))) {
+        	$query->condition("diplom.id = ".CRequest::getFilter("pract"));
+        }
+        // фильтр по месту практики по id
+        if (!is_null(CRequest::getFilter("practId"))) {
+        	$query->innerJoin(TABLE_PRACTICE_PLACES." as pract", "diplom.pract_place_id = pract.id and pract.id = ".CRequest::getFilter("practId"));
+        }
+        // фильтр по ин.яз.
+        if (!is_null(CRequest::getFilter("foreign"))) {
+        	$query->innerJoin(TABLE_LANGUAGES." as lang", "diplom.foreign_lang=lang.id and lang.id = ".CRequest::getFilter("foreign"));
+        }
+        // фильтр по рецензенту
+        if (!is_null(CRequest::getFilter("recenz"))) {
+        	$query->innerJoin(TABLE_PERSON." as person", "diplom.recenz_id = person.id and person.id = ".CRequest::getFilter("recenz"));
+        }
+        // фильтр по оценке
+        if (!is_null(CRequest::getFilter("mark"))) {
+        	$query->innerJoin(TABLE_MARKS." as mark", "diplom.study_mark = mark.id and mark.id = ".CRequest::getFilter("mark"));
+        }
+        // фильтр по комментарию
+        if (!is_null(CRequest::getFilter("comment"))) {
+        	$query->condition("diplom.id = ".CRequest::getFilter("comment"));
+        }
         // получение дипломных тем
         $diploms = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $item) {
@@ -341,228 +377,228 @@ class CDiplomsController extends CBaseController {
     	}
     }
  	public function actionSearch() {
-    	$res = array();
-    	$term = CRequest::getString("query");
-    	/**
-    	 * Поиск по теме диплома
-    	*/
-    	$query = new CQuery();
-    	$query->select("distinct(diplom.id) as id, diplom.dipl_name as title")
-    	->from(TABLE_DIPLOMS." as diplom")
-    	->condition("diplom.dipl_name like '%".$term."%'")
-    	->limit(0, 5);
-    			foreach ($query->execute()->getItems() as $item) {
-    				$res[] = array(
-    						"field" => "id",
-    						"value" => $item["id"],
-    						"label" => $item["title"],
-    						"class" => "CDiplom"
-    				);
-    			}
-    	/**
-    	* Поиск по ФИО студента
-    	*/
-    	$query = new CQuery();
-    	$query->select("distinct(diplom.student_id) as id, student.fio as title");
-    	$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id")
-    	->from(TABLE_DIPLOMS." as diplom")
-    	->condition("student.fio like '%".$term."%'")
-    	->limit(0, 5);
-    			foreach ($query->execute()->getItems() as $item) {
-    				$res[] = array(
-    						"field" => "student_id",
-    						"value" => $item["id"],
-    						"label" => $item["title"],
-    						"class" => "CDiplom"
-    				);
-    			}
-    	/**
-    	 * Поиск по степени утверждения диплома
-    	*/
-    	$query = new CQuery();
-    	$query->select("distinct(diplom.diplom_confirm) as id, confirm.name as title");
-    	$query->innerJoin(TABLE_DIPLOM_CONFIRMATIONS." as confirm", "diplom.diplom_confirm = confirm.id")
-    	->from(TABLE_DIPLOMS." as diplom")
-    	->condition("confirm.name like '%".$term."%'")
-    	->limit(0, 5);
-    			foreach ($query->execute()->getItems() as $item) {
-    				$res[] = array(
-    						"field" => "diplom_confirm",
-    						"value" => $item["id"],
-    						"label" => $item["title"],
-    						"class" => "CDiplom"
-    				);
-    			}  	
-    	/**
-    	* Поиск по месту практики
-    	*/
-    	$query = new CQuery();
-    	$query->select("distinct(diplom.id) as id, diplom.pract_place as title")
-    	->from(TABLE_DIPLOMS." as diplom")
-    	->condition("diplom.pract_place like '%".$term."%'")
-    	->limit(0, 5);
-    			foreach ($query->execute()->getItems() as $item) {
-    				$res[] = array(
-    						"field" => "id",
-    						"value" => $item["id"],
-    						"label" => $item["title"],
-    						"class" => "CDiplom"
-    				);
-    			}
-    	/**
-    	* Поиск по месту практики
-    	*/
-    	$query = new CQuery();
-    	$query->select("distinct(diplom.pract_place_id) as id, pract.name as title");
-    	$query->innerJoin(TABLE_PRACTICE_PLACES." as pract", "diplom.pract_place_id = pract.id")
-    	->from(TABLE_DIPLOMS." as diplom")
-    	->condition("pract.name like '%".$term."%'")
-    	->limit(0, 5);
-    			foreach ($query->execute()->getItems() as $item) {
-    				$res[] = array(
-    						"field" => "pract_place_id",
-    						"value" => $item["id"],
-    						"label" => $item["title"],
-    						"class" => "CDiplom"
-    				);
-    			}
-    	/**
-    	* Поиск по преподавателю
-    	*/
-		$query = new CQuery();
-    	$query->select("distinct(diplom.kadri_id) as id, prepod.fio as title");
-    	$query->innerJoin(TABLE_PERSON." as prepod", "diplom.kadri_id = prepod.id")
-    	->from(TABLE_DIPLOMS." as diplom")
-    	->condition("prepod.fio like '%".$term."%'")
-    	->limit(0, 5);
-    			foreach ($query->execute()->getItems() as $item) {
-    				$res[] = array(
-    						"field" => "kadri_id",
-    						"value" => $item["id"],
-    						"label" => $item["title"],
-    						"class" => "CDiplom"
-    				);
-    			}
-    	/**
-    	* Поиск по группе
-    	*/
-    	$query = new CQuery();
-    	$query->select("distinct(student.group_id) as id, st_group.name as title");
-    	$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id");
-    	$query->innerJoin(TABLE_STUDENT_GROUPS." as st_group", "student.group_id = st_group.id")
-    	->from(TABLE_DIPLOMS." as diplom")
-    	->condition("st_group.name like '%".$term."%'")
-    	->limit(0, 5);
-    			foreach ($query->execute()->getItems() as $item) {
-    				$res[] = array(
-    						"field" => "student.group_id",
-    						"value" => $item["id"],
-    						"label" => $item["title"],
-    						"class" => "CDiplom"
-    				);
-    			}
-    	/**
-    	* Поиск по дате предзащиты
-    	*/
-    	/*$query = new CQuery();
-    	$query->select("distinct(dipl_prew.id) as id, dipl_prew.date_preview as title");
-    	$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id");
-        $query->innerJoin(TABLE_DIPLOM_PREVIEWS." as dipl_prew", "student.id = dipl_prew.student_id")
-    	->from(TABLE_DIPLOMS." as diplom")
-    	->condition("dipl_prew.date_preview like '%".$term."%'")
-    	->limit(0, 5);
-    			foreach ($query->execute()->getItems() as $item) {
-    				$res[] = array(
-    						"field" => "dipl_prew.id",
-    						"value" => $item["id"],
-    						"label" => $item["title"],
-    						"class" => "CDiplom"
-    				);
-    			}*/
-    	/**
-    	* Поиск по дате защиты
-    	*/
-    	/*$query = new CQuery();
-    	$query->select("distinct(diplom.id) as id, diplom.date_act as title")
-    	->from(TABLE_DIPLOMS." as diplom")
-    	->condition("diplom.date_act like '%".$term."%'")
-    	->limit(0, 5);
-    			foreach ($query->execute()->getItems() as $item) {
-    				$res[] = array(
-    						"field" => "id",
-    						"value" => $item["id"],
-    						"label" => $item["title"],
-    						"class" => "CDiplom"
-    				);
-    			}*/
-    	/**
-    	* Поиск по ин.яз.
-    	*/
-		$query = new CQuery();
-    	$query->select("distinct(diplom.foreign_lang) as id, lang.name as title");
-    	$query->innerJoin(TABLE_LANGUAGES." as lang", "diplom.foreign_lang=lang.id")
-    	->from(TABLE_DIPLOMS." as diplom")
-    	->condition("lang.name like '%".$term."%'")
-    	->limit(0, 5);
-    			foreach ($query->execute()->getItems() as $item) {
-    				$res[] = array(
-    						"field" => "foreign_lang",
-    						"value" => $item["id"],
-    						"label" => $item["title"],
-    						"class" => "CDiplom"
-    				);
-    			}
-    	/**
-    	* Поиск по рецензенту
-    	*/
-    	$query = new CQuery();
-    	$query->select("distinct(diplom.recenz_id) as id, prepod.fio as title");
-    	$query->innerJoin(TABLE_PERSON." as prepod", "diplom.recenz_id = prepod.id")
-    	->from(TABLE_DIPLOMS." as diplom")
-    	->condition("prepod.fio like '%".$term."%'")
-    	->limit(0, 5);
-    			foreach ($query->execute()->getItems() as $item) {
-    				$res[] = array(
-    						"field" => "recenz_id",
-    						"value" => $item["id"],
-    						"label" => $item["title"],
-    						"class" => "CDiplom"
-    				);
-    			}
-    	/**
-    	* Поиск по оценке
-    	*/
-    	$query = new CQuery();
-    	$query->select("distinct(diplom.study_mark) as id, mark.name as title");
-    	$query->innerJoin(TABLE_MARKS." as mark", "diplom.study_mark = mark.id")
-    	->from(TABLE_DIPLOMS." as diplom")
-    	->condition("mark.name like '%".$term."%'")
-    	->limit(0, 5);
-    			foreach ($query->execute()->getItems() as $item) {
-    				$res[] = array(
-    						"field" => "study_mark",
-    						"value" => $item["id"],
-    						"label" => $item["title"],
-    						"class" => "CDiplom"
-    				);
-    			}
-    	/**
-    	* Поиск по комментарию
-    	*/
-    	$query = new CQuery();
-    	$query->select("distinct(diplom.id) as id, diplom.comment as title")
-    	->from(TABLE_DIPLOMS." as diplom")
-    	->condition("diplom.comment like '%".$term."%'")
-    	->limit(0, 5);
-    			foreach ($query->execute()->getItems() as $item) {
-    				$res[] = array(
-    						"field" => "id",
-    						"value" => $item["id"],
-    						"label" => $item["title"],
-    						"class" => "CDiplom"
-    				);
-    			}
-    	echo json_encode($res);
+ 		$term = CRequest::getString("query");
+ 		$res = array();
+ 		/**
+ 		 * Поиск по теме диплома
+ 		 */
+ 		$query = new CQuery();
+ 		$query->select("distinct(diplom.id) as id, diplom.dipl_name as name")
+ 		->from(TABLE_DIPLOMS." as diplom")
+ 		->condition("diplom.dipl_name like '%".$term."%'")
+ 		->limit(0, 5);
+ 		foreach ($query->execute()->getItems() as $item) {
+ 			$res[] = array(
+ 					"label" => $item["name"],
+ 					"value" => $item["name"],
+ 					"object_id" => $item["id"],
+ 					"type" => 1 					
+ 			);
+ 		}
+ 		/**
+ 		 * Поиск по ФИО студента
+ 		 */
+ 		$query = new CQuery();
+ 		$query->select("distinct(diplom.student_id) as id, student.fio as name");
+ 		$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id")
+ 		->from(TABLE_DIPLOMS." as diplom")
+ 		->condition("student.fio like '%".$term."%'")
+ 		->limit(0, 5);
+ 		foreach ($query->execute()->getItems() as $item) {
+ 			$res[] = array(
+ 					"label" => $item["name"],
+ 					"value" => $item["name"],
+ 					"object_id" => $item["id"],
+ 					"type" => 2
+ 			);
+ 		}
+ 		/**
+ 		 * Поиск по степени утверждения диплома
+ 		 */
+ 		$query = new CQuery();
+ 		$query->select("distinct(diplom.diplom_confirm) as id, confirm.name as name");
+ 		$query->innerJoin(TABLE_DIPLOM_CONFIRMATIONS." as confirm", "diplom.diplom_confirm = confirm.id")
+ 		->from(TABLE_DIPLOMS." as diplom")
+ 		->condition("confirm.name like '%".$term."%'")
+ 		->limit(0, 5);
+ 		foreach ($query->execute()->getItems() as $item) {
+ 			$res[] = array(
+ 					"label" => $item["name"],
+ 					"value" => $item["name"],
+ 					"object_id" => $item["id"],
+ 					"type" => 3
+ 			);
+ 		}
+ 		/**
+ 		 * Поиск по месту практики
+ 		 */
+ 		$query = new CQuery();
+ 		$query->select("distinct(diplom.id) as id, diplom.pract_place as name")
+ 		->from(TABLE_DIPLOMS." as diplom")
+ 		->condition("diplom.pract_place like '%".$term."%'")
+ 		->limit(0, 5);
+ 		foreach ($query->execute()->getItems() as $item) {
+ 			$res[] = array(
+ 					"label" => $item["name"],
+ 					"value" => $item["name"],
+ 					"object_id" => $item["id"],
+ 					"type" => 4
+ 			);
+ 		}
+ 		/**
+ 		 * Поиск по месту практики по id
+ 		 */
+ 		$query = new CQuery();
+ 		$query->select("distinct(diplom.pract_place_id) as id, pract.name as name");
+ 		$query->innerJoin(TABLE_PRACTICE_PLACES." as pract", "diplom.pract_place_id = pract.id")
+ 		->from(TABLE_DIPLOMS." as diplom")
+ 		->condition("pract.name like '%".$term."%'")
+ 		->limit(0, 5);
+ 		foreach ($query->execute()->getItems() as $item) {
+ 			$res[] = array(
+ 					"label" => $item["name"],
+ 					"value" => $item["name"],
+ 					"object_id" => $item["id"],
+ 					"type" => 5
+ 			);
+ 		}
+ 		/**
+ 		 * Поиск по руководителю
+ 		 */
+ 		$query = new CQuery();
+ 		$query->select("distinct(diplom.kadri_id) as id, person.fio as name")
+ 		->from(TABLE_DIPLOMS." as diplom")
+ 		->innerJoin(TABLE_PERSON." as person", "diplom.kadri_id = person.id")
+ 		->condition("person.fio like '%".$term."%'")		
+ 		->limit(0, 5);
+ 		foreach ($query->execute()->getItems() as $item) {
+ 			$res[] = array(
+ 					"label" => $item["name"],
+ 					"value" => $item["name"],
+ 					"object_id" => $item["id"],
+ 					"type" => 6
+ 			);
+ 		}
+ 		/**
+ 		 * Поиск по группе
+ 		 */
+ 		$query = new CQuery();
+ 		$query->select("distinct(student.group_id) as id, st_group.name as name");
+ 		$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id");
+ 		$query->innerJoin(TABLE_STUDENT_GROUPS." as st_group", "student.group_id = st_group.id")
+ 		->from(TABLE_DIPLOMS." as diplom")
+ 		->condition("st_group.name like '%".$term."%'")
+ 		->limit(0, 5);
+ 		foreach ($query->execute()->getItems() as $item) {
+ 			$res[] = array(
+ 					"label" => $item["name"],
+ 					"value" => $item["name"],
+ 					"object_id" => $item["id"],
+ 					"type" => 7
+ 			);
+ 		}
+ 		/**
+ 		 * Поиск по ин.яз.
+ 		 */
+ 		$query = new CQuery();
+ 		$query->select("distinct(diplom.foreign_lang) as id, lang.name as name");
+ 		$query->innerJoin(TABLE_LANGUAGES." as lang", "diplom.foreign_lang=lang.id")
+ 		->from(TABLE_DIPLOMS." as diplom")
+ 		->condition("lang.name like '%".$term."%'")
+ 		->limit(0, 5);
+ 		foreach ($query->execute()->getItems() as $item) {
+ 			$res[] = array(
+ 					"label" => $item["name"],
+ 					"value" => $item["name"],
+ 					"object_id" => $item["id"],
+ 					"type" => 8
+ 			);
+ 		}
+ 		/**
+ 		 * Поиск по рецензенту
+ 		 */
+ 		$query = new CQuery();
+ 		$query->select("distinct(diplom.recenz_id) as id, prepod.fio as name");
+ 		$query->innerJoin(TABLE_PERSON." as prepod", "diplom.recenz_id = prepod.id")
+ 		->from(TABLE_DIPLOMS." as diplom")
+ 		->condition("prepod.fio like '%".$term."%'")
+ 		->limit(0, 5);
+ 		foreach ($query->execute()->getItems() as $item) {
+ 			$res[] = array(
+ 					"label" => $item["name"],
+ 					"value" => $item["name"],
+ 					"object_id" => $item["id"],
+ 					"type" => 9
+ 			);
+ 		}
+ 		/**
+ 		 * Поиск по оценке
+ 		 */
+ 		$query = new CQuery();
+ 		$query->select("distinct(diplom.study_mark) as id, mark.name as name");
+ 		$query->innerJoin(TABLE_MARKS." as mark", "diplom.study_mark = mark.id")
+ 		->from(TABLE_DIPLOMS." as diplom")
+ 		->condition("mark.name like '%".$term."%'")
+ 		->limit(0, 5);
+ 		foreach ($query->execute()->getItems() as $item) {
+ 			$res[] = array(
+ 					"label" => $item["name"],
+ 					"value" => $item["name"],
+ 					"object_id" => $item["id"],
+ 					"type" => 10
+ 			);
+ 		}
+ 		/**
+ 		 * Поиск по комментарию
+ 		 */
+ 		$query = new CQuery();
+ 		$query->select("distinct(diplom.id) as id, diplom.comment as name")
+ 		->from(TABLE_DIPLOMS." as diplom")
+ 		->condition("diplom.comment like '%".$term."%'")
+ 		->limit(0, 5);
+ 		foreach ($query->execute()->getItems() as $item) {
+ 			$res[] = array(
+ 					"label" => $item["name"],
+ 					"value" => $item["name"],
+ 					"object_id" => $item["id"],
+ 					"type" => 11
+ 			);
+ 		}
+ 		/**
+ 		 * Поиск по дате предзащиты
+ 		 */
+ 		/*$query = new CQuery();
+		$query->select("distinct(dipl_prew.id) as id, dipl_prew.date_preview as name");
+		$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id");
+		$query->innerJoin(TABLE_DIPLOM_PREVIEWS." as dipl_prew", "student.id = dipl_prew.student_id")
+		->from(TABLE_DIPLOMS." as diplom")
+		->condition("dipl_prew.date_preview like '%".$term."%'")
+		->limit(0, 5);
+		foreach ($query->execute()->getItems() as $item) {
+			$res[] = array(
+					"label" => $item["name"],
+					"value" => $item["name"],
+					"object_id" => $item["id"],
+					"type" => 12
+			);
+		}
+ 		/**
+ 		 * Поиск по дате защиты
+ 		 */
+		/*$query = new CQuery();
+		$query->select("distinct(diplom.id) as id, diplom.date_act as name")
+		->from(TABLE_DIPLOMS." as diplom")
+		->condition("diplom.date_act like '%".$term."%'")
+		->limit(0, 5);
+		foreach ($query->execute()->getItems() as $item) {
+		$res[] = array(
+				"label" => $item["name"],
+				"value" => $item["name"],
+				"object_id" => $item["id"],
+				"type" => 13
+ 		 	);
+		}*/
+		echo json_encode($res);
     }
     public function actionUpdateThemeApprove() {
     	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
