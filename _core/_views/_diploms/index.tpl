@@ -1,6 +1,9 @@
 {extends file="_core.3col.tpl"}
 
-{block name="localSearchContent"}
+{block name="asu_center"}
+	<h2>Дипломные темы студентов</h2>
+    {CHtml::helpForCurrentPage()}
+    
     <script>
     /**
      * Очистка указанного фильтра
@@ -66,38 +69,119 @@
                 items[i].checked = this.checked;
             }
         });
+        /**
+         * Это старый код адаптированный под Bootstrap
+         * Он не страшный, он оставлен таким, какой он есть, чтобы бэкэнд
+         * не переписывать
+         **/
+        var searchResults = new Object();
+        jQuery("#search").typeahead({
+            source: function (query, process) {
+                return jQuery.ajax({
+                    url: "#",
+                    type: "get",
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        "query": query,
+                        "action": "search"
+                    },
+                    beforeSend: function(){
+                        /**
+                         * Показываем индикатор активности
+                         */
+                        jQuery("#search").css({
+                            "background-image": 'url({$web_root}images/ajax-loader.gif)',
+                            "background-repeat": "no-repeat",
+                            "background-position": "95% center"
+                        });
+                    },
+                    success: function(data){
+                        var lookup = new Array();
+                        searchResults = new Object();
+                        for (var i = 0; i < data.length; i++) {
+                            lookup.push(data[i].label);
+                            searchResults[data[i].label] = data[i];
+                        }
+                        process(lookup);
+                        jQuery("#search").css("background-image", "none");
+                    }
+                });
+            },
+            updater: function(item){
+                var selected = searchResults[item];
+                if (selected.type == 1) {
+                    // выбрана тема
+                    window.location.href = "?action=index&filter=theme:" + selected.object_id;
+                } else if(selected.type == 2) {
+                    // выбран студент
+                    window.location.href = "?action=index&filter=student:" + selected.object_id;
+                } else if(selected.type == 3) {
+                    // выбрана степень утверждения диплома
+                	window.location.href = "?action=index&filter=confirm:" + selected.object_id;
+                } else if(selected.type == 4) {
+                    // выбрано место практики 
+                	window.location.href = "?action=index&filter=pract:" + selected.object_id;
+                } else if(selected.type == 5) {
+                    // выбрано место практики по id
+                	window.location.href = "?action=index&filter=practId:" + selected.object_id;
+                } else if(selected.type == 6) {
+                    // выбран руководитель
+                	window.location.href = "?action=index&filter=person:" + selected.object_id;
+                } else if(selected.type == 7) {
+                    // выбрана группа
+                	window.location.href = "?action=index&filter=group:" + selected.object_id;
+                } else if(selected.type == 8) {
+                    // выбран ин.яз.
+                	window.location.href = "?action=index&filter=foreign:" + selected.object_id;
+                } else if(selected.type == 9) {
+                    // выбран рецензент
+                	window.location.href = "?action=index&filter=recenz:" + selected.object_id;
+                } else if(selected.type == 10) {
+                    // выбрана оценка
+                	window.location.href = "?action=index&filter=mark:" + selected.object_id;
+                } else if(selected.type == 11) {
+                    // выбран комментарий
+                	window.location.href = "?action=index&filter=comment:" + selected.object_id;
+                }
+            }
+        });
     });
 	</script>
-    <div class="form-horizontal">
-        <div class="control-group">
-            <label class="control-label" for="person">Преподаватель</label>
-            <div class="controls">
-                {CHtml::dropDownList("person", $diplomManagers, $currentPerson, "kadri_id", "span12")}
-                {if !is_null($currentPerson)}
-                    <span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('person'); return false; "/></span>
-                {/if}  
-            </div>
-        </div>
-    </div>
-    <div class="form-horizontal">
-        <div class="control-group">
-            <label class="control-label" for="group">Группа</label>
-            <div class="controls">
-                {CHtml::dropDownList("group", $studentGroups, $currentGroup, "group_id", "span12")}
-                {if !is_null($currentGroup)}
-                    <span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('group'); return false; "/></span>
-                {/if}  
-            </div>
-        </div>
-    </div>
-{/block}
-			
-{block name="asu_center"}
-
-<h2>Дипломные темы студентов</h2>
-    {CHtml::helpForCurrentPage()}
-    {include file="_core.searchLocal.tpl"}
-	
+	<table border="0" width="100%" class="tableBlank">
+		<tr>
+			<td>
+				<div class="form-horizontal">
+        			<div class="control-group">
+            			<label class="control-label" for="person">Преподаватель</label>
+            			<div class="controls">
+                			{CHtml::dropDownList("person", $diplomManagers, $currentPerson, "kadri_id", "span12")}
+                			{if !is_null($currentPerson)}
+                    			<span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('person'); return false; "/></span>
+                			{/if}  
+            			</div>
+        			</div>
+    			</div>
+    			<div class="form-horizontal">
+        			<div class="control-group">
+            			<label class="control-label" for="group">Группа</label>
+            			<div class="controls">
+                			{CHtml::dropDownList("group", $studentGroups, $currentGroup, "group_id", "span12")}
+                			{if !is_null($currentGroup)}
+                    			<span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('group'); return false; "/></span>
+                			{/if}  
+            			</div>
+        			</div>
+    			</div>
+			</td>
+      		<td valign="top">
+				<p>
+					<input type="text" id="search" style="width: 96%; " placeholder="Поиск">
+				</p>
+			</td>
+		</tr>
+	</table>
+    
 	{if $diploms->getCount() == 0}
 		Нет дипломов для отображения
 	{else}
