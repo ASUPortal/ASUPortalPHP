@@ -1,7 +1,7 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-	<h2>Дипломные темы студентов</h2>
+	<h2>Темы ВКР</h2>
     {CHtml::helpForCurrentPage()}
     
     <script>
@@ -64,7 +64,7 @@
     		updateFilter();
     	});
     	jQuery("#selectAll").change(function(){
-            var items = jQuery("input[name=selectedDoc]")
+    		var items = jQuery("input[name='selectedDoc[]']")
             for (var i = 0; i < items.length; i++) {
                 items[i].checked = this.checked;
             }
@@ -263,7 +263,7 @@
 	        <tr>
 	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить диплом {$diplom->dipl_name}')) { location.href='?action=delete&id={$diplom->id}'; }; return false;"></a></td>
 	            <td>
-                    <input type="checkbox" value="{$diplom->getId()}" name="selectedDoc">
+                    <input type="checkbox" value="{$diplom->getId()}" name="selectedDoc[]">
                 </td>
 	            <td>{counter}</td>
 				<td>
