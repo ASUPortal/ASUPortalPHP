@@ -142,7 +142,7 @@ class CDiplomsController extends CBaseController {
                 "template" => "formset_diploms_theme"
             ),
 			array(
-                "title" => "Добавить дипломную тему",
+                "title" => "Добавить тему ВКР",
                 "link" => "?action=add",
                 "icon" => "actions/list-add.png"
             ),
@@ -275,7 +275,7 @@ class CDiplomsController extends CBaseController {
     }
     public function actionApproveTheme() {
     	$type = CRequest::getInt("type");
-    	foreach (CRequest::getArray("selectedInView") as $id) {
+    	foreach (CRequest::getArray("selectedDoc") as $id) {
     		$diplom = CStaffManager::getDiplom($id);
     		if (!is_null($diplom)) {
     			$diplom->diplom_confirm = $type;
