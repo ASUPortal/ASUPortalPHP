@@ -29,6 +29,7 @@ class CPrintManager {
      */
     public static function getFormset($key) {
         if (!self::getCacheFormset()->hasElement($key)) {
+        	$item = null;
             if (is_numeric($key)) {
                 $item = CActiveRecordProvider::getById(TABLE_PRINT_FORMSETS, $key);
             } elseif (is_string($key)) {
