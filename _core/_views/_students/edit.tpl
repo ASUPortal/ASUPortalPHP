@@ -1,7 +1,7 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-<h2>Редактирование студента</h2>
+<h2>Редактирование карточки студента</h2>
 
     {CHtml::helpForCurrentPage()}
 
