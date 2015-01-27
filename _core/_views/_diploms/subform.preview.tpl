@@ -10,9 +10,9 @@
     {foreach $diplom->previews->getItems() as $preview}
         <tr>
             <td>{counter}</td>
-            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить предзащиту от {$preview->getPreviewDate()}')) { location.href='previews.php?action=delete&id={$preview->id}'; }; return false;"></a></td>
+            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить предзащиту от {$preview->getPreviewDate()}')) { location.href='preview.php?action=delete&id={$preview->id}'; }; return false;"></a></td>
             <td>
-                <a href="previews.php?action=edit&id={$preview->getId()}">
+                <a href="preview.php?action=edit&id={$preview->getId()}">
                     {$preview->getPreviewDate()}
                 </a>
             </td>
