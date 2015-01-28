@@ -26,12 +26,21 @@
                         var lookup = new Array();
                         searchResults = new Object();
                         for (var i = 0; i < data.length; i++) {
-                            lookup.push(data[i].label);
-                            var searchObj = new Object();
+                        	var searchObj = new Object();
                             searchObj.field = data[i].field;
                             searchObj.className = data[i].class;
                             searchObj.value = data[i].value;
-                            searchResults[data[i].label] = searchObj;
+                            if (!(data[i].label in searchResults)) {
+                            	searchResults[data[i].label] = searchObj;	
+                            	lookup.push(data[i].label);
+                            } else {
+                            	var index = 1;
+                            	while ((data[i].label + " (" + index + ")") in searchResults) {
+                            		index++;
+                            	}
+                            	searchResults[data[i].label + " (" + index + ")"] = searchObj;
+                            	lookup.push(data[i].label + " (" + index + ")");
+                            }
                         }
                         process(lookup);
                         jQuery("#search").css("background-image", "none");
@@ -39,7 +48,7 @@
                 });
             },
             updater: function(item){
-                var value = searchResults[item].value;
+            	var value = searchResults[item].value;
                 var key = searchResults[item].field;
                 var className = searchResults[item].className;
                 /**

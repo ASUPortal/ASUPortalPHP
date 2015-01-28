@@ -312,7 +312,12 @@ class CDiplomsController extends CBaseController {
                 "link" => "#",
                 "icon" => "devices/printer.png",
                 "template" => "formset_diploms"
-            )
+            ),
+			array(
+				"title" => "Добавить предзащиту",
+				"link" => WEB_ROOT."_modules/_diploms/preview.php?action=add&id=".$diplom->getId(),
+				"icon" => "actions/list-add.png"
+			)
         ));	
         $this->renderView("_diploms/edit.tpl");
     }
