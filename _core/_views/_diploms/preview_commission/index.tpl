@@ -1,93 +1,34 @@
 {extends file="_core.3col.tpl"}
 
+{block name="localSearchContent"}
+	<form class="form-horizontal">
+      <div class="control-group">
+       	<label for="showall" class="control-label">Показывать комиссии прошлых лет</label>
+      	<div class="controls">
+			{CHtml::checkBox("showall", 1, $showAll)}
+        </div>
+      </div>
+	</form>
+{/block}
+
 {block name="asu_center"}
-    <h2>Комиссии по предзащите дипломов</h2>
+    <h2>Комиссии по предзащите ВКР</h2>
 
     {CHtml::helpForCurrentPage()}
-
-    <script>
-        function getFilters() {
-            filters = new Object();
-            var items = jQuery("#filters p");
-            jQuery.each(items, function(key, value){
-                // получаем название фильтра, он хранится в label-е
-                var label = jQuery(value).find("label");
-                var filter_name = "";
-                if (label.length > 0) {
-                    filter_name = jQuery(label[0]).attr("for");
-                }
-                var filter_value = "";
-                var val = jQuery(value).find("select");
-                if (val.length > 0) {
-                    filter_value = jQuery(val[0]).val();
-                } else {
-                    val = jQuery(value).find("input");
-                    if (val.length > 0) {
-                        filter_value = jQuery(val[0]).val();
-                    }
-                }
-                /**
-                 * Если есть что добавлять, то добавляем
-                 */
-                if (filter_name !== "") {
-                    filters[filter_name] = filter_value;
-                }
-            });
-            return filters;
-        }
-        /**
-         * Очистка указанного фильтра
-         * @param type
-         */
-        function removeFilter(type) {
-            var filters = getFilters();
-            var action = "preview_comm.php?action=index&filter=";
-            var actions = new Array();
-            jQuery.each(filters, function(key, value){
-                if (key !== type) {
-                    actions[actions.length] = key + ":" + value;
-                }
-            });
-            action = action + actions.join("_");
-            window.location.href = action;
-        }
-        function addFilter(key, value) {
-            var filters = getFilters();
-            var action = "preview_comm.php?action=index&filter=";
-            var actions = new Array();
-            filters[key] = value;
-            jQuery.each(filters, function(filter_key, filter_value){
-                actions[actions.length] = filter_key + ":" + filter_value;
-            });
-            action = action + actions.join("_");
-            window.location.href = action;
-        }
-        jQuery(document).ready(function(){
-            /**
-             * Для всех опубликованных фильтров добавляем
-             * автоматический переключатель
-             */
-            var items = jQuery("#filters p");
-            jQuery.each(items, function(key, value){
-                var input = jQuery(value).find("select");
-                if (input.length > 0) {
-                    input = input[0];
-                    jQuery(input).change(function(){
-                        addFilter(jQuery(this).attr("id"), jQuery(this).val());
-                    });
-                }
-                var select = jQuery(value).find("input[type=checkbox]");
-                if (select.length > 0) {
-                    select = select[0];
-                    jQuery(select).change(function(){
-                        if (jQuery(select).is(":checked")) {
-                            addFilter(jQuery(this).attr("id"), jQuery(this).val());
-                        } else {
-                            removeFilter(jQuery(this).attr("id"))
-                        }
-                    });
-                }
-            });
+    {include file="_core.searchLocal.tpl"}
+	
+	<script>
+    	jQuery(document).ready(function(){
+    		jQuery("#showall").change(function(){
+    			//var requestParams = array();
+    			//$.each(CRequest::getGlobalRequestVariables()->getItems(), function(key, value) {
+    				//requestParams[] = key + "=" + value;
+    				{if $showAll}
+						window.location.href = web_root + "_modules/_diploms/preview_comm.php"; //+ implode("&", requestParams);
+    				{else}
+    					window.location.href = web_root + "_modules/_diploms/preview_comm.php?action=index&showAll=1"; //+ implode("&", requestParams);
+    				{/if}
+    		});
             jQuery("#selectAll").change(function(){
             	var items = jQuery("input[name='selectedDoc[]']")
                 for (var i = 0; i < items.length; i++) {
@@ -97,30 +38,12 @@
         });
     </script>
 
-    <table border="0" width="100%" class="tableBlank">
-        <tr>
-            <td valign="top">
-                <form id="filters">
-                    <p>
-                        <label for="showall">Показывать комиссии прошлых лет</label>
-                        {CHtml::checkBox("showall", 1, $showAll)}
-                    </p>
-                </form>
-            </td>
-            <td valign="top" width="200px">
-                <p>
-
-                </p>
-            </td>
-        </tr>
-    </table>
-
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th></th>
             <th>#</th>
             <th>{CHtml::tableOrder("name", $commissions->getFirstItem())}</th>
-			<th>{CHtml::tableOrder("secretary_id", $commissions->getFirstItem())}</th>
+			<th>{CHtml::tableOrder("person.fio", $commissions->getFirstItem(), true)}</th>
             <th>{CHtml::tableOrder("date_act", $commissions->getFirstItem())}</th>
             <th>{CHtml::tableOrder("comment", $commissions->getFirstItem())}</th>
             <th>{CHtml::tableOrder("members", $commissions->getFirstItem())}</th>
@@ -144,7 +67,11 @@
                     {$commission->comment}
                 </td>
                 <td valign="top">
-
+                	<ul>
+                	{foreach $commission->members->getItems() as $member}
+                		<li>{$member->getName()}</li>
+               		{/foreach}
+               		</ul>
                 </td>
                 <td>
                     <input type="checkbox" value="{$commission->getId()}" name="selectedDoc[]">

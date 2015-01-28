@@ -18,16 +18,26 @@ class CDiplomPreviewCommissionController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet(false);
+        $set = new CRecordSet();
         $query = new CQuery();
         $set->setQuery($query);
-        $query->select("com.*")
+        $query->select("com.*");
+        $query->innerJoin(TABLE_DIPLOM_PREVIEW_MEMBERS." as members", "com.secretary_id=members.kadri_id");
+        $query->innerJoin(TABLE_PERSON." as person", "members.kadri_id = person.id")
             ->from(TABLE_DIPLOM_PREVIEW_COMISSIONS." as com")
             ->order("com.date_act desc");
         $showAll = true;
-        if (is_null(CRequest::getFilter("showall"))) {
+        if (CRequest::getInt("showAll") != 1) {
             $query->condition('com.date_act between "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_start)).'" and "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_end)).'"');
             $showAll = false;
+        }
+        if (CRequest::getString("order") == "person.fio") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->innerJoin(TABLE_DIPLOM_PREVIEW_MEMBERS." as members", "com.secretary_id=members.kadri_id");
+        		$query->innerJoin(TABLE_PERSON." as person", "members.kadri_id = person.id");
+        		$query->order("person.fio ".$direction);
         }
         $items = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
@@ -96,50 +106,74 @@ class CDiplomPreviewCommissionController extends CBaseController {
         $this->redirect("?action=index");
     }
     public function actionSearch() {
-
-    }
-    public function actionSearchDiplom() {
-        $res = array();
-        $term = CRequest::getString("term");
-        /**
-         * Поиск по теме диплома в таблице с дипломами
-         */
-        $query = new CQuery();
-        $query->select("diplom.*")
-            ->from(TABLE_DIPLOMS." as diplom")
-            ->condition("diplom.dipl_name like '%".$term."%'")
-            ->limit(0, 5);
-        foreach ($query->execute()->getItems() as $item) {
-            $diplom = new CDiplom(new CActiveRecord($item));
-            if (!is_null($diplom->student)) {
-                $res[] = array(
-                    "label" => $diplom->student->getName()." (".$diplom->dipl_name.")",
-                    "value" => $diplom->student->getName()." (".$diplom->dipl_name.")",
-                    "object_id" => $item["id"],
-                    "filter" => "diplom"
-                );
-            }
-        }
-        /**
-         * Поиск по фамилии студента
-         */
-        $query = new CQuery();
-        $query->select("diplom.*")
-            ->from(TABLE_DIPLOMS." as diplom")
-            ->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id = student.id")
-            ->condition("student.fio like '%".$term."%'")
-            ->limit(0, 5);
-        foreach ($query->execute()->getItems() as $item) {
-            $diplom = new CDiplom(new CActiveRecord($item));
-            if (!is_null($diplom->student)) {
-                $res[] = array(
-                    "label" => $diplom->student->getName()." (".$diplom->dipl_name.")",
-                    "value" => $diplom->student->getName()." (".$diplom->dipl_name.")",
-                    "object_id" => $item["id"],
-                    "filter" => "diplom"
-                );
-            }
-        }
-        echo json_encode($res);
+    	$res = array();
+    	$term = CRequest::getString("query");
+    	/**
+    	 * Поиск по комиссии
+    	*/
+    	$query = new CQuery();
+    	$query->select("distinct(com.id) as id, com.name as title")
+	    	->from(TABLE_DIPLOM_PREVIEW_COMISSIONS." as com")
+	    	->condition("com.name like '%".$term."%'")
+	    	->limit(0, 5);
+    	foreach ($query->execute()->getItems() as $item) {
+    		$res[] = array(
+    				"field" => "com.id",
+    				"value" => $item["id"],
+    				"label" => $item["title"],
+    				"class" => "CDiplomPreviewCommission"
+    		);
+    	}
+    	/**
+    	 * Поиск по секретарю
+    	 */
+    	$query = new CQuery();
+    	$query->select("distinct(members.kadri_id) as id, person.fio as title");
+    	$query->innerJoin(TABLE_DIPLOM_PREVIEW_MEMBERS." as members", "com.secretary_id=members.kadri_id");
+    	$query->innerJoin(TABLE_PERSON." as person", "members.kadri_id = person.id")
+	    	->from(TABLE_DIPLOM_PREVIEW_COMISSIONS." as com")
+	    	->condition("person.fio like '%".$term."%'")
+	    	->limit(0, 5);
+    	foreach ($query->execute()->getItems() as $item) {
+    		$res[] = array(
+    				"field" => "kadri_id",
+    				"value" => $item["id"],
+    				"label" => $item["title"],
+    				"class" => "CDiplomPreviewCommission"
+    		);
+    	}
+    	/**
+    	 * Поиск по примечанию
+    	 */
+    	$query = new CQuery();
+    	$query->select("distinct(com.id) as id, com.comment as title")
+    	->from(TABLE_DIPLOM_PREVIEW_COMISSIONS." as com")
+    	->condition("com.comment like '%".$term."%'")
+    	->limit(0, 5);
+    	foreach ($query->execute()->getItems() as $item) {
+    		$res[] = array(
+    				"field" => "com.id",
+    				"value" => $item["id"],
+    				"label" => $item["title"],
+    				"class" => "CDiplomPreviewCommission"
+    		);
+    	}
+    	/**
+    	 * Поиск по дате создания комиссии
+    	 */
+    	/*$query = new CQuery();
+    	$query->select("distinct(com.id) as id, com.date_act as title")
+    	->from(TABLE_DIPLOM_PREVIEW_COMISSIONS." as com")
+    	->condition("com.date_act like '%".$term."%'")
+    	->limit(0, 5);
+    	foreach ($query->execute()->getItems() as $item) {
+    		$res[] = array(
+    				"field" => "com.id",
+    				"value" => $item["id"],
+    				"label" => $item["title"],
+    				"class" => "CDiplomPreviewCommission"
+    		);
+    	}*/
+    	echo json_encode($res);
     }
 }
