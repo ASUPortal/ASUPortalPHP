@@ -41,7 +41,7 @@
 <div class="control-group">
     {CHtml::activeLabel("comm_id", $preview)}
     <div class="controls">
-        {CHtml::activeLookup("comm_id", $preview, "preview_commissions")}
+        {CHtml::activeLookup("comm_id", $preview, "class.CSearchCatalogPreviewCommission", false, array(), true)}
         {CHtml::error("comm_id", $preview)}
     </div>
 </div>

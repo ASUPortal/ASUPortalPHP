@@ -177,7 +177,7 @@
             function prepareFormHTMLFormDisplay(html, sourceURL) {
                 var targetHtml = jQuery("#asu_body_content form", html);
                 // убиваем дополнительные кнопки
-                var buttons = jQuery(".btn-group", targetHtml);
+                var buttons = jQuery(".btn-primary", targetHtml);
                 var buttonsRow = jQuery(buttons).parents(".control-group");
                 jQuery(buttonsRow).remove();
                 // формируем адрес, на который нужно оптравить форму теперь

@@ -137,6 +137,7 @@ class CDiplom extends CActiveModel {
             "aspire_recomendation" => "Рекомендован в аспирантуру",
             "average_mark" => "Средний балл",
 			"normokontroler_id" => "Нормоконтролер",
+        	"protocol" => "Номер защиты",
         );
     }
     /**
