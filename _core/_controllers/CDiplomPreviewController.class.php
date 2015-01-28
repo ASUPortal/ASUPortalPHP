@@ -26,11 +26,6 @@ class CDiplomPreviewController extends CBaseController{
 					"title" => "Назад",
 					"link" => WEB_ROOT."_modules/_diploms/index.php?action=edit&id=".$preview->diplom_id,
 					"icon" => "actions/edit-undo.png"
-        		),
-        		array(
-					"title" => "Добавить комиссию",
-					"link" => WEB_ROOT."_modules/_diploms/preview_comm.php?action=add",
-					"icon" => "actions/list-add.png"
         		)
         ));
         $this->renderView("_diploms/diplom_preview/add.tpl");

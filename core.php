@@ -182,6 +182,7 @@
     define("TABLE_DIPLOM_PREVIEWS", "diplom_previews");
     define("TABLE_DIPLOM_CONFIRMATIONS", "diplom_confirms");
     define("TABLE_DIPLOM_PREVIEW_COMISSIONS", "diplom_preview_committees");
+    define("TABLE_DIPLOM_PREVIEW_MEMBERS", "diplom_preview_kadri");
     define("TABLE_PRACTICE_PLACES", "pract_places");
     define("TABLE_LANGUAGES", "language");
     define("TABLE_MARKS", "study_marks");
