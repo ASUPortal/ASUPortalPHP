@@ -31,6 +31,14 @@
 </div>
 
 <div class="control-group">
+    {CHtml::activeLabel("order", $diplom)}
+    <div class="controls">
+        {CHtml::activeTextField("order", $diplom, "order")}
+        {CHtml::error("order", $diplom)}
+    </div>
+</div>
+
+<div class="control-group">
     {CHtml::activeLabel("aspire_recomendation", $diplom)}
     <div class="controls">
         {CHtml::activeCheckBox("aspire_recomendation", $diplom)}
