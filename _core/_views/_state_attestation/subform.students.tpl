@@ -87,25 +87,30 @@
     <tr>
         <td>
             <p>
-                <input type="text" id="search" style="width: 100%; " placeholder="Поиск по теме диплома и фамилии студента">
+                <input type="text" id="search" style="width: 100%; " placeholder="Поиск по теме ВКР и фамилии студента">
             </p>
         </td>
     </tr>
 </table>
 
 {foreach $form->commission->getDiplomsListByDate() as $date=>$diploms}
-    <h2>{$date|date_format:"%d.%m.%Y"}</h2>
-
+	<h2>{$date|date_format:"%d.%m.%Y"} Номер распоряжения:
+	{foreach $diploms as $dipl}
+    	{if ($dipl->order == 0)}
+			{else} {$dipl->order}
+		{/if}
+    {/foreach}
+    </h2>
 <table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th></th>
         <th>#</th>
         <th>Студент</th>
-        <th>Тема диплома</th>
+        <th>Тема ВКР</th>
     </tr>
     {foreach $diploms as $diplom}
         <tr>
-            <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить диплом {$diplom->dipl_name}')) { removeDiplom({$diplom->getId()}); }; return false;"></a></td>
+            <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить тему ВКР {$diplom->dipl_name}')) { removeDiplom({$diplom->getId()}); }; return false;"></a></td>
             <td>{counter}</td>
             <td>
                 {if !is_null($diplom->student)}

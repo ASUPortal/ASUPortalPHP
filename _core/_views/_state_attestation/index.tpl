@@ -1,7 +1,7 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-    <h2>Комиссии по защите дипломов</h2>
+    <h2>Комиссии по защите ВКР</h2>
 
     {CHtml::helpForCurrentPage()}
 

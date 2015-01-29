@@ -153,7 +153,7 @@
 			<td>
 				<div class="form-horizontal">
         			<div class="control-group">
-            			<label class="control-label" for="person">Преподаватель</label>
+            			<label class="control-label" for="person">Руководитель</label>
             			<div class="controls">
                 			{CHtml::dropDownList("person", $diplomManagers, $currentPerson, "kadri_id", "span12")}
                 			{if !is_null($currentPerson)}
@@ -183,7 +183,7 @@
 	</table>
     
 	{if $diploms->getCount() == 0}
-		Нет дипломов для отображения
+		Нет ВКР для отображения
 	{else}
 	<script>
             /**
@@ -261,7 +261,7 @@
 	        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
 	        {foreach $diploms->getItems() as $diplom}
 	        <tr>
-	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить диплом {$diplom->dipl_name}')) { location.href='?action=delete&id={$diplom->id}'; }; return false;"></a></td>
+	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить тему ВКР {$diplom->dipl_name}')) { location.href='?action=delete&id={$diplom->id}'; }; return false;"></a></td>
 	            <td>
                     <input type="checkbox" value="{$diplom->getId()}" name="selectedDoc[]">
                 </td>

@@ -1,7 +1,7 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-    <h2>Редактирование диплома сотрудника</h2>
+    <h2>Редактирование ВКР сотрудника</h2>
 
     {CHtml::helpForCurrentPage()}
 

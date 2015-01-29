@@ -15,7 +15,7 @@ class CDiplomsController extends CBaseController {
         }
 
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Дипломные темы студентов");
+        $this->setPageTitle("Темы ВКР студентов");
 
         parent::__construct();
     }
