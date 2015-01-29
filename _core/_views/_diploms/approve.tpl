@@ -149,7 +149,7 @@
 	</table>
 	
 	{if $diploms->getCount() == 0}
-		Нет дипломов для отображения
+		Нет ВКР для отображения
 	{else}
 	<script>
             /**
@@ -219,7 +219,7 @@
 	        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
 	        {foreach $diploms->getItems() as $diplom}
 	        <tr>
-	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить диплом {$diplom->dipl_name}')) { location.href='?action=delete&id={$diplom->id}'; }; return false;"></a></td>
+	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить тему ВКР {$diplom->dipl_name}')) { location.href='?action=delete&id={$diplom->id}'; }; return false;"></a></td>
 	            <td>
                     <input type="checkbox" value="{$diplom->getId()}" name="selectedDoc[]">
                 </td>
