@@ -74,6 +74,66 @@ class CDiplomsController extends CBaseController {
         		$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id");
         		$query->order("student.fio ".$direction);
         }
+        elseif (CRequest::getString("order") == "diplom_confirm") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->order("diplom_confirm ".$direction);
+        }
+        elseif (CRequest::getString("order") == "dipl_name") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->order("dipl_name ".$direction);
+        }
+        elseif (CRequest::getString("order") == "pract_place_id") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->order("pract_place_id ".$direction);
+        }
+        elseif (CRequest::getString("order") == "date_act") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->order("date_act ".$direction);
+        }
+        elseif (CRequest::getString("order") == "foreign_lang") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->order("foreign_lang ".$direction);
+        }
+        elseif (CRequest::getString("order") == "protocol_2aspir_id") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->order("protocol_2aspir_id ".$direction);
+        }
+        elseif (CRequest::getString("order") == "recenz_id") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->order("recenz_id ".$direction);
+        }
+        elseif (CRequest::getString("order") == "study_mark") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->order("study_mark ".$direction);
+        }
+        elseif (CRequest::getString("order") == "gak_num") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->order("gak_num ".$direction);
+        }
+        elseif (CRequest::getString("order") == "comment") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->order("comment ".$direction);
+        }
         // фильтр по руководителю
         if (!is_null(CRequest::getFilter("person"))) {
         	$query->innerJoin(TABLE_PERSON." as person", "diplom.kadri_id = person.id and person.id = ".CRequest::getFilter("person"));

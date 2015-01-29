@@ -243,20 +243,20 @@
 	            <th></th>
 	            <th><input type="checkbox" id="selectAll"></th>
 	            <th>№</th>
-	            <th>{CHtml::tableOrder("diplom_confirm", $diploms->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("dipl_name", $diploms->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("pract_place_id", $diploms->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("diplom_confirm", $diploms->getFirstItem(), true)}</th>
+	            <th>{CHtml::tableOrder("dipl_name", $diploms->getFirstItem(), true)}</th>
+	            <th>{CHtml::tableOrder("pract_place_id", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("prepod.fio", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("student.fio", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("st_group.name", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("dipl_prew.date_preview", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("date_act", $diploms->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("foreign_lang", $diploms->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("protocol_2aspir_id", $diploms->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("recenz_id", $diploms->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("study_mark", $diploms->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("gak_num", $diploms->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("comment", $diploms->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("date_act", $diploms->getFirstItem(), true)}</th>
+	            <th>{CHtml::tableOrder("foreign_lang", $diploms->getFirstItem(), true)}</th>
+	            <th>{CHtml::tableOrder("protocol_2aspir_id", $diploms->getFirstItem(), true)}</th>
+	            <th>{CHtml::tableOrder("recenz_id", $diploms->getFirstItem(), true)}</th>
+	            <th>{CHtml::tableOrder("study_mark", $diploms->getFirstItem(), true)}</th>
+	            <th>{CHtml::tableOrder("gak_num", $diploms->getFirstItem(), true)}</th>
+	            <th>{CHtml::tableOrder("comment", $diploms->getFirstItem(), true)}</th>
 	        </tr>
 	        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
 	        {foreach $diploms->getItems() as $diplom}
