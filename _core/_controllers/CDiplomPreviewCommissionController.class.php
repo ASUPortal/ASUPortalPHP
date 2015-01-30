@@ -13,7 +13,7 @@ class CDiplomPreviewCommissionController extends CBaseController {
 
         $this->_useDojo = true;
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Предзащита дип. проектов - комиссии");
+        $this->setPageTitle("Предзащита ВКР - комиссии");
 
         parent::__construct();
     }
