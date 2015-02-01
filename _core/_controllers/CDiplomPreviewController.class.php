@@ -7,7 +7,7 @@ class CDiplomPreviewController extends CBaseController{
             }
         }
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Предзащита дип. проектов - студенты");
+        $this->setPageTitle("Предзащита ВКР - студенты");
         parent::__construct();
     }
     public function actionAdd() {
