@@ -94,12 +94,11 @@
 </table>
 
 {foreach $form->commission->getDiplomsListByDate() as $date=>$diploms}
-	<h2>{$date|date_format:"%d.%m.%Y"} Номер распоряжения:
-	{foreach $diploms as $dipl}
-    	{if ($dipl->order == 0)}
-			{else} {$dipl->order}
-		{/if}
-    {/foreach}
+	<h2>{$date|date_format:"%d.%m.%Y"} 
+		Номер распоряжения:
+		{$first = array_values($diploms)}
+		{$first = $first[0]}
+		{$first->num_order}
     </h2>
 <table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
@@ -108,13 +107,15 @@
         <th>Студент</th>
         <th>Тема ВКР</th>
     </tr>
-    {foreach $diploms as $diplom}
+    {if usort($diploms, array("CSABComissionController", "studentByProtocolSorter"))}
+    {/if}
+    {foreach $diploms as $diplom} 
         <tr>
             <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить тему ВКР {$diplom->dipl_name}')) { removeDiplom({$diplom->getId()}); }; return false;"></a></td>
             <td>{counter}</td>
-            <td>
-                {if !is_null($diplom->student)}
-                    {$diplom->student->getName()}
+            <td>	
+                {if !is_null($diplom->student)}	
+            		{$diplom->student->getName()}
                 {/if}
             </td>
             <td>
