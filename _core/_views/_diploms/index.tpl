@@ -112,37 +112,37 @@
                 var selected = searchResults[item];
                 if (selected.type == 1) {
                     // выбрана тема
-                    window.location.href = "?action=index&filter=theme:" + selected.object_id;
+                    window.location.href = "?action=index&isArchive=1&filter=theme:" + selected.object_id;
                 } else if(selected.type == 2) {
                     // выбран студент
-                    window.location.href = "?action=index&filter=student:" + selected.object_id;
+                    window.location.href = "?action=index&isArchive=1&filter=student:" + selected.object_id;
                 } else if(selected.type == 3) {
                     // выбрана степень утверждения диплома
-                	window.location.href = "?action=index&filter=confirm:" + selected.object_id;
+                	window.location.href = "?action=index&isArchive=1&filter=confirm:" + selected.object_id;
                 } else if(selected.type == 4) {
                     // выбрано место практики 
-                	window.location.href = "?action=index&filter=pract:" + selected.object_id;
+                	window.location.href = "?action=index&isArchive=1&filter=pract:" + selected.object_id;
                 } else if(selected.type == 5) {
                     // выбрано место практики по id
-                	window.location.href = "?action=index&filter=practId:" + selected.object_id;
+                	window.location.href = "?action=index&isArchive=1&filter=practId:" + selected.object_id;
                 } else if(selected.type == 6) {
                     // выбран руководитель
-                	window.location.href = "?action=index&filter=person:" + selected.object_id;
+                	window.location.href = "?action=index&isArchive=1&filter=person:" + selected.object_id;
                 } else if(selected.type == 7) {
                     // выбрана группа
-                	window.location.href = "?action=index&filter=group:" + selected.object_id;
+                	window.location.href = "?action=index&isArchive=1&filter=group:" + selected.object_id;
                 } else if(selected.type == 8) {
                     // выбран ин.яз.
-                	window.location.href = "?action=index&filter=foreign:" + selected.object_id;
+                	window.location.href = "?action=index&isArchive=1&filter=foreign:" + selected.object_id;
                 } else if(selected.type == 9) {
                     // выбран рецензент
-                	window.location.href = "?action=index&filter=recenz:" + selected.object_id;
+                	window.location.href = "?action=index&isArchive=1&filter=recenz:" + selected.object_id;
                 } else if(selected.type == 10) {
                     // выбрана оценка
-                	window.location.href = "?action=index&filter=mark:" + selected.object_id;
+                	window.location.href = "?action=index&isArchive=1&filter=mark:" + selected.object_id;
                 } else if(selected.type == 11) {
                     // выбран комментарий
-                	window.location.href = "?action=index&filter=comment:" + selected.object_id;
+                	window.location.href = "?action=index&isArchive=1&filter=comment:" + selected.object_id;
                 }
             }
         });
@@ -177,6 +177,9 @@
       		<td valign="top">
 				<p>
 					<input type="text" id="search" style="width: 96%; " placeholder="Поиск">
+				</p>
+				<p align="center">
+					<span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('group'); return false; " title="очистить фильтры"/></span>
 				</p>
 			</td>
 		</tr>

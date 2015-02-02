@@ -29,7 +29,7 @@
                             {$page->getAuthor()->getName()}
                         {/if}
                     </td>
-                    <td><a href="index.php?action=view&id={$page->getId()}" target="_blank">Просмотреть</a></td>
+                    <td><a href="admin.php?action=view&id={$page->getId()}" target="_blank">Просмотреть</a></td>
                 </tr>
             {/foreach}
         </table>
