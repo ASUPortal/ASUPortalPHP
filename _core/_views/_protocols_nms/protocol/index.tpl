@@ -12,7 +12,7 @@
                     <th width="16">&nbsp;</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("date_text", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("date_text", $objects->getFirstItem(), true)}</th>
                     <th>{CHtml::tableOrder("num", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("program_content", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("comment", $objects->getFirstItem())}</th>

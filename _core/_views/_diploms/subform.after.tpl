@@ -31,10 +31,10 @@
 </div>
 
 <div class="control-group">
-    {CHtml::activeLabel("order", $diplom)}
+    {CHtml::activeLabel("num_order", $diplom)}
     <div class="controls">
-        {CHtml::activeTextField("order", $diplom, "order")}
-        {CHtml::error("order", $diplom)}
+        {CHtml::activeTextField("num_order", $diplom, "order")}
+        {CHtml::error("num_order", $diplom)}
     </div>
 </div>
 

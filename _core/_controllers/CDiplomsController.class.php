@@ -26,7 +26,7 @@ class CDiplomsController extends CBaseController {
         $currentGroup = null;
         $query->select("diplom.*")
             ->from(TABLE_DIPLOMS." as diplom")
-			->order("diplom.dipl_name asc");
+			->order("diplom.date_act desc");
         $managersQuery = new CQuery();
         $managersQuery->select("person.*")
         	->from(TABLE_PERSON." as person")
