@@ -8,7 +8,7 @@
  */
 
 class CPublicPagesController extends CBaseController{
-    private $allowedAnonymous = array(
+    protected $allowedAnonymous = array(
         "view"
     );
     public function __construct() {
@@ -26,6 +26,8 @@ class CPublicPagesController extends CBaseController{
         $this->setPageTitle("Страницы портала кафедры АСУ");
 
         parent::__construct();
+    }
+    protected function onActionBeforeExecute() {
     }
     public function actionView() {
         $page = CPageManager::getPage(CRequest::getInt("id"));
