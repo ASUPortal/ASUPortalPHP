@@ -64,15 +64,6 @@ class CPagesController extends CBaseController{
         $this->setData("page", $page);
         $this->renderView("_pages/edit.tpl");
     }
-    public function actionView() {
-    	$page = CPageManager::getPage(CRequest::getInt("id"));
-    	$this->addJSInclude(JQUERY_UI_JS_PATH);
-    	$this->addCSSInclude(JQUERY_UI_CSS_PATH);
-    	$this->addCSSInclude("_modules/_redactor/redactor.css");
-    	$this->addJSInclude("_modules/_redactor/redactor.min.js");
-    	$this->setData("page", $page);
-    	$this->renderView("_pages/public.view.tpl");
-    }
     public function actionSearch() {
         $res = array();
         $term = CRequest::getString("query");
