@@ -96,9 +96,15 @@
 {foreach $form->commission->getDiplomsListByDate() as $date=>$diploms}
 	<h2>{$date|date_format:"%d.%m.%Y"} 
 		Номер распоряжения:
-		{$first = array_values($diploms)}
-		{$first = $first[0]}
-		{$first->num_order}
+		{$found = false}
+		{foreach $diploms as $diplom}
+			{if !$found}
+				{if $diplom->num_order != 0}
+					{$found = true}
+					{$diplom->num_order}
+				{/if}
+			{/if}
+		{/foreach}
     </h2>
 <table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
