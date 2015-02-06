@@ -1,11 +1,13 @@
 {extends file="_core.flow.tpl"}
 {block name="content"}
+{if !isset($multiple)}{$multiple = false}{/if}
 <div class="modal hide fade">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel">Выбор из списка</h3>
     </div>
     <div class="modal-body">
+        {$selectedFirst = false}
         {foreach $items->getItems() as $key=>$value}
             {if $multiple}
                 <label class="checkbox">
@@ -14,7 +16,7 @@
                 </label>
             {else}
                 <label class="radio">
-                    <input type="radio" value="{$key}" name="selected[]"/>
+                    <input type="radio" value="{$key}" name="selected[]" {if !$selectedFirst}checked{$selectedFirst = true}{/if}/>
                     {$value}
                 </label>
             {/if}
