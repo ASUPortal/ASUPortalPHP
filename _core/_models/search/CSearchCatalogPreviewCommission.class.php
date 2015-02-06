@@ -1,6 +1,6 @@
 <?php
 
-class CSearchCatalogPreviewCommission extends CComponent implements ISearchCatalogInterface{
+class CSearchCatalogPreviewCommission extends CAbstractSearchCatalog{
     public function actionTypeAhead($lookup)
     {
         $result = array();

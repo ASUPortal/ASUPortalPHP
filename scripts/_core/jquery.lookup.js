@@ -78,15 +78,15 @@
 
         // щелчок на элементе в диалоге
         this._onDialogRowClick = function(event){
-            if (!event.data._isMultiple) {
+            if (!this._isMultiple) {
                 // выбор не множественный снимаем все остальные выбиралки
-                var selected = jQuery(this).parents("table").find("input:checked");
+                var selected = jQuery(event.srcElement).parents("table").find("input:checked");
                 jQuery.each(selected, function(){
                     jQuery(this).attr("checked", false);
                 });
             }
             // выбираем чекбокс в текущей строке
-            var checkbox = jQuery(this).find("input[type=checkbox]");
+            var checkbox = jQuery(event.srcElement).parents("tr").find("input[type=checkbox]");
             jQuery(checkbox).attr("checked", true);
         };
 
@@ -279,13 +279,65 @@
             jQuery(dialog).modal("hide");
         };
 
-        // загрузка данных в диалог
-        this._onDialogShown = function(event){
-            this.parentObject = event.data;
-			var xhrData = this.parentObject._properties;
-			xhrData["action"] = "LookupViewData";
-			xhrData["catalog"] = this.parentObject._catalog;
-					
+        // данные для диалога с сервера получены
+        this._onDialogDataReceived = function(data){
+            // загружаем полученные данные
+            var container = jQuery(".modal-body", this._lookupDialog);
+            jQuery(container).empty();
+            var table = jQuery("<table/>",{
+                "class": "table table-hover table-condensed"
+            });
+            var body = jQuery("<tbody/>");
+            // для каждой полученной записи добавляем строку
+            var index = 1;
+            var parent = this;
+            jQuery.each(data, function(key, value){
+                var row = jQuery("<tr/>");
+                jQuery(row).css("cursor", "pointer");
+                jQuery(row).on("click", jQuery.proxy(parent._onDialogRowClick, parent));
+                jQuery(row).appendTo(body);
+
+                var selectColumn = jQuery("<td/>");
+                var selector = jQuery("<input/>", {
+                    "type": "checkbox",
+                    "value": key
+                });
+                jQuery(selector).appendTo(selectColumn);
+
+                var number = jQuery("<td/>", {
+                    "text": index++
+                });
+                var dataRow = jQuery("<td/>", {
+                    "text": value
+                });
+
+                jQuery(selectColumn).appendTo(row);
+                jQuery(number).appendTo(row);
+                jQuery(dataRow).appendTo(row);
+
+                jQuery(row).appendTo(body);
+            });
+            jQuery(body).appendTo(table);
+            jQuery(table).appendTo(container);
+        };
+
+        // обновление диалога при смене параметров
+        this._onPropertiesChange = function(event){
+            // покажем загрузчик в диалоге
+            var place = jQuery(".modal-body", this._lookupDialog);
+            jQuery(place).html('<div style="text-align: center;"><img src="' + web_root + 'images/loader.gif"></div>');
+            // получим выбранные параметры
+            var params = new Array();
+            jQuery.each(jQuery(".modal-properties-box input:checked", this._lookupDialog), function(key, item){
+                params[params.length] = jQuery(item).val();
+            });
+            // отправим запрос на сервер вместе с параметрами
+            var xhrData = this._properties;
+            xhrData["action"] = "LookupViewData";
+            xhrData["catalog"] = this._catalog;
+            xhrData["properties"] = params;
+
+            var that = this;
             jQuery.ajax({
                 cache: false,
                 url: web_root + "_modules/_search/",
@@ -293,45 +345,48 @@
                 data: xhrData,
                 context: this,
                 success: function(data){
-                    var parentObject = this.parentObject;
-                    // загружаем полученные данные
-                    // var container = jQuery(".modal-body", this);
-                    var container = jQuery(".modal-body", this._lookupDialog);
+                    this._onDialogDataReceived(data);
+                }
+            });
+        };
+
+        // загрузка параметров каталога в диалог
+        this._onDialogShown = function(event){
+            this.parentObject = event.data;
+            /**
+             * поменяем местами запросы. сначала делаем запрос
+             * на получение параметров каталога
+             */
+            jQuery.ajax({
+                cache: false,
+                url: web_root + "_modules/_search/",
+                dataType: "json",
+                data:  {
+                    action: "LookupGetCatalogProperties",
+                    catalog: this.parentObject._catalog
+                },
+                context: this,
+                success: function(properties){
+                    // загружаем параметры каталога в выбиратор
+                    var parent = this.parentObject;
+                    var container = jQuery(".modal-properties-box", this._lookupDialog);
                     jQuery(container).empty();
-                    var table = jQuery("<table/>",{
-                        "class": "table table-hover table-condensed"
-                    });
-                    var body = jQuery("<tbody/>");
-                    // для каждой полученной записи добавляем строку
-                    var index = 1;
-                    jQuery.each(data, function(key, value){
-                        var row = jQuery("<tr/>");
-                        jQuery(row).css("cursor", "pointer");
-                        jQuery(row).on("click", parentObject, parentObject._onDialogRowClick);
-                        jQuery(row).appendTo(body);
-
-                        var selectColumn = jQuery("<td/>");
-                        var selector = jQuery("<input/>", {
+                    jQuery.each(properties, function(key, property){
+                        var wrapper = jQuery("<label/>", {
+                            "class": "checkbox inline"
+                        }).text(property.label);
+                        var checker = jQuery("<input/>", {
                             "type": "checkbox",
-                            "value": key
+                            "value": property.key,
+                            "checked": property.checked
                         });
-                        jQuery(selector).appendTo(selectColumn);
-
-                        var number = jQuery("<td/>", {
-                            "text": index++
-                        });
-                        var dataRow = jQuery("<td/>", {
-                            "text": value
-                        });
-
-                        jQuery(selectColumn).appendTo(row);
-                        jQuery(number).appendTo(row);
-                        jQuery(dataRow).appendTo(row);
-
-                        jQuery(row).appendTo(body);
+                        jQuery(checker).appendTo(wrapper);
+                        jQuery(wrapper).appendTo(container);
+                        // вешаем обновление содержимого при нажатии на галку
+                        jQuery(checker).on("change", jQuery.proxy(parent._onPropertiesChange, parent));
                     });
-                    jQuery(body).appendTo(table);
-                    jQuery(table).appendTo(container);
+                    // загружаем данные в соответствии с нажатыми галочками
+                    jQuery.proxy(parent._onPropertiesChange(), parent);
                 }
             });
         };

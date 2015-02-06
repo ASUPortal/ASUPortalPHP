@@ -225,25 +225,35 @@ class CSearchController extends CBaseController{
      * @return ISearchCatalogInterface
      * @throws Exception
      */
-    private function searchObjectsFactory($catalog) {
+    private function searchObjectsFactory($catalog, $properties = array()) {
         if ($catalog == "staff") {
-            return new CSearchCatalogStaff(array());
+            return new CSearchCatalogStaff(array(
+                "properties" => $properties
+            ));
         } elseif ($catalog == "student") {
-            return new CSearchCatalogStudent(array());
+            return new CSearchCatalogStudent(array(
+                "properties" => $properties
+            ));
         } elseif ($catalog == "studentgroup") {
-            return new CSearchCatalogStudentGroup(array());
+            return new CSearchCatalogStudentGroup(array(
+                "properties" => $properties
+            ));
         } elseif ($catalog == "sab_commissions") {
             return new CSearchCatalogSABCommission(array());
         } elseif (CUtils::strLeft($catalog, ".") == "class") {
             $class = CUtils::strRight($catalog, ".");
-            return new $class(array());
+            return new $class(array(
+                "properties" => $properties
+            ));
         } elseif (!is_null(CTaxonomyManager::getTaxonomy($catalog))) {
             return new CSearchCatalogTaxonomy(array(
-                "taxonomy" => $catalog
+                "taxonomy" => $catalog,
+                "properties" => $properties
             ));
         } elseif (!is_null(CTaxonomyManager::getLegacyTaxonomy($catalog))) {
             return new CSearchCatalogTaxonomyLegacy(array(
-                "taxonomy" => $catalog
+                "taxonomy" => $catalog,
+                "properties" => $properties
             ));
         } else {
             throw new Exception("Не могу найти каталог для поиска ".$catalog);
@@ -271,10 +281,32 @@ class CSearchController extends CBaseController{
         $this->setData("allowCreation", CRequest::getString("allowCreation"));
         $this->renderView("_search/subform.lookupdialog.tpl");
     }
+    public function actionLookupGetCatalogProperties() {
+        $catalog = CRequest::getString("catalog");
+        $obj = $this->searchObjectsFactory($catalog);
+
+        $properties = array();
+        foreach ($obj->actionGetCatalogProperties() as $key=>$value) {
+            $property = array(
+                "key" => $key,
+                "label" => $value,
+                "checked" => false
+            );
+            $properties[$key] = $property;
+        }
+        foreach ($obj->actionGetDefaultCatalogProperties() as $value) {
+            if (array_key_exists($value, $properties)) {
+                $properties[$value]["checked"] = true;
+            }
+        }
+        echo json_encode($properties);
+    }
     public function actionLookupViewData() {
         $catalog = CRequest::getString("catalog");
+        $properties = CRequest::getArray("properties");
+        $properties = array_unique($properties);
 
-        $obj = $this->searchObjectsFactory($catalog);
+        $obj = $this->searchObjectsFactory($catalog, $properties);
         $result = $obj->actionGetViewData();
 
         echo json_encode($result);

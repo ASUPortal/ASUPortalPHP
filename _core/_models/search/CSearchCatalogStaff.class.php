@@ -7,7 +7,42 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class CSearchCatalogStaff extends CComponent implements ISearchCatalogInterface{
+class CSearchCatalogStaff extends CAbstractSearchCatalog{
+    public function actionGetCatalogProperties()
+    {
+        $properties = array();
+        $taxonomy = CTaxonomyManager::getLegacyTaxonomy("person_types");
+        /**
+         * @var $term CTerm
+         */
+        $properties["order"] = "С действующим приказом";
+        foreach ($taxonomy->getTerms()->getItems() as $term) {
+            $properties[$term->getId()] = $term->getValue();
+        }
+        return $properties;
+    }
+
+    public function actionGetDefaultCatalogProperties()
+    {
+        $properties = array();
+        $taxonomy = CTaxonomyManager::getLegacyTaxonomy("person_types");
+        /**
+         * @var $term CTerm
+         */
+        foreach ($taxonomy->getTerms()->getItems() as $term) {
+            if ($term->getValue() == TYPE_PPS) {
+                $properties[] = $term->getId();
+            } elseif ($term->getValue() == "учебно-вспомогательный персонал") {
+                $properties[] = $term->getId();
+            } elseif ($term->getValue() == "аспирант") {
+                $properties[] = $term->getId();
+            }
+        }
+        $properties[] = "order";
+        return $properties;
+    }
+
+
     public function actionTypeAhead($lookup)
     {
         $result = array();
@@ -38,8 +73,37 @@ class CSearchCatalogStaff extends CComponent implements ISearchCatalogInterface{
     {
         $result = array();
         // выбор сотрудников
-        foreach (CStaffManager::getAllPersons()->getItems() as $person) {
-            $result[$person->getId()] = $person->getName();
+        $withOrder = false;
+        if (in_array("order", $this->properties)) {
+            $withOrder = true;
+            unset($this->properties[array_search("order", $this->properties)]);
+        }
+        // если ничего не выбрано, то выдаем всех
+        $personsArray = array();
+        if (count($this->properties) == 0) {
+            foreach (CStaffManager::getAllPersons()->getItems() as $person) {
+                $result[$person->getId()] = $person->getName();
+                $personsArray[] = $person;
+            }
+        } else {
+            $types = new CArrayList();
+            foreach ($this->properties as $type) {
+                $types->add($type, $type);
+            }
+            foreach (CStaffManager::getPersonsWithTypes($types)->getItems() as $person) {
+                $result[$person->getId()] = $person->getName();
+                $personsArray[] = $person;
+            }
+        }
+        if ($withOrder) {
+            /**
+             * @var $person CPerson
+             */
+            foreach ($personsArray as $person) {
+                if (!$person->hasActiveOrder()) {
+                    unset($result[$person->getId()]);
+                }
+            }
         }
         return $result;
     }
