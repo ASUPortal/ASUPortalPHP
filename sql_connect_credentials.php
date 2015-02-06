@@ -5,16 +5,13 @@
  * но и кучу всякого разного хлама, которого по логике названия там быть не должно
  */
 
-$sql_host='localhost';
-$sql_base='asu';
+$sql_host = getenv("DB_HOST");
+$sql_base = getenv("DB_NAME");
 
-$sql_login='root';
-$sql_passw='';
+$sql_login = getenv("DB_USER");
+$sql_passw = getenv("DB_PASS");
 
-//$sql_login='root';
-//$sql_passw='';
-
-$sql_stats_base = 'stats';
-$sql_stats_login = 'root';
-$sql_stats_passw = '';
-$sql_stats_host = 'localhost';
+$sql_stats_base = getenv("DB_NAME_STATS");
+$sql_stats_login = getenv("DB_USER");
+$sql_stats_passw = getenv("DB_PASS");
+$sql_stats_host = getenv("DB_HOST");
