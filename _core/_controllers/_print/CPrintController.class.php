@@ -72,108 +72,7 @@ class CPrintController extends CFlowController {
              * Это место для экспериментов и написания отладочного кода
              */
             $value = array();
-            $reviewers = new CArrayList();
-            $diploms = new CArrayList();
-            /**
-             * Здесь групповая печать, ходим кругами
-            */
-            foreach ($diploms->getItems() as $spec) {
-            	/**
-            	 * Получаем все дипломы, которые защищаются по выбранной
-            	 * специальности
-            	 */
-            	foreach ($spec->diploms->getItems() as $diplom) {
-            		$diploms->add($diplom->getId(), $diplom);
-            	}
-            	/**
-            	 * Теперь собираем всех рецензентов в один массив.
-            	 * К каждому рецензенту прицепляем дипломы, которые он
-            	 * рецензировал
-            	 */
-            	foreach ($diploms->getItems() as $diplom) {
-            		/**
-            		 * Консультант
-            		 */
-            		if (!is_null($diplom->person)) {
-            			$reviewer = $diplom->person;
-            			$reviewerArr = new CArrayList();
-            			if ($reviewers->hasElement($reviewer->getId())) {
-            				$reviewerArr = $reviewers->getItem($reviewer->getId());
-            			}
-            			$reviewerArr->add($diplom->getId(), $diplom);
-            			$reviewers->add($reviewer->getId(), $reviewerArr);
-            		}
-            	}
-            }
-            /**
-             * Теперь выводим это в окончательный массив
-             */
-            $reviewerIndex = 0;
-            foreach ($reviewers->getItems() as $reviewerId=>$diploms) {
-            	$reviewerIndex++;
-            	$isFirst = true;
-            	foreach ($diploms->getItems() as $diplom) {
-            		$dataRow = array();
-            		/**
-            		 * Для начала заполним результирующий массив пустыми строками
-            		*/
-            		for ($i = 0; $i <= 4; $i++) {
-            			$dataRow[$i] = "";
-            		}
-            		/**
-            		 * Фамилия и инициалы дипломника
-            		 */
-            		$dataRow[0] = "";
-            		$dataRow[1] = "";
-            		if (!is_null($diplom->student)) {
-            			$student = $diplom->student;
-            			$nv = "";
-            			/**
-            			 * ФИО
-            			 */
-            			$nv = $student->getName();
-            			$dataRow[1] = $nv;
-            		}
-            		$dataRow[2] = "";
-            		if (!is_null($diplom->student)) {
-            			if (!is_null($diplom->student->getGroup())) {
-            			$group = $diplom->student->getGroup()->getName();
-            			$dataRow[2] = $group;
-            			}
-            		}
-            		$dataRow[3] = "";
-					$theme = $diplom->dipl_name;
-					$dataRow[3] = $theme;
-					$dataRow[4] = "";
-					$prepod = CStaffManager::getPerson($reviewerId);
-					if (!is_null($prepod)) {
-						$nv = "";
-						$nv = $prepod->getName();
-						/**
-						 * Степень
-						*/
-						if (!is_null($prepod->degree)) {
-							$nv .= ", ".$prepod->degree->getValue();
-						}
-						/**
-						 * Звание
-						 */
-						if (!is_null($prepod->title)) {
-							$nv .= ", ".$prepod->title->getValue();
-						}
-						$dataRow[4] = $nv;
-					}
-            		$value[] = $dataRow;
-            	}
-            }
-            $value = "_____";
-            $plan = CIndPlanManager::getLoad(CRequest::getInt("plan"));
-            if (!is_null($plan->year)) {
-                $value = $plan->year->name;
-            }
-
-            var_dump($plan->year->name);
-            // $this->debugTable($value);
+            $this->debugTable($value);
         }
         /**
          * Еще один вариант. Надеюсь, этот заработает нормально
@@ -192,6 +91,26 @@ class CPrintController extends CFlowController {
                     foreach ($descriptors as $node) {
                         $xml = $this->processNode($node, $field, $object, $form);
                     }
+                }
+            } elseif (mb_strpos($fieldName, ".class") !== false) {
+                /**
+                 * Это новый описатель, параметры которого хранятся в отдельном классе
+                 */
+                $classFieldName = CUtils::strLeft($fieldName, ".class");
+                /**
+                 * @var $classField IPrintClassField
+                 */
+                $classField = new $classFieldName();
+                if (!is_a($classField, "IPrintClassField")) {
+                    throw new Exception("Класс ".$classField." не реализует интерфейс IPrintClassField");
+                }
+                /**
+                 * Дабы не ломать уже имеющуюся структуру работать будем через
+                 * класс-адаптер
+                 */
+                $adapter = new CPrintClassFieldToFieldAdapter($classField, $object);
+                foreach ($descriptors as $node) {
+                    $xml = $this->processNode($node, $adapter, $object, $form);
                 }
             }
         }
