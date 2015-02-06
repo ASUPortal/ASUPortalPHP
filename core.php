@@ -58,9 +58,30 @@
     );
     /**
      * Сделаем небольшую оптимизацию для загрузки классов
+     * Это еще более новая версия, с рекурсивной загружалкой
      */
     global $classAutoloadMapping;
     $classAutoloadMapping = array();
+
+    function scanFolderForClasses($folder, &$import) {
+        global $classAutoloadMapping;
+
+        $folderHandler = opendir($folder);
+        while (false !== ($file = readdir($folderHandler))) {
+            if ($file != "." && $file != "..") {
+                if (is_dir($folder.CORE_DS.$file)) {
+                    $import[] = $folder.CORE_DS.$file;
+                    scanFolderForClasses($folder.CORE_DS.$file, $import);
+                } elseif (is_file($folder.CORE_DS.$file)) {
+                    $filename = $folder.CORE_DS.$file;
+                    if (mb_substr($file, mb_strlen($file) - 10) == ".class.php") {
+                        $className = mb_substr($file, 0, mb_strlen($file) - 10);
+                        $classAutoloadMapping[$className] = $filename;
+                    }
+                }
+            }
+        }
+    }
     /**
      * Добавляем подпапки
      */
@@ -70,20 +91,7 @@
         "_framework" => CORE_CWD.CORE_DS.'_core'.CORE_DS.'_framework',
     );
     foreach ($subfoldersToLoad as $folder) {
-        $modelsDir = opendir($folder);
-        while (false !== ($dir = readdir($modelsDir))) {
-            if ($dir != "." && $dir != "..") {
-                if (is_dir($folder.CORE_DS.$dir)) {
-                    $import[] = $folder.CORE_DS.$dir.CORE_DS;
-                } else if (is_file($folder.CORE_DS.$dir)) {
-                    $filename = $folder.CORE_DS.$dir;
-                    if (mb_substr($filename, mb_strlen($filename) - 10) == ".class.php") {
-                        $className = mb_substr($filename, 0, mb_strlen($filename) - 10);
-                        $classAutoloadMapping[$className] = $filename;
-                    }
-                }
-            }
-        }
+        scanFolderForClasses($folder, $import);
     }
     /**
      * Конфигурация всего приложения
