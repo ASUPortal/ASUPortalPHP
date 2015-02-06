@@ -51,7 +51,27 @@ class CIndPlanLoadController extends CBaseController{
     }
     public function actionView() {
         $person = CStaffManager::getPerson(CRequest::getInt("id"));
-
+        /**
+         * Формируем меню
+         */
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "load.php?action=index",
+                "icon" => "actions/edit-undo.png"
+            ),
+            array(
+                "title" => "Добавить",
+                "link" => "load.php?action=add&id=".$person->getId(),
+                "icon" => "actions/list-add.png"
+            ),
+            array(
+                "title" => "Печать по шаблону",
+                "link" => "#",
+                "icon" => "devices/printer.png",
+                "template" => "formset_individual_plan"
+            )
+        ));
         $this->setData("person", $person);
         $this->renderView("_individual_plan/load/view.tpl");
     }
