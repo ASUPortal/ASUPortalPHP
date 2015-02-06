@@ -29,5 +29,6 @@ images/lects/*
 .vagrant
 vagrant
 tmp/beans/*
+!tmp/beans/index.html
 
 sql_connect_credentials.php
