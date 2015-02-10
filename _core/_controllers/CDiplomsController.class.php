@@ -191,8 +191,10 @@ class CDiplomsController extends CBaseController {
 			}
         }
         else {
-        	$query->condition("diplom.kadri_id = ".CSession::getCurrentPerson()->getId());
-        	 
+        	if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY or
+        		CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
+        			$query->condition("diplom.kadri_id = ".CSession::getCurrentPerson()->getId());
+        	}
         }
         foreach ($set->getPaginated()->getItems() as $item) {
             $diplom = new CDiplom($item);
