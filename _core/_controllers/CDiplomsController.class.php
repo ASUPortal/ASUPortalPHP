@@ -296,12 +296,12 @@ class CDiplomsController extends CBaseController {
 			$person = new CPerson(new CActiveRecord($ar));
 			$managers[$person->getId()] = $person->getName();
 		}
-		/*$studentGroups = array();
+		$studentGroups = array();
 		foreach ($groupsQuery->execute()->getItems() as $ar) {
 			$group = new CStudentGroup(new CActiveRecord($ar));
 			$studentGroups[$group->getId()] = $group->getName();
-		}*/
-		$studentGroups = new CStudentGroup();
+		}
+		//$studentGroups = new CStudentGroup();
 		$this->setData("isArchive", $isArchive);
 		$this->setData("isApprove", $isApprove);
 		$this->setData("studentGroups", $studentGroups);
