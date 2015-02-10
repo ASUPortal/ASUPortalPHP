@@ -39,11 +39,6 @@ class CDiplomsController extends CBaseController {
         	->innerJoin(TABLE_STUDENTS." as student", "stgroup.id = student.group_id")
         	->innerJoin(TABLE_DIPLOMS." as diplom", "student.id =  diplom.student_id");
         $set->setQuery($query);
-        $isApprove = (CRequest::getString("isApprove") == "1");
-        $isArchive = (CRequest::getString("isArchive") == "1");
-        if (!$isArchive) {
-        	$query->condition('diplom.date_act between "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_start)).'" and "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_end)).'"');
-        }
         if (CRequest::getString("order") == "st_group.name") {
         	$direction = "asc";
         	if (CRequest::getString("direction") != "") {
@@ -187,6 +182,18 @@ class CDiplomsController extends CBaseController {
         }
         // получение дипломных тем
         $diploms = new CArrayList();
+        $isApprove = (CRequest::getString("isApprove") == "1");
+        $isArchive = (CRequest::getString("isArchive") == "1");
+        if (!$isArchive) {
+        	if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY or
+        		CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
+        			$query->condition('diplom.kadri_id = "'.CSession::getCurrentPerson()->getId().'" and diplom.date_act between "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_start)).'" and "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_end)).'"');
+			}
+        }
+        else {
+        	$query->condition("diplom.kadri_id = ".CSession::getCurrentPerson()->getId());
+        	 
+        }
         foreach ($set->getPaginated()->getItems() as $item) {
             $diplom = new CDiplom($item);
             $diploms->add($diplom->getId(), $diplom);
@@ -294,6 +301,7 @@ class CDiplomsController extends CBaseController {
 			$group = new CStudentGroup(new CActiveRecord($ar));
 			$studentGroups[$group->getId()] = $group->getName();
 		}
+		//$studentGroups = new CStudentGroup();
 		$this->setData("isArchive", $isArchive);
 		$this->setData("isApprove", $isApprove);
 		$this->setData("studentGroups", $studentGroups);
