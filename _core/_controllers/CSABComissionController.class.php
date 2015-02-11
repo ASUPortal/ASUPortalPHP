@@ -95,6 +95,15 @@ class CSABComissionController extends CBaseController {
         ));
         $this->renderView("_state_attestation/add.tpl");
     }
+    public static function studentByProtocolSorter(CDiplom $first, CDiplom $second) {
+    	if ($first->protocol == $second->protocol) {
+    		return 0;
+    	}
+    	if ($first->protocol > $second->protocol) {
+    		return 1;
+    	}
+    	return -1;
+    }
     public function actionSave() {
         $form = new CSABCommissionForm();
         $form->setAttributes(CRequest::getArray($form::getClassName()));

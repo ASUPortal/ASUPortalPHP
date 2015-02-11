@@ -6,7 +6,7 @@
  * Time: 15:28
  */
 
-class CDocumentFoldersLookup implements ISearchCatalogInterface{
+class CDocumentFoldersLookup extends CAbstractSearchCatalog{
 
     public function actionTypeAhead($lookup)
     {

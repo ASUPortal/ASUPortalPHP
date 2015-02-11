@@ -1,7 +1,7 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-    <h2>Комиссии по защите дипломов</h2>
+    <h2>Комиссии по защите ВКР</h2>
 
     {CHtml::helpForCurrentPage()}
 
@@ -89,7 +89,7 @@
                 }
             });
             jQuery("#selectAll").change(function(){
-                var items = jQuery("input[name=selectedDoc]")
+            	var items = jQuery("input[name='selectedDoc[]']")
                 for (var i = 0; i < items.length; i++) {
                     items[i].checked = this.checked;
                 }
@@ -155,7 +155,7 @@
                     </ul>
                 </td>
                 <td>
-                    <input type="checkbox" value="{$commission->getId()}" name="selectedDoc">
+                    <input type="checkbox" value="{$commission->getId()}" name="selectedDoc[]">
                 </td>
             </tr>
         {/foreach}

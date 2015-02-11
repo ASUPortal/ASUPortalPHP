@@ -178,7 +178,7 @@
             jQuery.each(properties, function(key, value){
                 if (jQuery(value).attr("value") == "selectedInView") {
                     var selectedItems = new Array();
-                    jQuery.each(jQuery("input[name='selectedDoc']:checked"), function(key, value){
+                    jQuery.each(jQuery("input[name='selectedDoc[]']:checked"), function(key, value){
                         selectedItems.push(jQuery(value).val());
                     });
                     beanData[jQuery(value).attr("name")] = selectedItems.join(":");

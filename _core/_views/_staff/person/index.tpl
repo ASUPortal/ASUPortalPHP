@@ -10,7 +10,7 @@
     <script>
         jQuery(document).ready(function(){
             jQuery("#selectAll").change(function(){
-                var items = jQuery("input[name=selectedDoc]")
+				var items = jQuery("input[name='selectedDoc[]']")
                 for (var i = 0; i < items.length; i++) {
                     items[i].checked = this.checked;
                 }
@@ -47,7 +47,7 @@
                     {/foreach}
                 </td>
                 <td>
-                    <input type="checkbox" value="{$person->getId()}" name="selectedDoc">
+                    <input type="checkbox" value="{$person->getId()}" name="selectedDoc[]">
                 </td>
             </tr>
         {/foreach}

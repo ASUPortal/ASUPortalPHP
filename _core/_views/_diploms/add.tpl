@@ -1,7 +1,7 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-    <h2>Добавление дипломной темы</h2>
+    <h2>Добавление темы ВКР</h2>
 
     {CHtml::helpForCurrentPage()}
 

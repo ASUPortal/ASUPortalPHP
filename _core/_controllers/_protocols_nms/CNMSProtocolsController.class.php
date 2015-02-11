@@ -17,12 +17,19 @@ class CNMSProtocolsController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
+        $set = new CRecordSet(false);
         $query = new CQuery();
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_NMS_PROTOCOL." as t")
             ->order("t.id desc");
+        if (CRequest::getString("order") == "date_text") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") == "desc") {
+        		$direction = "desc";
+        	}
+        	$query->order('STR_TO_DATE(date_text, "%d.%m.%Y") '.$direction);
+        }
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CNMSProtocol($ar);

@@ -29,7 +29,7 @@ class CPagesController extends CBaseController{
         $query = new CQuery();
         $query->select("page.*")
             ->from(TABLE_PAGES." as page")
-            ->order("page.title asc");
+            ->order("page.type_id asc");
         $pages = new CArrayList();
         $set->setQuery($query);
         if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY or
@@ -93,7 +93,7 @@ class CPagesController extends CBaseController{
     public function actionDelete() {
         $page = CPageManager::getPage(CRequest::getInt("id"));
         $page->remove();
-        $this->redirect("admin.php?aciton=index");
+        $this->redirect("admin.php?action=index");
     }
     public function actionSave() {
         $page = new CPage();

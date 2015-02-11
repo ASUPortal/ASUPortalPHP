@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class CSearchCatalogUsers implements ISearchCatalogInterface{
+class CSearchCatalogUsers extends CAbstractSearchCatalog{
     public function actionTypeAhead($lookup)
     {
         $result = array();

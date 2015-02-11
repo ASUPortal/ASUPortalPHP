@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class CSearchCatalogProtocolOpinion implements ISearchCatalogInterface {
+class CSearchCatalogProtocolOpinion extends  CAbstractSearchCatalog {
     public function actionTypeAhead($lookup)
     {
         $result = array();

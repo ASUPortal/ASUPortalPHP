@@ -72,15 +72,7 @@ class CPrintController extends CFlowController {
              * Это место для экспериментов и написания отладочного кода
              */
             $value = array();
-
-            $value = "_____";
-            $plan = CIndPlanManager::getLoad(CRequest::getInt("plan"));
-            if (!is_null($plan->year)) {
-                $value = $plan->year->name;
-            }
-
-            var_dump($plan->year->name);
-            // $this->debugTable($value);
+            $this->debugTable($value);
         }
         /**
          * Еще один вариант. Надеюсь, этот заработает нормально
@@ -99,6 +91,26 @@ class CPrintController extends CFlowController {
                     foreach ($descriptors as $node) {
                         $xml = $this->processNode($node, $field, $object, $form);
                     }
+                }
+            } elseif (mb_strpos($fieldName, ".class") !== false) {
+                /**
+                 * Это новый описатель, параметры которого хранятся в отдельном классе
+                 */
+                $classFieldName = CUtils::strLeft($fieldName, ".class");
+                /**
+                 * @var $classField IPrintClassField
+                 */
+                $classField = new $classFieldName();
+                if (!is_a($classField, "IPrintClassField")) {
+                    throw new Exception("Класс ".$classField." не реализует интерфейс IPrintClassField");
+                }
+                /**
+                 * Дабы не ломать уже имеющуюся структуру работать будем через
+                 * класс-адаптер
+                 */
+                $adapter = new CPrintClassFieldToFieldAdapter($classField, $object);
+                foreach ($descriptors as $node) {
+                    $xml = $this->processNode($node, $adapter, $object, $form);
                 }
             }
         }

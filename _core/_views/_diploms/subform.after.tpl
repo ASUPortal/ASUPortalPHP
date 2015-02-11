@@ -23,6 +23,22 @@
 </div>
 
 <div class="control-group">
+    {CHtml::activeLabel("protocol", $diplom)}
+    <div class="controls">
+        {CHtml::activeTextField("protocol", $diplom, "protocol")}
+        {CHtml::error("protocol", $diplom)}
+    </div>
+</div>
+
+<div class="control-group">
+    {CHtml::activeLabel("num_order", $diplom)}
+    <div class="controls">
+        {CHtml::activeTextField("num_order", $diplom, "order")}
+        {CHtml::error("num_order", $diplom)}
+    </div>
+</div>
+
+<div class="control-group">
     {CHtml::activeLabel("aspire_recomendation", $diplom)}
     <div class="controls">
         {CHtml::activeCheckBox("aspire_recomendation", $diplom)}

@@ -31,3 +31,11 @@
             Описатели полей
         </center></a>
 </p>
+
+<p>
+    <a href="classFields.php?action=index">
+        <center>
+            <img src="{$web_root}images/{$icon_theme}/32x32/apps/preferences-desktop-remote-desktop.png"><br>
+            Класс-описатели полей
+        </center></a>
+</p>

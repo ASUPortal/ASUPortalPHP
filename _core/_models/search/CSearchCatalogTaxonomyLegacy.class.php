@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class CSearchCatalogTaxonomyLegacy extends CComponent implements ISearchCatalogInterface {
+class CSearchCatalogTaxonomyLegacy extends CAbstractSearchCatalog {
     public $taxonomy;
 
     public function actionTypeAhead($lookup)
