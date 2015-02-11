@@ -45,6 +45,11 @@ class CFlowController extends CBaseController{
         // передаем управление другому объекту
         $controllerClass = CRequest::getString("targetClass");
         $controllerMethod = "action".CRequest::getString("targetMethod");
+
+        // если не указано хотябы одно, то это конец
+        if ($controllerClass == "" || $controllerMethod == "") {
+            return true;
+        }
         self::$_alreadyInstantiated = true;
         self::$_useFlowController = true;
 
@@ -79,11 +84,9 @@ class CFlowController extends CBaseController{
      * @param bool $multiple
      */
     public function showPickList(CArrayList $items, $targetClass, $targetMethod, $multiple = false) {
-        $this->setData("targetClass", $targetClass);
-        $this->setData("targetMethod", $targetMethod);
         $this->setData("multiple", $multiple);
         $this->setData("items", $items);
-        $this->renderView("_flow/pickList.tpl");
+        $this->renderView("_flow/pickList.tpl", $targetClass, $targetMethod);
     }
 
     /**
@@ -144,12 +147,8 @@ class CFlowController extends CBaseController{
      * @param $targetMethod
      */
     public function renderView($view, $targetClass = "", $targetMethod = "") {
-        if ($targetClass != "") {
-            $this->setData("targetClass", $targetClass);
-        }
-        if ($targetMethod != "") {
-            $this->setData("targetMethod", $targetMethod);
-        }
+        $this->setData("targetClass", $targetClass);
+        $this->setData("targetMethod", $targetMethod);
         CApp::getApp()->beans->serializeBean(self::getStatefullBean());
         $this->setData("beanId", self::getStatefullBean()->getBeanId());
 
