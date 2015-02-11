@@ -45,6 +45,22 @@ class CIndPlanLoadController extends CBaseController{
             $persons->add($person->getId(), $person);
         }
 
+        $this->addActionsMenuItem(
+            array(
+                array(
+                    "title" => "Назад",
+                    "link" => "index.php",
+                    "icon" => "actions/edit-undo.png"
+                ),
+                array(
+                    "title" => "Печать по шаблону",
+                    "link" => "#",
+                    "icon" => "devices/printer.png",
+                    "template" => "formset_ind_plan_view"
+                )
+            )
+        );
+
         $this->setData("paginator", $set->getPaginator());
         $this->setData("persons", $persons);
         $this->renderView("_individual_plan/load/index.tpl");

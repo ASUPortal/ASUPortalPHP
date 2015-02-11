@@ -10,9 +10,21 @@
             Нет документов для отображения
         </div>
     {else}
+        <script>
+            jQuery(document).ready(function(){
+                jQuery("#selectAll").change(function(){
+                    var items = jQuery("input[name='selectedDoc[]']")
+                    for (var i = 0; i < items.length; i++) {
+                        items[i].checked = this.checked;
+                    }
+                });
+            });
+        </script>
+
         <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
                 <th>#</th>
+                <th><input type="checkbox" id="selectAll"></th>
                 <th>{CHtml::tableOrder("fio", $persons->getFirstItem())}</th>
                 <th>Год</th>
             </tr>
@@ -20,6 +32,9 @@
             {foreach $persons->getItems() as $person}
             <tr>
                 <td rowspan="{$person->getIndPlansByYears()->getCount() + 1}">{counter}</td>
+                <td rowspan="{$person->getIndPlansByYears()->getCount() + 1}">
+                    <input type="checkbox" value="{$person->getId()}" name="selectedDoc[]">
+                </td>
                 <td rowspan="{$person->getIndPlansByYears()->getCount() + 1}">
                     <a href="load.php?action=view&id={$person->getId()}">
                         {$person->fio}
@@ -48,5 +63,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_individual_plan/load/index.right.tpl"}
+    {include file="_individual_plan/load/common.right.tpl"}
 {/block}
