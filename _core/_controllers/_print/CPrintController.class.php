@@ -474,6 +474,7 @@ class CPrintController extends CFlowController {
             foreach ($formset->forms->getItems() as $form) {
                 $forms->add($form->getId(), $form->title);
             }
+
             $this->showPickList($forms, get_class($this), "PrePrintWithTemplate");
         }
     }
