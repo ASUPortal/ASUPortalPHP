@@ -14,8 +14,8 @@
 class CArrayList {
     private $_items;
 
-    public function __construct() {
-        $this->_items = array();
+    public function __construct($array = array()) {
+        $this->_items = $array;
     }
 
     public function add($key, $val) {
