@@ -7,6 +7,11 @@
  * To change this template use File | Settings | File Templates.
  */
 
+/**
+ * Class CIndPlanPersonLoad
+ *
+ * @property CPerson person
+ */
 class CIndPlanPersonLoad extends CActiveModel{
     protected $_table = TABLE_IND_PLAN_LOADS;
     protected $_person = null;
