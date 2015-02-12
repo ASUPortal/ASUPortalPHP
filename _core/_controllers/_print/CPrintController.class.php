@@ -514,8 +514,11 @@ class CPrintController extends CFlowController {
     public function actionPrintWithBeanData() {
         $url = WEB_ROOT."_modules/_print/?action=print";
         foreach (self::getStatefullBean()->getItems() as $key=>$value) {
-            $url .= "&".$key."=".$value;
+            if (!is_object($value)) {
+                $url .= "&".$key."=".$value;
+            }
         }
+        $url .= "&beanId=".self::getStatefullBean()->getBeanId();
         $this->redirect($url);
     }
 }
