@@ -64,6 +64,9 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
          */
         foreach ($targetPlans->getItems() as $plan) {
             $row = array();
+            if (array_key_exists($plan->person_id, $result)) {
+                $row = $result[$plan->person_id];
+            }
             $row[0] = "АСУ";
             $row[1] = count($result) + 1;
             $row[2] = "";
@@ -82,7 +85,10 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
             if (!is_null($plan->person)) {
                 $row[4] = $plan->person->fio_short;
             }
-            $row[5] = 0; // план на семестр
+            // план на семестр
+            if (!array_key_exists(5, $row)) {
+                $row[5] = 0;
+            }
             $preparedData = array();
             $table = $plan->getStudyLoadTable()->getTable();
             foreach ($table as $r) {
@@ -102,12 +108,10 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
             if (in_array($month, array(
                 2, 3, 4, 5, 6
             ))) {
-                $row[5] = 0;
                 foreach ($preparedData as $preparedRow) {
                     $row[5] += $preparedRow[1];
                 }
             } else {
-                $row[5] = 0;
                 foreach ($preparedData as $preparedRow) {
                     $row[5] += $preparedRow[8];
                 }
@@ -131,16 +135,20 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
                 21 => -1
             );
             foreach ($rows as $target=>$source) {
-                $row[$target] = 0;
+                if (!array_key_exists($target, $row)) {
+                    $row[$target] = 0;
+                }
                 if ($source != -1) {
-                    $row[$target] = $preparedData[$source][$month];
+                    $row[$target] += $preparedData[$source][$month];
                 }
             }
-            $row[22] = 0;
+            if (!array_key_exists(22, $row)) {
+                $row[22] = 0;
+            }
             for ($i = 6; $i <= 21; $i++) {
                 $row[22] += $row[$i];
             }
-            $result[] = $row;
+            $result[$plan->person_id] = $row;
         }
         return $result;
     }
