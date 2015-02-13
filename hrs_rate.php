@@ -139,7 +139,7 @@ echo '<table name=tab1 border=1 cellpadding="10" cellspacing="0"><tr align="cent
 			 else {echo '<tr align="left" class="text2" bgcolor="#DFEFFF">';}
 		
 		//echo '<tr align="left" class="main">';
-		if ($_SESSION['task_rights_id']!=4) { //del_confirm_act(del_title,loc_href)
+		if ($_SESSION['task_rights_id']=4) { //del_confirm_act(del_title,loc_href)
 		echo '<td align="center"> <a href=javascript:del_confirm_act("'.f_ro(str_replace(' ','_',$tmpval['dolg_name'])).'","?type=del&item_id='.$tmpval['id'].'") title="Удалить">
 			<img src="images/todelete.png" alt="Удалить" border="0"></a>&nbsp;&nbsp;&nbsp;
 			<a href="'.$main_page.'?new_id='.$tmpval['id'].'&type=edit" title="Правка">
