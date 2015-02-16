@@ -48,6 +48,13 @@ class CStaffPublicationsController extends CBaseController{
                 $query->condition("p.kadri_id=".$currentPerson);
             }
         }
+        if (CRequest::getString("order") == "year") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") == "desc") {
+        		$direction = "desc";
+        	}
+        	$query->order('STR_TO_DATE(year, "%Y") '.$direction);
+        }
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CPublication($ar);
@@ -61,9 +68,17 @@ class CStaffPublicationsController extends CBaseController{
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
-            "title" => "Добавить публикацию",
-            "link" => "publications.php?action=add",
-            "icon" => "actions/list-add.png"
+        		array(
+        				"title" => "Добавить публикацию",
+        				"link" => "publications.php?action=add",
+        				"icon" => "actions/list-add.png"
+        		),
+        		array(
+        				"title" => "Печать по шаблону",
+        				"link" => "#",
+        				"icon" => "devices/printer.png",
+        				"template" => "formset_publications"
+        		),
         ));
         /**
          * Отображение представления
