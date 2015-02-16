@@ -6,6 +6,12 @@
             jQuery("#person_selector").change(function(){
                 window.location.href=web_root + "_modules/_staff/publications.php?person=" + jQuery(this).val();
             });
+        	jQuery("#selectAll").change(function(){
+        		var items = jQuery("input[name='selectedDoc[]']")
+                for (var i = 0; i < items.length; i++) {
+                    items[i].checked = this.checked;
+                }
+            });
         });
     </script>
     <div class="form-horizontal">
@@ -31,6 +37,7 @@
             <thead>
                 <tr>
                     <th width="16">&nbsp;</th>
+                    <th><input type="checkbox" id="selectAll"></th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
                     <th>{CHtml::tableOrder("name", $objects->getFirstItem())}</th>
@@ -40,7 +47,7 @@
                     <th>В том числе с кафедры</th>
                     <th>{CHtml::tableOrder("grif", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("publisher", $objects->getFirstItem())}</th>
-                    <th>{CHtml::tableOrder("year", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("year", $objects->getFirstItem(), true)}</th>
                     <th>{CHtml::tableOrder("approve_date", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("type_book", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("copy", $objects->getFirstItem())}</th>
@@ -51,6 +58,9 @@
             {foreach $objects->getItems() as $object}
                 <tr>
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить публикация')) { location.href='publications.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
+                    <td>
+                    	<input type="checkbox" value="{$object->getId()}" name="selectedDoc[]">
+                	</td>
                     <td>{counter}</td>
                     <td><a href="publications.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
                     <td>{$object->name}</td>

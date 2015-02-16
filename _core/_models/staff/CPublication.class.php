@@ -10,6 +10,7 @@ class CPublication extends CActiveModel {
     protected $_table = TABLE_PUBLICATIONS;
     protected $_authors = null;
     protected $_type = null;
+    protected $_person = null;
 
     public function relations() {
         return array(
@@ -27,6 +28,13 @@ class CPublication extends CActiveModel {
                 "storageProperty" => "_type",
                 "relationFunction" => "getType"
             ),
+        	"person" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_person",
+        		"storageField" => "kadri_id",
+        		"managerClass" => "CStaffManager",
+        		"managerGetObject" => "getPerson"
+        	),
         );
     }
 
