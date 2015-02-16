@@ -1137,7 +1137,7 @@ class CHtml {
     			$actions[] = "direction=asc";
     		}
     	} else {
-    		$actions[] = "direction=asc";
+    		$actions[] = "direction=desc";
     	}
         if ($showLink) {
             $label = '<a href="?'.implode($actions, "&").'">'.$label.'</a>';
