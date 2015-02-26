@@ -43,34 +43,4 @@ class CStaffPrintController extends CFlowController{
         $this->setData("object", $object);
         $this->renderView("_staff/print/contractProperties.tpl", "CStaffPrintController", "PrintContract");
     }
-    public function actionSelectPerson() {
-    	$items = new CArrayList();
-    	$bean = self::getStatefullBean();
-    	$publication[] = split (":", $bean->getItem("id"));
-    	$publications = array_values($publication);
-    	$publications = $publication[0];
-    	$load = CStaffManager::getPublication($publications[0]);
-    	$izdan = $load->id;
-    	$query = new CQuery();
-    	$query->select("p.kadri_id")
-    	->from(TABLE_PUBLICATION_BY_PERSONS." as p");
-    	$query->condition("p.izdan_id=".$izdan);
-    	foreach ($query->execute()->getItems() as $item) {
-    		$kadri = $item["kadri_id"];
-    		$author = CStaffManager::getPersonById($kadri);
-    		$value = $author->getName();
-    		$items->add($kadri, $value);
-    	}
-    	$this->setData("items", $items);
-    	$this->renderView("_flow/pickList.tpl", "CStaffPrintController", "PrintPerson");
-    }
-    public function actionPrintPerson() {
-    	// складываем из бина параметры
-    	$bean = self::getStatefullBean();
-    	$selected = CRequest::getArray("selected");
-    	$bean->add("person", $selected[0]);
-    	// редирект на печать
-    	$this->redirectNextAction("CPrintController", "PrintWithBeanData");
-    	return true;
-    }
 }
