@@ -142,7 +142,9 @@
         });
     });
 </script>
-
+	{if $records->getCount() == 0}
+		Нет журналов для отображения
+	{else}
 <table border="0" width="100%" class="tableBlank">
     <tr>
         <td valign="top">
@@ -251,6 +253,7 @@
 </form>
 
     {CHtml::paginator($paginator, "?action=index")}
+    {/if}
 {/block}
 
 {block name="asu_right"}
