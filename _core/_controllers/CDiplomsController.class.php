@@ -222,6 +222,20 @@ class CDiplomsController extends CBaseController {
 				"title" => "Список студентов",
 				"link" => WEB_ROOT."_modules/_students/",
 				"icon" => "apps/system-users.png"
+			),
+			array(
+				"title" => "Групповые операции",
+				"link" => "#",
+				"icon" => "apps/utilities-terminal.png",
+				"child" => array(
+					array(
+						"title" => "Удалить выделенные",
+						"icon" => "actions/edit-delete.png",
+						"form" => "#MainView",
+						"link" => "index.php",
+						"action" => "Delete"
+						)
+				)
 			)
 		));
 		if ($isArchive) {
@@ -396,7 +410,14 @@ class CDiplomsController extends CBaseController {
     }
     public function actionDelete() {
     	$diplom = CStaffManager::getDiplom(CRequest::getInt("id"));
-    	$diplom->remove();
+    	if (!is_null($diplom)) {
+    		$diplom->remove();
+    	}
+    	$items = CRequest::getArray("selectedDoc");
+    	foreach ($items as $id){
+    		$diplom = CStaffManager::getDiplom($id);
+    		$diplom->remove();
+    	}
     	$this->redirect("?action=index");
     }
     public function actionSave() {
