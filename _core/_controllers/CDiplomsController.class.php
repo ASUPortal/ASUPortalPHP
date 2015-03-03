@@ -234,7 +234,21 @@ class CDiplomsController extends CBaseController {
 						"form" => "#MainView",
 						"link" => "index.php",
 						"action" => "Delete"
-						)
+						),
+					array(
+						"title" => "Сменить дату защиты",
+						"icon" => "actions/edit-redo.png",
+						"form" => "#MainView",
+						"link" => "index.php",
+						"action" => "changeDateAct"
+					),
+					array(
+						"title" => "Сменить место практики",
+						"icon" => "actions/edit-redo.png",
+						"form" => "#MainView",
+						"link" => "index.php",
+						"action" => "changePractPlace"
+					)
 				)
 			)
 		));
@@ -419,6 +433,84 @@ class CDiplomsController extends CBaseController {
     		$diplom->remove();
     	}
     	$this->redirect("?action=index");
+    }
+    public function actionChangeDateAct() {
+    	$items = CRequest::getArray("selectedDoc");
+    	$form = new CDiplomChangeDateActForm();
+    	$form->diploms = $items;
+    	$this->setData("form", $form);
+    	$this->addActionsMenuItem(array(
+    			array(
+    					"title" => "Назад",
+    					"link" => "?action=index",
+    					"icon" => "actions/edit-undo.png"
+    			)
+    	));
+    	$this->renderView("_diploms/changeDateAct.tpl");
+    }
+    public function actionChangeDateActProcess() {
+    	$form = new CDiplomChangeDateActForm();
+    	$form->setAttributes(CRequest::getArray(CDiplomChangeDateActForm::getClassName()));
+    	if ($form->validate()) {
+    		$date = $form->date_act;
+    		foreach ($form->diploms as $id) {
+    			$diplom = CStaffManager::getDiplom($id);
+    			if (!is_null($diplom)) {
+    				$diplom->date_act = date("Y.m.d", strtotime($date));
+    				$diplom->save();
+    			}
+    		}	
+    		$this->redirect("?action=index");
+    		return false;
+    	}
+    	$this->setData("form", $form);
+    	$this->addActionsMenuItem(array(
+    			array(
+    					"title" => "Назад",
+    					"link" => "?action=index",
+    					"icon" => "actions/edit-undo.png"
+    			)
+    	));
+    	$this->renderView("_diploms/changeDateAct.tpl");
+    }
+    public function actionChangePractPlace() {
+    	$items = CRequest::getArray("selectedDoc");
+    	$form = new CDiplomChangePractPlaceForm();
+    	$form->diploms = $items;
+    	$this->setData("form", $form);
+    	$this->addActionsMenuItem(array(
+    			array(
+    					"title" => "Назад",
+    					"link" => "?action=index",
+    					"icon" => "actions/edit-undo.png"
+    			)
+    	));
+    	$this->renderView("_diploms/changePractPlace.tpl");
+    }
+    public function actionChangePractPlaceProcess() {
+    	$form = new CDiplomChangePractPlaceForm();
+    	$form->setAttributes(CRequest::getArray(CDiplomChangePractPlaceForm::getClassName()));
+    	if ($form->validate()) {
+    		$pract = CTaxonomyManager::getPracticePlace($form->pract_place_id);
+    		foreach ($form->diploms as $id) {
+    			$diplom = CStaffManager::getDiplom($id);
+    			if (!is_null($diplom)) {
+    				$diplom->pract_place_id = $pract->getId();
+    				$diplom->save();
+    			}
+    		}
+    		$this->redirect("?action=index");
+    		return false;
+    	}
+    	$this->setData("form", $form);
+    	$this->addActionsMenuItem(array(
+    			array(
+    					"title" => "Назад",
+    					"link" => "?action=index",
+    					"icon" => "actions/edit-undo.png"
+    			)
+    	));
+    	$this->renderView("_diploms/changeDateAct.tpl");
     }
     public function actionSave() {
         $diplom = new CDiplom();
