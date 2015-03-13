@@ -26,5 +26,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_print/formset/index.right.tpl"}
+{include file="_print/formset/common.right.tpl"}
 {/block}

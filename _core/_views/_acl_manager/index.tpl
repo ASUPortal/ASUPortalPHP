@@ -7,5 +7,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_acl_manager/index.right.tpl"}
+{include file="_acl_manager/common.right.tpl"}
 {/block}

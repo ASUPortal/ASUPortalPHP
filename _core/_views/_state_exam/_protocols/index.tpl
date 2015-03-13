@@ -26,5 +26,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_state_exam/_protocols/index.right.tpl"}
+    {include file="_state_exam/_protocols/common.right.tpl"}
 {/block}

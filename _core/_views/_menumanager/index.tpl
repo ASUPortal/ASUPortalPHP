@@ -13,5 +13,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_menumanager/index.right.tpl"}
+    {include file="_menumanager/common.right.tpl"}
 {/block}

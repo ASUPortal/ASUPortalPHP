@@ -4,7 +4,7 @@
     <h2>Редактирование рабочей программы</h2>
     {CHtml::helpForCurrentPage()}
 
-    
+
 {/block}
 
 {block name="asu_right"}

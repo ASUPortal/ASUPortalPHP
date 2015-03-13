@@ -6,6 +6,6 @@
  * Time: 21:54
  */
 
-class CWorkPlan {
-
+class CWorkPlan extends CActiveModel{
+    protected $_table = TABLE_WORK_PLANS;
 }

@@ -24,5 +24,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_acl_manager/groups/index.right.tpl"}
+{include file="_acl_manager/groups/common.right.tpl"}
 {/block}

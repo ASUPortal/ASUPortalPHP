@@ -82,5 +82,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_specialities/index.right.tpl"}
+{include file="_specialities/common.right.tpl"}
 {/block}

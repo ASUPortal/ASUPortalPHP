@@ -36,5 +36,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_state_exam/_tickets/index.right.tpl"}
+{include file="_state_exam/_tickets/common.right.tpl"}
 {/block}

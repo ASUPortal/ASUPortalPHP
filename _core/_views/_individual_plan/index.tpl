@@ -7,5 +7,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_individual_plan/index.right.tpl"}
+    {include file="_individual_plan/common.right.tpl"}
 {/block}

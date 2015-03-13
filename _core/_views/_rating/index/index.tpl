@@ -33,5 +33,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_rating/index/index.right.tpl"}
+{include file="_rating/index/common.right.tpl"}
 {/block}

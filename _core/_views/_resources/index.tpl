@@ -15,5 +15,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_resources/index.right.tpl"}
+    {include file="_resources/common.right.tpl"}
 {/block}

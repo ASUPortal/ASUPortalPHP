@@ -36,5 +36,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_core/model/index.right.tpl"}
+    {include file="_core/model/common.right.tpl"}
 {/block}

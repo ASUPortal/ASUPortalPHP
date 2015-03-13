@@ -10,5 +10,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_calendar/index.right.tpl"}
+    {include file="_calendar/common.right.tpl"}
 {/block}

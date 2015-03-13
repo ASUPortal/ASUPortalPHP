@@ -36,5 +36,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_news/index.right.tpl"}
+    {include file="_news/common.right.tpl"}
 {/block}

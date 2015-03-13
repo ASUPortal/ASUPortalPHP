@@ -37,5 +37,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_users/users/index.right.tpl"}
+{include file="_users/users/common.right.tpl"}
 {/block}

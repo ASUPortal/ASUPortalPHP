@@ -7,5 +7,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="__generator/index.right.tpl"}
+    {include file="__generator/common.right.tpl"}
 {/block}

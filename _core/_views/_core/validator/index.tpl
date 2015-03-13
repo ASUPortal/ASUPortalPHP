@@ -38,5 +38,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_core/validator/index.right.tpl"}
+    {include file="_core/validator/common.right.tpl"}
 {/block}
