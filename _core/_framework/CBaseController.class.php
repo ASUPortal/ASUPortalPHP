@@ -121,7 +121,11 @@ class CBaseController {
         $this->addJSInlineInclude("var web_root = '".WEB_ROOT."';");
         // angular
         $this->addJSInclude("_core/angular/angular.js");
+        $this->addJSInclude("_core/angular/angular-resource.js");
+        $this->addJSInclude("_core/angular/angular-loading-bar.js");
         $this->addJSInclude("_core/angular.application.js");
+        $this->addJSInclude("_core/angular.directives.js");
+        $this->addCSSInclude("_core/angular/angular-loading-bar.css");
         // ядреные модули
         $this->addJSInclude("_core/core.js");
         $this->setData("wap_mode", false);

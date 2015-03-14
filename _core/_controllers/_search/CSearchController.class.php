@@ -311,6 +311,24 @@ class CSearchController extends CBaseController{
 
         echo json_encode($result);
     }
+    public function actionNgLookupViewData() {
+        $catalog = CRequest::getString("catalog");
+        $properties = CRequest::getArray("properties");
+        $properties = array_unique($properties);
+
+        $obj = $this->searchObjectsFactory($catalog, $properties);
+        $data = $obj->actionGetViewData();
+
+        $result = array();
+        foreach ($data as $key=>$value) {
+            $item = new stdClass();
+            $item->key = $key;
+            $item->value = $value;
+            $result[] = $item;
+        }
+
+        echo json_encode($result);
+    }
     public function actionGlobalSearch() {
         /**
          * Запрос, который отправил пользователь

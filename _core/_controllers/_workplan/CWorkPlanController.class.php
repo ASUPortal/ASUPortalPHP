@@ -6,7 +6,7 @@
  * Time: 21:49
  */
 
-class CWorkPlanController extends CBaseController{
+class CWorkPlanController extends CJsonController{
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -59,6 +59,7 @@ class CWorkPlanController extends CBaseController{
                 "icon" => "actions/edit-undo.png"
             ),
         ));
+        $this->addJSInclude("_modules/_workplan/workplanController.js");
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
         $this->setData("plan", $plan);
         $this->renderView("_workplan/workplan/edit.tpl");
