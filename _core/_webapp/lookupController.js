@@ -3,7 +3,7 @@
  */
 application
     .factory("LookupCatalog", function($resource){
-        return $resource(web_root + "_modules/_search/", {
+        return $resource(web_root + "_modules/_search/index.php", {
 
         }, {
             query: {

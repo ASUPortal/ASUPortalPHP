@@ -415,7 +415,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
      *
      * @return stdClass
      */
-    public function toJsonObject() {
+    public function toJsonObject($relations = true) {
         $obj = new stdClass();
         // добавим поля из таблицы
         foreach ($this->getDbTableFields()->getItems() as $name=>$field) {
@@ -425,15 +425,13 @@ class CActiveModel extends CModel implements IJSONSerializable{
         foreach ($this->relations() as $field=>$properties) {
             if ($properties["relationPower"] == RELATION_MANY_TO_MANY) {
                 $array = array();
-                /**
-                 * @var CActiveModel $value
-                 */
-                foreach ($this->$field->getItems() as $value) {
-                    // $array[] = new stdClass();
-                    $array[] = $value->getId();
-                    // $item = new stdClass();
-                    // $item->key = $value->getId();
-                    // $array[] = $item;
+                if ($relations) {
+                    /**
+                     * @var CActiveModel $value
+                     */
+                    foreach ($this->$field->getItems() as $value) {
+                        $array[] = $value->toJsonObject();
+                    }
                 }
                 $obj->$field = $array;
             }
@@ -473,7 +471,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
                     // добавим туда новые данные
                     foreach ($data as $value) {
                         $ar = new CActiveRecord(array(
-                            $properties["rightKey"] => $value,
+                            $properties["rightKey"] => $value["id"],
                             trim(CUtils::strLeft($properties["leftCondition"], "=")) => $modelData["id"],
                             "id" => null
                         ));
