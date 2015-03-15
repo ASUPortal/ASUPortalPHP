@@ -429,7 +429,11 @@ class CActiveModel extends CModel implements IJSONSerializable{
                  * @var CActiveModel $value
                  */
                 foreach ($this->$field->getItems() as $value) {
+                    // $array[] = new stdClass();
                     $array[] = $value->getId();
+                    // $item = new stdClass();
+                    // $item->key = $value->getId();
+                    // $array[] = $item;
                 }
                 $obj->$field = $array;
             }

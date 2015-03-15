@@ -549,7 +549,7 @@ class CHtml {
             $class = self::getFielsizeClass();
         }
         if ($class != "") {
-            $inline .= ' class="'.$class.'"';
+            $inline .= ' class="'.$class.'" ';
         }
         if ($html == "") {
             $html = ' rows="5"';

@@ -50,9 +50,9 @@ class NgHtml extends CHtml{
         echo '<div ng-controller="LookupController as lookupCtrl" ng-init="lookupCtrl.initLookup(\''.$glossary.'\')">';
 
         if ($multiple) {
-            echo '<ui-select style="width: 312px;" multiple ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2">';
+            echo '<ui-select style="width: 312px;" ng-disabled="disabled" multiple ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2">';
                 echo '<ui-select-match placeholder="Выберите значение из списка">{{$item.value}}</ui-select-match>';
-                echo '<ui-select-choices repeat="item.key as item in items | filter: $select.search">';
+                echo '<ui-select-choices repeat="item.key as item in items track by $index | filter: $select.search">';
                     echo '<div ng-bind-html="item.value | highlight: $select.search"></div>';
                 echo '</ui-select-choices>';
             echo '</ui-select>';
