@@ -8,6 +8,7 @@
  *
  * @property CTerm discipline
  * @property CCorriculumCycle cycle
+ * @property CArrayList plans
  */
 class CCorriculumDiscipline extends CActiveModel {
     protected $_table = TABLE_CORRICULUM_DISCIPLINES;
@@ -19,6 +20,7 @@ class CCorriculumDiscipline extends CActiveModel {
     protected $_hours = null;
     protected $_parent = null;
     protected $_competentions = null;
+    protected $_plans = null;
 
     /**
      * Разнообразные публичные свойства
@@ -89,6 +91,14 @@ class CCorriculumDiscipline extends CActiveModel {
                 "managerClass" => "CCorriculumsManager",
                 "managerGetObject" => "getCompetention"
             ),
+            "plans" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_plans",
+                "storageTable" => TABLE_WORK_PLANS,
+                "storageCondition" => "corriculum_discipline_id=".$this->id,
+                "managerClass" => "CWorkPlanManager",
+                "managerGetObject" => "getWorkplan"
+            )
         );
     }
     public function attributeLabels() {

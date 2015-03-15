@@ -17,8 +17,23 @@
  * @property int education_form_id
  * @property int author_id
  * @property string year
+ *
+ * @property CTerm discipline
  */
 
 class CWorkPlan extends CActiveModel{
     protected $_table = TABLE_WORK_PLANS;
+    protected $_discipline;
+
+    protected function relations() {
+        return array(
+            "discipline" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_discipline",
+                "storageField" => "discipline_id",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getDiscipline"
+            ),
+        );
+    }
 }

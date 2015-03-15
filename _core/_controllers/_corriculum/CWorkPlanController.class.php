@@ -60,7 +60,7 @@ class CWorkPlanController extends CJsonController{
         }
         // копируем информацию из учебного плана
         if (!is_null($corriculum)) {
-            $plan->direction_id = $corriculum->direction_id;
+            $plan->direction_id = $corriculum->speciality_direction_id;
             $plan->qualification_id = $corriculum->qualification_id;
             $plan->education_form_id = $corriculum->form_id;
         }
@@ -70,15 +70,15 @@ class CWorkPlanController extends CJsonController{
         $this->redirect("?action=edit&id=".$plan->getId());
     }
     public function actionEdit() {
+        $this->addJSInclude("_modules/_workplan/workplanController.js");
+        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
         $this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
-                "link" => "?action=index",
+                "link" => "disciplines.php?action=edit&id=".$plan->corriculum_discipline_id,
                 "icon" => "actions/edit-undo.png"
             ),
         ));
-        $this->addJSInclude("_modules/_workplan/workplanController.js");
-        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
         $this->setData("plan", $plan);
         $this->renderView("_corriculum/_workplan/workplan/edit.tpl");
     }

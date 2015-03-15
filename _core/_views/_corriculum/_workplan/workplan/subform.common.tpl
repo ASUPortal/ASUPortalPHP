@@ -6,7 +6,7 @@
 
 {NgHtml::activeTextRow($plan, 'workplan', 'approver_name')}
 
-{NgHtml::activeSelectRow($plan, 'workplan', 'direction_id', 'education_specializations')}
+{NgHtml::activeSelectRow($plan, 'workplan', 'direction_id', 'corriculum_speciality_directions')}
 
 {NgHtml::activeSelectRow($plan, 'workplan', 'qualification_id', 'corriculum_skill')}
 

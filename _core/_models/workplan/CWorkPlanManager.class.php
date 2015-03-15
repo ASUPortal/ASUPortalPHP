@@ -7,6 +7,10 @@
  */
 
 class CWorkPlanManager {
+    /**
+     * @param $id
+     * @return CWorkPlan
+     */
     public static function getWorkplan($id) {
         $plan = null;
         $ar = CActiveRecordProvider::getById(TABLE_WORK_PLANS, $id);
