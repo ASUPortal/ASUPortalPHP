@@ -16,4 +16,6 @@
 
 {NgHtml::activeTextRow($plan, 'workplan', 'year')}
 
+{NgHtml::activeTextBoxRow($plan, 'workplan', 'intended_for')}
+
 {NgHtml::activeSelectRow($plan, 'workplan', 'author_id', 'staff')}
