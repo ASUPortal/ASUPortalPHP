@@ -115,5 +115,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_workplan/workplan/common.right.tpl"}
+{include file="_workplan/_workplan/common.right.tpl"}
 {/block}

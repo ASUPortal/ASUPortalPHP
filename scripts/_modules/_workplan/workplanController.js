@@ -12,11 +12,15 @@ application
                 $scope.workplan = data;
             });
         };
+
+        $scope.save = function(){
+            $scope.workplan.$save();
+        }
     }]);
 
 application
     .factory('WorkPlan', function($resource){
-        return $resource(web_root + "_modules/_workplan/", {
+        return $resource(web_root + "_modules/_corriculum/workplans.php", {
             model: "CWorkPlan",
             type: "json"
         }, {

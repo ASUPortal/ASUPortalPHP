@@ -43,7 +43,7 @@ class CWorkPlanController extends CJsonController{
         ));
         $this->setData("plans", $paginated);
         $this->setData("paginator", $set->getPaginator());
-        $this->renderView("_workplan/workplan/index.tpl");
+        $this->renderView("_workplan/_workplan/index.tpl");
     }
     public function actionAdd() {
         $plan = new CWorkPlan();
@@ -62,6 +62,6 @@ class CWorkPlanController extends CJsonController{
         $this->addJSInclude("_modules/_workplan/workplanController.js");
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
         $this->setData("plan", $plan);
-        $this->renderView("_workplan/workplan/edit.tpl");
+        $this->renderView("_corriculum/_workplan/workplan/edit.tpl");
     }
 }
