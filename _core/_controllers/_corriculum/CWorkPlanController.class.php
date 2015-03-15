@@ -46,8 +46,26 @@ class CWorkPlanController extends CJsonController{
         $this->renderView("_workplan/_workplan/index.tpl");
     }
     public function actionAdd() {
+        // получим дисциплину, по которой делаем рабочую программу
+        $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("id"));
+        $corriculum = $discipline->cycle->corriculum;
+        //
         $plan = new CWorkPlan();
         $plan->title = "Наименование не указано";
+        // дисциплина из учебного плана
+        $plan->corriculum_discipline_id = $discipline->getId();
+        // дисциплина из справочника
+        if (!is_null($discipline->discipline)) {
+            $plan->discipline_id = $discipline->discipline->getId();
+        }
+        // копируем информацию из учебного плана
+        if (!is_null($corriculum)) {
+            $plan->direction_id = $corriculum->direction_id;
+            $plan->qualification_id = $corriculum->qualification_id;
+            $plan->education_form_id = $corriculum->form_id;
+        }
+        $plan->year = date("Y");
+        $plan->author_id = CSession::getCurrentPerson()->getId();
         $plan->save();
         $this->redirect("?action=edit&id=".$plan->getId());
     }

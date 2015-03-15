@@ -14,6 +14,7 @@
                 {include file="_corriculum/_workplan/workplan/subform.common.tpl"}
             </div>
         </div>
+        {NgHtml::activeSaveRow($plan, 'workplan')}
     </form>
 {/block}
 
