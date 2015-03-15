@@ -23,7 +23,7 @@
  * @property CArrayList profiles
  */
 
-class CWorkPlan extends CActiveModel {
+class CWorkPlan extends CActiveModel implements IVersionControl{
     protected $_table = TABLE_WORK_PLANS;
     protected $_discipline;
     protected $_profiles;
