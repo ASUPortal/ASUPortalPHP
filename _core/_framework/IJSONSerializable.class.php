@@ -8,4 +8,5 @@
 
 interface IJSONSerializable {
     public function toJsonObject();
+    public function updateWithJsonString($jsonString);
 }

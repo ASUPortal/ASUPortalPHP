@@ -409,6 +409,12 @@ class CActiveModel extends CModel implements IJSONSerializable{
         return $this->getDbTable()->getFields();
     }
 
+    /**
+     * Конвертация модельного объекта в объект, готовый для
+     * сериализации в json
+     *
+     * @return stdClass
+     */
     public function toJsonObject() {
         $obj = new stdClass();
 
@@ -418,4 +424,23 @@ class CActiveModel extends CModel implements IJSONSerializable{
 
         return $obj;
     }
+
+    /**
+     * Обновление модели на основе данных, пришедших из json-контроллера
+     *
+     * @param $jsonString
+     */
+    public function updateWithJsonString($jsonString) {
+        // данные модели
+        $modelData = json_decode($jsonString, true);
+        // убираем служебную инфу
+        if (array_key_exists("_translation", $modelData)) {
+            unset($modelData["_translation"]);
+        }
+        // данные обратно в модель
+        foreach ($modelData as $key=>$value) {
+            $this->$key = $value;
+        }
+    }
+
 }

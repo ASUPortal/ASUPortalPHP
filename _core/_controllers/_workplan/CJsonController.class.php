@@ -27,11 +27,36 @@ class CJsonController extends CBaseController{
      * Функция выполнения запроса
      */
     private function processRequest() {
-        if (CRequest::getString("action") == "get") {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $this->actionJSONSave();
+        } elseif (CRequest::getString("action") == "get") {
+            $this->actionJSONGet();
+        } elseif ($_SERVER["REQUEST_METHOD"] === "GET") {
             $this->actionJSONGet();
         } else {
             echo "Действие ".CRequest::getString("action")." не реализовано";
         }
+    }
+
+    /**
+     * Сохранение данных
+     * Этот метод только POST-овый
+     */
+    private function actionJSONSave() {
+        // получи название класса модели, которую надо использовать
+        $modelClass = CRequest::getString("model");
+        // создадим объект, посмотрим, в какой таблице он живет
+        /**
+         * @var $model CActiveModel
+         */
+        $model = new $modelClass();
+        // проверим, может не реализует нужный интерфейс
+        if (!is_a($model, "IJSONSerializable")) {
+            throw new Exception("Класс ".$modelClass." не реализует интерфейс IJSONSerializable");
+        }
+        $rest_json = file_get_contents("php://input");
+        $model->updateWithJsonString($rest_json);
+        $model->save();
     }
 
     /**
