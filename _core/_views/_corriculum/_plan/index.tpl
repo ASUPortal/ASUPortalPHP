@@ -61,5 +61,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_corriculum/_plan/common.right.tpl"}
+    {include file="_corriculum/_plan/index.right.tpl"}
 {/block}
