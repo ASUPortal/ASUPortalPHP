@@ -25,8 +25,6 @@ application
             this.initLookup = function (glossary) {
                 lookupCatalog.query({catalog: glossary}, function(data) {
                     $scope.items = data;
-
-                    console.log($scope.items);
                 });
             }
         }

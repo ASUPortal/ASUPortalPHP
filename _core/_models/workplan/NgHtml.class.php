@@ -41,7 +41,15 @@ class NgHtml extends CHtml{
     public static function activeSelectRow(CModel $model, $ngModelName, $ngFieldName, $glossary) {
         self::rowStart($model, $ngFieldName);
         echo '<div ng-controller="LookupController as lookupCtrl" ng-init="lookupCtrl.initLookup(\''.$glossary.'\')">';
-        echo '<select class="select2" ng-model="'.$ngModelName.'.'.$ngFieldName.'" ng-options="'.$ngModelName.'.'.$ngFieldName.' as item.value for item in items"></select>';
+
+        echo '<ui-select ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="bootstrap">';
+            echo '<ui-select-match placeholder="Выберите значение из списка">[[$select.selected.value]]</ui-select-match>';
+            echo '<ui-select-choices repeat="item.key as item in items | filter: $select.search">';
+                echo '<div ng-bind-html="item.value | highlight: $select.search"></div>';
+            echo '</ui-select-choices>';
+        echo '</ui-select>';
+
+
         echo '</div>';
         self::rowEnd($model);
         // будут по умолчанию на select2
@@ -49,14 +57,6 @@ class NgHtml extends CHtml{
             self::$select2Init = true;
             ?>
                 <script src="<?php echo WEB_ROOT; ?>_core\_webapp\lookupController.js"></script>
-                <script src="<?php echo WEB_ROOT; ?>scripts\_core\jSelect2\js\select2.js"></script>
-                <link href="<?php echo WEB_ROOT; ?>scripts\_core\jSelect2\css\select2.css" rel="stylesheet" />
-
-                <script>
-                    jQuery(document).ready(function(){
-                        jQuery(".select2").select2();
-                    });
-                </script>
             <?
         }
     }

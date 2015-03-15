@@ -123,9 +123,12 @@ class CBaseController {
         $this->addJSInclude("_core/angular/angular.js");
         $this->addJSInclude("_core/angular/angular-resource.js");
         $this->addJSInclude("_core/angular/angular-loading-bar.js");
+        $this->addJSInclude("_core/angular/angular-select.js");
+        $this->addJSInclude("_core/angular/angular-sanitize.js");
         $this->addJSInclude("_core/angular.application.js");
-        $this->addJSInclude("_core/angular.directives.js");
         $this->addCSSInclude("_core/angular/angular-loading-bar.css");
+        $this->addCSSInclude("_core/angular/angular-select.css");
+        $this->addCSSInclude("_core/angular/angular-select2.css");
         // ядреные модули
         $this->addJSInclude("_core/core.js");
         $this->setData("wap_mode", false);
