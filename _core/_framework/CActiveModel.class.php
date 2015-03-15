@@ -8,7 +8,7 @@
  *
  * Первый уровень иерархии после CActiveRecord для доступа к данным
  */
-class CActiveModel extends CModel{
+class CActiveModel extends CModel implements IJSONSerializable{
     private $_aRecord = null;
     protected $_table = null;
     private $_dbTable = null;
@@ -407,5 +407,15 @@ class CActiveModel extends CModel{
      */
     public function getDbTableFields() {
         return $this->getDbTable()->getFields();
+    }
+
+    public function toJsonObject() {
+        $obj = new stdClass();
+
+        foreach ($this->getDbTableFields()->getItems() as $name=>$field) {
+            $obj->$name = $this->$name;
+        }
+
+        return $obj;
     }
 }

@@ -6,15 +6,6 @@
  * Time: 21:54
  */
 
-class CWorkPlan extends CActiveModel implements IJSONSerializable{
+class CWorkPlan extends CActiveModel{
     protected $_table = TABLE_WORK_PLANS;
-
-    public function toJsonObject()
-    {
-        $obj = new stdClass();
-        $obj->id = $this->getId();
-        $obj->title = $this->title;
-
-        return $obj;
-    }
 }
