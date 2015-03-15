@@ -11,7 +11,9 @@ class NgHtml extends CHtml{
 
     private static function rowStart(CModel $model, $ngFieldName) {
         echo '<div class="control-group">';
-        CHtml::activeLabel($ngFieldName, $model);
+        if ($ngFieldName != "") {
+            CHtml::activeLabel($ngFieldName, $model);
+        }
         echo '<div class="controls">';
     }
     private static function rowEnd(CModel $model) {
@@ -38,6 +40,11 @@ class NgHtml extends CHtml{
             'ng-model="'.$ngModelName.'.'.$ngFieldName.'"');
         self::rowEnd($model);
     }
+    public static function activeSaveRow(CModel $model, $ngModelName, $ngFieldName = "") {
+        self::rowStart($model, $ngFieldName);
+        echo '<span ng-click="save()" class="btn">Сохранить</span>';
+        self::rowEnd($model);
+    }
     public static function activeSelectRow(CModel $model, $ngModelName, $ngFieldName, $glossary) {
         self::rowStart($model, $ngFieldName);
         echo '<div ng-controller="LookupController as lookupCtrl" ng-init="lookupCtrl.initLookup(\''.$glossary.'\')">';
@@ -56,7 +63,7 @@ class NgHtml extends CHtml{
         if (!self::$select2Init) {
             self::$select2Init = true;
             ?>
-                <script src="<?php echo WEB_ROOT; ?>_core\_webapp\lookupController.js"></script>
+                <script src="<?php echo WEB_ROOT; ?>_core/_webapp/lookupController.js"></script>
                 <style>
                     .select2 > .select2-choice.ui-select-match {
                         /* Because of the inclusion of Bootstrap */
