@@ -5,6 +5,9 @@
  * Date: 31.07.12
  * Time: 0:03
  * To change this template use File | Settings | File Templates.
+ *
+ * @property CTerm discipline
+ * @property CCorriculumCycle cycle
  */
 class CCorriculumDiscipline extends CActiveModel {
     protected $_table = TABLE_CORRICULUM_DISCIPLINES;
