@@ -326,7 +326,7 @@ class CSearchController extends CBaseController{
              * @var ISearchCatalogInterface $obj
              */
             $term = $obj->actionGetObject($key);
-            $result[] = $term->toJsonObject();
+            $result[] = $term->toJsonObject(false);
         }
 
         echo json_encode($result);

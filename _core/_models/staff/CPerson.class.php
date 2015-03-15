@@ -675,7 +675,7 @@ class CPerson extends CActiveModel{
 
     public function toJsonObject($relations = true)
     {
-        $object = parent::toJsonObject(false);
+        $object = parent::toJsonObject($relations);
         $object->name = $this->getName();
         return $object;
     }
