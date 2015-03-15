@@ -42,8 +42,8 @@ class NgHtml extends CHtml{
         self::rowStart($model, $ngFieldName);
         echo '<div ng-controller="LookupController as lookupCtrl" ng-init="lookupCtrl.initLookup(\''.$glossary.'\')">';
 
-        echo '<ui-select ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="bootstrap">';
-            echo '<ui-select-match placeholder="Выберите значение из списка">[[$select.selected.value]]</ui-select-match>';
+        echo '<ui-select style="width: 312px; " ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2">';
+            echo '<ui-select-match placeholder="Выберите значение из списка">{{$select.selected.value}}</ui-select-match>';
             echo '<ui-select-choices repeat="item.key as item in items | filter: $select.search">';
                 echo '<div ng-bind-html="item.value | highlight: $select.search"></div>';
             echo '</ui-select-choices>';
@@ -57,6 +57,12 @@ class NgHtml extends CHtml{
             self::$select2Init = true;
             ?>
                 <script src="<?php echo WEB_ROOT; ?>_core\_webapp\lookupController.js"></script>
+                <style>
+                    .select2 > .select2-choice.ui-select-match {
+                        /* Because of the inclusion of Bootstrap */
+                        height: 29px;
+                    }
+                </style>
             <?
         }
     }
