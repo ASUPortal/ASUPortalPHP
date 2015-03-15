@@ -45,17 +45,25 @@ class NgHtml extends CHtml{
         echo '<span ng-click="save()" class="btn btn-primary">Сохранить</span>';
         self::rowEnd($model);
     }
-    public static function activeSelectRow(CModel $model, $ngModelName, $ngFieldName, $glossary) {
+    public static function activeSelectRow(CModel $model, $ngModelName, $ngFieldName, $glossary, $multiple = false) {
         self::rowStart($model, $ngFieldName);
         echo '<div ng-controller="LookupController as lookupCtrl" ng-init="lookupCtrl.initLookup(\''.$glossary.'\')">';
 
-        echo '<ui-select style="width: 312px; " ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2">';
-            echo '<ui-select-match placeholder="Выберите значение из списка">{{$select.selected.value}}</ui-select-match>';
-            echo '<ui-select-choices repeat="item.key as item in items | filter: $select.search">';
-                echo '<div ng-bind-html="item.value | highlight: $select.search"></div>';
-            echo '</ui-select-choices>';
-        echo '</ui-select>';
-
+        if ($multiple) {
+            echo '<ui-select style="width: 312px;" multiple ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2">';
+                echo '<ui-select-match placeholder="Выберите значение из списка">{{$item.value}}</ui-select-match>';
+                echo '<ui-select-choices repeat="item.key as item in items | filter: $select.search">';
+                    echo '<div ng-bind-html="item.value | highlight: $select.search"></div>';
+                echo '</ui-select-choices>';
+            echo '</ui-select>';
+        } else {
+            echo '<ui-select style="width: 312px;" ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2">';
+                echo '<ui-select-match placeholder="Выберите значение из списка">{{$select.selected.value}}</ui-select-match>';
+                echo '<ui-select-choices repeat="item.key as item in items | filter: $select.search">';
+                    echo '<div ng-bind-html="item.value | highlight: $select.search"></div>';
+                echo '</ui-select-choices>';
+            echo '</ui-select>';
+        }
 
         echo '</div>';
         self::rowEnd($model);

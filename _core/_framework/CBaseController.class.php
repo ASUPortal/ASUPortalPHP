@@ -355,7 +355,7 @@ class CBaseController {
             foreach ($this->getData()->getItems() as $key=>$value) {
                 $this->getSmarty()->assign($key, $value);
             }
-            $this->preventJsAndCssCache();
+            // $this->preventJsAndCssCache();
             $this->getSmarty()->assign("_actions_menu", $this->getActionsMenuContent());
             $this->getSmarty()->assign("css", $this->getCSSIncludes()->getItems());
             $this->getSmarty()->assign("js", $this->getJSIncludes()->getItems());

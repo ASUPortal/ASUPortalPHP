@@ -36,4 +36,12 @@ class CWorkPlan extends CActiveModel{
             ),
         );
     }
+
+    public function toJsonObject(){
+        $obj = parent::toJsonObject();
+        $obj->profiles = array();
+        return $obj;
+    }
+
+
 }

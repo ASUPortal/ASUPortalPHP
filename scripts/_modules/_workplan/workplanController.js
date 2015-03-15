@@ -7,6 +7,9 @@ application
         'WorkPlan',
     function($scope, workPlanFactory){
         $scope.workplan;
+        $scope.workplan = {
+            profiles: []
+        };
         $scope.init = function($id){
             workPlanFactory.get({id: $id}, function(data){
                 $scope.workplan = data;
