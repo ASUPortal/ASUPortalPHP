@@ -121,7 +121,14 @@ class CBaseController {
         $this->addJSInlineInclude("var web_root = '".WEB_ROOT."';");
         // angular
         $this->addJSInclude("_core/angular/angular.js");
+        $this->addJSInclude("_core/angular/angular-resource.js");
+        $this->addJSInclude("_core/angular/angular-loading-bar.js");
+        $this->addJSInclude("_core/angular/angular-select.js");
+        $this->addJSInclude("_core/angular/angular-sanitize.js");
         $this->addJSInclude("_core/angular.application.js");
+        $this->addCSSInclude("_core/angular/angular-loading-bar.css");
+        $this->addCSSInclude("_core/angular/angular-select.css");
+        $this->addCSSInclude("_core/angular/angular-select2.css");
         // ядреные модули
         $this->addJSInclude("_core/core.js");
         $this->setData("wap_mode", false);
@@ -348,7 +355,7 @@ class CBaseController {
             foreach ($this->getData()->getItems() as $key=>$value) {
                 $this->getSmarty()->assign($key, $value);
             }
-            $this->preventJsAndCssCache();
+            // $this->preventJsAndCssCache();
             $this->getSmarty()->assign("_actions_menu", $this->getActionsMenuContent());
             $this->getSmarty()->assign("css", $this->getCSSIncludes()->getItems());
             $this->getSmarty()->assign("js", $this->getJSIncludes()->getItems());

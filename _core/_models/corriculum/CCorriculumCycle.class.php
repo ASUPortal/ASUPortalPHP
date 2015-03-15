@@ -5,6 +5,8 @@
  * Date: 31.07.12
  * Time: 20:28
  * To change this template use File | Settings | File Templates.
+ *
+ * @property CCorriculum corriculum
  */
 class CCorriculumCycle extends CActiveModel {
     protected $_table = TABLE_CORRICULUM_CYCLES;

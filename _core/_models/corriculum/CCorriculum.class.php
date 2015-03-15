@@ -3,6 +3,11 @@
  * Description of CCorriculum
  *
  * @author TERRAN
+ *
+ * @property CTerm direction
+ * @property int direction_id
+ * @property int qualification_id
+ * @property int form_id
  */
 class CCorriculum extends CActiveModel{
     protected $_table = TABLE_CORRICULUMS;

@@ -18,7 +18,7 @@ class CHtml {
     private static $_clearboxInit = false;
     private static $_viewGroupSelectInit = false;
     private static $_widgetsIndex = 0;
-    private static function getFielsizeClass() {
+    protected static function getFielsizeClass() {
         $result = "span5";
         if (!is_null(CSession::getCurrentUser())) {
             if (!is_null(CSession::getCurrentUser()->getPersonalSettings())) {
@@ -549,7 +549,7 @@ class CHtml {
             $class = self::getFielsizeClass();
         }
         if ($class != "") {
-            $inline .= ' class="'.$class.'"';
+            $inline .= ' class="'.$class.'" ';
         }
         if ($html == "") {
             $html = ' rows="5"';
