@@ -270,7 +270,7 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_diploms/common.right.tpl"}
+{include file="_diploms/index.right.tpl"}
 {/block}
 
 

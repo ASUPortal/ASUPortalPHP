@@ -30,5 +30,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_acl_manager/tables/common.right.tpl"}
+{include file="_acl_manager/tables/index.right.tpl"}
 {/block}

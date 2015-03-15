@@ -84,5 +84,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_diploms/preview_commission/common.right.tpl"}
+    {include file="_diploms/preview_commission/index.right.tpl"}
 {/block}

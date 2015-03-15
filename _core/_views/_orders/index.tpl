@@ -62,5 +62,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_orders/common.right.tpl"}
+{include file="_orders/index.right.tpl"}
 {/block}

@@ -257,5 +257,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_gradebook/common.right.tpl"}
+    {include file="_gradebook/index.right.tpl"}
 {/block}

@@ -63,5 +63,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_student_groups/common.right.tpl"}
+{include file="_student_groups/index.right.tpl"}
 {/block}

@@ -26,5 +26,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_state_exam/_questions/common.right.tpl"}
+    {include file="_state_exam/_questions/index.right.tpl"}
 {/block}

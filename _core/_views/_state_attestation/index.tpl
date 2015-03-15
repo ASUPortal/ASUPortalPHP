@@ -165,5 +165,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_state_attestation/common.right.tpl"}
+    {include file="_state_attestation/index.right.tpl"}
 {/block}
