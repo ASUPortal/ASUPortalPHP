@@ -290,6 +290,7 @@
     define("TABLE_NMS_PROTOCOL_AGENDA_MEMBERS", "protocol_nms_detail_members");
     define("TABLE_HOURS_RATE", "hours_rate");
     define("TABLE_WORK_PLANS", "pl_corriculum_workplans");
+    define("TABLE_WORK_PLAN_PROFILES", "pl_corriculum_workplan_profiles");
     /**
      * Константы пагинатора
      */

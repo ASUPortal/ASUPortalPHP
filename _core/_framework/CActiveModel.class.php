@@ -417,11 +417,23 @@ class CActiveModel extends CModel implements IJSONSerializable{
      */
     public function toJsonObject() {
         $obj = new stdClass();
-
+        // добавим поля из таблицы
         foreach ($this->getDbTableFields()->getItems() as $name=>$field) {
             $obj->$name = $this->$name;
         }
-
+        // добавим отношения многие-ко-многим
+        foreach ($this->relations() as $field=>$properties) {
+            if ($properties["relationPower"] == RELATION_MANY_TO_MANY) {
+                $array = array();
+                /**
+                 * @var CActiveModel $value
+                 */
+                foreach ($this->$field->getItems() as $value) {
+                    $array[] = $value->getId();
+                }
+                $obj->$field = $array;
+            }
+        }
         return $obj;
     }
 
@@ -436,6 +448,36 @@ class CActiveModel extends CModel implements IJSONSerializable{
         // убираем служебную инфу
         if (array_key_exists("_translation", $modelData)) {
             unset($modelData["_translation"]);
+        }
+        // попробуем сохранить данные, которые находятся в отношениях
+        // многие-ко-многим
+        foreach ($this->relations() as $field=>$properties) {
+            if ($properties["relationPower"] == RELATION_MANY_TO_MANY) {
+                if (array_key_exists($field, $modelData)) {
+                    $data = $modelData[$field];
+                    // уберем их из модели
+                    unset($modelData[$field]);
+                    // уберем уже имеющиеся данные из связанной таблицы
+                    /**
+                     * @var CActiveRecord $ar
+                     */
+                    foreach (CActiveRecordProvider::getWithCondition(
+                        $properties["joinTable"], $properties["leftCondition"]
+                    )->getItems() as $ar) {
+                        $ar->remove();
+                    }
+                    // добавим туда новые данные
+                    foreach ($data as $value) {
+                        $ar = new CActiveRecord(array(
+                            $properties["rightKey"] => $value,
+                            trim(CUtils::strLeft($properties["leftCondition"], "=")) => $modelData["id"],
+                            "id" => null
+                        ));
+                        $ar->setTable($properties["joinTable"]);
+                        $ar->insert();
+                    }
+                }
+            }
         }
         // данные обратно в модель
         foreach ($modelData as $key=>$value) {
