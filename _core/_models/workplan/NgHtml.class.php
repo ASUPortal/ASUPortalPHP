@@ -42,7 +42,7 @@ class NgHtml extends CHtml{
     }
     public static function activeSaveRow(CModel $model, $ngModelName, $ngFieldName = "") {
         self::rowStart($model, $ngFieldName);
-        echo '<span ng-click="save()" class="btn">Сохранить</span>';
+        echo '<span ng-click="save()" class="btn btn-primary">Сохранить</span>';
         self::rowEnd($model);
     }
     public static function activeSelectRow(CModel $model, $ngModelName, $ngFieldName, $glossary) {
