@@ -62,4 +62,11 @@ class CSearchCatalogTaxonomy extends CAbstractSearchCatalog{
             return WEB_ROOT."_modules/_taxonomy/?action=add&taxonomy_id=".$taxonomy->getId();
         }
     }
+
+    public function actionGetObject($id)
+    {
+        return CTaxonomyManager::getTerm($id);
+    }
+
+
 }

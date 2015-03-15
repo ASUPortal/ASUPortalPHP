@@ -58,4 +58,10 @@ class CSearchCatalogPreviewCommission extends CAbstractSearchCatalog{
     {
     	return WEB_ROOT."_modules/_diploms/preview_comm.php?action=add";
     }
+
+    public function actionGetObject($id)
+    {
+        return CSABManager::getPreviewCommission($id);
+    }
+
 }

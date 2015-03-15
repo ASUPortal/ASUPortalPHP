@@ -112,4 +112,10 @@ class CSearchCatalogStaff extends CAbstractSearchCatalog{
     {
         // TODO: Implement actionGetCreationActionUrl() method.
     }
+
+    public function actionGetObject($id)
+    {
+        return CStaffManager::getPerson($id);
+    }
+
 }

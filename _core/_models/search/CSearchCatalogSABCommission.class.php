@@ -100,4 +100,10 @@ class CSearchCatalogSABCommission extends CAbstractSearchCatalog{
     {
         // TODO: Implement actionGetCreationActionUrl() method.
     }
+
+    public function actionGetObject($id)
+    {
+        return CSABManager::getCommission($id);
+    }
+
 }

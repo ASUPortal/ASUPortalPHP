@@ -47,4 +47,10 @@ class CSearchCatalogStudent extends CAbstractSearchCatalog{
     {
         // TODO: Implement actionGetCreationActionUrl() method.
     }
+
+    public function actionGetObject($id)
+    {
+        return CStaffManager::getStudent($id);
+    }
+
 }
