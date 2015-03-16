@@ -138,11 +138,15 @@ class CDiplomsController extends CBaseController {
         }
         // фильтр по группе
         if (!is_null(CRequest::getFilter("group"))) {
+        	$arr = explode(",", CRequest::getFilter("group"));
+        	foreach ($arr as $key=>$value) {
+        		$arrs[] = 'st_group.id = '.$value;
+        	}
         	$currentGroup = CRequest::getFilter("group");
         	$query->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id");
-        	$query->innerJoin(TABLE_STUDENT_GROUPS." as st_group", "student.group_id = st_group.id and st_group.id = ".CRequest::getFilter("group"));
+        	$query->innerJoin(TABLE_STUDENT_GROUPS." as st_group", "student.group_id = st_group.id and (".implode(" or ", $arrs).")");
         	$managersQuery->innerJoin(TABLE_STUDENTS." as student", "diplom.student_id = student.id");
-        	$managersQuery->innerJoin(TABLE_STUDENT_GROUPS." as st_group", "student.group_id = st_group.id and st_group.id = ".CRequest::getFilter("group"));
+        	$managersQuery->innerJoin(TABLE_STUDENT_GROUPS." as st_group", "student.group_id = st_group.id and (".implode(" or ", $arrs).")");
         }
         // фильтр по теме
         if (!is_null(CRequest::getFilter("theme"))) {
@@ -334,7 +338,6 @@ class CDiplomsController extends CBaseController {
 			$group = new CStudentGroup(new CActiveRecord($ar));
 			$studentGroups[$group->getId()] = $group->getName();
 		}
-		//$studentGroups = new CStudentGroup();
 		$this->setData("isArchive", $isArchive);
 		$this->setData("isApprove", $isApprove);
 		$this->setData("studentGroups", $studentGroups);
