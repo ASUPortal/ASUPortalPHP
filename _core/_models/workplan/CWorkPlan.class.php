@@ -17,12 +17,13 @@
  * @property int education_form_id
  * @property int author_id
  * @property string year
+ * @property string intended_for // предназначена для
  *
  * @property CTerm discipline
  * @property CArrayList profiles
  */
 
-class CWorkPlan extends CActiveModel{
+class CWorkPlan extends CActiveModel implements IVersionControl{
     protected $_table = TABLE_WORK_PLANS;
     protected $_discipline;
     protected $_profiles;

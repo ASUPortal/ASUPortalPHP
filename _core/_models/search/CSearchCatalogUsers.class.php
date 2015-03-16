@@ -48,4 +48,10 @@ class CSearchCatalogUsers extends CAbstractSearchCatalog{
         // TODO: Implement actionGetCreationActionUrl() method.
     }
 
+    public function actionGetObject($id)
+    {
+        return CStaffManager::getUser($id);
+    }
+
+
 }

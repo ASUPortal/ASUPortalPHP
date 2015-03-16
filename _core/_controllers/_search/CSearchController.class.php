@@ -321,10 +321,12 @@ class CSearchController extends CBaseController{
 
         $result = array();
         foreach ($data as $key=>$value) {
-            $item = new stdClass();
-            $item->key = $key;
-            $item->value = $value;
-            $result[] = $item;
+            /**
+             * @var IJSONSerializable $term
+             * @var ISearchCatalogInterface $obj
+             */
+            $term = $obj->actionGetObject($key);
+            $result[] = $term->toJsonObject(false);
         }
 
         echo json_encode($result);

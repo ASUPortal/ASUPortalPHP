@@ -52,4 +52,14 @@ class CSearchCatalogTaxonomyLegacy extends CAbstractSearchCatalog {
     {
         // TODO: Implement actionGetCreationActionUrl() method.
     }
+
+    public function actionGetObject($id)
+    {
+        $taxonomy = CTaxonomyManager::getLegacyTaxonomy($this->taxonomy);
+        if (is_null($taxonomy)) {
+            return null;
+        }
+        return $taxonomy->getTerm($id);
+    }
+
 }
