@@ -39,8 +39,8 @@ class CStudentController extends CBaseController {
                 "icon" => "actions/list-add.png"
             ),
             array(
-                "title" => "Дипломы",
-                "link" => WEB_ROOT."diploms_view.php",
+                "title" => "ВКР",
+                "link" => WEB_ROOT."_modules/_diploms/",
                 "icon" => "devices/network-wired.png"
             ),
             array(
@@ -59,7 +59,14 @@ class CStudentController extends CBaseController {
                         "form" => "#MainView",
                         "link" => "index.php",
                         "action" => "changeGroup"
-                    )
+                    ),
+                	array(
+                		"title" => "Удалить выделенные",
+                		"icon" => "actions/edit-delete.png",
+                		"form" => "#MainView",
+                		"link" => "index.php",
+                		"action" => "Delete"
+                	)
                 )
             )
         ));
@@ -158,10 +165,16 @@ class CStudentController extends CBaseController {
     }
     public function actionDelete() {
         $student = CStaffManager::getStudent(CRequest::getInt("id"));
-        $student->remove();
+        if (!is_null($student)) {
+        	$student->remove();
+        }
+        $items = CRequest::getArray("selectedInView");
+        foreach ($items as $id){
+        	$student = CStaffManager::getStudent($id);
+        	$student->remove();
+        }
         $this->redirect("?action=index");
     }
-
     /**
      * Быстрый поиск
      */
