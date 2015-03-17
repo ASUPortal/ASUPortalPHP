@@ -37,7 +37,8 @@ class CDiplomsController extends CBaseController {
         	->from(TABLE_STUDENT_GROUPS." as stgroup")
         	->order("stgroup.name asc")
         	->innerJoin(TABLE_STUDENTS." as student", "stgroup.id = student.group_id")
-        	->innerJoin(TABLE_DIPLOMS." as diplom", "student.id =  diplom.student_id");
+        	->innerJoin(TABLE_DIPLOMS." as diplom", "student.id =  diplom.student_id")
+        	->condition('diplom.date_act between "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_start)).'" and "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_end)).'"');
         $set->setQuery($query);
         if (CRequest::getString("order") == "st_group.name") {
         	$direction = "asc";
