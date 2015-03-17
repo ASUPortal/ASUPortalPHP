@@ -59,8 +59,8 @@
     		filters.person = $(this).val();
     		updateFilter();
     	});
-    	$("#group_id").change(function(){
-    		filters.group = $(this).val();
+    	$("#show_groups").click(function(){
+    		filters.group = $("#multiple").val();
     		updateFilter();
     	});
     	jQuery("#selectAll").change(function(){
@@ -150,7 +150,7 @@
 	</script>
 	<table border="0" width="100%" class="tableBlank">
 		<tr>
-			<td>
+			<td valign="top">
 				<div class="form-horizontal">
         			<div class="control-group">
             			<label class="control-label" for="person">Руководитель</label>
@@ -162,28 +162,44 @@
             			</div>
         			</div>
     			</div>
-    			<div class="form-horizontal">
-        			<div class="control-group">
-            			<label class="control-label" for="group">Группа</label>
-            			<div class="controls">
-                			{CHtml::dropDownList("group", $studentGroups, $currentGroup, "group_id", "span12")}
-                			{if !is_null($currentGroup)}
-                    			<span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('group'); return false; "/></span>
-                			{/if}  
-            			</div>
-        			</div>
-    			</div>
 			</td>
       		<td valign="top">
 				<p>
 					<input type="text" id="search" style="width: 96%; " placeholder="Поиск">
 				</p>
-				<p align="center">
-					<span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('group'); return false; " title="очистить фильтры"/></span>
-				</p>
 			</td>
 		</tr>
 	</table>
+	<form action="index.php">
+	<table border="0" width="100%" class="tableBlank">
+		<tr>
+			<td>			
+				<div class="form-horizontal">
+        			<div class="control-group">
+            			<label class="control-label" for="group">Группа</label>
+            			<div class="controls">
+            				<p>
+            					<select id="multiple" multiple>
+            					{foreach $studentGroups as $key=>$value}
+									<option value={$key}>{$value}</option>
+								{/foreach}
+								</select>
+							</p>
+            			</div>
+        			</div>
+    			</div>
+    		<td valign="top" width="50%">
+    			<div id="show_groups"><input name="" type="button" value="Показать"></div>
+    		</td>
+    		</td>
+    		<td valign="top" width="5%">
+				<p align="center">
+					<span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter(); return false; " title="очистить фильтры"/></span>
+				</p>
+			</td>
+		</tr>
+    </table>
+    </form>
     
 	{if $diploms->getCount() == 0}
 		Нет ВКР для отображения
@@ -348,5 +364,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_diploms/common.right.tpl"}
+{include file="_diploms/index.right.tpl"}
 {/block}
