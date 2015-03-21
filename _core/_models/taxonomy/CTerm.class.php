@@ -16,7 +16,7 @@ class CTerm extends CActiveModel{
     private $_aRecord = null;
     private $_taxonomy = null;
 
-    public function relations() {
+    protected function relations() {
         return array(
             "childTerms" => array(
                 "relationPower" => RELATION_MANY_TO_MANY,
