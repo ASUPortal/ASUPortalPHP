@@ -17,6 +17,13 @@
     </div></div>
 
     <div class="control-group">
+        {CHtml::activeLabel("child_taxonomy_id", $taxonomy)}
+        <div class="controls">
+            {CHtml::activeLookup("child_taxonomy_id", $taxonomy, "class.CTaxonomyCatalog")}
+            {CHtml::error("child_taxonomy_id", $taxonomy)}
+        </div></div>
+
+    <div class="control-group">
         {CHtml::activeLabel("terms", $taxonomy)}
         <div class="controls">
         {CHtml::activeTextBox("terms", $taxonomy)}
