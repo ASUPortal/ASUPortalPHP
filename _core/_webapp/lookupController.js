@@ -21,10 +21,15 @@ application
         'LookupCatalog',
         function ($scope, lookupCatalog) {
             $scope.items;
+            $scope.itemsPlain;
 
             this.initLookup = function (glossary) {
                 lookupCatalog.query({catalog: glossary}, function(data) {
                     $scope.items = data;
+                    $scope.itemsPlain = [];
+                    for (var i = 0; i < data.length; i++) {
+                        $scope.itemsPlain[$scope.itemsPlain.length] = data[i].name;
+                    }
                 });
             }
         }

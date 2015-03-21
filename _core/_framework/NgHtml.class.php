@@ -45,6 +45,24 @@ class NgHtml extends CHtml{
         echo '<span ng-click="save()" class="btn btn-primary">Сохранить</span>';
         self::rowEnd($model);
     }
+    public static function activeTaggingRow(CModel $model, $ngModelName, $ngFieldName, $glossary, $multiple = false) {
+        self::rowStart($model, $ngFieldName);
+        echo '<div ng-controller="LookupController as lookupCtrl" ng-init="lookupCtrl.initLookup(\''.$glossary.'\')">';
+
+        if ($multiple) {
+            echo '<ui-select tagging tagging-label="Нажмите Enter для добавления нового значения" style="width: 312px;" multiple ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2">';
+                echo '<ui-select-match placeholder="Выберите значение из списка">{{$item}}</ui-select-match>';
+                echo '<ui-select-choices repeat="item in itemsPlain | filter: $select.search ">';
+                    echo '<div ng-bind-html="item | highlight: $select.search"></div>';
+                echo '</ui-select-choices>';
+            echo '</ui-select>';
+        } else {
+            echo 1234;
+        }
+
+        echo '</div>';
+        self::rowEnd($model);
+    }
     public static function activeSelectRow(CModel $model, $ngModelName, $ngFieldName, $glossary, $multiple = false) {
         self::rowStart($model, $ngFieldName);
         echo '<div ng-controller="LookupController as lookupCtrl" ng-init="lookupCtrl.initLookup(\''.$glossary.'\')">';
