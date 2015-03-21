@@ -21,12 +21,16 @@
  *
  * @property CTerm discipline
  * @property CArrayList profiles
+ * @property CArrayList goals
+ * @property CArrayList tasks
  */
 
 class CWorkPlan extends CActiveModel implements IVersionControl{
     protected $_table = TABLE_WORK_PLANS;
     protected $_discipline;
     protected $_profiles;
+    protected $_goals;
+    protected $_tasks;
 
     protected function relations() {
         return array(
@@ -45,7 +49,75 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
                 "rightKey" => "profile_id",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
+            ),
+            "goals" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_goals",
+                "storageTable" => TABLE_WORK_PLAN_GOALS,
+                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "managerClass" => "CWorkPlan",
+                "managerGetObject" => "getWorkplanGoal"
+            ),
+            "tasks" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_tasks",
+                "storageTable" => TABLE_WORK_PLAN_TASKS,
+                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "managerClass" => "CWorkPlan",
+                "managerGetObject" => "getWorkplanTask"
             )
         );
+    }
+
+    public static function getWorkplanGoal($id) {
+        $result = "";
+        $ar = CActiveRecordProvider::getById(TABLE_WORK_PLAN_GOALS, $id);
+        if (!is_null($ar)) {
+            $result = $ar->getItemValue("goal");
+        }
+        return $result;
+    }
+
+    public static function getWorkplanTask($id) {
+        $result = "";
+        $ar = CActiveRecordProvider::getById(TABLE_WORK_PLAN_TASKS, $id);
+        if (!is_null($ar)) {
+            $result = $ar->getItemValue("task");
+        }
+        return $result;
+    }
+
+    public function updateWithJsonString($jsonString) {
+        $data = parent::updateWithJsonString($jsonString);
+        $id = $data["id"];
+        // цели
+        /**
+         * @var CActiveRecord $ar
+         */
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_GOALS, "plan_id=".$id)->getItems() as $ar) {
+            $ar->remove();
+        }
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_TASKS, "plan_id=".$id)->getItems() as $ar) {
+            $ar->remove();
+        }
+        foreach ($data["goals"] as $goal) {
+            $ar = new CActiveRecord(array(
+                "id" => null,
+                "plan_id" => $id,
+                "goal" => $goal
+            ));
+            $ar->setTable(TABLE_WORK_PLAN_GOALS);
+            $ar->insert();
+        }
+        // задачи
+        foreach ($data["tasks"] as $task) {
+            $ar = new CActiveRecord(array(
+                "id" => null,
+                "plan_id" => $id,
+                "task" => $task
+            ));
+            $ar->setTable(TABLE_WORK_PLAN_TASKS);
+            $ar->insert();
+        }
     }
 }

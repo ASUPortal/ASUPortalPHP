@@ -8,7 +8,9 @@ application
     function($scope, workPlanFactory){
         $scope.workplan;
         $scope.workplan = {
-            profiles: []
+            profiles: [],
+            goals: [],
+            tasks: []
         };
         $scope.init = function($id){
             workPlanFactory.get({id: $id}, function(data){

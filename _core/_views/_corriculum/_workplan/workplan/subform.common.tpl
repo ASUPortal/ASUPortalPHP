@@ -16,6 +16,10 @@
 
 {NgHtml::activeTextRow($plan, 'workplan', 'year')}
 
+{NgHtml::activeTaggingRow($plan, 'workplan', 'goals', 'workplan_goals', true)}
+
+{NgHtml::activeTaggingRow($plan, 'workplan', 'tasks', 'workplan_tasks', true)}
+
 {NgHtml::activeTextBoxRow($plan, 'workplan', 'intended_for')}
 
 {NgHtml::activeSelectRow($plan, 'workplan', 'author_id', 'staff')}

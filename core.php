@@ -292,6 +292,8 @@
     define("TABLE_HOURS_RATE", "hours_rate");
     define("TABLE_WORK_PLANS", "pl_corriculum_workplans");
     define("TABLE_WORK_PLAN_PROFILES", "pl_corriculum_workplan_profiles");
+    define("TABLE_WORK_PLAN_GOALS", "pl_corriculum_workplan_goals");
+    define("TABLE_WORK_PLAN_TASKS", "pl_corriculum_workplan_tasks");
     /**
      * Константы пагинатора
      */
