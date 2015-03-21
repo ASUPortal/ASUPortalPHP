@@ -7,11 +7,29 @@
  * To change this template use File | Settings | File Templates.
  *
  * Термин любого словаря, чтобы однообразный доступ к ним был
+ *
+ * @property childTerms CArrayList
  */
 class CTerm extends CActiveModel{
     protected $_table = TABLE_TAXONOMY_TERMS;
+    protected $_childTerms = null;
     private $_aRecord = null;
     private $_taxonomy = null;
+
+    public function relations() {
+        return array(
+            "childTerms" => array(
+                "relationPower" => RELATION_MANY_TO_MANY,
+                "storageProperty" => "_childTerms",
+                "joinTable" => TABLE_TAXONOMY_CHILD_TERMS,
+                "leftCondition" => "parent_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "rightKey" => "child_id",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getTerm"
+            )
+        );
+    }
+
     public static function getClassName() {
         return __CLASS__;
     }

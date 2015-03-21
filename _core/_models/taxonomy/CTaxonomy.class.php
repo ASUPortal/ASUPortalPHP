@@ -7,10 +7,26 @@
  * To change this template use File | Settings | File Templates.
  *
  * Словарь таксономии
+ *
+ * @property CTaxonomy childTaxonomy
  */
 class CTaxonomy extends CActiveModel {
     protected $_table = TABLE_TAXONOMY;
     protected $_cacheTerms = null;
+    protected $_childTaxonomy = null;
+
+    public function relations() {
+        return array(
+            "childTaxonomy" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_childTaxonomy",
+                "storageField" => "child_taxonomy_id",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getTaxonomy"
+            )
+        );
+    }
+
     public function attributeLabels() {
         return array(
             "name" => "Название",

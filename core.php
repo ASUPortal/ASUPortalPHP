@@ -213,6 +213,7 @@
     define("TABLE_CORRICULUM_ATTESTATIONS", "pl_corriculum_attestations");
     define("TABLE_TAXONOMY", "taxonomy");
     define("TABLE_TAXONOMY_TERMS", "taxonomy_terms");
+    define("TABLE_TAXONOMY_CHILD_TERMS", "taxonomy_term_hierarchy");
     define("TABLE_EDUCATION_FORMS", "study_forms");
     define("TABLE_RATING_INDEXES", "rating_index");
     define("TABLE_PERSON_RATINGS", "rating_person_indexes");

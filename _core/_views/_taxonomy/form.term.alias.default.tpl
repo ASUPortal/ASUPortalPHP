@@ -13,3 +13,15 @@
         {CHtml::error("alias", $term)}
     </div>
 </div>
+
+{if !is_null($term->getParentTaxonomy())}
+    {if !is_null($term->getParentTaxonomy()->childTaxonomy)}
+        <div class="control-group">
+            {CHtml::activeLabel("childTerms", $term)}
+            <div class="controls">
+                {CHtml::activeLookup("childTerms", $term, $term->getParentTaxonomy()->childTaxonomy->getAlias(), true)}
+                {CHtml::error("childTerms", $term)}
+            </div>
+        </div>
+    {/if}
+{/if}

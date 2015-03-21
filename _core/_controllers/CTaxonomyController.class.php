@@ -99,7 +99,6 @@ class CTaxonomyController extends CBaseController {
         $taxonomy->setAttributes(CRequest::getArray($taxonomy::getClassName()));
         $taxonomy->save();
 
-
         $terms = CRequest::getArray($taxonomy::getClassName());
         $terms = explode(chr(13), $terms["terms"]);
         foreach ($terms as $term) {
