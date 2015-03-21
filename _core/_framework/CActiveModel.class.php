@@ -299,7 +299,11 @@ class CActiveModel extends CModel implements IJSONSerializable{
                     foreach (CActiveRecordProvider::getWithCondition($table, $condition, $managerOrder)->getItems() as $item) {
                         $obj = $managerClass::$managerGetter($item->getId());
                         if (!is_null($obj)) {
-                            $this->$private->add($obj->getId(), $obj);
+                            if (is_object($obj)) {
+                                $this->$private->add($obj->getId(), $obj);
+                            } else {
+                                $this->$private->add($this->$private->getCount(), $obj);
+                            }
                         }
                     }
                 }
@@ -451,6 +455,18 @@ class CActiveModel extends CModel implements IJSONSerializable{
                     }
                 }
                 $obj->$field = $array;
+            } elseif ($properties["relationPower"] == RELATION_HAS_MANY) {
+                $array = array();
+                if ($relations) {
+                    foreach ($this->$field->getItems() as $value) {
+                        if (is_object($value)) {
+                            $array[] = $value->toJsonObject();
+                        } else {
+                            $array[] = $value;
+                        }
+                    }
+                }
+                $obj->$field = $array;
             }
         }
         return $obj;
@@ -460,6 +476,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
      * Обновление модели на основе данных, пришедших из json-контроллера
      *
      * @param $jsonString
+     * @return array
      */
     public function updateWithJsonString($jsonString) {
         // данные модели
@@ -502,6 +519,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
         foreach ($modelData as $key=>$value) {
             $this->$key = $value;
         }
+        return $modelData;
     }
 
 }
