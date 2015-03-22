@@ -10,12 +10,27 @@ application
         $scope.workplan = {
             profiles: [],
             goals: [],
-            tasks: []
+            tasks: [],
+            competentions: []
         };
         $scope.init = function($id){
             workPlanFactory.get({id: $id}, function(data){
                 $scope.workplan = data;
             });
+        };
+
+        $scope.addCompetention = function(){
+            $scope.workplan.competentions[$scope.workplan.competentions.length] = {
+                skills: [],
+                knowledges: [],
+                experiences: []
+            };
+        };
+
+        $scope.removeCompetention = function(index){
+            if (confirm("Вы действительно хотите удалить компетенцию?")) {
+                $scope.workplan.competentions.splice(index, 1);
+            }
         };
 
         $scope.save = function(){

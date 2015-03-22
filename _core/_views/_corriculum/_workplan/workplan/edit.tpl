@@ -8,10 +8,14 @@
     <form action="index.php" method="post" enctype="multipart/form-data" class="form-horizontal" ng-controller="WorkPlanController as ctrl" ng-init="init({$plan->getId()})">
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#common">Общая информация</a></li>
+            <li><a data-toggle="tab" href="#competentions">Компетенции</a></li>
         </ul>
         <div class="tab-content">
             <div id="common" class="tab-pane active">
                 {include file="_corriculum/_workplan/workplan/subform.common.tpl"}
+            </div>
+            <div id="competentions" class="tab-pane">
+                {include file="_corriculum/_workplan/workplan/subform.competentions.tpl"}
             </div>
         </div>
         {NgHtml::activeSaveRow($plan, 'workplan')}

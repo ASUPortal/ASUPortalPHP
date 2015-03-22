@@ -23,6 +23,7 @@
  * @property CArrayList profiles
  * @property CArrayList goals
  * @property CArrayList tasks
+ * @property CArrayList competentions
  */
 
 class CWorkPlan extends CActiveModel implements IVersionControl{
@@ -31,6 +32,7 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
     protected $_profiles;
     protected $_goals;
     protected $_tasks;
+    protected $_competentions;
 
     protected function relations() {
         return array(
@@ -65,6 +67,14 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CWorkPlan",
                 "managerGetObject" => "getWorkplanTask"
+            ),
+            "competentions" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_competentions",
+                "storageTable" => TABLE_WORK_PLAN_COMPETENTIONS,
+                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "managerClass" => "CWorkPlanManager",
+                "managerGetObject" => "getWorkplanCompetention"
             )
         );
     }
@@ -90,16 +100,18 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
     public function updateWithJsonString($jsonString) {
         $data = parent::updateWithJsonString($jsonString);
         $id = $data["id"];
+        // почистим связанные таблицы
+        CActiveRecordProvider::removeWithCondition(TABLE_WORK_PLAN_GOALS, "plan_id=".$id);
+        CActiveRecordProvider::removeWithCondition(TABLE_WORK_PLAN_TASKS, "plan_id=".$id);
+        CActiveRecordProvider::removeWithCondition(TABLE_WORK_PLAN_COMPETENTIONS, "plan_id=".$id);
+        CActiveRecordProvider::removeWithCondition(TABLE_WORK_PLAN_SKILLS, "plan_id=".$id);
+        CActiveRecordProvider::removeWithCondition(TABLE_WORK_PLAN_EXPERIENCES, "plan_id=".$id);
+        CActiveRecordProvider::removeWithCondition(TABLE_WORK_PLAN_KNOWLEDGES, "plan_id=".$id);
+        // добавим данные обратно
         // цели
         /**
          * @var CActiveRecord $ar
          */
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_GOALS, "plan_id=".$id)->getItems() as $ar) {
-            $ar->remove();
-        }
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_TASKS, "plan_id=".$id)->getItems() as $ar) {
-            $ar->remove();
-        }
         foreach ($data["goals"] as $goal) {
             $ar = new CActiveRecord(array(
                 "id" => null,
@@ -118,6 +130,49 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
             ));
             $ar->setTable(TABLE_WORK_PLAN_TASKS);
             $ar->insert();
+        }
+        // компетенции
+        foreach ($data["competentions"] as $cData) {
+            $compAr = new CActiveModel(new CActiveRecord(array(
+                "id" => null,
+                "plan_id" => $id,
+                "competention_id" => $cData["competention_id"]
+            )));
+            $compAr->getRecord()->setTable(TABLE_WORK_PLAN_COMPETENTIONS);
+            $compAr->save();
+            // знания
+            foreach ($cData["knowledges"] as $knowledge) {
+                $ar = new CActiveRecord(array(
+                    "id" => null,
+                    "plan_id" => $id,
+                    "competention_id" => $compAr->getId(),
+                    "knowledge_id" => $knowledge["id"]
+                ));
+                $ar->setTable(TABLE_WORK_PLAN_KNOWLEDGES);
+                $ar->insert();
+            }
+            // умения
+            foreach ($cData["skills"] as $skill) {
+                $ar = new CActiveRecord(array(
+                    "id" => null,
+                    "plan_id" => $id,
+                    "competention_id" => $compAr->getId(),
+                    "skill_id" => $skill["id"]
+                ));
+                $ar->setTable(TABLE_WORK_PLAN_SKILLS);
+                $ar->insert();
+            }
+            // навыки
+            foreach ($cData["experiences"] as $exp) {
+                $ar = new CActiveRecord(array(
+                    "id" => null,
+                    "plan_id" => $id,
+                    "competention_id" => $compAr->getId(),
+                    "experience_id" => $exp["id"]
+                ));
+                $ar->setTable(TABLE_WORK_PLAN_EXPERIENCES);
+                $ar->insert();
+            }
         }
     }
 }

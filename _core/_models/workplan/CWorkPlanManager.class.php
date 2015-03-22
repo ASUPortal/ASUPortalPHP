@@ -19,4 +19,17 @@ class CWorkPlanManager {
         }
         return $plan;
     }
+
+    /**
+     * @param $id
+     * @return CWorkPlanCompetention
+     */
+    public static function getWorkplanCompetention($id) {
+        $competention = null;
+        $ar = CActiveRecordProvider::getById(TABLE_WORK_PLAN_COMPETENTIONS, $id);
+        if (!is_null($ar)) {
+            $competention = new CWorkPlanCompetention($ar);
+        }
+        return $competention;
+    }
 }

@@ -294,6 +294,10 @@
     define("TABLE_WORK_PLAN_PROFILES", "pl_corriculum_workplan_profiles");
     define("TABLE_WORK_PLAN_GOALS", "pl_corriculum_workplan_goals");
     define("TABLE_WORK_PLAN_TASKS", "pl_corriculum_workplan_tasks");
+    define("TABLE_WORK_PLAN_COMPETENTIONS", "pl_corriculum_workplan_competentions");
+    define("TABLE_WORK_PLAN_KNOWLEDGES", "pl_corriculum_workplan_knowledges");
+    define("TABLE_WORK_PLAN_SKILLS", "pl_corriculum_workplan_skills");
+    define("TABLE_WORK_PLAN_EXPERIENCES", "pl_corriculum_workplan_experiences");
     /**
      * Константы пагинатора
      */
