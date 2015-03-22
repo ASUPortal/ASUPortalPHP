@@ -45,8 +45,16 @@ class NgHtml extends CHtml{
         echo '<span ng-click="save()" class="btn btn-primary">Сохранить</span>';
         self::rowEnd($model);
     }
-    public static function activeTaggingRow(CModel $model, $ngModelName, $ngFieldName, $glossary, $multiple = false) {
+    public static function activeTaggingRow(CModel $model, $ngModelName, $ngFieldName, $properties = array()) {
         self::rowStart($model, $ngFieldName);
+        $glossary = "";
+        if (array_key_exists("glossary", $properties)) {
+            $glossary = $properties["glossary"];
+        }
+        $multiple = false;
+        if (array_key_exists("multiple", $properties)) {
+            $multiple = $properties["multiple"];
+        }
         echo '<div ng-controller="LookupController as lookupCtrl" ng-init="lookupCtrl.initLookup(\''.$glossary.'\')">';
 
         if ($multiple) {
@@ -62,9 +70,30 @@ class NgHtml extends CHtml{
 
         echo '</div>';
         self::rowEnd($model);
+        // будут по умолчанию на select2
+        if (!self::$select2Init) {
+            self::$select2Init = true;
+            ?>
+            <script src="<?php echo WEB_ROOT; ?>_core/_webapp/lookupController.js"></script>
+            <style>
+                .select2 > .select2-choice.ui-select-match {
+                    /* Because of the inclusion of Bootstrap */
+                    height: 29px;
+                }
+            </style>
+        <?
+        }
     }
-    public static function activeSelectRow(CModel $model, $ngModelName, $ngFieldName, $glossary, $multiple = false) {
+    public static function activeSelectRow(CModel $model, $ngModelName, $ngFieldName, $properties = array()) {
         self::rowStart($model, $ngFieldName);
+        $glossary = "";
+        if (array_key_exists("glossary", $properties)) {
+            $glossary = $properties["glossary"];
+        }
+        $multiple = false;
+        if (array_key_exists("multiple", $properties)) {
+            $multiple = $properties["multiple"];
+        }
         echo '<div ng-controller="LookupController as lookupCtrl" ng-init="lookupCtrl.initLookup(\''.$glossary.'\')">';
 
         if ($multiple) {
