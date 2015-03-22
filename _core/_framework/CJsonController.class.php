@@ -55,8 +55,11 @@ class CJsonController extends CBaseController{
             throw new Exception("Класс ".$modelClass." не реализует интерфейс IJSONSerializable");
         }
         $rest_json = file_get_contents("php://input");
+        // пусть будет транзакционным по умолчанию
+        $transaction = new CTransaction();
         $model->updateWithJsonString($rest_json);
         $model->save();
+        $transaction->commit();
     }
 
     /**

@@ -435,10 +435,12 @@ class CQuery {
      * Запрос собственного типа, для всякого разного
      *
      * @param $query
+     * @return $this
      */
     public function query($query) {
         $this->_type = QUERY_CUSTOM;
         $this->_query = $query;
+        return $this;
     }
     private function queryCustom() {
         if (is_object($this->getDb())) {
@@ -452,8 +454,10 @@ class CQuery {
         } else {
             $res = new CArrayList();
             $q = mysql_query($this->getQueryString(), $this->getDb()) or die(mysql_error($this->getDb())." -> ".$this->getQueryString());
-            while ($row = mysql_fetch_assoc($q)) {
-                $res->add($res->getCount(), $row);
+            if (mysql_affected_rows($this->getDb()) > 0) {
+                while ($row = mysql_fetch_assoc($q)) {
+                    $res->add($res->getCount(), $row);
+                }
             }
             return $res;
         }
