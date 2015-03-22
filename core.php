@@ -298,6 +298,8 @@
     define("TABLE_WORK_PLAN_KNOWLEDGES", "pl_corriculum_workplan_knowledges");
     define("TABLE_WORK_PLAN_SKILLS", "pl_corriculum_workplan_skills");
     define("TABLE_WORK_PLAN_EXPERIENCES", "pl_corriculum_workplan_experiences");
+    define("TABLE_WORK_PLAN_DISCIPLINES_BEFORE", "pl_corriculum_workplan_disciplines_before");
+    define("TABLE_WORK_PLAN_DISCIPLINES_AFTER", "pl_corriculum_workplan_disciplines_after");
     /**
      * Константы пагинатора
      */

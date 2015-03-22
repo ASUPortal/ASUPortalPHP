@@ -33,6 +33,8 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
     protected $_goals;
     protected $_tasks;
     protected $_competentions;
+    protected $_disciplinesBefore;
+    protected $_disciplinesAfter;
 
     protected function relations() {
         return array(
@@ -75,6 +77,24 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CWorkPlanManager",
                 "managerGetObject" => "getWorkplanCompetention"
+            ),
+            "disciplinesBefore" => array(
+                "relationPower" => RELATION_MANY_TO_MANY,
+                "storageProperty" => "_disciplinesBefore",
+                "joinTable" => TABLE_WORK_PLAN_DISCIPLINES_BEFORE,
+                "leftCondition" => "plan_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "rightKey" => "discipline_id",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getDiscipline"
+            ),
+            "disciplinesAfter" => array(
+                "relationPower" => RELATION_MANY_TO_MANY,
+                "storageProperty" => "_disciplinesAfter",
+                "joinTable" => TABLE_WORK_PLAN_DISCIPLINES_AFTER,
+                "leftCondition" => "plan_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "rightKey" => "discipline_id",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getDiscipline"
             )
         );
     }

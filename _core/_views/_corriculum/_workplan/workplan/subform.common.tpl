@@ -16,10 +16,20 @@
 
 {NgHtml::activeTextRow($plan, 'workplan', 'year')}
 
+{NgHtml::activeTextBoxRow($plan, 'workplan', 'intended_for')}
+
+{NgHtml::activeSelectRow($plan, 'workplan', 'author_id', 'staff')}
+
+<h3>1. Цели и задачи освоения дисциплины</h3>
+
 {NgHtml::activeTaggingRow($plan, 'workplan', 'goals', 'workplan_goals', true)}
 
 {NgHtml::activeTaggingRow($plan, 'workplan', 'tasks', 'workplan_tasks', true)}
 
-{NgHtml::activeTextBoxRow($plan, 'workplan', 'intended_for')}
+<h3>2. Место дисциплины в структуре ООП ВПО</h3>
 
-{NgHtml::activeSelectRow($plan, 'workplan', 'author_id', 'staff')}
+{NgHtml::activeTextBoxRow($plan, 'workplan', 'position')}
+
+{NgHtml::activeSelectRow($plan, 'workplan', 'disciplinesBefore', 'subjects', true)}
+
+{NgHtml::activeSelectRow($plan, 'workplan', 'disciplinesAfter', 'subjects', true)}

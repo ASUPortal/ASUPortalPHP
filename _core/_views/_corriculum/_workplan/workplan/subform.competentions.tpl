@@ -1,3 +1,5 @@
+<h3>Требования к результатам освоения содержания дисциплины</h3>
+
 <span class="btn btn-success btn-mini" ng-click="addCompetention()">Добавить компетенцию</span>
 
 <table class="table table-striped">
