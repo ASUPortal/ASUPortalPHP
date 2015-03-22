@@ -11,7 +11,9 @@ application
             profiles: [],
             goals: [],
             tasks: [],
-            competentions: []
+            competentions: [],
+            disciplinesBefore: [],
+            disciplinesAfter: []
         };
         $scope.init = function($id){
             workPlanFactory.get({id: $id}, function(data){
