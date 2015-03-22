@@ -8,12 +8,13 @@ application
 
         }, {
             query: {
-                method: "GET",
+                method: "POST",
                 isArray: true,
                 cache: lookupCache,
                 params: {
                     catalog: '@catalog',
-                    action: "NgLookupViewData"
+                    action: "NgLookupViewData",
+                    properties: '@properties'
                 }
             }
         });
@@ -26,7 +27,12 @@ application
             $scope.itemsPlain;
 
             this.initLookup = function (glossary) {
-                lookupCatalog.query({catalog: glossary}, function(data) {
+                properties = [];
+                if (glossary in lookupCatalogProperties) {
+                    properties = lookupCatalogProperties[glossary];
+                    debugger;
+                }
+                lookupCatalog.query({catalog: glossary, properties: properties}, function(data) {
                     $scope.items = data;
                     $scope.itemsPlain = [];
                     for (var i = 0; i < data.length; i++) {

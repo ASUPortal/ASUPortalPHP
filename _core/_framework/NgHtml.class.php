@@ -55,6 +55,15 @@ class NgHtml extends CHtml{
         if (array_key_exists("multiple", $properties)) {
             $multiple = $properties["multiple"];
         }
+        $glossaryProperties = array();
+        if (array_key_exists("properties", $properties)) {
+            $glossaryProperties = $properties["properties"];
+        }
+        if (count($glossaryProperties) > 0) {
+            echo '<script>
+                lookupCatalogProperties.'.$glossary.' = '.json_encode($glossaryProperties).';
+            </script>';
+        }
         echo '<div ng-controller="LookupController as lookupCtrl" ng-init="lookupCtrl.initLookup(\''.$glossary.'\')">';
 
         if ($multiple) {
@@ -81,6 +90,11 @@ class NgHtml extends CHtml{
                     height: 29px;
                 }
             </style>
+            <script>
+                if (typeof lookupCatalogProperties == "undefined") {
+                    lookupCatalogProperties = {};
+                }
+            </script>
         <?
         }
     }
@@ -93,6 +107,15 @@ class NgHtml extends CHtml{
         $multiple = false;
         if (array_key_exists("multiple", $properties)) {
             $multiple = $properties["multiple"];
+        }
+        $glossaryProperties = array();
+        if (array_key_exists("properties", $properties)) {
+            $glossaryProperties = $properties["properties"];
+        }
+        if (count($glossaryProperties) > 0) {
+            echo '<script>
+                lookupCatalogProperties.'.$glossary.' = '.json_encode($glossaryProperties).';
+            </script>';
         }
         echo '<div ng-controller="LookupController as lookupCtrl" ng-init="lookupCtrl.initLookup(\''.$glossary.'\')">';
 
@@ -125,6 +148,11 @@ class NgHtml extends CHtml{
                         height: 29px;
                     }
                 </style>
+                <script>
+                    if (typeof lookupCatalogProperties == "undefined") {
+                        lookupCatalogProperties = {};
+                    }
+                </script>
             <?
         }
     }
