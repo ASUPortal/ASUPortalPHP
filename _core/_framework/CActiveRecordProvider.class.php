@@ -134,4 +134,19 @@ class CActiveRecordProvider {
     public static function removeFromCache($table, $id) {
         self::getCache()->removeItem($table."_".$id);
     }
+
+    /**
+     * Удалить все записи из таблицы
+     *
+     * @param $table
+     * @param $condition
+     */
+    public static function removeWithCondition($table, $condition) {
+        /**
+         * @var CActiveRecord $ar
+         */
+        foreach (CActiveRecordProvider::getWithCondition($table, $condition)->getItems() as $ar) {
+            $ar->remove();
+        }
+    }
 }
