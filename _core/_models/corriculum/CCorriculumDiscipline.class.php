@@ -95,7 +95,7 @@ class CCorriculumDiscipline extends CActiveModel {
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_plans",
                 "storageTable" => TABLE_WORK_PLANS,
-                "storageCondition" => "corriculum_discipline_id=".$this->id,
+                "storageCondition" => "corriculum_discipline_id=".$this->id." and _version_of = 0",
                 "managerClass" => "CWorkPlanManager",
                 "managerGetObject" => "getWorkplan"
             )
