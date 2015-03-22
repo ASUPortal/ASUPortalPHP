@@ -10,7 +10,7 @@ class CTransaction {
     private $_completed = false;
     public function __construct() {
         $this->_completed = false;
-        $query = new C2Query();
+        $query = new CQuery();
         $query->query("START TRANSACTION;")->execute();
     }
 
@@ -18,7 +18,7 @@ class CTransaction {
      * Откат тразакции
      */
     public function rollback() {
-        $query = new C2Query();
+        $query = new CQuery();
         $query->query("ROLLBACK;")->execute();
     }
 
@@ -26,7 +26,7 @@ class CTransaction {
      * Фиксация транзакции
      */
     public function commit() {
-        $query = new C2Query();
+        $query = new CQuery();
         $query->query("COMMIT;")->execute();
     }
 

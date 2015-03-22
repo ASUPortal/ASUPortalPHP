@@ -150,6 +150,7 @@ class CQuery {
         if (!is_null($this->_limit)) {
             $q .= " LIMIT ".$this->_limitStart.", ".$this->_limit;
         }
+        $q .= ";";
         $this->_query = $q;
         if (is_object($this->getDb())) {
             if (!$this->_isExecuted) {
@@ -208,7 +209,7 @@ class CQuery {
             $q =
                 "INSERT INTO ".$this->_table." ".
                     "(".implode(", ", $columns).") VALUES ".
-                    "(".implode(", ", $placeholders).")";
+                    "(".implode(", ", $placeholders).");";
             $this->_query = $q;
             if (!$this->_isExecuted) {
                 $statement = $this->getDb()->prepare($q);
@@ -227,7 +228,7 @@ class CQuery {
             $q =
                 "INSERT INTO ".$this->_table." ".
                     "(".implode(", ", $columns).") VALUES ".
-                    "(".implode(", ", $values).")";
+                    "(".implode(", ", $values).");";
             $this->_query = $q;
             if (!$this->_isExecuted) {
                 $this->_result = mysql_query($q, $this->getDb()) or die(mysql_error($this->getDb())." -> ".$q);
@@ -256,6 +257,7 @@ class CQuery {
                 $q .=
                     "WHERE ".$this->_condition;
             }
+            $q .= ";";
             $this->_query = $q;
             if (!$this->_isExecuted) {
                 $this->_result = $this->getDb()->prepare($q);
@@ -281,6 +283,7 @@ class CQuery {
                 $q .=
                     "WHERE ".$this->_condition;
             }
+            $q .= ";";
             $this->_query = $q;
             if (!$this->_isExecuted) {
                 $this->_result = mysql_query($q, $this->getDb()) or die(mysql_error($this->getDb())." -> ".$q);
@@ -299,6 +302,7 @@ class CQuery {
             $q .=
                 "WHERE ".$this->_condition;
         }
+        $q .= ";";
         $this->_query = $q;
         if (is_object($this->getDb())) {
             if (!$this->_isExecuted) {
