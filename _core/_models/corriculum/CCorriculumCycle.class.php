@@ -7,6 +7,7 @@
  * To change this template use File | Settings | File Templates.
  *
  * @property CCorriculum corriculum
+ * @property string title
  */
 class CCorriculumCycle extends CActiveModel {
     protected $_table = TABLE_CORRICULUM_CYCLES;

@@ -66,6 +66,10 @@ class CWorkPlanController extends CJsonController{
         }
         $plan->year = date("Y");
         $plan->author_id = CSession::getCurrentPerson()->getId();
+        // место дисциплины в структуре плана
+        if (!is_null($discipline->cycle)) {
+            $plan->position = "Дисциплина относится к базовой части учебного цикла ".$discipline->cycle->title ;
+        }
         $plan->save();
         $this->redirect("?action=edit&id=".$plan->getId());
     }

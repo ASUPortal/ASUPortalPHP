@@ -18,6 +18,7 @@
  * @property int author_id
  * @property string year
  * @property string intended_for // предназначена для
+ * @property string position
  *
  * @property CTerm discipline
  * @property CArrayList profiles
