@@ -2,13 +2,15 @@
  * Created by abarmin on 14.03.15.
  */
 application
-    .factory("LookupCatalog", function($resource){
+    .factory("LookupCatalog", function($resource, $cacheFactory){
+        var lookupCache = $cacheFactory("LookupCatalog");
         return $resource(web_root + "_modules/_search/index.php", {
 
         }, {
             query: {
                 method: "GET",
                 isArray: true,
+                cache: lookupCache,
                 params: {
                     catalog: '@catalog',
                     action: "NgLookupViewData"
