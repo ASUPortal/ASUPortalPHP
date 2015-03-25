@@ -141,16 +141,37 @@ if(isset($_GET['id'])) {
                 echo '<td style="width: 130px;" align="center" valign="middle">';
                 if ($a['image']!="") {
                     if ($a['news_type']=='notice') {
-                        echo '<img src="images/news/small/sm_'.urlencode($a['image']).'" align="center" valign="middle"  border=0>';
+                    	?>
+                    	<div id="modal<?php echo ($a['id'])?>" class="modal hide fade">
+						  <div class="modal-header">
+						    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						    <h3 id="myModalLabel"><?php echo ($a['title'])?></h3>
+						  </div>
+						  <div class="modal-body">
+						    <img src="images/news/<?php echo urlencode($a['image'])?>">
+						  </div>
+						</div>
+                    	<p><a href="#modal<?php echo ($a['id'])?>" data-toggle="modal">
+                        <?php 
+                        echo '<img src="_modules/_thumbnails/?src=images/news/'.$a['image'].'" align="center" valign="middle"  border=0>';
+                        ?>
+                   		</a></p>
+                        <?php
                     } else {
-                        echo '<img src="images/news/small/sm_'.urlencode($a['image']).'" align="center" valign="middle" alt="Фото новости" border=0>';
+                        ?>
+                    	<p><a href="#modal<?php echo ($a['id'])?>" data-toggle="modal">
+                        <?php 
+                        echo '<img src="_modules/_thumbnails/?src=images/news/'.$a['image'].'" align="center" valign="middle" alt="Фото новости" border=0>';
+                        ?>
+						</a></p>
+                        <?php
                     }
                 } else {
                     //сначала пытаемся получить фото из анкета, если не находим из биографии
                     if ($a['user_photo']!="") {
-                        echo '<img src="images/lects/small/sm_'.$a['user_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из биографии" border=0>';
+                        echo '<img src="_modules/_thumbnails/?src=images/lects/'.$a['user_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из биографии" border=0>';
                     } else if ($showKadriImg_ifNullBiogImg && $a['kadri_photo']!="") {
-                        echo '<img src="images/lects/small/sm_'.$a['kadri_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из анкеты" border=0>';
+                        echo '<img src="_modules/_thumbnails/?src=images/lects/'.$a['kadri_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из анкеты" border=0>';
                     } else {
                         echo '<img src="images/design/notice.gif" border="0" align="center" valign="middle" alt="Фото новости" border=0>';
                     }
