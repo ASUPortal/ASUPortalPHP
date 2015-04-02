@@ -31,13 +31,18 @@ application
                 if (glossary in lookupCatalogProperties) {
                     properties = lookupCatalogProperties[glossary];
                 }
-                lookupCatalog.query({catalog: glossary, properties: properties}, function(data) {
-                    $scope.items = data;
+                if (glossary == "emptyGlossary") {
+                    $scope.items = [];
                     $scope.itemsPlain = [];
-                    for (var i = 0; i < data.length; i++) {
-                        $scope.itemsPlain[$scope.itemsPlain.length] = data[i].name;
-                    }
-                });
+                } else {
+                    lookupCatalog.query({catalog: glossary, properties: properties}, function(data) {
+                        $scope.items = data;
+                        $scope.itemsPlain = [];
+                        for (var i = 0; i < data.length; i++) {
+                            $scope.itemsPlain[$scope.itemsPlain.length] = data[i].name;
+                        }
+                    });
+                }
             }
         }
     ]);

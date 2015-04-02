@@ -41,7 +41,7 @@ class NgHtml extends CHtml{
         self::rowEnd($model);
     }
     public static function activeTagging($ngModelName, $ngFieldName, $properties = array()) {
-        $glossary = "";
+        $glossary = "emptyGlossary";
         if (array_key_exists("glossary", $properties)) {
             $glossary = $properties["glossary"];
         }
