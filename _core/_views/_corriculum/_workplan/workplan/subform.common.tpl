@@ -22,9 +22,31 @@
 
 <h3>1. Цели и задачи освоения дисциплины</h3>
 
-{NgHtml::activeTaggingRow($plan, 'workplan', 'goals', ["glossary"=>"workplan_goals", "multiple"=>true])}
+<span class="btn btn-success btn-mini" ng-click="addTask()">Добавить задачу</span>
 
-{NgHtml::activeTaggingRow($plan, 'workplan', 'tasks', ["glossary"=>"workplan_tasks", "multiple"=>true])}
+<table class="table table-striped">
+    <tr ng-repeat="t in workplan.tasks">
+        <td>
+            <span class="btn btn-warning btn-mini" ng-click="removeTask($index)">Удалить задачу</span>
+        </td>
+        <td>
+            {NgHtml::activeTextTagging("t", "task", ["glossary" => "workplan_tasks"])}
+        <td>
+    </tr>
+</table>
+
+<span class="btn btn-success btn-mini" ng-click="addGoal()">Добавить цель</span>
+
+<table class="table table-striped">
+    <tr ng-repeat="t in workplan.goals">
+        <td>
+            <span class="btn btn-warning btn-mini" ng-click="removeGoal($index)">Удалить цель</span>
+        </td>
+        <td>
+            {NgHtml::activeTextTagging("t", "goal", ["glossary" => "workplan_goals"])}
+        <td>
+    </tr>
+</table>
 
 <h3>2. Место дисциплины в структуре ООП ВПО</h3>
 

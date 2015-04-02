@@ -13,12 +13,37 @@ application
             tasks: [],
             competentions: [],
             disciplinesBefore: [],
-            disciplinesAfter: []
+            disciplinesAfter: [],
+            sections: []
         };
         $scope.init = function($id){
             workPlanFactory.get({id: $id}, function(data){
                 $scope.workplan = data;
             });
+        };
+
+        $scope.addTask = function(){
+            $scope.workplan.tasks[$scope.workplan.tasks.length] = {
+                plan_id: $scope.workplan.id
+            };
+        };
+
+        $scope.removeTask = function(index){
+            if (confirm("Вы действительно хотите удалить задачу?")) {
+                $scope.workplan.tasks.splice(index, 1);
+            }
+        };
+
+        $scope.addGoal = function(){
+            $scope.workplan.goals[$scope.workplan.goals.length] = {
+                plan_id: $scope.workplan.id
+            };
+        };
+
+        $scope.removeGoal = function(index){
+            if (confirm("Вы действительно хотите удалить цель?")) {
+                $scope.workplan.goals.splice(index, 1);
+            }
         };
 
         $scope.addCompetention = function(){
@@ -33,6 +58,15 @@ application
             if (confirm("Вы действительно хотите удалить компетенцию?")) {
                 $scope.workplan.competentions.splice(index, 1);
             }
+        };
+
+        $scope.addSection = function(){
+            $scope.workplan.sections[$scope.workplan.sections.length] = {
+                plan_id: $scope.workplan.id,
+                sectionIndex: $scope.workplan.sections.length + 1,
+                lectures: [],
+                controls: []
+            };
         };
 
         $scope.save = function(){
