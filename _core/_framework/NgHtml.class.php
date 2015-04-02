@@ -20,24 +20,34 @@ class NgHtml extends CHtml{
         echo '</div>';
         echo '</div>';
     }
-    public static function activeTextRow(CModel $model, $ngModelName, $ngFieldName) {
-        self::rowStart($model, $ngFieldName);
+    public static function activeText($ngModelName, $ngFieldName) {
         CHtml::textField(
             $ngModelName."_".$ngFieldName,
             null,
             "",
             "",
             'ng-model="'.$ngModelName.'.'.$ngFieldName.'"');
+    }
+    public static function activeTextRow(CModel $model, $ngModelName, $ngFieldName) {
+        self::rowStart($model, $ngFieldName);
+        self::activeText($ngModelName, $ngFieldName);
         self::rowEnd($model);
     }
-    public static function activeTextBoxRow(CModel $model, $ngModelName, $ngFieldName) {
-        self::rowStart($model, $ngFieldName);
+    public static function activeTextBox($ngModelName, $ngFieldName, $properties = array()) {
+        $html = "";
+        if (array_key_exists("html", $properties)) {
+            $html = $properties["html"];
+        }
         CHtml::textBox(
             $ngModelName."_".$ngFieldName,
             null,
             "",
             "",
-            'ng-model="'.$ngModelName.'.'.$ngFieldName.'"');
+            'ng-model="'.$ngModelName.'.'.$ngFieldName.'" '.$html);
+    }
+    public static function activeTextBoxRow(CModel $model, $ngModelName, $ngFieldName) {
+        self::rowStart($model, $ngFieldName);
+        self::activeTextBox($ngModelName, $ngFieldName);
         self::rowEnd($model);
     }
     public static function activeTagging($ngModelName, $ngFieldName, $properties = array()) {
@@ -101,9 +111,8 @@ class NgHtml extends CHtml{
         self::activeTagging($ngModelName, $ngFieldName, $properties);
         self::rowEnd($model);
     }
-    public static function activeSelectRow(CModel $model, $ngModelName, $ngFieldName, $properties = array()) {
-        self::rowStart($model, $ngFieldName);
-        $glossary = "";
+    public static function activeSelect($ngModelName, $ngFieldName, $properties = array()) {
+        $glossary = "emptyGlossary";
         if (array_key_exists("glossary", $properties)) {
             $glossary = $properties["glossary"];
         }
@@ -124,39 +133,44 @@ class NgHtml extends CHtml{
 
         if ($multiple) {
             echo '<ui-select style="width: 312px;" multiple ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2">';
-                echo '<ui-select-match placeholder="Выберите значение из списка">{{$item.name}}</ui-select-match>';
-                echo '<ui-select-choices repeat="item in items | filter: $select.search ">';
-                    echo '<div ng-bind-html="item.name | highlight: $select.search"></div>';
-                echo '</ui-select-choices>';
+            echo '<ui-select-match placeholder="Выберите значение из списка">{{$item.name}}</ui-select-match>';
+            echo '<ui-select-choices repeat="item in items | filter: $select.search ">';
+            echo '<div ng-bind-html="item.name | highlight: $select.search"></div>';
+            echo '</ui-select-choices>';
             echo '</ui-select>';
         } else {
             echo '<ui-select style="width: 312px;" ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2">';
-                echo '<ui-select-match placeholder="Выберите значение из списка">{{$select.selected.name}}</ui-select-match>';
-                echo '<ui-select-choices repeat="item.id as item in items | filter: $select.search">';
-                    echo '<div ng-bind-html="item.name | highlight: $select.search"></div>';
-                echo '</ui-select-choices>';
+            echo '<ui-select-match placeholder="Выберите значение из списка">{{$select.selected.name}}</ui-select-match>';
+            echo '<ui-select-choices repeat="item.id as item in items | filter: $select.search">';
+            echo '<div ng-bind-html="item.name | highlight: $select.search"></div>';
+            echo '</ui-select-choices>';
             echo '</ui-select>';
         }
 
         echo '</div>';
-        self::rowEnd($model);
         // будут по умолчанию на select2
         if (!self::$select2Init) {
             self::$select2Init = true;
             ?>
-                <script src="<?php echo WEB_ROOT; ?>_core/_webapp/lookupController.js"></script>
-                <style>
-                    .select2 > .select2-choice.ui-select-match {
-                        /* Because of the inclusion of Bootstrap */
-                        height: 29px;
-                    }
-                </style>
-                <script>
-                    if (typeof lookupCatalogProperties == "undefined") {
-                        lookupCatalogProperties = {};
-                    }
-                </script>
-            <?
+            <script src="<?php echo WEB_ROOT; ?>_core/_webapp/lookupController.js"></script>
+            <style>
+                .select2 > .select2-choice.ui-select-match {
+                    /* Because of the inclusion of Bootstrap */
+                    height: 29px;
+                }
+            </style>
+            <script>
+                if (typeof lookupCatalogProperties == "undefined") {
+                    lookupCatalogProperties = {};
+                }
+            </script>
+        <?
         }
+    }
+    public static function activeSelectRow(CModel $model, $ngModelName, $ngFieldName, $properties = array()) {
+        self::rowStart($model, $ngFieldName);
+        self::activeSelect($ngModelName, $ngFieldName, $properties = array());
+        self::rowEnd($model);
+
     }
 }
