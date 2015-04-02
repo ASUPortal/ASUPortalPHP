@@ -4,8 +4,10 @@
  * User: abarmin
  * Date: 02.04.15
  * Time: 18:27
+ *
+ * @property int plan_id
+ * @property string goal
  */
-
-class CWorkPlanGoal {
-
+class CWorkPlanGoal extends CActiveModel{
+    protected $_table = TABLE_WORK_PLAN_GOALS;
 }
