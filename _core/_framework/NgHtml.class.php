@@ -50,6 +50,62 @@ class NgHtml extends CHtml{
         self::activeTextBox($ngModelName, $ngFieldName);
         self::rowEnd($model);
     }
+    public static function activeTextTagging($ngModelName, $ngFieldName, $properties = array()) {
+        $glossary = "emptyGlossary";
+        if (array_key_exists("glossary", $properties)) {
+            $glossary = $properties["glossary"];
+        }
+        $multiple = false;
+        if (array_key_exists("multiple", $properties)) {
+            $multiple = $properties["multiple"];
+        }
+        $glossaryProperties = array();
+        if (array_key_exists("properties", $properties)) {
+            $glossaryProperties = $properties["properties"];
+        }
+        if (count($glossaryProperties) > 0) {
+            echo '<script>
+                lookupCatalogProperties.'.$glossary.' = '.json_encode($glossaryProperties).';
+            </script>';
+        }
+        echo '<div ng-controller="LookupController as lookupCtrl" ng-init="lookupCtrl.initLookup(\''.$glossary.'\')">';
+
+        if ($multiple) {
+            echo '<ui-select tagging tagging-label="Нажмите Enter для добавления нового значения" style="width: 312px;" multiple ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2">';
+            echo '<ui-select-match placeholder="Выберите значение из списка">{{$item}}</ui-select-match>';
+            echo '<ui-select-choices repeat="item in itemsPlain | filter: $select.search ">';
+            echo '<div ng-bind-html="item | highlight: $select.search"></div>';
+            echo '</ui-select-choices>';
+            echo '</ui-select>';
+        } else {
+            echo '<ui-select tagging tagging-label="Нажмите Enter для добавления нового значения" style="width: 312px;" ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2">';
+            echo '<ui-select-match placeholder="Выберите значение из списка"><span ng-bind="'.$ngModelName.'.'.$ngFieldName.'"/></ui-select-match>';
+            echo '<ui-select-choices repeat="item in itemsPlain | filter: $select.search ">';
+            echo '<div ng-bind-html="item | highlight: $select.search"></div>';
+            echo '</ui-select-choices>';
+            echo '</ui-select>';
+        }
+
+        echo '</div>';
+        // будут по умолчанию на select2
+        if (!self::$select2Init) {
+            self::$select2Init = true;
+            ?>
+            <script src="<?php echo WEB_ROOT; ?>_core/_webapp/lookupController.js"></script>
+            <style>
+                .select2 > .select2-choice.ui-select-match {
+                    /* Because of the inclusion of Bootstrap */
+                    height: 29px;
+                }
+            </style>
+            <script>
+                if (typeof lookupCatalogProperties == "undefined") {
+                    lookupCatalogProperties = {};
+                }
+            </script>
+        <?
+        }
+    }
     public static function activeTagging($ngModelName, $ngFieldName, $properties = array()) {
         $glossary = "emptyGlossary";
         if (array_key_exists("glossary", $properties)) {
