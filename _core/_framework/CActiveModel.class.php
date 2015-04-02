@@ -523,6 +523,55 @@ class CActiveModel extends CModel implements IJSONSerializable{
                         $ar->insert();
                     }
                 }
+            } elseif ($properties["relationPower"] == RELATION_HAS_MANY) {
+                if (array_key_exists($field, $modelData)) {
+                    $data = $modelData[$field];
+                    // уберем данные из модели
+                    unset($modelData[$field]);
+                    // если в свойствах отношения указан целевой класс, то
+                    // будем обновлять автоматом
+                    if (array_key_exists("targetClass", $properties)) {
+                        // получим список записей, которые уже есть
+                        $targetClass = $properties["targetClass"];
+                        /**
+                         * @var CActiveModel $targetObj
+                         */
+                        $targetObj = new $targetClass();
+                        $items = CActiveRecordProvider::getWithCondition($targetObj->getTable(), trim(CUtils::strLeft($properties["storageCondition"], "="))."=".$modelData["id"]);
+                        $docsToRemove = array();
+                        /**
+                         * @var CActiveRecord $item
+                         */
+                        foreach ($items->getItems() as $item) {
+                            $docsToRemove[] = $item->getId();
+                        }
+                        /**
+                         * @var string $item
+                         */
+                        foreach ($data as $item) {
+                            // полученные данные обратно в json, чтобы
+                            // можно было все сделать одинаково рекурсивно
+                            $childJsonData = json_encode($item);
+                            // создадим экземпляр целевого класса
+                            /**
+                             * @var CActiveModel $targetObj
+                             */
+                            $targetObj = new $targetClass();
+                            $targetObj->updateWithJsonString($childJsonData);
+                            $targetObj->save();
+                            // уберем из списка добавленную запись
+                            if (in_array($targetObj->getId(), $docsToRemove)) {
+                                unset($docsToRemove[array_search($targetObj->getId(), $docsToRemove)]);
+                            }
+                        }
+                        // удалим элементы из списка на удаление - мы
+                        // их удалили и вместе с другими данными с клиента
+                        // они не пришли
+                        if (count($docsToRemove) > 0) {
+                            CActiveRecordProvider::removeWithCondition($targetObj->getTable(), "id in (".implode(", ", $docsToRemove).")");
+                        }
+                    }
+                }
             }
         }
         // данные обратно в модель
