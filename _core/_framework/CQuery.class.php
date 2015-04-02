@@ -444,14 +444,19 @@ class CQuery {
     }
     private function queryCustom() {
         if (is_object($this->getDb())) {
+            $start = microtime();
             $res = new CArrayList();
             $this->_result = $this->getDb()->prepare($this->getQueryString());
             $this->_result->execute();
             foreach ($this->_result->fetchAll(PDO::FETCH_ASSOC) as $row) {
                 $res->add($res->getCount(), $row);
             }
+            $end = microtime();
+            CLog::writeToLog($this->getQueryString()." (".($end - $start).")");
+            CLog::addQueryTime($end-$start);
             return $res;
         } else {
+            $start = microtime();
             $res = new CArrayList();
             $q = mysql_query($this->getQueryString(), $this->getDb()) or die(mysql_error($this->getDb())." -> ".$this->getQueryString());
             if (mysql_affected_rows($this->getDb()) > 0) {
@@ -459,6 +464,9 @@ class CQuery {
                     $res->add($res->getCount(), $row);
                 }
             }
+            $end = microtime();
+            CLog::writeToLog($this->getQueryString()." (".($end - $start).")");
+            CLog::addQueryTime($end-$start);
             return $res;
         }
     }
