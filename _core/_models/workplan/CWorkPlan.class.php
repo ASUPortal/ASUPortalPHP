@@ -25,6 +25,7 @@
  * @property CArrayList goals
  * @property CArrayList tasks
  * @property CArrayList competentions
+ * @property CArrayList sections
  */
 
 class CWorkPlan extends CActiveModel implements IVersionControl{
@@ -36,6 +37,7 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
     protected $_competentions;
     protected $_disciplinesBefore;
     protected $_disciplinesAfter;
+    protected $_sections;
 
     protected function relations() {
         return array(
@@ -60,16 +62,14 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
                 "storageProperty" => "_goals",
                 "storageTable" => TABLE_WORK_PLAN_GOALS,
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "managerClass" => "CWorkPlan",
-                "managerGetObject" => "getWorkplanGoal"
+                "targetClass" => "CWorkPlanGoal"
             ),
             "tasks" => array(
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_tasks",
                 "storageTable" => TABLE_WORK_PLAN_TASKS,
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "managerClass" => "CWorkPlan",
-                "managerGetObject" => "getWorkplanTask"
+                "targetClass" => "CWorkPlanTask"
             ),
             "competentions" => array(
                 "relationPower" => RELATION_HAS_MANY,
@@ -96,6 +96,13 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
                 "rightKey" => "discipline_id",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getDiscipline"
+            ),
+            "sections" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_sections",
+                "storageTable" => TABLE_WORK_PLAN_CONTENT_SECTIONS,
+                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CWorkPlanContentSection"
             )
         );
     }
@@ -122,17 +129,19 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
         $data = parent::updateWithJsonString($jsonString);
         $id = $data["id"];
         // почистим связанные таблицы
+        /*
         CActiveRecordProvider::removeWithCondition(TABLE_WORK_PLAN_GOALS, "plan_id=".$id);
         CActiveRecordProvider::removeWithCondition(TABLE_WORK_PLAN_TASKS, "plan_id=".$id);
         CActiveRecordProvider::removeWithCondition(TABLE_WORK_PLAN_COMPETENTIONS, "plan_id=".$id);
         CActiveRecordProvider::removeWithCondition(TABLE_WORK_PLAN_SKILLS, "plan_id=".$id);
         CActiveRecordProvider::removeWithCondition(TABLE_WORK_PLAN_EXPERIENCES, "plan_id=".$id);
         CActiveRecordProvider::removeWithCondition(TABLE_WORK_PLAN_KNOWLEDGES, "plan_id=".$id);
+        CActiveRecordProvider::removeWithCondition(TABLE_WORK_PLAN_CONTENT_SECTIONS, "plan_id=".$id);
         // добавим данные обратно
         // цели
-        /**
+
          * @var CActiveRecord $ar
-         */
+
         foreach ($data["goals"] as $goal) {
             $ar = new CActiveRecord(array(
                 "id" => null,
@@ -195,5 +204,6 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
                 $ar->insert();
             }
         }
+         * */
     }
 }
