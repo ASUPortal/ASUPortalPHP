@@ -508,7 +508,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
                      * @var CActiveRecord $ar
                      */
                     foreach (CActiveRecordProvider::getWithCondition(
-                        $properties["joinTable"], $properties["leftCondition"]
+                        $properties["joinTable"], trim(CUtils::strLeft($properties["leftCondition"], "="))."=".$modelData["id"]
                     )->getItems() as $ar) {
                         $ar->remove();
                     }
