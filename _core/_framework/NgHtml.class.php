@@ -225,7 +225,7 @@ class NgHtml extends CHtml{
     }
     public static function activeSelectRow(CModel $model, $ngModelName, $ngFieldName, $properties = array()) {
         self::rowStart($model, $ngFieldName);
-        self::activeSelect($ngModelName, $ngFieldName, $properties = array());
+        self::activeSelect($ngModelName, $ngFieldName, $properties);
         self::rowEnd($model);
 
     }
