@@ -70,7 +70,13 @@ class CSearchCatalogTaxonomy extends CAbstractSearchCatalog{
 
     public function actionGetObject($id)
     {
-        return CTaxonomyManager::getTerm($id);
+        $cache_id = $this->taxonomy."_item_".$id;
+        if (is_null(CApp::getApp()->cache->get($cache_id))) {
+            $taxonomy = CTaxonomyManager::getTaxonomy($this->taxonomy);
+            $term = $taxonomy->getTerm($id);
+            CApp::getApp()->cache->set($cache_id, $term, 30);
+        }
+        return CApp::getApp()->cache->get($cache_id);
     }
 
 
