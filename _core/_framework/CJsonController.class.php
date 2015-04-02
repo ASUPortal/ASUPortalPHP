@@ -60,6 +60,10 @@ class CJsonController extends CBaseController{
         $model->updateWithJsonString($rest_json);
         $model->save();
         $transaction->commit();
+        // вернем модель после сохранения
+        $_GET["model"] = $modelClass;
+        $_GET["id"] = $model->getId();
+        $this->actionJSONGet();
     }
 
     /**
