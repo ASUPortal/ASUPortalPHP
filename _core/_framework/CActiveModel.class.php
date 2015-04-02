@@ -288,8 +288,14 @@ class CActiveModel extends CModel implements IJSONSerializable{
                 if (is_null($this->$private)) {
                     $table = $relation['storageTable'];
                     $condition = $relation['storageCondition'];
-                    $managerClass = $relation['managerClass'];
-                    $managerGetter = $relation['managerGetObject'];
+                    $useManager = true;
+                    if (array_key_exists("targetClass", $relation)) {
+                        $targetClass = $relation["targetClass"];
+                        $useManager = false;
+                    } else {
+                        $managerClass = $relation['managerClass'];
+                        $managerGetter = $relation['managerGetObject'];
+                    }
                     $managerOrder = null;
                     if (array_key_exists("managerOrder", $relation)) {
                         $managerOrder = $relation['managerOrder'];
@@ -297,7 +303,11 @@ class CActiveModel extends CModel implements IJSONSerializable{
 
                     $this->$private = new CArrayList();
                     foreach (CActiveRecordProvider::getWithCondition($table, $condition, $managerOrder)->getItems() as $item) {
-                        $obj = $managerClass::$managerGetter($item->getId());
+                        if ($useManager) {
+                            $obj = $managerClass::$managerGetter($item->getId());
+                        } else {
+                            $obj = new $targetClass($item);
+                        }
                         if (!is_null($obj)) {
                             if (is_object($obj)) {
                                 $this->$private->add($obj->getId(), $obj);
