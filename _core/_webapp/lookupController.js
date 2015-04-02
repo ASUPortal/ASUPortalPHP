@@ -30,7 +30,6 @@ application
                 properties = [];
                 if (glossary in lookupCatalogProperties) {
                     properties = lookupCatalogProperties[glossary];
-                    debugger;
                 }
                 lookupCatalog.query({catalog: glossary, properties: properties}, function(data) {
                     $scope.items = data;
