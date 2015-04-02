@@ -40,13 +40,7 @@ class NgHtml extends CHtml{
             'ng-model="'.$ngModelName.'.'.$ngFieldName.'"');
         self::rowEnd($model);
     }
-    public static function activeSaveRow(CModel $model, $ngModelName, $ngFieldName = "") {
-        self::rowStart($model, $ngFieldName);
-        echo '<span ng-click="save()" class="btn btn-primary">Сохранить</span>';
-        self::rowEnd($model);
-    }
-    public static function activeTaggingRow(CModel $model, $ngModelName, $ngFieldName, $properties = array()) {
-        self::rowStart($model, $ngFieldName);
+    public static function activeTagging($ngModelName, $ngFieldName, $properties = array()) {
         $glossary = "";
         if (array_key_exists("glossary", $properties)) {
             $glossary = $properties["glossary"];
@@ -68,17 +62,16 @@ class NgHtml extends CHtml{
 
         if ($multiple) {
             echo '<ui-select tagging tagging-label="Нажмите Enter для добавления нового значения" style="width: 312px;" multiple ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2">';
-                echo '<ui-select-match placeholder="Выберите значение из списка">{{$item}}</ui-select-match>';
-                echo '<ui-select-choices repeat="item in itemsPlain | filter: $select.search ">';
-                    echo '<div ng-bind-html="item | highlight: $select.search"></div>';
-                echo '</ui-select-choices>';
+            echo '<ui-select-match placeholder="Выберите значение из списка">{{$item}}</ui-select-match>';
+            echo '<ui-select-choices repeat="item in itemsPlain | filter: $select.search ">';
+            echo '<div ng-bind-html="item | highlight: $select.search"></div>';
+            echo '</ui-select-choices>';
             echo '</ui-select>';
         } else {
             echo 1234;
         }
 
         echo '</div>';
-        self::rowEnd($model);
         // будут по умолчанию на select2
         if (!self::$select2Init) {
             self::$select2Init = true;
@@ -97,6 +90,16 @@ class NgHtml extends CHtml{
             </script>
         <?
         }
+    }
+    public static function activeSaveRow(CModel $model, $ngModelName, $ngFieldName = "") {
+        self::rowStart($model, $ngFieldName);
+        echo '<span ng-click="save()" class="btn btn-primary">Сохранить</span>';
+        self::rowEnd($model);
+    }
+    public static function activeTaggingRow(CModel $model, $ngModelName, $ngFieldName, $properties = array()) {
+        self::rowStart($model, $ngFieldName);
+        self::activeTagging($ngModelName, $ngFieldName, $properties);
+        self::rowEnd($model);
     }
     public static function activeSelectRow(CModel $model, $ngModelName, $ngFieldName, $properties = array()) {
         self::rowStart($model, $ngFieldName);
