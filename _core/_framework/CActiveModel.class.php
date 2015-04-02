@@ -507,10 +507,12 @@ class CActiveModel extends CModel implements IJSONSerializable{
                     /**
                      * @var CActiveRecord $ar
                      */
-                    foreach (CActiveRecordProvider::getWithCondition(
-                        $properties["joinTable"], trim(CUtils::strLeft($properties["leftCondition"], "="))."=".$modelData["id"]
-                    )->getItems() as $ar) {
-                        $ar->remove();
+                    if (array_key_exists("id", $modelData)) {
+                        foreach (CActiveRecordProvider::getWithCondition(
+                            $properties["joinTable"], trim(CUtils::strLeft($properties["leftCondition"], "="))."=".$modelData["id"]
+                        )->getItems() as $ar) {
+                            $ar->remove();
+                        }
                     }
                     // добавим туда новые данные
                     foreach ($data as $value) {
@@ -537,13 +539,16 @@ class CActiveModel extends CModel implements IJSONSerializable{
                          * @var CActiveModel $targetObj
                          */
                         $targetObj = new $targetClass();
-                        $items = CActiveRecordProvider::getWithCondition($targetObj->getTable(), trim(CUtils::strLeft($properties["storageCondition"], "="))."=".$modelData["id"]);
                         $docsToRemove = array();
-                        /**
-                         * @var CActiveRecord $item
-                         */
-                        foreach ($items->getItems() as $item) {
-                            $docsToRemove[] = $item->getId();
+                        // его может не быть, если запись новая
+                        if (array_key_exists("id", $modelData)) {
+                            $items = CActiveRecordProvider::getWithCondition($targetObj->getTable(), trim(CUtils::strLeft($properties["storageCondition"], "="))."=".$modelData["id"]);
+                            /**
+                             * @var CActiveRecord $item
+                             */
+                            foreach ($items->getItems() as $item) {
+                                $docsToRemove[] = $item->getId();
+                            }
                         }
                         /**
                          * @var string $item
