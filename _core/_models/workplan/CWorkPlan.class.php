@@ -76,8 +76,7 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
                 "storageProperty" => "_competentions",
                 "storageTable" => TABLE_WORK_PLAN_COMPETENTIONS,
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "managerClass" => "CWorkPlanManager",
-                "managerGetObject" => "getWorkplanCompetention"
+                "targetClass" => "CWorkPlanCompetention"
             ),
             "disciplinesBefore" => array(
                 "relationPower" => RELATION_MANY_TO_MANY,
@@ -124,6 +123,7 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
         }
         return $result;
     }
+
 
     public function updateWithJsonString($jsonString) {
         $data = parent::updateWithJsonString($jsonString);

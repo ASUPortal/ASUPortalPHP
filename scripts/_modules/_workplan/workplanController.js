@@ -69,6 +69,13 @@ application
             };
         };
 
+        $scope.addLecture = function(index){
+            var section = $scope.workplan.sections[index];
+            section.lectures[section.lectures.length] = {
+                section_id: section.id
+            };
+        };
+
         $scope.save = function(){
             $scope.workplan.$save();
         }
