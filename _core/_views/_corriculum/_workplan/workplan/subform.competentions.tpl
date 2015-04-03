@@ -7,11 +7,11 @@
         <td>
             {NgHtml::activeSelectRow($plan, 'competention', 'competention_id', ["glossary"=>"corriculum_competentions"])}
 
-            {NgHtml::activeSelectRow($plan, 'competention', 'knowledges', ["glossary"=>"corriculum_knowledges", "multiple"=>true])}
+            {NgHtml::activeSelectRow($plan, 'competention', 'knowledges', ["glossary"=>"corriculum_knowledges", "multiple"=>true, "onSelect" => "onCompetentionChildSelect"])}
 
-            {NgHtml::activeSelectRow($plan, 'competention', 'skills', ["glossary"=>"corriculum_knowledges", "multiple"=>true])}
+            {NgHtml::activeSelectRow($plan, 'competention', 'skills', ["glossary"=>"corriculum_knowledges", "multiple"=>true, "onSelect" => "onCompetentionChildSelect"])}
 
-            {NgHtml::activeSelectRow($plan, 'competention', 'experiences', ["glossary"=>"corriculum_knowledges", "multiple"=>true])}
+            {NgHtml::activeSelectRow($plan, 'competention', 'experiences', ["glossary"=>"corriculum_knowledges", "multiple"=>true, "onSelect" => "onCompetentionChildSelect"])}
 
             <span class="btn btn-warning btn-mini" ng-click="removeCompetention($index)">Удалить компетенцию</span>
         </td>

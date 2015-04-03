@@ -51,8 +51,11 @@ application
             $scope.workplan.competentions[$scope.workplan.competentions.length] = {
                 skills: [],
                 knowledges: [],
-                experiences: []
+                experiences: [],
+                plan_id: $scope.workplan.id
             };
+            // мне надо знать id компетенции
+            $scope.save();
         };
 
         $scope.removeCompetention = function(index){
@@ -91,6 +94,17 @@ application
                 var section = $scope.workplan.sections[section];
                 section.lectures.splice(index, 1);
             }
+        };
+
+        $scope.onCompetentionChildSelect = function($item, $model, $index){
+            // при выборе ЗУНа в объект надо дописать id компетенции
+            // иначе ломается ограничение целостности
+            $model.competention_id = $scope.workplan.competentions[$index].id;
+        };
+
+        $scope.onProfileSelect = function($item, $model, $index){
+            // при выборе профиля указать план
+            $model.plan_id = $scope.workplan.id;
         };
 
         $scope.save = function(){

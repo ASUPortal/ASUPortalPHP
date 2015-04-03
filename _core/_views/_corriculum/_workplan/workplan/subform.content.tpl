@@ -65,19 +65,14 @@
             </td>
         </tr>
         <tr>
-            <td>
-                &nbsp;
-            </td>
+            {literal}
+                <td>
+                    <span class="btn btn-warning btn-mini" ng-click="addTermLoad($index)">Добавить вид работы</span>
+                </td>
+            {/literal}
             <td ng-repeat="term in workplan.terms">
                 <span class="btn btn-warning btn-mini" ng-click="removeTerm($index)">Удалить семестр</span>
             </td>
-        </tr>
-        <tr>
-            {literal}
-            <td colspan="{{workplan.terms.length + 1}}">
-                <span class="btn btn-warning btn-mini" ng-click="addTermLoad($index)">Добавить вид работы</span>
-            </td>
-            {/literal}
         </tr>
     </table>
 </div>
