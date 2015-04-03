@@ -124,6 +124,10 @@ class NgHtml extends CHtml{
         if (array_key_exists("properties", $properties)) {
             $glossaryProperties = $properties["properties"];
         }
+        $onSelect = "";
+        if (array_key_exists("onSelect", $properties)) {
+            $onSelect = 'on-select="'.$properties["onSelect"].'($item, $model, $index)"';
+        }
         if (count($glossaryProperties) > 0) {
             echo '<script>
                 lookupCatalogProperties.'.$glossary.' = '.json_encode($glossaryProperties).';
@@ -132,7 +136,7 @@ class NgHtml extends CHtml{
         echo '<div ng-controller="LookupController as lookupCtrl" ng-init="lookupCtrl.initLookup(\''.$glossary.'\')">';
 
         if ($multiple) {
-            echo '<ui-select tagging tagging-label="Нажмите Enter для добавления нового значения" style="width: 312px;" multiple ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2">';
+            echo '<ui-select tagging tagging-label="Нажмите Enter для добавления нового значения" style="width: 312px;" multiple ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2" '.$onSelect.'>';
             echo '<ui-select-match placeholder="Выберите значение из списка">{{$item}}</ui-select-match>';
             echo '<ui-select-choices repeat="item in itemsPlain | filter: $select.search ">';
             echo '<div ng-bind-html="item | highlight: $select.search"></div>';
