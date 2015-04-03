@@ -304,6 +304,7 @@
     define("TABLE_WORK_PLAN_CONTENT_CONTROLS", "pl_corriculum_workplan_content_controls");
     define("TABLE_WORK_PLAN_TERMS", "pl_corriculum_workplan_terms");
     define("TABLE_WORK_PLAN_TERM_LOADS", "pl_corriculum_workplan_term_loads");
+    define("TABLE_WORK_PLAN_TERM_SECTIONS", "pl_corriculum_workplan_term_sections");
     /**
      * Константы пагинатора
      */

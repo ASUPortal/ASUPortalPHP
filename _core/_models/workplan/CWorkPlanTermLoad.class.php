@@ -8,4 +8,17 @@
 
 class CWorkPlanTermLoad extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_TERM_LOADS;
+
+    protected function relations() {
+        return array(
+            "type" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageField" => "type_id",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getTerm"
+            )
+        );
+    }
+
+
 }
