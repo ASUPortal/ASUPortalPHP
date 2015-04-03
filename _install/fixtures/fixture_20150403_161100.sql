@@ -1,0 +1,1 @@
+ALTER TABLE `pl_corriculum_workplan_term_loads` ADD FOREIGN KEY (`term_id`) REFERENCES `asu_portal_20150315`.`pl_corriculum_workplan_terms`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
