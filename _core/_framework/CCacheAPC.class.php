@@ -7,6 +7,8 @@
  */
 
 class CCacheAPC extends CCache{
+    protected $timeout;
+
     public function get($id) {
         if ($this->hasCache($id)) {
             return apc_fetch($id);
@@ -14,7 +16,10 @@ class CCacheAPC extends CCache{
         return null;
     }
 
-    public function set($id, $value, $expire = 0){
+    public function set($id, $value, $expire = null){
+        if (is_null($expire)) {
+            $expire = $this->timeout;
+        }
         apc_store($id, $value, $expire);
     }
 
