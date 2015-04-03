@@ -53,8 +53,23 @@
         </tr>
         <tr>
             <td ng-repeat="term in workplan.terms">
-                семестр
+                {NgHtml::activeText("term", "number", ["html" => 'style="width: 100%; "'])}
             </td>
+        </tr>
+        <tr ng-repeat="type in workplan.terms[0].types" ng-init="type_id = $index">
+            <td>
+                {NgHtml::activeSelect("type", "type_id", ["glossary" => "corriculum_labor_types", "onSelect" => "onTypeSelect"])}
+            </td>
+            <td ng-repeat="term in workplan.terms">
+                <input type="text" ng-model="term.types[type_id].value">
+            </td>
+        </tr>
+        <tr>
+            {literal}
+            <td colspan="{{workplan.terms.length + 1}}">
+                <span class="btn btn-warning btn-mini" ng-click="addTermLoad($index)">Добавить вид работы</span>
+            </td>
+            {/literal}
         </tr>
     </table>
 </div>

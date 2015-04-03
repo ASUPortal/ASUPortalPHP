@@ -14,7 +14,6 @@ class CWorkPlanTerm extends CActiveModel{
         return array(
             "types" => array(
                 "relationPower" => RELATION_HAS_MANY,
-                "storageProperty" => "_types",
                 "storageTable" => TABLE_WORK_PLAN_TERM_LOADS,
                 "storageCondition" => "term_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanTermLoad"

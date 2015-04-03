@@ -104,7 +104,29 @@ application
 
     function($scope){
         $scope.addTerm = function(){
-            $scope.workplan.terms[$scope.workplan.terms.length] = {};
+            $scope.workplan.terms[$scope.workplan.terms.length] = {
+                plan_id: $scope.workplan.id
+            };
+            // сохраним, нам надо узнать id семестра
+            $scope.save();
+        };
+
+        $scope.addTermLoad = function(){
+            // добавим во все семестры вид нагрузки
+            for (var i = 0; i < $scope.workplan.terms.length; i++) {
+                var term = $scope.workplan.terms[i];
+                term.types[term.types.length] = {
+                    term_id: term.id
+                };
+            }
+        };
+
+        $scope.onTypeSelect = function($item, $model, $index) {
+            // укажем вид занятия во всех семестрах
+            for (var i = 0; i < $scope.workplan.terms.length; i++) {
+                var term = $scope.workplan.terms[i];
+                term.types[$index].type_id = $model;
+            }
         };
     }]);
 
