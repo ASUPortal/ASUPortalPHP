@@ -482,6 +482,10 @@ class CActiveModel extends CModel implements IJSONSerializable{
                     }
                 }
                 $obj->$field = $array;
+            } elseif ($properties["relationPower"] == RELATION_HAS_ONE) {
+                if (!is_null($this->$field)) {
+                    $obj->$field = $this->$field->toJsonObject();
+                }
             }
         }
         return $obj;
