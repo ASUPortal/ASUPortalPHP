@@ -8,7 +8,7 @@
 
 {NgHtml::activeSelectRow($plan, 'workplan', 'direction_id', ["glossary"=>"corriculum_speciality_directions"])}
 
-{NgHtml::activeSelectRow($plan, 'workplan', 'profiles', ["glossary"=>"corriculum_speciality_directions", "multiple"=>true, "onSelect" => "onProfileSelect"])}
+{NgHtml::activeSelectRow($plan, 'workplan', 'profiles', ["glossary"=>"corriculum_speciality_directions", "multiple"=>true])}
 
 {NgHtml::activeSelectRow($plan, 'workplan', 'qualification_id', ["glossary"=>"corriculum_skill"])}
 

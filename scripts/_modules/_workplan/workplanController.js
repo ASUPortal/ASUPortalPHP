@@ -102,11 +102,6 @@ application
             $model.competention_id = $scope.workplan.competentions[$index].id;
         };
 
-        $scope.onProfileSelect = function($item, $model, $index){
-            // при выборе профиля указать план
-            $model.plan_id = $scope.workplan.id;
-        };
-
         $scope.save = function(){
             return $scope.workplan.$save();
         }
