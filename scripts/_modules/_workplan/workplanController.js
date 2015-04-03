@@ -67,6 +67,15 @@ application
                 lectures: [],
                 controls: []
             };
+            // сохраним, чтобы присвоился id раздела
+            // он там много где нужен
+            $scope.save();
+        };
+
+        $scope.removeSection = function(index){
+            if (confirm("Вы действительно хотите удалить раздел?")) {
+                $scope.workplan.sections.splice(index, 1);
+            }
         };
 
         $scope.addLecture = function(index){
@@ -74,6 +83,13 @@ application
             section.lectures[section.lectures.length] = {
                 section_id: section.id
             };
+        };
+
+        $scope.removeLecture = function(section, index){
+            if (confirm("Вы действительно хотите удалить содержимое раздела?")) {
+                var section = $scope.workplan.sections[section];
+                section.lectures.splice(index, 1);
+            }
         };
 
         $scope.save = function(){
