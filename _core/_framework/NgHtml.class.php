@@ -185,6 +185,10 @@ class NgHtml extends CHtml{
         if (array_key_exists("properties", $properties)) {
             $glossaryProperties = $properties["properties"];
         }
+        $onSelect = "";
+        if (array_key_exists("onSelect", $properties)) {
+            $onSelect = 'on-select="'.$properties["onSelect"].'($item, $model, $index)"';
+        }
         if (count($glossaryProperties) > 0) {
             echo '<script>
                 lookupCatalogProperties.'.$glossary.' = '.json_encode($glossaryProperties).';
@@ -193,14 +197,14 @@ class NgHtml extends CHtml{
         echo '<div ng-controller="LookupController as lookupCtrl" ng-init="lookupCtrl.initLookup(\''.$glossary.'\')">';
 
         if ($multiple) {
-            echo '<ui-select style="width: 312px;" multiple ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2">';
+            echo '<ui-select style="width: 312px;" multiple ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2" '.$onSelect.'>';
             echo '<ui-select-match placeholder="Выберите значение из списка">{{$item.name}}</ui-select-match>';
             echo '<ui-select-choices repeat="item in items | filter: $select.search ">';
             echo '<div ng-bind-html="item.name | highlight: $select.search"></div>';
             echo '</ui-select-choices>';
             echo '</ui-select>';
         } else {
-            echo '<ui-select style="width: 312px;" ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2">';
+            echo '<ui-select style="width: 312px;" ng-model="'.$ngModelName.'.'.$ngFieldName.'" theme="select2" '.$onSelect.'>';
             echo '<ui-select-match placeholder="Выберите значение из списка">{{$select.selected.name}}</ui-select-match>';
             echo '<ui-select-choices repeat="item.id as item in items | filter: $select.search">';
             echo '<div ng-bind-html="item.name | highlight: $select.search"></div>';
