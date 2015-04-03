@@ -219,6 +219,11 @@ class CActiveModel extends CModel implements IJSONSerializable{
             $relations = $this->relations();
             $relation = $relations[$name];
 
+            // разрешим не указывать
+            if (!array_key_exists("storageProperty", $relation)) {
+                $relation["storageProperty"] = "_".$name;
+            }
+
             // определяем, какой тип связи
             if ($relation['relationPower'] == RELATION_HAS_ONE) {
                 // сначала кладем объект в приватное свойство
@@ -264,6 +269,10 @@ class CActiveModel extends CModel implements IJSONSerializable{
         $relations = $this->relations();
         if (array_key_exists($name, $relations)) {
             $relation = $relations[$name];
+            // разрешим не указывать
+            if (!array_key_exists("storageProperty", $relation)) {
+                $relation["storageProperty"] = "_".$name;
+            }
 
             if ($relation['relationPower'] == RELATION_HAS_ONE) {
                 $private = $relation['storageProperty'];
