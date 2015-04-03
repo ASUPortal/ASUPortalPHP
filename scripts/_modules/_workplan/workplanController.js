@@ -94,7 +94,7 @@ application
         };
 
         $scope.save = function(){
-            $scope.workplan.$save();
+            return $scope.workplan.$save();
         }
     }]);
 
@@ -105,10 +105,30 @@ application
     function($scope){
         $scope.addTerm = function(){
             $scope.workplan.terms[$scope.workplan.terms.length] = {
-                plan_id: $scope.workplan.id
+                plan_id: $scope.workplan.id,
+                types: []
             };
-            // сохраним, нам надо узнать id семестра
-            $scope.save();
+            // сохраним, а потом скопируем виды нагрузки
+            $scope.save().then(function(){
+                // если у нас уже есть семестры, то из первого копируем виды нагрузки
+                if ($scope.workplan.terms.length > 1) {
+                    var first = $scope.workplan.terms[0];
+                    var last = $scope.workplan.terms[$scope.workplan.terms.length - 1];
+                    for (var i = 0; i < first.types.length; i++) {
+                        last.types[last.types.length] = {
+                            term_id: last.id,
+                            type_id: first.types[i].type_id
+                        };
+                    }
+                }
+            });
+        };
+
+        $scope.removeTerm = function(index){
+            // удаление семестра
+            if (confirm("Вы действительно хотите удалить семестр?")) {
+                $scope.workplan.terms.splice(index, 1);
+            }
         };
 
         $scope.addTermLoad = function(){
