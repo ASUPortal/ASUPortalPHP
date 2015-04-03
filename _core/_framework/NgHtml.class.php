@@ -20,13 +20,18 @@ class NgHtml extends CHtml{
         echo '</div>';
         echo '</div>';
     }
-    public static function activeText($ngModelName, $ngFieldName) {
+    public static function activeText($ngModelName, $ngFieldName, $properties = array()) {
+        $html = "";
+        if (array_key_exists("html", $properties)) {
+            $html = $properties["html"];
+        }
+        $html .= ' ng-model="'.$ngModelName.'.'.$ngFieldName.'"';
         CHtml::textField(
             $ngModelName."_".$ngFieldName,
             null,
             "",
             "",
-            'ng-model="'.$ngModelName.'.'.$ngFieldName.'"');
+            $html);
     }
     public static function activeTextRow(CModel $model, $ngModelName, $ngFieldName) {
         self::rowStart($model, $ngFieldName);
