@@ -303,6 +303,7 @@
     define("TABLE_WORK_PLAN_CONTENT_SECTIONS", "pl_corriculum_workplan_content_sections");
     define("TABLE_WORK_PLAN_CONTENT_LECTURES", "pl_corriculum_workplan_content_lectures");
     define("TABLE_WORK_PLAN_CONTENT_CONTROLS", "pl_corriculum_workplan_content_controls");
+    define("TABLE_WORK_PLAN_TERMS", "pl_corriculum_workplan_terms");
     /**
      * Константы пагинатора
      */

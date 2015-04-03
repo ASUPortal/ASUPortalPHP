@@ -35,3 +35,26 @@
         </td>
     </tr>
 </table>
+
+<h4>4.2. Структура дисциплины</h4>
+
+<div ng-controller="WorkPlanTermsController as wptCtrl">
+    <span class="btn btn-success btn-mini" ng-click="addTerm()">Добавить семестр</span>
+    <table class="table table-striped">
+        <tr>
+            <td rowspan="2">
+                Вид работы
+            </td>
+            {literal}
+            <td colspan="{{workplan.terms.length}}">
+                Трудоемкость, часов
+            </td>
+            {/literal}
+        </tr>
+        <tr>
+            <td ng-repeat="term in workplan.terms">
+                семестр
+            </td>
+        </tr>
+    </table>
+</div>

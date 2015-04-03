@@ -14,7 +14,8 @@ application
             competentions: [],
             disciplinesBefore: [],
             disciplinesAfter: [],
-            sections: []
+            sections: [],
+            terms: []
         };
         $scope.init = function($id){
             workPlanFactory.get({id: $id}, function(data){
@@ -95,6 +96,16 @@ application
         $scope.save = function(){
             $scope.workplan.$save();
         }
+    }]);
+
+application
+    .controller("WorkPlanTermsController", [
+        '$scope',
+
+    function($scope){
+        $scope.addTerm = function(){
+            $scope.workplan.terms[$scope.workplan.terms.length] = {};
+        };
     }]);
 
 application

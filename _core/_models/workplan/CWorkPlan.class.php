@@ -38,6 +38,7 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
     protected $_disciplinesBefore;
     protected $_disciplinesAfter;
     protected $_sections;
+    protected $_terms;
 
     protected function relations() {
         return array(
@@ -102,6 +103,13 @@ class CWorkPlan extends CActiveModel implements IVersionControl{
                 "storageTable" => TABLE_WORK_PLAN_CONTENT_SECTIONS,
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanContentSection"
+            ),
+            "terms" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_terms",
+                "storageTable" => TABLE_WORK_PLAN_TERMS,
+                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CWorkPlanTerm"
             )
         );
     }
