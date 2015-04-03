@@ -75,4 +75,8 @@
             </td>
         </tr>
     </table>
+
+    <div ng-repeat="term in workplan.terms">
+        {include file="_corriculum/_workplan/workplan/subform.content.term.tpl"}
+    </div>
 </div>

@@ -120,7 +120,8 @@ application
         $scope.addTerm = function(){
             $scope.workplan.terms[$scope.workplan.terms.length] = {
                 plan_id: $scope.workplan.id,
-                types: []
+                types: [],
+                sections: []
             };
             // сохраним, а потом скопируем виды нагрузки
             $scope.save().then(function(){
@@ -161,6 +162,14 @@ application
                 var term = $scope.workplan.terms[i];
                 term.types[$index].type_id = $model;
             }
+        };
+
+        $scope.addTermSection = function($index){
+            // добавление раздела в семестр
+            var term = $scope.workplan.terms[$index];
+            term.sections[term.sections.length] = {
+                term_id: term.id
+            };
         };
     }]);
 
