@@ -211,13 +211,9 @@ class CActiveModel extends CModel implements IJSONSerializable{
             // пришел объект
             // объекты складываем в соответствии с relations()
             if (!array_key_exists($name, $this->relations())) {
-                $trace = debug_backtrace();
-                trigger_error(
-                    'Неопределенное свойство в __set(): ' . $name .
-                        ' в файле ' . $trace[0]['file'] .
-                        ' на строке ' . $trace[0]['line'],
-                    E_USER_NOTICE);
-                return null;
+                // обратимся к родительскому методу
+                parent::__set($name, $value);
+                return;
             }
 
             $relations = $this->relations();
@@ -348,7 +344,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
             }
         }
 
-        return null;
+        return parent::__get($name);
     }
 
     /**

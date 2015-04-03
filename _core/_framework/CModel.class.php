@@ -9,6 +9,7 @@
 class CModel {
     private $_errors = null;
     private static $_thisObject = null;
+    private $_customItems = array();
     /**
      * Название класса
      *
@@ -18,6 +19,18 @@ class CModel {
     public static function getClassName() {
         return __CLASS__;
     }
+
+    function __get($name) {
+        if (array_key_exists($name, $this->_customItems)) {
+            return $this->_customItems[$name];
+        }
+        return null;
+    }
+
+    function __set($name, $value) {
+        $this->_customItems[$name] = $value;
+    }
+
     /**
      * Переопределяемый метод для указания отношений между сущностями
      * @return array
