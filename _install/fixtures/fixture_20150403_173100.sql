@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost:8889
--- Время создания: Апр 03 2015 г., 14:30
+-- Время создания: Апр 03 2015 г., 14:37
 -- Версия сервера: 5.5.38
 -- Версия PHP: 5.5.18
 
@@ -22,7 +22,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `pl_corriculum_workplan_term_sections` (
 `id` int(11) NOT NULL,
-  `plan_id` int(11) NOT NULL,
+  `term_id` int(11) NOT NULL,
   `title` tinytext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -34,7 +34,7 @@ CREATE TABLE `pl_corriculum_workplan_term_sections` (
 -- Индексы таблицы `pl_corriculum_workplan_term_sections`
 --
 ALTER TABLE `pl_corriculum_workplan_term_sections`
- ADD PRIMARY KEY (`id`), ADD KEY `plan_id` (`plan_id`);
+ ADD PRIMARY KEY (`id`), ADD KEY `plan_id` (`term_id`);
 
 --
 -- AUTO_INCREMENT для сохранённых таблиц
@@ -53,4 +53,4 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 -- Ограничения внешнего ключа таблицы `pl_corriculum_workplan_term_sections`
 --
 ALTER TABLE `pl_corriculum_workplan_term_sections`
-ADD CONSTRAINT `pl_corriculum_workplan_term_sections_ibfk_1` FOREIGN KEY (`plan_id`) REFERENCES `pl_corriculum_workplans` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ADD CONSTRAINT `pl_corriculum_workplan_term_sections_ibfk_1` FOREIGN KEY (`term_id`) REFERENCES `pl_corriculum_workplan_terms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
