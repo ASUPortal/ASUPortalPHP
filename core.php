@@ -106,8 +106,7 @@
         ),
         "components" => array(
             "cache" => array(
-                "class" => "CCacheFile",
-                "cacheDir" => CORE_CWD.CORE_DS.'tmp'.CORE_DS.'cache'.CORE_DS,
+                "class" => "CCacheAPC",
                 "timeout" => 60
             ),
             "beans" => array(
