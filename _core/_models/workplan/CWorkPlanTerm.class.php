@@ -8,6 +8,7 @@
  * @property CArrayList types
  * @property CArrayList sections
  * @property CArrayList labs
+ * @property CArrayList practices
  */
 class CWorkPlanTerm extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_TERMS;
@@ -31,6 +32,12 @@ class CWorkPlanTerm extends CActiveModel{
                 "storageTable" => TABLE_WORK_PLAN_TERM_LABS,
                 "storageCondition" => "term_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanTermLab"
+            ),
+            "practices" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageTable" => TABLE_WORK_PLAN_TERM_PRACTICES,
+                "storageCondition" => "term_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CWorkPlanTermPractice"
             )
         );
     }

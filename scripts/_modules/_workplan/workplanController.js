@@ -120,7 +120,8 @@ application
                 plan_id: $scope.workplan.id,
                 types: [],
                 sections: [],
-                labs: []
+                labs: [],
+                practices: []
             };
             // сохраним, а потом скопируем виды нагрузки
             $scope.save().then(function(){
@@ -229,6 +230,17 @@ application
         $scope.addLab = function($index){
             var term = $scope.workplan.terms[$index];
             term.labs[term.labs.length] = {
+                term_id: term.id
+            };
+        };
+
+        /**
+         * Добавление практики в семестр
+         * @param $index
+         */
+        $scope.addPractice = function($index){
+            var term = $scope.workplan.terms[$index];
+            term.practices[term.practices.length] = {
                 term_id: term.id
             };
         };

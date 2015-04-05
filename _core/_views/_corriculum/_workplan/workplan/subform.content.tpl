@@ -13,4 +13,8 @@
 
 {include file="_corriculum/_workplan/workplan/subform.content.labs.tpl"}
 
+<h4>4.4. Практические занятия (семинары)</h4>
+
+{include file="_corriculum/_workplan/workplan/subform.content.practices.tpl"}
+
 </div>
