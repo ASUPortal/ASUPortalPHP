@@ -119,7 +119,8 @@ application
             $scope.workplan.terms[$scope.workplan.terms.length] = {
                 plan_id: $scope.workplan.id,
                 types: [],
-                sections: []
+                sections: [],
+                labs: []
             };
             // сохраним, а потом скопируем виды нагрузки
             $scope.save().then(function(){
@@ -196,6 +197,10 @@ application
             }
         };
 
+        /**
+         * Добавить содержание раздела
+         * @param $index
+         */
         $scope.addTermSection = function($index){
             // добавление раздела в семестр
             var term = $scope.workplan.terms[$index];
@@ -215,6 +220,17 @@ application
                     };
                 }
             });
+        };
+
+        /**
+         * Добавление лабораторной работы в семестр
+         * @param $index
+         */
+        $scope.addLab = function($index){
+            var term = $scope.workplan.terms[$index];
+            term.labs[term.labs.length] = {
+                term_id: term.id
+            };
         };
     }]);
 

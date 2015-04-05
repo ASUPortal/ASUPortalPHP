@@ -1,4 +1,4 @@
-<div ng-controller="WorkPlanTermsController as wptCtrl">
+
     <span class="btn btn-success btn-mini" ng-click="addTerm()">Добавить семестр</span>
     <table class="table table-striped">
         <tr>
@@ -39,4 +39,3 @@
     <div ng-repeat="term in workplan.terms">
         {include file="_corriculum/_workplan/workplan/subform.content.term.tpl"}
     </div>
-</div>
