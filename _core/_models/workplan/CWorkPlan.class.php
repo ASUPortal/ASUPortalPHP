@@ -28,7 +28,7 @@
  * @property CArrayList sections
  */
 
-class CWorkPlan extends CActiveModel implements IVersionControl{
+class CWorkPlan extends CActiveModel {
     protected $_table = TABLE_WORK_PLANS;
 
     protected function relations() {

@@ -112,6 +112,9 @@ application
         '$scope',
 
     function($scope){
+        /**
+         * Добавление семестра
+         */
         $scope.addTerm = function(){
             $scope.workplan.terms[$scope.workplan.terms.length] = {
                 plan_id: $scope.workplan.id,
@@ -134,6 +137,10 @@ application
             });
         };
 
+        /**
+         * Удаление семестра
+         * @param index
+         */
         $scope.removeTerm = function(index){
             // удаление семестра
             if (confirm("Вы действительно хотите удалить семестр?")) {
@@ -141,6 +148,9 @@ application
             }
         };
 
+        /**
+         * Добавление вида нагрузки в семестр
+         */
         $scope.addTermLoad = function(){
             // добавим во все семестры вид нагрузки
             for (var i = 0; i < $scope.workplan.terms.length; i++) {
@@ -151,11 +161,38 @@ application
             }
         };
 
+        /**
+         * После выбора типа нагрузки
+         *
+         * @param $item
+         * @param $model
+         * @param $index
+         */
         $scope.onTypeSelect = function($item, $model, $index) {
             // укажем вид занятия во всех семестрах
             for (var i = 0; i < $scope.workplan.terms.length; i++) {
                 var term = $scope.workplan.terms[i];
                 term.types[$index].type_id = $model;
+            }
+            // во все разделы добавим, если там такого еще нет
+            for (var i  = 0; i < $scope.workplan.terms.length; i++) {
+                var term = $scope.workplan.terms[i];
+                for (var j = 0; j < term.sections.length; j++) {
+                    var section = term.sections[j];
+                    var isExist = false;
+                    for (var k = 0; k < section.loads.length; k++) {
+                        var load = section.loads[k];
+                        if (load.type_id == $model) {
+                            isExist = true;
+                        }
+                    }
+                    if (!isExist) {
+                        section.loads[section.loads.length] = {
+                            section_id: section.id,
+                            type_id: $model
+                        };
+                    }
+                }
             }
         };
 
@@ -163,8 +200,21 @@ application
             // добавление раздела в семестр
             var term = $scope.workplan.terms[$index];
             term.sections[term.sections.length] = {
-                term_id: term.id
+                term_id: term.id,
+                loads: []
             };
+            // сохраним, нам нужен id раздела
+            $scope.save().then(function(data){
+                // копируем из семестра имеющиеся виды нагрузки
+                var term = data.terms[$index];
+                var section = term.sections[term.sections.length - 1];
+                for (var i = 0; i < term.types.length; i++) {
+                    section.loads[section.loads.length] = {
+                        section_id: section.id,
+                        type_id: term.types[i].type_id
+                    };
+                }
+            });
         };
     }]);
 

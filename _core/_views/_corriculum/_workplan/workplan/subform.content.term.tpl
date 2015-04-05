@@ -29,5 +29,10 @@
         <td>
             {NgHtml::activeTextBox("section", "title", ["html" => 'style="width: 100%; "'])}
         </td>
+        {literal}
+        <td ng-repeat="load in section.loads" ng-init="section_id = $index">
+            <input type="text" ng-model="load.value">
+        </td>
+        {/literal}
     </tr>
 </table>
