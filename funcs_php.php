@@ -744,7 +744,7 @@ if ($nameFile!="") {
 		"/.*\.exe/i",
 		"/.*\.htm|.*\.html|.*\.mht/i",
 		"/.*\.jpg$|.*\.jpeg$|.*\.tif$|.*\.bmp$|.*\.png$/i",
-		"/.*\.ppt|.*\.pps/i",
+		"/.*\.ppt.?|.*\.pps/i",
 		"/.*\.chm|.*\.hlp/i",
 		"/.*\.msi|.*\.msp/i"
 	);
