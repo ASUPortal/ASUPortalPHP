@@ -60,6 +60,10 @@
                 jQuery(".documents_item[type=file]").prepend('<div class="item_manage">' +
                         '<i class="icon-pencil documents_item_manage" style="cursor: pointer;"></i>' +
                         '</div>');
+             	// добавляем выпадающие кнопки редактирования папки
+                jQuery(".documents_item[type=folder]").prepend('<div class="item_manage">' +
+                        '<i class="icon-pencil documents_item_manage" style="cursor: pointer;"></i>' +
+                        '</div>');
 
                 // управляшки
                 jQuery(".documents_item_manage").popover({
@@ -72,6 +76,10 @@
                         if (jQuery(parent).attr("type") == "file") {
                             links[links.length] = '<li><a href="files.php?action=delete&id=' + jQuery(parent).attr("objid") + '">Удалить</a></li>';
                             links[links.length] = '<li><a href="files.php?action=edit&id=' + jQuery(parent).attr("objid") + '">Редактировать</a></li>';
+                        }
+                        if (jQuery(parent).attr("type") == "folder") {
+                            links[links.length] = '<li><a href="index.php?action=delete&id=' + jQuery(parent).attr("objid") + '">Удалить</a></li>';
+                            links[links.length] = '<li><a href="index.php?action=edit&id=' + jQuery(parent).attr("objid") + '">Редактировать</a></li>';
                         }
                         return '<ul class="nav nav-pills nav-stacked">' + links.join("") + "</ul>";
                     }
