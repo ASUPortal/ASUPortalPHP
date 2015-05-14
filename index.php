@@ -168,10 +168,20 @@ if(isset($_GET['id'])) {
                     }
                 } else {
                     //сначала пытаемся получить фото из анкета, если не находим из биографии
-                    if ($a['user_photo']!="") {
-                        echo '<img src="_modules/_thumbnails/?src=images/lects/'.$a['user_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из биографии" border=0>';
+                    if ($a['user_photo']!="") {   	
+						$filename = 'images/lects/small/sm_'.$a['user_photo'].'';
+						if (file_exists($filename)) {
+							echo '<img src="images/lects/small/sm_'.$a['user_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из биографии" border=0>';
+						} else {
+							echo '<img src="_modules/_thumbnails/?src=images/lects/'.$a['user_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из биографии" border=0>';
+						}
                     } else if ($showKadriImg_ifNullBiogImg && $a['kadri_photo']!="") {
-                        echo '<img src="_modules/_thumbnails/?src=images/lects/'.$a['kadri_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из анкеты" border=0>';
+                    	$filename = 'images/lects/small/sm_'.$a['kadri_photo'].'';
+                    	if (file_exists($filename)) {
+							echo '<img src="images/lects/small/sm_'.$a['kadri_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из анкеты" border=0>';
+                    	} else {
+							echo '<img src="_modules/_thumbnails/?src=images/lects/'.$a['kadri_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из анкеты" border=0>';
+                    	}
                     } else {
                         echo '<img src="images/design/notice.gif" border="0" align="center" valign="middle" alt="Фото новости" border=0>';
                     }

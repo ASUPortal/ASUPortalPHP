@@ -912,6 +912,24 @@ class CStaffManager{
         }
         return self::getCacheDiploms()->getItem($key);
     }
+    
+    /**
+     * Получить диплом по идентификатору студента
+     *
+     * @param $key
+     * @return CDiplom
+     */
+    public static function getDiplomByStudent($key) {
+    	if (!self::getCacheDiploms()->hasElement($key)) {
+    		$item = CActiveRecordProvider::getById(TABLE_DIPLOMS, $key);
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_DIPLOMS, "student_id = '".$key."'")->getItems() as $item) {
+    			$diplom = new CDiplom($item);
+    			self::getCacheDiploms()->add($diplom->id, $diplom);
+    			self::getCacheDiploms()->add($diplom->student_id, $diplom);
+    		}
+    	}
+    	return self::getCacheDiploms()->getItem($key);
+    }
 
     /**
      * Кэш предзащит диплома

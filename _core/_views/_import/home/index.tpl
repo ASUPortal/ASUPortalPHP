@@ -11,6 +11,11 @@
             <a href="index.php?action=form&provider=CImportMarksFromCSV">Импорт оценок из CSV</a>
         </li>
     </ul>
+    <ul>
+        <li>
+            <a href="index.php?action=form&provider=CImportRegFromCSV">Импорт рег. номеров ВКР из CSV</a>
+        </li>
+    </ul>
 {/block}
 
 {block name="asu_right"}
