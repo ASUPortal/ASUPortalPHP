@@ -5,10 +5,13 @@
  * Date: 31.07.12
  * Time: 21:42
  * To change this template use File | Settings | File Templates.
+ *
+ * @property int section_id
  */
 class CCorriculumDisciplineLabor extends CActiveModel {
     protected $_form = null;
     protected $_type = null;
+    protected $_section = null;
     protected $_table = TABLE_CORRICULUM_DISCIPLINE_LABORS;
 
     /**
@@ -39,6 +42,13 @@ class CCorriculumDisciplineLabor extends CActiveModel {
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
             ),
+            'section' => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageField" => "section_id",
+                "storageProperty" => "_section",
+                "managerClass" => "CCorriculumsManager",
+                "managerGetObject" => "getDisciplineSection"
+            )
         );
     }
     public function attributeLabels() {
