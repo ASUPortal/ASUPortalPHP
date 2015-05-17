@@ -9,7 +9,7 @@
 {/if}{/if}
 
 <p>
-    <a href="{$web_root}_modules/_orders/index.php?rated=0">
+    <a href="{$web_root}_modules/_orders/index.php">
 	    <center>
 	        <img src="{$web_root}images/{$icon_theme}/32x32/actions/address-book-new.png">
 		Приказы
