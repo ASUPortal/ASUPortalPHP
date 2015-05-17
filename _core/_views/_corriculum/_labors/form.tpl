@@ -1,7 +1,7 @@
 <form action="labors.php" method="post" class="form-horizontal">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $labor)}
-    {CHtml::activeHiddenField("discipline_id", $labor)}
+    {CHtml::activeHiddenField("section_id", $labor)}
 
     <div class="control-group">
         {CHtml::activeLabel("type_id", $labor)}

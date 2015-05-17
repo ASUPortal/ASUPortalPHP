@@ -19,7 +19,7 @@ class CCorriculumLaborsController extends CBaseController {
     }
     public function actionAdd() {
         $labor = new CCorriculumDisciplineLabor();
-        $labor->discipline_id = CRequest::getInt("id");
+        $labor->section_id = CRequest::getInt("id");
         $this->setData("labor", $labor);
         $this->renderView("_corriculum/_labors/add.tpl");
     }
@@ -36,7 +36,7 @@ class CCorriculumLaborsController extends CBaseController {
             if ($this->continueEdit()) {
                 $this->redirect("labors.php?action=edit&id=".$labor->getId());
             } else {
-                $this->redirect("disciplines.php?action=edit&id=".$labor->discipline_id);
+                $this->redirect("disciplines.php?action=edit&id=".$labor->section->discipline_id);
             }
             return true;
         }
@@ -45,7 +45,11 @@ class CCorriculumLaborsController extends CBaseController {
     }
     public function actionDel() {
         $labor = CCorriculumsManager::getLabor(CRequest::getInt("id"));
-        $id = $labor->discipline_id;
+        if (is_null($labor->section)) {
+            $id = $labor->discipline_id;
+        } else {
+            $id = $labor->section->discipline_id;
+        }
         $labor->remove();
         $this->redirect("disciplines.php?action=edit&id=".$id);
     }

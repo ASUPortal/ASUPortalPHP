@@ -13,9 +13,9 @@
 </p>
 
 <p>
-    <a href="labors.php?action=add&id={$discipline->getId()}"><center>
+    <a href="disciplineSections.php?action=add&id={$discipline->getId()}"><center>
         <img src="{$web_root}images/{$icon_theme}/32x32/actions/list-add.png"><br>
-        Добавить вид нагрузки
+        Добавить семестр
     </center></a>
 </p>
 

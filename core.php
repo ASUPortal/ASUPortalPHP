@@ -206,6 +206,7 @@
     define("TABLE_CORRICULUM_DISCIPLINE_LABORS", "pl_corriculum_discipline_labors");
     define("TABLE_CORRICULUM_DISCIPLINE_CONTROLS", "pl_corriculum_discipline_controls");
     define("TABLE_CORRICULUM_DISCIPLINE_HOURS", "pl_corriculum_discipline_hours");
+    define("TABLE_CORRICULUM_DISCIPLINE_SECTIONS", "pl_corriculum_discipline_sections");
     define("TABLE_CORRICULUM_CYCLES", "pl_corriculum_cycles");
     define("TABLE_CORRICULUM_PRACTICES", "pl_corriculum_practices");
     define("TABLE_CORRICULUM_DISCIPLINE_COMPETENTIONS", "pl_corriculum_discipline_competentions");

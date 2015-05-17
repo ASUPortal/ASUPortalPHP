@@ -295,4 +295,17 @@ class CCorriculumsManager {
         }
         return self::getCacheAttestations()->getItem($key);
     }
+
+    /**
+     * @param $key
+     * @return CCorriculumDisciplineSection|null
+     */
+    public static function getDisciplineSection($key) {
+        $ar = CActiveRecordProvider::getById(TABLE_CORRICULUM_DISCIPLINE_SECTIONS, $key);
+        $obj = null;
+        if (!is_null($ar)) {
+            $obj = new CCorriculumDisciplineSection($ar);
+        }
+        return $obj;
+    }
 }
