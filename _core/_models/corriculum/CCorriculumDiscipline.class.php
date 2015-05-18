@@ -9,6 +9,8 @@
  * @property CTerm discipline
  * @property CCorriculumCycle cycle
  * @property CArrayList plans
+ * @property CArrayList sections
+ * @property CArrayList labors
  */
 class CCorriculumDiscipline extends CActiveModel {
     protected $_table = TABLE_CORRICULUM_DISCIPLINES;

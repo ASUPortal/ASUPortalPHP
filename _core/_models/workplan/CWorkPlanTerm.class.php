@@ -9,6 +9,8 @@
  * @property CArrayList sections
  * @property CArrayList labs
  * @property CArrayList practices
+ * @property int plan_id
+ * @property String number
  */
 class CWorkPlanTerm extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_TERMS;
