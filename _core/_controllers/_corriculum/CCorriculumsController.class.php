@@ -114,6 +114,24 @@ class CCorriculumsController extends CBaseController {
                 $newDiscipline->cycle_id = $newCycle->getId();
                 $newDiscipline->save();
                 /**
+                 * Копируем семестры
+                 * @var CCorriculumDisciplineSection $section
+                 */
+                foreach ($discipline->sections->getItems() as $section) {
+                    $newSection = $section->copy();
+                    $newSection->discipline_id = $newDiscipline->getId();
+                    $newSection->save();
+                    /**
+                     * Копируем виды нагрузку из семестров
+                     * @var CCorriculumDisciplineLabor $labor
+                     */
+                    foreach ($section->labors->getItems() as $labor) {
+                        $newLabor = $labor->copy();
+                        $newLabor->section_id = $newSection->getId();
+                        $newLabor->save();
+                    }
+                }
+                /**
                  * Клонируем нагрузку из дисциплин
                  */
                 foreach ($discipline->labors->getItems() as $labor) {
@@ -127,6 +145,24 @@ class CCorriculumsController extends CBaseController {
 					$newChildDiscipline->parent_id = $newDiscipline->getId();
 					$newChildDiscipline->cycle_id = $newCycle->getId();
 					$newChildDiscipline->save();
+                    /**
+                     * Копируем семестры
+                     * @var CCorriculumDisciplineSection $section
+                     */
+                    foreach ($child->sections->getItems() as $section) {
+                        $newSection = $section->copy();
+                        $newSection->discipline_id = $newChildDiscipline->getId();
+                        $newSection->save();
+                        /**
+                         * Копируем виды нагрузку из семестров
+                         * @var CCorriculumDisciplineLabor $labor
+                         */
+                        foreach ($section->labors->getItems() as $labor) {
+                            $newLabor = $labor->copy();
+                            $newLabor->section_id = $newSection->getId();
+                            $newLabor->save();
+                        }
+                    }
 					/**
 					 * Клонируем нагрузку из дисциплин
 					 */
