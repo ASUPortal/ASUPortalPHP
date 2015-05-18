@@ -7,6 +7,7 @@
  * To change this template use File | Settings | File Templates.
  *
  * @property int section_id
+ * @property int type_id
  */
 class CCorriculumDisciplineLabor extends CActiveModel {
     protected $_form = null;

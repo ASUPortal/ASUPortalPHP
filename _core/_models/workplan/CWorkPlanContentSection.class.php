@@ -9,6 +9,8 @@
  * @property string name
  * @property CArrayList lectures
  * @property CArrayList controls
+ * @property int plan_id
+
  */
 class CWorkPlanContentSection extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_CONTENT_SECTIONS;

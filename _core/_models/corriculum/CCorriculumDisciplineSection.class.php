@@ -7,6 +7,8 @@
  *
  * @property int discipline_id
  * @property CArrayList labors
+ * @property String title
+ * @property int sectionIndex
  */
 class CCorriculumDisciplineSection extends CActiveModel{
     protected $_table = TABLE_CORRICULUM_DISCIPLINE_SECTIONS;
