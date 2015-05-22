@@ -33,6 +33,7 @@ class CTaxonomyManager {
     private static $_cachePracticePlaces = null;
     private static $_cacheLegacyTaxonomies = null;
     private static $_cacheLegacyTerms = null;
+    private static $_cacheTowns = null;
     /**
      * Кэш должностей
      *
@@ -77,6 +78,32 @@ class CTaxonomyManager {
             }
         }
         return self::$_cacheTitles;
+    }
+    /**
+     * Кэш городов
+     *
+     * @static
+     * @return CArrayList
+     */
+    public static function getCacheTowns() {
+    	if (is_null(self::$_cacheTowns)) {
+    		self::$_cacheTowns = new CArrayList();
+    		foreach (CActiveRecordProvider::getAllFromTable(TABLE_TOWNS)->getItems() as $item) {
+    			$term = new CTerm($item);
+    			self::$_cacheTowns->add($term->getId(), $term);
+    		}
+    	}
+    	return self::$_cacheTowns;
+    }
+    /**
+     * Город
+     *
+     * @static
+     * @param $key
+     * @return CTerm
+     */
+    public static function getTown($key) {
+    	return self::getCacheTowns()->getItem($key);
     }
     /**
      * Звание

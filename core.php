@@ -180,6 +180,8 @@
     define("TABLE_DISCIPLINES", "subjects");
     define("TABLE_SPECIALITIES", "specialities");
     define("TABLE_DEPARTMENT_PROTOCOLS", "protocols");
+    define("TABLE_DEP_PROTOCOL_AGENDA", "protocol_details");
+    define("TABLE_DEP_PROTOCOL_VISIT", "protocol_visit");
     define("TABLE_YEARS", "time_intervals");
     define("TABLE_YEAR_PARTS", "time_parts");
     define("TABLE_SEB_QUSTIONS_IN_TICKETS", "seb_question_in_ticket");
@@ -191,6 +193,7 @@
     define("TABLE_DIPLOM_PREVIEW_COMISSIONS", "diplom_preview_committees");
     define("TABLE_DIPLOM_PREVIEW_MEMBERS", "diplom_preview_kadri");
     define("TABLE_PRACTICE_PLACES", "pract_places");
+    define("TABLE_TOWNS", "towns");
     define("TABLE_LANGUAGES", "language");
     define("TABLE_MARKS", "study_marks");
     define("TABLE_SEB_PROTOCOLS", "seb_protocol");
