@@ -179,6 +179,7 @@
     define("TABLE_SEB_TICKETS", "seb_ticket");
     define("TABLE_DISCIPLINES", "subjects");
     define("TABLE_SPECIALITIES", "specialities");
+    define("TABLE_SCIENCE_SPECIALITIES", "specialities_science");
     define("TABLE_DEPARTMENT_PROTOCOLS", "protocols");
     define("TABLE_DEP_PROTOCOL_AGENDA", "protocol_details");
     define("TABLE_DEP_PROTOCOL_VISIT", "protocol_visit");

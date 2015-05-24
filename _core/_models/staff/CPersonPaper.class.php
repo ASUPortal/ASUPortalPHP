@@ -9,6 +9,9 @@
 
 class CPersonPaper extends CActiveModel{
     protected $_table = TABLE_PERSON_DISSER;
+    protected $_person = null;
+    protected $_scienceManager = null;
+    protected $_edForm = null;
     public $type = 0;
 
     public function fieldsProperty() {
@@ -39,4 +42,51 @@ class CPersonPaper extends CActiveModel{
             )
         );
     }
+
+    public function relations() {
+    	return array(
+            "person" => array(
+					"relationPower" => RELATION_HAS_ONE,
+					"storageProperty" => "_person",
+					"storageField" => "kadri_id",
+					"managerClass" => "CStaffManager",
+					"managerGetObject" => "getPerson"
+            ),
+    		"scienceManager" => array(
+    				"relationPower" => RELATION_HAS_ONE,
+    				"storageProperty" => "_scienceManager",
+    				"storageField" => "scinceMan",
+    				"managerClass" => "CStaffManager",
+    				"managerGetObject" => "getPerson"
+    		),
+            "educationForm" => array(
+					"relationPower" => RELATION_HAS_ONE,
+					"storageProperty" => "_edForm",
+					"storageField" => "study_form_id",
+					"managerClass" => "CTaxonomyManager",
+					"managerGetObject" => "getEductionForm"
+            ),
+    		"scienceSpec" => array(
+					"relationPower" => RELATION_HAS_ONE,
+					"storageProperty" => "_scienceSpec",
+					"storageField" => "science_spec_id",
+					"managerClass" => "CTaxonomyManager",
+					"managerGetObject" => "getScienceSpeciality"
+    		)
+    	);
+    }
+    public function attributeLabels() {
+    	return array(
+    			"kadri_id" => "ФИО",
+    			"person.fio" => "ФИО",
+    			"science_spec_id" => "Номер спец-ти",
+    			"study_form_id" => "Форма обучения",
+    			"scinceMan" => "Руководитель",
+    			"tema" => "Тема",
+    			"god_zach" => "Год защиты",
+    			"date_end" => "Дата окончания",
+    			"comment" => "Комментарий"
+    	);
+    }
+
 }
