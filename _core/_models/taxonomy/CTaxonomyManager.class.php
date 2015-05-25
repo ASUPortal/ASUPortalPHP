@@ -17,6 +17,7 @@ class CTaxonomyManager {
     private static $_cacheTypes = null;
     private static $_fullInit = false;
     private static $_cacheSpecialities = null;
+    private static $_cacheScienceSpecialities = null;
     private static $_cacheYears = null;
     private static $_cacheMarks = null;
     private static $_cacheEdForms = null;
@@ -33,6 +34,7 @@ class CTaxonomyManager {
     private static $_cachePracticePlaces = null;
     private static $_cacheLegacyTaxonomies = null;
     private static $_cacheLegacyTerms = null;
+    private static $_cacheTowns = null;
     /**
      * Кэш должностей
      *
@@ -77,6 +79,32 @@ class CTaxonomyManager {
             }
         }
         return self::$_cacheTitles;
+    }
+    /**
+     * Кэш городов
+     *
+     * @static
+     * @return CArrayList
+     */
+    public static function getCacheTowns() {
+    	if (is_null(self::$_cacheTowns)) {
+    		self::$_cacheTowns = new CArrayList();
+    		foreach (CActiveRecordProvider::getAllFromTable(TABLE_TOWNS)->getItems() as $item) {
+    			$term = new CTerm($item);
+    			self::$_cacheTowns->add($term->getId(), $term);
+    		}
+    	}
+    	return self::$_cacheTowns;
+    }
+    /**
+     * Город
+     *
+     * @static
+     * @param $key
+     * @return CTerm
+     */
+    public static function getTown($key) {
+    	return self::getCacheTowns()->getItem($key);
     }
     /**
      * Звание
@@ -205,6 +233,32 @@ class CTaxonomyManager {
             $arr[$i->getId()] = $i->getValue();
         }
         return $arr;
+    }
+    /**
+     * Кэш научных специальностей
+     *
+     * @static
+     * @return CArrayList
+     */
+    public static function getCacheScienceSpecialities() {
+    	if (is_null(self::$_cacheScienceSpecialities)) {
+    		self::$_cacheScienceSpecialities = new CArrayList();
+    		foreach (CActiveRecordProvider::getAllFromTable(TABLE_SCIENCE_SPECIALITIES)->getItems() as $item) {
+    			$term = new CScienceSpeciality($item);
+    			self::$_cacheScienceSpecialities->add($term->getId(), $term);
+    		}
+    	}
+    	return self::$_cacheScienceSpecialities;
+    }
+    /**
+     * Научная специальность
+     *
+     * @static
+     * @param $key
+     * @return CScienceSpeciality
+     */
+    public static function getScienceSpeciality($key) {
+    	return self::getCacheScienceSpecialities()->getItem($key);
     }
     /**
      * Кэш дисциплин

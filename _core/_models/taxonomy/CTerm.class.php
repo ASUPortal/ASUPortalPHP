@@ -44,6 +44,9 @@ class CTerm extends CActiveModel{
         	case TABLE_MARKS:
         		return $this->getRecord()->getItemValue("name_short");
         		break;
+        	case TABLE_SCIENCE_SPECIALITIES:
+        		return $this->getRecord()->getItemValue("name_short");
+        		break;
             default:
                 return $this->getRecord()->getItemValue("name");
             	break;
