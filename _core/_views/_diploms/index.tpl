@@ -189,7 +189,7 @@
         			</div>
     			</div>
     		<td valign="top" width="50%">
-    			<div id="show_groups"><input name="" type="button" value="Показать"></div>
+    			<div id="show_groups"><input name="" type="button" class="btn" value="Показать"></div>
     		</td>
     		</td>
     		<td valign="top" width="5%">
