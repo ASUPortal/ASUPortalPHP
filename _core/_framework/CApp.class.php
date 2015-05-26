@@ -5,6 +5,8 @@
  * Date: 07.08.12
  * Time: 16:30
  * To change this template use File | Settings | File Templates.
+ *
+ * @property CCache cache
  */
 class CApp extends CComponent{
     private static $_inst = null;

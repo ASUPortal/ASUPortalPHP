@@ -290,6 +290,21 @@ class CActiveModel extends CModel implements IJSONSerializable{
                 return $this->$private;
             } elseif ($relation['relationPower'] == RELATION_HAS_MANY) {
                 $private = $relation['storageProperty'];
+                /**
+                 * Проверим, вдруг разрешено использование кэш
+                 * и данные кэше уже есть
+                 */
+                $useCache = false;
+                if (array_key_exists("useCache", $relation)) {
+                    $useCache = $relation["useCache"];
+                }
+                if ($useCache) {
+                    $cacheKey = get_class($this)."_property_".$name."_".$this->getId();
+                    if (CApp::getApp()->cache->hasCache($cacheKey)) {
+                        $valueFromCache = CApp::getApp()->cache->get($cacheKey);
+                        $this->$private = $valueFromCache;
+                    }
+                }
                 if (is_null($this->$private)) {
                     $table = $relation['storageTable'];
                     $condition = $relation['storageCondition'];
@@ -321,6 +336,9 @@ class CActiveModel extends CModel implements IJSONSerializable{
                             }
                         }
                     }
+                    if ($useCache) {
+                        CApp::getApp()->cache->set($cacheKey, $this->$private, 60);
+                    }
                 }
                 return $this->$private;
             } elseif ($relation['relationPower'] == RELATION_COMPUTED) {
@@ -332,6 +350,21 @@ class CActiveModel extends CModel implements IJSONSerializable{
                 return $this->$private;
             } elseif ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
                 $private = $relation['storageProperty'];
+                /**
+                 * Проверим, вдруг разрешено использование кэш
+                 * и данные кэше уже есть
+                 */
+                $useCache = false;
+                if (array_key_exists("useCache", $relation)) {
+                    $useCache = $relation["useCache"];
+                }
+                if ($useCache) {
+                    $cacheKey = get_class($this)."_property_".$name."_".$this->getId();
+                    if (CApp::getApp()->cache->hasCache($cacheKey)) {
+                        $valueFromCache = CApp::getApp()->cache->get($cacheKey);
+                        $this->$private = $valueFromCache;
+                    }
+                }
                 if (is_null($this->$private)) {
                     $this->$private = new CArrayList();
 
@@ -347,6 +380,10 @@ class CActiveModel extends CModel implements IJSONSerializable{
                         if (!is_null($obj)) {
                             $this->$private->add($obj->id, $obj);
                         }
+                    }
+
+                    if ($useCache) {
+                        CApp::getApp()->cache->set($cacheKey, $this->$private, 60);
                     }
                 }
                 return $this->$private;

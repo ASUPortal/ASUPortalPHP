@@ -207,13 +207,17 @@ class CMenuItem extends CActiveModel {
      */
     public function getRoles() {
         if (is_null($this->_roles)) {
-            $this->_roles = new CArrayList();
-            foreach (CActiveRecordProvider::getWithCondition(TABLE_MENU_ITEMS_ACCESS, "item_id = " . $this->getId())->getItems() as $item) {
-                $role = CStaffManager::getUserRole($item->getItemValue("role_id"));
-                if (!is_null($role)) {
-                    $this->_roles->add($role->getId(), $role);
+            if (!CApp::getApp()->cache->hasCache("menu_item_access_".$this->getId())) {
+                $this->_roles = new CArrayList();
+                foreach (CActiveRecordProvider::getWithCondition(TABLE_MENU_ITEMS_ACCESS, "item_id = " . $this->getId())->getItems() as $item) {
+                    $role = CStaffManager::getUserRole($item->getItemValue("role_id"));
+                    if (!is_null($role)) {
+                        $this->_roles->add($role->getId(), $role);
+                    }
                 }
+                CApp::getApp()->cache->set("menu_item_access_".$this->getId(), $this->_roles, 300);
             }
+            $this->_roles = CApp::getApp()->cache->get("menu_item_access_".$this->getId());
         }
         return $this->_roles;
     }

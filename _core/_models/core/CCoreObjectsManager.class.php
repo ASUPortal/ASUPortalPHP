@@ -9,9 +9,7 @@
 
 class CCoreObjectsManager {
     private static $_cacheModels = null;
-    private static $_cacheModelFields = null;
     private static $_cacheModelValidators = null;
-    private static $_cacheModelFieldTranslations = null;
     private static $_cacheModelFieldValidators = null;
     private static $_cacheValidators = null;
     private static $_cacheModelTasks = null;
@@ -44,26 +42,6 @@ class CCoreObjectsManager {
             self::$_cacheModels = new CArrayList();
         }
         return self::$_cacheModels;
-    }
-
-    /**
-     * @return CArrayList|null
-     */
-    private static function getCacheModelFields() {
-        if (is_null(self::$_cacheModelFields)) {
-            self::$_cacheModelFields = new CArrayList();
-        }
-        return self::$_cacheModelFields;
-    }
-
-    /**
-     * @return CArrayList|null
-     */
-    private static function getCacheModelFieldTranslations() {
-        if (is_null(self::$_cacheModelFieldTranslations)) {
-            self::$_cacheModelFieldTranslations = new CArrayList();
-        }
-        return self::$_cacheModelFieldTranslations;
     }
 
     /**
@@ -117,17 +95,17 @@ class CCoreObjectsManager {
      * @return CCoreModelField
      */
     public static function getCoreModelField($key) {
-        if (!self::getCacheModelFields()->hasElement($key)) {
+        if (!CApp::getApp()->cache->hasCache("core_model_field_".$key)) {
             $ar = null;
             if (is_numeric($key)) {
                 $ar = CActiveRecordProvider::getById(TABLE_CORE_MODEL_FIELDS, $key);
             }
             if (!is_null($ar)) {
                 $field = new CCoreModelField($ar);
-                self::getCacheModelFields()->add($field->getId(), $field);
+                CApp::getApp()->cache->set("core_model_field_".$key, $field, 300);
             }
         }
-        return self::getCacheModelFields()->getItem($key);
+        return CApp::getApp()->cache->get("core_model_field_".$key);
     }
 
     /**
@@ -135,17 +113,17 @@ class CCoreObjectsManager {
      * @return CCoreModelFieldTranslation
      */
     public static function getCoreModelFieldTranslation($key) {
-        if (!self::getCacheModelFieldTranslations()->hasElement($key)) {
+        if (!CApp::getApp()->cache->hasCache("core_model_field_translation_".$key)) {
             $ar = null;
             if (is_numeric($key)) {
                 $ar = CActiveRecordProvider::getById(TABLE_CORE_MODEL_FIELD_TRANSLATIONS, $key);
             }
             if (!is_null($ar)) {
                 $t = new CCoreModelFieldTranslation($ar);
-                self::getCacheModelFieldTranslations()->add($t->getId(), $t);
+                CApp::getApp()->cache->set("core_model_field_translation_".$key, $t, 300);
             }
         }
-        return self::getCacheModelFieldTranslations()->getItem($key);
+        return CApp::getApp()->cache->get("core_model_field_translation_".$key);
     }
     public static function getAttributeLabels(CModel $model) {
         $translation = array();

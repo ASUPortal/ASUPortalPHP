@@ -53,7 +53,8 @@ class CCoreModelField extends CActiveModel{
                 "storageTable" => TABLE_CORE_MODEL_FIELD_TRANSLATIONS,
                 "storageCondition" => "field_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CCoreObjectsManager",
-                "managerGetObject" => "getCoreModelFieldTranslation"
+                "managerGetObject" => "getCoreModelFieldTranslation",
+                "useCache" => true
             ),
             "model" => array(
                 "relationPower" => RELATION_HAS_ONE,
