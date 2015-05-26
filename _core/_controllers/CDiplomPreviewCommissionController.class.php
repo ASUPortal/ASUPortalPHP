@@ -22,8 +22,7 @@ class CDiplomPreviewCommissionController extends CBaseController {
         $query = new CQuery();
         $set->setQuery($query);
         $query->select("com.*");
-        $query->innerJoin(TABLE_DIPLOM_PREVIEW_MEMBERS." as members", "com.secretary_id=members.kadri_id");
-        $query->innerJoin(TABLE_PERSON." as person", "members.kadri_id = person.id")
+        $query->leftJoin(TABLE_DIPLOM_PREVIEW_MEMBERS." as members", "members.comm_id=com.id")
             ->from(TABLE_DIPLOM_PREVIEW_COMISSIONS." as com")
             ->order("com.date_act desc");
         $showAll = true;
@@ -35,8 +34,7 @@ class CDiplomPreviewCommissionController extends CBaseController {
         	$direction = "asc";
         	if (CRequest::getString("direction") != "") {
         		$direction = CRequest::getString("direction");}
-        		$query->innerJoin(TABLE_DIPLOM_PREVIEW_MEMBERS." as members", "com.secretary_id=members.kadri_id");
-        		$query->innerJoin(TABLE_PERSON." as person", "members.kadri_id = person.id");
+        		$query->innerJoin(TABLE_PERSON." as person", "com.secretary_id = person.id");
         		$query->order("person.fio ".$direction);
         }
         $items = new CArrayList();
@@ -128,15 +126,14 @@ class CDiplomPreviewCommissionController extends CBaseController {
     	 * Поиск по секретарю
     	 */
     	$query = new CQuery();
-    	$query->select("distinct(members.kadri_id) as id, person.fio as title");
-    	$query->innerJoin(TABLE_DIPLOM_PREVIEW_MEMBERS." as members", "com.secretary_id=members.kadri_id");
-    	$query->innerJoin(TABLE_PERSON." as person", "members.kadri_id = person.id")
+    	$query->select("distinct(com.secretary_id) as id, person.fio as title");
+    	$query->innerJoin(TABLE_PERSON." as person", "com.secretary_id = person.id")
 	    	->from(TABLE_DIPLOM_PREVIEW_COMISSIONS." as com")
 	    	->condition("person.fio like '%".$term."%'")
 	    	->limit(0, 5);
     	foreach ($query->execute()->getItems() as $item) {
     		$res[] = array(
-    				"field" => "kadri_id",
+    				"field" => "secretary_id",
     				"value" => $item["id"],
     				"label" => $item["title"],
     				"class" => "CDiplomPreviewCommission"
