@@ -106,8 +106,7 @@
         ),
         "components" => array(
             "cache" => array(
-                "class" => "CCacheAPC",
-                "timeout" => 60
+                "class" => "CCacheMemcache"
             ),
             "beans" => array(
                 "class" => "CBeanManager",
