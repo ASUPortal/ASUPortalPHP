@@ -35,6 +35,7 @@ class CTaxonomyManager {
     private static $_cacheLegacyTaxonomies = null;
     private static $_cacheLegacyTerms = null;
     private static $_cacheTowns = null;
+    private static $_cacheHoursRate = null;
     /**
      * Кэш должностей
      *
@@ -750,7 +751,36 @@ class CTaxonomyManager {
         }
         return $res;
     }
-
+    
+    /**
+     * Кэш ставок
+     *
+     * @return CArrayList|null
+     */
+    private static function getCacheHoursRate() {
+    	if (is_null(self::$_cacheHoursRate)) {
+    		self::$_cacheHoursRate = new CArrayList();
+    	}
+    	return self::$_cacheHoursRate;
+    }
+    
+    /**
+     * Ставка в часах
+     *
+     * @param $key
+     * @return CHoursRate
+     */
+    public static function getHoursRate($key) {
+    	if (!self::getCacheHoursRate()->hasElement($key)) {
+    		$item = CActiveRecordProvider::getById(TABLE_HOURS_RATE, $key);
+    		if (!is_null($item)) {
+    			$rate = new CHoursRate($item);
+    			self::getCacheHoursRate()->add($rate->getId(), $rate);
+    		}
+    	}
+    	return self::getCacheHoursRate()->getItem($key);
+    }
+    
     /**
      * Статусу утверждения диплома
      *
