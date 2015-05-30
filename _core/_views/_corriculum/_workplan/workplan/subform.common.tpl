@@ -1,57 +1,119 @@
-{NgHtml::activeTextBoxRow($plan, 'workplan', 'title')}
+<div class="control-group">
+    {CHtml::activeLabel("title", $plan)}
+    <div class="controls">
+        {CHtml::activeTextBox("title", $plan)}
+        {CHtml::error("title", $plan)}
+    </div>
+</div>
 
-{NgHtml::activeSelectRow($plan, 'workplan', 'department_id', ["glossary"=>"departmentNames"])}
+<div class="control-group">
+    {CHtml::activeLabel("department_id", $plan)}
+    <div class="controls">
+        {CHtml::activeLookup("department_id", $plan, "departmentNames")}
+        {CHtml::error("department_id", $plan)}
+    </div>
+</div>
 
-{NgHtml::activeTextBoxRow($plan, 'workplan', 'approver_post')}
+<div class="control-group">
+    {CHtml::activeLabel("approver_post", $plan)}
+    <div class="controls">
+        {CHtml::activeTextBox("approver_post", $plan)}
+        {CHtml::error("approver_post", $plan)}
+    </div>
+</div>
 
-{NgHtml::activeTextRow($plan, 'workplan', 'approver_name')}
+<div class="control-group">
+    {CHtml::activeLabel("approver_name", $plan)}
+    <div class="controls">
+        {CHtml::activeTextBox("approver_name", $plan)}
+        {CHtml::error("approver_name", $plan)}
+    </div>
+</div>
 
-{NgHtml::activeSelectRow($plan, 'workplan', 'direction_id', ["glossary"=>"corriculum_speciality_directions"])}
+<div class="control-group">
+    {CHtml::activeLabel("direction_id", $plan)}
+    <div class="controls">
+        {CHtml::activeLookup("direction_id", $plan, "corriculum_speciality_directions")}
+        {CHtml::error("direction_id", $plan)}
+    </div>
+</div>
 
-{NgHtml::activeSelectRow($plan, 'workplan', 'profiles', ["glossary"=>"corriculum_speciality_directions", "multiple"=>true])}
+<div class="control-group">
+    {CHtml::activeLabel("profiles", $plan)}
+    <div class="controls">
+        {CHtml::activeLookup("profiles", $plan, "corriculum_speciality_directions", true)}
+        {CHtml::error("profiles", $plan)}
+    </div>
+</div>
 
-{NgHtml::activeSelectRow($plan, 'workplan', 'qualification_id', ["glossary"=>"corriculum_skill"])}
+<div class="control-group">
+    {CHtml::activeLabel("qualification_id", $plan)}
+    <div class="controls">
+        {CHtml::activeLookup("qualification_id", $plan, "corriculum_skill")}
+        {CHtml::error("qualification_id", $plan)}
+    </div>
+</div>
 
-{NgHtml::activeSelectRow($plan, 'workplan', 'education_form_id', ["glossary"=>"study_forms"])}
+<div class="control-group">
+    {CHtml::activeLabel("education_form_id", $plan)}
+    <div class="controls">
+        {CHtml::activeLookup("education_form_id", $plan, "study_forms")}
+        {CHtml::error("education_form_id", $plan)}
+    </div>
+</div>
 
-{NgHtml::activeTextRow($plan, 'workplan', 'year')}
+<div class="control-group">
+    {CHtml::activeLabel("year", $plan)}
+    <div class="controls">
+        {CHtml::activeTextField("year", $plan)}
+        {CHtml::error("year", $plan)}
+    </div>
+</div>
 
-{NgHtml::activeTextBoxRow($plan, 'workplan', 'intended_for')}
+<div class="control-group">
+    {CHtml::activeLabel("intended_for", $plan)}
+    <div class="controls">
+        {CHtml::activeTextBox("intended_for", $plan)}
+        {CHtml::error("intended_for", $plan)}
+    </div>
+</div>
 
-{NgHtml::activeSelectRow($plan, 'workplan', 'author_id', ["glossary"=>"staff"])}
+<div class="control-group">
+    {CHtml::activeLabel("author_id", $plan)}
+    <div class="controls">
+        {CHtml::activeLookup("author_id", $plan, "staff")}
+        {CHtml::error("author_id", $plan)}
+    </div>
+</div>
 
 <h3>1. Цели и задачи освоения дисциплины</h3>
 
-<span class="btn btn-success btn-mini" ng-click="addTask()">Добавить задачу</span>
+{CHtml::activeComponent("workplantasks.php", $plan)}
 
-<table class="table table-striped">
-    <tr ng-repeat="t in workplan.tasks">
-        <td>
-            <span class="btn btn-warning btn-mini" ng-click="removeTask($index)">Удалить задачу</span>
-        </td>
-        <td>
-            {NgHtml::activeTextTagging("t", "task", ["glossary" => "workplan_tasks"])}
-        <td>
-    </tr>
-</table>
-
-<span class="btn btn-success btn-mini" ng-click="addGoal()">Добавить цель</span>
-
-<table class="table table-striped">
-    <tr ng-repeat="t in workplan.goals">
-        <td>
-            <span class="btn btn-warning btn-mini" ng-click="removeGoal($index)">Удалить цель</span>
-        </td>
-        <td>
-            {NgHtml::activeTextTagging("t", "goal", ["glossary" => "workplan_goals"])}
-        <td>
-    </tr>
-</table>
+{CHtml::activeComponent("workplangoals.php", $plan)}
 
 <h3>2. Место дисциплины в структуре ООП ВПО</h3>
 
-{NgHtml::activeTextBoxRow($plan, 'workplan', 'position')}
+<div class="control-group">
+    {CHtml::activeLabel("position", $plan)}
+    <div class="controls">
+        {CHtml::activeTextBox("position", $plan)}
+        {CHtml::error("position", $plan)}
+    </div>
+</div>
 
-{NgHtml::activeSelectRow($plan, 'workplan', 'disciplinesBefore', ["glossary"=>"subjects", "multiple"=>true])}
+<div class="control-group">
+    {CHtml::activeLabel("disciplinesBefore", $plan)}
+    <div class="controls">
+        {CHtml::activeLookup("disciplinesBefore", $plan, "subjects", true)}
+        {CHtml::error("disciplinesBefore", $plan)}
+    </div>
+</div>
 
-{NgHtml::activeSelectRow($plan, 'workplan', 'disciplinesAfter', ["glossary"=>"subjects", "multiple"=>true])}
+<div class="control-group">
+    {CHtml::activeLabel("disciplinesAfter", $plan)}
+    <div class="controls">
+        {CHtml::activeLookup("disciplinesAfter", $plan, "subjects", true)}
+        {CHtml::error("disciplinesAfter", $plan)}
+    </div>
+</div>

@@ -6,7 +6,7 @@
  * Time: 21:49
  */
 
-class CWorkPlanController extends CJsonController{
+class CWorkPlanController extends CBaseController{
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -179,7 +179,6 @@ class CWorkPlanController extends CJsonController{
         $this->redirect("?action=edit&id=".$plan->getId());
     }
     public function actionEdit() {
-        $this->addJSInclude("_modules/_workplan/workplanController.js");
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
         $this->addActionsMenuItem(array(
             array(
@@ -190,5 +189,17 @@ class CWorkPlanController extends CJsonController{
         ));
         $this->setData("plan", $plan);
         $this->renderView("_corriculum/_workplan/workplan/edit.tpl");
+    }
+    public function actionSave() {
+        $plan = new CWorkPlan();
+        $plan->setAttributes(CRequest::getArray($plan->getClassName()));
+        if ($plan->validate()) {
+            $plan->save();
+            if ($this->continueEdit()) {
+                $this->redirect("workplans.php?action=edit&id=".$plan->getId());
+            } else {
+                $this->redirect("disciplines.php?action=edit&id=".$plan->corriculum_discipline_id);
+            }
+        }
     }
 }

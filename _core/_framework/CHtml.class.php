@@ -18,6 +18,8 @@ class CHtml {
     private static $_clearboxInit = false;
     private static $_viewGroupSelectInit = false;
     private static $_widgetsIndex = 0;
+    private static $_componentsInit = false;
+
     protected static function getFielsizeClass() {
         $result = "span5";
         if (!is_null(CSession::getCurrentUser())) {
@@ -1366,6 +1368,35 @@ class CHtml {
         } else {
             $data = $model->$name;
             echo '<input type="checkbox" name="selectedInView[]" value="'.$data.'" class="_viewGroupSelectorItem" asu-index="'.(self::$_widgetsIndex).'" />';
+        }
+    }
+
+    /**
+     * Самодостаточный аяксовый компонент
+     *
+     * @param string $url
+     * @param CModel $model
+     */
+    public static function activeComponent($controllerUrl = "", CModel $model, $params = array()) {
+        /**
+         * По умолчанию грузим содержимое действия index, если не указано иначе
+         */
+        $defaultAction = "index";
+        if (array_key_exists("defaultAction", $params)) {
+            $defaultAction = $params["defaultAction"];
+        }
+        self::$_widgetsIndex++;
+        echo '<div id="component_'.(self::$_widgetsIndex).'" asu-controller="'.$controllerUrl.'" asu-action="'.$defaultAction.'" asu-type="component" asu-index="'.self::$_widgetsIndex.'"><img src="'.WEB_ROOT.'/images/ajax-loader.gif"></div>';
+
+        if (!self::$_componentsInit) {
+            self::$_componentsInit = true;
+        ?>
+            <script>
+                jQuery(document).ready(function(){
+                    jQuery("[asu-type='component']").components();
+                });
+            </script>
+        <?php
         }
     }
 }

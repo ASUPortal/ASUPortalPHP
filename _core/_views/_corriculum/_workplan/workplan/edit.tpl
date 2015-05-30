@@ -3,9 +3,12 @@
 {block name="asu_center"}
     <h2>Редактирование рабочей программы</h2>
     {CHtml::helpForCurrentPage()}
+    
+    <form action="workplans.php" method="post" enctype="multipart/form-data" class="form-horizontal">
+        {CHtml::hiddenField("action", "save")}
+        {CHtml::activeHiddenField("discipline_id", $plan)}
+        {CHtml::activeHiddenField("id", $plan)}
 
-
-    <form action="index.php" method="post" enctype="multipart/form-data" class="form-horizontal" ng-controller="WorkPlanController as ctrl" ng-init="init({$plan->getId()})">
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#common">Общая информация</a></li>
             <li><a data-toggle="tab" href="#competentions">Компетенции</a></li>
@@ -22,7 +25,11 @@
                 {include file="_corriculum/_workplan/workplan/subform.content.tpl"}
             </div>
         </div>
-        {NgHtml::activeSaveRow($plan, 'workplan')}
+        <div class="control-group">
+            <div class="controls">
+                {CHtml::submit("Сохранить")}
+            </div>
+        </div>
     </form>
 {/block}
 

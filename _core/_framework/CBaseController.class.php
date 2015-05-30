@@ -119,16 +119,6 @@ class CBaseController {
         $this->addJSInclude(CSettingsManager::getSettingValue("jquery_migrate_path"));
         $this->addJSInclude("_core/jquery.cookie.js");
         $this->addJSInlineInclude("var web_root = '".WEB_ROOT."';");
-        // angular
-        $this->addJSInclude("_core/angular/angular.js");
-        $this->addJSInclude("_core/angular/angular-resource.js");
-        $this->addJSInclude("_core/angular/angular-loading-bar.js");
-        $this->addJSInclude("_core/angular/angular-select.js");
-        $this->addJSInclude("_core/angular/angular-sanitize.js");
-        $this->addJSInclude("_core/angular.application.js");
-        $this->addCSSInclude("_core/angular/angular-loading-bar.css");
-        $this->addCSSInclude("_core/angular/angular-select.css");
-        $this->addCSSInclude("_core/angular/angular-select2.css");
         // ядреные модули
         $this->addJSInclude("_core/core.js");
         $this->setData("wap_mode", false);
@@ -193,6 +183,10 @@ class CBaseController {
         $this->addJSInclude("_core/jquery.upload.js");
         $this->addJSInclude("_core/jquery.colorbox.js");
         $this->addCSSInclude("_core/jColorbox/colorbox.css");
+        /**
+         * Компоненты
+         */
+        $this->addJSInclude("_core/jquery.component.js");
     }
 
     /**
