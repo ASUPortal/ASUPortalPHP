@@ -36,6 +36,7 @@ class CTaxonomyManager {
     private static $_cacheLegacyTerms = null;
     private static $_cacheTowns = null;
     private static $_cacheHoursRate = null;
+    private static $_cacheTimeIntervals = null;
     /**
      * Кэш должностей
      *
@@ -195,6 +196,33 @@ class CTaxonomyManager {
         }
         asort($arr);
         return $arr;
+    }
+    /**
+     * Кэш справочника учебных годов
+     *
+     * @return CArrayList|null
+     */
+    private static function getCacheTimeIntervals() {
+    	if (is_null(self::$_cacheTimeIntervals)) {
+    		self::$_cacheTimeIntervals = new CArrayList();
+    	}
+    	return self::$_cacheTimeIntervals;
+    }
+    /**
+     * Справочник учебных годов 
+     *
+     * @param $key
+     * @return CTimeIntervals
+     */
+    public static function getTimeInterval($key) {
+    	if (!self::getCacheTimeIntervals()->hasElement($key)) {
+    		$item = CActiveRecordProvider::getById(TABLE_YEARS, $key);
+    		if (!is_null($item)) {
+    			$year = new CTimeIntervals($item);
+    			self::getCacheTimeIntervals()->add($year->getId(), $year);
+    		}
+    	}
+    	return self::getCacheTimeIntervals()->getItem($key);
     }
     /**
      * Кэш специальностей
