@@ -78,7 +78,7 @@ function letters()
 <?php
 //-------------------------------------------------------------------
 echo '<div class=text style="text-align:center"> выберите первую букву фамилии преподавателя </div>';
-if (isset($_SESSION['auth']) && $_SESSION['userType']=='преподаватель') {echo '<a href="lect_lecturers.php?go=1" class=text title="'.$_SESSION['FIO'].'"> добавить  биографию</a>';}
+if (isset($_SESSION['auth']) && $_SESSION['userType']=='преподаватель') {echo '<a href="_modules/_biography/" class=text title="'.$_SESSION['FIO'].'"> добавить  биографию</a>';}
 echo '<br>';
     letters();
 /**
@@ -239,11 +239,21 @@ $def_settings["part_name"] = CUtils::getCurrentYearPart()->name;
         echo '<div class="text">';
         if ($photo_biog!="")
          {
-		  echo '<img src="images/lects/small/sm_'.urlencode($photo_biog).'" border="0" align="left" hspace="10" vspace="0" title="фото из биографии">';
+         	$filename = 'images/lects/small/sm_'.urlencode($photo_biog).'';
+         	if (file_exists($filename)) {
+		  		echo '<img src="images/lects/small/sm_'.urlencode($photo_biog).'" border="0" align="left" hspace="10" vspace="0" title="фото из биографии">';
+		  	} else {
+		  		echo '<img src="_modules/_thumbnails/?src=images/lects/'.urlencode($photo_biog).'" border="0" align="left" hspace="10" vspace="0" title="фото из биографии">';
+		  	}
          }
 	 else if ($showKadriImg_ifNullBiogImg && $photo_kadri!="")
          {
-		  echo '<img src="images/lects/small/sm_'.urlencode($photo_kadri).'" border="0" align="left" hspace="10" vspace="0" title="фото из анкеты">';
+         	$filename = 'images/lects/small/sm_'.urlencode($photo_kadri).'';
+         	if (file_exists($filename)) {
+		  		echo '<img src="images/lects/small/sm_'.urlencode($photo_kadri).'" border="0" align="left" hspace="10" vspace="0" title="фото из анкеты">';
+		  	} else {
+		  		echo '<img src="_modules/_thumbnails/?src=images/lects/'.urlencode($photo_kadri).'" border="0" align="left" hspace="10" vspace="0" title="фото из анкеты">';
+		  	}
          }
 
 //----------------------------
