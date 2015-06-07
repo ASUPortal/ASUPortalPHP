@@ -235,6 +235,8 @@
     define("TABLE_EXAMINATION_QUESTIONS", "questions");
     define("TABLE_EXAMINATION_TICKETS", "questions_tickets");
     define("TABLE_EXAMINATION_QUESTIONS_IN_TICKETS", "questions_tickets_questions");
+    define("TABLE_QUESTION_TO_USERS", "question2users");
+    define("TABLE_QUESTION_STATUS", "question_status");
     define("TABLE_ORDER_TYPES", "order_type");
     define("TABLE_ORDER_MONEY_TYPES", "order_type_money");
     define("TABLE_PRINT_FORMSETS", "print_formset");
