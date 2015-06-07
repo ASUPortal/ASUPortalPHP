@@ -41,6 +41,8 @@ class CTimeIntervalsController extends CBaseController{
     }
     public function actionAdd() {
         $year = new CTimeIntervals();
+        $year->date_start = '01.09.'.date("Y");
+        $year->date_end = '31.08.'.(date("Y")+1);
         $this->setData("year", $year);
         $this->renderView("_time_intervals/add.tpl");
     }
