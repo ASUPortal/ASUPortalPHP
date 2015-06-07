@@ -11,14 +11,6 @@
     </div>
     
 	<div class="control-group">
-        {CHtml::activeLabel("status", $quest)}
-        <div class="controls">
-        	{CHtml::activeLookup("status", $quest, "question_status")}
-            {CHtml::error("status", $quest)}
-        </div>
-    </div>
-    
-	<div class="control-group">
         {CHtml::activeLabel("question_text", $quest)}
         <div class="controls">
             {CHtml::activeTextBox("question_text", $quest)}
@@ -31,14 +23,6 @@
         <div class="controls">
             {CHtml::activeTextBox("contact_info", $quest)}
             {CHtml::error("contact_info", $quest)}
-        </div>
-    </div>
-    
-	<div class="control-group">
-        {CHtml::activeLabel("answer_text", $quest)}
-        <div class="controls">
-            {CHtml::activeTextBox("answer_text", $quest)}
-            {CHtml::error("answer_text", $quest)}
         </div>
     </div>
 
