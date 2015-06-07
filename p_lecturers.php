@@ -457,7 +457,7 @@ if (isset($_GET['archiv'])) {$archiv_query=' and (date_act_sort<"'.$def_settings
 	  from question2users q2u 
 	  where q2u.status=3 and answer_text is not null and answer_text!="" and user_id='.$idlect.' 
 	  order by q2u.datetime_quest');
-        echo "<p><div class=title> Вопросы и ответы на них преподавателя: (".mysql_num_rows($res).") &nbsp; <a href=\"p_question.php?user_id=$idlect\">Задать вопрос</a></div>";
+        echo "<p><div class=title> Вопросы и ответы на них преподавателя: (".mysql_num_rows($res).") &nbsp; <a href=\"_modules\_question_add\index.php?action=index&user_id=$idlect\">Задать вопрос</a></div>";
         if (mysql_num_rows($res)<1) {echo '<div class=text>&nbsp;&nbsp;-вопросов с ответами на портале нет</div>';}
 			echo '<ul class=text>';
 			while ($a=mysql_fetch_array($res)) 
