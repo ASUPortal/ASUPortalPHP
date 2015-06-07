@@ -5,7 +5,7 @@ class CQuestionAddController extends CBaseController{
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
             if ($action == "") {
-                $action = "add";
+                $action = "index";
             }
             if (!in_array($action, $this->allowedAnonymous)) {
                 $this->redirectNoAccess();
