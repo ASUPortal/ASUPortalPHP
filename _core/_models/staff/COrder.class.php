@@ -40,7 +40,7 @@ class COrder extends CActiveModel {
     public  function attributeLabels() {
         return array(
             "type_money" => "Введенные приказы (тип средств)",
-            "type_order" => "&nbsp;",
+            "type_order" => "Тип приказа",
             "order" => "Приказ",
             "order_period" => "Период действия приказа",
             "main_work_place" => "Основное место работы (для совместителей)",

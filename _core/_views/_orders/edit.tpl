@@ -9,19 +9,22 @@
 			dateFormat: "dd.mm.yy",
 			showOn: "button",
             buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
-            buttonImageOnly: true
+            buttonImageOnly: true,
+            changeYear: true
 		});
 		jQuery("#date_begin").datepicker({
 			dateFormat: "dd.mm.yy",
 			showOn: "button",
             buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
-            buttonImageOnly: true
+            buttonImageOnly: true,
+            changeYear: true
 		});
 		jQuery("#date_end").datepicker({
 			dateFormat: "dd.mm.yy",
 			showOn: "button",
             buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
-            buttonImageOnly: true
+            buttonImageOnly: true,
+            changeYear: true
 		});
 	});
 </script>
@@ -62,10 +65,10 @@
         {CHtml::activeLabel("order_period", $order)}
         <div class="controls">
         с {CHtml::activeTextField("date_begin", $order, "date_begin", "", 'style="width: 100px;"')}
-        {CHtml::error("num_order", $order)}
+        {CHtml::error("date_begin", $order)}
 
         по {CHtml::activeTextField("date_end", $order, "date_end", "", 'style="width: 100px;"')}
-        {CHtml::error("date_order", $order)}
+        {CHtml::error("date_end", $order)}
         </div>
     </div>
 
