@@ -123,7 +123,7 @@ if (isset($_GET['tab']) && intval($_GET['tab'])>0) $tab=intval($_GET['tab']);
 
 
 ?>
-    <h4>Часовая нагрузка сотрудников(ППС) <span > <a href="hrs_rate.php">справочник ставок </a> </span> </h4>
+    <h4>Часовая нагрузка сотрудников(ППС) <span > <a href="_modules/_hrs_rate/">справочник ставок </a> </span> </h4>
 <?php
 //print_r($_SESSION);
 //для расчета почасовки по месяцам
