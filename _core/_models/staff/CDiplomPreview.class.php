@@ -28,32 +28,29 @@ class CDiplomPreview extends CActiveModel {
 				"managerClass" => "CStaffManager",
 				"managerGetObject" => "getStudent"
 			),
-			"diplom" => array(
+			"diploms" => array(
 				"relationPower" => RELATION_HAS_ONE,
 				"storageProperty" => "_diploms",
 				"storageField" => "diplom_id",
 				"managerClass" => "CStaffManager",
 				"managerGetObject" => "getDiplom"
-			),
-			"reviewer" => array(
-				"relationPower" => RELATION_HAS_ONE,
-				"storageProperty" => "_reviewer",
-				"storageField" => "recenz_id",
-				"managerClass" => "CStaffManager",
-				"managerGetObject" => "getPerson"
 			)
         );
     }
     public function attributeLabels() {
     	return array(
     			"student_id" => "Студент",
+    			"student.fio" => "Студент",
     			"diplom_percent" => "Процент выполнения работы",
     			"another_view" => "Прослушать еще раз",
-    			"recenz_id" => "Рецензент",
     			"date_preview" => "Дата предзащиты",
+    			"person.fio" => "Рецензент",
     			"comm_id" => "Комиссия",
+    			"comm.name" => "Комиссия",
     			"comment" => "Примечание",
-    			"diplom_id" => "Тема диплома",
+    			"diplom_id" => "Тема ВКР",
+    			"diplom.dipl_name" => "Тема ВКР",
+    			"st_group.name" => "Группа"
     	);
     }
     public function fieldsProperty() {
