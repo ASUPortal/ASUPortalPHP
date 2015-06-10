@@ -10,6 +10,10 @@
             Нет документов для отображения
         </div>
     {else}
+		{if (CSession::getCurrentUser()->getLevelForCurrentTask() == 2 or CSession::getCurrentUser()->getLevelForCurrentTask() == 4)}
+			{include file="_core.searchLocal.tpl"}
+		{/if}
+
         <script>
             jQuery(document).ready(function(){
                 jQuery("#selectAll").change(function(){
