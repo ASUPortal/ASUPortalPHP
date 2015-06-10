@@ -9,7 +9,7 @@
     <li {if $smarty.foreach.loadItem.first}class="active"{/if}>
         <a href="#load_{$load->getId()}" data-toggle="tab">
             {$load->type}
-            <i class="icon-pencil" onclick="window.location.href='?action=edit&id={$load->getId()}'" style="cursor: pointer; "></i>
+            <i class="icon-pencil" onclick="window.location.href='?action=edit&id={$load->getId()}&year={$load->year->id}'" style="cursor: pointer; "></i>
         </a>
     </li>
 {/foreach}
