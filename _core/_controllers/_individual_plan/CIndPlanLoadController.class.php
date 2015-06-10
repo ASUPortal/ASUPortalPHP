@@ -124,4 +124,25 @@ class CIndPlanLoadController extends CBaseController{
         $load->remove();
         $this->redirect("?action=view&id=".$person->getId());
     }
+    public function actionSearch() {
+    	$res = array();
+    	$term = CRequest::getString("query");
+    	/**
+    	 * Поиск по ФИО
+    	*/
+    	$query = new CQuery();
+    	$query->select("distinct(person.id) as id, person.fio as name")
+    	->from(TABLE_PERSON." as person")
+    	->condition("person.fio like '%".$term."%'")
+    	->limit(0, 5);
+    	foreach ($query->execute()->getItems() as $item) {
+    		$res[] = array(
+    				"field" => "id",
+    				"value" => $item["id"],
+    				"label" => $item["name"],
+    				"class" => "CPerson"
+    		);
+    	}
+    	echo json_encode($res);
+    }
 }
