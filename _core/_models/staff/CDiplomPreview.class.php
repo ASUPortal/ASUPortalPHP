@@ -10,7 +10,7 @@ class CDiplomPreview extends CActiveModel {
     protected $_table = TABLE_DIPLOM_PREVIEWS;
     protected $_commission = null;
     protected $_student = null;
-    protected $_diploms = null;
+    protected $_diplom = null;
 
     public function relations() {
         return array(
@@ -30,30 +30,27 @@ class CDiplomPreview extends CActiveModel {
 			),
 			"diplom" => array(
 				"relationPower" => RELATION_HAS_ONE,
-				"storageProperty" => "_diploms",
+				"storageProperty" => "_diplom",
 				"storageField" => "diplom_id",
 				"managerClass" => "CStaffManager",
 				"managerGetObject" => "getDiplom"
-			),
-			"reviewer" => array(
-				"relationPower" => RELATION_HAS_ONE,
-				"storageProperty" => "_reviewer",
-				"storageField" => "recenz_id",
-				"managerClass" => "CStaffManager",
-				"managerGetObject" => "getPerson"
 			)
         );
     }
     public function attributeLabels() {
     	return array(
     			"student_id" => "Студент",
+    			"student.fio" => "Студент",
     			"diplom_percent" => "Процент выполнения работы",
     			"another_view" => "Прослушать еще раз",
-    			"recenz_id" => "Рецензент",
     			"date_preview" => "Дата предзащиты",
+    			"person.fio" => "Рецензент",
     			"comm_id" => "Комиссия",
+    			"comm.name" => "Комиссия",
     			"comment" => "Примечание",
-    			"diplom_id" => "Тема диплома",
+    			"diplom_id" => "Тема ВКР",
+    			"diplom.dipl_name" => "Тема ВКР",
+    			"st_group.name" => "Группа"
     	);
     }
     public function fieldsProperty() {

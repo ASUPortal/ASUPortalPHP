@@ -67,6 +67,7 @@ class CIndPlanLoadController extends CBaseController{
     }
     public function actionView() {
         $person = CStaffManager::getPerson(CRequest::getInt("id"));
+        $year = CRequest::getInt("year");
         /**
          * Формируем меню
          */
@@ -78,7 +79,7 @@ class CIndPlanLoadController extends CBaseController{
             ),
             array(
                 "title" => "Добавить",
-                "link" => "load.php?action=add&id=".$person->getId(),
+                "link" => "load.php?action=add&id=".$person->getId()."&year=".$year,
                 "icon" => "actions/list-add.png"
             ),
             array(
@@ -94,24 +95,41 @@ class CIndPlanLoadController extends CBaseController{
     public function actionAdd() {
         $load = new CIndPlanPersonLoad();
         $load->person_id = CRequest::getInt("id");
-
+        $year = CRequest::getInt("year");
+        $this->addActionsMenuItem(
+        	array(
+        		"title" => "Назад",
+        		"link" => "load.php?action=view&id=".$load->person_id."&year=".$year,
+        		"icon" => "actions/edit-undo.png"
+        	)
+        );
         $this->setData("load", $load);
         $this->renderView("_individual_plan/load/add.tpl");
     }
     public function actionEdit() {
         $load = CIndPlanManager::getLoad(CRequest::getInt("id"));
+        $year = CRequest::getInt("year");
+        $this->addActionsMenuItem(
+        		array(
+        				"title" => "Назад",
+        				"link" => "load.php?action=view&id=".$load->person_id."&year=".$year,
+        				"icon" => "actions/edit-undo.png"
+        		)
+        );
         $this->setData("load", $load);
         $this->renderView("_individual_plan/load/edit.tpl");
     }
     public function actionSave() {
         $load = new CIndPlanPersonLoad();
         $load->setAttributes(CRequest::getArray($load::getClassName()));
+        parse_str(parse_url($_SERVER["HTTP_REFERER"], PHP_URL_QUERY));
+        $years = $year;
         if ($load->validate()) {
             $load->save();
             if ($this->continueEdit()) {
-                $this->redirect("?action=edit&id=".$load->getId());
+                $this->redirect("?action=edit&id=".$load->getId()."&year=".$years);
             } else {
-                $this->redirect("?action=view&id=".$load->person_id);
+                $this->redirect("?action=view&id=".$load->person_id."&year=".$years);
             }
             return true;
         }
@@ -120,8 +138,31 @@ class CIndPlanLoadController extends CBaseController{
     }
     public function actionDelete() {
         $load = CIndPlanManager::getLoad(CRequest::getInt("id"));
+        parse_str(parse_url($_SERVER["HTTP_REFERER"], PHP_URL_QUERY));
+        $years = $year;
         $person = $load->person;
         $load->remove();
-        $this->redirect("?action=view&id=".$person->getId());
+        $this->redirect("?action=view&id=".$person->getId()."&year=".$years);
+    }
+    public function actionSearch() {
+    	$res = array();
+    	$term = CRequest::getString("query");
+    	/**
+    	 * Поиск по ФИО
+    	*/
+    	$query = new CQuery();
+    	$query->select("distinct(person.id) as id, person.fio as name")
+    	->from(TABLE_PERSON." as person")
+    	->condition("person.fio like '%".$term."%'")
+    	->limit(0, 5);
+    	foreach ($query->execute()->getItems() as $item) {
+    		$res[] = array(
+    				"field" => "id",
+    				"value" => $item["id"],
+    				"label" => $item["name"],
+    				"class" => "CPerson"
+    		);
+    	}
+    	echo json_encode($res);
     }
 }
