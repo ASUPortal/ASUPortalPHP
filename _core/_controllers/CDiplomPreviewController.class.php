@@ -162,10 +162,18 @@ class CDiplomPreviewController extends CBaseController{
     		));
     	}
     	$this->addActionsMenuItem(array(
-    			"title" => "Добавить",
-    			"link" => "?action=addPreview",
-    			"icon" => "actions/list-add.png"
-    	));
+					array(
+							"title" => "Добавить",
+							"link" => "?action=addPreview",
+							"icon" => "actions/list-add.png"
+							),
+					array(
+							"title" => "Статистика",
+							"link" => "?action=statistic",
+							"icon" => "mimetypes/x-office-spreadsheet.png"
+			    			),
+    		)
+    	);
     	$previews = new CArrayList();
     	foreach ($set->getPaginated()->getItems() as $item) {
     		$preview = new CDiplomPreview($item);
