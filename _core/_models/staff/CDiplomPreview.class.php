@@ -10,7 +10,7 @@ class CDiplomPreview extends CActiveModel {
     protected $_table = TABLE_DIPLOM_PREVIEWS;
     protected $_commission = null;
     protected $_student = null;
-    protected $_diploms = null;
+    protected $_diplom = null;
 
     public function relations() {
         return array(
@@ -28,9 +28,9 @@ class CDiplomPreview extends CActiveModel {
 				"managerClass" => "CStaffManager",
 				"managerGetObject" => "getStudent"
 			),
-			"diploms" => array(
+			"diplom" => array(
 				"relationPower" => RELATION_HAS_ONE,
-				"storageProperty" => "_diploms",
+				"storageProperty" => "_diplom",
 				"storageField" => "diplom_id",
 				"managerClass" => "CStaffManager",
 				"managerGetObject" => "getDiplom"
