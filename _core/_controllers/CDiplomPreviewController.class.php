@@ -440,7 +440,6 @@ class CDiplomPreviewController extends CBaseController{
     	}
     	$count_previews_summer_not_complete = count($prevsSummerNotComplete);
     	
-        $this->setData("paginator", $set->getPaginator());
         $this->setData("date_previews", $date_previews);
         $this->setData("count_previews", $count_previews);
         $this->setData("count_previews_winter", $count_previews_winter);

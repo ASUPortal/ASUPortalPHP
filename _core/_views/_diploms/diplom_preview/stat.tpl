@@ -52,7 +52,6 @@
             <th>Дата предзащиты</th>
             <th>Количество предзащит</th>
         </tr>
-        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $date_previews as $key => $value}
         <tr>
             <td>{counter}</td>
@@ -62,7 +61,6 @@
         {/foreach}
     </table>
     
-    {CHtml::paginator($paginator, "?action=index")}
 {/block}
 
 {block name="asu_right"}
