@@ -36,8 +36,8 @@ class CWorkPlanGoalsController extends CBaseController{
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
-            "title" => "Добавить сотрудника",
-            "link" => "workplangoals.php?action=add",
+            "title" => "Добавить цель",
+            "link" => "workplangoals.php?action=add&id=".CRequest::getInt("plan_id"),
             "icon" => "actions/list-add.png"
         ));
         /**
@@ -47,13 +47,14 @@ class CWorkPlanGoalsController extends CBaseController{
     }
     public function actionAdd() {
         $object = new CWorkPlanGoal();
+        $object->plan_id = CRequest::getInt("id");
         $this->setData("object", $object);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplangoals.php?action=index",
+            "link" => "workplangoals.php?action=index&plan_id=".CRequest::getInt("id"),
             "icon" => "actions/edit-undo.png"
         ));
         /**

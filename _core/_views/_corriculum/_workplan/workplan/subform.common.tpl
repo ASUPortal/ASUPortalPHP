@@ -88,9 +88,9 @@
 
 <h3>1. Цели и задачи освоения дисциплины</h3>
 
-{CHtml::activeComponent("workplantasks.php", $plan)}
+{CHtml::activeComponent("workplantasks.php?plan_id={$plan->getId()}", $plan)}
 
-{CHtml::activeComponent("workplangoals.php", $plan)}
+{CHtml::activeComponent("workplangoals.php?plan_id={$plan->getId()}", $plan)}
 
 <h3>2. Место дисциплины в структуре ООП ВПО</h3>
 
