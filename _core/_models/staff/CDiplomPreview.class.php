@@ -11,6 +11,7 @@ class CDiplomPreview extends CActiveModel {
     protected $_commission = null;
     protected $_student = null;
     protected $_diplom = null;
+    public $another_view = 0;
 
     public function relations() {
         return array(
@@ -63,5 +64,15 @@ class CDiplomPreview extends CActiveModel {
     }
     public function getPreviewDate() {
     	return date("d.m.Y", strtotime($this->date_preview));
+    }
+    public function validationRules() {
+    	return array(
+    			"required" => array(
+    					"student_id",
+    					"diplom_percent",
+    					"date_preview",
+    					"comm_id"
+    			)
+    	);
     }
 }
