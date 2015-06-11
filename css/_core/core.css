@@ -218,3 +218,13 @@ p.error {
 .menu_child_container img {
     padding-right: 5px;
 }
+
+.componentLoadingWrapper {
+    border: 1px solid #c0c0c0;
+    background: #eeeeee;
+    background-image: url("../../images/ajax-loader.gif");
+    background-repeat: no-repeat;
+    background-position: center center;
+    opacity: 0.5;
+    min-height: 200px;
+}

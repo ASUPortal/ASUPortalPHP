@@ -1386,7 +1386,7 @@ class CHtml {
             $defaultAction = $params["defaultAction"];
         }
         self::$_widgetsIndex++;
-        echo '<div id="component_'.(self::$_widgetsIndex).'" asu-controller="'.$controllerUrl.'" asu-action="'.$defaultAction.'" asu-type="component" asu-index="'.self::$_widgetsIndex.'"><img src="'.WEB_ROOT.'/images/ajax-loader.gif"></div>';
+        echo '<div id="component_'.(self::$_widgetsIndex).'" asu-controller="'.$controllerUrl.'" asu-action="'.$defaultAction.'" asu-type="component" asu-index="'.self::$_widgetsIndex.'"></div>';
 
         if (!self::$_componentsInit) {
             self::$_componentsInit = true;
