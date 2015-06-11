@@ -184,7 +184,13 @@
 		</tr>
     </table>
     </form>
-    
+{if CRequest::getInt("winterNotComplete")==1}
+	{$prev=$previewsWinterNotComplete}
+{elseif CRequest::getInt("summerNotComplete")==1}
+	{$prev=$previewsSummerNotComplete}
+{else}
+	{$prev=$previews}
+{/if}
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th></th>
@@ -202,7 +208,7 @@
             <th>{CHtml::tableOrder("comment", $previews->getFirstItem(), true)}</th>
         </tr>
         {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
-        {foreach $previews->getItems() as $preview}
+        {foreach $prev->getItems() as $preview}
         <tr>
             <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить предзащиту студента {$preview->student->getName()}')) { location.href='?action=deletePreview&id={$preview->id}'; }; return false;"></a></td>
 			<td><a href="preview.php?action=editPreview&id={$preview->getId()}" class="icon-pencil" title="правка"></a></td>
@@ -273,7 +279,6 @@
         </tr>
         {/foreach}
     </table>
-
     {CHtml::paginator($paginator, "?action=index")}
 {/block}
 
