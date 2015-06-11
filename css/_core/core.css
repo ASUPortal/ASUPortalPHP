@@ -228,3 +228,9 @@ p.error {
     opacity: 0.5;
     min-height: 200px;
 }
+
+.asu_component .menu_item_container a {
+    width: 100px;
+    display: block;
+    text-align: center;
+}
