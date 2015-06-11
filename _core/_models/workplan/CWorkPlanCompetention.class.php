@@ -5,6 +5,7 @@
  * Date: 21.03.15
  * Time: 23:56
  *
+ * @property int plan_id
  * @property CArrayList knowledges
  * @property CArrayList skills
  * @property CArrayList experiences
