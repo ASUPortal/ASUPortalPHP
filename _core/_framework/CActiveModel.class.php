@@ -118,6 +118,13 @@ class CActiveModel extends CModel implements IJSONSerializable{
                 }
             }
         }
+        /**
+         * Если в кэше есть, то обновим
+         */
+        $keySeek = $this->getTable() . "_" . $this->getId();
+        if (CApp::getApp()->cache->hasCache($keySeek)) {
+            CApp::getApp()->cache->set($keySeek, $this);
+        }
     }
     /**
      * Сохранение новой модели

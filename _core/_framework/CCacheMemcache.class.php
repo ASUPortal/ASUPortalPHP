@@ -31,7 +31,11 @@ class CCacheMemcache extends CCache{
 
     public function set($id, $value, $expire = 0)
     {
-        $this->_memcache->add($id, $value, false, $expire);
+        if ($this->hasCache($id)) {
+            $this->_memcache->replace($id, $value, false, $expire);
+        } else {
+            $this->_memcache->add($id, $value, false, $expire);
+        }
     }
 
     public function hasCache($key)
