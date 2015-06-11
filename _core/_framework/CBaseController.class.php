@@ -25,6 +25,7 @@ class CBaseController {
     private $_cssAbs = null;
     protected $_useDojo = false;
     private $_actionsMenuContent = array();
+    protected $_isComponent = false;
 
     protected static $_useFlowController = false;
 
@@ -95,16 +96,20 @@ class CBaseController {
         /**
          * Если у пользователя включен рабочий стол, то даем возможность
          * из любого места туда перейти
+         *
+         * В компонентах выключаем эту возможность за ненадобностью
          */
-        if (!is_null(CSession::getCurrentUser())) {
-            if (!is_null(CSession::getCurrentUser()->getPersonalSettings())) {
-                if (CSession::getCurrentUser()->getPersonalSettings()->isDashboardEnabled()) {
-                    if ($this->getAction() == ACTION_INDEX) {
-                        $this->addActionsMenuItem(array(
-                            "link" => WEB_ROOT."_modules/_dashboard/",
-                            "title" => "На рабочий стол",
-                            "icon" => "apps/preferences-system-session.png"
-                        ));
+        if (!$this->_isComponent) {
+            if (!is_null(CSession::getCurrentUser())) {
+                if (!is_null(CSession::getCurrentUser()->getPersonalSettings())) {
+                    if (CSession::getCurrentUser()->getPersonalSettings()->isDashboardEnabled()) {
+                        if ($this->getAction() == ACTION_INDEX) {
+                            $this->addActionsMenuItem(array(
+                                "link" => WEB_ROOT."_modules/_dashboard/",
+                                "title" => "На рабочий стол",
+                                "icon" => "apps/preferences-system-session.png"
+                            ));
+                        }
                     }
                 }
             }

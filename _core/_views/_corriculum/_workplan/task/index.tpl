@@ -1,8 +1,6 @@
 {extends file="_core.component.tpl"}
 
 {block name="asu_center"}
-    <h2>Управление задачами рабочих программ</h2>
-
     {if ($objects->getCount() == 0)}
         Нет объектов для отображения
     {else}

@@ -1,8 +1,6 @@
 {extends file="_core.component.tpl"}
 
 {block name="asu_center"}
-    <h2>Управление целями рабочей программы</h2>
-
     {if ($objects->getCount() == 0)}
         Нет объектов для отображения
     {else}
@@ -13,8 +11,8 @@
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
                     <th>{CHtml::tableOrder("id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("plan_id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("goal", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("plan_id", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("goal", $objects->getFirstItem())}</th>
                 </tr>
             </thead>
             <tbody>

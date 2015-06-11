@@ -1,5 +1,7 @@
 <?php
 class CWorkPlanGoalsController extends CBaseController{
+    protected $_isComponent = true;
+
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
