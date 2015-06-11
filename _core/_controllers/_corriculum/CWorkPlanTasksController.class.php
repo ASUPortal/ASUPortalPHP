@@ -24,7 +24,8 @@ class CWorkPlanTasksController extends CBaseController{
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_TASKS." as t")
-            ->order("t.id asc");
+            ->order("t.id asc")
+            ->condition("plan_id=".CRequest::getInt("plan_id"));;
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanTask($ar);
@@ -36,8 +37,8 @@ class CWorkPlanTasksController extends CBaseController{
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
-            "title" => "Добавить сотрудника",
-            "link" => "workplantasks.php?action=add",
+            "title" => "Добавить задачу",
+            "link" => "workplantasks.php?action=add&id=".CRequest::getInt("plan_id"),
             "icon" => "actions/list-add.png"
         ));
         /**
@@ -47,13 +48,14 @@ class CWorkPlanTasksController extends CBaseController{
     }
     public function actionAdd() {
         $object = new CWorkPlanTask();
+        $object->plan_id = CRequest::getInt("id");
         $this->setData("object", $object);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplantasks.php?action=index",
+            "link" => "workplantasks.php?action=index&plan_id=".$object->plan_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -69,7 +71,7 @@ class CWorkPlanTasksController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplantasks.php?action=index",
+            "link" => "workplantasks.php?action=index&plan_id=".$object->plan_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -90,7 +92,7 @@ class CWorkPlanTasksController extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("workplantasks.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplantasks.php?action=index");
+                $this->redirect("workplantasks.php?action=index&plan_id=".$object->plan_id);
             }
             return true;
         }

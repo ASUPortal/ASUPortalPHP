@@ -24,7 +24,8 @@ class CWorkPlanGoalsController extends CBaseController{
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_GOALS." as t")
-            ->order("t.id asc");
+            ->order("t.id asc")
+            ->condition("plan_id=".CRequest::getInt("plan_id"));
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanGoal($ar);
@@ -70,7 +71,7 @@ class CWorkPlanGoalsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplangoals.php?action=index",
+            "link" => "workplangoals.php?action=index&plan_id=".CRequest::getInt("id"),
             "icon" => "actions/edit-undo.png"
         ));
         /**
