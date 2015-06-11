@@ -16,6 +16,8 @@ class CDiplomPreviewController extends CBaseController{
     }
     public function actionIndex() {
     	$set = new CRecordSet(false);
+    	$setWinterNotComplete = new CRecordSet(false);
+    	$setSummerNotComplete = new CRecordSet(false);
     	$query = new CQuery();
     	$currentCommission = null;
     	$currentGroup = null;
@@ -195,10 +197,10 @@ class CDiplomPreviewController extends CBaseController{
     	$queryWinterNotComplete->select("preview.*")
     	->from(TABLE_DIPLOM_PREVIEWS." as preview")
     	->condition('preview.date_preview between "'.(date("Y")-1)."-12-01".'" and "'.(date("Y"))."-02-28".'" and (preview.diplom_percent=0 or preview.another_view!=0)');
-    	$set->setQuery($queryWinterNotComplete);
+    	$setWinterNotComplete->setQuery($queryWinterNotComplete);
     	 
     	$previewsWinterNotComplete = new CArrayList();
-    	foreach ($set->getPaginated()->getItems() as $item) {
+    	foreach ($setWinterNotComplete->getPaginated()->getItems() as $item) {
     		$previewWinterNotComplete = new CDiplomPreview($item);
     		$previewsWinterNotComplete->add($previewWinterNotComplete->getId(), $previewWinterNotComplete);
     	}
@@ -207,10 +209,10 @@ class CDiplomPreviewController extends CBaseController{
     	$querySummerNotComplete->select("preview.*")
     	->from(TABLE_DIPLOM_PREVIEWS." as preview")
     	->condition('preview.date_preview between "'.(date("Y"))."-05-01".'" and "'.(date("Y"))."-06-30".'" and (preview.diplom_percent=0 or preview.another_view!=0)');
-    	$set->setQuery($querySummerNotComplete);
+    	$setSummerNotComplete->setQuery($querySummerNotComplete);
     		
     	$previewsSummerNotComplete = new CArrayList();
-    	foreach ($set->getPaginated()->getItems() as $item) {
+    	foreach ($setSummerNotComplete->getPaginated()->getItems() as $item) {
     		$previewSummerNotComplete = new CDiplomPreview($item);
     		$previewsSummerNotComplete->add($previewSummerNotComplete->getId(), $previewSummerNotComplete);
     	}
@@ -224,6 +226,8 @@ class CDiplomPreviewController extends CBaseController{
     	$this->setData("currentGroup", $currentGroup);
     	$this->setData("previews", $previews);
     	$this->setData("paginator", $set->getPaginator());
+    	$this->setData("paginatorWinterNotComplete", $setWinterNotComplete->getPaginator());
+    	$this->setData("paginatorSummerNotComplete", $setSummerNotComplete->getPaginator());
     	$this->renderView("_diploms/diplom_preview/index.tpl");
     }
     public function actionAdd() {
