@@ -341,7 +341,7 @@ class CRecordSet {
     }
     private function getTableAlias() {
         if (strpos($this->getQuery()->getTable(), " as ")) {
-            return substr($this->getQuery()->getTable(), strpos($this->getQuery()->getTable(), "as") + 3);
+            return substr($this->getQuery()->getTable(), strpos($this->getQuery()->getTable(), " as ") + 3);
         }
         return $this->getQuery()->getTable();
     }
