@@ -11,6 +11,7 @@
  * @property CArrayList practices
  * @property int plan_id
  * @property String number
+ * @property CWorkPlan plan
  */
 class CWorkPlanTerm extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_TERMS;
@@ -40,6 +41,11 @@ class CWorkPlanTerm extends CActiveModel{
                 "storageTable" => TABLE_WORK_PLAN_TERM_PRACTICES,
                 "storageCondition" => "term_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanTermPractice"
+            ),
+            "plan" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageField" => "plan_id",
+                "targetClass" => "CWorkPlan"
             )
         );
     }

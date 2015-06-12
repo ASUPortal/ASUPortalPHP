@@ -8,6 +8,8 @@
  * @property int term_id
  * @property int type_id
  * @property int value
+ * @property CWorkPlanTerm term
+
  */
 class CWorkPlanTermLoad extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_TERM_LOADS;
@@ -19,6 +21,11 @@ class CWorkPlanTermLoad extends CActiveModel{
                 "storageField" => "type_id",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
+            ),
+            "term" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageField" => "term_id",
+                "targetClass" => "CWorkPlanTerm",
             )
         );
     }
@@ -40,6 +47,5 @@ class CWorkPlanTermLoad extends CActiveModel{
             )
         );
     }
-
 
 }

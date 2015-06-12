@@ -26,6 +26,7 @@
  * @property CArrayList tasks
  * @property CArrayList competentions
  * @property CArrayList sections
+ * @property CArrayList terms
  */
 
 class CWorkPlan extends CActiveModel {

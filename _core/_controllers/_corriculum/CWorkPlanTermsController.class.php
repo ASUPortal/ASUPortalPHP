@@ -89,6 +89,30 @@ class CWorkPlanTermsController extends CBaseController{
         $object->setAttributes(CRequest::getArray($object::getClassName()));
         if ($object->validate()) {
             $object->save();
+            /**
+             * Добавим в семестр все виды нагрузки, которые есть
+             * в других семестрах этого плана
+             */
+            $types = array();
+            $plan = $object->plan;
+            /**
+             * @var $term CWorkPlanTerm
+             * @var $type CWorkPlanTermLoad
+             */
+            foreach ($plan->terms->getItems() as $term) {
+                foreach ($term->types->getItems() as $type) {
+                    if (!in_array($type->type_id, $types)) {
+                        $types[] = $type->type_id;
+                    }
+                }
+            }
+            foreach ($types as $type) {
+                $t = new CWorkPlanTermLoad();
+                $t->term_id = $object->getId();
+                $t->type_id = $type;
+                $t->value = 0;
+                $t->save();
+            }
             if ($this->continueEdit()) {
                 $this->redirect("workplanterms.php?action=edit&id=".$object->getId());
             } else {
