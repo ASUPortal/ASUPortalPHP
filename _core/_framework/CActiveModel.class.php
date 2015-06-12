@@ -126,6 +126,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
             }
         } catch (Exception $e) {
             $transaction->rollback();
+            throw new Exception($e);
         }
         $transaction->commit();
         /**
@@ -195,7 +196,14 @@ class CActiveModel extends CModel implements IJSONSerializable{
             }
         }
 
-        $this->getRecord()->remove();
+        $transaction = new CTransaction();
+        try {
+            $this->getRecord()->remove();
+        } catch (Exception $e) {
+            $transaction->rollback();
+            throw new Exception($e);
+        }
+        $transaction->commit();
     }
     /**
      * Волшебный сеттер
