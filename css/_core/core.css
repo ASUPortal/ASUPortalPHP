@@ -234,3 +234,13 @@ p.error {
     display: block;
     text-align: center;
 }
+
+.component_menu_container {
+    display: block;
+    height: 70px;
+    overflow: hidden;
+}
+
+.component_menu_container .menu_item_container{
+    float: left;
+}
