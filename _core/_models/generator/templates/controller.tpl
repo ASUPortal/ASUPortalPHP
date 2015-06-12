@@ -34,7 +34,7 @@ class #controllerName# extends CBaseController{
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
-            "title" => "Добавить сотрудника",
+            "title" => "Добавить",
             "link" => "#controllerFile#?action=add",
             "icon" => "actions/list-add.png"
         ));

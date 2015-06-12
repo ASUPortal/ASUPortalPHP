@@ -14,7 +14,7 @@ class CGeneratableController extends CFormModel {
     public $pageTitle = "Управление какими-то объектами";
     public $modelName = "CSomeObject";
     public $modelTable = "TABLE_SOME_OBJECTS";
-    public $modelManager = "CSomeObjectsManager";
+    public $modelManager = "CBaseManager";
     public $modelManagerGetter = "getSomeObject";
     public $viewPath = "_someobjects";
     public $viewIndexTitle = "Заголовок страницы списка";
