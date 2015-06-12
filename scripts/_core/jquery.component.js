@@ -98,6 +98,10 @@
                 that._formSubmit();
                 return false;
             });
+            /**
+             * Выбиралки из каталога сделаем выбиралками из каталога
+             */
+            jQuery(".catalogLookup", data).catalogLookup();
             setTimeout(function(){
                 jQuery(that).html(data);
             }, 500);
