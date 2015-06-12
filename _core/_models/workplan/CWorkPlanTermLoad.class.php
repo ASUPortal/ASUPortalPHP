@@ -23,5 +23,23 @@ class CWorkPlanTermLoad extends CActiveModel{
         );
     }
 
+    public function attributeLabels() {
+        return array(
+            "type_id" => "Тип",
+            "value" => "Значение"
+        );
+    }
+
+    protected function validationRules() {
+        return array(
+            "required" => array(
+                "value"
+            ),
+            "selected" => array(
+                "type_id"
+            )
+        );
+    }
+
 
 }
