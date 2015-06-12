@@ -10,7 +10,7 @@
  * @property CArrayList lectures
  * @property CArrayList controls
  * @property int plan_id
-
+ * @property CWorkPlan plan
  */
 class CWorkPlanContentSection extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_CONTENT_SECTIONS;
@@ -35,6 +35,22 @@ class CWorkPlanContentSection extends CActiveModel{
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
             ),
+            "plan" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageField" => "plan_id",
+                "targetClass" => "CWorkPlan"
+            )
         );
     }
+
+    protected function validationRules() {
+        return array(
+            "required" => array(
+                "name",
+                "sectionIndex"
+            )
+        );
+    }
+
+
 }
