@@ -287,12 +287,23 @@ class CActiveModel extends CModel implements IJSONSerializable{
                     $key_field = $relation['storageField'];
                     $key_value = $this->$key_field;
 
-                    $managerClass = $relation['managerClass'];
-                    $managerGetter = $relation['managerGetObject'];
-
-                    if ($key_value != "") {
-                        $this->$private = $managerClass::$managerGetter($key_value);
+                    $useManager = true;
+                    if (array_key_exists("targetClass", $relation)) {
+                        $targetClass = $relation["targetClass"];
+                        $useManager = false;
+                    } else {
+                        $managerClass = $relation['managerClass'];
+                        $managerGetter = $relation['managerGetObject'];
                     }
+
+                    if ($useManager) {
+                        $obj = $managerClass::$managerGetter($key_value);
+                    } else {
+                        $targetClass = "get".mb_substr($targetClass, 1);
+                        $obj = CBaseManager::$targetClass($key_value);
+                    }
+
+                    $this->$private = $obj;
                 }
                 return $this->$private;
             } elseif ($relation['relationPower'] == RELATION_HAS_MANY) {
