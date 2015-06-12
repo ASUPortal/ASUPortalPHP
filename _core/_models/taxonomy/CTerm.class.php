@@ -134,4 +134,15 @@ class CTerm extends CActiveModel{
         $this->_table = $table;
         $this->getRecord()->setTable($table);
     }
+
+    /**
+     * Текст термина
+     *
+     * @return string
+     */
+    function __toString() {
+        return $this->getValue();
+    }
+
+
 }
