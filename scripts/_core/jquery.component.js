@@ -101,7 +101,7 @@
                                 object.substring(object.indexOf("=") + 1);
                         });
                         that._loadData(href, params);
-                        return false; 
+                        return false;
                     }
                 });
             });
