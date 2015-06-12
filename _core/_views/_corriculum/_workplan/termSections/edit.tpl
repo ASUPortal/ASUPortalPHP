@@ -6,6 +6,8 @@
     {CHtml::helpForCurrentPage()}
 
     {include file="_corriculum/_workplan/termSections/form.tpl"}
+
+    {CHtml::activeComponent("workplantermsectionloads.php?section_id={$object->getId()}", $object)}
 {/block}
 
 {block name="asu_right"}

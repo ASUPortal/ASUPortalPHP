@@ -11,4 +11,24 @@
  */
 class CWorkPlanTermSectionLoad extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_TERM_SECTION_LOADS;
+
+    public function attributeLabels() {
+        return array(
+            "type_id" => "Вид нагрузки",
+            "value" => "Количество часов"
+        );
+    }
+
+    protected function validationRules() {
+        return array(
+            "required" => array(
+                "value"
+            ),
+            "selected" => array(
+                "type_id"
+            )
+        );
+    }
+
+
 }
