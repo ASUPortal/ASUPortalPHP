@@ -15,6 +15,6 @@
 
 <h4>4.4. Практические занятия (семинары)</h4>
 
-{include file="_corriculum/_workplan/workplan/subform.content.practices.tpl"}
+    {CHtml::activeComponent("workplantermpractices.php?plan_id={$plan->getId()}", $plan)}
 
 </div>
