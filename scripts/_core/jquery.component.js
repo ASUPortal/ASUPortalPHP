@@ -99,11 +99,13 @@
                 return false;
             });
             /**
-             * Выбиралки из каталога сделаем выбиралками из каталога
+             * Покажем содержимое контейнера.
+             * Чтобы не было мерцания сделаем задержку
              */
-            jQuery(".catalogLookup", data).catalogLookup();
             setTimeout(function(){
-                jQuery(that).html(data);
+                jQuery(that).html(data)
+                    .find(".catalogLookup").catalogLookup().end()
+                    .find("[asu-type='component']").components().end();
             }, 500);
         };
 
