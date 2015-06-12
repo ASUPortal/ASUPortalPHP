@@ -10,12 +10,11 @@
                     <th width="16">&nbsp;</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("term_id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("lab_num", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("section_num", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("title", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("hours", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("term_id", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("lab_num", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("section_num", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("title", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("hours", $objects->getFirstItem())}</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,12 +24,15 @@
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить лабораторная работа')) { location.href='workplantermlabs.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{counter}</td>
                     <td><a href="workplantermlabs.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>{$object->id}</td>
-<td>{$object->term_id}</td>
-<td>{$object->lab_num}</td>
-<td>{$object->section_num}</td>
-<td>{$object->title}</td>
-<td>{$object->hours}</td>
+                    <td>
+                        {if (!is_null($object->term))}
+                            {$object->term->number}
+                        {/if}
+                    </td>
+                    <td>{$object->lab_num}</td>
+                    <td>{$object->section_num}</td>
+                    <td>{$object->title}</td>
+                    <td>{$object->hours}</td>
                 </tr>
             {/foreach}
             </tbody>

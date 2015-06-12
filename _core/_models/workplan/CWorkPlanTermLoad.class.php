@@ -9,7 +9,7 @@
  * @property int type_id
  * @property int value
  * @property CWorkPlanTerm term
-
+ * @property CTerm type
  */
 class CWorkPlanTermLoad extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_TERM_LOADS;

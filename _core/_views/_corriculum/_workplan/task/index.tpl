@@ -10,9 +10,7 @@
                     <th width="16">&nbsp;</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("plan_id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("task", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("task", $objects->getFirstItem())}</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,9 +20,7 @@
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить задача рабочей программы')) { location.href='workplantasks.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{counter}</td>
                     <td><a href="workplantasks.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>{$object->id}</td>
-<td>{$object->plan_id}</td>
-<td>{$object->task}</td>
+                    <td>{$object->task}</td>
                 </tr>
             {/foreach}
             </tbody>

@@ -19,20 +19,42 @@ class CWorkPlanTermsController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
-        $query = new CQuery();
-        $set->setQuery($query);
-        $query->select("t.*")
-            ->from(TABLE_WORK_PLAN_TERMS." as t")
-            ->order("t.id asc")
-            ->condition("plan_id=".CRequest::getInt("plan_id"));
-        $objects = new CArrayList();
-        foreach ($set->getPaginated()->getItems() as $ar) {
-            $object = new CWorkPlanTerm($ar);
-            $objects->add($object->getId(), $object);
+        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
+        /**
+         * Сформируем таблицу по всем семестрам
+         * указанного учебного плана
+         *
+         * @var $term CWorkPlanTerm
+         * @var $type CWorkPlanTermLoad
+         */
+        $data = array(array());
+        foreach ($plan->terms->getItems() as $term) {
+            foreach ($term->types->getItems() as $type) {
+                $data[$type->type->getValue()][$term->number] = $type->value;
+            }
         }
-        $this->setData("objects", $objects);
-        $this->setData("paginator", $set->getPaginator());
+        unset($data[0]);
+        $this->setData("data", $data);
+        /**
+         * Теперь соберем трудоемкость по отдельным семестрам
+         * по разделам
+         *
+         * @var $section CWorkPlanTermSection
+         * @var $load CWorkPlanTermSectionLoad
+         */
+        $terms = array();
+        foreach ($plan->terms->getItems() as $term) {
+            $termData = array(array());
+            foreach ($term->sections->getItems() as $section) {
+                foreach ($section->loads->getItems() as $load) {
+                    $termData[$section->title][$load->type->getValue()] = $load->value;
+                }
+            }
+            unset($termData[0]);
+            $terms[$term->number] = $termData;
+        }
+        $this->setData("termData", $terms);
+        $this->setData("plan", $plan);
         /**
          * Генерация меню
          */
@@ -69,11 +91,15 @@ class CWorkPlanTermsController extends CBaseController{
         /**
          * Генерация меню
          */
-        $this->addActionsMenuItem(array(
+        $this->addActionsMenuItem(array(array(
             "title" => "Назад",
             "link" => "workplanterms.php?action=index&plan_id=".$object->plan_id,
             "icon" => "actions/edit-undo.png"
-        ));
+        ), array(
+            "title" => "Удалить семестр",
+            "link" => "workplanterms.php?action=delete&id=".$object->getId(),
+            "icon" => "actions/edit-delete.png"
+        )));
         /**
          * Отображение представления
          */

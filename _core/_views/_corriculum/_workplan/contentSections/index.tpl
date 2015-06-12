@@ -10,10 +10,10 @@
                     <th width="16">&nbsp;</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("plan_id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("name", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("sectionIndex", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("sectionIndex", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("name", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("lectures", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("controls", $objects->getFirstItem())}</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,10 +23,18 @@
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить раздел дисциплины')) { location.href='workplancontentsections.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{counter}</td>
                     <td><a href="workplancontentsections.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>{$object->id}</td>
-<td>{$object->plan_id}</td>
-<td>{$object->name}</td>
-<td>{$object->sectionIndex}</td>
+                    <td>{$object->sectionIndex}</td>
+                    <td>{$object->name}</td>
+                    <td>
+                        {foreach $object->lectures->getItems() as $l}
+                            <p>{$l->lecture_title}</p>
+                        {/foreach}
+                    </td>
+                    <td>
+                        {foreach $object->controls->getItems() as $l}
+                            <p>{$l}</p>
+                        {/foreach}
+                    </td>
                 </tr>
             {/foreach}
             </tbody>

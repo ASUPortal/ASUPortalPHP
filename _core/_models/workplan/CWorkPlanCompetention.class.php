@@ -9,6 +9,7 @@
  * @property CArrayList knowledges
  * @property CArrayList skills
  * @property CArrayList experiences
+ * @property CTerm competention
  */
 class CWorkPlanCompetention extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_COMPETENTIONS;
@@ -18,6 +19,11 @@ class CWorkPlanCompetention extends CActiveModel{
 
     protected function relations() {
         return array(
+            "competention" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageField" => "competention_id",
+                "targetClass" => "CTerm"
+            ),
             "knowledges" => array(
                 "relationPower" => RELATION_MANY_TO_MANY,
                 "storageProperty" => "_knowledges",

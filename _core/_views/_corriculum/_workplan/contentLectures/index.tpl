@@ -10,9 +10,7 @@
                     <th width="16">&nbsp;</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("section_id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("lecture_title", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("lecture_title", $objects->getFirstItem())}</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,9 +20,7 @@
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить лекция')) { location.href='workplancontentlectures.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{counter}</td>
                     <td><a href="workplancontentlectures.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>{$object->id}</td>
-<td>{$object->section_id}</td>
-<td>{$object->lecture_title}</td>
+                    <td>{$object->lecture_title}</td>
                 </tr>
             {/foreach}
             </tbody>

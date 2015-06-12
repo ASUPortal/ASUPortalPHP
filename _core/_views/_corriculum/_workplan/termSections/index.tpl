@@ -10,9 +10,7 @@
                     <th width="16">&nbsp;</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("term_id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("title", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("title", $objects->getFirstItem())}</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,9 +20,7 @@
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить раздел')) { location.href='workplantermsections.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{counter}</td>
                     <td><a href="workplantermsections.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>{$object->id}</td>
-<td>{$object->term_id}</td>
-<td>{$object->title}</td>
+                    <td>{$object->title}</td>
                 </tr>
             {/foreach}
             </tbody>

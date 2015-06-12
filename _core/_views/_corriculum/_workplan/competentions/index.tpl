@@ -10,9 +10,10 @@
                     <th width="16">&nbsp;</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("plan_id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("competention_id", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("competention_id", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("knowledges", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("skills", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("experiences", $objects->getFirstItem())}</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,9 +23,22 @@
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить компетенция')) { location.href='workplancompetentions.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{counter}</td>
                     <td><a href="workplancompetentions.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>{$object->id}</td>
-<td>{$object->plan_id}</td>
-<td>{$object->competention_id}</td>
+                    <td>{if (!is_null($object->competention))}{$object->competention}{/if}</td>
+                    <td>
+                        {foreach $object->knowledges->getItems() as $o}
+                            <p>{$o}</p>
+                        {/foreach}
+                    </td>
+                    <td>
+                        {foreach $object->skills->getItems() as $o}
+                            <p>{$o}</p>
+                        {/foreach}
+                    </td>
+                    <td>
+                        {foreach $object->experiences->getItems() as $o}
+                            <p>{$o}</p>
+                        {/foreach}
+                    </td>
                 </tr>
             {/foreach}
             </tbody>

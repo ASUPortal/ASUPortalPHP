@@ -10,10 +10,8 @@
                     <th width="16">&nbsp;</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("section_id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("type_id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("value", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("type_id", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("value", $objects->getFirstItem())}</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,10 +21,12 @@
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить вид нагрузки')) { location.href='workplantermsectionloads.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{counter}</td>
                     <td><a href="workplantermsectionloads.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>{$object->id}</td>
-<td>{$object->section_id}</td>
-<td>{$object->type_id}</td>
-<td>{$object->value}</td>
+                    <td>
+                        {if !is_null($object->type)}
+                            {$object->type}
+                        {/if}
+                    </td>
+                    <td>{$object->value}</td>
                 </tr>
             {/foreach}
             </tbody>
