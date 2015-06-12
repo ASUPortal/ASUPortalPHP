@@ -1,3 +1,4 @@
+{CHtml::activeComponent("workplanterms.php?plan_id={$plan->getId()}", $plan)}
 
     <span class="btn btn-success btn-mini" ng-click="addTerm()">Добавить семестр</span>
     <table class="table table-striped">

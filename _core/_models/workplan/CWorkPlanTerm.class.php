@@ -44,5 +44,19 @@ class CWorkPlanTerm extends CActiveModel{
         );
     }
 
+    public function attributeLabels() {
+        return array(
+            "number" => "Номер семестра"
+        );
+    }
+
+    protected function validationRules() {
+        return array(
+            "required" => array(
+                "number"
+            )
+        );
+    }
+
 
 }
