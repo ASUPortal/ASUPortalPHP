@@ -447,7 +447,8 @@
                                 var item = jQuery("<div/>", {
                                     "class": "btn",
                                     "text": value,
-                                    "index": key
+                                    "index": key,
+                                    "style": "white-space: normal"
                                 });
                                 jQuery(item).attr("index", key);
                                 jQuery(item).appendTo(context._placeholder);
