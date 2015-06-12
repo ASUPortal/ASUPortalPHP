@@ -56,13 +56,59 @@
          * @private
          */
         this._onDataLoaded = function(data){
-            /**
-             * Забиндимся на все ссылки кроме #_saveAndContinue и #_saveAndBack
-             * Сначала предотвратим щелчки на них
-             */
             data = jQuery.parseHTML(data);
             var that = this;
-            jQuery("a", data).not("#_saveAndContinue, #_saveAndBack").on("click", function(){
+            /**
+             * Удалим со все ссылок удаления их родные события
+             * Это большой-большой костыль
+             */
+            jQuery("a.icon-trash", data).filter(function(){
+                if (jQuery(this).prop("onclick")) {
+                    return true;
+                }
+                return false;
+            }).each(function(){
+                /**
+                 * Узнаем location.href родного события
+                 */
+                var text = this.outerHTML;
+                var link = text.substring(
+                    text.indexOf("location.href='") + "location.href='".length
+                );
+                link = link.substring(0, link.indexOf("'"));
+                link = link.replace("&amp;", "&");
+                /**
+                 * Узнаем текст предупреждения
+                 */
+                var msg = text.substring(
+                    text.indexOf("confirm('") + "confirm('".length
+                );
+                msg = msg.substring(msg, msg.indexOf("'"));
+                /**
+                 * Удалим обработчик щелчка мыши
+                 */
+                jQuery(this).prop("onclick", null);
+                /**
+                 * Добавим свой обработчик
+                 */
+                jQuery(this).on("click", function(){
+                    if (confirm(msg)) {
+                        var href = link.substring(0, link.indexOf("?"));
+                        var paramArr = link.substring(link.indexOf("?") + 1).split("&");
+                        var params = {};
+                        jQuery.each(paramArr, function(index, object){
+                            params[object.substring(0, object.indexOf("="))] =
+                                object.substring(object.indexOf("=") + 1);
+                        });
+                        that._loadData(href, params);
+                        return false; 
+                    }
+                });
+            });
+            /**
+             * Забиндимся на все ссылки кроме #_saveAndContinue и #_saveAndBack
+             */
+            jQuery("a", data).not("#_saveAndContinue, #_saveAndBack, .icon-trash").on("click", function(){
                 var link = jQuery(this).attr("href");
                 var href = link.substring(0, link.indexOf("?"));
                 var paramArr = link.substring(link.indexOf("?") + 1).split("&");
