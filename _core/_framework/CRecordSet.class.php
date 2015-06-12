@@ -56,7 +56,9 @@ class CRecordSet {
     public function getItems() {
         // если запрос еще не выполнялся - выполним его
         if (!is_null($this->getQuery())) {
+            $transaction = new CTransaction();
             $res = $this->getQuery()->execute();
+            $transaction->commit();
             foreach ($res->getItems() as $item) {
                 $ar = new CActiveRecord($item);
                 $ar->setTable($this->getQuery()->getTable());

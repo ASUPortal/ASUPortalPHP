@@ -79,45 +79,55 @@ class CActiveModel extends CModel implements IJSONSerializable{
      */
     public function save() {
         /**
-         * Из публичных свойств объекта пробуем получить
-         * данные для записи на случай, если их не положил пользователь
+         * Пусть сохранение будет транзакционной операцией
+         * Мало ли что, вообще
          */
-        foreach (get_object_vars($this) as $key=>$value) {
-            if ($this->getDbTable()->getFields()->hasElement($key)) {
-                $this->getRecord()->setItemValue($key, $value);
+        $transaction = new CTransaction();
+        try {
+            /**
+             * Из публичных свойств объекта пробуем получить
+             * данные для записи на случай, если их не положил пользователь
+             */
+            foreach (get_object_vars($this) as $key=>$value) {
+                if ($this->getDbTable()->getFields()->hasElement($key)) {
+                    $this->getRecord()->setItemValue($key, $value);
+                }
             }
-        }
-        if (is_null($this->getId()) | $this->getId() == "") {
-            $this->saveModel();
-            if (is_object(CApp::getApp()->getDbConnection())) {
-                $this->setId(CApp::getApp()->getDbConnection()->lastInsertId());
+            if (is_null($this->getId()) | $this->getId() == "") {
+                $this->saveModel();
+                if (is_object(CApp::getApp()->getDbConnection())) {
+                    $this->setId(CApp::getApp()->getDbConnection()->lastInsertId());
+                } else {
+                    $this->setId(mysql_insert_id());
+                }
             } else {
-                $this->setId(mysql_insert_id());
+                $this->updateModel();
             }
-        } else {
-            $this->updateModel();
-        }
-        // попытаемся сразу сохранить многие-ко-многим отношения
-        foreach ($this->relations() as $field=>$relation) {
-            if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
-                // сохраним старое значение на всякий случай
-                $currentValue = $this->$field;
-                // удалим все старые
-                foreach (CActiveRecordProvider::getWithCondition($relation['joinTable'], $relation['leftCondition'])->getItems() as $ar) {
-                    $ar->remove();
-                }
-                // теперь сохраним новые
-                foreach ($currentValue->getItems() as $key=>$value) {
-                    $ar = new CActiveRecord(array(
-                        CUtils::strLeft($relation['leftCondition'], " ") => $this->getId(),
-                        $relation['rightKey'] => $key,
-                        "id" => null
-                    ));
-                    $ar->setTable($relation['joinTable']);
-                    $ar->insert();
+            // попытаемся сразу сохранить многие-ко-многим отношения
+            foreach ($this->relations() as $field=>$relation) {
+                if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
+                    // сохраним старое значение на всякий случай
+                    $currentValue = $this->$field;
+                    // удалим все старые
+                    foreach (CActiveRecordProvider::getWithCondition($relation['joinTable'], $relation['leftCondition'])->getItems() as $ar) {
+                        $ar->remove();
+                    }
+                    // теперь сохраним новые
+                    foreach ($currentValue->getItems() as $key=>$value) {
+                        $ar = new CActiveRecord(array(
+                            CUtils::strLeft($relation['leftCondition'], " ") => $this->getId(),
+                            $relation['rightKey'] => $key,
+                            "id" => null
+                        ));
+                        $ar->setTable($relation['joinTable']);
+                        $ar->insert();
+                    }
                 }
             }
+        } catch (Exception $e) {
+            $transaction->rollback();
         }
+        $transaction->commit();
         /**
          * Если в кэше есть, то обновим
          */
