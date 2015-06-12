@@ -81,8 +81,9 @@ class CWorkPlanTermSectionsController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanTermSection(CRequest::getInt("id"));
+        $term = $object->term_id;
         $object->remove();
-        $this->redirect("workplantermsections.php?action=index");
+        $this->redirect("workplantermsections.php?action=index&term_id=".$term);
     }
     public function actionSave() {
         $object = new CWorkPlanTermSection();

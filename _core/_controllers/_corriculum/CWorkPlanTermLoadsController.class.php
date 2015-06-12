@@ -81,8 +81,9 @@ class CWorkPlanTermLoadsController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanTermLoad(CRequest::getInt("id"));
+        $term = $object->term_id;
         $object->remove();
-        $this->redirect("workplantermloads.php?action=index");
+        $this->redirect("workplantermloads.php?action=index&term_id=".$term);
     }
     public function actionSave() {
         $object = new CWorkPlanTermLoad();

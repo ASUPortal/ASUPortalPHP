@@ -104,9 +104,13 @@ class CWorkPlanTermLabsController extends CBaseController{
         $this->renderView("_corriculum/_workplan/termLabs/edit.tpl");
     }
     public function actionDelete() {
+        /**
+         * @var $object CWorkPlanTermLab
+         */
         $object = CBaseManager::getWorkPlanTermLab(CRequest::getInt("id"));
+        $plan = $object->term->plan_id;
         $object->remove();
-        $this->redirect("workplantermlabs.php?action=index");
+        $this->redirect("workplantermlabs.php?action=index&plan_id=".$plan);
     }
     public function actionSave() {
         $object = new CWorkPlanTermLab();

@@ -81,8 +81,9 @@ class CWorkPlanCompetentionsController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanCompetention(CRequest::getInt("id"));
+        $plan = $object->plan_id;
         $object->remove();
-        $this->redirect("workplancompetentions.php?action=index");
+        $this->redirect("workplancompetentions.php?action=index&plan_id=".$plan);
     }
     public function actionSave() {
         $object = new CWorkPlanCompetention();

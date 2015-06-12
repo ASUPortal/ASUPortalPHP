@@ -56,5 +56,14 @@ class CWorkPlanCompetention extends CActiveModel{
         );
     }
 
+    public function attributeLabels() {
+        return array(
+            "competention_id" => "Компетенция",
+            "knowledges" => "Знания",
+            "skills" => "Умения",
+            "experiences" => "Навыки"
+        );
+    }
+
 
 }

@@ -52,5 +52,12 @@ class CWorkPlanContentSection extends CActiveModel{
         );
     }
 
+    public function attributeLabels() {
+        return array(
+            "name" => "Название раздела",
+            "sectionIndex" => "Номер раздела"
+        );
+    }
+
 
 }

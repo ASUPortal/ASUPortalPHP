@@ -81,8 +81,9 @@ class CWorkPlanContentLecturesController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanContentLecture(CRequest::getInt("id"));
+        $section = $object->section_id;
         $object->remove();
-        $this->redirect("workplancontentlectures.php?action=index");
+        $this->redirect("workplancontentlectures.php?action=index&section_id=".$section);
     }
     public function actionSave() {
         $object = new CWorkPlanContentLecture();

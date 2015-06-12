@@ -71,7 +71,7 @@ class CWorkPlanGoalsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplangoals.php?action=index&plan_id=".CRequest::getInt("id"),
+            "link" => "workplangoals.php?action=index&plan_id=".$object->plan_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -81,8 +81,9 @@ class CWorkPlanGoalsController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanGoal(CRequest::getInt("id"));
+        $plan = $object->plan_id;
         $object->remove();
-        $this->redirect("workplangoals.php?action=index");
+        $this->redirect("workplangoals.php?action=index&plan_id=".$plan);
     }
     public function actionSave() {
         $object = new CWorkPlanGoal();
