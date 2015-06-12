@@ -12,6 +12,7 @@
  * @property int plan_id
  * @property String number
  * @property CWorkPlan plan
+
  */
 class CWorkPlanTerm extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_TERMS;
