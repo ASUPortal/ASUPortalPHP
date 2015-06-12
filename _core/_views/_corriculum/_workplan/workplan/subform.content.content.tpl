@@ -1,1 +1,0 @@
-{CHtml::activeComponent("workplancontentsections.php?plan_id={$plan->getId()}", $plan)}
