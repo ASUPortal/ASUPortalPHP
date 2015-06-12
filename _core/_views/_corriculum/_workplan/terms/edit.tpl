@@ -8,6 +8,8 @@
     {include file="_corriculum/_workplan/terms/form.tpl"}
 
     {CHtml::activeComponent("workplantermloads.php?term_id={$object->getId()}", $object)}
+
+    {CHtml::activeComponent("workplantermsections.php?term_id={$object->getId()}", $object)}
 {/block}
 
 {block name="asu_right"}
