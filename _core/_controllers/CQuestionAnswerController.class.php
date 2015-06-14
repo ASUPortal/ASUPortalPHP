@@ -202,7 +202,7 @@ class CQuestionAnswerController extends CBaseController{
     	$quest = new CQuestion();
     	$quest->setAttributes(CRequest::getArray($quest::getClassName()));
     	if ($quest->validate()) {
-    		$quest->contact_info .= "; ".CStaffManager::getUser(CSession::getCurrentUser()->getId())->getName().'; ip '.$_SERVER["REMOTE_ADDR"];
+    		$quest->contact_info .= " ".CStaffManager::getUser(CSession::getCurrentUser()->getId())->getName().'; ip '.$_SERVER["REMOTE_ADDR"];
     		if ($quest->answer_text != '') {
     			$quest->datetime_answ=date("Y-d-m H:i:s",time());
     		}

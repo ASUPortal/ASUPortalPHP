@@ -1,6 +1,11 @@
 <?php
 
 class CQuestionAddController extends CBaseController{
+	public $allowedAnonymous = array(
+			"index",
+			"edit",
+			"save"
+	);
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -18,21 +23,46 @@ class CQuestionAddController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
+    	$query = new CQuery();
+    	$query->select("user.*")
+    	->from(TABLE_USERS." as user")
+    	->order("user.FIO asc");
+    	$users = array();
+    	foreach ($query->execute()->getItems() as $ar) {
+    		$user = new CUser(new CActiveRecord($ar));
+    		$users[$user->getId()] = $user->FIO;
+    	}
     	$quest = new CQuestion();
     	$quest->user_id = CRequest::getInt("user_id");
     	$this->setData("quest", $quest);
-    	$this->renderView("_question_add/add.tpl");
+    	$this->setData("users", $users);
+    	$this->renderView("__public/_question_add/add.tpl");
     }
     public function actionEdit() {
+    	$query = new CQuery();
+    	$query->select("user.*")
+    	->from(TABLE_USERS." as user")
+    	->order("user.FIO asc");
+    	$users = array();
+    	foreach ($query->execute()->getItems() as $ar) {
+    		$user = new CUser(new CActiveRecord($ar));
+    		$users[$user->getId()] = $user->FIO;
+    	}
     	$quest = CQuestionManager::getQuestion(CRequest::getInt("id"));
+    	$this->setData("users", $users);
     	$this->setData("quest", $quest);
-    	$this->renderView("_question_add/edit.tpl");
+    	$this->renderView("__public/_question_add/edit.tpl");
     }
     public function actionSave() {
     	$quest = new CQuestion();
     	$quest->setAttributes(CRequest::getArray($quest::getClassName()));
     	if ($quest->validate()) {
-    		$quest->contact_info .= "; ".CStaffManager::getUser(CSession::getCurrentUser()->getId())->getName().'; ip '.$_SERVER["REMOTE_ADDR"];
+    		if (!CSession::isAuth()) {
+    			$user = "";
+    		} else {
+    			$user = CStaffManager::getUser(CSession::getCurrentUser()->getId())->getName();
+    		}
+    		$quest->contact_info .= " ".$user.'; ip '.$_SERVER["REMOTE_ADDR"];
     		if ($quest->answer_text != '') {
     			$quest->datetime_answ=date("Y-d-m H:i:s",time());
     		}
@@ -45,6 +75,6 @@ class CQuestionAddController extends CBaseController{
     		return true;
     	}
     	$this->setData("quest", $quest);
-    	$this->renderView("_question_add/edit.tpl");
+    	$this->renderView("__public/_question_add/edit.tpl");
     }
 }
