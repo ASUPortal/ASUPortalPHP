@@ -16,13 +16,10 @@ class CDiplomPreviewController extends CBaseController{
     }
     public function actionIndex() {
     	$set = new CRecordSet(false);
-    	$setWinterNotComplete = new CRecordSet(false);
-    	$setSummerNotComplete = new CRecordSet(false);
     	$query = new CQuery();
     	$currentCommission = null;
     	$currentGroup = null;
     	$isArchive = (CRequest::getString("isArchive") == "1");
-    	$set->setQuery($query);
     	$query->select("preview.*")
     	->from(TABLE_DIPLOM_PREVIEWS." as preview")
     	->order("preview.date_preview desc");
@@ -176,6 +173,30 @@ class CDiplomPreviewController extends CBaseController{
 			    			),
     		)
     	);
+    	//Предзащиты зимой
+    	if (CRequest::getInt("winterPreviews")==1) {
+    		$query->condition('preview.date_preview between "'.(date("Y")-1)."-12-01".'" and "'.(date("Y"))."-02-28".'"');
+    	}
+    	//Предзащиты летом
+    	if (CRequest::getInt("summerPreviews")==1) {
+    		$query->condition('preview.date_preview between "'.(date("Y"))."-05-01".'" and "'.(date("Y"))."-06-30".'"');
+    	}
+    	//Прошедшие предзащиту зимой
+    	if (CRequest::getInt("winterCompletePreviews")==1) {
+    		$query->condition('preview.date_preview between "'.(date("Y")-1)."-12-01".'" and "'.(date("Y"))."-02-28".'" and (preview.diplom_percent!=0 and preview.another_view=0)');
+    	}
+    	//Прошедшие предзащиту летом
+    	if (CRequest::getInt("summerCompletePreviews")==1) {
+    		$query->condition('preview.date_preview between "'.(date("Y"))."-05-01".'" and "'.(date("Y"))."-06-30".'" and (preview.diplom_percent!=0 and preview.another_view=0)');
+    	}
+    	//Не прошедшие предзащиту зимой
+    	if (CRequest::getInt("winterNotComplete")==1) {
+    		$query->condition('preview.date_preview between "'.(date("Y")-1)."-12-01".'" and "'.(date("Y"))."-02-28".'" and (preview.diplom_percent=0 or preview.another_view!=0)');
+    	}
+    	//Не прошедшие предзащиту летом
+    	if (CRequest::getInt("summerNotComplete")==1) {
+    		$query->condition('preview.date_preview between "'.(date("Y"))."-05-01".'" and "'.(date("Y"))."-06-30".'" and (preview.diplom_percent=0 or preview.another_view!=0)');
+    	}
     	$previews = new CArrayList();
     	foreach ($set->getPaginated()->getItems() as $item) {
     		$preview = new CDiplomPreview($item);
@@ -192,33 +213,6 @@ class CDiplomPreviewController extends CBaseController{
     		$group = new CStudentGroup(new CActiveRecord($ar));
     		$studentGroups[$group->getId()] = $group->getName();
     	}
-    	
-    	$queryWinterNotComplete = new CQuery();
-    	$queryWinterNotComplete->select("preview.*")
-    	->from(TABLE_DIPLOM_PREVIEWS." as preview")
-    	->condition('preview.date_preview between "'.(date("Y")-1)."-12-01".'" and "'.(date("Y"))."-02-28".'" and (preview.diplom_percent=0 or preview.another_view!=0)');
-    	$setWinterNotComplete->setQuery($queryWinterNotComplete);
-    	 
-    	$previewsWinterNotComplete = new CArrayList();
-    	foreach ($setWinterNotComplete->getPaginated()->getItems() as $item) {
-    		$previewWinterNotComplete = new CDiplomPreview($item);
-    		$previewsWinterNotComplete->add($previewWinterNotComplete->getId(), $previewWinterNotComplete);
-    	}
-    	
-    	$querySummerNotComplete = new CQuery();
-    	$querySummerNotComplete->select("preview.*")
-    	->from(TABLE_DIPLOM_PREVIEWS." as preview")
-    	->condition('preview.date_preview between "'.(date("Y"))."-05-01".'" and "'.(date("Y"))."-06-30".'" and (preview.diplom_percent=0 or preview.another_view!=0)');
-    	$setSummerNotComplete->setQuery($querySummerNotComplete);
-    		
-    	$previewsSummerNotComplete = new CArrayList();
-    	foreach ($setSummerNotComplete->getPaginated()->getItems() as $item) {
-    		$previewSummerNotComplete = new CDiplomPreview($item);
-    		$previewsSummerNotComplete->add($previewSummerNotComplete->getId(), $previewSummerNotComplete);
-    	}
-    	
-    	$this->setData("previewsSummerNotComplete", $previewsSummerNotComplete);
-    	$this->setData("previewsWinterNotComplete", $previewsWinterNotComplete);
     	$this->setData("isArchive", $isArchive);
     	$this->setData("studentGroups", $studentGroups);
     	$this->setData("commissions", $commissions);
@@ -226,8 +220,6 @@ class CDiplomPreviewController extends CBaseController{
     	$this->setData("currentGroup", $currentGroup);
     	$this->setData("previews", $previews);
     	$this->setData("paginator", $set->getPaginator());
-    	$this->setData("paginatorWinterNotComplete", $setWinterNotComplete->getPaginator());
-    	$this->setData("paginatorSummerNotComplete", $setSummerNotComplete->getPaginator());
     	$this->renderView("_diploms/diplom_preview/index.tpl");
     }
     public function actionAdd() {
@@ -365,6 +357,7 @@ class CDiplomPreviewController extends CBaseController{
         			),
         	));
         }
+        
 		$prevs = array();
     	foreach ($query->execute()->getItems() as $ar) {
     		$prev = new CDiplomPreview(new CActiveRecord($ar));
@@ -372,76 +365,98 @@ class CDiplomPreviewController extends CBaseController{
     	}
     	$date_previews = array();
     	$date_previews = array_count_values($prevs);
+    	
+    	//Общее количество предзащит
     	$count_previews = count($prevs);
     	
+    	//Общее количество защит
+    	$queryAll = new CQuery();
+    	$queryAll->select("diplom.*")
+    	->from(TABLE_DIPLOMS." as diplom");
+    	if (!$isArchive) {
+    		$queryAll->condition('diplom.date_act between "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_start)).'" and "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_end)).'"');
+    	}
+    	$count_all = $queryAll->execute()->getCount();
+    	
+    	//Всего защит зимой
+    	$queryWinterAll = new CQuery();
+    	$queryWinterAll->select("diplom.*")
+    	->from(TABLE_DIPLOMS." as diplom")
+    	->condition('diplom.date_act between "'.(date("Y")-1)."-12-01".'" and "'.(date("Y"))."-02-28".'"');
+    	$count_winter_all = $queryWinterAll->execute()->getCount();
+    	
+    	//Всего защит летом
+    	$querySummerAll = new CQuery();
+    	$querySummerAll->select("diplom.*")
+    	->from(TABLE_DIPLOMS." as diplom")
+    	->condition('diplom.date_act between "'.(date("Y"))."-05-01".'" and "'.(date("Y"))."-06-30".'"');
+    	$count_summer_all = $querySummerAll->execute()->getCount();
+    	
+    	//Из них не имеющие предзащиты зимой
+    	$queryNotPreviewsWinter = new CQuery();
+    	$queryNotPreviewsWinter->select("diplom.*")
+    	->from(TABLE_DIPLOMS." as diplom")
+    	->leftJoin(TABLE_DIPLOM_PREVIEWS." as preview", "diplom.student_id = preview.student_id")
+    	->condition('preview.student_id is null and diplom.date_act between "'.(date("Y")-1)."-12-01".'" and "'.(date("Y"))."-02-28".'"');
+    	$count_not_previews_winter = $queryNotPreviewsWinter->execute()->getCount();
+    	
+    	//Из них не имеющие предзащиты летом
+    	$queryNotPreviewsSummer = new CQuery();
+    	$queryNotPreviewsSummer->select("diplom.*")
+    	->from(TABLE_DIPLOMS." as diplom")
+    	->leftJoin(TABLE_DIPLOM_PREVIEWS." as preview", "diplom.student_id = preview.student_id")
+    	->condition('preview.student_id is null and diplom.date_act between "'.(date("Y"))."-05-01".'" and "'.(date("Y"))."-06-30".'"');
+    	$count_not_previews_summer = $queryNotPreviewsSummer->execute()->getCount();
+    	
+    	//Количество предзащит зимой
     	$queryWinter = new CQuery();
     	$queryWinter->select("preview.*")
     	->from(TABLE_DIPLOM_PREVIEWS." as preview")
     	->condition('preview.date_preview between "'.(date("Y")-1)."-12-01".'" and "'.(date("Y"))."-02-28".'"');
-    	$prevsWinter = array();
-    	foreach ($queryWinter->execute()->getItems() as $ar) {
-    		$prevWinter = new CDiplomPreview(new CActiveRecord($ar));
-    		$prevsWinter[$prevWinter->getId()] = $prevWinter->date_preview;
-    	}
-    	$count_previews_winter = count($prevsWinter);
+    	$count_previews_winter = $queryWinter->execute()->getCount();
     	
+    	//Количество предзащит летом
     	$querySummer = new CQuery();
     	$querySummer->select("preview.*")
     	->from(TABLE_DIPLOM_PREVIEWS." as preview")
     	->condition('preview.date_preview between "'.(date("Y"))."-05-01".'" and "'.(date("Y"))."-06-30".'"');
-    	$prevsSummer = array();
-    	foreach ($querySummer->execute()->getItems() as $ar) {
-    		$prevSummer = new CDiplomPreview(new CActiveRecord($ar));
-    		$prevsSummer[$prevSummer->getId()] = $prevSummer->date_preview;
-    	}
-    	$count_previews_summer = count($prevsSummer);
+    	$count_previews_summer = $querySummer->execute()->getCount();
     	
+    	//Прошедшие предзащиту зимой
     	$queryWinterComplete = new CQuery();
     	$queryWinterComplete->select("preview.*")
     	->from(TABLE_DIPLOM_PREVIEWS." as preview")
     	->condition('preview.date_preview between "'.(date("Y")-1)."-12-01".'" and "'.(date("Y"))."-02-28".'" and (preview.diplom_percent!=0 and preview.another_view=0)');
-    	$prevsWinterComplete = array();
-    	foreach ($queryWinterComplete->execute()->getItems() as $ar) {
-    		$prevWinterComplete = new CDiplomPreview(new CActiveRecord($ar));
-    		$prevsWinterComplete[$prevWinterComplete->getId()] = $prevWinterComplete->date_preview;
-    	}
-    	$count_previews_winter_complete = count($prevsWinterComplete);
+    	$count_previews_winter_complete = $queryWinterComplete->execute()->getCount();
     	
-    	$queryWinterNotComplete = new CQuery();
-    	$queryWinterNotComplete->select("preview.*")
-    	->from(TABLE_DIPLOM_PREVIEWS." as preview")
-    	->condition('preview.date_preview between "'.(date("Y")-1)."-12-01".'" and "'.(date("Y"))."-02-28".'" and (preview.diplom_percent=0 or preview.another_view!=0)');
-    	$prevsWinterNotComplete = array();
-    	foreach ($queryWinterNotComplete->execute()->getItems() as $ar) {
-    		$prevWinterNotComplete = new CDiplomPreview(new CActiveRecord($ar));
-    		$prevsWinterNotComplete[$prevWinterNotComplete->getId()] = $prevWinterNotComplete->date_preview;
-    	}
-    	$count_previews_winter_not_complete = count($prevsWinterNotComplete);
-    	
+    	//Прошедшие предзащиту летом
     	$querySummerComplete = new CQuery();
     	$querySummerComplete->select("preview.*")
     	->from(TABLE_DIPLOM_PREVIEWS." as preview")
     	->condition('preview.date_preview between "'.(date("Y"))."-05-01".'" and "'.(date("Y"))."-06-30".'" and (preview.diplom_percent!=0 and preview.another_view=0)');
-    	$prevsSummerComplete = array();
-    	foreach ($querySummerComplete->execute()->getItems() as $ar) {
-    		$prevSummerComplete = new CDiplomPreview(new CActiveRecord($ar));
-    		$prevsSummerComplete[$prevSummerComplete->getId()] = $prevSummerComplete->date_preview;
-    	}
-    	$count_previews_summer_complete = count($prevsSummerComplete);
+    	$count_previews_summer_complete = $querySummerComplete->execute()->getCount();
     	
+    	//Не прошедшие предзащиту зимой
+    	$queryWinterNotComplete = new CQuery();
+    	$queryWinterNotComplete->select("preview.*")
+    	->from(TABLE_DIPLOM_PREVIEWS." as preview")
+    	->condition('preview.date_preview between "'.(date("Y")-1)."-12-01".'" and "'.(date("Y"))."-02-28".'" and (preview.diplom_percent=0 or preview.another_view!=0)');
+    	$count_previews_winter_not_complete = $queryWinterNotComplete->execute()->getCount();
+    	
+    	//Не прошедшие предзащиту летом
     	$querySummerNotComplete = new CQuery();
     	$querySummerNotComplete->select("preview.*")
     	->from(TABLE_DIPLOM_PREVIEWS." as preview")
     	->condition('preview.date_preview between "'.(date("Y"))."-05-01".'" and "'.(date("Y"))."-06-30".'" and (preview.diplom_percent=0 or preview.another_view!=0)');
-    	$prevsSummerNotComplete = array();
-    	foreach ($querySummerNotComplete->execute()->getItems() as $ar) {
-    		$prevSummerNotComplete = new CDiplomPreview(new CActiveRecord($ar));
-    		$prevsSummerNotComplete[$prevSummerNotComplete->getId()] = $prevSummerNotComplete->date_preview;
-    	}
-    	$count_previews_summer_not_complete = count($prevsSummerNotComplete);
+    	$count_previews_summer_not_complete = $querySummerNotComplete->execute()->getCount();
     	
         $this->setData("date_previews", $date_previews);
+        $this->setData("count_all", $count_all);
         $this->setData("count_previews", $count_previews);
+        $this->setData("count_winter_all", $count_winter_all);
+        $this->setData("count_summer_all", $count_summer_all);
+        $this->setData("count_not_previews_winter", $count_not_previews_winter);
+        $this->setData("count_not_previews_summer", $count_not_previews_summer);
         $this->setData("count_previews_winter", $count_previews_winter);
         $this->setData("count_previews_summer", $count_previews_summer);
         $this->setData("count_previews_winter_complete", $count_previews_winter_complete);

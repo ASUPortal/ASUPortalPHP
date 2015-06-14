@@ -184,18 +184,8 @@
 		</tr>
     </table>
     </form>
-{if CRequest::getInt("winterNotComplete")==1}
-	{$prev=$previewsWinterNotComplete}
-	{$page=$paginatorWinterNotComplete}
-{elseif CRequest::getInt("summerNotComplete")==1}
-	{$prev=$previewsSummerNotComplete}
-	{$page=$paginatorSummerNotComplete}
-{else}
-	{$prev=$previews}
-	{$page=$paginator}
-{/if}
 
-{if ($prev->getCount() == 0)}
+{if ($previews->getCount() == 0)}
 	Нет объектов для отображения
 {else}
     <table class="table table-striped table-bordered table-hover table-condensed">
@@ -214,8 +204,8 @@
             <th>{CHtml::tableOrder("comm.name", $previews->getFirstItem(), true)}</th>
             <th>{CHtml::tableOrder("comment", $previews->getFirstItem(), true)}</th>
         </tr>
-        {counter start=(20 * ($page->getCurrentPageNumber() - 1)) print=false}
-        {foreach $prev->getItems() as $preview}
+        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+        {foreach $previews->getItems() as $preview}
         <tr>
             <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить предзащиту студента {$preview->student->getName()}')) { location.href='?action=deletePreview&id={$preview->id}'; }; return false;"></a></td>
 			<td><a href="preview.php?action=editPreview&id={$preview->getId()}" class="icon-pencil" title="правка"></a></td>
