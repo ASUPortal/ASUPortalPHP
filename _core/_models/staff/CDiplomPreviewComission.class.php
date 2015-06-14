@@ -11,16 +11,17 @@ class CDiplomPreviewComission extends CActiveModel {
 	protected $_table = TABLE_DIPLOM_PREVIEW_COMISSIONS;
     protected $_secretar = null;
     protected $_members = null;
-    
+    protected $_previews = null;
+    protected $_student = null;
 
 	public function relations() {
 		return array(
 				"secretar" => array(
-					"relationPower" => RELATION_HAS_ONE,
-					"storageProperty" => "_secretar",
-					"storageField" => "secretary_id",
-					"managerClass" => "CStaffManager",
-					"managerGetObject" => "getPerson"
+						"relationPower" => RELATION_HAS_ONE,
+						"storageProperty" => "_secretar",
+						"storageField" => "secretary_id",
+						"managerClass" => "CStaffManager",
+						"managerGetObject" => "getPerson"
 				),
 				"members" => array(
 						"relationPower" => RELATION_MANY_TO_MANY,
@@ -31,6 +32,22 @@ class CDiplomPreviewComission extends CActiveModel {
 						"managerClass" => "CStaffManager",
 						"managerGetObject" => "getPerson"
 				),
+				"previews" => array(
+						"relationPower" => RELATION_HAS_MANY,
+						"storageProperty" => "_previews",
+						"storageTable" => TABLE_DIPLOM_PREVIEWS,
+						"storageCondition" => "comm_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+						"managerClass" => "CStaffManager",
+						"managerGetObject" => "getDiplomPreview",
+						"managerOrder" => "date_preview desc"
+				),
+				"student" => array(
+						"relationPower" => RELATION_HAS_ONE,
+						"storageProperty" => "_student",
+						"storageField" => "student_id",
+						"managerClass" => "CStaffManager",
+						"managerGetObject" => "getStudent"
+				)
 		);
 	}
 	public function attributeLabels() {
@@ -62,6 +79,18 @@ class CDiplomPreviewComission extends CActiveModel {
 			$ar->remove();
 		}
 		parent::remove();
+	}
+	public function getPreviewsListByDate() {
+		$result = array();
+		foreach ($this->previews->getItems() as $preview) {
+			$byDay = array();
+			if (array_key_exists($preview->date_preview, $result)) {
+				$byDay = $result[$preview->date_preview];
+			}
+			$byDay[] = $preview;
+			$result[$preview->date_preview] = $byDay;
+		}
+		return $result;
 	}
 }
 
