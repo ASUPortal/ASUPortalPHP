@@ -3,5 +3,5 @@
 {block name="asu_center"}
     <h2>Редактирование вопроса</h2>
 
-    {include file="_question_add/form.tpl"}
+    {include file="__public/_question_add/form.tpl"}
 {/block}

@@ -1,12 +1,13 @@
 <form action="index.php" class="form-horizontal" method="post" enctype="multipart/form-data">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $quest)}
-
+    {CHtml::activeHiddenField("user_id", $quest)}
+    
     <div class="control-group">
         {CHtml::activeLabel("user_id", $quest)}
         <div class="controls">
-        	{CHtml::activeLookup("user_id", $quest, "class.CSearchCatalogUsers")}
-            {CHtml::error("user_id", $quest)}
+             {CHtml::activeDropDownList("user_id", $quest, $users)}
+             {CHtml::error("user_id", $quest)}
         </div>
     </div>
     

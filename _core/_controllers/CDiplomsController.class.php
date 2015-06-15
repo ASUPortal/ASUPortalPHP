@@ -204,6 +204,16 @@ class CDiplomsController extends CBaseController {
         			$query->condition("diplom.kadri_id = ".CSession::getCurrentPerson()->getId());
         	}
         }
+        //Не имеющие предзащиты зимой
+        if (CRequest::getInt("winterNotPreviews")==1) {
+        	$query->leftJoin(TABLE_DIPLOM_PREVIEWS." as preview", "diplom.student_id = preview.student_id");
+        	$query->condition('preview.student_id is null and diplom.date_act between "'.(date("Y")-1)."-12-01".'" and "'.(date("Y"))."-02-28".'"');
+        }
+        //Не имеющие предзащиты летом
+        if (CRequest::getInt("summerNotPreviews")==1) {
+        	$query->leftJoin(TABLE_DIPLOM_PREVIEWS." as preview", "diplom.student_id = preview.student_id");
+        	$query->condition('preview.student_id is null and diplom.date_act between "'.(date("Y"))."-05-01".'" and "'.(date("Y"))."-06-30".'"');
+        }
         foreach ($set->getPaginated()->getItems() as $item) {
             $diplom = new CDiplom($item);
             $diploms->add($diplom->getId(), $diplom);
