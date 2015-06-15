@@ -129,10 +129,23 @@ class CCorriculumDiscipline extends CActiveModel {
             if ($labor->type_id == $key) {
                 $res = $labor;
             } elseif (!is_null($labor->type)) {
-		if ($labor->type->getAlias() == $key) {
-                    $res = $labor;
-		}
+				if ($labor->type->getAlias() == $key) {
+		        	$res = $labor;
+				}
             }
+        }
+        if (is_null($res)) {
+        	foreach ($this->sections->getItems() as $section) {
+        		foreach ($section->labors->getItems() as $labor) {
+        			if ($labor->type_id == $key) {
+        				$res = $labor;
+        			} elseif (!is_null($labor->type)) {
+        				if ($labor->type->getAlias() == $key) {
+        					$res = $labor;
+        				}
+        			}		
+        		}
+        	}
         }
         return $res;
     }

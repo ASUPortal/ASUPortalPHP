@@ -128,6 +128,7 @@ class CCorriculumsController extends CBaseController {
                     foreach ($section->labors->getItems() as $labor) {
                         $newLabor = $labor->copy();
                         $newLabor->section_id = $newSection->getId();
+                        $newLabor->type_id = $labor->type_id;
                         $newLabor->save();
                     }
                 }
@@ -137,6 +138,7 @@ class CCorriculumsController extends CBaseController {
                 foreach ($discipline->labors->getItems() as $labor) {
                     $newLabor = $labor->copy();
                     $newLabor->discipline_id = $newDiscipline->getId();
+                    $newLabor->type_id = $labor->type_id;
                     $newLabor->save();
                 }
 				// копируем дочерние дисциплины
@@ -160,6 +162,7 @@ class CCorriculumsController extends CBaseController {
                         foreach ($section->labors->getItems() as $labor) {
                             $newLabor = $labor->copy();
                             $newLabor->section_id = $newSection->getId();
+                            $newLabor->type_id = $labor->type_id;
                             $newLabor->save();
                         }
                     }
@@ -169,6 +172,7 @@ class CCorriculumsController extends CBaseController {
 					foreach ($child->labors->getItems() as $labor) {
 						$newLabor = $labor->copy();
 						$newLabor->discipline_id = $newChildDiscipline->getId();
+						$newLabor->type_id = $labor->type_id;
 						$newLabor->save();
 					}
 				}
