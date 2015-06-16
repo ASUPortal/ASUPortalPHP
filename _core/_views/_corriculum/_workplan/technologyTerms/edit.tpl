@@ -6,6 +6,8 @@
     {CHtml::helpForCurrentPage()}
 
     {include file="_corriculum/_workplan/technologyTerms/form.tpl"}
+
+    {CHtml::activeComponent("workplantechnologytermtypes.php?term_id={$object->getId()}", $object)}
 {/block}
 
 {block name="asu_right"}

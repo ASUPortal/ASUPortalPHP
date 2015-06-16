@@ -55,3 +55,22 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `pl_corriculum_workplan_technology_term`
 ADD CONSTRAINT `pl_corriculum_workplan_technology_term_ibfk_2` FOREIGN KEY (`term_id`) REFERENCES `pl_corriculum_workplan_terms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD CONSTRAINT `pl_corriculum_workplan_technology_term_ibfk_1` FOREIGN KEY (`plan_id`) REFERENCES `pl_corriculum_workplans` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- Технологии (вид занятия)
+CREATE TABLE `pl_corriculum_workplan_technology_term_type` (
+`id` int(11) NOT NULL,
+  `technology_term_id` int(11) NOT NULL,
+  `type_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+ALTER TABLE `pl_corriculum_workplan_technology_term_type`
+ ADD PRIMARY KEY (`id`), ADD KEY `technology_term_id` (`technology_term_id`,`type_id`), ADD KEY `type_id` (`type_id`);
+
+
+ALTER TABLE `pl_corriculum_workplan_technology_term_type`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `pl_corriculum_workplan_technology_term_type`
+ADD CONSTRAINT `pl_corriculum_workplan_technology_term_type_ibfk_2` FOREIGN KEY (`type_id`) REFERENCES `taxonomy_terms` (`id`) ON UPDATE CASCADE,
+ADD CONSTRAINT `pl_corriculum_workplan_technology_term_type_ibfk_1` FOREIGN KEY (`technology_term_id`) REFERENCES `pl_corriculum_workplan_technology_term` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

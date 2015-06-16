@@ -318,6 +318,7 @@
     define("TABLE_WORK_PLAN_PROJECT_THEMES", "pl_corriculum_workplan_projects");
     define("TABLE_WORK_PLAN_SELFEDUCATION", "pl_corriculum_workplan_selfeducation");
     define("TABLE_WORK_PLAN_TECHNOLOGY_TERMS", "pl_corriculum_workplan_technology_term");
+    define("TABLE_WORK_PLAN_TECHNOLOGY_TERM_TYPES", "pl_corriculum_workplan_technology_term_type");
     /**
      * Константы пагинатора
      */
