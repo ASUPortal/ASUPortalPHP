@@ -19,6 +19,7 @@
  * @property string year
  * @property string intended_for // предназначена для
  * @property string position
+ * @property string project_description
  *
  * @property CTerm discipline
  * @property CArrayList profiles
@@ -28,7 +29,6 @@
  * @property CArrayList sections
  * @property CArrayList terms
  */
-
 class CWorkPlan extends CActiveModel {
     protected $_table = TABLE_WORK_PLANS;
 
@@ -105,4 +105,42 @@ class CWorkPlan extends CActiveModel {
             )
         );
     }
+
+    public function attributeLabels() {
+        return array(
+            "title" => "Наименование",
+            "department_id" => "Кафедра",
+            "approver_post" => "Должность утверждающего",
+            "approver_name" => "Утверждающий",
+            "direction_id" => "Направление подготовки",
+            "profiles" => "Профили",
+            "qualification_id" => "Квалификация",
+            "edufaction_form_id" => "Форма обучения",
+            "year" => "Год",
+            "intended_for" => "Предназначено для",
+            "author_id" => "Автор",
+            "position" => "Место дисциплины",
+            "disciplinesBefore" => "Предшествующие дисциплины",
+            "disciplinesAfter" => "Последующие дисциплины",
+            "project_description" => "Курсовой проект"
+        );
+    }
+
+    protected function validationRules() {
+        return array(
+            "required" => array(
+                "title",
+                "year"
+            ),
+            "selected" => array(
+                "department_id",
+                "author_id",
+                "direction_id",
+                "qualification_id",
+                "education_form_id"
+            )
+        );
+    }
+
+
 }

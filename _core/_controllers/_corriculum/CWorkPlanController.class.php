@@ -21,6 +21,11 @@ class CWorkPlanController extends CBaseController{
         $this->_smartyEnabled = true;
         $this->setPageTitle("Рабочие программы");
 
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        $this->addCSSInclude("_modules/_redactor/redactor.css");
+        $this->addJSInclude("_modules/_redactor/redactor.min.js");
+
         parent::__construct();
     }
     public function actionIndex() {
