@@ -65,5 +65,9 @@ class CWorkPlanTerm extends CActiveModel{
         );
     }
 
+    function __toString() {
+        return $this->number;
+    }
+
 
 }

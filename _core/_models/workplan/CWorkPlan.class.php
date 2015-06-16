@@ -20,6 +20,7 @@
  * @property string intended_for // предназначена для
  * @property string position
  * @property string project_description
+ * @property string education_technologies
  *
  * @property CTerm discipline
  * @property CArrayList profiles
@@ -129,7 +130,8 @@ class CWorkPlan extends CActiveModel {
             "position" => "Место дисциплины",
             "disciplinesBefore" => "Предшествующие дисциплины",
             "disciplinesAfter" => "Последующие дисциплины",
-            "project_description" => "Курсовой проект"
+            "project_description" => "Курсовой проект",
+            "education_technologies" => "Образовательные технологии"
         );
     }
 

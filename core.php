@@ -317,6 +317,7 @@
     define("TABLE_WORK_PLAN_TERM_PRACTICES", "pl_corriculum_workplan_term_practices");
     define("TABLE_WORK_PLAN_PROJECT_THEMES", "pl_corriculum_workplan_projects");
     define("TABLE_WORK_PLAN_SELFEDUCATION", "pl_corriculum_workplan_selfeducation");
+    define("TABLE_WORK_PLAN_TECHNOLOGY_TERMS", "pl_corriculum_workplan_technology_term");
     /**
      * Константы пагинатора
      */

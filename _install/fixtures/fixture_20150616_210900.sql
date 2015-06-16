@@ -36,3 +36,22 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `pl_corriculum_workplan_selfeducation`
 ADD CONSTRAINT `pl_corriculum_workplan_selfeducation_ibfk_1` FOREIGN KEY (`plan_id`) REFERENCES `pl_corriculum_workplans` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--- Интерактивные образовательные технологии (семестр)
+CREATE TABLE `pl_corriculum_workplan_technology_term` (
+`id` int(11) NOT NULL,
+  `plan_id` int(11) NOT NULL,
+  `term_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+ALTER TABLE `pl_corriculum_workplan_technology_term`
+ ADD PRIMARY KEY (`id`), ADD KEY `plan_id` (`plan_id`,`term_id`), ADD KEY `term_id` (`term_id`);
+
+
+ALTER TABLE `pl_corriculum_workplan_technology_term`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `pl_corriculum_workplan_technology_term`
+ADD CONSTRAINT `pl_corriculum_workplan_technology_term_ibfk_2` FOREIGN KEY (`term_id`) REFERENCES `pl_corriculum_workplan_terms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT `pl_corriculum_workplan_technology_term_ibfk_1` FOREIGN KEY (`plan_id`) REFERENCES `pl_corriculum_workplans` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
