@@ -29,6 +29,10 @@
 
 {CHtml::activeComponent("workplanprojectthemes.php?plan_id={$plan->getId()}", $plan)}
 
+<h4>4.6. Самостоятельное изучение разделов дисциплины</h4>
+
+{CHtml::activeComponent("workplanselfeducationblocks.php?plan_id={$plan->getId()}", $plan)}
+
 <script>
     jQuery(document).ready(function(){
         jQuery("#project_description").redactor({
