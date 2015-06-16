@@ -28,6 +28,7 @@
  * @property CArrayList competentions
  * @property CArrayList sections
  * @property CArrayList terms
+ * @property CArrayList projectThemes
  */
 class CWorkPlan extends CActiveModel {
     protected $_table = TABLE_WORK_PLANS;
@@ -102,6 +103,12 @@ class CWorkPlan extends CActiveModel {
                 "storageTable" => TABLE_WORK_PLAN_TERMS,
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanTerm"
+            ),
+            "projectThemes" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageTable" => TABLE_WORK_PLAN_PROJECT_THEMES,
+                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CWorkPlanProjectTheme"
             )
         );
     }

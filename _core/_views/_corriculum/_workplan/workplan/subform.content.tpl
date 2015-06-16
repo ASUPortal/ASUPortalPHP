@@ -25,8 +25,14 @@
     </div>
 </div>
 
+<strong>Темы курсовых проектов</strong>
+
+{CHtml::activeComponent("workplanprojectthemes.php?plan_id={$plan->getId()}", $plan)}
+
 <script>
     jQuery(document).ready(function(){
-        jQuery("#project_description")
+        jQuery("#project_description").redactor({
+            imageUpload: '{$web_root}_modules/_redactor/image_upload.php'
+        });
     });
 </script>
