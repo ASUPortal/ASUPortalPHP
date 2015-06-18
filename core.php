@@ -319,6 +319,7 @@
     define("TABLE_WORK_PLAN_SELFEDUCATION", "pl_corriculum_workplan_selfeducation");
     define("TABLE_WORK_PLAN_TECHNOLOGY_TERMS", "pl_corriculum_workplan_technology_term");
     define("TABLE_WORK_PLAN_TECHNOLOGY_TERM_TYPES", "pl_corriculum_workplan_technology_term_type");
+    define("TABLE_WORK_PLAN_TECHNOLOGY_TERM_TYPE_LOADS", "pl_corriculum_workplan_technology_term_type_load");
     /**
      * Константы пагинатора
      */

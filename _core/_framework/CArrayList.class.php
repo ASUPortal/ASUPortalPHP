@@ -11,11 +11,13 @@
  * хранения даных.
  * Массив с вынесенными отдельно параметрами, методами, объектами
  */
-class CArrayList {
+class CArrayList implements Iterator{
     private $_items;
+    protected $_position = 0;
 
     public function __construct($array = array()) {
         $this->_items = $array;
+        $this->_position = 0;
     }
 
     public function add($key, $val) {
@@ -143,4 +145,62 @@ class CArrayList {
         }
         return $res;
     }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Return the current element
+     * @link http://php.net/manual/en/iterator.current.php
+     * @return mixed Can return any type.
+     */
+    public function current() {
+        $values = array_values($this->_items);
+        return $values[$this->_position];
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Move forward to next element
+     * @link http://php.net/manual/en/iterator.next.php
+     * @return void Any returned value is ignored.
+     */
+    public function next() {
+        ++$this->_position;
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Return the key of the current element
+     * @link http://php.net/manual/en/iterator.key.php
+     * @return mixed scalar on success, or null on failure.
+     */
+    public function key() {
+        $keys = array_keys($this->_items);
+        if (array_key_exists($this->_position, $keys)) {
+            return $keys[$this->_position];
+        }
+        return null;
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Checks if current position is valid
+     * @link http://php.net/manual/en/iterator.valid.php
+     * @return boolean The return value will be casted to boolean and then evaluated.
+     * Returns true on success or false on failure.
+     */
+    public function valid() {
+        return $this->hasElement($this->key());
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Rewind the Iterator to the first element
+     * @link http://php.net/manual/en/iterator.rewind.php
+     * @return void Any returned value is ignored.
+     */
+    public function rewind() {
+        $this->_position = 0;
+    }
+
+
 }

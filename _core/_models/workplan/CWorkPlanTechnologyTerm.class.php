@@ -9,6 +9,7 @@
  * @property int term_id
  *
  * @property CWorkPlanTerm term
+ * @property CArrayList types
  */
 class CWorkPlanTechnologyTerm extends CActiveModel{
     protected $_table =  TABLE_WORK_PLAN_TECHNOLOGY_TERMS;
@@ -19,6 +20,12 @@ class CWorkPlanTechnologyTerm extends CActiveModel{
                 "relationPower" => RELATION_HAS_ONE,
                 "storageField" => "term_id",
                 "targetClass" => "CWorkPlanTerm"
+            ),
+            "types" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageTable" => TABLE_WORK_PLAN_TECHNOLOGY_TERM_TYPES,
+                "storageCondition" => "technology_term_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CWorkPlanTechnologyTermType"
             )
         );
     }

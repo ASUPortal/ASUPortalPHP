@@ -4,6 +4,7 @@
     {if ($objects->getCount() == 0)}
         Нет объектов для отображения
     {else}
+
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
                 <tr>
@@ -15,12 +16,12 @@
             </thead>
             <tbody>
             {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
-            {foreach $objects->getItems() as $object}
+            {foreach $objects->getItems() as $term}
                 <tr>
-                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить семестр')) { location.href='workplantechnologyterms.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
+                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить семестр')) { location.href='workplantechnologyterms.php?action=delete&id={$term->getId()}'; }; return false;"></a></td>
                     <td>{counter}</td>
-                    <td><a href="workplantechnologyterms.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>{$object->term}</td>
+                    <td><a href="workplantechnologyterms.php?action=edit&id={$term->getId()}" class="icon-pencil"></a></td>
+                    <td>{$term->term}</td>
                 </tr>
             {/foreach}
             </tbody>
