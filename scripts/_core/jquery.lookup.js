@@ -471,9 +471,13 @@
             // создаем новые
             var itemHolder = this;
             jQuery.each(this._values, function(index, value){
+                var realItemName = itemName;
+                if (itemHolder._isMultiple) {
+                    realItemName += "[" + index + "]";
+                }
                 var input = jQuery("<input/>", {
                     "type": "hidden",
-                    "name": itemName,
+                    "name": realItemName,
                     "value": value
                 });
                 jQuery(input).attr("asu-type", "value");

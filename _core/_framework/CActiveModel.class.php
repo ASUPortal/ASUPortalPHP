@@ -407,12 +407,24 @@ class CActiveModel extends CModel implements IJSONSerializable{
                     $joinTable = $relation["joinTable"];
                     $rightKey = $relation["rightKey"];
                     $leftCondition = $relation["leftCondition"];
-                    $managerClass = $relation["managerClass"];
-                    $managerGetter = $relation["managerGetObject"];
+
+                    $useManager = true;
+                    if (array_key_exists("targetClass", $relation)) {
+                        $useManager = false;
+                    } else {
+                        $managerClass = $relation["managerClass"];
+                        $managerGetter = $relation["managerGetObject"];
+                    }
 
                     foreach (CActiveRecordProvider::getWithCondition($joinTable, $leftCondition)->getItems() as $item) {
                         $items = $item->getItems();
-                        $obj = $managerClass::$managerGetter($items[$rightKey]);
+                        if ($useManager) {
+                            $obj = $managerClass::$managerGetter($items[$rightKey]);
+                        } else {
+                            $method = "get".mb_substr($relation["targetClass"], 1);
+                            $obj = CBaseManager::$method($items[$rightKey]);
+                        }
+
                         if (!is_null($obj)) {
                             $this->$private->add($obj->id, $obj);
                         }
@@ -461,12 +473,27 @@ class CActiveModel extends CModel implements IJSONSerializable{
             if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
                 if (array_key_exists($field, $array)) {
                     $values = $array[$field];
-                    $manager = $relation['managerClass'];
-                    $getter = $relation['managerGetObject'];
+
+                    $useManager = true;
+                    if (array_key_exists("targetClass", $relation)) {
+                        $useManager = false;
+                    } else {
+                        $manager = $relation['managerClass'];
+                        $getter = $relation['managerGetObject'];
+                    }
+                    // разрешим не указывать
+                    if (!array_key_exists("storageProperty", $relation)) {
+                        $relation["storageProperty"] = "_".$field;
+                    }
                     $property = $relation['storageProperty'];
                     $this->$property = new CArrayList();
                     foreach ($values as $value) {
-                        $related = $manager::$getter($value);
+                        if ($useManager) {
+                            $related = $manager::$getter($value);
+                        } else {
+                            $method = "get".mb_substr($relation["targetClass"], 1);
+                            $related = CBaseManager::$method($value);
+                        }
                         if (!is_null($related)) {
                             $this->$property->add($related->getId(), $related);
                         }

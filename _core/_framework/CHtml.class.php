@@ -1196,9 +1196,6 @@ class CHtml {
             $field .= "[".$submodelName."]";
         }
         $field .= "[".$name."]";
-        if ($isMultiple) {
-            $field .= "[]";
-        }
         $fieldRequired = false;
         $validators = CCoreObjectsManager::getFieldValidators($model);
         if (array_key_exists($name, $validators)) {
@@ -1212,8 +1209,9 @@ class CHtml {
         <div class="catalogLookup" asu-catalog="<?php echo $catalog; ?>" asu-multiple="<?php echo ($isMultiple) ? "true":"false" ;?>" asu-value-name="<?php echo $field; ?>" asu-creation="<?php echo ($allowCreation) ? "true":"false" ;?>">
 
         <?php if (is_object($data)) : ?>
-            <?php foreach ($data->getItems() as $val) : ?>
-                <input type="hidden" name="<?php echo $field; ?>" value="<?php echo $val->getId(); ?>" asu-type="value">
+            <?php $index = 0; ?>
+            <?php foreach ($data->getItems() as $val) : $index++; ?>
+                <input type="hidden" name="<?php echo $field; ?>[<?php echo $index; ?>]" value="<?php echo $val->getId(); ?>" asu-type="value">
             <?php endforeach; ?>
         <?php else: ?>
             <input type="hidden" name="<?php echo $field; ?>" value="<?php echo $data; ?>" asu-type="value">

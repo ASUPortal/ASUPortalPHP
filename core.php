@@ -320,6 +320,9 @@
     define("TABLE_WORK_PLAN_TECHNOLOGY_TERMS", "pl_corriculum_workplan_technology_term");
     define("TABLE_WORK_PLAN_TECHNOLOGY_TERM_TYPES", "pl_corriculum_workplan_technology_term_type");
     define("TABLE_WORK_PLAN_TECHNOLOGY_TERM_TYPE_LOADS", "pl_corriculum_workplan_technology_term_type_load");
+    define("TABLE_WORK_PLAN_MARK_TYPES", "pl_corriculum_workplan_marktypes");
+    define("TABLE_WORK_PLAN_MARK_TYPE_FUNDS", "pl_corriculum_workplan_marktype_fund");
+    define("TABLE_WORK_PLAN_MARK_TYPE_PLACES", "pl_corriculum_workplan_marktype_place");
     /**
      * Константы пагинатора
      */
