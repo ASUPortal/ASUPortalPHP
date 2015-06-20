@@ -323,6 +323,7 @@
     define("TABLE_WORK_PLAN_MARK_TYPES", "pl_corriculum_workplan_marktypes");
     define("TABLE_WORK_PLAN_MARK_TYPE_FUNDS", "pl_corriculum_workplan_marktype_fund");
     define("TABLE_WORK_PLAN_MARK_TYPE_PLACES", "pl_corriculum_workplan_marktype_place");
+    define("TABLE_WORK_PLAB_BRS", "pl_corriculum_workplan_brs");
     /**
      * Константы пагинатора
      */
