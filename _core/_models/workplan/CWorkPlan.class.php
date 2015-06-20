@@ -131,7 +131,8 @@ class CWorkPlan extends CActiveModel {
             "disciplinesBefore" => "Предшествующие дисциплины",
             "disciplinesAfter" => "Последующие дисциплины",
             "project_description" => "Курсовой проект",
-            "education_technologies" => "Образовательные технологии"
+            "education_technologies" => "Образовательные технологии",
+            "hardware" => "Скобяные изделия"
         );
     }
 

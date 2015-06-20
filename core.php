@@ -325,6 +325,7 @@
     define("TABLE_WORK_PLAN_MARK_TYPE_PLACES", "pl_corriculum_workplan_marktype_place");
     define("TABLE_WORK_PLAN_BRS", "pl_corriculum_workplan_brs");
     define("TABLE_WORK_PLAN_LITERATURE", "pl_corriculum_workplan_literature");
+    define("TABLE_WORK_PLAN_SOFTWARE", "pl_corriculum_workplan_software");
     /**
      * Константы пагинатора
      */

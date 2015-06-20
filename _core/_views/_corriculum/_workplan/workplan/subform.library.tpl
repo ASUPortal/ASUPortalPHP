@@ -9,3 +9,25 @@
 <h3>7.3. Интернет-ресурсы</h3>
 
 {CHtml::activeComponent("workplanliterature.php?type=3&plan_id={$plan->getId()}", $plan)}
+
+<h3>7.4. Программное обеспечение</h3>
+
+{CHtml::activeComponent("workplansoftware.php?&plan_id={$plan->getId()}", $plan)}
+
+<h3>8. Материальное обеспечение</h3>
+
+<div class="control-group">
+    {CHtml::activeLabel("hardware", $plan)}
+    <div class="controls">
+        {CHtml::activeTextBox("hardware", $plan, "hardware")}
+        {CHtml::error("hardware", $plan)}
+    </div>
+</div>
+
+<script>
+    jQuery(document).ready(function(){
+        jQuery("#hardware").redactor({
+            imageUpload: '{$web_root}_modules/_redactor/image_upload.php'
+        });
+    });
+</script>
