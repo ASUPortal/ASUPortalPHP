@@ -15,7 +15,7 @@
             <li><a data-toggle="tab" href="#content">Содержание</a></li>
             <li><a data-toggle="tab" href="#eduTechnologies">Образовательные технологии</a></li>
             <li><a data-toggle="tab" href="#markTypes">Оценочные средства</a></li>
-            <li><a data-toggle="tab" href="#library">Литература</a></li>
+            <li><a data-toggle="tab" href="#library">Обеспечение</a></li>
         </ul>
         <div class="tab-content">
             <div id="common" class="tab-pane active">

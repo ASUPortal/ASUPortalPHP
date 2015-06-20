@@ -1,5 +1,5 @@
 <?php
-class CWorkPlanBRSController extends CBaseController{
+class CWorkPlanLiteratureController extends CBaseController{
     protected $_isComponent = true;
 
     public function __construct() {
@@ -23,12 +23,12 @@ class CWorkPlanBRSController extends CBaseController{
         $query = new CQuery();
         $set->setQuery($query);
         $query->select("t.*")
-            ->from(TABLE_WORK_PLAN_BRS." as t")
+            ->from(TABLE_WORK_PLAN_LITERATURE." as t")
             ->order("t.id asc")
-            ->condition("plan_id=".CRequest::getInt("plan_id"));
+            ->condition("plan_id=".CRequest::getInt("plan_id")." AND type=".CRequest::getInt("type"));
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
-            $object = new CWorkPlanBRS($ar);
+            $object = new CWorkPlanLiterature($ar);
             $objects->add($object->getId(), $object);
         }
         $this->setData("objects", $objects);
@@ -38,66 +38,68 @@ class CWorkPlanBRSController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Добавить",
-            "link" => "workplanbrs.php?action=add&id=".CRequest::getInt("plan_id"),
+            "link" => "workplanliterature.php?action=add&plan_id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
             "icon" => "actions/list-add.png"
         ));
         /**
          * Отображение представления
          */
-        $this->renderView("_corriculum/_workplan/brs/index.tpl");
+        $this->renderView("_corriculum/_workplan/literature/index.tpl");
     }
     public function actionAdd() {
-        $object = new CWorkPlanBRS();
-        $object->plan_id = CRequest::getInt("id");
+        $object = new CWorkPlanLiterature();
+        $object->plan_id = CRequest::getInt("plan_id");
+        $object->type = CRequest::getInt("type");
         $this->setData("object", $object);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplanbrs.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplanliterature.php?action=index&plan_id=".$object->plan_id."&type=".$object->type,
             "icon" => "actions/edit-undo.png"
         ));
         /**
          * Отображение представления
          */
-        $this->renderView("_corriculum/_workplan/brs/add.tpl");
+        $this->renderView("_corriculum/_workplan/literature/add.tpl");
     }
     public function actionEdit() {
-        $object = CBaseManager::getWorkPlanBRS(CRequest::getInt("id"));
+        $object = CBaseManager::getWorkPlanLiterature(CRequest::getInt("id"));
         $this->setData("object", $object);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplanbrs.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplanliterature.php?action=index&plan_id=".$object->plan_id."&type=".$object->type,
             "icon" => "actions/edit-undo.png"
         ));
         /**
          * Отображение представления
          */
-        $this->renderView("_corriculum/_workplan/brs/edit.tpl");
+        $this->renderView("_corriculum/_workplan/literature/edit.tpl");
     }
     public function actionDelete() {
-        $object = CBaseManager::getWorkPlanBRS(CRequest::getInt("id"));
+        $object = CBaseManager::getWorkPlanLiterature(CRequest::getInt("id"));
         $plan = $object->plan_id;
+        $type = $object->type;
         $object->remove();
-        $this->redirect("workplanbrs.php?action=index&plan_id=".$plan);
+        $this->redirect("workplanliterature.php?action=index&plan_id=".$plan."&type=".$type);
     }
     public function actionSave() {
-        $object = new CWorkPlanBRS();
+        $object = new CWorkPlanLiterature();
         $object->setAttributes(CRequest::getArray($object::getClassName()));
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplanbrs.php?action=edit&id=".$object->getId());
+                $this->redirect("workplanliterature.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplanbrs.php?action=index&plan_id=".$object->plan_id);
+                $this->redirect("workplanliterature.php?action=index&plan_id=".$object->plan_id."&type=".$object->type);
             }
             return true;
         }
         $this->setData("object", $object);
-        $this->renderView("_corriculum/_workplan/brs/edit.tpl");
+        $this->renderView("_corriculum/_workplan/literature/edit.tpl");
     }
 }

@@ -13,7 +13,7 @@
  * @property CTerm mark
  */
 class CWorkPlanBRS extends CActiveModel{
-    protected $_table = TABLE_WORK_PLAB_BRS;
+    protected $_table = TABLE_WORK_PLAN_BRS;
 
     protected function relations() {
         return array(
