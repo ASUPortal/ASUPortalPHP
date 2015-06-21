@@ -17,7 +17,7 @@
         {foreach $load->getWorksByType(4)->getItems() as $work}
             <tr>
                 <td>
-                    <a href="work.php?action=edit&id={$work->getId()}">
+                    <a href="work.php?action=edit&id={$work->getId()}&year={$year}">
                         <i class="icon-pencil"></i>
                     </a>
                 </td>
