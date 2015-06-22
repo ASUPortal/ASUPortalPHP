@@ -72,16 +72,13 @@ class CIndPlanWorkController extends CBaseController{
     }
     public function actionDelete() {
         $object = CIndPlanManager::getWork(CRequest::getInt("id"));
-        parse_str(parse_url($_SERVER["HTTP_REFERER"], PHP_URL_QUERY));
-        $years = $year;
         $id = $object->load->person_id;
+        $year = $object->load->year_id;
         $object->remove();
-        $this->redirect("load.php?action=view&id=".$id."&year=".$years);
+        $this->redirect("load.php?action=view&id=".$id."&year=".$year);
     }
     public function actionSave() {
         $arr = CRequest::getArray("CModel");
-        parse_str(parse_url($_SERVER["HTTP_REFERER"], PHP_URL_QUERY));
-        $years = $year;
         if ($arr["work_type"] == "1") {
             $load = CIndPlanManager::getLoad($arr["load_id"]);
             $object = new CIndPlanPersonLoadTable($load);
@@ -89,9 +86,9 @@ class CIndPlanWorkController extends CBaseController{
             if ($object->validate()) {
                 $object->save();
                 if ($this->continueEdit()) {
-                    $this->redirect("work.php?action=add&id=".$object->getLoad()->getId()."&type=1"."&year=".$years);
+                    $this->redirect("work.php?action=add&id=".$object->getLoad()->getId()."&type=1"."&year=".$year);
                 } else {
-                    $this->redirect("load.php?action=view&id=".$object->getLoad()->person_id."&year=".$years);
+                    $this->redirect("load.php?action=view&id=".$object->getLoad()->person_id."&year=".$year);
                 }
                 return true;
             }
@@ -101,9 +98,9 @@ class CIndPlanWorkController extends CBaseController{
             if ($object->validate()) {
                 $object->save();
                 if ($this->continueEdit()) {
-                    $this->redirect("work.php?action=edit&id=".$object->getId()."&year=".$years);
+                    $this->redirect("work.php?action=edit&id=".$object->getId()."&year=".$year);
                 } else {
-                    $this->redirect("load.php?action=view&id=".$object->load->person_id."&year=".$years);
+                    $this->redirect("load.php?action=view&id=".$object->load->person_id."&year=".$year);
                 }
                 return true;
             }
