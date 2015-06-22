@@ -125,9 +125,9 @@ class CIndPlanLoadController extends CBaseController{
         if ($load->validate()) {
             $load->save();
             if ($this->continueEdit()) {
-                $this->redirect("?action=edit&id=".$load->getId()."&year=".$year);
+                $this->redirect("?action=edit&id=".$load->getId()."&year=".$load->year_id);
             } else {
-                $this->redirect("?action=view&id=".$load->person_id."&year=".$year);
+                $this->redirect("?action=view&id=".$load->person_id."&year=".$load->year_id);
             }
             return true;
         }

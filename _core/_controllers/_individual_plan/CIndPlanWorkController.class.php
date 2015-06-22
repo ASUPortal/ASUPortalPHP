@@ -86,9 +86,9 @@ class CIndPlanWorkController extends CBaseController{
             if ($object->validate()) {
                 $object->save();
                 if ($this->continueEdit()) {
-                    $this->redirect("work.php?action=add&id=".$object->getLoad()->getId()."&type=1"."&year=".$year);
+                    $this->redirect("work.php?action=add&id=".$object->getLoad()->getId()."&type=1"."&year=".$object->getLoad()->year_id);
                 } else {
-                    $this->redirect("load.php?action=view&id=".$object->getLoad()->person_id."&year=".$year);
+                    $this->redirect("load.php?action=view&id=".$object->getLoad()->person_id."&year=".$object->getLoad()->year_id);
                 }
                 return true;
             }
@@ -98,9 +98,9 @@ class CIndPlanWorkController extends CBaseController{
             if ($object->validate()) {
                 $object->save();
                 if ($this->continueEdit()) {
-                    $this->redirect("work.php?action=edit&id=".$object->getId()."&year=".$year);
+                    $this->redirect("work.php?action=edit&id=".$object->getId()."&year=".$object->load->year_id);
                 } else {
-                    $this->redirect("load.php?action=view&id=".$object->load->person_id."&year=".$year);
+                    $this->redirect("load.php?action=view&id=".$object->load->person_id."&year=".$object->load->year_id);
                 }
                 return true;
             }
