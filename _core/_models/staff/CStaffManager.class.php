@@ -730,13 +730,13 @@ class CStaffManager{
     }
     
     /**
-     * Получить публикации текущего сотрудника
+     * Получить публикации выбранного сотрудника
      *
      * @return CArrayList
      */
     public static function getWorksCurrentPerson() {
     	$works = new CArrayList();
-    	foreach (CActiveRecordProvider::getWithCondition(TABLE_PUBLICATION_BY_PERSONS, "kadri_id = ".CSession::getCurrentPerson()->id)->getItems() as $ar) {
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_PUBLICATION_BY_PERSONS, "kadri_id = ".CRequest::getInt("id"))->getItems() as $ar) {
     		$work = new CPublicationByPersons($ar);
     		$works->add($work->getId(), $work);
     		self::getCacheWorks()->add($work->getId(), $work);
