@@ -731,10 +731,10 @@ class CStaffManager{
     
     /**
      * Получить публикации выбранного сотрудника
-     *
+     * @param CPerson $key
      * @return CArrayList
      */
-    public static function getWorksCurrentPerson($key) {
+    public static function getWorksByPerson($key) {
     	$works = new CArrayList();
     	foreach (CActiveRecordProvider::getWithCondition(TABLE_PUBLICATION_BY_PERSONS, "kadri_id = ".$key)->getItems() as $ar) {
     		$work = new CPublicationByPersons($ar);
@@ -743,9 +743,9 @@ class CStaffManager{
     	}
     	return $works;
     }
-    public static function getPublicationsCurrentPerson($key) {
+    public static function getPublicationsByPerson($key) {
     	$publications = new CArrayList();
-    	foreach (CStaffManager::getWorksCurrentPerson($key)->getItems() as $work) {
+    	foreach (CStaffManager::getWorksByPerson($key)->getItems() as $work) {
     		$item = CActiveRecordProvider::getById(TABLE_PUBLICATIONS, $work->izdan_id);
     		$publication = new CPublication($item);
     		$publications->add($publication->getId(), $publication);
@@ -762,9 +762,9 @@ class CStaffManager{
     	}
     	return $publications;
     }
-    public static function getPublicationsCurrentPersonByYear($key) {
+    public static function getPublicationsByPersonByYear($key) {
     	$publications = new CArrayList();
-    	foreach (CStaffManager::getPublicationsCurrentPerson($key)->getItems() as $person) {
+    	foreach (CStaffManager::getPublicationsByPerson($key)->getItems() as $person) {
     		foreach (CStaffManager::getPublicationsByYear()->getItems() as $year) {
     			$persons = $person->id;
     			$years = $year->id;
