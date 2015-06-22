@@ -760,12 +760,12 @@ class CStaffManager{
     }
     /**
      * Получить все публикации за текущий год
-     * 
+     * @param CTimeIntervals $key
      * @return CArrayList
      */
-    public static function getPublicationsByCurrentYear() {
+    public static function getPublicationsByCurrentYear(CTimeIntervals $int) {
     	$publications = new CArrayList();
-    	foreach (CActiveRecordProvider::getWithCondition(TABLE_PUBLICATIONS, 'year = "'.date("Y", strtotime(CUtils::getCurrentYear()->date_start)).'" or year = "'.date("Y", strtotime(CUtils::getCurrentYear()->date_end)).'"')->getItems() as $year) {
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_PUBLICATIONS, 'year = "'.date("Y", strtotime($int->date_start)).'" or year = "'.date("Y", strtotime($int->date_end)).'"')->getItems() as $year) {
     		$publication = new CPublication($year);
     		$publications->add($publication->getId(), $publication);
     		self::getCachePublications()->add($publication->getId(), $publication);
@@ -777,10 +777,10 @@ class CStaffManager{
      * @param CPerson $key
      * @return CArrayList
      */
-    public static function getPublicationsByPersonByYear(CPerson $key) {
+    public static function getPublicationsByPersonByYear(CPerson $key, CTimeIntervals $int) {
     	$publications = new CArrayList();
     	foreach (CStaffManager::getPublicationsByPerson($key)->getItems() as $person) {
-    		foreach (CStaffManager::getPublicationsByCurrentYear()->getItems() as $year) {
+    		foreach (CStaffManager::getPublicationsByCurrentYear($int)->getItems() as $year) {
     			$persons = $person->id;
     			$years = $year->id;
     			if ($persons == $years) {
