@@ -730,7 +730,7 @@ class CStaffManager{
     }
     
     /**
-     * Получить публикации выбранного сотрудника
+     * Получить список работ, оносящихся к выбранному сотруднику
      * @param CPerson $key
      * @return CArrayList
      */
@@ -743,6 +743,11 @@ class CStaffManager{
     	}
     	return $works;
     }
+    /**
+     * Получить публикации выбранного сотрудника
+     * @param CPerson $key
+     * @return CArrayList
+     */
     public static function getPublicationsByPerson($key) {
     	$publications = new CArrayList();
     	foreach (CStaffManager::getWorksByPerson($key)->getItems() as $work) {
@@ -753,6 +758,11 @@ class CStaffManager{
     	}
     	return $publications;
     }
+    /**
+     * Получить все публикации за год
+     * 
+     * @return CArrayList
+     */
     public static function getPublicationsByYear() {
     	$publications = new CArrayList();
     	foreach (CActiveRecordProvider::getWithCondition(TABLE_PUBLICATIONS, "year = ".(date("Y")-1)." or year = ".(date("Y")))->getItems() as $year) {
@@ -762,6 +772,11 @@ class CStaffManager{
     	}
     	return $publications;
     }
+    /**
+     * Получить публикации выбранного сотрудника с учётом года
+     * @param CPerson $key
+     * @return CArrayList
+     */
     public static function getPublicationsByPersonByYear($key) {
     	$publications = new CArrayList();
     	foreach (CStaffManager::getPublicationsByPerson($key)->getItems() as $person) {
