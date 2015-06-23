@@ -37,6 +37,7 @@ class CStaffManager{
     private static $_cacheUsatuOrders = null;
     private static $_cachePersonChildren = null;
     private static $_cachePersonDiploms = null;
+    private static $_cacheWorks = null;
     /**
      * Инициализация всех сотрудников.
      *
@@ -132,6 +133,17 @@ class CStaffManager{
             self::$_cachePublications = new CArrayList();
         }
         return self::$_cachePublications;
+    }
+    /**
+     * Кэш публикаций по сотруднику
+     * @static
+     * @return CArrayList
+     */
+    private static function getCacheWorks() {
+    	if (is_null(self::$_cacheWorks)) {
+    		self::$_cacheWorks = new CArrayList();
+    	}
+    	return self::$_cacheWorks;
     }
     /**
      * @static
@@ -716,7 +728,73 @@ class CStaffManager{
         }
         return self::getCachePublications()->getItem($key);
     }
-
+    
+    /**
+     * Получить список работ, оносящихся к выбранному сотруднику
+     * @param CPerson $key
+     * @return CArrayList
+     */
+    public static function getWorksByPerson(CPerson $key) {
+    	$works = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_PUBLICATION_BY_PERSONS, "kadri_id = ".$key->getId())->getItems() as $ar) {
+    		$work = new CPublicationByPersons($ar);
+    		$works->add($work->getId(), $work);
+    		self::getCacheWorks()->add($work->getId(), $work);
+    	}
+    	return $works;
+    }
+    /**
+     * Получить публикации выбранного сотрудника
+     * @param CPerson $key
+     * @return CArrayList
+     */
+    public static function getPublicationsByPerson(CPerson $key) {
+    	$publications = new CArrayList();
+    	foreach (CStaffManager::getWorksByPerson($key)->getItems() as $work) {
+    		$item = CActiveRecordProvider::getById(TABLE_PUBLICATIONS, $work->izdan_id);
+    		$publication = new CPublication($item);
+    		$publications->add($publication->getId(), $publication);
+    		self::getCachePublications()->add($publication->getId(), $publication);
+    	}
+    	return $publications;
+    }
+    /**
+     * Получить все публикации за выбранный год
+     * @param CTimeIntervals $int
+     * @return CArrayList
+     */
+    public static function getPublicationsByYear(CTimeIntervals $int) {
+    	$publications = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_PUBLICATIONS, 'year = "'.date("Y", strtotime($int->date_start)).'" or year = "'.date("Y", strtotime($int->date_end)).'"')->getItems() as $year) {
+    		$publication = new CPublication($year);
+    		$publications->add($publication->getId(), $publication);
+    		self::getCachePublications()->add($publication->getId(), $publication);
+    	}
+    	return $publications;
+    }
+    /**
+     * Получить публикации выбранного сотрудника с учётом года
+     * @param CPerson $key
+     * @param CTimeIntervals $int
+     * @return CArrayList
+     */
+    public static function getPublicationsByPersonByYear(CPerson $key, CTimeIntervals $int) {
+    	$publications = new CArrayList();
+    	foreach (CStaffManager::getPublicationsByPerson($key)->getItems() as $person) {
+    		foreach (CStaffManager::getPublicationsByYear($int)->getItems() as $year) {
+    			$persons = $person->id;
+    			$years = $year->id;
+    			if ($persons == $years) {
+    				$item = CActiveRecordProvider::getById(TABLE_PUBLICATIONS, $person->id);
+    				$publication = new CPublication($item);
+    				$publications->add($publication->getId(), $publication);
+    				self::getCachePublications()->add($publication->getId(), $publication);
+    			}
+    		}
+    	}
+    	return $publications;
+    }	
+        
     /**
      * Все зарегистрированные группы пользователей
      *

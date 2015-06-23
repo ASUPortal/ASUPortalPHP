@@ -122,14 +122,12 @@ class CIndPlanLoadController extends CBaseController{
     public function actionSave() {
         $load = new CIndPlanPersonLoad();
         $load->setAttributes(CRequest::getArray($load::getClassName()));
-        parse_str(parse_url($_SERVER["HTTP_REFERER"], PHP_URL_QUERY));
-        $years = $year;
         if ($load->validate()) {
             $load->save();
             if ($this->continueEdit()) {
-                $this->redirect("?action=edit&id=".$load->getId()."&year=".$years);
+                $this->redirect("?action=edit&id=".$load->getId()."&year=".$load->year_id);
             } else {
-                $this->redirect("?action=view&id=".$load->person_id."&year=".$years);
+                $this->redirect("?action=view&id=".$load->person_id."&year=".$load->year_id);
             }
             return true;
         }
@@ -138,11 +136,10 @@ class CIndPlanLoadController extends CBaseController{
     }
     public function actionDelete() {
         $load = CIndPlanManager::getLoad(CRequest::getInt("id"));
-        parse_str(parse_url($_SERVER["HTTP_REFERER"], PHP_URL_QUERY));
-        $years = $year;
         $person = $load->person;
+        $year = $load->year_id;
         $load->remove();
-        $this->redirect("?action=view&id=".$person->getId()."&year=".$years);
+        $this->redirect("?action=view&id=".$person->getId()."&year=".$year);
     }
     public function actionSearch() {
     	$res = array();

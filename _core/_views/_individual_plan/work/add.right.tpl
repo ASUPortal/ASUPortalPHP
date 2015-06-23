@@ -1,13 +1,5 @@
+{CHtml::displayActionsMenu($_actions_menu)}
 {if $object->work_type == "1"}
-    <p>
-        <a href="load.php?action=view&id={$object->getLoad()->person_id}">
-            <center>
-                <img src="{$web_root}images/{$icon_theme}/32x32/actions/edit-undo.png"><br>
-                Назад
-            </center>
-        </a>
-    </p>
-
     <p>
         <a href="#autofill" data-toggle="modal">
             <center>
@@ -39,12 +31,4 @@
             <a href="#" class="btn btn-primary" id="autoFillLoadGo">Заполнить</a>
         </div>
     </div>
-{else}
-    <p>
-        <a href="load.php?action=view&id={$object->load->person_id}">
-            <center>
-                <img src="{$web_root}images/{$icon_theme}/32x32/actions/edit-undo.png"><br>
-                Назад
-            </center></a>
-    </p>
 {/if}
