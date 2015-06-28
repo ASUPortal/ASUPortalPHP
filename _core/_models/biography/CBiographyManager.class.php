@@ -22,4 +22,15 @@ class CBiographyManager {
         }
         return self::getCacheBiographys()->getItem($key);
     }
+    public static function getBiographyByUser($key) {
+    	if (!self::getCacheBiographys()->hasElement($key)) {
+    		$item = CActiveRecordProvider::getById(TABLE_BIOGRAPHY, $key);
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_BIOGRAPHY, "user_id = '".$key."'")->getItems() as $item) {
+    			$biography = new CBiography($item);
+    			self::getCacheBiographys()->add($biography->id, $biography);
+    			self::getCacheBiographys()->add($biography->user_id, $biography);
+    		}
+    	}
+    	return self::getCacheBiographys()->getItem($key);
+    }
 }
