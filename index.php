@@ -204,9 +204,9 @@ if(isset($_GET['id'])) {
                 if ($hide_person_data_rule)
                     $a['title'].=$hide_person_data_text;
                 else {
-                    $a['title'].='<a href="p_lecturers.php?';
+                    $a['title'].='<a href="_modules/_lecturers/index.php?action=view';
                     if (isset($_GET['wap']) ) { $a['title'].='wap&';}
-                    $a['title'].='onget=1&idlect='.$a['user_id'].'" title="об авторе...">'.$a['fio'].'</a>' ;
+                    $a['title'].='&id='.$a['user_id'].'" title="об авторе...">'.$a['fio'].'</a>' ;
                 }
                 $a['title'].=')</font>';
             }

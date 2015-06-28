@@ -405,7 +405,7 @@ $add_string=reset_param_name($query_string,'sort');
 			<img src="images/toupdate.png" alt="Правка" border="0"></a></td>';}
 		$i++;
 		echo '<td>&nbsp;'.($i+($page-1)*$pgVals).'</td>';
-		echo '<td>&nbsp;<a href="p_lecturers.php?onget=1&idlect='.$tmpval['id'].'" title="биография">'.color_mark($q,$tmpval['FIO']).'</td>';//
+		echo '<td>&nbsp;<a href="_modules/_lecturers/index.php?action=view&id='.$tmpval['id'].'" title="биография">'.color_mark($q,$tmpval['FIO']).'</td>';//
 		echo '<td>&nbsp;'.color_mark($q,$tmpval['login']).'</td>';
 		echo '<td>&nbsp;'.color_mark($q,$tmpval['status']).'</td>';
         $foreign_lang='';

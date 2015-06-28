@@ -156,7 +156,7 @@ class CNewsItem extends CActiveModel{
             if (is_null($this->author)) {
                 return "";
             } else {
-                return WEB_ROOT."p_lecturers.php?idlect=".$this->author->getId()."&onget=1";
+                return WEB_ROOT."_modules/_lecturers/index.php?action=view&id=".$this->author->getId();
             }
         } else {
             return "";

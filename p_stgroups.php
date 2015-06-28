@@ -321,7 +321,7 @@ echo '</div><br>';
 			while ($a=mysql_fetch_array($res))
 				{
                     echo "<li>".
-                    echoIf($a['user_id']!='', '<a href="p_lecturers.php?onget=1&idlect='.$a['user_id'].'">'.$a['fio_short'].'</a>', $a['fio_short'])."</li>";}
+                    echoIf($a['user_id']!='', '<a href="_modules/_lecturers/index.php?action=view&id='.$a['user_id'].'">'.$a['fio_short'].'</a>', $a['fio_short'])."</li>";}
 			echo '</ul>';
 		}
 	 if ($photo!="" && $showGrPhoto)

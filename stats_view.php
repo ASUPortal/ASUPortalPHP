@@ -137,7 +137,7 @@ if (isset($_GET['part2'])) {
     {	$i++;
             if (($i/2)<>round($i/2)) {$outstr.= "<tr  bgcolor=#E6E6FF class=text>\n";}
             else {$outstr.= "<tr  bgcolor=#D7D7FF class=text>\n";}
-             $outstr.= '<td>'.$i.'</td><td><a href="p_lecturers.php?onget=1&idlect='.$a['id'].'">'.$a['val'].'</a></td><td>'.$a['nums'].'</td></tr>';
+             $outstr.= '<td>'.$i.'</td><td><a href="_modules/_lecturers/index.php?action=view&id='.$a['id'].'">'.$a['val'].'</a></td><td>'.$a['nums'].'</td></tr>';
     } 
     
     $outstr.= '</table>';

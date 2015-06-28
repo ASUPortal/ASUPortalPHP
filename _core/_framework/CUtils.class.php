@@ -51,7 +51,7 @@ class CUtils {
         return WEB_ROOT."p_administration.php";
     }
     public static function getLecturersLink() {
-        return WEB_ROOT."p_lecturers.php";
+        return WEB_ROOT."_modules/_lecturers/index.php";
     }
     /**
      * Текущий год

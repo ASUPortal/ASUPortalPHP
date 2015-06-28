@@ -863,7 +863,7 @@ $add_string=reset_param_name($query_string,'sort');
 		else {echo color_mark($q,$tmpval['subj_name']);}
 //------------------------------		
 		echo '</td>';
-		if ($kadri_id==0) echo '<td>&nbsp;<a href="p_lecturers.php?onget=1&idlect='.$tmpval['user_id'].'" title="о преподавателе">'.color_mark($q,$tmpval[2]).'</td>';//
+		if ($kadri_id==0) echo '<td>&nbsp;<a href="_modules/_lecturers/index.php?action=view&id='.$tmpval['user_id'].'" title="о преподавателе">'.color_mark($q,$tmpval[2]).'</td>';//
 		
 		echo '<td>&nbsp;<a href="students_view.php?item_id='.$tmpval['student_id'].'&type=edit" title="о студенте">'.color_mark($q,$tmpval['stud_fio']).' ('.color_mark($q,$tmpval['gr_name']).')</a></td>';
 

@@ -149,8 +149,8 @@ if ($pg_id>0 ) {
 	    $is_pg_author=true;	 
 	}
 	echo '<h4>'.$a['title'].' <span class=text>( страницу добавил: '.
-	($hide_person_data_rule?$hide_person_data_text:'<a href="'.$files_path.'p_lecturers.php?onget=1&idlect='.$a['user_id_insert'].'"><b>'.$a['fioInsert'].'</b></a>').', обновил '.
-	($hide_person_data_rule?$hide_person_data_text:'<a href="'.$files_path.'p_lecturers.php?onget=1&idlect='.$a['user_id_update'].'"><b>'.$a['fioUpdate'].'</b></a>').') &nbsp;
+	($hide_person_data_rule?$hide_person_data_text:'<a href="'.$files_path.'_modules/_lecturers/index.php?action=view&id='.$a['user_id_insert'].'"><b>'.$a['fioInsert'].'</b></a>').', обновил '.
+	($hide_person_data_rule?$hide_person_data_text:'<a href="'.$files_path.'_modules/_lecturers/index.php?action=view&id='.$a['user_id_update'].'"><b>'.$a['fioUpdate'].'</b></a>').') &nbsp;
 	 '.($is_pg_author&& $a['type_id']!=2?'<a href="pg_new.php?pg_id='.$pg_id.'&type=edit">изменить </a>':'').' 
 	 <a href="?">к списку страниц</a> </span>
 	 </h4>';
@@ -255,8 +255,8 @@ else { //вывод списка загруженных страниц (поль
 	 echo'
 	 	<td><a href="?pg_id='.$a['id'].'">'.$a['title'].'</a></td> 
 	 	<td width=200> '.
-		($hide_person_data_rule?$hide_person_data_text:'<a href="'.$files_path.'p_lecturers.php?onget=1&idlect='.$a['user_id_insert'].'">'.$a['fioInsert'].'</a> / 
-		 <a href="'.$files_path.'p_lecturers.php?onget=1&idlect='.$a['user_id_update'].'">'.$a['fioUpdate'].'</a>').'</td></tr>';
+		($hide_person_data_rule?$hide_person_data_text:'<a href="'.$files_path.'_modules/_lecturers/index.php?action=view&id='.$a['user_id_insert'].'">'.$a['fioInsert'].'</a> / 
+		 <a href="'.$files_path.'_modules/_lecturers/index.php?action=view&id='.$a['user_id_update'].'">'.$a['fioUpdate'].'</a>').'</td></tr>';
 	}
 	
 	}else {echo '<tr height=40><td>список пуст</td></tr>';}
@@ -348,8 +348,8 @@ else { //вывод списка загруженных страниц (поль
 		'</u></i></td> 
 	 	<td align=center>&nbsp;'.$a['gr_cnt'].echoIf(intval($a['gr_cnt'])>0 || intval($a['pers_cnt'])>0,' / ','').$a['pers_cnt'].'</td>
 		<td align=center>'.$dateB.'</td>
-		<td> '.($hide_person_data_rule?$hide_person_data_text:'<a href="'.$files_path.'p_lecturers.php?onget=1&idlect='.$a['user_id_insert'].'">'.$a['fioInsert'].'</a> / 
-		 <a href="'.$files_path.'p_lecturers.php?onget=1&idlect='.$a['user_id_update'].'">'.$a['fioUpdate'].'</a>').'</td>
+		<td> '.($hide_person_data_rule?$hide_person_data_text:'<a href="'.$files_path.'_modules/_lecturers/index.php?action=view&id='.$a['user_id_insert'].'">'.$a['fioInsert'].'</a> / 
+		 <a href="'.$files_path.'_modules/_lecturers/index.php?action=view&id='.$a['user_id_update'].'">'.$a['fioUpdate'].'</a>').'</td>
 		</tr>';
 	}
 	

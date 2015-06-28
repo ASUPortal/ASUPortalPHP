@@ -72,7 +72,7 @@ if (mysql_num_rows($res)>0 || mysql_num_rows($resWeek)>0)
 			else {$pol_img=$pol_imgN;}
 			}
 		
-		echo ''.$bDay_text.'-<a href="p_lecturers.php?onget=1&idlect='.$a['id'].'" title="'.$a['fio'].'-'.$a['k_role'].'">
+		echo ''.$bDay_text.'-<a href="_modules/_lecturers/index.php?action=view&id='.$a['id'].'" title="'.$a['fio'].'-'.$a['k_role'].'">
 			<img src="'.$pol_img.'" border=0 height=20 alt="'.$a['pol_name'].'">'.$a['fio_short'].'</a>; ';
 	}
 	if (mysql_num_rows($res)>0) {echo '<br>';}
@@ -87,7 +87,7 @@ if (mysql_num_rows($res)>0 || mysql_num_rows($resWeek)>0)
 			}
 		
 		$bDay=$week_days[date('w',mktime (0,0,0,$a['bMonth'],$a['bDay'],date("Y")))];
-		echo '<b>'.$a['bDay'].'.'.$a['bMonth'].' ('.$bDay.')</b> -<a href="p_lecturers.php?onget=1&idlect='.$a['id'].'" title="'.$a['fio'].'-'.$a['k_role'].'">
+		echo '<b>'.$a['bDay'].'.'.$a['bMonth'].' ('.$bDay.')</b> -<a href="_modules/_lecturers/index.php?action=view&id='.$a['id'].'" title="'.$a['fio'].'-'.$a['k_role'].'">
 			<img src="'.$pol_img.'" border=0 height=20 alt="'.$a['pol_name'].'">'.$a['fio_short'].'</a>; ';
 	}
 	

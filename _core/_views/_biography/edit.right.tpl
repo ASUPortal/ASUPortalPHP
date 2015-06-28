@@ -17,7 +17,7 @@
 </p>
 
 <p>
-    <a href="{$web_root}p_lecturers.php?onget=1&idlect={$biography->user_id}">
+    <a href="{$web_root}_modules/_lecturers/index.php?action=view&id={$biography->user_id}">
         <center>
             <img src="{$web_root}images/{$icon_theme}/32x32/actions/format-justify-fill.png"><br>
             Анкета

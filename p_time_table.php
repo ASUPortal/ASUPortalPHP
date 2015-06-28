@@ -268,7 +268,7 @@ echo '</div><div class="middle2">'.$sess.' &nbsp;'.$def_settings['year_name'].' 
 echo '<div class="main"><a href="?onget=1&getallsub=1" title="к выбору расписания">Расписание занятий</a>,<span class="names">'
 .$def_settings['part_name'].' &nbsp;'.$def_settings['year_name'].'года , 
 <font size=-1>';
-if ($gr_mode!=1) {echo '<a href="p_lecturers.php?onget=1&idlect='.$idlect.'" title="о преподавателе...">'.$result_1['FIO'].'</a>';}
+if ($gr_mode!=1) {echo '<a href="_modules/_lecturers/index.php?action=view&id='.$idlect.'" title="о преподавателе...">'.$result_1['FIO'].'</a>';}
 else { echo '<a href="p_stgroups.php?onget=1&group_id='.$idlect.'" title="о учебной группе...">'.$result_1['FIO'].'</a>';}
 echo '</font></span></div> ';
 
