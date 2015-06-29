@@ -35,180 +35,180 @@
     	<tr>
     	<td>
     		<div class="text">
-    		{if ($biogs == 0)}
+    		{if ($biogs->getCount() == 0)}
         		Биография не выложена
     		{else}
     			{$pathPhoto}
-    			{CLecturersController::biographyView()}
+    			{CHtml::biographyView()}
     		{/if}
     		</div><br>
 	
-	    	<div class=text style="font-weight:bold; text-decoration:underline;">Веб-страницы на портале: ({mysql_num_rows($resPage)})</div>
-	    	{if (mysql_num_rows($resPage)<1)}
+	    	<div class=text style="font-weight:bold; text-decoration:underline;">Веб-страницы на портале: ({$pages->getCount()})</div>
+	    	{if ($pages->getCount() == 0)}
 	    		<div class=text>&nbsp;- веб-страниц на портале нет</div>
 	    	{/if}
 	    	<ul class=text>
-	    	{while ($a=mysql_fetch_array($resPage))}
-	    		<li><a href="{$web_root}_modules/_pages/index.php?action=view&id={$a['id']}">{$a['title']}</a></li>
-	    	{/while}
+	    	{foreach $pages->getItems() as $page}
+	    		<li><a href="{$web_root}_modules/_pages/index.php?action=view&id={$page->id}">{$page->title}</a></li>
+	    	{/foreach}
 	    	</ul>
 	    	
-			<div class=text style="font-weight:bold;">Список пособий на портале: ({mysql_num_rows($resSubj)})</div>
-	    	{if (mysql_num_rows($resSubj)<1)}
+			<div class=text style="font-weight:bold;">Список пособий на портале: ({$subjects->getCount()})</div>
+	    	{if ($subjects->getCount() == 0)}
 	    		<div class=text>&nbsp;- пособий на портале нет</div>
 	    	{/if}
 	    	<ul class=text>
-	    	{while ($a=mysql_fetch_array($resSubj))}
-	    		<li><a href='{$web_root}p_library.php?onget=1&getdir={$a['nameFolder']}'>{$a['nameSubject']} ({$a['f_cnt']})</a></li>
-	    	{/while}
+	    	{foreach $subjects->getItems() as $subject}
+	    		<li><a href="{$web_root}p_library.php?onget=1&getdir={$subject->nameFolder}">{$subject->name} ({$subject->f_cnt})</a></li>
+	    	{/foreach}
 	    	</ul>
 	    	
-			<div class=text style="font-weight:bold;"> Объявления текущего учебного года: ({mysql_num_rows($resNews)})</div>
-	    	{if (mysql_num_rows($resNews)<1)}
+			<div class=text style="font-weight:bold;"> Объявления текущего учебного года: ({$news->getCount()})</div>
+	    	{if ($news->getCount() == 0)}
 	    		<div class=text>&nbsp;- объявлений на портале нет</div>
 	    	{/if}
 	    	<ul class=text>
-	    	{while ($a=mysql_fetch_array($resNews))}
-	    		<div id="news{$a['id']}" class="modal hide fade">
+	    	{foreach $news->getItems() as $new}
+	    		<div id="news{$new->id}" class="modal hide fade">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3 id="myModalLabel">{$a['title']}</h3>
+						<h3 id="myModalLabel">{$new->title}</h3>
 					</div>
 					<div class="modal-body">
-						{if ({$a['image']}!='')}
-							<img src="{$web_root}images/news/{$a['image']}">
+						{if ({$new->image}!='')}
+							<img src="{$web_root}images/news/{$new->image}">
 						{/if}
-						{CLecturersController::msg_replace($a['file'])}
-						{if ({$a['file_attach']}!='')}
-							<br><div>Прикреплен файл: <a href="{$web_root}news/attachement/{$a['file_attach']}">
-							<img src="{$web_root}images/design/attachment.gif" border=0><b>{$a['file_attach']}</b></a></div>
+						{CUtils::msg_replace({$new->file})}
+						{if ({$new->file_attach}!='')}
+							<br><div>Прикреплен файл: <a href="{$web_root}news/attachement/{$new->file_attach}">
+							<img src="{$web_root}images/design/attachment.gif" border=0><b>{$new->file_attach}</b></a></div>
 						{/if}
 					</div>
 					<div class="modal-footer">
 						<button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
 					</div>
 				</div>
-	    		<li><a href="#news{$a['id']}" data-toggle="modal">{$a['title']} от {$a['date_time']|date_format:"d.m.Y"}</a></li>
-	    	{/while}
+	    		<li><a href="#news{$new->id}" data-toggle="modal">{$new->title} от {$new->date_time|date_format:"d.m.Y"}</a></li>
+	    	{/foreach}
 	    	</ul>
 	    	
-			<div class=text style="font-weight:bold;"><a href="#" onclick="hide_show('news_old'); return false;">Объявления прошлых учебных лет: ({mysql_num_rows($resNewsOld)})</a></div>
-	    	{if (mysql_num_rows($resNewsOld)<1)}
+			<div class=text style="font-weight:bold;"><a href="#" onclick="hide_show('news_old'); return false;">Объявления прошлых учебных лет: ({$newsOld->getCount()})</a></div>
+	    	{if ($newsOld->getCount() == 0)}
 	    		<div class=text>&nbsp;- объявлений на портале нет</div>
 	    	{/if}
 	    	<div style="display:none;" id="news_old">
 	    	<ul class=text>
-	    	{while ($a=mysql_fetch_array($resNewsOld))}
-	    		<div id="news_old{$a['id']}" class="modal hide fade">
+	    	{foreach $newsOld->getItems() as $newOld}
+	    		<div id="news_old{$newOld->id}" class="modal hide fade">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3 id="myModalLabel">{$a['title']}</h3>
+						<h3 id="myModalLabel">{$newOld->title}</h3>
 					</div>
 					<div class="modal-body">
-						{if ({$a['image']}!='')}
-							<img src="{$web_root}images/news/{$a['image']}">
+						{if ({$newOld->image}!='')}
+							<img src="{$web_root}images/news/{$newOld->image}">
 						{/if}
-						{CLecturersController::msg_replace($a['file'])}
-						{if ({$a['file_attach']}!='')}
-							<br><div>Прикреплен файл: <a href="{$web_root}news/attachement/{$a['file_attach']}">
-							<img src="{$web_root}images/design/attachment.gif" border=0><b>{$a['file_attach']}</b></a></div>
+						{CUtils::msg_replace({$newOld->file})}
+						{if ({$newOld->file_attach}!='')}
+							<br><div>Прикреплен файл: <a href="{$web_root}news/attachement/{$newOld->file_attach}">
+							<img src="{$web_root}images/design/attachment.gif" border=0><b>{$newOld->file_attach}</b></a></div>
 						{/if}
 					</div>
 					<div class="modal-footer">
 						<button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
 					</div>
 				</div>
-	    		<li><a href="#news_old{$a['id']}" data-toggle="modal">{$a['title']} от {$a['date_time']|date_format:"d.m.Y"}</a></li>
-	    	{/while}
+	    		<li><a href="#news_old{$newOld->id}" data-toggle="modal">{$newOld->title} от {$newOld->date_time|date_format:"d.m.Y"}</a></li>
+	    	{/foreach}
 	    	</ul>
 	    	</div>
 	    	
-			<p><div class=text style="font-weight:bold;">Дипломники текущего учебного года: ({mysql_num_rows($resDipl)})</div>
-	    	{if (mysql_num_rows($resDipl)<1)}
+			<p><div class=text style="font-weight:bold;">Дипломники текущего учебного года: ({$diploms->getCount()})</div>
+	    	{if ($diploms->getCount() == 0)}
 	    		<div class=text>&nbsp;- дипломников на портале нет</div>
 	    	{/if}
 	    	<ul class=text>
-	    	{while ($a=mysql_fetch_array($resDipl))}
-	    		<li>{$a['student_fio']} ({$a['group_name']}),
-    				{if (strlen({$a['pract_place']})>3)} 
-    				место практики: <u>{$a['pract_place']}</u><br> 
+	    	{foreach $diploms->getItems() as $diplom}
+	    		<li>{$diplom->student_fio} ({$diplom->group_name}),
+    				{if (strlen({$diplom->pract_place})>3)} 
+    				место практики: <u>{$diplom->pract_place}</u><br> 
     				{else} 
     				<br>
     				{/if}
-    			<i>{$a['dipl_name']}</i></li>
-	    	{/while}
+    			<i>{$diplom->dipl_name}</i></li>
+	    	{/foreach}
 	    	</ul>
 	    	
-			<div class=text style="font-weight:bold;"><a href="#" onclick="hide_show('dipl_old'); return false;">Дипломники предыдущих учебных лет: ({mysql_num_rows($resDiplOld)})</a></div>
-	    	{if (mysql_num_rows($resDiplOld)<1)}
+			<div class=text style="font-weight:bold;"><a href="#" onclick="hide_show('dipl_old'); return false;">Дипломники предыдущих учебных лет: ({$diplomsOld->getCount()})</a></div>
+	    	{if ($diplomsOld->getCount() == 0)}
 	    		<div class=text>&nbsp;- дипломников на портале нет</div>
 	    	{/if}
 	    	<div style="display:none;" id="dipl_old">
 	    	<ul class=text>
-	    	{while ($a=mysql_fetch_array($resDiplOld))}
-	    		<li>{$a['student_fio']} ({$a['group_name']}),
-    				{if (strlen({$a['pract_place']})>3)} 
-    				место практики: <u>{$a['pract_place']}</u><br> 
+	    	{foreach $diplomsOld->getItems() as $diplomOld}
+	    		<li>{$diplomOld->student_fio} ({$diplomOld->group_name}),
+    				{if (strlen({$diplomOld->pract_place})>3)} 
+    				место практики: <u>{$diplomOld->pract_place}</u><br> 
     				{else} 
     				<br>
     				{/if}
-    			<i>{$a['dipl_name']}</i></li>
-	    	{/while}
+    			<i>{$diplomOld->dipl_name}</i></li>
+	    	{/foreach}
 	    	</ul>
 	    	</div>
 	    	
-			<p><div class=text style="font-weight:bold;"><a href="#" onclick="hide_show('aspirs'); return false;" title='срок обучения не истек'>Подготовка аспирантов, текущие: ({mysql_num_rows($resAspir)})</a></div>
-	    	{if (mysql_num_rows($resAspir)<1)}
+			<p><div class=text style="font-weight:bold;"><a href="#" onclick="hide_show('aspirs'); return false;" title='срок обучения не истек'>Подготовка аспирантов, текущие: ({$aspirs->getCount()})</a></div>
+	    	{if ($aspirs->getCount() == 0)}
 	    		<div class=text>&nbsp;- аспирантов на портале нет</div>
 	    	{/if}
 	    	<div style="display:none;" id="aspirs">
 	    	<ul class=text>
-	    	{while ($a=mysql_fetch_array($resAspir))}
-	    		<li>{$a['fio']}<br><i>{$a['tema']}</i></li>
-	    	{/while}
+	    	{foreach $aspirs->getItems() as $aspir}
+	    		<li>{$aspir->fio}<br><i>{$aspir->tema}</i></li>
+	    	{/foreach}
 	    	</ul>
 	    	</div>
 	    	
-			<p><div class=text style="font-weight:bold;"><a href="#" onclick="hide_show('aspirsOld'); return false;" title='с истекшим сроком обучения'>Подготовка аспирантов, архив: ({mysql_num_rows($resAspirOld)})</a></div>
-	    	{if (mysql_num_rows($resAspirOld)<1)}
+			<p><div class=text style="font-weight:bold;"><a href="#" onclick="hide_show('aspirsOld'); return false;" title='с истекшим сроком обучения'>Подготовка аспирантов, архив: ({$aspirsOld->getCount()})</a></div>
+	    	{if ($aspirsOld->getCount() == 0)}
 	    		<div class=text>&nbsp;- аспирантов на портале нет</div>
 	    	{/if}
 	    	<div style="display:none;" id="aspirsOld">
 	    	<ul class=text>
-	    	{while ($a=mysql_fetch_array($resAspirOld))}
-	    		<li>{$a['fio']}<br><i>{$a['tema']}</i></li>
-	    	{/while}
+	    	{foreach $aspirsOld->getItems() as $aspirOld}
+	    		<li>{$aspirOld->fio}<br><i>{$aspirOld->tema}</i></li>
+	    	{/foreach}
 	    	</ul>
 	    	</div>
 	    	
 	    	<p><div class=text style="font-weight:bold;">Расписание занятий:</div>
-			{if (mysql_num_rows($resRasp)<1)}
+			{if ($rasps->getCount() == 0)}
 	    		<div class=text>&nbsp;- расписания на портале нет</div>
 	    	{/if}
 	    	<ul class=text>
-	    	{while ($a=mysql_fetch_array($resRasp))}
-	    		<li><a href="{$web_root}p_time_table.php?onget=1&idlect={$a['id']}">расписание занятий</a></li>
-	    	{/while}
+	    	{foreach $rasps->getItems() as $rasp}
+	    		<li><a href="{$web_root}p_time_table.php?onget=1&idlect={$rasp->id}">расписание занятий</a></li>
+	    	{/foreach}
 	    	</ul>
 	    	
-			<p><div class=text style="font-weight:bold;">Вопросы и ответы на них преподавателя: ({mysql_num_rows($resQuest)}) &nbsp; <a href="{$web_root}_modules/_question_add/index.php?action=index&user_id={CRequest::getInt("id")}">Задать вопрос</a></div>
-			{if (mysql_num_rows($resQuest)<1)}
+			<p><div class=text style="font-weight:bold;">Вопросы и ответы на них преподавателя: ({$quests->getCount()}) &nbsp; <a href="{$web_root}_modules/_question_add/index.php?action=index&user_id={CRequest::getInt("id")}">Задать вопрос</a></div>
+			{if ($quests->getCount() == 0)}
 	    		<div class=text>&nbsp;- вопросов с ответами на портале нет</div>
 	    	{/if}
 	    	<ul class=text>
-	    	{while ($a=mysql_fetch_array($resQuest))}
-	    		<li>вопрос: <font color=grey>{$a['question_text']}</font>, ответ: <b>{$a['answer_text']}</b></li>
-	    	{/while}
+	    	{foreach $quests->getItems() as $quest}
+	    		<li>вопрос: <font color=grey>{$quest->question_text}</font>, ответ: <b>{$quest->answer_text}</b></li>
+	    	{/foreach}
 	    	</ul>
 	    	
-			<p><div class=text style="font-weight:bold;">Кураторство учебных групп: ({mysql_num_rows($resGroup)})</div>
-			{if (mysql_num_rows($resGroup)<1)}
+			<p><div class=text style="font-weight:bold;">Кураторство учебных групп: ({$groups->getCount()})</div>
+			{if ($groups->getCount() == 0)}
 	    		<div class=text>&nbsp;- записей на портале нет</div>
 	    	{/if}
 	    	<ul class=text>
-	    	{while ($a=mysql_fetch_array($resGroup))}
-	    		<li><a href="{$web_root}p_stgroups.php?onget=1&group_id={$a['id']}">{$a['name']}</a></li>
-	    	{/while}
+	    	{foreach $groups->getItems() as $group}
+	    		<li><a href="{$web_root}p_stgroups.php?onget=1&group_id={$group->id}">{$group->name}</a></li>
+	    	{/foreach}
 	    	</ul>
     	</td>
     	</tr>

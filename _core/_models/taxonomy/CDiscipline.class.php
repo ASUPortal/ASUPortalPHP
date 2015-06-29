@@ -7,6 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 class CDiscipline extends CActiveModel {
+	protected $_table = TABLE_DISCIPLINES;
     private $_questions = null;
     /**
      * Вопросы, которые по данной дисциплине есть

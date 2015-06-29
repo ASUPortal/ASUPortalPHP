@@ -3,7 +3,8 @@
 class CLecturersController extends CBaseController {
 	public $allowedAnonymous = array(
 			"index",
-			"view"
+			"view",
+			"search"
 	);
     public function __construct() {
         if (!CSession::isAuth()) {
@@ -27,7 +28,7 @@ class CLecturersController extends CBaseController {
         $query->select("user.*")
             ->from(TABLE_USERS." as user")
             ->condition("user.status!='администратор'")
-            ->order("user.FIO asc");  
+            ->order("user.FIO asc");
         $firstLet = array("А","Б","В","Г","Д","Е","Ё","Ж","З","И","Й","К","Л","М","Н","О","П","Р","С","Т","У","Ф",
         		"Х","Ц","Ч","Ш","Щ","Э","Ю","Я");
         $letter = $firstLet[CRequest::getInt("getsub")];
@@ -35,90 +36,90 @@ class CLecturersController extends CBaseController {
         if (CRequest::getInt("getsub")>0) {
         	$letterId = CRequest::getInt("getsub");
         }
-        $query_letter_rus = "select UPPER(left(u.fio,1)) as name, COUNT(*) AS cnt from users u where u.status='преподаватель' group by 1 order by 1";
-        $res_rus = mysql_query($query_letter_rus);
-        if (isset($_GET['getsub'])) {
+        $queryLetter = new CQuery();
+        $queryLetter->select("user.*, UPPER(left(user.FIO,1)) as name, count(*) as cnt")
+        ->from(TABLE_USERS." as user")
+        ->condition("user.status='преподаватель'")
+        ->group(1)
+        ->order("user.FIO asc");  
+        $resRus = array();
+        foreach ($queryLetter->execute()->getItems() as $ar) {
+        	$res = new CUser(new CActiveRecord($ar));
+        	$resRus[$res->id] = $res->name;
+        }
+        $resRusLetters = array();
+        $resRusLetters = array_count_values($resRus);
+        if (isset($_GET['getsub']) and !isset($_GET['filter'])) {
         	$query->condition('user.FIO like "'.$letter.'%" and user.status!="администратор"');
+        }
+        if (CSession::isAuth() and CSession::getCurrentUser()->status=='преподаватель') {
+        	$this->addActionsMenuItem(array(
+        			array(
+        				"title" => "Добавить биографию",
+        				"link" => WEB_ROOT."_modules/_biography/",
+        				"icon" => "actions/list-add.png"
+        			)
+        		)
+        	);		
         }
         $lects = new CArrayList();
         $set->setQuery($query);      
         foreach ($set->getPaginated()->getItems() as $ar) {
-            $lect = new CLect($ar);
+            $lect = new CLecturer($ar);
             $lects->add($lect->getId(), $lect);
         }
+        $this->setData("resRusLetters", $resRusLetters);
+        $this->setData("letterId", $letterId);
+        $this->setData("firstLet", $firstLet);
         $this->setData("paginator", $set->getPaginator());
         $this->setData("lects", $lects);
-        $this->setData("firstLet", $firstLet);
-        $this->setData("letterId", $letterId);
-        $this->setData("query_letter_rus", $query_letter_rus);
-        $this->setData("res_rus", $res_rus);
         $this->renderView("__public/_lecturers/index.tpl");
     }
-    public function biographyView() {
-		$printFullBox = false;
-    	if (mb_strlen(CBiographyManager::getBiographyByUser(CRequest::getInt("id"))->main_text) > 450) {
-    		echo mb_substr(CLecturersController::msg_replace(CBiographyManager::getBiographyByUser(CRequest::getInt("id"))->main_text), 0, 450)."...";
-    		echo '<p><a href="#modal" data-toggle="modal">Читать полностью</a></p>';
-    		$printFullBox = true;
-    	} else {
-    		echo CLecturersController::msg_replace(CBiographyManager::getBiographyByUser(CRequest::getInt("id"))->main_text);
-    	}
-    	if ($printFullBox) {
-    		echo '
-                    <div id="modal" class="modal hide fade">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h3 id="myModalLabel">Биография</h3>
-                        </div>
-                        <div class="modal-body">
-                            '.CLecturersController::msg_replace(CBiographyManager::getBiographyByUser(CRequest::getInt("id"))->main_text).'
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
-                        </div>
-                    </div>
-                ';
-    	}
-    }
-    public function msg_replace($s) {
-    	//замена при выводе сообщений на экран для форматирования
-	    $s=str_replace ("\r\n","<br>",$s);
-	    
-	    $s=str_replace ("[url]","<a href='http://",$s);
-	    $s=str_replace ("[/url]","' target='_blank' style='font-weight:normal; text-decoration:underline;'>Ресурс</a>",$s);
-	    
-	    $s=str_replace ("[quote]","<u>Цитата</u><br><span style='color:grey;background:white;'>",$s);
-	    $s=str_replace ("[/quote]","</span><br>",$s);
-	    
-	    $s=str_replace ("[b]","<b>",$s);
-	    $s=str_replace ("[/b]","</b>",$s);
-	    
-	    $s=str_replace ("[u]","<u>",$s);
-	    $s=str_replace ("[/u]","</u>",$s);
-	    
-	    $s=str_replace ("[i]","<i>",$s);
-	    $s=str_replace ("[/i]","</i>",$s);
-	    	
-	    return $s;
-    }
     public function actionView() {
-    	$lect = CLectManager::getLect(CRequest::getInt("id"));
+    	$lect = CBaseManager::getLecturer(CRequest::getInt("id"));
     	$this->setData("lect", $lect);
+    	$this->addActionsMenuItem(array(
+			array(
+				"title" => "Назад",
+				"link" => WEB_ROOT."_modules/_lecturers/index.php",
+				"icon" => "actions/edit-undo.png"
+			)
+		));
     	
-    	//Биография   	
+    	//Биография  
+    	$setBiog = new CRecordSet();
     	$queryBiog = new CQuery();
     	$queryBiog->select("biog.*")
     	->from(TABLE_BIOGRAPHY." as biog")
     	->condition("biog.user_id=".CRequest::getInt("id"));
-    	$biogs = $queryBiog->execute()->getCount();
+    	$biogs = new CArrayList();
+    	$setBiog->setQuery($queryBiog);
+    	foreach ($setBiog->getItems() as $ar) {
+    		$biog = new CBiography($ar);
+    		$biogs->add($ar->getId(), $biog);
+    	}
     	$this->setData("biogs", $biogs);
-    	if ($biogs != 0) {
-    		$photo_b=mysql_query("select image from biography where user_id='".CRequest::getInt("id")."' limit 0,1 ");
-    		$photo_biog=mysql_result($photo_b,0);
-    		 
-    		$photo_k=mysql_query("select photo from kadri where id in(select kadri_id as id from users where id='".CRequest::getInt("id")."') limit 0,1");
-    		$photo_kadri=mysql_result($photo_k,0);
-    		
+    	foreach ($biogs->getItems() as $biog) {
+    		$photo_biog=$biog->image;
+    	}
+    	
+    	$setKadri = new CRecordSet();
+    	$queryKadri = new CQuery();
+    	$queryKadri->select("person.*")
+    	->from(TABLE_PERSON." as person")
+    	->innerJoin(TABLE_USERS." as users", "users.kadri_id=person.id")
+    	->condition("users.id=".CRequest::getInt("id"));
+    	$persons = new CArrayList();
+    	$setKadri->setQuery($queryKadri);
+    	foreach ($setKadri->getItems() as $ar) {
+    		$person = new CPerson($ar);
+    		$persons->add($ar->getId(), $person);
+    	}
+    	foreach ($persons->getItems() as $person) {
+    		$photo_kadri=$person->photo;
+    	}
+    	
+    	if ($biogs->getCount() != 0) {
     		if ($photo_biog!="") {
     			$filename = CORE_CWD.CORE_DS."images".CORE_DS."lects".CORE_DS."small".CORE_DS."sm_".$photo_biog;
     			if (file_exists($filename)) {
@@ -140,85 +141,179 @@ class CLecturersController extends CBaseController {
     	}
     	
     	//Веб-страницы на портале
-    	$resPage=mysql_query('select `id`,`title` from `pg_uploads` where `user_id_insert`='.CRequest::getInt("id").' and type_id<>1');
-    	$this->setData("resPage", $resPage);
+    	$setPage = new CRecordSet();
+    	$resPage = new CQuery();
+    	$resPage->select("page.*")
+    	->from(TABLE_PAGES." as page")
+    	->condition("page.user_id_insert=".CRequest::getInt("id")." and page.type_id<>1");
+    	$pages = new CArrayList();
+    	$setPage->setQuery($resPage);
+    	foreach ($setPage->getItems() as $ar) {
+    		$page = new CPage($ar);
+    		$pages->add($ar->getId(), $page);
+    	}
+    	$this->setData("pages", $pages);
     	
-    	//Список пособий на портале
-    	$resSubj=mysql_query('SELECT d.nameFolder, s.name AS nameSubject, (select count(*) from files f where f.nameFolder= d.nameFolder) as f_cnt
-							FROM subjects s
-							LEFT OUTER JOIN documents d
-							ON (s.id = d.subj_id)
-							WHERE d.user_id ="'.CRequest::getInt("id").'"');
-    	$this->setData("resSubj", $resSubj);
+    	//Список пособий на портале 	
+    	$setSubj = new CRecordSet();
+    	$resSubj = new CQuery();
+    	$resSubj->select("subj.*, doc.nameFolder as nameFolder, (select count(*) from files f where f.nameFolder = doc.nameFolder) as f_cnt")
+    	->from(TABLE_DISCIPLINES." as subj")
+    	->leftJoin(TABLE_LIBRARY_DOCUMENTS." as doc", "subj.id = doc.subj_id")
+    	->condition("doc.user_id=".CRequest::getInt("id"));
+    	$subjects = new CArrayList();
+    	$setSubj->setQuery($resSubj);
+    	foreach ($setSubj->getItems() as $ar) {
+    		$subject = new CDiscipline($ar);
+    		$subjects->add($ar->getId(), $subject);
+    	}
+    	$this->setData("subjects", $subjects);
     	
     	//Объявления текущего учебного года
-    	$resNews=mysql_query('select id,title,date_time,file,file_attach,image from news
-				where user_id_insert="'.CRequest::getInt("id").'" and date_time>="'.CUtils::getCurrentYear()->date_start.'"
-				order by date_time DESC');
-    	$this->setData("resNews", $resNews);
+    	$setNews = new CRecordSet();
+    	$resNews = new CQuery();
+    	$resNews->select("news.*")
+    	->from(TABLE_NEWS." as news")
+    	->condition('news.user_id_insert="'.CRequest::getInt("id").'" and news.date_time>="'.CUtils::getCurrentYear()->date_start.'"')
+    	->order("news.date_time desc");
+    	$news = new CArrayList();
+    	$setNews->setQuery($resNews);
+    	foreach ($setNews->getItems() as $ar) {
+    		$new = new CNewsItem($ar);
+    		$news->add($ar->getId(), $new);
+    	}
+    	$this->setData("news", $news);
     	
     	//Объявления прошлых учебных лет
-    	$resNewsOld=mysql_query ('select id,title,date_time,file,file_attach,image from news
-				where user_id_insert="'.CRequest::getInt("id").'" and date_time<"'.CUtils::getCurrentYear()->date_start.'"
-				order by date_time DESC');
-    	$this->setData("resNewsOld", $resNewsOld);
+    	$setNewsOld = new CRecordSet();
+    	$resNewsOld = new CQuery();
+    	$resNewsOld->select("news.*")
+    	->from(TABLE_NEWS." as news")
+    	->condition('news.user_id_insert="'.CRequest::getInt("id").'" and news.date_time<"'.CUtils::getCurrentYear()->date_start.'"')
+    	->order("news.date_time desc");
+    	$newsOld = new CArrayList();
+    	$setNewsOld->setQuery($resNewsOld);
+    	foreach ($setNewsOld->getItems() as $ar) {
+    		$newOld = new CNewsItem($ar);
+    		$newsOld->add($ar->getId(), $newOld);
+    	}
+    	$this->setData("newsOld", $newsOld);
     	
     	//Дипломники текущего учебного года
-    	$queryDipl='SELECT diploms.id,diploms.dipl_name,pp.name as pract_place,kadri.id as kadri_id,kadri.fio as kadri_fio,students.fio as student_fio,study_groups.name as group_name,diploms.comment
-		FROM diploms
-		left join students on diploms.student_id=students.id
-		left join pract_places pp on pp.id=diploms.pract_place_id
-		left join kadri on diploms.kadri_id=kadri.id
-		left join study_groups on study_groups.id=students.group_id
-		inner join users on users.kadri_id=kadri.id
-			where users.kadri_id>0 and users.id="'.CRequest::getInt("id").'" and (diploms.date_act>="'.CUtils::getCurrentYear()->date_start.'" or date_act is NULL)	order by students.fio';
-    	$resDipl=mysql_query($queryDipl);
-		$this->setData("resDipl", $resDipl);	
+    	$setDipl = new CRecordSet();
+    	$resDipl = new CQuery();
+    	$resDipl->select("diploms.*, pp.name as pract_place, students.fio as student_fio, study_groups.name as group_name")
+    	->from(TABLE_DIPLOMS." as diploms")
+    	->leftJoin(TABLE_STUDENTS." as students", "diploms.student_id=students.id")
+    	->leftJoin(TABLE_PRACTICE_PLACES." as pp", "pp.id=diploms.pract_place_id")
+    	->leftJoin(TABLE_PERSON." as kadri", "diploms.kadri_id=kadri.id")
+    	->leftJoin(TABLE_STUDENT_GROUPS." as study_groups", "study_groups.id=students.group_id")
+    	->leftJoin(TABLE_USERS." as users", "users.kadri_id=kadri.id")
+    	->condition('users.kadri_id>0 and users.id="'.CRequest::getInt("id").'" and (diploms.date_act>="'.CUtils::getCurrentYear()->date_start.'" or diploms.date_act is NULL)')
+    	->order("students.fio asc");
+    	$diploms = new CArrayList();
+    	$setDipl->setQuery($resDipl);
+    	foreach ($setDipl->getItems() as $ar) {
+    		$diplom = new CDiplom($ar);
+    		$diploms->add($ar->getId(), $diplom);
+    	}
+    	$this->setData("diploms", $diploms);
     	
-    	//Дипломники предыдущих учебных лет
-    	$queryDiplOld='SELECT diploms.id,diploms.dipl_name,pp.name as pract_place,kadri.id as kadri_id,kadri.fio as kadri_fio,students.fio as student_fio,study_groups.name as group_name,diploms.comment
-		FROM diploms
-		left join students on diploms.student_id=students.id
-		left join kadri on diploms.kadri_id=kadri.id
-		left join study_groups on study_groups.id=students.group_id
-		left join pract_places pp on pp.id=diploms.pract_place_id
-		left join users on users.kadri_id=kadri.id
-			where users.kadri_id>0 and users.id="'.CRequest::getInt("id").'" and (diploms.date_act<"'.CUtils::getCurrentYear()->date_start.'" )
-			order by students.fio';
-    	$resDiplOld=mysql_query($queryDiplOld);
-    	$this->setData("resDiplOld", $resDiplOld);
+    	//Дипломники предыдущих учебных лет	
+    	$setDiplOld = new CRecordSet();
+    	$resDiplOld = new CQuery();
+    	$resDiplOld->select("diploms.*, pp.name as pract_place, students.fio as student_fio, study_groups.name as group_name")
+    	->from(TABLE_DIPLOMS." as diploms")
+    	->leftJoin(TABLE_STUDENTS." as students", "diploms.student_id=students.id")
+    	->leftJoin(TABLE_PRACTICE_PLACES." as pp", "pp.id=diploms.pract_place_id")
+    	->leftJoin(TABLE_PERSON." as kadri", "diploms.kadri_id=kadri.id")
+    	->leftJoin(TABLE_STUDENT_GROUPS." as study_groups", "study_groups.id=students.group_id")
+    	->leftJoin(TABLE_USERS." as users", "users.kadri_id=kadri.id")
+    	->condition('users.kadri_id>0 and users.id="'.CRequest::getInt("id").'" and diploms.date_act<"'.CUtils::getCurrentYear()->date_start.'"')
+    	->order("students.fio asc");
+    	$diplomsOld = new CArrayList();
+    	$setDiplOld->setQuery($resDiplOld);
+    	foreach ($setDiplOld->getItems() as $ar) {
+    		$diplomOld = new CDiplom($ar);
+    		$diplomsOld->add($ar->getId(), $diplomOld);
+    	}
+    	$this->setData("diplomsOld", $diplomsOld);
     	
-    	//Подготовка аспирантов, текущие
-    	$queryAspir='SELECT k.fio,d.`tema` FROM `disser` d inner join kadri k on k.id=d.`kadri_id`
-					WHERE d.`kadri_id`>0 and `scinceMan`=(select kadri_id from users where id='.CRequest::getInt("id").') and `god_zach`>="'.date("Y").'" order by k.fio';
-    	$resAspir=mysql_query($queryAspir);
-    	$this->setData("resAspir", $resAspir);
+    	//Подготовка аспирантов, текущие 	
+    	$setAspir = new CRecordSet();
+    	$resAspir = new CQuery();
+    	$resAspir->select("disser.*, kadri.fio as fio")
+    	->from(TABLE_PERSON_DISSER." as disser")
+    	->innerJoin(TABLE_PERSON." as kadri", "kadri.id=disser.kadri_id")
+    	->condition('disser.kadri_id>0 and disser.scinceMan=(select users.kadri_id from users where users.id="'.CRequest::getInt("id").'") and disser.god_zach>="'.date("Y").'"')
+    	->order("kadri.fio asc");
+    	$aspirs = new CArrayList();
+    	$setAspir->setQuery($resAspir);
+    	foreach ($setAspir->getItems() as $ar) {
+    		$aspir = new CPersonPaper($ar);
+    		$aspirs->add($ar->getId(), $aspir);
+    	}
+    	$this->setData("aspirs", $aspirs);
     	
     	//Подготовка аспирантов, архив
-    	$queryAspirOld='SELECT k.fio,d.`tema` FROM `disser` d inner join kadri k on k.id=d.`kadri_id`
-					WHERE d.`kadri_id`>0 and `scinceMan`=(select kadri_id from users where id='.CRequest::getInt("id").') and `scinceMan`>0
-						and (`god_zach`<"'.date("Y").'" or `god_zach` is null) order by k.fio';
-    	$resAspirOld=mysql_query($queryAspirOld);
-    	$this->setData("resAspirOld", $resAspirOld);
+    	$setAspirOld = new CRecordSet();
+    	$resAspirOld = new CQuery();
+    	$resAspirOld->select("disser.*, kadri.fio as fio")
+    	->from(TABLE_PERSON_DISSER." as disser")
+    	->innerJoin(TABLE_PERSON." as kadri", "kadri.id=disser.kadri_id")
+    	->condition('disser.kadri_id>0 and disser.scinceMan=(select users.kadri_id from users where users.id="'.CRequest::getInt("id").'") and disser.scinceMan>0 and (disser.god_zach<"'.date("Y").'" or disser.god_zach is null)')
+    	->order("kadri.fio asc");
+    	$aspirsOld = new CArrayList();
+    	$setAspirOld->setQuery($resAspirOld);
+    	foreach ($setAspirOld->getItems() as $ar) {
+    		$aspirOld = new CPersonPaper($ar);
+    		$aspirsOld->add($ar->getId(), $aspirOld);
+    	}
+    	$this->setData("aspirsOld", $aspirsOld);
     	
     	//Расписание
-    	$resRasp=mysql_query('select id from time where id="'.CRequest::getInt("id").'" and
-				time.year="'.CUtils::getCurrentYear()->getId().'" and time.month="'.CUtils::getCurrentYearPart()->getId().'" limit 0,1');
-    	$this->setData("resRasp", $resRasp);
+    	$setRasp = new CRecordSet();
+    	$resRasp = new CQuery();
+    	$resRasp->select("time.*")
+    	->from(TABLE_SCHEDULE." as time")
+    	->condition('time.id="'.CRequest::getInt("id").'" and time.year="'.CUtils::getCurrentYear()->getId().'" and time.month="'.CUtils::getCurrentYearPart()->getId().'"');
+    	$rasps = new CArrayList();
+    	$setRasp->setQuery($resRasp);
+    	foreach ($setRasp->getItems() as $ar) {
+    		$rasp = new CSchedule($ar);
+    		$rasps->add($ar->getId(), $rasp);
+    	}
+    	$this->setData("rasps", $rasps);
     	
     	//Вопросы и ответы на них преподавателя
-    	$resQuest=mysql_query('select q2u.user_id,q2u.question_text,q2u.contact_info,q2u.answer_text,q2u.datetime_quest,q2u.datetime_answ
-							from question2users q2u
-							where q2u.status=3 and answer_text is not null and answer_text!="" and user_id='.CRequest::getInt("id").'
-							order by q2u.datetime_quest');
-    	$this->setData("resQuest", $resQuest);
+    	$setQuest = new CRecordSet();
+    	$resQuest = new CQuery();
+    	$resQuest->select("quest.*")
+    	->from(TABLE_QUESTION_TO_USERS." as quest")
+    	->condition('quest.status=3 and quest.answer_text is not null and quest.answer_text!="" and quest.user_id="'.CRequest::getInt("id").'"')
+    	->order("quest.datetime_quest desc");
+    	$quests = new CArrayList();
+    	$setQuest->setQuery($resQuest);
+    	foreach ($setQuest->getItems() as $ar) {
+    		$quest = new CQuestion($ar);
+    		$quests->add($ar->getId(), $quest);
+    	}
+    	$this->setData("quests", $quests);
     	
     	//Кураторство учебных групп
-    	$resGroup=mysql_query ('select sg.id,sg.name
-				from study_groups sg
-					left join users u on u.kadri_id=sg.curator_id
-					where u.kadri_id>0 and u.id='.CRequest::getInt("id"));
-    	$this->setData("resGroup", $resGroup);
+    	$setGroup = new CRecordSet();
+    	$resGroup = new CQuery();
+    	$resGroup->select("sg.id, sg.name")
+    	->from(TABLE_STUDENT_GROUPS." as sg")
+    	->leftJoin(TABLE_USERS." as users", "users.kadri_id=sg.curator_id")
+    	->condition("users.id=".CRequest::getInt("id"));
+    	$groups = new CArrayList();
+    	$setGroup->setQuery($resGroup);
+    	foreach ($setGroup->getItems() as $ar) {
+    		$group = new CStudentGroup($ar);
+    		$groups->add($ar->getId(), $group);
+    	}
+    	$this->setData("groups", $groups);
     	
     	$this->renderView("__public/_lecturers/view.tpl");
     }

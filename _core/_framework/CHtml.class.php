@@ -907,7 +907,7 @@ class CHtml {
             $printHelpBox = false;
             if (mb_strlen(CHelpManager::getHelpForCurrentPage()->content) > 512) {
                 echo mb_substr(CHelpManager::getHelpForCurrentPage()->content, 0, 512)."...";
-                echo '<p><a href="#help" data-toggle="modal">Читать польностью</a></p>';
+                echo '<p><a href="#help" data-toggle="modal">Читать полностью</a></p>';
                 $printHelpBox = true;
             } else {
                 echo CHelpManager::getHelpForCurrentPage()->content;
@@ -944,6 +944,33 @@ class CHtml {
             echo '<a href="'.WEB_ROOT.'_modules/_help/?action=add&page='.$uri.'" target="_blank">Добавить справку для текущей страницы</a>';
             echo '</div>';
         }
+    }
+    public static function biographyView() {
+    	$lect = CBaseManager::getLecturer(CRequest::getInt("id"));
+    	$printFullBox = false;
+    	if (mb_strlen(CBiographyManager::getBiographyByUser(CStaffManager::getUserById($lect->id))->main_text) > 450) {
+    		echo mb_substr(CUtils::msg_replace(CBiographyManager::getBiographyByUser(CStaffManager::getUserById($lect->id))->main_text), 0, 450)."...";
+    		echo '<p><a href="#modal" data-toggle="modal">Читать полностью</a></p>';
+    		$printFullBox = true;
+    	} else {
+    		echo CUtils::msg_replace(CBiographyManager::getBiographyByUser(CStaffManager::getUserById($lect->id))->main_text);
+    	}
+    	if ($printFullBox) {
+    		echo '
+                    <div id="modal" class="modal hide fade">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h3 id="myModalLabel">Биография</h3>
+                        </div>
+                        <div class="modal-body">
+                            '.CUtils::msg_replace(CBiographyManager::getBiographyByUser(CStaffManager::getUserById($lect->id))->main_text).'
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                        </div>
+                    </div>
+                ';
+    	}
     }
     public static function errorSummary(CModel $model) {
         if ($model->getValidationErrors()->getCount() > 0) {
@@ -1280,7 +1307,7 @@ class CHtml {
             }
         }
         if ($display) {
-            $link = WEB_ROOT.CUtils::strRight($storage, CORE_CWD).$file;
+            $link = CUtils::strRight($storage, CORE_CWD).$file;
             $icon = "";
             if (CUtils::isImage($storage.$file)) {
                 // показываем превью изображения
@@ -1295,7 +1322,7 @@ class CHtml {
                 }
             }
             if ($addLinkToOriginal) {
-                echo '<a href="'.$link.'" target="_blank"';
+                echo '<a href="'.WEB_ROOT.''.$link.'" target="_blank"';
                 if (CUtils::isImage($storage.$file)) {
                     echo ' class="image_clearboxy"';
                 }

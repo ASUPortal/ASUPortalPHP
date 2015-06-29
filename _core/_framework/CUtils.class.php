@@ -878,4 +878,25 @@ class CUtils {
 			return $text;
 		}
 	}
+	public function msg_replace($s) {
+		//замена при выводе сообщений на экран для форматирования
+		$s=str_replace ("\r\n","<br>",$s);
+		 
+		$s=str_replace ("[url]","<a href='http://",$s);
+		$s=str_replace ("[/url]","' target='_blank' style='font-weight:normal; text-decoration:underline;'>Ресурс</a>",$s);
+		 
+		$s=str_replace ("[quote]","<u>Цитата</u><br><span style='color:grey;background:white;'>",$s);
+		$s=str_replace ("[/quote]","</span><br>",$s);
+		 
+		$s=str_replace ("[b]","<b>",$s);
+		$s=str_replace ("[/b]","</b>",$s);
+		 
+		$s=str_replace ("[u]","<u>",$s);
+		$s=str_replace ("[/u]","</u>",$s);
+		 
+		$s=str_replace ("[i]","<i>",$s);
+		$s=str_replace ("[/i]","</i>",$s);
+	
+		return $s;
+	}
 }
