@@ -22,20 +22,4 @@ class CBiographyManager {
         }
         return self::getCacheBiographys()->getItem($key);
     }
-    /**
-     * Получить биографию по идентификатору пользователя
-     *
-     * @param CUser $key
-     * @return CBiography
-     */
-    public static function getBiographyByUser(CUser $key) {
-    	if (!self::getCacheBiographys()->hasElement($key->getId())) {
-    		foreach (CActiveRecordProvider::getWithCondition(TABLE_BIOGRAPHY, "user_id = '".$key->getId()."'")->getItems() as $item) {
-    			$biography = new CBiography($item);
-    			self::getCacheBiographys()->add($biography->id, $biography);
-    			self::getCacheBiographys()->add($biography->user_id, $biography);
-    		}
-    	}
-    	return self::getCacheBiographys()->getItem($key->getId());
-    }
 }

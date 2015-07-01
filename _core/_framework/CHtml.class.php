@@ -945,33 +945,6 @@ class CHtml {
             echo '</div>';
         }
     }
-    public static function biographyView() {
-    	$lect = CBaseManager::getLecturer(CRequest::getInt("id"));
-    	$printFullBox = false;
-    	if (mb_strlen(CBiographyManager::getBiographyByUser(CStaffManager::getUserById($lect->id))->main_text) > 450) {
-    		echo mb_substr(CUtils::msg_replace(CBiographyManager::getBiographyByUser(CStaffManager::getUserById($lect->id))->main_text), 0, 450)."...";
-    		echo '<p><a href="#modal" data-toggle="modal">Читать полностью</a></p>';
-    		$printFullBox = true;
-    	} else {
-    		echo CUtils::msg_replace(CBiographyManager::getBiographyByUser(CStaffManager::getUserById($lect->id))->main_text);
-    	}
-    	if ($printFullBox) {
-    		echo '
-                    <div id="modal" class="modal hide fade">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h3 id="myModalLabel">Биография</h3>
-                        </div>
-                        <div class="modal-body">
-                            '.CUtils::msg_replace(CBiographyManager::getBiographyByUser(CStaffManager::getUserById($lect->id))->main_text).'
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
-                        </div>
-                    </div>
-                ';
-    	}
-    }
     public static function errorSummary(CModel $model) {
         if ($model->getValidationErrors()->getCount() > 0) {
             echo '<div class="alert alert-error">';

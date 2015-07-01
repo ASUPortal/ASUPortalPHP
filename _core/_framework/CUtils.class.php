@@ -878,7 +878,7 @@ class CUtils {
 			return $text;
 		}
 	}
-	public function msg_replace($s) {
+	public static function msg_replace($s) {
 		//замена при выводе сообщений на экран для форматирования
 		$s=str_replace ("\r\n","<br>",$s);
 		 
