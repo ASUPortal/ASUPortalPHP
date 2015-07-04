@@ -33,38 +33,37 @@
     {else}
 	    {include file="_core.searchLocal.tpl"}
 	    	
-        <table class="table">
+        <table class="table table-striped table-bordered table-hover table-condensed">
+			<tr>
+	            <th>#</th>
+	            <th>{CHtml::tableOrder("fio", $lects->getFirstItem())}</th>
+	            <th>Расписание</th>
+	        </tr>
             {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $lects->getItems() as $lect}
-                <tr>
-                    <td>
-	                    <a href="index.php?action=view&id={$lect->getId()}">{$lect->FIO}
-	        			{if {$lect->getBiography()->getCount()}==1}
-	                    	(+)</a>
-	                    {else}
-	                    	(-)</a>
-	                    {/if}
-
-	        			{if {$lect->getDiploms()->getCount()}!=0}
-	                    	<span class=text style="color:#CCCCCC;"> дипломников({$lect->getDiploms()->getCount()})</span>
-	                    {/if}
-	                    
-	        			{if {$lect->getDoc()->getCount()}!=0}
-	                    	<span class=text style="color:#CCCCCC;"> предметов({$lect->getDoc()->getCount()})</span>
-	                    {/if}
-	                    
-	        			{if {$lect->getNews()->getCount()}!=0}
-	                    	<span class=text style="color:#CCCCCC;"> объявлений({$lect->getNews()->getCount()})</span>
-	                    {/if}
-	        			{if {$lect->getTime()->getCount()}!=0}
-	                    	<span class=text style="color:#CCCCCC;"> расписание</span>
-	                    {/if}
-                    </td>
-
-                </tr>
+		    <tr>
+		    	<td>{counter}</td>
+		        <td>
+					<a href="index.php?action=view&id={$lect->getUser()->id}">{$lect->fio}
+					{if {$lect->getBiography()->getCount()}==1}
+		         		(+)</a>
+					{else}
+		         		(-)</a>
+					{/if}
+				</td>
+		        <td>
+					{if {$lect->getTime()->getCount()}!=0}
+						{foreach $lect->getTime()->getItems() as $rasp}
+		    				<a href="{$web_root}p_time_table.php?onget=1&idlect={$rasp->id}">посмотреть</a>
+						{/foreach}
+		         	{else}
+		         		расписания на портале нет
+		       		{/if}
+				</td>
+			</tr>
             {/foreach}
         </table>
-        <p class="text" valign="bottom">(+) биография есть (-) биографии нет</p>
+        <p>(+) биография есть (-) биографии нет</p>
         {CHtml::paginator($paginator, "?action=index")}
     {/if}
 {/block}
