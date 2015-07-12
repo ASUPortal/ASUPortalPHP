@@ -1,4 +1,4 @@
-<div style="font-weight:bold;"><a href="{$web_root}_modules/_question_add/index.php?action=index&user_id={$lect->getUser()->id}">Задать вопрос</a></div>
+<div><input name="" onclick="location.href='{$web_root}_modules/_question_add/index.php?action=index&user_id={$lect->getUser()->id}'" type="button" class="btn" value="Задать вопрос"></div>
 <br>
 {if ($lect->getQuestions()->getCount() == 0)}
 	вопросов с ответами на портале нет

@@ -46,15 +46,15 @@ class CLecturersController extends CBaseController {
         }
         $resRusLetters = array();
         $resRusLetters = array_count_values($resRus);
-        $firstLet = array();
+        $firstLet = array(1);
         foreach ($resRusLetters as $key=>$value) {
         	$firstLet[] = $key;
         }
         $letter = $firstLet[CRequest::getInt("getsub")];
         $letterId = -1;
-        if (isset($_GET['getsub']) and !isset($_GET['filter'])) {
-        	if ($_GET['getsub']>=0) {
-        		$letterId = $_GET['getsub'];
+        if (CRequest::getInt("getsub")>0 and is_null(CRequest::getFilter("person.id"))) {
+        	if (CRequest::getInt("getsub")>0) {
+        		$letterId = CRequest::getInt("getsub");
         	}
         	$query->condition('person.fio like "'.$letter.'%" and userGroup.group_id=1');
         }

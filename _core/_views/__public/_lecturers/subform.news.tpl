@@ -1,8 +1,8 @@
 <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#tab-news-subjects">Список пособий на портале ({$lect->getSubjects()->getCount()})</a></li>
+    <li class="active"><a data-toggle="tab" href="#tab-news-subjects">Список пособий на портале ({$lect->getManuals()->getCount()})</a></li>
     <li><a data-toggle="tab" href="#tab-news-current">Объявления текущего учебного года ({$lect->getNewsCurrentYear()->getCount()})</a></li>
     <li><a data-toggle="tab" href="#tab-news-old">Объявления прошлых учебных лет ({$lect->getNewsOld()->getCount()})</a></li>
-    <li><a data-toggle="tab" href="#tab-news-page">Cтраницы на портале ({$lect->getPage()->getCount()})</a></li>
+    <li><a data-toggle="tab" href="#tab-news-page">Cтраницы на портале ({$lect->getPages()->getCount()})</a></li>
 </ul>
 <div class="tab-content">
 	<div class="tab-pane active" id="tab-news-subjects">

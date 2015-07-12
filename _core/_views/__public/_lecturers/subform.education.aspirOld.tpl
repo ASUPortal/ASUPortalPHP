@@ -1,4 +1,4 @@
-{if ($lect->getAspirOld()->getCount() == 0)}
+{if ($lect->getAspirantsOld()->getCount() == 0)}
 	аспирантов на портале нет
 {else}
 <table class="table table-striped table-bordered table-hover table-condensed">
@@ -8,10 +8,10 @@
 	          <th>Тема диссертации</th>
 	</tr>
 {$i = 1}
-{foreach $lect->getAspirOld()->getItems() as $aspir}
+{foreach $lect->getAspirantsOld()->getItems() as $aspir}
 	<tr>
 	   	<td>{$i++}</td>
-	   	<td>{$aspir->fio}</td>
+	   	<td>{CStaffManager::getPersonById($aspir->kadri_id)->fio}</td>
 	   	<td>{$aspir->tema}</td>
 	</tr>
 {/foreach}

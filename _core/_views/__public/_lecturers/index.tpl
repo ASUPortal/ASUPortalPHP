@@ -43,17 +43,10 @@
             {foreach $lects->getItems() as $lect}
 		    <tr>
 		    	<td>{counter}</td>
+		        <td><a href="index.php?action=view&id={$lect->getUser()->id}">{$lect->fio}</a></td>
 		        <td>
-					<a href="index.php?action=view&id={$lect->getUser()->id}">{$lect->fio}
-					{if {$lect->getBiography()->getCount()}==1}
-		         		(+)</a>
-					{else}
-		         		(-)</a>
-					{/if}
-				</td>
-		        <td>
-					{if {$lect->getTime()->getCount()}!=0}
-						{foreach $lect->getTime()->getItems() as $rasp}
+					{if {$lect->getSchedule()->getCount()}!=0}
+						{foreach $lect->getSchedule()->getItems() as $rasp}
 		    				<a href="{$web_root}p_time_table.php?onget=1&idlect={$rasp->id}">посмотреть</a>
 						{/foreach}
 		         	{else}
@@ -63,7 +56,6 @@
 			</tr>
             {/foreach}
         </table>
-        <p>(+) биография есть (-) биографии нет</p>
         {CHtml::paginator($paginator, "?action=index")}
     {/if}
 {/block}

@@ -38,13 +38,13 @@ class CPerson extends CActiveModel{
     private $_documents = null;
     private $_newsCurrentYear = null;
     private $_newsOld = null;
-    private $_times = null;
+    private $_schedules = null;
     private $_pages = null;
-    private $_subjects = null;
-    private $_aspirCurrent = null;
-    private $_aspirOld = null;
+    private $_manuals = null;
+    private $_aspirantsCurrent = null;
+    private $_aspirantsOld = null;
     private $_questions = null;
-    private $_groups = null;
+    private $_supervisedGroups = null;
     public $to_tabel = 0;
     public $is_slave = 0;
 
@@ -163,7 +163,7 @@ class CPerson extends CActiveModel{
         		"relationPower" => RELATION_HAS_MANY,
         		"storageProperty" => "_biography",
         		"storageTable" => TABLE_BIOGRAPHY,
-        		"storageCondition" => "user_id = ".$this->getUser()->id,
+        		"storageCondition" => "user_id = " . (is_null($this->getId()) ? 0 : $this->getUserId()),
         		"managerClass" => "CBiographyManager",
         		"managerGetObject" => "getBiography"
         	),
@@ -171,7 +171,7 @@ class CPerson extends CActiveModel{
     			"relationPower" => RELATION_HAS_MANY,
     			"storageProperty" => "_documents",
     			"storageTable" => TABLE_LIBRARY_DOCUMENTS,
-    			"storageCondition" => "user_id = ".$this->getUser()->id,
+    			"storageCondition" => "user_id = " . (is_null($this->getId()) ? 0 : $this->getUserId()),
     			"managerClass" => "CLibraryManager",
     			"managerGetObject" => "getDocument"
     		),
@@ -179,7 +179,7 @@ class CPerson extends CActiveModel{
     			"relationPower" => RELATION_HAS_MANY,
     			"storageProperty" => "_newsCurrentYear",
     			"storageTable" => TABLE_NEWS,
-    			"storageCondition" => 'user_id_insert = '.$this->getUser()->id.' and date_time>="'.CUtils::getCurrentYear()->date_start.'"',
+    			"storageCondition" => 'user_id_insert = '.(is_null($this->getId()) ? 0 : $this->getUserId()).' and date_time>="'.CUtils::getCurrentYear()->date_start.'"',
     			"managerClass" => "CNewsManager",
     			"managerGetObject" => "getNewsItem",
 				"managerOrder" => "`date_time` desc"
@@ -188,7 +188,7 @@ class CPerson extends CActiveModel{
     			"relationPower" => RELATION_HAS_MANY,
     			"storageProperty" => "_newsOld",
     			"storageTable" => TABLE_NEWS,
-    			"storageCondition" => 'user_id_insert = '.$this->getUser()->id.' and date_time<"'.CUtils::getCurrentYear()->date_start.'"',
+    			"storageCondition" => 'user_id_insert = '.(is_null($this->getId()) ? 0 : $this->getUserId()).' and date_time<"'.CUtils::getCurrentYear()->date_start.'"',
     			"managerClass" => "CNewsManager",
     			"managerGetObject" => "getNewsItem",
     			"managerOrder" => "`date_time` desc"
@@ -197,7 +197,7 @@ class CPerson extends CActiveModel{
     			"relationPower" => RELATION_HAS_MANY,
     			"storageProperty" => "_pages",
     			"storageTable" => TABLE_PAGES,
-    			"storageCondition" => "user_id_insert = ".$this->getUser()->id." and type_id<>1",
+    			"storageCondition" => "user_id_insert = ".(is_null($this->getId()) ? 0 : $this->getUserId())." and type_id<>1",
     			"managerClass" => "CPageManager",
     			"managerGetObject" => "getPage"
     		),
@@ -205,16 +205,16 @@ class CPerson extends CActiveModel{
     			"relationPower" => RELATION_HAS_MANY,
     			"storageProperty" => "_questions",
     			"storageTable" => TABLE_QUESTION_TO_USERS,
-    			"storageCondition" => 'status!=5 and answer_text is not null and answer_text!="" and user_id="'.$this->getUser()->id.'"',
+    			"storageCondition" => 'status!=5 and answer_text is not null and answer_text!="" and user_id="'.(is_null($this->getId()) ? 0 : $this->getUserId()).'"',
     			"managerClass" => "CQuestionManager",
     			"managerGetObject" => "getQuestion",
     			"managerOrder" => "`datetime_quest` desc"
     		),
-    		"groups" => array(
+    		"supervisedGroups" => array(
     			"relationPower" => RELATION_HAS_MANY,
-    			"storageProperty" => "_groups",
+    			"storageProperty" => "_supervisedGroups",
     			"storageTable" => TABLE_STUDENT_GROUPS,
-    			"storageCondition" => "curator_id = ".$this->id,
+    			"storageCondition" => "curator_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
     			"managerClass" => "CStaffManager",
     			"managerGetObject" => "getStudentGroup"
     		)
@@ -406,6 +406,20 @@ class CPerson extends CActiveModel{
             }
         }
         return $this->_user;
+    }
+    /**
+     * Идентификатор связанного с сотрудником пользователя портала
+     *
+     * @return int
+     */
+    public function getUserId() {
+    	$person = CStaffManager::getPerson($this->getId());
+    	if (!is_null($person->getUser())) {
+    		$userId = $person->getUser()->id;
+    	} else {
+    		$userId = 0;
+    	}
+    	return $userId;
     }
     /**
      * Является ли пользователем портала
@@ -786,6 +800,7 @@ class CPerson extends CActiveModel{
     	}
     	return $this->_graduatesCurrentYear;
     }
+    
     /**
      * Дипломники предыдущих учебных лет
      * 
@@ -807,12 +822,13 @@ class CPerson extends CActiveModel{
     	}
     	return $this->_graduatesOld;
     }
+    
     /**
      * Предметы
      * 
      * @return CArrayList
      */
-    public function getDoc() {
+    public function getDocuments() {
     	$result = new CArrayList();
     	foreach ($this->documents->getItems() as $document) {
     		$result->add($document->getId(), $document);
@@ -864,19 +880,19 @@ class CPerson extends CActiveModel{
      * 
      * @return CArrayList
      */
-    public function getTime() {
-    	if (is_null($this->_times)) {
-    		$this->_times = new CArrayList();
+    public function getSchedule() {
+    	if (is_null($this->_schedules)) {
+    		$this->_schedules = new CArrayList();
     		$query = new CQuery();
-    		$query->select("time.*")
-	    		->from(TABLE_SCHEDULE." as time")
-	    		->condition("time.id=".$this->getUser()->id." and time.year=".CUtils::getCurrentYear()->getId()." and time.month=".CUtils::getCurrentYearPart()->getId());
+    		$query->select("schedule.*")
+	    		->from(TABLE_SCHEDULE." as schedule")
+	    		->condition("schedule.id=".$this->getUser()->id." and schedule.year=".CUtils::getCurrentYear()->getId()." and schedule.month=".CUtils::getCurrentYearPart()->getId());
     		foreach ($query->execute()->getItems() as $item) {
-    			$time = new CSchedule(new CActiveRecord($item));
-    			$this->_times->add($time->getId(), $time);
+    			$schedule = new CSchedule(new CActiveRecord($item));
+    			$this->_schedules->add($schedule->getId(), $schedule);
     		}
     	}
-    	return $this->_times;
+    	return $this->_schedules;
     }
     
     /**
@@ -884,7 +900,7 @@ class CPerson extends CActiveModel{
      * 
      * @return CArrayList
      */
-    public function getPage() {
+    public function getPages() {
     	$result = new CArrayList();
     	foreach ($this->pages->getItems() as $page) {
     		$result->add($page->getId(), $page);
@@ -897,9 +913,9 @@ class CPerson extends CActiveModel{
      * 
      * @return CArrayList
      */
-    public function getSubjects() {
-    	if (is_null($this->_subjects)) {
-    		$this->_subjects = new CArrayList();
+    public function getManuals() {
+    	if (is_null($this->_manuals)) {
+    		$this->_manuals = new CArrayList();
     		$query = new CQuery();
     		$query->select("subj.*, doc.nameFolder as nameFolder, (select count(*) from files f where f.nameFolder = doc.nameFolder) as f_cnt")
 	    		->from(TABLE_DISCIPLINES." as subj")
@@ -907,32 +923,32 @@ class CPerson extends CActiveModel{
 	    		->condition("doc.user_id=".$this->getUser()->id);
     		foreach ($query->execute()->getItems() as $item) {
     			$subject = new CDiscipline(new CActiveRecord($item));
-    			$this->_subjects->add($subject->getId(), $subject);
+    			$this->_manuals->add($subject->getId(), $subject);
     		}
     	}
-    	return $this->_subjects;
+    	return $this->_manuals;
     }
     
     /**
      * Подготовка аспирантов, текущие
-     * 
+     * 'year = "'.date("Y", strtotime(CUtils::getCurrentYear()->date_start)).'" or year = "'.date("Y", strtotime($int->date_end)).'
      * @return CArrayList
      */
-    public function getAspirCurrent() {
-    	if (is_null($this->_aspirCurrent)) {
-    		$this->_aspirCurrent = new CArrayList();
+    public function getAspirantsCurrent() {
+    	if (is_null($this->_aspirantsCurrent)) {
+    		$this->_aspirantsCurrent = new CArrayList();
     		$query = new CQuery();
-    		$query->select("disser.*, kadri.fio as fio")
+    		$query->select("disser.*")
 	    		->from(TABLE_PERSON_DISSER." as disser")
 	    		->innerJoin(TABLE_PERSON." as kadri", "kadri.id=disser.kadri_id")
-	    		->condition('disser.kadri_id>0 and disser.scinceMan="'.$this->id.'" and disser.god_zach>="'.date("Y").'"')
+	    		->condition('disser.scinceMan="'.$this->id.'" and disser.god_zach>="'.date("Y", strtotime(CUtils::getCurrentYear()->date_end)).'"')
 	    		->order("kadri.fio asc");
     		foreach ($query->execute()->getItems() as $item) {
     			$aspir = new CPersonPaper(new CActiveRecord($item));
-    			$this->_aspirCurrent->add($aspir->getId(), $aspir);
+    			$this->_aspirantsCurrent->add($aspir->getId(), $aspir);
     		}
     	}
-    	return $this->_aspirCurrent;
+    	return $this->_aspirantsCurrent;
     }
     
     /**
@@ -940,21 +956,21 @@ class CPerson extends CActiveModel{
      * 
      * @return CArrayList
      */
-    public function getAspirOld() {
-    	if (is_null($this->_aspirOld)) {
-    		$this->_aspirOld = new CArrayList();
+    public function getAspirantsOld() {
+    	if (is_null($this->_aspirantsOld)) {
+    		$this->_aspirantsOld = new CArrayList();
     		$query = new CQuery();
-    		$query->select("disser.*, kadri.fio as fio")
+    		$query->select("disser.*")
 	    		->from(TABLE_PERSON_DISSER." as disser")
 	    		->innerJoin(TABLE_PERSON." as kadri", "kadri.id=disser.kadri_id")
-	    		->condition('disser.kadri_id>0 and disser.scinceMan="'.$this->id.'" and disser.scinceMan>0 and (disser.god_zach<"'.date("Y").'" or disser.god_zach is null)')
+	    		->condition('disser.scinceMan="'.$this->id.'" and disser.scinceMan>0 and (disser.god_zach<"'.date("Y", strtotime(CUtils::getCurrentYear()->date_end)).'" or disser.god_zach is null)')
 	    		->order("kadri.fio asc");
     		foreach ($query->execute()->getItems() as $item) {
     			$aspir = new CPersonPaper(new CActiveRecord($item));
-    			$this->_aspirOld->add($aspir->getId(), $aspir);
+    			$this->_aspirantsOld->add($aspir->getId(), $aspir);
     		}
     	}
-    	return $this->_aspirOld;
+    	return $this->_aspirantsOld;
     }
     
     /**
@@ -975,10 +991,10 @@ class CPerson extends CActiveModel{
      * 
      * @return CArrayList
      */
-    public function getGroups() {
+    public function getSupervisedGroups() {
     	$result = new CArrayList();
-    	foreach ($this->groups->getItems() as $question) {
-    		$result->add($question->getId(), $question);
+    	foreach ($this->supervisedGroups->getItems() as $group) {
+    		$result->add($group->getId(), $group);
     	}
     	return $result;
     }
