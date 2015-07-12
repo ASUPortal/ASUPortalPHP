@@ -32,7 +32,7 @@ class CPerson extends CActiveModel{
     protected $_degree = null;
     protected $_orders_sab = null;
     protected $_indPlanLoads = null;
-	private $_biography = null;
+	private $_biographies = null;
     private $_graduatesCurrentYear = null;
     private $_graduatesOld = null;
     private $_documents = null;
@@ -159,9 +159,9 @@ class CPerson extends CActiveModel{
                 "managerClass" => "CIndPlanManager",
                 "managerGetObject" => "getLoad"
             ),
-        	"biography" => array(
+        	"biographies" => array(
         		"relationPower" => RELATION_HAS_MANY,
-        		"storageProperty" => "_biography",
+        		"storageProperty" => "_biographies",
         		"storageTable" => TABLE_BIOGRAPHY,
         		"storageCondition" => "user_id = " . (is_null($this->getId()) ? 0 : $this->getUserId()),
         		"managerClass" => "CBiographyManager",
@@ -771,9 +771,9 @@ class CPerson extends CActiveModel{
      * 
      * @return CArrayList
      */
-    public function getBiography() {
+    public function getBiographies() {
     	$result = new CArrayList();
-    	foreach ($this->biography->getItems() as $biography) {
+    	foreach ($this->biographies->getItems() as $biography) {
     		$result->add($biography->getId(), $biography);
     	}
     	return $result;
@@ -824,7 +824,7 @@ class CPerson extends CActiveModel{
     }
     
     /**
-     * Предметы
+     * Документы
      * 
      * @return CArrayList
      */
@@ -931,7 +931,7 @@ class CPerson extends CActiveModel{
     
     /**
      * Подготовка аспирантов, текущие
-     * 'year = "'.date("Y", strtotime(CUtils::getCurrentYear()->date_start)).'" or year = "'.date("Y", strtotime($int->date_end)).'
+     * 
      * @return CArrayList
      */
     public function getAspirantsCurrent() {

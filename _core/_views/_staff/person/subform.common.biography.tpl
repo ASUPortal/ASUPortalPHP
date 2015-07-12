@@ -1,6 +1,6 @@
-{if ($form->person->getBiography()->getCount() == 0)}
+{if ($form->person->getBiographies()->getCount() == 0)}
 		У Вас ещё не заполнена биография!
-		<div><input name="" onclick="location.href='{$web_root}_modules/_biography/index.php?action=addBiogr&user_id={$form->person->getUserId()}'" type="button" class="btn" value="Добавить"></div>
+		<div><input name="" onclick="location.href='{$web_root}_modules/_biography/index.php?action=addBiography&user_id={$form->person->getUserId()}'" type="button" class="btn" value="Добавить"></div>
 {else}
         <table class="table table-striped table-bordered table-hover table-condensed">
 			<tr>
@@ -8,7 +8,7 @@
 	            <th width="100"><i class="icon-camera"></i></th>
 	            <th>Биография</th>
         	</tr>
-            {foreach $form->person->getBiography()->getItems() as $biography}
+            {foreach $form->person->getBiographies()->getItems() as $biography}
                 {if !is_null($biography->getUser())}
 					<b>{$biography->getUser()->getName()}</b><br><br>
 				{/if}

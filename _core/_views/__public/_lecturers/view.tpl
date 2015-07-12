@@ -16,10 +16,10 @@
         </tr>
     	<tr>
     	<td>
-			{if ($lect->getBiography()->getCount() == 0)}
+			{if ($lect->getBiographies()->getCount() == 0)}
         		Биография не выложена</td>
     		{else}
-    			{foreach $lect->getBiography()->getItems() as $biogr}
+    			{foreach $lect->getBiographies()->getItems() as $biogr}
 	    			<td>{CHtml::activeAttachPreview("photo", $lect, 100)}</td>
 	    			<td></td>
 	    			<td>{CUtils::msg_replace($biogr->main_text)}</td>
