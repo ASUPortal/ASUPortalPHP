@@ -17,7 +17,7 @@ date("d.m.Y",$DateTimeShift)." <b>".
 ($showWeekCnt?"<font size=+2>".$tabs6.$weeksBeetween."</font>-я учебная неделя</b>":"")."<br>";
 
 if (isset($_SESSION['auth']) && $_SESSION['auth']==1) {
- 	$dateTimeOut=$dateTimeOut."<div class=warning style='text-align:center;font-size:10pt;'><a class=warning href='{$files_path}p_lecturers.php?onget=1&idlect=".$_SESSION['id']."' title='моя страница'>".$_SESSION['FIO']."</a> &nbsp; <a class=warning href='".$files_path."p_administration.php?exit=1'>выход</a></div>";}
+ 	$dateTimeOut=$dateTimeOut."<div class=warning style='text-align:center;font-size:10pt;'><a class=warning href='{$files_path}_modules/_lecturers/index.php?action=view&id=".$_SESSION['id']."' title='моя страница'>".$_SESSION['FIO']."</a> &nbsp; <a class=warning href='".$files_path."p_administration.php?exit=1'>выход</a></div>";}
 else {
 if (!isset($_GET['wap'])) {
 $dateTimeOut=$dateTimeOut."<a class=warning href='#show' style='font-size:12pt;' onClick=javascript:show_auth_form('author_layer');>авторизация</a>

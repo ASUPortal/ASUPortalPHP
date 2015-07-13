@@ -174,7 +174,7 @@ for ($day=1;$day<=6;$day++)
 				if (isset($_POST[$tmp_var1]) && $_POST[$tmp_var1]=='on' || $filter!='on') 
 					{echo '<td width=150><b>';
 					if (!isset($_GET['save'])) {
-					 	echo '<a href="p_lecturers.php?onget=1&idlect='.$a['user_id'].'" title="о преподавателе"> '.$a['FIO'].'</a>';}
+					 	echo '<a href="_modules/_lecturers/index.php?action=view&id='.$a['user_id'].'" title="о преподавателе"> '.$a['FIO'].'</a>';}
 					else {echo $a['FIO'];}
 					echo '</b></td>';
 					$lects[$numLects]=$a['time_id'];

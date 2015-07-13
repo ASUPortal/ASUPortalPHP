@@ -55,7 +55,7 @@ if (mysql_num_rows($res)>0)
 
 	if (trim($name)=='') {$name=$a['login'];}
 	$href='#';
-	if ($a['status']=='преподаватель') {$href='p_lecturers.php?onget=1&idlect='.$a['user_id'].'';}
+	if ($a['status']=='преподаватель') {$href='_modules/_lecturers/index.php?action=view&id='.$a['user_id'].'';}
 	
 	echo '<tr><td><a href="'.$href.'" title="'.$a['status'].'"><font size="+1">'.$name.'</font>, группы ('.$a['gr_cnt'].'): ';
 	

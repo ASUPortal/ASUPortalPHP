@@ -39,6 +39,12 @@ class CBiographyController extends CBaseController{
     	$this->setData("biography", $biography);
     	$this->renderView("_biography/add.tpl");
     }
+    public function actionAddBiography() {
+    	$biography = new CBiography();
+    	$biography->user_id = CRequest::getInt("user_id");
+    	$this->setData("biography", $biography);
+    	$this->renderView("_biography/add.tpl");
+    }
     public function actionEdit() {
         $biography = CBiographyManager::getBiography(CRequest::getInt("id"));
         $this->setData("biography", $biography);

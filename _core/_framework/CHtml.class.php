@@ -907,7 +907,7 @@ class CHtml {
             $printHelpBox = false;
             if (mb_strlen(CHelpManager::getHelpForCurrentPage()->content) > 512) {
                 echo mb_substr(CHelpManager::getHelpForCurrentPage()->content, 0, 512)."...";
-                echo '<p><a href="#help" data-toggle="modal">Читать польностью</a></p>';
+                echo '<p><a href="#help" data-toggle="modal">Читать полностью</a></p>';
                 $printHelpBox = true;
             } else {
                 echo CHelpManager::getHelpForCurrentPage()->content;
@@ -1280,7 +1280,7 @@ class CHtml {
             }
         }
         if ($display) {
-            $link = WEB_ROOT.CUtils::strRight($storage, CORE_CWD).$file;
+            $link = CUtils::strRight($storage, CORE_CWD).$file;
             $icon = "";
             if (CUtils::isImage($storage.$file)) {
                 // показываем превью изображения
@@ -1295,7 +1295,7 @@ class CHtml {
                 }
             }
             if ($addLinkToOriginal) {
-                echo '<a href="'.$link.'" target="_blank"';
+                echo '<a href="'.WEB_ROOT.''.$link.'" target="_blank"';
                 if (CUtils::isImage($storage.$file)) {
                     echo ' class="image_clearboxy"';
                 }

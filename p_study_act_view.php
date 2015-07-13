@@ -258,7 +258,7 @@ echo '<table name=tab1 border=1 cellpadding="10" cellspacing="0" width="99%">
 		else {echo $tmpval['subj_name'];}
 		echo '</td>';
 		
-		echo '<td>&nbsp;<a href="p_lecturers.php?onget=1&idlect='.$tmpval['user_id'].'" title="о преподавателе">'.$tmpval[2].'</td>';//		
+		echo '<td>&nbsp;<a href="_modules/_lecturers/index.php?action=view&id='.$tmpval['user_id'].'" title="о преподавателе">'.$tmpval[2].'</td>';//		
 
 		echo '<td>&nbsp;'.$tmpval['act_name'].'</td>';
 		echo '<td>&nbsp;'.$tmpval['study_act_comment'].'</td>';

@@ -396,7 +396,7 @@ echo '<form name=item_list id=item_list action="" method="post"><table name=tab1
 
         echo '<td>&nbsp;'.
         echoIf($tmpval['curator_user_id']!='',
-            '<a href="p_lecturers.php?onget=1&idlect='.$tmpval['curator_user_id'].'">'.color_mark($q,$tmpval['curator_fio_short']).'</a>',
+            '<a href="_modules/_lecturers/index.php?action=view&id='.$tmpval['curator_user_id'].'">'.color_mark($q,$tmpval['curator_fio_short']).'</a>',
             color_mark($q,$tmpval['curator_fio_short']));
         echo '</td>';
 

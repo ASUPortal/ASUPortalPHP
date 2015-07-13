@@ -51,7 +51,7 @@ class CUtils {
         return WEB_ROOT."p_administration.php";
     }
     public static function getLecturersLink() {
-        return WEB_ROOT."p_lecturers.php";
+        return WEB_ROOT."_modules/_lecturers/index.php";
     }
     /**
      * Текущий год
@@ -877,5 +877,26 @@ class CUtils {
 		} else {
 			return $text;
 		}
+	}
+	public static function msg_replace($s) {
+		//замена при выводе сообщений на экран для форматирования
+		$s=str_replace ("\r\n","<br>",$s);
+		 
+		$s=str_replace ("[url]","<a href='http://",$s);
+		$s=str_replace ("[/url]","' target='_blank' style='font-weight:normal; text-decoration:underline;'>Ресурс</a>",$s);
+		 
+		$s=str_replace ("[quote]","<u>Цитата</u><br><span style='color:grey;background:white;'>",$s);
+		$s=str_replace ("[/quote]","</span><br>",$s);
+		 
+		$s=str_replace ("[b]","<b>",$s);
+		$s=str_replace ("[/b]","</b>",$s);
+		 
+		$s=str_replace ("[u]","<u>",$s);
+		$s=str_replace ("[/u]","</u>",$s);
+		 
+		$s=str_replace ("[i]","<i>",$s);
+		$s=str_replace ("[/i]","</i>",$s);
+	
+		return $s;
 	}
 }

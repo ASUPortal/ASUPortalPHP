@@ -164,7 +164,7 @@ $head='
     <div align=center class=middle> Общая статистика:</div>
     <ul class=text>
     <li><a href="'.$web_root.'index.php">новостей: <b>'.$a['new_cnt'].'</b></a></li>
-    <li><a href="'.$web_root.'p_lecturers.php">преподавателей: <b>'.$a['lect_cnt'].'</b></a> </li>
+    <li><a href="'.$web_root.'_modules/_lecturers/index.php">преподавателей: <b>'.$a['lect_cnt'].'</b></a> </li>
     <li><a href="'.$web_root.'p_library.php">предметов:  <b>'.$a['subj_cnt'].'</b></a></li>
     <li><a href="'.$web_root.'p_library.php">учебных файлов:  <b>'.$a['files_cnt'].'</b></a></li>
     <li><a href="'.$web_root.'p_gost_docs_view.php">документов:  <b>'.$a['docs_cnt'].'</b></a></li>

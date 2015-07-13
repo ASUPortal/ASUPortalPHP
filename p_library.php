@@ -159,7 +159,7 @@ function letters() {
 	                <a href="?onget=1&getdir='.$a['nameFolder'].'">'.$a['subj_name'].'</a>
                 </td>
 	            <td>
-	                '.($hide_person_data_rule?$hide_person_data_text:'<a href="p_lecturers.php?onget=1&idlect='.$a['user_id'].'">'.$a['fio'].'</a>').'
+	                '.($hide_person_data_rule?$hide_person_data_text:'<a href="_modules/_lecturers/index.php?action=view&id='.$a['user_id'].'">'.$a['fio'].'</a>').'
                 </td>
     	    </tr>';
 
@@ -224,7 +224,7 @@ if ($getdir>0) {
     echo '
     <div class="middle">
         <a href=p_library.php?onget=1&getsubj='.$dd['subj_id'].'">'.$dd['name'].'</a></div><div class="text_library" >
-		'.($hide_person_data_rule?$hide_person_data_text:'<a href="p_lecturers.php?onget=1&idlect='.$ddd['id'].'" title="подробнее о преподавателе" style="text-decoration:none;">'.$ddd['FIO'].'</a>').'
+		'.($hide_person_data_rule?$hide_person_data_text:'<a href="_modules/_lecturers/index.php?action=view&id='.$ddd['id'].'" title="подробнее о преподавателе" style="text-decoration:none;">'.$ddd['FIO'].'</a>').'
 	</div>';
     if(mysql_num_rows($res02)==0) {
         echo '<br><div class="middle_lite_library">В данном предмете материалов нет.</div>';
@@ -321,7 +321,7 @@ if (isset($_GET['getallsub']) || $getsubj>0 || isset($_GET['getsub'])) {
         while($p=mysql_fetch_array($res06)) {
             echo '<div class="text" style="padding-left:40px;">
 		  Преподаватель:&nbsp;
-		  '.($hide_person_data_rule?$hide_person_data_text:'<a href="p_lecturers.php?onget=1&idlect='.$p['user_id'].'" title="подробнее о преподавателе">'.$p['fio'].'</a>').', &nbsp;
+		  '.($hide_person_data_rule?$hide_person_data_text:'<a href="_modules/_lecturers/index.php?action=view&id='.$p['user_id'].'" title="подробнее о преподавателе">'.$p['fio'].'</a>').', &nbsp;
 	      <a href="?onget=1&getdir='.$p['nameFolder'].'">найдено материалов преподавателя ('.$p['f_cnt'].')</a></div>';
             echo '';
 

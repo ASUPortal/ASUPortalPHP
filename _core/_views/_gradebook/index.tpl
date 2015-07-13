@@ -212,7 +212,7 @@
 
     {foreach $records->getItems() as $record}
     <tr>
-        <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить работу стедунта {if !is_null($record->student)}{$record->student->getName()}{/if}')) { location.href='?action=delete&id={$record->id}'; }; return false;"></a></td>
+        <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить работу студента {if !is_null($record->student)}{$record->student->getName()}{/if}')) { location.href='?action=delete&id={$record->id}'; }; return false;"></a></td>
         <td><a href="?action=edit&id={$record->getId()}">{$record->getId()}</a></td>
         <td>{$record->getDate()}</td>
         <td>
@@ -223,7 +223,7 @@
         <td>
             {if !is_null($record->person)}
                 {if !is_null($record->person->getUser())}
-                    <a href="{$web_root}p_lecturers.php?onget=1&idlect={$record->person->getUser()->getId()}">{$record->person->getName()}</a>
+                    <a href="{$web_root}_modules/_lecturers/index.php?action=view&id={$record->person->getUser()->getId()}">{$record->person->getName()}</a>
                 {else}
                     {$record->person->getName()}
                 {/if}

@@ -13,7 +13,7 @@
                 </p>
                 <p class="asu_auth_info">
                     {if (CSession::isAuth())}
-                    <a href="{CUtils::getLecturersLink()}?onGet=1&amp;idlect={CSession::getCurrentUser()->getId()}">
+                    <a href="{CUtils::getLecturersLink()}?action=view&amp;id={CSession::getCurrentUser()->getId()}">
                         {if is_null(CSession::getCurrentPerson())}
                             {CSession::getCurrentUser()->getName()}
                         {else}

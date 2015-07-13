@@ -32,6 +32,19 @@ class CPerson extends CActiveModel{
     protected $_degree = null;
     protected $_orders_sab = null;
     protected $_indPlanLoads = null;
+	private $_biographies = null;
+    private $_graduatesCurrentYear = null;
+    private $_graduatesOld = null;
+    private $_documents = null;
+    private $_newsCurrentYear = null;
+    private $_newsOld = null;
+    private $_schedules = null;
+    private $_pages = null;
+    private $_manuals = null;
+    private $_aspirantsCurrent = null;
+    private $_aspirantsOld = null;
+    private $_questions = null;
+    private $_supervisedGroups = null;
     public $to_tabel = 0;
     public $is_slave = 0;
 
@@ -145,7 +158,66 @@ class CPerson extends CActiveModel{
                 "storageCondition" => "person_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "managerClass" => "CIndPlanManager",
                 "managerGetObject" => "getLoad"
-            )
+            ),
+        	"biographies" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageProperty" => "_biographies",
+        		"storageTable" => TABLE_BIOGRAPHY,
+        		"storageCondition" => "user_id = " . (is_null($this->getId()) ? 0 : $this->getUserId()),
+        		"managerClass" => "CBiographyManager",
+        		"managerGetObject" => "getBiography"
+        	),
+    		"documents" => array(
+    			"relationPower" => RELATION_HAS_MANY,
+    			"storageProperty" => "_documents",
+    			"storageTable" => TABLE_LIBRARY_DOCUMENTS,
+    			"storageCondition" => "user_id = " . (is_null($this->getId()) ? 0 : $this->getUserId()),
+    			"managerClass" => "CLibraryManager",
+    			"managerGetObject" => "getDocument"
+    		),
+    		"newsCurrentYear" => array(
+    			"relationPower" => RELATION_HAS_MANY,
+    			"storageProperty" => "_newsCurrentYear",
+    			"storageTable" => TABLE_NEWS,
+    			"storageCondition" => 'user_id_insert = '.(is_null($this->getId()) ? 0 : $this->getUserId()).' and date_time>="'.CUtils::getCurrentYear()->date_start.'"',
+    			"managerClass" => "CNewsManager",
+    			"managerGetObject" => "getNewsItem",
+				"managerOrder" => "`date_time` desc"
+    		),
+    		"newsOld" => array(
+    			"relationPower" => RELATION_HAS_MANY,
+    			"storageProperty" => "_newsOld",
+    			"storageTable" => TABLE_NEWS,
+    			"storageCondition" => 'user_id_insert = '.(is_null($this->getId()) ? 0 : $this->getUserId()).' and date_time<"'.CUtils::getCurrentYear()->date_start.'"',
+    			"managerClass" => "CNewsManager",
+    			"managerGetObject" => "getNewsItem",
+    			"managerOrder" => "`date_time` desc"
+    		),
+    		"pages" => array(
+    			"relationPower" => RELATION_HAS_MANY,
+    			"storageProperty" => "_pages",
+    			"storageTable" => TABLE_PAGES,
+    			"storageCondition" => "user_id_insert = ".(is_null($this->getId()) ? 0 : $this->getUserId())." and type_id<>1",
+    			"managerClass" => "CPageManager",
+    			"managerGetObject" => "getPage"
+    		),
+    		"questions" => array(
+    			"relationPower" => RELATION_HAS_MANY,
+    			"storageProperty" => "_questions",
+    			"storageTable" => TABLE_QUESTION_TO_USERS,
+    			"storageCondition" => 'status!=5 and answer_text is not null and answer_text!="" and user_id="'.(is_null($this->getId()) ? 0 : $this->getUserId()).'"',
+    			"managerClass" => "CQuestionManager",
+    			"managerGetObject" => "getQuestion",
+    			"managerOrder" => "`datetime_quest` desc"
+    		),
+    		"supervisedGroups" => array(
+    			"relationPower" => RELATION_HAS_MANY,
+    			"storageProperty" => "_supervisedGroups",
+    			"storageTable" => TABLE_STUDENT_GROUPS,
+    			"storageCondition" => "curator_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+    			"managerClass" => "CStaffManager",
+    			"managerGetObject" => "getStudentGroup"
+    		)
         );
     }
     public function attributeLabels() {
@@ -334,6 +406,20 @@ class CPerson extends CActiveModel{
             }
         }
         return $this->_user;
+    }
+    /**
+     * Идентификатор связанного с сотрудником пользователя портала
+     *
+     * @return int
+     */
+    public function getUserId() {
+    	$person = CStaffManager::getPerson($this->getId());
+    	if (!is_null($person->getUser())) {
+    		$userId = $person->getUser()->id;
+    	} else {
+    		$userId = 0;
+    	}
+    	return $userId;
     }
     /**
      * Является ли пользователем портала
@@ -678,6 +764,239 @@ class CPerson extends CActiveModel{
         $object = parent::toJsonObject($relations);
         $object->name = $this->getName();
         return $object;
+    }
+    
+    /**
+     * Биография
+     * 
+     * @return CArrayList
+     */
+    public function getBiographies() {
+    	$result = new CArrayList();
+    	foreach ($this->biographies->getItems() as $biography) {
+    		$result->add($biography->getId(), $biography);
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Дипломники текущего учебного года
+     * 
+     * @return CArrayList
+     */
+    public function getGraduatesCurrentYear() {
+    	if (is_null($this->_graduatesCurrentYear)) {
+    		$this->_graduatesCurrentYear = new CArrayList();
+    		$query = new CQuery();
+    		$query->select("diploms.*")
+	    		->from(TABLE_DIPLOMS." as diploms")
+	    		->leftJoin(TABLE_STUDENTS." as students", "diploms.student_id=students.id")
+	    		->condition('kadri_id = "'.$this->id.'" and (date_act>="'.CUtils::getCurrentYear()->date_start.'" or date_act is NULL)')
+	    		->order("students.fio asc");
+    		foreach ($query->execute()->getItems() as $item) {
+    			$diplom = new CDiplom(new CActiveRecord($item));
+    			$this->_graduatesCurrentYear->add($diplom->getId(), $diplom);
+    		}
+    	}
+    	return $this->_graduatesCurrentYear;
+    }
+    
+    /**
+     * Дипломники предыдущих учебных лет
+     * 
+     * @return CArrayList
+     */
+    public function getGraduatesOld() {
+    	if (is_null($this->_graduatesOld)) {
+    		$this->_graduatesOld = new CArrayList();
+   			$query = new CQuery();
+	    	$query->select("diploms.*")
+		    	->from(TABLE_DIPLOMS." as diploms")
+		    	->leftJoin(TABLE_STUDENTS." as students", "diploms.student_id=students.id")
+		    	->condition('kadri_id = "'.$this->id.'" and date_act<"'.CUtils::getCurrentYear()->date_start.'"')
+		    	->order("students.fio asc");
+    		foreach ($query->execute()->getItems() as $item) {
+    			$diplom = new CDiplom(new CActiveRecord($item));
+    			$this->_graduatesOld->add($diplom->getId(), $diplom);
+    		}
+    	}
+    	return $this->_graduatesOld;
+    }
+    
+    /**
+     * Документы
+     * 
+     * @return CArrayList
+     */
+    public function getDocuments() {
+    	$result = new CArrayList();
+    	foreach ($this->documents->getItems() as $document) {
+    		$result->add($document->getId(), $document);
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Объявления
+     * 
+     * @return CArrayList
+     */
+    public function getNews() {
+    	$result = new CArrayList();
+    	foreach ($this->news->getItems() as $new) {
+    		$result->add($new->getId(), $new);
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Объявления текущего учебного года
+     * 
+     * @return CArrayList
+     */
+    public function getNewsCurrentYear() {
+    	$result = new CArrayList();
+    	foreach ($this->newsCurrentYear->getItems() as $new) {
+    		$result->add($new->getId(), $new);
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Объявления прошлых учебных лет
+     * 
+     * @return CArrayList
+     */
+    public function getNewsOld() {
+    	$result = new CArrayList();
+    	foreach ($this->newsOld->getItems() as $new) {
+    		$result->add($new->getId(), $new);
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Расписание
+     * 
+     * @return CArrayList
+     */
+    public function getSchedule() {
+    	if (is_null($this->_schedules)) {
+    		$this->_schedules = new CArrayList();
+    		$query = new CQuery();
+    		$query->select("schedule.*")
+	    		->from(TABLE_SCHEDULE." as schedule")
+	    		->condition("schedule.id=".$this->getUser()->id." and schedule.year=".CUtils::getCurrentYear()->getId()." and schedule.month=".CUtils::getCurrentYearPart()->getId());
+    		foreach ($query->execute()->getItems() as $item) {
+    			$schedule = new CSchedule(new CActiveRecord($item));
+    			$this->_schedules->add($schedule->getId(), $schedule);
+    		}
+    	}
+    	return $this->_schedules;
+    }
+    
+    /**
+     * Cтраницы на портале
+     * 
+     * @return CArrayList
+     */
+    public function getPages() {
+    	$result = new CArrayList();
+    	foreach ($this->pages->getItems() as $page) {
+    		$result->add($page->getId(), $page);
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Список пособий на портале
+     * 
+     * @return CArrayList
+     */
+    public function getManuals() {
+    	if (is_null($this->_manuals)) {
+    		$this->_manuals = new CArrayList();
+    		$query = new CQuery();
+    		$query->select("subj.*, doc.nameFolder as nameFolder, (select count(*) from files f where f.nameFolder = doc.nameFolder) as f_cnt")
+	    		->from(TABLE_DISCIPLINES." as subj")
+	    		->leftJoin(TABLE_LIBRARY_DOCUMENTS." as doc", "subj.id = doc.subj_id")
+	    		->condition("doc.user_id=".$this->getUser()->id);
+    		foreach ($query->execute()->getItems() as $item) {
+    			$subject = new CDiscipline(new CActiveRecord($item));
+    			$this->_manuals->add($subject->getId(), $subject);
+    		}
+    	}
+    	return $this->_manuals;
+    }
+    
+    /**
+     * Подготовка аспирантов, текущие
+     * 
+     * @return CArrayList
+     */
+    public function getAspirantsCurrent() {
+    	if (is_null($this->_aspirantsCurrent)) {
+    		$this->_aspirantsCurrent = new CArrayList();
+    		$query = new CQuery();
+    		$query->select("disser.*")
+	    		->from(TABLE_PERSON_DISSER." as disser")
+	    		->innerJoin(TABLE_PERSON." as kadri", "kadri.id=disser.kadri_id")
+	    		->condition('disser.scinceMan="'.$this->id.'" and disser.god_zach>="'.date("Y", strtotime(CUtils::getCurrentYear()->date_end)).'"')
+	    		->order("kadri.fio asc");
+    		foreach ($query->execute()->getItems() as $item) {
+    			$aspir = new CPersonPaper(new CActiveRecord($item));
+    			$this->_aspirantsCurrent->add($aspir->getId(), $aspir);
+    		}
+    	}
+    	return $this->_aspirantsCurrent;
+    }
+    
+    /**
+     * Подготовка аспирантов, архив
+     * 
+     * @return CArrayList
+     */
+    public function getAspirantsOld() {
+    	if (is_null($this->_aspirantsOld)) {
+    		$this->_aspirantsOld = new CArrayList();
+    		$query = new CQuery();
+    		$query->select("disser.*")
+	    		->from(TABLE_PERSON_DISSER." as disser")
+	    		->innerJoin(TABLE_PERSON." as kadri", "kadri.id=disser.kadri_id")
+	    		->condition('disser.scinceMan="'.$this->id.'" and disser.scinceMan>0 and (disser.god_zach<"'.date("Y", strtotime(CUtils::getCurrentYear()->date_end)).'" or disser.god_zach is null)')
+	    		->order("kadri.fio asc");
+    		foreach ($query->execute()->getItems() as $item) {
+    			$aspir = new CPersonPaper(new CActiveRecord($item));
+    			$this->_aspirantsOld->add($aspir->getId(), $aspir);
+    		}
+    	}
+    	return $this->_aspirantsOld;
+    }
+    
+    /**
+     * Вопросы и ответы на них преподавателя
+     * 
+     * @return CArrayList
+     */
+    public function getQuestions() {
+    	$result = new CArrayList();
+    	foreach ($this->questions->getItems() as $question) {
+    		$result->add($question->getId(), $question);
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Кураторство учебных групп
+     * 
+     * @return CArrayList
+     */
+    public function getSupervisedGroups() {
+    	$result = new CArrayList();
+    	foreach ($this->supervisedGroups->getItems() as $group) {
+    		$result->add($group->getId(), $group);
+    	}
+    	return $result;
     }
 
 }

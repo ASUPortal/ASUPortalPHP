@@ -164,7 +164,7 @@ else {$query=$query.'	where LOWER(users.fio) like "%'.$q.'%" or LOWER(biography.
 	  		$i=0;
 			  while ($a=mysql_fetch_array($res))
 	  		{	$i++;
-	  		 	echo '<p>'.$i.' <a class=text style="color:#2020bd" href="p_lecturers.php?onget=1&idlect='.$a['user_id'].'" target="_blank">'.$a['fio'].'</a></p>';
+	  		 	echo '<p>'.$i.' <a class=text style="color:#2020bd" href="_modules/_lecturers/index.php?action=view&id='.$a['user_id'].'" target="_blank">'.$a['fio'].'</a></p>';
 	  		} 
 	  	} 
 	  else {echo ' ничего не найдено';} 
