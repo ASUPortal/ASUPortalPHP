@@ -7,6 +7,7 @@
     <form action="workplans.php" method="post" enctype="multipart/form-data" class="form-horizontal">
         {CHtml::hiddenField("action", "save")}
         {CHtml::activeHiddenField("discipline_id", $plan)}
+        {CHtml::activeHiddenField("corriculum_discipline_id", $plan)}
         {CHtml::activeHiddenField("id", $plan)}
 
         <ul class="nav nav-tabs">

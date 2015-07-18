@@ -7,9 +7,9 @@
  * To change this template use File | Settings | File Templates.
  *
  * Сотрудник
+ *
+ * @property CArrayList workplans
  */
-
-
 class CPerson extends CActiveModel{
     protected $_table = TABLE_PERSON;
     private $_subordinators = null;
@@ -217,7 +217,13 @@ class CPerson extends CActiveModel{
     			"storageCondition" => "curator_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
     			"managerClass" => "CStaffManager",
     			"managerGetObject" => "getStudentGroup"
-    		)
+    		),
+            "workplans" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageTable" => TABLE_WORK_PLANS,
+                "storageCondition" => "author_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CWorkPlan"
+            )
         );
     }
     public function attributeLabels() {
@@ -262,7 +268,8 @@ class CPerson extends CActiveModel{
             "prepod_rabota" => "Опыт преподавательской работы",
             "nagradi" => "Научные награды",
             "primech" => "Примечание",
-            "order_seb_id" => "Приказ по ГАК"
+            "order_seb_id" => "Приказ по ГАК",
+            "workplans" => "Рабочие программы"
         );
     }
     public function fieldsProperty() {
