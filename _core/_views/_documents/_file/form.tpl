@@ -1,6 +1,6 @@
 <form action="files.php" method="post" enctype="multipart/form-data" class="form-horizontal">
     {CHtml::hiddenField("action", "save")}
-    {CHtml::activeHiddenField("id_file", $object)}
+    {CHtml::activeHiddenField("id", $object)}
 
     {CHtml::errorSummary($object)}
 

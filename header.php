@@ -165,8 +165,8 @@ $head='
     <ul class=text>
     <li><a href="'.$web_root.'index.php">новостей: <b>'.$a['new_cnt'].'</b></a></li>
     <li><a href="'.$web_root.'_modules/_lecturers/index.php">преподавателей: <b>'.$a['lect_cnt'].'</b></a> </li>
-    <li><a href="'.$web_root.'p_library.php">предметов:  <b>'.$a['subj_cnt'].'</b></a></li>
-    <li><a href="'.$web_root.'p_library.php">учебных файлов:  <b>'.$a['files_cnt'].'</b></a></li>
+    <li><a href="'.$web_root.'_modules/_library/index.php">предметов:  <b>'.$a['subj_cnt'].'</b></a></li>
+    <li><a href="'.$web_root.'_modules/_library/index.php">учебных файлов:  <b>'.$a['files_cnt'].'</b></a></li>
     <li><a href="'.$web_root.'p_gost_docs_view.php">документов:  <b>'.$a['docs_cnt'].'</b></a></li>
     </ul>
     ';
@@ -174,7 +174,7 @@ $head='
     if ($count_files!=0 || $count_notice!=0 || $count_news!=0 || 1>0) {
         $statistic .= '<div class=middle>Статистика за неделю: </div><ul class=TEXT>';
         if ($count_files!=0 || 1>0) {
-            $statistic .= '<li><a href="'.$web_root.'p_library.php">новых файлов:<b>'.$count_files.'</b> </a> </li>';
+            $statistic .= '<li><a href="'.$web_root.'_modules/_library/index.php">новых файлов:<b>'.$count_files.'</b> </a> </li>';
         }
         if ($count_notice!=0 || 1>0) {
             $statistic .= '<li><a href="'.$web_root.'p_notice.php">новых объявлений: <b>'.$count_notice.'</b></a></li>';
