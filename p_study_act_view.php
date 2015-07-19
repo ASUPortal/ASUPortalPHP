@@ -189,7 +189,7 @@ if ($student_id>0) {
        users.id AS user_id,
        subjects.name AS subj_n_full,
        sm.color as mark_color,
-(SELECT COUNT(f.id_file) 
+(SELECT COUNT(f.id) 
 					  FROM    (documents d 
 					           INNER JOIN
 					              files f
@@ -252,7 +252,7 @@ echo '<table name=tab1 border=1 cellpadding="10" cellspacing="0" width="99%">
 		echo '<td>&nbsp;';
 		if ($tmpval['f_cnt']>0)
 		{
-		 echo ' <a href="p_library.php?onget=1&getsubj='.$tmpval['subject_id'].'" title="'.$tmpval['subj_n_full'].
+		 echo ' <a href="_modules/_library/index.php?action=index&filter=subject:'.$tmpval['subject_id'].'" title="'.$tmpval['subj_n_full'].
             ', пособия по предмету">'.$tmpval['subj_name'].' ('.$tmpval['f_cnt'].')</a> ';
 		 }
 		else {echo $tmpval['subj_name'];}

@@ -110,7 +110,7 @@ $query='select distinct files.browserFile,files.DATA as file_date,files.nameFile
 	  		$i=0;
 			  while ($a=mysql_fetch_array($res))
 	  		{	$i++;
-	  		 	echo '<p>'.$i.' <a class=text style="color:#2020bd" href="p_library.php?onget=1&getdirect='.$a['nameFolder'].'&getfile='.$a['nameFile'].'" target="_blank">'.$a['browserFile'].', '.$a['subj_name'].', <b>'.$a['fio'].'</b></a></p>';
+	  		 	echo '<p>'.$i.' <a class=text style="color:#2020bd" href="_modules/_library/index.php?action=publicView&id='.$a['nameFolder'].'&getfile='.$a['nameFile'].'" target="_blank">'.$a['browserFile'].', '.$a['subj_name'].', <b>'.$a['fio'].'</b></a></p>';
 	  		} 
 	  	} 
 	  else {echo ' ничего не найдено';} 

@@ -223,7 +223,7 @@ for ($day=1;$day<=6;$day++)
 					if ($num_rows_subj>0) {	
 					 $b_subj=mysql_fetch_array($res_subj);
 					 $subj=$b_subj['nameFolder'];
-					 $b['study']='<a href="p_library.php?onget=1&getdir='.$b_subj['nameFolder'].'" title="пособий по предмету: '.$b_subj['cnt_files'].'">'.$b['study'].'</a>';//$link_style='';
+					 $b['study']='<a href="_modules/_library/index.php?action=publicView&id='.$b_subj['nameFolder'].'" title="пособий по предмету: '.$b_subj['cnt_files'].'">'.$b['study'].'</a>';//$link_style='';
 					 }
 					else {
 					 //$link='#';

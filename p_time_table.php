@@ -322,7 +322,7 @@ for ($num=1;$num<=count($time);$num++)
 				if ($num_rows_subj>0) {	
 				 $b_subj=mysql_fetch_array($res_subj);
 				 $subj=$b_subj['nameFolder'];
-				 $link='p_library.php?onget=1&getdir='.$b_subj['nameFolder'].'';$link_style='';
+				 $link='_modules/_library/index.php?action=publicView&id='.$b_subj['nameFolder'].'';$link_style='';
 				 }
 				else {
 				 $link='#';$link_style='style="color:#666666;"';
