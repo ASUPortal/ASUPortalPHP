@@ -37,11 +37,10 @@ class CLibraryManager {
      */
     public static function getFile($key) {
         if (!self::getCacheFiles()->hasElement($key)) {
-            $ar = CActiveRecordProvider::getById(TABLE_LIBRARY_FILES, $key);
-            if (!is_null($ar)) {
-                $file = new CLibraryFile($ar);
-                self::getCacheFiles()->add($file->getId(), $file);
-            }
+        	foreach (CActiveRecordProvider::getWithCondition(TABLE_LIBRARY_FILES, "id='".$key."'")->getItems() as $item) {
+        		$file = new CLibraryFile($item);
+        		self::getCacheFiles()->add($file->getId(), $file);
+        	}
         }
         return self::getCacheFiles()->getItem($key);
     }
@@ -55,7 +54,8 @@ class CLibraryManager {
         $query = new CQuery();
         $query->select("*")
             ->from(TABLE_LIBRARY_FILES)
-            ->condition("nameFolder = ".$key);
+            ->condition("nameFolder = ".$key)
+        	->order("browserFile asc");
         foreach ($query->execute()->getItems() as $data) {
             $file = new CLibraryFile(new CActiveRecord($data));
             $result->add($file->getId(), $file);
@@ -105,7 +105,7 @@ class CLibraryManager {
         $query = new CQuery();
         $query->select("file.*")
             ->from(TABLE_LIBRARY_FILES." as file")
-            ->order("file.id_file desc")
+            ->order("file.id desc")
             ->limit(0, 10);
         foreach ($query->execute()->getItems() as $data) {
             $doc = new CLibraryFile(new CActiveRecord($data));

@@ -10,15 +10,7 @@
 class CLibraryFile extends CActiveModel{
     protected $_table = TABLE_LIBRARY_FILES;
     protected $_document = null;
-
-    /**
-     * Ну вот на кой так было нужно?
-     *
-     * @return int|mixed|null
-     */
-    public function getId() {
-        return $this->id_file;
-    }
+    
     public function relations() {
         return array(
             "document" => array(
@@ -29,6 +21,30 @@ class CLibraryFile extends CActiveModel{
                 "managerGetObject" => "getDocumentByFolderId"
             )
         );
+    }
+    public function attributeLabels() {
+    	return array(
+    			"browserFile" => "Имя файла на сервере",
+    			"nameFile" => "Файл",
+    			"add_link" => "Сопутствующие ссылки (ПО, эл.ресурсы)",
+    			"nameFolder" => "Имя папки"
+    	);
+    }
+    public function fieldsProperty() {
+    	return array(
+    			'nameFile' => array(
+    					'type'  => FIELD_UPLOADABLE,
+    					'upload_dir' => CORE_CWD.CORE_DS."library".CORE_DS.CRequest::getInt("id").CORE_DS
+    			)
+    	);
+    }
+    public function validationRules() {
+    	return array(
+    			"required" => array(
+    					"browserFile",
+		    			"nameFile"
+    			)
+    	);
     }
     public function getAuthorName() {
         $result = "";
@@ -81,6 +97,9 @@ class CLibraryFile extends CActiveModel{
      * @return string
      */
     public function getFileDownloadLink() {
+    	$file = CLibraryManager::getFile($this->getId());
+    	$file->entry = $file->entry+1;
+    	$file->save();
         return WEB_ROOT."library/".$this->nameFolder."/".$this->nameFile;
     }
 }

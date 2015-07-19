@@ -46,7 +46,7 @@ class CLibraryFolder{
         if (is_null(self::$_materials)) {
             self::$_materials = new CArrayList();
             $query = new CQuery();
-            $query->select("doc.user_id as user_id, COUNT(file.id_file) as cnt")
+            $query->select("doc.user_id as user_id, COUNT(file.id) as cnt")
                 ->from(TABLE_LIBRARY_DOCUMENTS." as doc")
                 ->innerJoin(TABLE_LIBRARY_FILES." as file", "doc.nameFolder = file.nameFolder")
                 ->group("doc.user_id");
@@ -56,8 +56,23 @@ class CLibraryFolder{
         }
         return self::$_materials;
     }
-    public function getMaterialsCount() {
-        return self::getMaterialsCntByAllPersons();
+    public function getMaterialsCount($key) {
+		$query = new CQuery();
+		$query->select("doc.user_id")
+			->from(TABLE_LIBRARY_DOCUMENTS." as doc")
+			->innerJoin(TABLE_LIBRARY_FILES." as file", "doc.nameFolder = file.nameFolder")
+			->condition("doc.nameFolder = ".$key);
+		$materialsCount = $query->execute()->getCount();
+        return $materialsCount;
+    }
+    public function getMaterialsCountBySubject($subj_id, $user_id) {
+    	$query = new CQuery();
+    	$query->select("doc.user_id")
+    	->from(TABLE_LIBRARY_DOCUMENTS." as doc")
+    	->innerJoin(TABLE_LIBRARY_FILES." as file", "doc.nameFolder = file.nameFolder")
+    	->condition("doc.subj_id = ".$subj_id." and doc.user_id = ".$user_id);
+    	$materialsCount = $query->execute()->getCount();
+    	return $materialsCount;
     }
     public function getFolderIds() {
         if (is_null($this->_folders)) {

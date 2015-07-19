@@ -1,4 +1,5 @@
 {if ($showLatest)}
+    <h5>Последние файлы в разделе "Учеба"</h5>
     <table width="100%" border="0" cellpadding="5" cellspacing="0" class="tableBlank" style="border: 1px solid black; ">
         {foreach CLibraryManager::getLatestDocuments()->getItems() as $file}
             <tr>
@@ -29,4 +30,5 @@
             </tr>
         {/foreach}
     </table>
+    <br>
 {/if}
