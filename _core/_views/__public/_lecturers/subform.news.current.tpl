@@ -12,7 +12,7 @@
 			{if ({$new->image}!='')}
 				<img src="{$web_root}images/news/{$new->image}">
 			{/if}
-			{CUtils::msg_replace({$new->file})}
+			{CUtils::getReplacedMessage({$new->file})}
 			{if ({$new->file_attach}!='')}
 				<br><div>Прикреплен файл: <a href="{$web_root}news/attachement/{$new->file_attach}">
 				<img src="{$web_root}images/design/attachment.gif" border=0><b>{$new->file_attach}</b></a></div>

@@ -113,8 +113,7 @@ class CPublicLibraryController extends CBaseController{
     	if (!is_null(CRequest::getFilter("author"))) {
     		$selectedUser = CRequest::getFilter("author");
     		$author = CRequest::getFilter("author");
-    	}
-    	if (is_null(CRequest::getFilter("author"))) {
+    	} else {
     		$query->condition("doc.user_id = ".CSession::getCurrentUser()->getId());
     		$author = CSession::getCurrentUser()->getId();
     	}
@@ -183,8 +182,7 @@ class CPublicLibraryController extends CBaseController{
     	if (!is_null(CRequest::getFilter("author"))) {
     		$document->user_id = CRequest::getFilter("author");
     		$author = CRequest::getFilter("author");
-    	}
-    	if (is_null(CRequest::getFilter("author"))) {
+    	} else {
     		$document->user_id = CSession::getCurrentUser()->getId();
     		$author = CSession::getCurrentUser()->getId();
     	}
@@ -235,8 +233,7 @@ class CPublicLibraryController extends CBaseController{
     	$document = CLibraryManager::getDocument(CRequest::getInt("id"));
     	if (!is_null(CRequest::getFilter("author"))) {
     		$author = CRequest::getFilter("author");
-    	}
-    	if (is_null(CRequest::getFilter("author"))) {
+    	} else {
     		$author = CSession::getCurrentUser()->getId();
     	}
     	// отбор дисциплин, которых нет у пользователя
@@ -283,8 +280,7 @@ class CPublicLibraryController extends CBaseController{
     	$files = CLibraryManager::getFilesByFolder(CRequest::getInt("id"));
     	if (!is_null(CRequest::getFilter("author"))) {
     		$author = CRequest::getFilter("author");
-    	}
-    	if (is_null(CRequest::getFilter("author"))) {
+    	} else {
     		$author = CSession::getCurrentUser()->getId();
     	}
     	$this->addActionsMenuItem(array(
@@ -313,8 +309,7 @@ class CPublicLibraryController extends CBaseController{
     	if (!is_null(CRequest::getFilter("author"))) {
     		$file->user_id = CRequest::getFilter("author");
     		$author = CRequest::getFilter("author");
-    	}
-    	if (is_null(CRequest::getFilter("author"))) {
+    	} else {
     		$file->user_id = CSession::getCurrentUser()->getId();
     		$author = CSession::getCurrentUser()->getId();
     	}
@@ -342,8 +337,7 @@ class CPublicLibraryController extends CBaseController{
     	$file = CLibraryManager::getFile(CRequest::getInt("id_file"));
     	if (!is_null(CRequest::getFilter("author"))) {
     		$author = CRequest::getFilter("author");
-    	}
-    	if (is_null(CRequest::getFilter("author"))) {
+    	} else {
     		$author = CSession::getCurrentUser()->getId();
     	}
     	$this->addActionsMenuItem(array(

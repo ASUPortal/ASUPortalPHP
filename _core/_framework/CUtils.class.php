@@ -884,7 +884,7 @@ class CUtils {
 	 * @param $s
 	 * @return string
 	 */
-	public static function msg_replace($s) {
+	public static function getReplacedMessage($s) {
 		
 		$s=str_replace ("\r\n","<br>",$s);
 		 
@@ -911,12 +911,12 @@ class CUtils {
      * @param $fileName
      * @return string
      */
-	public static function print_file_size($fileName) {
+	public static function getFileSize($fileName) {
 		if ($fileName!='') {
 			if (file_exists(CORE_CWD.CORE_DS.$fileName)) {
-				echo '<font size=-2 style="font-family:Arial;">, размер файла: <b>'.round(filesize(CORE_CWD.CORE_DS.$fileName)/1024/1024,3).'</b> МБ </font>';
+				return round(filesize(CORE_CWD.CORE_DS.$fileName)/1024/1024,3);
 			} else {
-				echo '<span><font size=-2 color="#FF0000" style="font-family:Arial;"> файл не найден.</font></span>';
+				return 0;
 			}
 		}
 	}
