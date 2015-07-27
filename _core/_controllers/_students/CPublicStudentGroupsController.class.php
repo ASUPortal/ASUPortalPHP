@@ -49,7 +49,7 @@ class CPublicStudentGroupsController extends CBaseController {
     	}
     	$letter = $firstLet[CRequest::getInt("getsub")];
     	$letterId = -1;
-    	if (CRequest::getInt("getsub")>0 and is_null(CRequest::getFilter("person.id"))) {
+    	if (CRequest::getInt("getsub")>0 and is_null(CRequest::getFilter("id"))) {
     		if (CRequest::getInt("getsub")>0) {
     			$letterId = CRequest::getInt("getsub");
     		}
