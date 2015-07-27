@@ -3,7 +3,7 @@
 {else}
 <ul>
 {foreach $lect->getSupervisedGroups()->getItems() as $group}
-	<li><a href="{$web_root}p_stgroups.php?onget=1&group_id={$group->id}">{$group->name}</a></li>
+	<li><a href="{$web_root}_modules/_student_groups/public.php?action=view&id={$group->id}">{$group->name}</a></li>
 {/foreach}
 </ul>
 {/if}
