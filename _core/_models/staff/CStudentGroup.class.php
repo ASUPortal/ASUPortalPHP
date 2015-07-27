@@ -11,6 +11,7 @@ class CStudentGroup extends CActiveModel {
     private $_students = null;
     private $_year = null;
     private $_speciality = null;
+    private $_schedules = null;
     protected $_monitor = null;
     protected $_curator = null;
     protected $_corriculum = null;
@@ -106,5 +107,24 @@ class CStudentGroup extends CActiveModel {
             $this->_speciality = CTaxonomyManager::getSpeciality($this->getRecord()->getItemValue("speciality_id"));
         }
         return $this->_speciality;
+    }
+    /**
+     * Расписание
+     *
+     * @return CArrayList
+     */
+    public function getSchedule() {
+    	if (is_null($this->_schedules)) {
+    		$this->_schedules = new CArrayList();
+    		$query = new CQuery();
+    		$query->select("schedule.*")
+	    		->from(TABLE_SCHEDULE." as schedule")
+	    		->condition("schedule.grup=".$this->getId()." and schedule.year=".CUtils::getCurrentYear()->getId()." and schedule.month=".CUtils::getCurrentYearPart()->getId());
+    		foreach ($query->execute()->getItems() as $item) {
+    			$schedule = new CSchedule(new CActiveRecord($item));
+    			$this->_schedules->add($schedule->getId(), $schedule);
+    		}
+    	}
+    	return $this->_schedules;
     }
 }
