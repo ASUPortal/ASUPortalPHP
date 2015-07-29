@@ -62,7 +62,7 @@ class CDocumentsManager {
      */
     public static function getFile($key = 0) {
         if (!self::getCacheFiles()->hasElement($key)) {
-            foreach (CActiveRecordProvider::getWithCondition(TABLE_DOCUMENTS, "id_file=".$key)->getItems() as $ar) {
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_DOCUMENTS, "id=".$key)->getItems() as $ar) {
                 $dar = new CDocumentActiveRecord($ar->getItems());
                 $dar->setTable(TABLE_DOCUMENTS);
                 $obj = new CDocumentFile($dar);

@@ -107,6 +107,7 @@ class CHtml {
                 }
             }
         }
+        asort($values);
         foreach ($values as $key=>$value) {
             $checked = "";
             if (is_null($selected)) {

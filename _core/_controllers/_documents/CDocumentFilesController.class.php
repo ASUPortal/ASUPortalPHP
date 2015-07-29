@@ -58,7 +58,6 @@ class CDocumentFilesController extends CBaseController{
     public function actionSave() {
         $object = new CDocumentFile();
         $object->setAttributes(CRequest::getArray($object::getClassName()));
-        $object->setPk("id_file");
         if ($object->validate()) {
             $object->save();
             $this->redirect("index.php?action=index&parent=".$object->folder_id);

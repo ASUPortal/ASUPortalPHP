@@ -677,7 +677,7 @@ $query.='students.fio AS stud_fio,
        users.id AS user_id,
        subjects.name AS subj_n_full,
        sm.color as mark_color,
-(SELECT COUNT(f.id_file) 
+(SELECT COUNT(f.id) 
 					  FROM    (documents d 
 					           INNER JOIN
 					              files f
@@ -858,7 +858,7 @@ $add_string=reset_param_name($query_string,'sort');
 //------------------------------
 		if ($tmpval['f_cnt']>0)
 		{
-		 echo ' <a href="p_library.php?onget=1&getsubj='.$tmpval['subject_id'].'" title="'.$tmpval['subj_n_full'].', пособия по предмету">'.color_mark($q,$tmpval['subj_name']).' ('.$tmpval['f_cnt'].')</a> ';
+		 echo ' <a href="_modules/_library/index.php?action=index&filter=subject:'.$tmpval['subject_id'].'" title="'.$tmpval['subj_n_full'].', пособия по предмету">'.color_mark($q,$tmpval['subj_name']).' ('.$tmpval['f_cnt'].')</a> ';
 		 }
 		else {echo color_mark($q,$tmpval['subj_name']);}
 //------------------------------		
