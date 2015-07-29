@@ -7,5 +7,5 @@
  */
 
 class CDocumentActiveRecord extends CActiveRecord{
-    protected static $_pk = 'id_file';
+    protected static $_pk = 'id';
 } 

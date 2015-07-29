@@ -9,7 +9,7 @@
             {foreach $folder->getPersons()->getItems() as $person}
                 <li>
                     <a href="?action=index&filter=author:{$person->getUser()->getId()}">{$person->getDisplayName()}</a> -
-                    <a href="?action=view&id={$folder->getFolderIds()->getItem($person->getUser()->getId())}">найдено материалов преподавателя ({$folder->getMaterialsCount()->getItem($person->getUser()->getId())})</a>
+                    <a href="?action=publicView&id={$folder->getFolderIds()->getItem($person->getUser()->getId())}">найдено материалов преподавателя ({$folder->getMaterialsCount($folder->getFolderIds()->getItem($person->getUser()->getId()))})</a>
                 </li>
             {/foreach}
         </ul>

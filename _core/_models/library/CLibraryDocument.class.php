@@ -26,9 +26,25 @@ class CLibraryDocument extends CActiveModel {
                 "storageProperty" => "_person",
                 "storageField" => "user_id",
                 "managerClass" => "CStaffManager",
-                "managerGetObject" => "getPerson"
+                "managerGetObject" => "getUser"
             )
         );
+    }
+    
+    public function attributeLabels() {
+    	return array(
+    			"subj_id" => "Дисциплина",
+    			"user_id" => "Автор",
+    			"nameFolder" => "Имя папки"
+    	);
+    }
+    
+    public function validationRules() {
+    	return array(
+    			"selected" => array(
+    					"subj_id"
+    			)
+    	);
     }
 
     /**

@@ -22,7 +22,7 @@
     			{foreach $lect->getBiographies()->getItems() as $biogr}
 	    			<td>{CHtml::activeAttachPreview("photo", $lect, 100)}</td>
 	    			<td></td>
-	    			<td>{CUtils::msg_replace($biogr->main_text)}</td>
+	    			<td>{CUtils::getReplacedMessage($biogr->main_text)}</td>
 				{/foreach}
     		{/if}
     	</tr>

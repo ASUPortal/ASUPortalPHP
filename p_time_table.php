@@ -269,7 +269,7 @@ echo '<div class="main"><a href="?onget=1&getallsub=1" title="к выбору р
 .$def_settings['part_name'].' &nbsp;'.$def_settings['year_name'].'года , 
 <font size=-1>';
 if ($gr_mode!=1) {echo '<a href="_modules/_lecturers/index.php?action=view&id='.$idlect.'" title="о преподавателе...">'.$result_1['FIO'].'</a>';}
-else { echo '<a href="p_stgroups.php?onget=1&group_id='.$idlect.'" title="о учебной группе...">'.$result_1['FIO'].'</a>';}
+else { echo '<a href="_modules/_student_groups/public.php?action=view&id='.$idlect.'" title="о учебной группе...">'.$result_1['FIO'].'</a>';}
 echo '</font></span></div> ';
 
 echo "\n\n<table name=time_table_all border=1 cellspacing=0>\n";
@@ -322,7 +322,7 @@ for ($num=1;$num<=count($time);$num++)
 				if ($num_rows_subj>0) {	
 				 $b_subj=mysql_fetch_array($res_subj);
 				 $subj=$b_subj['nameFolder'];
-				 $link='p_library.php?onget=1&getdir='.$b_subj['nameFolder'].'';$link_style='';
+				 $link='_modules/_library/index.php?action=publicView&id='.$b_subj['nameFolder'].'';$link_style='';
 				 }
 				else {
 				 $link='#';$link_style='style="color:#666666;"';

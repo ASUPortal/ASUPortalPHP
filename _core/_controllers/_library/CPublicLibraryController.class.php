@@ -8,9 +8,11 @@
  */
 
 class CPublicLibraryController extends CBaseController{
-    private $allowedAnonymous = array(
+    public $allowedAnonymous = array(
         "index",
-        "search"
+        "search",
+    	"get",
+    	"publicView"
     );
     public function __construct() {
         if (!CSession::isAuth()) {
@@ -29,8 +31,8 @@ class CPublicLibraryController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
-        $set->setPageSize(5);
+        $set = new CRecordSet(false);
+        $set->setPageSize(10);
         $query = new CQuery();
         $set->setQuery($query);
         $query->select("DISTINCT subject.*")
@@ -63,6 +65,17 @@ class CPublicLibraryController extends CBaseController{
             $query->condition("ORD(LEFT(subject.name, 1)) = ".CRequest::getFilter("char"));
             $showLatest = false;
         }
+        if (CSession::isAuth() and (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY or
+        		CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_ALL)) {
+        			$this->addActionsMenuItem(array(
+        				array(
+        					"title" => "Просмотр своих предметов/файлов",
+        					"link" => WEB_ROOT."_modules/_library/index.php?action=view&filter=author:".CSession::getCurrentUser()->getId(),
+        					"icon" => "actions/edit-find-replace.png"
+        			)
+        		)
+        	);
+        }
         $folders = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $folder = new CLibraryFolder(new CTerm($ar));
@@ -73,7 +86,7 @@ class CPublicLibraryController extends CBaseController{
         $this->setData("folders", $folders);
         $this->setData("paginator", $set->getPaginator());
         $this->setData("showLatest", $showLatest);
-        $this->renderView("_library/public.index.tpl");
+        $this->renderView("_library/public/public.index.tpl");
     }
     public function actionGet() {
         $file = CLibraryManager::getFile(CRequest::getInt("id"));
@@ -82,13 +95,279 @@ class CPublicLibraryController extends CBaseController{
         }
     }
     public function actionView() {
-        $files = CLibraryManager::getFilesByFolder(CRequest::getInt("id"));
-        $this->setData("files", $files);
-        $this->renderView("_library/public.view.tpl");
+    	$set = new CRecordSet(false);
+    	$query = new CQuery();
+    	$set->setQuery($query);
+    	$query->select("DISTINCT subject.*")
+	    	->from(TABLE_DISCIPLINES." as subject")
+	    	->innerJoin(TABLE_LIBRARY_DOCUMENTS." as doc", "doc.subj_id = subject.id")
+	    	->condition("doc.user_id = ".CRequest::getFilter("author"))
+	    	->order("subject.name asc");
+    	$selectedUser = null;
+    	$usersQuery = new CQuery();
+    	$usersQuery->select("user.*")
+	    	->from(TABLE_USERS." as user")
+	    	->order("user.fio asc")
+	    	->innerJoin(TABLE_LIBRARY_DOCUMENTS." as doc", "user.id = doc.user_id");
+    	// фильтр по автору
+    	if (!is_null(CRequest::getFilter("author"))) {
+    		$selectedUser = CRequest::getFilter("author");
+    		$author = CRequest::getFilter("author");
+    	} else {
+    		$query->condition("doc.user_id = ".CSession::getCurrentUser()->getId());
+    		$author = CSession::getCurrentUser()->getId();
+    	}
+    	$users = array();
+    	foreach ($usersQuery->execute()->getItems() as $ar) {
+    		$user = new CUser(new CActiveRecord($ar));
+    		$users[$user->getId()] = $user->getName();
+    	}
+    	$folders = new CArrayList();
+    	foreach ($set->getPaginated()->getItems() as $ar) {
+    		$folder = new CLibraryFolder(new CTerm($ar));
+    		$folders->add($folders->getCount(), $folder);
+    	}
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => WEB_ROOT."_modules/_library/index.php",
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
+    	if (CSession::isAuth() and (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY or
+    			CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_ALL)) {
+    				$this->addActionsMenuItem(array(
+    					array(
+    						"title" => "Добавить предмет",
+    						"link" => WEB_ROOT."_modules/_library/index.php?action=addDocument&filter=author:".$author,
+    						"icon" => "actions/list-add.png"
+    					)
+    			)
+    		);
+    	}
+    	$this->addCSSInclude(JQUERY_UI_CSS_PATH);
+    	$this->addJSInclude(JQUERY_UI_JS_PATH);
+    	$this->setData("folders", $folders);
+    	$this->setData("users", $users);
+    	$this->setData("selectedUser", $selectedUser);
+    	$this->setData("author", $author);
+    	$this->setData("paginator", $set->getPaginator());
+    	$this->renderView("_library/view.tpl");
+    }
+    public function actionPublicView() {
+    	$files = CLibraryManager::getFilesByFolder(CRequest::getInt("id"));
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => WEB_ROOT."_modules/_library/index.php",
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
+    	$this->setData("files", $files);
+    	$this->renderView("_library/public/public.view.tpl");
+    }
+    public function actionAddDocument() {
+    	$query = new CQuery();
+    	$query->select("doc.*")
+	    	->from(TABLE_LIBRARY_DOCUMENTS." as doc");
+    	foreach ($query->execute()->getItems() as $ar) {
+    		$document = new CLibraryDocument(new CActiveRecord($ar));
+    		$nameFolder=0;
+    		if ($document->nameFolder > $nameFolder) {
+    			$nameFolder=$document->nameFolder;
+    		}
+    		$nameFolder++;
+    	}
+    	$document = new CLibraryDocument();
+    	if (!is_null(CRequest::getFilter("author"))) {
+    		$document->user_id = CRequest::getFilter("author");
+    		$author = CRequest::getFilter("author");
+    	} else {
+    		$document->user_id = CSession::getCurrentUser()->getId();
+    		$author = CSession::getCurrentUser()->getId();
+    	}
+    	$document->nameFolder = $nameFolder;
+    	// отбор дисциплин, которых нет у пользователя
+    	$disciplines = array();
+    	$query = new CQuery();
+    	$query->select("distinct(discipline.id) as id, discipline.name as name")
+	    	->from(TABLE_DISCIPLINES." as discipline")
+	    	->leftJoin(TABLE_LIBRARY_DOCUMENTS." as document", "discipline.id = document.subj_id")
+	    	->condition("discipline.id not in (select `subj_id` from `documents` where `user_id`=".$author.")");
+    	foreach ($query->execute()->getItems() as $item) {
+    		$disciplines[$item["id"]] = $item["name"];
+    	}
+		$this->addActionsMenuItem(array(
+			array(
+				"title" => "Назад",
+				"link" => WEB_ROOT."_modules/_library/index.php?action=view",
+				"icon" => "actions/edit-undo.png"
+			),
+			array(
+				"title" => "Добавить новую дисциплину",
+				"link" => WEB_ROOT."_modules/_taxonomy/?action=legacy&id=10",
+				"icon" => "actions/list-add.png"
+			)
+    	));
+    	$this->setData("document", $document);
+    	$this->setData("disciplines", $disciplines);
+    	$this->renderView("_library/addDocument.tpl");
+    }
+    public function actionDeleteDocument() {
+    	$document = CLibraryManager::getDocument(CRequest::getInt("id"));
+    	if (!is_null($document)) {
+    		$directory = CORE_CWD.CORE_DS."library".CORE_DS.$document->nameFolder.CORE_DS;
+    		$handle = opendir($directory);
+    		while (false !== ($file = readdir($handle))) {
+    			if (is_file($directory.CORE_DS.$file)) {
+    				unlink($directory.CORE_DS.$file);
+    			}
+    		}
+    		closedir($handle);
+    		rmdir($directory);
+    		$document->remove();
+    	}
+    	$this->redirect("?action=view");
+    }
+    public function actionEditDocument() {
+    	$document = CLibraryManager::getDocument(CRequest::getInt("id"));
+    	if (!is_null(CRequest::getFilter("author"))) {
+    		$author = CRequest::getFilter("author");
+    	} else {
+    		$author = CSession::getCurrentUser()->getId();
+    	}
+    	// отбор дисциплин, которых нет у пользователя
+    	$disciplines = array();
+    	$query = new CQuery();
+    	$query->select("distinct(discipline.id) as id, discipline.name as name")
+	    	->from(TABLE_DISCIPLINES." as discipline")
+	    	->leftJoin(TABLE_LIBRARY_DOCUMENTS." as document", "discipline.id = document.subj_id")
+	    	->condition("discipline.id not in (select `subj_id` from `documents` where `user_id`=".$author." and `id`!=".CRequest::getInt("id").")");
+    	foreach ($query->execute()->getItems() as $item) {
+    		$disciplines[$item["id"]] = $item["name"];
+    	}
+		$this->addActionsMenuItem(array(
+			array(
+				"title" => "Назад",
+				"link" => WEB_ROOT."_modules/_library/index.php?action=view&filter=author:".$author,
+				"icon" => "actions/edit-undo.png"
+			)
+    	));
+    	$this->setData("document", $document);
+    	$this->setData("author", $author);
+    	$this->setData("disciplines", $disciplines);
+    	$this->renderView("_library/editDocument.tpl");
+    }
+    public function actionSaveDocument() {
+    	$document = new CLibraryDocument();
+    	$document->setAttributes(CRequest::getArray($document::getClassName()));
+    	if ($document->validate()) {
+    		$document->save();
+    		mkdir(CORE_CWD.CORE_DS."library/".$document->nameFolder, 0777);
+    		if ($this->continueEdit()) {
+    			$this->redirect("?action=editDocument&id=".$document->getId());
+    		} else {
+    			$this->redirect("index.php?action=view");
+    		}
+    		return true;
+    	} else {
+    		$this->redirect("index.php?action=addDocument");
+    	}
+    	$this->setData("document", $document);
+    	$this->renderView("_library/editDocument.tpl");
+    }
+    public function actionViewFiles() {
+    	$files = CLibraryManager::getFilesByFolder(CRequest::getInt("id"));
+    	if (!is_null(CRequest::getFilter("author"))) {
+    		$author = CRequest::getFilter("author");
+    	} else {
+    		$author = CSession::getCurrentUser()->getId();
+    	}
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => WEB_ROOT."_modules/_library/index.php?action=view&filter=author:".CRequest::getFilter("author"),
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
+    	if (CSession::isAuth() and (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY or
+    			CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_ALL)) {
+    				$this->addActionsMenuItem(array(
+    					array(
+    						"title" => "Добавить файл",
+    						"link" => WEB_ROOT."_modules/_library/index.php?action=addFile&id=".CRequest::getInt("id")."&filter=author:".CRequest::getFilter("author"),
+    						"icon" => "actions/list-add.png"
+    				)
+    			)
+    		);
+    	}
+    	$this->setData("files", $files);
+    	$this->renderView("_library/viewFiles.tpl");
+    }
+    public function actionAddFile() {
+    	$file = new CLibraryFile();
+    	if (!is_null(CRequest::getFilter("author"))) {
+    		$file->user_id = CRequest::getFilter("author");
+    		$author = CRequest::getFilter("author");
+    	} else {
+    		$file->user_id = CSession::getCurrentUser()->getId();
+    		$author = CSession::getCurrentUser()->getId();
+    	}
+    	$file->nameFolder = CRequest::getInt("id");
+		$this->addActionsMenuItem(array(
+			array(
+				"title" => "Назад",
+				"link" => WEB_ROOT."_modules/_library/index.php?action=viewFiles&id=".CRequest::getInt("id")."&filter=author:".$author,
+				"icon" => "actions/edit-undo.png"
+			)
+    	));
+    	$this->setData("file", $file);
+    	$this->renderView("_library/addFile.tpl");
+    }
+    public function actionDeleteFile() {
+    	$file = CLibraryManager::getFile(CRequest::getInt("id_file"));
+    	if (!is_null($file)) {
+    		$directory = CORE_CWD.CORE_DS."library".CORE_DS.$file->nameFolder.CORE_DS.$file->nameFile;
+			unlink($directory);
+    		$file->remove();
+    	}
+    	$this->redirect("?action=viewFiles&id=".CRequest::getInt("id"));
+    }
+    public function actionEditFile() {
+    	$file = CLibraryManager::getFile(CRequest::getInt("id_file"));
+    	if (!is_null(CRequest::getFilter("author"))) {
+    		$author = CRequest::getFilter("author");
+    	} else {
+    		$author = CSession::getCurrentUser()->getId();
+    	}
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => WEB_ROOT."_modules/_library/index.php?action=viewFiles&id=".$file->nameFolder."&filter=author:".$author,
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
+    	$this->setData("file", $file);
+    	$this->renderView("_library/editFile.tpl");
+    }
+    public function actionSaveFile() {
+    	$file = new CLibraryFile();
+    	$file->setAttributes(CRequest::getArray($file::getClassName()));
+    	if ($file->validate()) {
+    		$file->save();
+    		if ($this->continueEdit()) {
+    			$this->redirect("?action=editFile&id=".$file->nameFolder."&id_file=".$file->getId()."&filter=author:".$file->user_id);
+    		} else {
+    			$this->redirect("index.php?action=viewFiles&id=".$file->nameFolder."&filter=author:".$file->user_id);
+    		}
+    		return true;
+    	}
+    	$this->setData("file", $file);
+    	$this->renderView("_library/editFile.tpl");
     }
     public function actionSearch() {
         $res = array();
-        $term = CRequest::getString("term");
+        $term = CRequest::getString("query");
         /**
          * Поиск по названию дисциплины
          */

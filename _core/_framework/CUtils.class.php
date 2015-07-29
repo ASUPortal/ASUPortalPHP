@@ -164,7 +164,7 @@ class CUtils {
         //echo $str;
 
         $patterns=array(
-            "/.*\.rar|.*\.zip/i",
+            "/.*\.rar|.*\.zip|.*\.7z/i",
             "/.*\.doc.?|.*\.rtf/i",
             "/.*\.xls.?/i",
             "/.*\.pdf/i",
@@ -172,7 +172,7 @@ class CUtils {
             "/.*\.exe/i",
             "/.*\.htm|.*\.html|.*\.mht/i",
             "/.*\.jpg$|.*\.jpeg$|.*\.tif$|.*\.bmp$|.*\.png$/i",
-            "/.*\.ppt|.*\.pps/i",
+            "/.*\.ppt.?|.*\.pps/i",
             "/.*\.chm|.*\.hlp/i",
             "/.*\.msi|.*\.msp/i"
         );
@@ -878,8 +878,14 @@ class CUtils {
 			return $text;
 		}
 	}
-	public static function msg_replace($s) {
-		//замена при выводе сообщений на экран для форматирования
+	/**
+	 * Замена при выводе сообщений на экран для форматирования
+	 *
+	 * @param $s
+	 * @return string
+	 */
+	public static function getReplacedMessage($s) {
+		
 		$s=str_replace ("\r\n","<br>",$s);
 		 
 		$s=str_replace ("[url]","<a href='http://",$s);
@@ -898,5 +904,20 @@ class CUtils {
 		$s=str_replace ("[/i]","</i>",$s);
 	
 		return $s;
+	}
+    /**
+     * Размер файла по указанному пути
+     *
+     * @param $fileName
+     * @return string
+     */
+	public static function getFileSize($fileName) {
+		if ($fileName!='') {
+			if (file_exists(CORE_CWD.CORE_DS.$fileName)) {
+				return round(filesize(CORE_CWD.CORE_DS.$fileName)/1024/1024,3);
+			} else {
+				return 0;
+			}
+		}
 	}
 }

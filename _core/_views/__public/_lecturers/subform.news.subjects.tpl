@@ -3,7 +3,7 @@
 {else}
 <ul>
 {foreach $lect->getManuals()->getItems() as $manual}
-	<li><a href="{$web_root}p_library.php?onget=1&getdir={$manual->nameFolder}">{$manual->name} ({$manual->f_cnt})</a></li>
+	<li><a href="{$web_root}_modules/_library/?action=publicView&id={$manual->nameFolder}">{$manual->name} ({$manual->f_cnt})</a></li>
 {/foreach}
 </ul>
 {/if}
