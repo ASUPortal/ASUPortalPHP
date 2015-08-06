@@ -230,6 +230,8 @@ if (!is_null(CSession::getCurrentUser())) {
     if (!is_null(CSession::getCurrentUser()->getPersonalSettings())) {
         if (CSession::getCurrentUser()->getPersonalSettings()->isDashboardEnabled()) {
             header("Location:_modules/_dashboard/");
+        } else {
+        	header("Location:_modules/_dashboard/index.php?action=tasks");
         }
     }
 }
