@@ -314,6 +314,7 @@ class CPublicLibraryController extends CBaseController{
     		$author = CSession::getCurrentUser()->getId();
     	}
     	$file->nameFolder = CRequest::getInt("id");
+    	$file->date_time = date("Y-m-d H:i:s");
 		$this->addActionsMenuItem(array(
 			array(
 				"title" => "Назад",

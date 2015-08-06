@@ -7,7 +7,7 @@
 	<tr>
 		<th width="5"></th>
 		<th width="5">#</th>
-		<th width="16">Значек</th>
+		<th width="16">Значок</th>
 		<th>Название</th>
 	</tr>
 	{foreach $items->getItems() as $item}

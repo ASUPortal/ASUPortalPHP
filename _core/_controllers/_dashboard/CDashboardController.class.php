@@ -58,19 +58,19 @@ class CDashboardController extends CBaseController {
                     $child = new CDashboardItem();
                     $child->id = "inbox";
                     $child->title = "Входящие (".CSession::getCurrentUser()->getUnreadMessages()->getCount().")";
-                    $child->link = WEB_ROOT."mail.php?folder=in";
+                    $child->link = "mail.php?folder=in";
                     $item->addChild($child);
                 } else {
                     $child = new CDashboardItem();
                     $child->id = "inbox";
                     $child->title = "Нет непрочитанных сообщений";
-                    $child->link = WEB_ROOT."mail.php?folder=in";
+                    $child->link = "mail.php?folder=in";
                     $item->addChild($child);
                 }
                 $child = new CDashboardItem();
                 $child->id = "new";
                 $child->title = "Написать сообщение";
-                $child->link = WEB_ROOT."mail.php?compose=1";
+                $child->link = "mail.php?compose=1";
                 $item->addChild($child);
                 $items->add("_".$items->getCount(), $item);
             }
@@ -84,6 +84,25 @@ class CDashboardController extends CBaseController {
         $this->setData("settings", $settings);
         $this->addJSInclude("_modules/_dashboard/script.js");
 		$this->renderView("_dashboard/index.tpl");
+	}
+	public function actionTasks() {
+		$set = new CRecordSet();
+		$query = new CQuery();
+		$query->select("tasks.*")
+			->from(TABLE_USER_ROLES." as tasks")
+			->condition('tasks.hidden!=1 and tasks.id in (
+						select task_id from task_in_group where user_group_id in (select group_id from user_in_group where user_id="'.CSession::getCurrentUser()->id.'")
+						union
+						select task_id from task_in_user where user_id="'.CSession::getCurrentUser()->id.'")')
+			->order("tasks.name asc");
+		$set->setQuery($query);
+		$tasks = new CArrayList();
+		foreach ($set->getItems() as $item) {
+			$task = new CUserRole($item);
+			$tasks->add($task->getId(), $task);
+		}
+		$this->setData("tasks", $tasks);
+		$this->renderView("_dashboard/tasks.tpl");
 	}
 	public function actionList() {
 		$set = CActiveRecordProvider::getWithCondition(TABLE_DASHBOARD, "user_id = ".CSession::getCurrentUser()->getId()." and parent_id = 0");
