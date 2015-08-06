@@ -3,6 +3,7 @@
     {CHtml::activeHiddenField("id", $file)}
     {CHtml::activeHiddenField("user_id", $file)}
 	{CHtml::activeHiddenField("nameFolder", $file)}
+	{CHtml::activeHiddenField("date_time", $file)}
     
 	<div class="control-group">
         {CHtml::activeLabel("browserFile", $file)}
