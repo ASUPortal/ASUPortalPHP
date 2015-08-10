@@ -87,17 +87,28 @@ class CDashboardController extends CBaseController {
 	}
 	public function actionTasks() {
 		$set = new CRecordSet();
-		$query = new CQuery();
-		$query->select("tasks.*")
-			->from(TABLE_USER_ROLES." as tasks")
-			->condition('tasks.hidden!=1 and tasks.id in (
-						select task_id from task_in_group where user_group_id in (select group_id from user_in_group where user_id="'.CSession::getCurrentUser()->id.'")
-						union
-						select task_id from task_in_user where user_id="'.CSession::getCurrentUser()->id.'")')
+		$queryForGroup = new CQuery();
+		$queryForGroup->select("distinct(tasks.id) as id, tasks.name as name, tasks.url as url")
+			->from(TABLE_USER_GROUP_HAS_ROLES." as groupTasks")
+			->innerJoin(TABLE_USER_ROLES." as tasks", "groupTasks.task_id=tasks.id")
+			->innerJoin(TABLE_USER_IN_GROUPS." as userGroup", "userGroup.user_id=".CSession::getCurrentUser()->id." and groupTasks.user_group_id=userGroup.group_id and groupTasks.task_rights_id!=0")
+			->condition('tasks.hidden!=1')
 			->order("tasks.name asc");
-		$set->setQuery($query);
+		$set->setQuery($queryForGroup);
+		$setForUser = new CRecordSet();
+		$queryForUser = new CQuery();
+		$queryForUser->select("distinct(tasks.id) as id, tasks.name as name, tasks.url as url")
+			->from(TABLE_USER_HAS_ROLES." as userTasks")
+			->innerJoin(TABLE_USER_ROLES." as tasks", "userTasks.task_id=tasks.id")
+			->condition('tasks.hidden!=1 and userTasks.user_id="'.CSession::getCurrentUser()->id.'" and userTasks.task_rights_id!=0')
+			->order("tasks.name asc");
+		$setForUser->setQuery($queryForUser);
 		$tasks = new CArrayList();
 		foreach ($set->getItems() as $item) {
+			$task = new CUserRole($item);
+			$tasks->add($task->getId(), $task);
+		}
+		foreach ($setForUser->getItems() as $item) {
 			$task = new CUserRole($item);
 			$tasks->add($task->getId(), $task);
 		}

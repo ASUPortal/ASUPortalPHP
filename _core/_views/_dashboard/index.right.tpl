@@ -14,34 +14,32 @@
         </center></a>
 </p>
 {foreach CSession::getCurrentUser()->getLevelsForCurrentTask() as $level}
-	{foreach CSession::getCurrentUser()->getGroups()->getItems() as $group}
-		{if ($group->id == 2) and ($level == 4)}
-			<p>
-			    <a href="settings.php?action=index">
-			        <center>
-			            <img src="{$web_root}images/{$icon_theme}/32x32/apps/preferences-desktop-wallpaper.png"><br>
-			            Управление группами
-			        </center></a>
-			</p>
-			
-			<p>
-			    <a href="#usersGroups" data-toggle="modal"><center>
-			        <img src="{$web_root}images/{$icon_theme}/32x32/categories/applications-accessories.png"><br>
-			        Личные настройки групп
-			    </center></a>
-			</p>
-			
-			<div id="usersGroups" class="modal hide fade">
-			    <div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			        <h3>Выберите группу</h3>
-			    </div>
-				<div class="modal-body">
-					
-				</div>
+	{if ($level == 4)}
+		<p>
+		    <a href="settings.php?action=index">
+		        <center>
+		            <img src="{$web_root}images/{$icon_theme}/32x32/apps/preferences-desktop-wallpaper.png"><br>
+		            Управление группами
+		        </center></a>
+		</p>
+		
+		<p>
+		    <a href="#usersGroups" data-toggle="modal"><center>
+		        <img src="{$web_root}images/{$icon_theme}/32x32/categories/applications-accessories.png"><br>
+		        Личные настройки групп
+		    </center></a>
+		</p>
+		
+		<div id="usersGroups" class="modal hide fade">
+		    <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h3>Выберите группу</h3>
+		    </div>
+			<div class="modal-body">
+				
 			</div>
-		{/if}
-	{/foreach}
+		</div>
+	{/if}
 {/foreach}
 
 <script>

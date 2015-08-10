@@ -9,11 +9,11 @@ class CUsersSettingsForm extends CFormModel {
     
     public function attributeLabels() {
     	return array(
-    			"dashboard_enabled" => "Использовать Рабочий стол",
-    			"dashboard_show_birthdays" => "Показывать дни рождения",
-    			"dashboard_show_messages" => "Показывать сообщения",
-    			"dashboard_show_all_tasks" => "Показывать все задачи",
-    			"dashboard_check_messages" => "Проверять сообщения"
+    			"dashboard_enabled_groups" => "Использовать Рабочий стол",
+    			"dashboard_show_birthdays_groups" => "Показывать дни рождения",
+    			"dashboard_show_messages_groups" => "Показывать сообщения",
+    			"dashboard_show_all_tasks_groups" => "Показывать все задачи",
+    			"dashboard_check_messages_groups" => "Проверять сообщения"
     	);
     }
 

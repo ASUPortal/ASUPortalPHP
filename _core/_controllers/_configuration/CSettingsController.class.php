@@ -56,7 +56,8 @@ class CSettingsController extends CBaseController {
     	$query->select("users.*")
 	    	->from(TABLE_USERS." as users")
 	    	->innerJoin(TABLE_USER_IN_GROUPS." as userGroup", "userGroup.user_id=users.id")
-	    	->condition("userGroup.group_id=".$userGroup." and users.id not in (select `user_id` from `user_settings`)");
+    		->leftJoin(TABLE_USER_SETTINGS." as userSettings", "users.id=userSettings.user_id")
+	    	->condition("userGroup.group_id=".$userGroup." and userSettings.user_id is null");
     	$users = array();
     	foreach ($query->execute()->getItems() as $ar) {
     		$user = new CUser(new CActiveRecord($ar));
@@ -78,11 +79,11 @@ class CSettingsController extends CBaseController {
     }
     public function actionAddUsersSettingsProcess() {
     	$checkboxes = array(
-    			"dashboard_enabled",
-    			"dashboard_show_birthdays",
-    			"dashboard_show_messages",
-    			"dashboard_show_all_tasks",
-    			"dashboard_check_messages"
+    			"dashboard_enabled_groups",
+    			"dashboard_show_birthdays_groups",
+    			"dashboard_show_messages_groups",
+    			"dashboard_show_all_tasks_groups",
+    			"dashboard_check_messages_groups"
     	);
     	$form = new CUsersSettingsForm();
     	$form->setAttributes(CRequest::getArray($form::getClassName()));
@@ -95,14 +96,14 @@ class CSettingsController extends CBaseController {
 	    			}
     			}
     			$settings->user_id = $id;
-    			$settings->dashboard_enabled = $form->dashboard_enabled;
-    			$settings->dashboard_show_birthdays = $form->dashboard_show_birthdays;
-    			$settings->dashboard_show_messages = $form->dashboard_show_messages;
-    			$settings->dashboard_show_all_tasks = $form->dashboard_show_all_tasks;
-    			$settings->dashboard_check_messages = $form->dashboard_check_messages;
+    			$settings->dashboard_enabled_groups = $form->dashboard_enabled_groups;
+    			$settings->dashboard_show_birthdays_groups = $form->dashboard_show_birthdays_groups;
+    			$settings->dashboard_show_messages_groups = $form->dashboard_show_messages_groups;
+    			$settings->dashboard_show_all_tasks_groups = $form->dashboard_show_all_tasks_groups;
+    			$settings->dashboard_check_messages_groups = $form->dashboard_check_messages_groups;
     			$settings->save();
     		}
-    		$this->redirect("?action=index");
+    		$this->redirect(WEB_ROOT."_modules/_dashboard/index.php?action=index");
     		return false;
     	}
     	$this->setData("form", $form);
@@ -143,11 +144,11 @@ class CSettingsController extends CBaseController {
     }
     public function actionChangeUsersSettingsProcess() {
     	$checkboxes = array(
-    			"dashboard_enabled",
-    			"dashboard_show_birthdays",
-    			"dashboard_show_messages",
-    			"dashboard_show_all_tasks",
-    			"dashboard_check_messages"
+    			"dashboard_enabled_groups",
+    			"dashboard_show_birthdays_groups",
+    			"dashboard_show_messages_groups",
+    			"dashboard_show_all_tasks_groups",
+    			"dashboard_check_messages_groups"
     	);
     	$form = new CUsersSettingsForm();
     	$form->setAttributes(CRequest::getArray($form::getClassName()));
@@ -155,15 +156,15 @@ class CSettingsController extends CBaseController {
     		foreach ($form->users as $id) {
     			$settings = CStaffManager::getUserSettingsByUser($id);
     			if (!is_null($settings)) {
-    				$settings->dashboard_enabled = $form->dashboard_enabled;
-    				$settings->dashboard_show_birthdays = $form->dashboard_show_birthdays;
-    				$settings->dashboard_show_messages = $form->dashboard_show_messages;
-    				$settings->dashboard_show_all_tasks = $form->dashboard_show_all_tasks;
-    				$settings->dashboard_check_messages = $form->dashboard_check_messages;
+    				$settings->dashboard_enabled_groups = $form->dashboard_enabled_groups;
+    				$settings->dashboard_show_birthdays_groups = $form->dashboard_show_birthdays_groups;
+    				$settings->dashboard_show_messages_groups = $form->dashboard_show_messages_groups;
+    				$settings->dashboard_show_all_tasks_groups = $form->dashboard_show_all_tasks_groups;
+    				$settings->dashboard_check_messages_groups = $form->dashboard_check_messages_groups;
     				$settings->save();
     			}
     		}
-    		$this->redirect("?action=index");
+    		$this->redirect(WEB_ROOT."_modules/_dashboard/index.php?action=index");
     		return false;
     	}
     	$this->setData("form", $form);

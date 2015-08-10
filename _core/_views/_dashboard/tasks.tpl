@@ -7,11 +7,18 @@
     {if ($tasks->getCount() == 0)}
         Нет объектов для отображения
     {else}
-		{foreach $tasks->getItems() as $task}
-			<div>
-				<ul><a href={$web_root}{$task->url}>{$task->name}</a></ul>
-			</div>
-		{/foreach}
+	<table class="table table-striped table-bordered table-hover table-condensed">
+	    <tr>
+	        <th>#</th>
+	        <th>Наименование</th>
+	    </tr>
+	    {foreach $tasks->getItems() as $task}
+	    <tr>
+	        <td>{counter}</td>
+	        <td><a href={$web_root}{$task->url}>{$task->name}</a></td>
+	    </tr>
+	    {/foreach}
+	</table>
     {/if}
 {/block}
 

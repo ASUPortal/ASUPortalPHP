@@ -1,12 +1,12 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-    <h2>Изменение личных настроек группы: {CStaffManager::getUserGroup(CRequest::getInt("id"))->comment}</h2>
+    <h2>Добавление личных настроек для группы: {CStaffManager::getUserGroup(CRequest::getInt("id"))->comment}</h2>
 
     {CHtml::helpForCurrentPage()}
 
     <form action="index.php" method="post" class="form-horizontal">
-        {CHtml::hiddenField("action", "changeUsersSettingsProcess")}
+        {CHtml::hiddenField("action", "addUsersSettingsProcess")}
         {CHtml::activeHiddenField("users", $form)}
 
         {CHtml::errorSummary($form)}
@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="tab-pane" id="dashboard">
-            <div class="control-group">
+			<div class="control-group">
                 {CHtml::activeLabel("dashboard_show_birthdays_groups", $form)}
                 <div class="controls">
                 {CHtml::activeDropDownList("dashboard_show_birthdays_groups", $form, $options)}
