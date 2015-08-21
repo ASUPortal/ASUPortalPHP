@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Автоматическое заполнение значений</h2>
+    {CHtml::helpForCurrentPage()}
 
     <form action="persons.php" method="post">
     {CHtml::hiddenField("action", "fillIndexes")}

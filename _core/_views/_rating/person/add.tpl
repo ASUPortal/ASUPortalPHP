@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Добавление показателей преподавателя</h2>
+{CHtml::helpForCurrentPage()}
 
 {include file="_rating/person/form.tpl"}
 {/block}

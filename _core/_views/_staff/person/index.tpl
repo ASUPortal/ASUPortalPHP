@@ -27,7 +27,7 @@
             <th>{CHtml::tableOrder("types", $persons->getFirstItem())}</th>
             <th><input type="checkbox" id="selectAll"></th>
         </tr>
-        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $persons->getItems() as $person}
             <tr>
                 <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить сотрудника {$person->getName()}')) { location.href='?action=delete&id={$person->getId()}'; }; return false;"></a></td>

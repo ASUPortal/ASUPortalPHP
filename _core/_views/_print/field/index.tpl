@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Описатели полей</h2>
+{CHtml::helpForCurrentPage()}
 
     <script>
         jQuery(document).ready(function(){
@@ -49,7 +50,7 @@
         <th></th>
     </tr>
 
-    {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+    {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
     {foreach $fields->getItems() as $field}
         <tr>
             <td valign="top"><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить описатель поля {$field->title}')) { location.href='?action=delete&id={$field->id}'; }; return false;"></a></td>

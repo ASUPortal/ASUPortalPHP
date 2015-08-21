@@ -5,7 +5,7 @@
 			minLength: 3,
 			source: function(query, process){
 				return jQuery.ajax({
-					url: web_root + "_modules/_state_attestation/",
+					url: web_root + "_modules/_state_attestation/index.php",
                     type: "get",
                     cache: false,
                     dataType: "json",
@@ -125,7 +125,7 @@
                 {/if}
             </td>
             <td>
-				<a href="{$web_root}_modules/_diploms/?action=edit&id={$diplom->getId()}">{$diplom->dipl_name}</a>
+				<a href="{$web_root}_modules/_diploms/index.php?action=edit&id={$diplom->getId()}">{$diplom->dipl_name}</a>
 			</td>
         </tr>
     {/foreach}

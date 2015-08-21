@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Добавление вида нагрузки</h2>
+{CHtml::helpForCurrentPage()}
 {include file="_corriculum/_labors/form.tpl"}
 {/block}
 

@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Мои билеты</h2>
+{CHtml::helpForCurrentPage()}
 
 <table class="table table-striped table-bordered table-hover table-condensed">
     <tr>

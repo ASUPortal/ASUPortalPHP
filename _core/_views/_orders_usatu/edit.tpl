@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Редактирование приказа</h2>
+{CHtml::helpForCurrentPage()}
 
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#tab-common">Общие сведения</a></li>

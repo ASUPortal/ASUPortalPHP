@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Протокол ГОС экзамена</h2>
+    {CHtml::helpForCurrentPage()}
 
     <p align="center">
         УФИМСКИЙ ГОСУДАРСТВЕННЫЙ АВИАЦИОННЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ

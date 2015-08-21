@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Справочная система</h2>
+{CHtml::helpForCurrentPage()}
 
     <table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
@@ -11,7 +12,7 @@
         <th>URL</th>
         <th>Текст справки</th>
     </tr>
-    
+    {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
     {foreach $helps->getItems() as $help}
         <tr>
             <td valign="top"><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить {$help->title}')) { location.href='?action=delete&id={$help->id}'; }; return false;"></td>

@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Мои исходящие сообщения</h2>
+    {CHtml::helpForCurrentPage()}
 
     {include file="_messages/subform.subscription.tpl"}
 
@@ -25,7 +26,7 @@
                         <th>{CHtml::tableOrder("date_send", $messages->getFirstItem())}</th>
                         <th>&nbsp;</th>
                     </tr>
-                    {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+                    {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
                     {foreach $messages->getItems() as $mail}
                         <tr>
                             <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить сообщение {$mail->getTheme()}')) { location.href='?action=delete&id={$mail->getId()}'; }; return false;"></a></td>

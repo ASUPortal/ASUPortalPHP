@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Регистрация ресурса</h2>
+    {CHtml::helpForCurrentPage()}
 
     {include file="_resources/form.tpl"}
 {/block}

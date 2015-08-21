@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Экзаменационные билеты</h2>
+    {CHtml::helpForCurrentPage()}
 
 <table>
     {foreach $tickets->getItems() as $ticket}

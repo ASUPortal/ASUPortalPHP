@@ -915,7 +915,7 @@ class CHtml {
             }
             if (CSession::getCurrentUser()->hasRole("help_add_inline")) {
                 echo '<p>';
-                echo '<a href="'.WEB_ROOT.'_modules/_help/?action=edit&id='.CHelpManager::getHelpForCurrentPage()->getId().'" target="_blank">Редактировать справку</a>';
+                echo '<a href="'.WEB_ROOT.'_modules/_help/index.php?action=edit&id='.CHelpManager::getHelpForCurrentPage()->getId().'" target="_blank">Редактировать справку</a>';
                 echo '</p>';
             }
             echo '</div>';
@@ -942,7 +942,7 @@ class CHtml {
                 $uri = $_SERVER["REQUEST_URI"];
                 $uri = str_replace(ROOT_FOLDER, "", $uri);
             }
-            echo '<a href="'.WEB_ROOT.'_modules/_help/?action=add&page='.$uri.'" target="_blank">Добавить справку для текущей страницы</a>';
+            echo '<a href="'.WEB_ROOT.'_modules/_help/index.php?action=add&page='.$uri.'" target="_blank">Добавить справку для текущей страницы</a>';
             echo '</div>';
         }
     }

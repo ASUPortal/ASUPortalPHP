@@ -11,7 +11,7 @@
         {foreach $order->news->getItems() as $news}
             <tr><td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить новость {$news->title}')) { location.href='?action=deleteNewsItem&id={$news->id}'; }; return false;"></a></td>
                 <td>{counter}</td>
-                <td><a href="{$web_root}_modules/_news/?action=edit&id={$news->getId()}">{$news->title}</a></td>
+                <td><a href="{$web_root}_modules/_news/index.php?action=edit&id={$news->getId()}">{$news->title}</a></td>
                 <td>{$news->file}</td>
             </tr>
         {/foreach}

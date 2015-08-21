@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Добавление cтраницы</h2>
+    {CHtml::helpForCurrentPage()}
 
     {include file="_pages/form.tpl"}
 {/block}

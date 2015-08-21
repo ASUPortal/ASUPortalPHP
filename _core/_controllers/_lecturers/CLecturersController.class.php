@@ -63,7 +63,7 @@ class CLecturersController extends CBaseController {
         	$this->addActionsMenuItem(array(
         			array(
         				"title" => "Добавить биографию",
-        				"link" => WEB_ROOT."_modules/_biography/",
+        				"link" => WEB_ROOT."_modules/_biography/index.php",
         				"icon" => "actions/list-add.png"
         			)
         		)

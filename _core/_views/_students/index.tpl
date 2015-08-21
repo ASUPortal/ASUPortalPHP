@@ -21,7 +21,7 @@
             <th>{CHtml::tableOrder("diploms", $students->getFirstItem())}</th>
             <th>Комментарий</th>
         </tr>
-        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $students->getItems() as $student}
         <tr>
             <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить студента {$student->fio}')) { location.href='?action=delete&id={$student->id}'; }; return false;"></a></td>
@@ -38,7 +38,7 @@
             <td>{$student->telephone}</td>
             <td>
                 {foreach $student->diploms->getItems() as $diplom}
-                    <p><a href="{$web_root}_modules/_diploms/?action=edit&id={$diplom->getId()}">{$diplom->dipl_name}</a></p>
+                    <p><a href="{$web_root}_modules/_diploms/index.php?action=edit&id={$diplom->getId()}">{$diplom->dipl_name}</a></p>
                 {/foreach}
             </td>
             <td>{$student->comment}</td>

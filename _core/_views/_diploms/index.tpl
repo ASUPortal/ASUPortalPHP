@@ -227,7 +227,7 @@
                     var container = item.target || item.srcElement;
                     var id = jQuery(container).attr("asu-id");
                     jQuery.ajax({
-                        url: web_root + "_modules/_diploms/",
+                        url: web_root + "_modules/_diploms/index.php",
                         beforeSend: function(){
                             jQuery(container).html('<i class="icon-signal"></i>');
                         },
@@ -277,7 +277,7 @@
 	            <th>{CHtml::tableOrder("gak_num", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("comment", $diploms->getFirstItem(), true)}</th>
 	        </tr>
-	        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+	        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
 	        {foreach $diploms->getItems() as $diplom}
 	        <tr>
 	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить тему ВКР {$diplom->dipl_name}')) { location.href='?action=delete&id={$diplom->id}'; }; return false;"></a></td>
@@ -306,12 +306,12 @@
 	            </td>
 	            <td>
 	                {if !is_null($diplom->person)}
-	                    <a href="{$web_root}_modules/_staff/?action=edit&id={$diplom->person->getId()}" title="о преподавателе">{$diplom->person->getName()}</a>
+	                    <a href="{$web_root}_modules/_staff/index.php?action=edit&id={$diplom->person->getId()}" title="о преподавателе">{$diplom->person->getName()}</a>
 	                {/if}
 	            </td>
 	            <td>
 	                {if !is_null($diplom->student)}
-	                    <a href="{$web_root}_modules/_students/?action=edit&id={$diplom->student->getId()}" title="о студенте">{$diplom->student->getName()}</a>
+	                    <a href="{$web_root}_modules/_students/index.php?action=edit&id={$diplom->student->getId()}" title="о студенте">{$diplom->student->getName()}</a>
 	                {/if}
 	            </td>
 	            <td>
@@ -350,7 +350,7 @@
 	                {/if}
 	            </td>
 	            <td>
-	                <a href="{$web_root}_modules/_state_attestation/?action=edit&id={$diplom->gak_num}">{$diplom->gak_num}</a>
+	                <a href="{$web_root}_modules/_state_attestation/index.php?action=edit&id={$diplom->gak_num}">{$diplom->gak_num}</a>
 	            </td>
 	            <td>
 	                {$diplom->comment}

@@ -1,7 +1,7 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-
+{CHtml::helpForCurrentPage()}
 <table class="table table-striped table-bordered table-hover table-condensed">
     {include file="_corriculum/_plan/subview.header.tpl"}
     <tr>

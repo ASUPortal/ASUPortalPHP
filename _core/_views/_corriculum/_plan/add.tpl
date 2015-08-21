@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Добавление учебного плана</h2>
+    {CHtml::helpForCurrentPage()}
     {include file="_corriculum/_plan/form.tpl"}
 {/block}
 

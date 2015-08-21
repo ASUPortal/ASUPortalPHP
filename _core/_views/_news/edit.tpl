@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Редактирование новости</h2>
+    {CHtml::helpForCurrentPage()}
 
     {include file="_news/form.tpl"}
 {/block}

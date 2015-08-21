@@ -8,6 +8,7 @@
 </script>
 
     <h2>Справочники: правка</h2>
+    {CHtml::helpForCurrentPage()}
 
     Просмотр справочника {CHtml::dropDownList("taxonomy_id", CTaxonomyManager::getLegacyTaxonomiesObjectsList(), $taxonomy->getId(), "taxonomy_id")}
 

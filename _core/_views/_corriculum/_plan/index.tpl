@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Индивидуальные учебные планы</h2>
+    {CHtml::helpForCurrentPage()}
     <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
         <tr>
@@ -14,7 +15,7 @@
             <th>Срок обучения</th>
         </tr>
         </thead>
-        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $corriculums->getItems() as $c}
             <tr>
                 <td>{counter}</td>

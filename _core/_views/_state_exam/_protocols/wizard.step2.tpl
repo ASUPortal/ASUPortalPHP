@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Мастер создания протоколов ГОС экзамена. Шаг 2 из 2</h2>
+{CHtml::helpForCurrentPage()}
 
 {include file="_state_exam/_protocols/form.wizard.step2.tpl"}
 {/block}

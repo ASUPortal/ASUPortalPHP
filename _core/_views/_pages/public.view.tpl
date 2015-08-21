@@ -2,6 +2,9 @@
 
 {block name="asu_center"}
     <h2>{$page->title}</h2>
+    {if (CSession::isAuth())}
+        {CHtml::helpForCurrentPage()}
+    {/if}
 
     {$page->page_content}
 {/block}

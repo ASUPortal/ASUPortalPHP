@@ -154,14 +154,14 @@
 				<th>{CHtml::tableOrder("date_end", $dissers->getFirstItem(), true)}</th>
 				<th>{CHtml::tableOrder("comment", $dissers->getFirstItem(), true)}</th>
 			</tr>
-			{counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false} 
+			{counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
 			{foreach $dissers->getItems() as $disser}
 			<tr>
 				<td><input type="checkbox" value="{$disser->getId()}" name="selectedDoc[]"></td>
 				<td>{counter}</td>
 				<td>
 					{if !is_null($disser->person)}
-	                    <a href="{$web_root}_modules/_staff/?action=edit&id={$disser->person->getId()}">{$disser->person->getName()}</a>
+	                    <a href="{$web_root}_modules/_staff/index.php?action=edit&id={$disser->person->getId()}">{$disser->person->getName()}</a>
 	                {/if}
 				</td>
 				<td>

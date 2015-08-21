@@ -18,7 +18,7 @@
                 <th>{CHtml::tableOrder("year.date_start", $years->getFirstItem(), true)}</th>
                 <th>{CHtml::tableOrder("comment", $years->getFirstItem())}</th>
             </tr>
-            {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+            {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $years->getItems() as $year}
 				{$trStyle=''}
 				{if $year->getId() == CUtils::getCurrentYear()->getId()}

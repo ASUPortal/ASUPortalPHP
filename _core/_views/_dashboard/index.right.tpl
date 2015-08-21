@@ -7,7 +7,7 @@
 </p>
 
 <p>
-    <a href="{$web_root}_modules/_settings/">
+    <a href="{$web_root}_modules/_settings/index.php">
         <center>
             <img src="{$web_root}images/{$icon_theme}/32x32/categories/applications-accessories.png"><br>
             Личные настройки
@@ -50,7 +50,7 @@
     jQuery("#usersGroups").on("shown", function(){
         var place = jQuery(".modal-body", this);
         jQuery.ajax({
-            url: "{$web_root}_modules/_settings/?action=usersGroups",
+            url: "{$web_root}_modules/_settings/index.php?action=usersGroups",
             type: "GET",
             cache: false,
             context: this,

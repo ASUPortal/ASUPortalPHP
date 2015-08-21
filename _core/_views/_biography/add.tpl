@@ -2,7 +2,8 @@
 
 {block name="asu_center"}
     <h2>Добавление биографии</h2>
-
+	{CHtml::helpForCurrentPage()}
+	
     {include file="_biography/form.tpl"}
 {/block}
 

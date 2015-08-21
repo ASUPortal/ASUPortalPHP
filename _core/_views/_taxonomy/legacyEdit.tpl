@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Редактирование термина таксономии</h2>
+    {CHtml::helpForCurrentPage()}
 
     {include file="_taxonomy/form.legacy.term.tpl"}
 {/block}

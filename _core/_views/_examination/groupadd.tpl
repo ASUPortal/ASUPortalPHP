@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Групповое добавление вопросов</h2>
+{CHtml::helpForCurrentPage()}
 
 <form action="index.php" method="POST" class="form-horizontal">
     <input type="hidden" name="action" value="saveGroup">

@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Протоколы НМС</h2>
+    {CHtml::helpForCurrentPage()}
 
     {if ($objects->getCount() == 0)}
         Нет объектов для отображения
@@ -27,7 +28,7 @@
                     <td><a href="index.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
                     <td>{$object->date_text}</td>
                     <td>{$object->num}</td>
-                    <td>{$object->program_content}</td>
+                    <td>{str_replace("\n","<br>",$object->program_content)}</td>
                     <td>{$object->comment}</td>
                 </tr>
             {/foreach}

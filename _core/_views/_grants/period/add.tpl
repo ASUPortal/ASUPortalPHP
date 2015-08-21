@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Добавление периода</h2>
+    {CHtml::helpForCurrentPage()}
 
     {include file="_grants/period/form.tpl"}
 {/block}

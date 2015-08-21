@@ -37,6 +37,13 @@ class CExaminationController extends CBaseController {
             4 => 4,
             5 => 5
         ));
+        $this->addActionsMenuItem(array(
+        	array(
+        		"title" => "Назад",
+        		"link" => "?action=index",
+        		"icon" => "actions/edit-undo.png"
+        	)
+        ));
         $this->setData("question", $question);
         $this->renderView("_examination/edit.tpl");
     }
@@ -75,6 +82,13 @@ class CExaminationController extends CBaseController {
             4 => 4,
             5 => 5
         ));
+        $this->addActionsMenuItem(array(
+        	array(
+        		"title" => "Назад",
+        		"link" => "?action=index",
+        		"icon" => "actions/edit-undo.png"
+        	)
+        ));
         $this->renderView("_examination/groupadd.tpl");
     }
     public function actionSaveGroup() {
@@ -103,6 +117,13 @@ class CExaminationController extends CBaseController {
             3 => 3,
             4 => 4,
             5 => 5
+        ));
+        $this->addActionsMenuItem(array(
+        	array(
+        		"title" => "Назад",
+        		"link" => "?action=index",
+        		"icon" => "actions/edit-undo.png"
+        	)
         ));
         $this->setData("generate", $generate);
         $this->addJSInclude("_modules/_examination/script.js");

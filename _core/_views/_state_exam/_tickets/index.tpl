@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Билеты к ГОС экзаменам</h2>
+{CHtml::helpForCurrentPage()}
 
 <table width="100%" cellpadding="0" cellspacing="0" border="1" id="dataTable">
     <thead>

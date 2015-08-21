@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Добавление гранта</h2>
+    {CHtml::helpForCurrentPage()}
 
     {include file="_grants/grant/form.tpl"}
 {/block}

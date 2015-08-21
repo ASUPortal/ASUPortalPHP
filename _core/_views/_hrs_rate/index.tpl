@@ -17,7 +17,7 @@
                 <th>{CHtml::tableOrder("rate", $rates->getFirstItem())}</th>
                 <th>{CHtml::tableOrder("comment", $rates->getFirstItem())}</th>
             </tr>
-            {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+            {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $rates->getItems() as $rate}
                 <tr>
                     <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить ставку {$rate->rate}')) { location.href='?action=delete&id={$rate->id}'; }; return false;"></a></td>

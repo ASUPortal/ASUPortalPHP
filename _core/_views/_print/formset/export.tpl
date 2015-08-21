@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Экспорт наборов форм</h2>
+{CHtml::helpForCurrentPage()}
 
     <textarea style="height: 500px; width: 100%;">{$data}</textarea>
 {/block}

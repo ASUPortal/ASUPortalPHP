@@ -2,7 +2,7 @@
 
 {block name="asu_center"}
 <h2>Показатели преподавателя {$person->getName()} (за {$year->getValue()} год)</h2>
-
+{CHtml::helpForCurrentPage()}
 
 
 <table width="100%" border="1" cellspacing="0" cellpadding="0">

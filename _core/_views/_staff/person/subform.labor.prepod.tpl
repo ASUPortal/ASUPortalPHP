@@ -17,7 +17,7 @@
             {foreach $form->person->getActiveOrdersByType(2, 2)->getItems() as $order}
                 <tr>
                     <td>{counter}</td>
-                    <td><a href="{$web_root}_modules/_orders/?action=viewOrder&id={$order->getId()}">Приказ № {$order->num_order} от {$order->date_order}</a></td>
+                    <td><a href="{$web_root}_modules/_orders/index.php?action=viewOrder&id={$order->getId()}">Приказ № {$order->num_order} от {$order->date_order}</a></td>
                     <td>С {$order->date_begin} по {$order->date_end}</td>
                 </tr>
             {/foreach}
@@ -33,7 +33,7 @@
             {foreach $form->person->getActiveOrdersByType(3, 2)->getItems() as $order}
                 <tr>
                     <td>{counter}</td>
-                    <td><a href="{$web_root}_modules/_orders/?action=viewOrder&id={$order->getId()}">Приказ № {$order->num_order} от {$order->date_order}</a></td>
+                    <td><a href="{$web_root}_modules/_orders/index.php?action=viewOrder&id={$order->getId()}">Приказ № {$order->num_order} от {$order->date_order}</a></td>
                     <td>С {$order->date_begin} по {$order->date_end}</td>
                 </tr>
             {/foreach}
@@ -50,7 +50,7 @@
             {foreach $form->person->getActiveOrdersByType(2, 3)->getItems() as $order}
                 <tr>
                     <td>{counter}</td>
-                    <td><a href="{$web_root}_modules/_orders/?action=viewOrder&id={$order->getId()}">Приказ № {$order->num_order} от {$order->date_order}</a></td>
+                    <td><a href="{$web_root}_modules/_orders/index.php?action=viewOrder&id={$order->getId()}">Приказ № {$order->num_order} от {$order->date_order}</a></td>
                     <td>С {$order->date_begin} по {$order->date_end}</td>
                 </tr>
             {/foreach}
@@ -66,7 +66,7 @@
             {foreach $form->person->getActiveOrdersByType(3, 3)->getItems() as $order}
                 <tr>
                     <td>{counter}</td>
-                    <td><a href="{$web_root}_modules/_orders/?action=viewOrder&id={$order->getId()}">Приказ № {$order->num_order} от {$order->date_order}</a></td>
+                    <td><a href="{$web_root}_modules/_orders/index.php?action=viewOrder&id={$order->getId()}">Приказ № {$order->num_order} от {$order->date_order}</a></td>
                     <td>С {$order->date_begin} по {$order->date_end}</td>
                 </tr>
             {/foreach}
@@ -83,7 +83,7 @@
             {foreach $form->person->getActiveOrdersByType(2, 4)->getItems() as $order}
                 <tr>
                     <td>{counter}</td>
-                    <td><a href="{$web_root}_modules/_orders/?action=viewOrder&id={$order->getId()}">Приказ № {$order->num_order} от {$order->date_order}</a></td>
+                    <td><a href="{$web_root}_modules/_orders/index.php?action=viewOrder&id={$order->getId()}">Приказ № {$order->num_order} от {$order->date_order}</a></td>
                     <td>С {$order->date_begin} по {$order->date_end}</td>
                 </tr>
             {/foreach}
@@ -99,7 +99,7 @@
             {foreach $form->person->getActiveOrdersByType(3, 4)->getItems() as $order}
                 <tr>
                     <td>{counter}</td>
-                    <td><a href="{$web_root}_modules/_orders/?action=viewOrder&id={$order->getId()}">Приказ № {$order->num_order} от {$order->date_order}</a></td>
+                    <td><a href="{$web_root}_modules/_orders/index.php?action=viewOrder&id={$order->getId()}">Приказ № {$order->num_order} от {$order->date_order}</a></td>
                     <td>С {$order->date_begin} по {$order->date_end}</td>
                 </tr>
             {/foreach}

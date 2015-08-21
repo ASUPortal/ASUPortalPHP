@@ -183,7 +183,7 @@
 				<th>{CHtml::tableOrder("quest.user_id", $quests->getFirstItem(), true)}</th>
 			{/if}
 			</tr>
-			{counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false} 
+			{counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
 			{foreach $quests->getItems() as $quest}
 			<tr>
 				<td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить вопрос {$quest->question_text}')) { location.href='?action=delete&id={$quest->id}'; }; return false;"></a></td>
