@@ -58,9 +58,33 @@ class CHelpManager {
                             if (!is_null($help)) {
                                 break;
                             }
+                        } 
+                        if (is_null($help)) {
+                        	if (strpos($key, "php?action") === false || 
+                        		strpos($key, "/?action") === false || 
+                        		strpos($key, "php?action=index") !== false) {
+                        			$key = substr($key, 0, strpos($key, "?"));
+                        			foreach (CActiveRecordProvider::getWithCondition(TABLE_HELP, "url = '".$key."'")->getItems() as $item) {
+                        				$help = new CHelp($item);
+                        		}
+                        	}
+                        }
+                        if (is_null($help)) {
+                        	foreach (CActiveRecordProvider::getWithCondition(TABLE_HELP, "url = '".$key."index.php'")->getItems() as $item) {
+                        		$help = new CHelp($item);
+                        	}
                         }
                     }
-                } else {
+				} elseif (strpos($key, ".php") === false) {
+					foreach (CActiveRecordProvider::getWithCondition(TABLE_HELP, "url = '".$key."'")->getItems() as $item) {
+						$help = new CHelp($item);
+					}
+					if (is_null($help)) {
+						foreach (CActiveRecordProvider::getWithCondition(TABLE_HELP, "url = '".$key."index.php'")->getItems() as $item) {
+							$help = new CHelp($item);
+						}
+					}
+            	} else {
                     // это русское название куска справки
                     if (is_null($help)) {
                         foreach (CActiveRecordProvider::getWithCondition(TABLE_HELP, "title = '".$key."'")->getItems() as $item) {
