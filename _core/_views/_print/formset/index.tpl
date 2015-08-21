@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Наборы шаблонов</h2>
+{CHtml::helpForCurrentPage()}
 
 <table id="dataTable" width="100%" cellspacing="0" cellpadding="2" border="1">
     <tr>

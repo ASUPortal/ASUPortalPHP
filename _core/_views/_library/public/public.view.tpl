@@ -2,6 +2,9 @@
 
 {block name="asu_center"}
     <h2>Учебные материалы</h2>
+    {if (CSession::isAuth())}
+    	{CHtml::helpForCurrentPage()}
+    {/if}
 {if ($files->getCount() == 0)}
 	Нет учебных материалов.
 {else}

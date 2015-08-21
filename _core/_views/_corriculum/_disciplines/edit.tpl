@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Редактирование дисциплины</h2>
+{CHtml::helpForCurrentPage()}
 {include file="_corriculum/_disciplines/form.tpl"}
 
     <ul class="nav nav-tabs">

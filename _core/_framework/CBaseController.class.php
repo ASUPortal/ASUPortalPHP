@@ -105,7 +105,7 @@ class CBaseController {
                     if (CSession::getCurrentUser()->getPersonalSettings()->isDashboardEnabled()) {
                         if ($this->getAction() == ACTION_INDEX) {
                             $this->addActionsMenuItem(array(
-                                "link" => WEB_ROOT."_modules/_dashboard/",
+                                "link" => WEB_ROOT."_modules/_dashboard/index.php",
                                 "title" => "На рабочий стол",
                                 "icon" => "apps/preferences-system-session.png"
                             ));

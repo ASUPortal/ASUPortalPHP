@@ -2,7 +2,7 @@
     jQuery(document).ready(function(){
         {if !is_null($diplom->getId())}
         jQuery.ajax({
-            url: web_root + "_modules/_diploms",
+            url: web_root + "_modules/_diploms/index.php",
             data: {
                 action: "getAverageMark",
                 id: {$diplom->getId()}
@@ -55,7 +55,7 @@
     {CHtml::activeLabel("foreign_lang", $diplom)}
     <div class="controls">
         {CHtml::activeDropDownList("foreign_lang", $diplom, CTaxonomyManager::getCacheLanguages()->getItems())}
-        <span><a href="{$web_root}_modules/_taxonomy/?action=legacy&id=2" target="_blank">
+        <span><a href="{$web_root}_modules/_taxonomy/index.php?action=legacy&id=2" target="_blank">
                 <img src="{$web_root}images/toupdate.png">
             </a></span>
         {CHtml::error("foreign_lang", $diplom)}

@@ -3,6 +3,7 @@
 {block name="asu_center"}
 
 <h2>Приказы сотрудника {$person->getName()}</h2>
+{CHtml::helpForCurrentPage()}
 
 <p>Общая ставка: {$person->getOrdersRate()}</p>
 

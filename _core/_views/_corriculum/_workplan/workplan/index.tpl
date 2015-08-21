@@ -7,105 +7,66 @@
     {if $plans->getCount() == 0}
 		Нет планов для отображения
 	{else}
-		<form action="index.php" method="post" id="MainView">
+		<form action="workplans.php" method="post" id="MainView">
 	    <table class="table table-striped table-bordered table-hover table-condensed">
 	        <tr>
 	            <th></th>
 	            <th><input type="checkbox" id="selectAll"></th>
 	            <th>№</th>
-	            <th>{CHtml::tableOrder("diplom_confirm", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("dipl_name", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("pract_place_id", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("prepod.fio", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("student.fio", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("st_group.name", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("dipl_prew.date_preview", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("date_act", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("foreign_lang", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("protocol_2aspir_id", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("recenz_id", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("study_mark", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("gak_num", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("comment", $diploms->getFirstItem(), true)}</th>
+	            <th>{CHtml::tableOrder("title", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("department_id", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("approver_post", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("approver_name", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("direction_id", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("profiles", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("qualification_id", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("edufaction_form_id", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("year", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("intended_for", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("author_id", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("position", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("disciplinesBefore", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("disciplinesAfter", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("project_description", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("education_technologies", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("hardware", $plans->getFirstItem())}</th>
 	        </tr>
-	        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
-	        {foreach $diploms->getItems() as $diplom}
+	        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
+	        {foreach $plans->getItems() as $plan}
 	        <tr>
-	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить тему ВКР {$diplom->dipl_name}')) { location.href='?action=delete&id={$diplom->id}'; }; return false;"></a></td>
+	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить план {$plan->title}')) { location.href='?action=delete&id={$plan->id}'; }; return false;"></a></td>
 	            <td>
-                    <input type="checkbox" value="{$diplom->getId()}" name="selectedDoc[]">
+                    <input type="checkbox" value="{$plan->getId()}" name="selectedDoc[]">
                 </td>
 	            <td>{counter}</td>
-				<td>
-                    <span>
-                        <span class="approveTheme" asu-id="{$diplom->getId()}" asu-color="{if is_null($diplom->confirmation)}white{else}{$diplom->confirmation->color_mark}{/if}">
-                            {if is_null($diplom->confirmation)}
-                                Не рассматривали
-                            {else}
-                                {$diplom->confirmation->getValue()}
-                            {/if}
-                        </span>
-                    </span>
-	            </td>
-	            <td><a href="?action=edit&id={$diplom->getId()}">{$diplom->dipl_name}</a></td>                       
+	            <td><a href="?action=edit&id={$plan->getId()}">{$plan->title}</a></td>   
+	            <td>{$plan->department_id}</td>
+	            <td>{$plan->approver_post}</td>                    
+	            <td>{$plan->approver_name}</td>
+	            <td>{$plan->direction_id}</td>
 	            <td>
-	                {if is_null($diplom->practPlace)}
-	                    {$diplom->pract_place}
-	                {else}
-	                    {$diplom->practPlace->getValue()}
-	                {/if}
-	            </td>
+	            	{foreach $plan->profiles->getItems() as $profil}
+	            		{$profil}
+	            	{/foreach}
+	            </td>              
+	            <td>{$plan->qualification_id}</td>
+	            <td>{$plan->edufaction_form_id}</td>
+	            <td>{$plan->year}</td>                    
+	            <td>{$plan->intended_for}</td>
+	            <td>{$plan->author_id}</td>
+	            <td>{$plan->position}</td>                    
 	            <td>
-	                {if !is_null($diplom->person)}
-	                    <a href="{$web_root}_modules/_staff/?action=edit&id={$diplom->person->getId()}" title="о преподавателе">{$diplom->person->getName()}</a>
-	                {/if}
+	            	{foreach $plan->disciplinesBefore->getItems() as $discipline}
+	            		{$discipline}
+	            	{/foreach}
 	            </td>
-	            <td>
-	                {if !is_null($diplom->student)}
-	                    <a href="{$web_root}_modules/_students/?action=edit&id={$diplom->student->getId()}" title="о студенте">{$diplom->student->getName()}</a>
-	                {/if}
+	            <td>{foreach $plan->disciplinesAfter->getItems() as $discipline}
+	            		{$discipline}
+	            	{/foreach}
 	            </td>
-	            <td>
-	                {if !is_null($diplom->student)}
-	                    {if !is_null($diplom->student->getGroup())}
-	                        {$diplom->student->getGroup()->getName()}
-	                    {/if}
-	                {/if}
-	            </td>
-	            <td>
-	                {if $diplom->getLastPreviewDate() != "0"}
-	                    {$diplom->getLastPreviewDate()|date_format:"d.m.Y"}
-	                {/if}
-	            </td>
-	            <td>
-	                {$diplom->date_act|date_format:"d.m.Y"}
-	            </td>
-	            <td>
-	                {if !is_null($diplom->language)}
-	                    {$diplom->language->getValue()}
-	                {/if}
-	            </td>
-	            <td>
-	                {if !is_null($diplom->recomendationProtocol)}
-	                    {$diplom->recomendationProtocol->getNumber()} от {$diplom->recomendationProtocol->getDate()}
-	                {/if}
-	            </td>
-	            <td>
-	                {if !is_null($diplom->reviewer)}
-	                    {$diplom->reviewer->getName()}
-	                {/if}
-	            </td>
-	            <td>
-	                {if !is_null($diplom->mark)}
-	                    {$diplom->mark->getValue()}
-	                {/if}
-	            </td>
-	            <td>
-	                <a href="{$web_root}_modules/_state_attestation/?action=edit&id={$diplom->gak_num}">{$diplom->gak_num}</a>
-	            </td>
-	            <td>
-	                {$diplom->comment}
-	            </td>
+	            <td>{$plan->project_description}</td>                    
+	            <td>{$plan->education_technologies}</td>
+	            <td>{$plan->hardware}</td>
 	        </tr>
 	        {/foreach}
 	    </table>
@@ -115,5 +76,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_workplan/_workplan/common.right.tpl"}
+{include file="_corriculum/_workplan/workplan/common.right.tpl"}
 {/block}

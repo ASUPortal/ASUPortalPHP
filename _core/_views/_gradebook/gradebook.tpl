@@ -12,6 +12,7 @@
 </script>
 
 <h2>Журнал успеваемости</h2>
+{CHtml::helpForCurrentPage()}
 
     <p>По дисциплине: {if !is_null($gradebook->discipline)}{$gradebook->discipline->getValue()}{/if}</p>
     <p>За период: c {$gradebook->date_start} по {$gradebook->date_end}</p>

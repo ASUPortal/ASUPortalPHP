@@ -8,7 +8,7 @@
  */
 
 class CPublicNewsController extends CBaseController {
-    private $allowedAnonymous = array(
+    public $allowedAnonymous = array(
         "index"
     );
     public function __construct() {
@@ -29,7 +29,7 @@ class CPublicNewsController extends CBaseController {
     }
     public function actionIndex() {
         $set = new CRecordSet();
-        $set->setPageSize(5);
+        $set->setPageSize(10);
         $query = new CQuery();
         $query->select("news.*")
             ->from(TABLE_NEWS." as news")

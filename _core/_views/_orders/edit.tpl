@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Редактирование приказа</h2>
+{CHtml::helpForCurrentPage()}
 
 <script>
 	jQuery(document).ready(function(){

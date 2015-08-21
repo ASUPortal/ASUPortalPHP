@@ -45,7 +45,7 @@ class CWorkPlanController extends CBaseController{
         ));
         $this->setData("plans", $paginated);
         $this->setData("paginator", $set->getPaginator());
-        $this->renderView("_workplan/_workplan/index.tpl");
+        $this->renderView("_corriculum/_workplan/workplan/index.tpl");
     }
     public function actionDelete() {
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));

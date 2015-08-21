@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Добавление термина таксономии</h2>
+{CHtml::helpForCurrentPage()}
 
     {include file="_taxonomy/form.term.tpl"}
 {/block}

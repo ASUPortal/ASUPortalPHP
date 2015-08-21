@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Справочники: правка</h2>
+{CHtml::helpForCurrentPage()}
 
 Просмотр справочника {CHtml::dropDownList("taxonomy_id", CTaxonomyManager::getTaxonomiesList(), $taxonomy->getId(), "taxonomy_id")}
 

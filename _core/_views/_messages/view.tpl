@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Просмотр сообщения</h2>
+    {CHtml::helpForCurrentPage()}
 
     <form>
         <p>

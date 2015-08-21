@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Редактирование учебного плана</h2>
+	{CHtml::helpForCurrentPage()}
     {include file="_corriculum/_plan/form.tpl"}
 
     <ul class="nav nav-tabs">

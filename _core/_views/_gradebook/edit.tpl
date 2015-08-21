@@ -2,7 +2,7 @@
 
 {block name="asu_center"}
 <h2>Редактирование записи</h2>
-
+{CHtml::helpForCurrentPage()}
 
 {include file="_gradebook/form.tpl"}
 {/block}

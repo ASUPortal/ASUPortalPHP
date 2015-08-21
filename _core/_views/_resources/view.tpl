@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>{$resource->getName()}</h2>
+    {CHtml::helpForCurrentPage()}
 
     <p>
         Название ресурса: {$resource->getName()}

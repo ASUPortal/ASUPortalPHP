@@ -138,10 +138,10 @@
                 <th>#</th>
                 <th>{CHtml::tableOrder("name", $practics->getFirstItem(), true)}</th>
                 <th>{CHtml::tableOrder("towns.name", $practics->getFirstItem(), true)}</th>
-                <th>Дипломов</th>
+                <th>Количество ВКР</th>
                 <th>{CHtml::tableOrder("comment", $practics->getFirstItem(), true)}</th>
             </tr>
-            {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+            {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $practics->getItems() as $practic}
                 <tr>
                     <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить базу практики {$practic->name}')) { location.href='?action=delete&id={$practic->id}'; }; return false;"></a></td>

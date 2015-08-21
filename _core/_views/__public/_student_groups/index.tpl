@@ -40,7 +40,7 @@
             <th>{CHtml::tableOrder("students_cnt", $groups->getFirstItem())}</th>
             <th>Расписание</th>
         </tr>
-        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $groups->getItems() as $group}
             <tr>
                 <td>{counter}</td>

@@ -2,7 +2,8 @@
 
 {block name="asu_center"}
     <h2>Гранты</h2>
-
+	{CHtml::helpForCurrentPage()}
+	
     {if ($grants->getCount() == 0)}
         Нет грантов для отображения
     {else}

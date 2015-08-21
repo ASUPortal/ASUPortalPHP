@@ -20,7 +20,7 @@
             <th>{CHtml::tableOrder("corriculum_id", $groups->getFirstItem())}</th>
             <th>Комментарий</th>
         </tr>
-        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $groups->getItems() as $group}
             <tr>
                 <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить группу {$group->name}')) { location.href='?action=delete&id={$group->id}'; }; return false;"></a></td>
@@ -49,7 +49,7 @@
                 </td>
                 <td>
                 	{if !is_null($group->corriculum)}
-                		<a href="{$web_root}_modules/_corriculum/?action=view&id={$group->corriculum->getId()}">
+                		<a href="{$web_root}_modules/_corriculum/index.php?action=view&id={$group->corriculum->getId()}">
                 			{$group->corriculum->title}
                 		</a>
                 	{/if}

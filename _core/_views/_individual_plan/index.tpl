@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Индивидуальный план</h2>
+    {CHtml::helpForCurrentPage()}
 
     <p>Смотрим направо, там кнопки. Здесь должна быть большая справка HowTo</p>
 {/block}

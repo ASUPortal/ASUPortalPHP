@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Добавление билета</h2>
+    {CHtml::helpForCurrentPage()}
 
     {include file="_state_exam/_tickets/form.tpl"}
 {/block}

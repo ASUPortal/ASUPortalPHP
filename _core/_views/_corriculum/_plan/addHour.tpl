@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Добавление распределение по семестрам {$hour->discipline->discipline->name}</h2>
+    {CHtml::helpForCurrentPage()}
 
     {include file="_corriculum/_plan/form.hour.tpl"}
 {/block}

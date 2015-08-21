@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Редактирование описателя поля</h2>
+{CHtml::helpForCurrentPage()}
 
     {include file="_print/field/form.tpl"}
 {/block}

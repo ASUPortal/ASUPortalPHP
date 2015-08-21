@@ -16,7 +16,7 @@
             <th>{CHtml::tableOrder("kadri_id", $users->getFirstItem())}</th>
             <th>Комментарий</th>
         </tr>
-        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $users->getItems() as $user}
         <tr>
             <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить пользователя {$user->getName()}')) { location.href='?action=delete&id={$user->getId()}'; }; return false;"></a></td>

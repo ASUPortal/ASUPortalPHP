@@ -55,7 +55,7 @@
 	            <th>#</th>
 	            <th>Предмет</th>
 	        </tr>
-		{counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+		{counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
 		{foreach $folders->getItems() as $folder}
 		    <tr>
 		    	<td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить предмет {$folder->getDiscipline()->getValue()}')) { location.href='?action=deleteDocument&id={CLibraryManager::getDocumentByFolderId($folder->getFolderIds()->getItem($author))->id}'; }; return false;"></a></td>

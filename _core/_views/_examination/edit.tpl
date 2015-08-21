@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Редактирование вопроса</h2>
+	{CHtml::helpForCurrentPage()}
 
     {include file="_examination/form.question.tpl"}
 {/block}
