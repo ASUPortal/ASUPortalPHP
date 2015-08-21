@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Показатели</h2>
+{CHtml::helpForCurrentPage()}
 
     {CHtml::dropDownList("year_id", CTaxonomyManager::getYearsList(), $year->getId(), "", "", "onchange='location.href=\"indexes.php?action=index&year=\" + this.value'")}
 

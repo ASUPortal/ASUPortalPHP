@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Добавление цикла</h2>
+    {CHtml::helpForCurrentPage()}
     {include file="_corriculum/_cycles/form.tpl"}
 {/block}
 

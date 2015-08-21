@@ -22,7 +22,7 @@ class CNMSProtocolsController extends CBaseController{
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_NMS_PROTOCOL." as t")
-            ->order("t.id desc");
+            ->order('STR_TO_DATE(date_text, "%d.%m.%Y") desc');
         if (CRequest::getString("order") == "date_text") {
         	$direction = "asc";
         	if (CRequest::getString("direction") == "desc") {

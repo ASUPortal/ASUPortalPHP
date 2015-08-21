@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Добавление пункта меню</h2>
+{CHtml::helpForCurrentPage()}
 
 {include file="_menumanager/formItem.tpl"}
 {/block}

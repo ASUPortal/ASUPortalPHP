@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Редактирование учебного года</h2>
+    {CHtml::helpForCurrentPage()}
 
     {include file="_time_intervals/form.tpl"}
 {/block}

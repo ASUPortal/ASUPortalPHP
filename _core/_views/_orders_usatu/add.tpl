@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Добавление приказа</h2>
+    {CHtml::helpForCurrentPage()}
 
     {include file="_orders_usatu/form.tpl"}
 {/block}

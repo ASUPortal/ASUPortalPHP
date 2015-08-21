@@ -2,7 +2,7 @@
 
 {block name="asu_center"}
 <h2>Журнал успеваемости</h2>
-
+{CHtml::helpForCurrentPage()}
 
 {/block}
 

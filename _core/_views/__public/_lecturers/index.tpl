@@ -39,7 +39,7 @@
 	            <th>{CHtml::tableOrder("fio", $lects->getFirstItem())}</th>
 	            <th>Расписание</th>
 	        </tr>
-            {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+            {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $lects->getItems() as $lect}
 		    <tr>
 		    	<td>{counter}</td>

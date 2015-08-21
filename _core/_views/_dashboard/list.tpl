@@ -2,12 +2,13 @@
 
 {block name="asu_center"}
 <h2>Элементы рабочего стола</h2>
+{CHtml::helpForCurrentPage()}
 
 <table class="table table-striped table-bordered table-hover table-condensed">
 	<tr>
 		<th width="5"></th>
 		<th width="5">#</th>
-		<th width="16">Значек</th>
+		<th width="16">Значок</th>
 		<th>Название</th>
 	</tr>
 	{foreach $items->getItems() as $item}

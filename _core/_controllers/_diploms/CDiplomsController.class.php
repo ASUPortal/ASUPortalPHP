@@ -235,7 +235,7 @@ class CDiplomsController extends CBaseController {
             ),
 			array(
 				"title" => "Список студентов",
-				"link" => WEB_ROOT."_modules/_students/",
+				"link" => WEB_ROOT."_modules/_students/index.php",
 				"icon" => "apps/system-users.png"
 			),
 			array(
@@ -405,7 +405,7 @@ class CDiplomsController extends CBaseController {
         $this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
-                "link" => WEB_ROOT."_modules/_diploms/",
+                "link" => WEB_ROOT."_modules/_diploms/index.php",
                 "icon" => "actions/edit-undo.png"
             )
         ));		
@@ -419,7 +419,7 @@ class CDiplomsController extends CBaseController {
         $this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
-                "link" => WEB_ROOT."_modules/_diploms/",
+                "link" => WEB_ROOT."_modules/_diploms/index.php",
                 "icon" => "actions/edit-undo.png"
             ),
             array(
@@ -537,7 +537,7 @@ class CDiplomsController extends CBaseController {
             if ($this->continueEdit()) {
                 $this->redirect("?action=edit&id=".$diplom->getId());
             } else {
-                $this->redirect(WEB_ROOT."_modules/_diploms/");
+                $this->redirect(WEB_ROOT."_modules/_diploms/index.php");
             }
             //$this->redirect("?action=index");
             return true;

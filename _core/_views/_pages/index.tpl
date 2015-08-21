@@ -18,12 +18,12 @@
                 <th>{CHtml::tableOrder("user_id_insert", $pages->getFirstItem())}</th>
                 <th></th>
             </tr>
-            {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+            {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $pages->getItems() as $page}
                 <tr>
                     <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить страницу {$page->title}')) { location.href='?action=delete&id={$page->id}'; }; return false;"></a></td>
                     <td>{counter}</td>
-                    <td><a href="admin.php?action=edit&id={$page->getId()}">{$page->title}</a</td>
+                    <td><a href="admin.php?action=edit&id={$page->getId()}">{$page->title}</a></td>
                     <td>
                         {if !is_null($page->getAuthor())}
                             {$page->getAuthor()->getName()}

@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>{$cycle->number} {$cycle->title}</h2>
+    {CHtml::helpForCurrentPage()}
 
     <p><strong>Базовая часть</strong></p>
         <table class="table table-striped table-bordered table-hover table-condensed">

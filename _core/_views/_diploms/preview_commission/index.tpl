@@ -49,7 +49,7 @@
             <th>{CHtml::tableOrder("members", $commissions->getFirstItem())}</th>
             <th><input type="checkbox" id="selectAll"></th>
         </tr>
-        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $commissions->getItems() as $commission}
             <tr>
                 <td valign="top"><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить комиссию {$commission->title}')) { location.href='?action=delete&id={$commission->getId()}'; }; return false;"></a></td>

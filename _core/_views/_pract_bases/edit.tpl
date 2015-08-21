@@ -2,7 +2,8 @@
 
 {block name="asu_center"}
     <h2>Редактирование базы практики</h2>
-
+	{CHtml::helpForCurrentPage()}
+	
     {include file="_pract_bases/form.tpl"}
 {/block}
 

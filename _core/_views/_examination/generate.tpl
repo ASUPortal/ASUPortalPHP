@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Генерация билетов</h2>
+{CHtml::helpForCurrentPage()}
 
 <form action="index.php" method="post" class="form-horizontal">
     <input type="hidden" name="action" value="generateTickets">

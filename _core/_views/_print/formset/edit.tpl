@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Редактирование набора шаблонов</h2>
+{CHtml::helpForCurrentPage()}
 
     {include file="_print/formset/form.tpl"}
 {/block}

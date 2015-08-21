@@ -12,7 +12,7 @@
             <th>{CHtml::tableOrder("comment", $groups->getFirstItem())}</th>
             <th>{CHtml::tableOrder("name", $groups->getFirstItem())}</th>
         </tr>
-        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $groups->getItems() as $group}
         <tr>
             <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить группу {$group->getName()}')) { location.href='?action=delete&id={$group->getId()}'; }; return false;"></td>

@@ -128,7 +128,7 @@
         <th>{CHtml::tableOrder("title", $orders->getFirstItem())}</th>
         <th>Комментарий</th>
     </tr>
-    {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+    {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
     {foreach $orders->getItems() as $order}
     <tr>
         <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить приказ {$order->title}')) { location.href='?action=delete&id={$order->id}'; }; return false;"></a></td>

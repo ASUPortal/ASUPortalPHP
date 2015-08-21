@@ -15,7 +15,7 @@
             <th>{CHtml::tableOrder("menu_name_id", $tasks->getFirstItem())}</th>
             <th>Комментарий</th>
         </tr>
-        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $tasks->getItems() as $task}
         <tr>
             <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить задачу {$task->getName()}')) { location.href='?action=delete&id={$task->getId()}'; }; return false;"></td>

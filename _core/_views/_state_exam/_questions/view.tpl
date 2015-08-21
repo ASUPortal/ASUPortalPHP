@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Вопрос по дисциплине {$question->getDiscipline()->getValue()}</h2>
+    {CHtml::helpForCurrentPage()}
 
     <p>
         <strong>Специальность:</strong> {$question->getSpeciality()->getValue()}

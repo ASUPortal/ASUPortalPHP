@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Билеты к ГОС экзаменам</h2>
+    {CHtml::helpForCurrentPage()}
 
     <p align="center">
         ФГБОУ ВПО УФИМСКИЙ ГОСУДАРСТВЕННЫЙ АВИАЦИОННЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ

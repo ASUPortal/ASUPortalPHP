@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Зарегистрированные ресурсы</h2>
+    {CHtml::helpForCurrentPage()}
 
     {if is_null($resources)}
         Нет зарегистрированных ресурсов

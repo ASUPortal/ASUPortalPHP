@@ -8,7 +8,7 @@
 <script>
     jQuery(document).ready(function(){
         jQuery("#search").autocomplete({
-            source: web_root + "_modules/_specialities/?action=search",
+            source: web_root + "_modules/_specialities/index.php?action=search",
             minLength: 2,
             select: function(event, ui) {
                 if (ui.item.type == 1) {
@@ -67,7 +67,7 @@
             <th>{CHtml::tableOrder("name", $specialities->getFirstItem())}</th>
             <th>Комментарий</th>
         </tr>
-        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $specialities->getItems() as $speciality}
         <tr>
             <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить специальность {$speciality->name}')) { location.href='?action=delete&id={$speciality->id}'; }; return false;"></a></td>

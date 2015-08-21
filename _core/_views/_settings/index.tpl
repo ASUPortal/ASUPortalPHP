@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Личные настройки Портала</h2>
+    {CHtml::helpForCurrentPage()}
 
     {include file="_settings/form.tpl"}
 {/block}

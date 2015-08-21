@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Поиск записей</h2>
+{CHtml::helpForCurrentPage()}
 
     {include file="_gradebook/gradebook.form.tpl"}
 {/block}

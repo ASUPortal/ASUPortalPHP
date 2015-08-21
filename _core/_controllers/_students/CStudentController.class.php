@@ -40,7 +40,7 @@ class CStudentController extends CBaseController {
             ),
             array(
                 "title" => "ВКР",
-                "link" => WEB_ROOT."_modules/_diploms/",
+                "link" => WEB_ROOT."_modules/_diploms/index.php",
                 "icon" => "devices/network-wired.png"
             ),
             array(
@@ -123,7 +123,7 @@ class CStudentController extends CBaseController {
             ),
             array(
                 "title" => "Успеваемость",
-                "link" => WEB_ROOT."_modules/_gradebook/?action=index&filter=student:".$student->getId(),
+                "link" => WEB_ROOT."_modules/_gradebook/index.php?action=index&filter=student:".$student->getId(),
                 "icon" => "actions/address-book-new.png"
             ),
             array(

@@ -50,7 +50,7 @@
                 <div class="row">
                     <div class="span11">
                         {if (CSession::isAuth())}
-                            {if (CSession::getCurrentUser()->getStatus() == "преподаватель")}
+                            {if (CSession::getCurrentUser()->getStatus() == "преподаватель") or (CSession::getCurrentUser()->getStatus() == "администратор")}
                                 {include file="_menumanager/menu.adminMenu.tpl"}
                             {/if}
                         {/if}

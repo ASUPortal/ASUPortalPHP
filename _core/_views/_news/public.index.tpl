@@ -2,6 +2,9 @@
 
 {block name="asu_center"}
     <h2>Новости</h2>
+    {if (CSession::isAuth())}
+    	{CHtml::helpForCurrentPage()}
+    {/if}
 
     {if ($news->getCount() == 0)}
         Нет новостей для отображения
@@ -14,10 +17,10 @@
         </script>
 
         {CHtml::paginator($paginator, "?action=index")}
-        <table border="1" cellpadding="5" cellspacing="0" width="100" class="tableBlank">
+        <table class="table table-striped table-bordered table-hover table-condensed">
             {foreach $news->getItems() as $newsItem}
                 <tr>
-                    <td width="130" valign="top">
+                    <td width="120" valign="top">
                         <img src="{$newsItem->getImagePath()}" hspace="5" vspace="5">
                     </td>
                     <td valign="top" style="padding-left: 5px; padding-right: 5px; ">

@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>{$discipline->number} {$discipline->discipline->name}</h2>
+    {CHtml::helpForCurrentPage()}
 
     <p><strong>Трудоемкость</strong></p>
         <table class="table table-striped table-bordered table-hover table-condensed">

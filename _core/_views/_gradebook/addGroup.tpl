@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Добавление группы записей</h2>
+{CHtml::helpForCurrentPage()}
 
 <script>
     jQuery(document).ready(function(){     
@@ -13,7 +14,7 @@
         });
         jQuery("#group_id").change(function(){
             jQuery.getJSON(
-                    web_root + "_modules/_gradebook/",
+                    web_root + "_modules/_gradebook/index.php",
                     {
                         action: "getStudentsByGroup",
                         group: jQuery(this).val()

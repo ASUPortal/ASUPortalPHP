@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Управление классами отчетов</h2>
+    {CHtml::helpForCurrentPage()}
 
     {if ($objects->getCount() == 0)}
         Нет объектов для отображения

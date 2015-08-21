@@ -204,7 +204,7 @@
             <th>{CHtml::tableOrder("comm.name", $previews->getFirstItem(), true)}</th>
             <th>{CHtml::tableOrder("comment", $previews->getFirstItem(), true)}</th>
         </tr>
-        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $previews->getItems() as $preview}
         <tr>
             <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить предзащиту студента {$preview->student->getName()}')) { location.href='?action=deletePreview&id={$preview->id}'; }; return false;"></a></td>
@@ -216,7 +216,7 @@
             <td>
 				{if !is_null($preview->student)}
 					{if !is_null($preview->student->getGroup())}
-						<a href="{$web_root}_modules/_students/?action=edit&id={$preview->student->getId()}">{$preview->student->getName()}</a>
+						<a href="{$web_root}_modules/_students/index.php?action=edit&id={$preview->student->getId()}">{$preview->student->getName()}</a>
 					{/if}
 				{/if}
 			</td>

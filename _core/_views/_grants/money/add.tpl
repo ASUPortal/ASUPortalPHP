@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Добавление расхода/поступления</h2>
+    {CHtml::helpForCurrentPage()}
 
     {include file="_grants/money/form.tpl"}
 {/block}

@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
 <h2>Журнал успеваемости</h2>
+{CHtml::helpForCurrentPage()}
 
 <script>
     /**
@@ -217,7 +218,7 @@
         <td>{$record->getDate()}</td>
         <td>
             {if !is_null($record->discipline)}
-                <a target="_blank" href="{$web_root}spravochnik_edit.php?item_id={$record->discipline->getId()}&type=edit&sprav_id=10">{$record->discipline->getValue()}</a>
+                <a target="_blank" href="{$web_root}_modules/_taxonomy/index.php?action=editLegacyTerm&id={$record->discipline->getId()}&taxonomy_id=10">{$record->discipline->getValue()}</a>
             {/if}
         </td>
         <td>
@@ -231,7 +232,7 @@
         </td>
         <td>
             {if (!is_null($record->student))}
-                <a href="{$web_root}_modules/_students/?action=edit&id={$record->student->getId()}">{$record->student->getName()}</a>
+                <a href="{$web_root}_modules/_students/index.php?action=edit&id={$record->student->getId()}">{$record->student->getName()}</a>
             {else}&nbsp;{/if}
         </td>
         <td>

@@ -2,6 +2,7 @@
 
 {block name="asu_center"}
     <h2>Справочник видов работ</h2>
+    {CHtml::helpForCurrentPage()}
 
     {if $works->getCount() == 0}
         <div class="alert">

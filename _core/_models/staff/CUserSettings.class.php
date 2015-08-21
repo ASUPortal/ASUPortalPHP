@@ -35,6 +35,11 @@ class CUserSettings extends CActiveModel {
             "dashboard_show_messages" => "Показывать сообщения",
             "dashboard_show_all_tasks" => "Показывать все задачи",
             "dashboard_check_messages" => "Проверять сообщения",
+        	"dashboard_enabled_groups" => "Использовать Рабочий стол",
+        	"dashboard_show_birthdays_groups" => "Показывать дни рождения",
+        	"dashboard_show_messages_groups" => "Показывать сообщения",
+        	"dashboard_show_all_tasks_groups" => "Показывать все задачи",
+        	"dashboard_check_messages_groups" => "Проверять сообщения",
             "portal_input_size" => "Размер полей ввода"
         );
     }
@@ -48,15 +53,48 @@ class CUserSettings extends CActiveModel {
         );
     }
     public function isDashboardEnabled() {
-        return $this->dashboard_enabled == 1;
+    	if ($this->dashboard_enabled == 1) {
+    		return true;
+    	} elseif (($this->dashboard_enabled_groups == 1) and ($this->dashboard_enabled == 2)) {
+    		return true;
+    	} else {
+    		return false;
+    	}
     }
     public function isShowBirthdays() {
-        return $this->dashboard_show_birthdays == 1;
+    	if ($this->dashboard_show_birthdays == 1) {
+    		return true;
+    	} elseif (($this->dashboard_show_birthdays_groups == 1) and ($this->dashboard_show_birthdays == 2)) {
+    		return true;
+    	} else {
+    		return false;
+    	}
     }
     public function isShowMessages() {
-        return $this->dashboard_show_messages == 1;
+    	if ($this->dashboard_show_messages == 1) {
+    		return true;
+    	} elseif (($this->dashboard_show_messages_groups == 1) and ($this->dashboard_show_messages == 2)) {
+    		return true;
+    	} else {
+    		return false;
+    	}
     }
     public function isCheckMessages() {
-        return $this->dashboard_check_messages == 1;
+    	if ($this->dashboard_check_messages == 1) {
+    		return true;
+    	} elseif (($this->dashboard_check_messages_groups == 1) and ($this->dashboard_check_messages == 2)) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+    public function isShowAllTasks() {
+    	if ($this->dashboard_show_all_tasks == 1) {
+    		return true;
+    	} elseif (($this->dashboard_show_all_tasks_groups == 1) and ($this->dashboard_show_all_tasks == 2)) {
+    		return true;
+    	} else {
+    		return false;
+    	}
     }
 }

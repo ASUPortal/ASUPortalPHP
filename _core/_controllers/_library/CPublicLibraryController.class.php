@@ -205,7 +205,7 @@ class CPublicLibraryController extends CBaseController{
 			),
 			array(
 				"title" => "Добавить новую дисциплину",
-				"link" => WEB_ROOT."_modules/_taxonomy/?action=legacy&id=10",
+				"link" => WEB_ROOT."_modules/_taxonomy/index.php?action=legacy&id=10",
 				"icon" => "actions/list-add.png"
 			)
     	));
@@ -314,6 +314,7 @@ class CPublicLibraryController extends CBaseController{
     		$author = CSession::getCurrentUser()->getId();
     	}
     	$file->nameFolder = CRequest::getInt("id");
+    	$file->date_time = date("Y-m-d H:i:s");
 		$this->addActionsMenuItem(array(
 			array(
 				"title" => "Назад",

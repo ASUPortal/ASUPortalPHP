@@ -9,6 +9,7 @@
     </script>
 
     <h2>Мои новости</h2>
+    {CHtml::helpForCurrentPage()}
 
     {if ($news->getCount() == 0)}
         У Вас еще нет новостей
@@ -20,7 +21,7 @@
             <th>Заголовок</th>
             <th>Текст новости</th>
         </tr>
-        {counter start=(20 * ($paginator->getCurrentPageNumber() - 1)) print=false}
+        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $news->getItems() as $newsItem}
         <tr valign="top">
             <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить новость {$newsItem->title}')) { location.href='?action=delete&id={$newsItem->id}'; }; return false;"></a></td>

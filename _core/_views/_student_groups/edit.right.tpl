@@ -6,7 +6,7 @@
 </p>
 
 <p>
-    <a href="{$web_root}_modules/_students/?action=index&filter=group_id:{$group->getId()}"><center>
+    <a href="{$web_root}_modules/_students/index.php?action=index&filter=group_id:{$group->getId()}"><center>
         <img src="{$web_root}images/{$icon_theme}/32x32/apps/system-users.png"><br>
         Студенты
     </center></a>
@@ -69,7 +69,7 @@
     jQuery("#studentsWithoutMarks").on("shown", function(){
         var place = jQuery(".modal-body", this);
         jQuery.ajax({
-            url: "{$web_root}_modules/_student_groups/?action=GetStudentsWithoutMarks&id={$group->getId()}",
+            url: "{$web_root}_modules/_student_groups/index.php?action=GetStudentsWithoutMarks&id={$group->getId()}",
             type: "GET",
             cache: false,
             context: this,
