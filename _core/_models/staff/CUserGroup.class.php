@@ -5,6 +5,8 @@
  * Date: 11.06.12
  * Time: 17:26
  * To change this template use File | Settings | File Templates.
+ *
+ * @property CArrayList dashboardItems
  */
 class CUserGroup extends CActiveModel {
     protected $_roles = null;
@@ -48,6 +50,12 @@ class CUserGroup extends CActiveModel {
                 "relationPower" => RELATION_COMPUTED,
                 "storageProperty" => "_roles",
                 "relationFunction" => "getRoles"
+            ),
+            "dashboardItems" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageTable" => TABLE_DASHBOARD,
+                "storageCondition" => "parent_id = 0 and group_id=".(is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CDashboardItem"
             )
         );
     }

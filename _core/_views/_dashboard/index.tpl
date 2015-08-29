@@ -1,52 +1,23 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-<div id="dashboard">
-	{foreach $items->getItems() as $item}
-		<div class="dashboard_item item-{$item->getId()}">
-			<div class="item_icon">
-				{if $item->icon !== ""}
-					<img src="{$web_root}images/{$icon_theme}/64x64/{$item->icon}">
-				{/if}
-			</div>
-			<div class="item_content">
-				<h4>
-					{if $item->link !== ""}
-						<a href="{$item->link}">{$item->title}</a>
-					{else}
-						{$item->title}
-					{/if}
-				</h4>
-				{if ($item->children->getCount() > 0)}
-					<ul>
-						{foreach $item->children->getItems() as $child}
-							<li>
-								{if $child->link !== ""}
-									<a href="{$child->link}">{$child->title}</a>
-								{else}
-									{$child->title}
-								{/if}							
-							</li>
-						{/foreach}
-					</ul>
-				{/if}
-			</div>
-			<div style="clear: both;"></div>
-		</div>
+	<ul class="nav nav-tabs" id="myTab">
+	{foreach $dashboards as $title=>$items}
+		{if $items->getCount()> 0}
+			<li {if $items@index eq 0} class="active" {/if}><a data-toggle="tab" href="#tab-{$items@index}">{$title}</a></li>
+		{/if}
 	{/foreach}
-    {foreach $settings->reports->getItems() as $report}
-        <div class="dashboard_item dashboard_report" report_id="{$report->getId()}">
-            <div class="item_hover"></div>
-            <div class="item_icon">
-                <img src="{$web_root}images/{$icon_theme}/64x64/apps/devhelp.png">
-            </div>
-            <div class="item_content">
-                <h4>{$report->title}</h4>
-
-            </div>
-        </div>
-    {/foreach}
-</div>
+	</ul>
+	<div class="tab-content">
+		{assign var=counter value=1}
+	{foreach $dashboards as $title=>$items}
+		{if $items->getCount()> 0}
+			<div class="tab-pane {if $items@index eq 0} active {/if}" id="tab-{$items@index}">
+				{include file="_dashboard/subform.dashboard.tpl"}
+			</div>
+		{/if}
+	{/foreach}
+	</div>
 {/block}
 
 {block name="asu_right"}

@@ -80,7 +80,19 @@ class CDashboardController extends CBaseController {
             $item = new CDashboardItem($ar);
             $items->add($item->getId(), $item);
         }
-		$this->setData("items", $items);
+        /**
+         * Личный рабочий стол
+         */
+        $dashboards = new CArrayList();
+        $dashboards->add("Личный рабочий стол", $items);
+        /**
+         * Соберем рабочие столы групп, в которые входит пользователь
+         */
+        $groups = CSession::getCurrentUser()->getGroups();
+        foreach ($groups->getItems() as $group) {
+            $dashboards->add($group->comment, $group->dashboardItems);
+        }
+		$this->setData("dashboards", $dashboards);
         $this->setData("settings", $settings);
         $this->addJSInclude("_modules/_dashboard/script.js");
 		$this->renderView("_dashboard/index.tpl");

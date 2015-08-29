@@ -44,8 +44,6 @@ class CGroupsController extends CBaseController {
         $group = CStaffManager::getUserGroup(CRequest::getInt("id"));
         $form = new CUserGroupForm();
         $form->group = $group;
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("form", $form);
         $this->renderView("_users/groups/edit.tpl");
     }
@@ -53,8 +51,6 @@ class CGroupsController extends CBaseController {
         $group = new CUserGroup();
         $form = new CUserGroupForm();
         $form->group = $group;
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("form", $form);
         $this->renderView("_users/groups/add.tpl");
     }

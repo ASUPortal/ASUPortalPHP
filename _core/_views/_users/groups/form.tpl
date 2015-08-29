@@ -6,6 +6,7 @@
         <li class="active"><a data-toggle="tab" href="#tab-common">Общая информация</a></li>
         <li><a data-toggle="tab" href="#tab-tasks">Права группы</a></li>
         <li><a data-toggle="tab" href="#tab-users">Члены группы</a></li>
+        <li><a data-toggle="tab" href="#tab-desktop">Рабочий стол</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab-common">
@@ -16,6 +17,9 @@
         </div>
         <div class="tab-pane" id="tab-users">
             {include file="_users/groups/subform.users.tpl"}
+        </div>
+        <div class="tab-pane" id="tab-desktop">
+            {include file="_users/groups/subform.desktop.tpl"}
         </div>
     </div>
 
