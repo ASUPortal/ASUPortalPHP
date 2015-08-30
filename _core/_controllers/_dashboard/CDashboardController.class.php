@@ -80,40 +80,22 @@ class CDashboardController extends CBaseController {
             $item = new CDashboardItem($ar);
             $items->add($item->getId(), $item);
         }
-		$this->setData("items", $items);
+        /**
+         * Личный рабочий стол
+         */
+        $dashboards = new CArrayList();
+        $dashboards->add("Личный рабочий стол", $items);
+        /**
+         * Соберем рабочие столы групп, в которые входит пользователь
+         */
+        $groups = CSession::getCurrentUser()->getGroups();
+        foreach ($groups->getItems() as $group) {
+            $dashboards->add($group->comment, $group->dashboardItems);
+        }
+		$this->setData("dashboards", $dashboards);
         $this->setData("settings", $settings);
         $this->addJSInclude("_modules/_dashboard/script.js");
 		$this->renderView("_dashboard/index.tpl");
-	}
-	public function actionTasks() {
-		$set = new CRecordSet();
-		$queryForGroup = new CQuery();
-		$queryForGroup->select("distinct(tasks.id) as id, tasks.name as name, tasks.url as url")
-			->from(TABLE_USER_GROUP_HAS_ROLES." as groupTasks")
-			->innerJoin(TABLE_USER_ROLES." as tasks", "groupTasks.task_id=tasks.id")
-			->innerJoin(TABLE_USER_IN_GROUPS." as userGroup", "userGroup.user_id=".CSession::getCurrentUser()->id." and groupTasks.user_group_id=userGroup.group_id and groupTasks.task_rights_id!=0")
-			->condition('tasks.hidden!=1')
-			->order("tasks.name asc");
-		$set->setQuery($queryForGroup);
-		$setForUser = new CRecordSet();
-		$queryForUser = new CQuery();
-		$queryForUser->select("distinct(tasks.id) as id, tasks.name as name, tasks.url as url")
-			->from(TABLE_USER_HAS_ROLES." as userTasks")
-			->innerJoin(TABLE_USER_ROLES." as tasks", "userTasks.task_id=tasks.id")
-			->condition('tasks.hidden!=1 and userTasks.user_id="'.CSession::getCurrentUser()->id.'" and userTasks.task_rights_id!=0')
-			->order("tasks.name asc");
-		$setForUser->setQuery($queryForUser);
-		$tasks = new CArrayList();
-		foreach ($set->getItems() as $item) {
-			$task = new CUserRole($item);
-			$tasks->add($task->getId(), $task);
-		}
-		foreach ($setForUser->getItems() as $item) {
-			$task = new CUserRole($item);
-			$tasks->add($task->getId(), $task);
-		}
-		$this->setData("tasks", $tasks);
-		$this->renderView("_dashboard/tasks.tpl");
 	}
 	public function actionList() {
 		$set = CActiveRecordProvider::getWithCondition(TABLE_DASHBOARD, "user_id = ".CSession::getCurrentUser()->getId()." and parent_id = 0");
@@ -262,7 +244,6 @@ class CDashboardController extends CBaseController {
 		$item->remove();
 		$this->redirect("?action=list");
 	}
-
     /**
      * Показываем окошко с ближайшими днями рождения
      */
