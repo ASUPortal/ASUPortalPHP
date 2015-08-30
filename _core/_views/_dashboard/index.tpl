@@ -12,7 +12,7 @@
 			<div class="item_content">
 				<h4>
 					{if $item->link !== ""}
-						<a href="{$web_root}{$item->link}">{$item->title}</a>
+						<a href="{$item->link}">{$item->title}</a>
 					{else}
 						{$item->title}
 					{/if}
@@ -22,7 +22,7 @@
 						{foreach $item->children->getItems() as $child}
 							<li>
 								{if $child->link !== ""}
-									<a href="{$web_root}{$child->link}">{$child->title}</a>
+									<a href="{$child->link}">{$child->title}</a>
 								{else}
 									{$child->title}
 								{/if}							

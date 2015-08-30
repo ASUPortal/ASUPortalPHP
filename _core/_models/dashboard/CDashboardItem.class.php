@@ -22,8 +22,7 @@ class CDashboardItem extends CActiveModel {
             "title" => "Название",
             "link" => "Ссылка",
             "icon" => "Значок",
-            "parent_id" => "Родительский элемент",
-            "user.FIO" => "Пользователь"
+            "parent_id" => "Родительский элемент"
         );
     }
     public function addChild(CDashboardItem $child = null) {
