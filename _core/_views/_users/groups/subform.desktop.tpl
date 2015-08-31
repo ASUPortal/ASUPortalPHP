@@ -1,0 +1,1 @@
+{CHtml::activeComponent("groupdashboard.php?id={$form->group->getId()}", $form->group)}
