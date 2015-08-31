@@ -227,6 +227,7 @@
     define("TABLE_STAFF_ORDERS", "orders");
     define("TABLE_PUBLICATION_BY_PERSONS", "works");
     define("TABLE_PUBLICATIONS", "izdan");
+    define("TABLE_PUBLICATIONS_TYPES", "izdan_type");
     define("TABLE_TITLES", "zvanie");
     define("TABLE_SETTINGS", "settings");
     define("TABLE_RATING_INDEX_VALUES", "rating_index_value");

@@ -37,7 +37,17 @@ class CPublication extends CActiveModel {
         	),
         );
     }
-
+    public function validationRules() {
+    	return array(
+    			"numeric" => array(
+    					"year"
+    			),
+    			"selected" => array(
+    					"authors",
+    					"type_book"
+    			)
+    	);
+    }
     public function fieldsProperty() {
         return array(
             "copy" => array(

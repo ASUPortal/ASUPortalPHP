@@ -48,15 +48,15 @@ class CUserSettings extends CActiveModel {
         );
     }
     public function isDashboardEnabled() {
-        return $this->dashboard_enabled == 1;
+    	return $this->dashboard_enabled == 1;
     }
     public function isShowBirthdays() {
-        return $this->dashboard_show_birthdays == 1;
+    	return $this->dashboard_show_birthdays == 1;
     }
     public function isShowMessages() {
-        return $this->dashboard_show_messages == 1;
+    	return $this->dashboard_show_messages == 1;
     }
     public function isCheckMessages() {
-        return $this->dashboard_check_messages == 1;
+    	return $this->dashboard_check_messages == 1;
     }
 }

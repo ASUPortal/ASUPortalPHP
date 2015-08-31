@@ -97,6 +97,17 @@ class CDashboardController extends CBaseController {
         $this->addJSInclude("_modules/_dashboard/script.js");
 		$this->renderView("_dashboard/index.tpl");
 	}
+	public function actionTasks() {
+		$tasks = array();
+		foreach (CSession::getCurrentUser()->getRoles()->getItems() as $role) {
+			if ($role->hidden!=1) {
+				$tasks["$role->url"] = $role->name;
+			}
+		}
+		asort($tasks);
+		$this->setData("tasks", $tasks);
+		$this->renderView("_dashboard/tasks.tpl");
+	}
 	public function actionList() {
 		$set = CActiveRecordProvider::getWithCondition(TABLE_DASHBOARD, "user_id = ".CSession::getCurrentUser()->getId()." and parent_id = 0");
         $items = new CArrayList();
@@ -244,7 +255,6 @@ class CDashboardController extends CBaseController {
 		$item->remove();
 		$this->redirect("?action=list");
 	}
-
     /**
      * Показываем окошко с ближайшими днями рождения
      */

@@ -589,6 +589,36 @@ class CPerson extends CActiveModel{
         return $res;
     }
     /**
+     * Публикации сотрудника в указанном году
+     * 
+     * @param CTerm $year
+     * @return CArrayList
+     */
+    public function getPublications(CTerm $year) {
+    	$res = new CArrayList();
+    	foreach ($this->publications->getItems() as $item) {
+    		if ($item->year == date("Y", strtotime($year->date_start)) or $item->year == date("Y", strtotime($year->date_end))) {
+    			$res->add($item->getId(), $item);
+    		}
+    	}
+    	return $res;
+    }
+    /**
+     * Суммарный вес публикаций преподавателя в указанном году
+     *
+     * @param CTerm $year
+     * @return int
+     */
+    public function getRatingPublicationsWeight(CTerm $year) {
+    	$res = 0;
+    	foreach ($this->getPublications($year)->getItems() as $index) {
+    		if (!is_null($index->type)) {
+    			$res += $index->type->weight;
+    		}
+    	}
+    	return $res;
+    }
+    /**
      * Звание
      *
      * @return CTerm

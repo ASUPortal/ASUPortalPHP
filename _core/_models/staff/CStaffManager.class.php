@@ -392,7 +392,6 @@ class CStaffManager{
         }
         return self::getCacheUsers()->getItem($id);
     }
-
     /**
      * Ученая степень преподавателя по id ученой степени
      *
@@ -730,7 +729,7 @@ class CStaffManager{
     }
     
     /**
-     * Получить список работ, оносящихся к выбранному сотруднику
+     * Получить список работ, относящихся к выбранному сотруднику
      * @param CPerson $key
      * @return CArrayList
      */
@@ -760,10 +759,10 @@ class CStaffManager{
     }
     /**
      * Получить все публикации за выбранный год
-     * @param CTimeIntervals $int
+     * @param CTerm $int
      * @return CArrayList
      */
-    public static function getPublicationsByYear(CTimeIntervals $int) {
+    public static function getPublicationsByYear(CTerm $int) {
     	$publications = new CArrayList();
     	foreach (CActiveRecordProvider::getWithCondition(TABLE_PUBLICATIONS, 'year = "'.date("Y", strtotime($int->date_start)).'" or year = "'.date("Y", strtotime($int->date_end)).'"')->getItems() as $year) {
     		$publication = new CPublication($year);
@@ -775,10 +774,10 @@ class CStaffManager{
     /**
      * Получить публикации выбранного сотрудника с учётом года
      * @param CPerson $key
-     * @param CTimeIntervals $int
+     * @param CTerm $int
      * @return CArrayList
      */
-    public static function getPublicationsByPersonByYear(CPerson $key, CTimeIntervals $int) {
+    public static function getPublicationsByPersonByYear(CPerson $key, CTerm $int) {
     	$publications = new CArrayList();
     	foreach (CStaffManager::getPublicationsByPerson($key)->getItems() as $person) {
     		foreach (CStaffManager::getPublicationsByYear($int)->getItems() as $year) {
@@ -793,8 +792,38 @@ class CStaffManager{
     		}
     	}
     	return $publications;
-    }	
-        
+    }
+    /**
+     * Все публикации
+     *
+     * @static
+     * @return CArrayList
+     */
+    public static function getAllPublications() {
+    	if (!self::$_cachePublications) {
+    		foreach (CActiveRecordProvider::getAllFromTable(TABLE_PUBLICATIONS)->getItems() as $ar) {
+    			$publication = new CPublication($ar);
+    			self::getCachePublications()->add($publication->getId(), $publication);
+    		}
+    	}
+    	return self::getCachePublications();
+    }
+    /**
+     * Получить все публикации с указанным типом издания
+     * @param $key
+     * @return CArrayList
+     */
+    public static function getPublicationsByType($key) {
+    	$publications = new CArrayList();
+    	foreach (self::getAllPublications()->getItems() as $index) {
+    		if (!is_null($index->type)) {
+    			if (strtoupper($index->type->getValue()) == strtoupper($key)) {
+    				$publications->add($index->getId(), $index);
+    			}
+    		}
+    	}
+    	return $publications;
+    }    
     /**
      * Все зарегистрированные группы пользователей
      *
