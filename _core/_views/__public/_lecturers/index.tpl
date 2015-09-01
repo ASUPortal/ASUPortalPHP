@@ -1,9 +1,6 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-	{if (CSession::isAuth())}
-    	{CHtml::helpForCurrentPage()}
-    {/if}
     <h2 style="text-align:center">Преподаватели</h2>
     <div class=text style="text-align:center">выберите первую букву фамилии преподавателя</div>
     <br>

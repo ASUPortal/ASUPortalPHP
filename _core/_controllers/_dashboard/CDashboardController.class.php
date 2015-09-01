@@ -58,19 +58,19 @@ class CDashboardController extends CBaseController {
                     $child = new CDashboardItem();
                     $child->id = "inbox";
                     $child->title = "Входящие (".CSession::getCurrentUser()->getUnreadMessages()->getCount().")";
-                    $child->link = WEB_ROOT."mail.php?folder=in";
+                    $child->link = "mail.php?folder=in";
                     $item->addChild($child);
                 } else {
                     $child = new CDashboardItem();
                     $child->id = "inbox";
                     $child->title = "Нет непрочитанных сообщений";
-                    $child->link = WEB_ROOT."mail.php?folder=in";
+                    $child->link = "mail.php?folder=in";
                     $item->addChild($child);
                 }
                 $child = new CDashboardItem();
                 $child->id = "new";
                 $child->title = "Написать сообщение";
-                $child->link = WEB_ROOT."mail.php?compose=1";
+                $child->link = "mail.php?compose=1";
                 $item->addChild($child);
                 $items->add("_".$items->getCount(), $item);
             }
@@ -96,6 +96,17 @@ class CDashboardController extends CBaseController {
         $this->setData("settings", $settings);
         $this->addJSInclude("_modules/_dashboard/script.js");
 		$this->renderView("_dashboard/index.tpl");
+	}
+	public function actionTasks() {
+		$tasks = array();
+		foreach (CSession::getCurrentUser()->getRoles()->getItems() as $role) {
+			if ($role->hidden!=1) {
+				$tasks["$role->url"] = $role->name;
+			}
+		}
+		asort($tasks);
+		$this->setData("tasks", $tasks);
+		$this->renderView("_dashboard/tasks.tpl");
 	}
 	public function actionList() {
 		$set = CActiveRecordProvider::getWithCondition(TABLE_DASHBOARD, "user_id = ".CSession::getCurrentUser()->getId()." and parent_id = 0");
@@ -244,7 +255,6 @@ class CDashboardController extends CBaseController {
 		$item->remove();
 		$this->redirect("?action=list");
 	}
-
     /**
      * Показываем окошко с ближайшими днями рождения
      */

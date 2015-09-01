@@ -15,6 +15,6 @@
         {include file="__public/_lecturers/subform.news.current.tpl"}
     </div>
         <div class="tab-pane" id="tab-news-old">
-        {include file="__public/_lecturers/subform.news.old.tpl"}
+        {include file="__public/_lecturers/subform.news.Old.tpl"}
     </div>
 </div>
