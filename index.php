@@ -153,7 +153,7 @@ if(isset($_GET['id'])) {
 						</div>
                     	<p><a href="#modal<?php echo ($a['id'])?>" data-toggle="modal">
                         <?php 
-                        echo '<img src="_modules/_thumbnails/?src=images/news/'.$a['image'].'" align="center" valign="middle"  border=0>';
+                        echo '<img src="_modules/_thumbnails/?src=images/news/'.$a['image']."&w=130".'" align="center" valign="middle"  border=0>';
                         ?>
                    		</a></p>
                         <?php
@@ -161,7 +161,7 @@ if(isset($_GET['id'])) {
                         ?>
                     	<p><a href="#modal<?php echo ($a['id'])?>" data-toggle="modal">
                         <?php 
-                        echo '<img src="_modules/_thumbnails/?src=images/news/'.$a['image'].'" align="center" valign="middle" alt="Фото новости" border=0>';
+                        echo '<img src="_modules/_thumbnails/?src=images/news/'.$a['image']."&w=130".'" align="center" valign="middle" alt="Фото новости" border=0>';
                         ?>
 						</a></p>
                         <?php
@@ -173,14 +173,14 @@ if(isset($_GET['id'])) {
 						if (file_exists($filename)) {
 							echo '<img src="images/lects/small/sm_'.$a['user_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из биографии" border=0>';
 						} else {
-							echo '<img src="_modules/_thumbnails/?src=images/lects/'.$a['user_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из биографии" border=0>';
+							echo '<img src="_modules/_thumbnails/?src=images/lects/'.$a['user_photo']."&w=100".'" border="0" align="center" valign="middle" alt="Фото преподавателя из биографии" border=0>';
 						}
                     } else if ($showKadriImg_ifNullBiogImg && $a['kadri_photo']!="") {
                     	$filename = 'images/lects/small/sm_'.$a['kadri_photo'].'';
                     	if (file_exists($filename)) {
 							echo '<img src="images/lects/small/sm_'.$a['kadri_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из анкеты" border=0>';
                     	} else {
-							echo '<img src="_modules/_thumbnails/?src=images/lects/'.$a['kadri_photo'].'" border="0" align="center" valign="middle" alt="Фото преподавателя из анкеты" border=0>';
+							echo '<img src="_modules/_thumbnails/?src=images/lects/'.$a['kadri_photo']."&w=100".'" border="0" align="center" valign="middle" alt="Фото преподавателя из анкеты" border=0>';
                     	}
                     } else {
                         echo '<img src="images/design/notice.gif" border="0" align="center" valign="middle" alt="Фото новости" border=0>';
