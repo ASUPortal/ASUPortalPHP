@@ -2,7 +2,7 @@
 /**
  * Класс для страницы преподавателей на внешнем портале
  */
-class CLecturerOuter extends CActiveModel {
+class CLecturerOuter extends CPerson {
     protected $_table = TABLE_USERS;
     private $_biographies = null;
     private $_documents = null;
@@ -12,7 +12,6 @@ class CLecturerOuter extends CActiveModel {
     private $_pages = null;
     private $_manuals = null;
     private $_questions = null;
-    private $_supervisedGroups = null;
     
     public function attributeLabels() {
     	return array(
@@ -74,80 +73,8 @@ class CLecturerOuter extends CActiveModel {
     					"managerClass" => "CQuestionManager",
     					"managerGetObject" => "getQuestion",
     					"managerOrder" => "`datetime_quest` desc"
-    			),
-    			"supervisedGroups" => array(
-    					"relationPower" => RELATION_HAS_MANY,
-    					"storageProperty" => "_supervisedGroups",
-    					"storageTable" => TABLE_STUDENT_GROUPS,
-    					"storageCondition" => "curator_id = ".$this->id,
-    					"managerClass" => "CStaffManager",
-    					"managerGetObject" => "getStudentGroup"
     			)
     	);
-    }
-    /**
-     * Биография
-     * 
-     * @return CArrayList
-     */
-    public function getBiographies() {
-    	$result = new CArrayList();
-    	foreach ($this->biographies->getItems() as $biography) {
-    		$result->add($biography->getId(), $biography);
-    	}
-    	return $result;
-    }
-    
-    /**
-     * Документы
-     * 
-     * @return CArrayList
-     */
-    public function getDocuments() {
-    	$result = new CArrayList();
-    	foreach ($this->documents->getItems() as $document) {
-    		$result->add($document->getId(), $document);
-    	}
-    	return $result;
-    }
-    
-    /**
-     * Объявления
-     * 
-     * @return CArrayList
-     */
-    public function getNews() {
-    	$result = new CArrayList();
-    	foreach ($this->news->getItems() as $new) {
-    		$result->add($new->getId(), $new);
-    	}
-    	return $result;
-    }
-    
-    /**
-     * Объявления текущего учебного года
-     * 
-     * @return CArrayList
-     */
-    public function getNewsCurrentYear() {
-    	$result = new CArrayList();
-    	foreach ($this->newsCurrentYear->getItems() as $new) {
-    		$result->add($new->getId(), $new);
-    	}
-    	return $result;
-    }
-    
-    /**
-     * Объявления прошлых учебных лет
-     * 
-     * @return CArrayList
-     */
-    public function getNewsOld() {
-    	$result = new CArrayList();
-    	foreach ($this->newsOld->getItems() as $new) {
-    		$result->add($new->getId(), $new);
-    	}
-    	return $result;
     }
     
     /**
@@ -169,20 +96,7 @@ class CLecturerOuter extends CActiveModel {
     	}
     	return $this->_schedules;
     }
-    
-    /**
-     * Cтраницы на портале
-     * 
-     * @return CArrayList
-     */
-    public function getPages() {
-    	$result = new CArrayList();
-    	foreach ($this->pages->getItems() as $page) {
-    		$result->add($page->getId(), $page);
-    	}
-    	return $result;
-    }
-    
+
     /**
      * Список пособий на портале
      * 
@@ -202,31 +116,5 @@ class CLecturerOuter extends CActiveModel {
     		}
     	}
     	return $this->_manuals;
-    }
-    
-    /**
-     * Вопросы и ответы на них преподавателя
-     * 
-     * @return CArrayList
-     */
-    public function getQuestions() {
-    	$result = new CArrayList();
-    	foreach ($this->questions->getItems() as $question) {
-    		$result->add($question->getId(), $question);
-    	}
-    	return $result;
-    }
-    
-    /**
-     * Кураторство учебных групп
-     * 
-     * @return CArrayList
-     */
-    public function getSupervisedGroups() {
-    	$result = new CArrayList();
-    	foreach ($this->supervisedGroups->getItems() as $group) {
-    		$result->add($group->getId(), $group);
-    	}
-    	return $result;
     }
 }

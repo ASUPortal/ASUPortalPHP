@@ -2,7 +2,6 @@
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#tab-news">Учебные пособия и объявления</a></li>
         <li><a data-toggle="tab" href="#tab-questions">Вопросы и ответы</a></li>
-        <li><a data-toggle="tab" href="#tab-groups">Кураторство учебных групп</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab-news">
@@ -10,9 +9,6 @@
         </div>
         <div class="tab-pane" id="tab-questions">
             {include file="__public/_lecturers/subform.questions.tpl"}
-        </div>
-        <div class="tab-pane" id="tab-groups">
-            {include file="__public/_lecturers/subform.groups.tpl"}
         </div>
     </div>
 </form>
