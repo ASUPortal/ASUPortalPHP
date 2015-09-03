@@ -16,7 +16,7 @@ class CLecturerOuter extends CActiveModel {
     
     public function attributeLabels() {
     	return array(
-    			"FIO" => "ФИО",
+    			"fio" => "ФИО",
     			"FIO_short" => "ФИО (краткое)",
     			"comment" => "Комментарий"
     	);

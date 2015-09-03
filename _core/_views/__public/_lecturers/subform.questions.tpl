@@ -1,4 +1,9 @@
-<div><input name="" onclick="location.href='{$web_root}_modules/_question_add/index.php?action=index&user_id={$lect->getUser()->id}'" type="button" class="btn" value="Задать вопрос"></div>
+{if (CSettingsManager::getSettingValue("hide_person_data_rule"))}
+	<div><input name="" onclick="location.href='{$web_root}_modules/_question_add/index.php?action=index&user_id={$lect->id}'" type="button" class="btn" value="Задать вопрос"></div>
+{else}
+	<div><input name="" onclick="location.href='{$web_root}_modules/_question_add/index.php?action=index&user_id={$lect->getUser()->id}'" type="button" class="btn" value="Задать вопрос"></div>
+{/if}
+
 <br>
 {if ($lect->getQuestions()->getCount() == 0)}
 	вопросов с ответами на портале нет

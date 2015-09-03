@@ -19,9 +19,9 @@
 	    	</tr>
     	</table>
     	<br>
-    	    {include file="__public/_lecturers_outer/form.tpl"}
+    	    {include file="__public/_lecturers/formOuter.tpl"}
 {/block}
 
 {block name="asu_right"}
-    {include file="__public/_lecturers_outer/view.right.tpl"}
+    {include file="__public/_lecturers/view.right.tpl"}
 {/block}
