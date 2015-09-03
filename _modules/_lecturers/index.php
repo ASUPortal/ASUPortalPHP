@@ -6,4 +6,8 @@
 require_once("../../core.php");
 mysql_query("SET NAMES UTF8");
 
-$controller = new CLecturersController();
+if (CSettingsManager::getSettingValue("hide_person_data_rule")) {
+	$controller = new CLecturersControllerOuter();
+} else {
+	$controller = new CLecturersController();
+}
