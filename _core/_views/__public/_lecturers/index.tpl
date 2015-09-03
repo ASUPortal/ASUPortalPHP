@@ -40,7 +40,13 @@
             {foreach $lects->getItems() as $lect}
 		    <tr>
 		    	<td>{counter}</td>
-		        <td><a href="index.php?action=view&id={$lect->getUser()->id}">{$lect->fio}</a></td>
+		        <td>
+			        {if (CSettingsManager::getSettingValue("hide_person_data_rule"))}
+			        	<a href="index.php?action=view&id={$lect->id}">{$lect->FIO}</a>
+			        {else}
+			        	<a href="index.php?action=view&id={$lect->getUser()->id}">{$lect->fio}</a>
+			        {/if}
+		        </td>
 		        <td>
 					{if {$lect->getSchedule()->getCount()}!=0}
 						{foreach $lect->getSchedule()->getItems() as $rasp}
