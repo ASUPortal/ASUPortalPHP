@@ -12,6 +12,7 @@
 class CLibraryFolder{
     private $_discipline = null;
     private $_persons = null;
+    private $_users = null;
     private static $_materials = null;
     private $_folders = null;
 
@@ -41,6 +42,23 @@ class CLibraryFolder{
             }
         }
         return $this->_persons;
+    }
+    /**
+     * Пользователи, которые ведут дисциплину из этой папки
+     *
+     * @return CArrayList|null
+     */
+    public function getUsers() {
+    	if (is_null($this->_users)) {
+    		$this->_users = new CArrayList();
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_LIBRARY_DOCUMENTS, "subj_id = ".$this->getDiscipline()->getId())->getItems() as $ar) {
+    			$user = CStaffManager::getUser($ar->getItemValue("user_id"));
+    			if (!is_null($user)) {
+    				$this->_users->add($user->getId(), $user);
+    			}
+    		}
+    	}
+    	return $this->_users;
     }
     private static function getMaterialsCntByAllPersons() {
         if (is_null(self::$_materials)) {
