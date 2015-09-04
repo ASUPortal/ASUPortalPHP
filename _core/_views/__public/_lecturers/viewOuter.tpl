@@ -19,7 +19,7 @@
 	    	</tr>
     	</table>
     	<br>
-    	    {include file="__public/_lecturers/formOuter.tpl"}
+    	    {include file="__public/_lecturers/form.tpl"}
 {/block}
 
 {block name="asu_right"}

@@ -73,6 +73,14 @@ class CLecturerOuter extends CPerson {
     					"managerClass" => "CQuestionManager",
     					"managerGetObject" => "getQuestion",
     					"managerOrder" => "`datetime_quest` desc"
+    			),
+    			"supervisedGroups" => array(
+    					"relationPower" => RELATION_HAS_MANY,
+    					"storageProperty" => "_supervisedGroups",
+    					"storageTable" => TABLE_STUDENT_GROUPS,
+    					"storageCondition" => "curator_id = -1",
+    					"managerClass" => "CStaffManager",
+    					"managerGetObject" => "getStudentGroup"
     			)
     	);
     }
