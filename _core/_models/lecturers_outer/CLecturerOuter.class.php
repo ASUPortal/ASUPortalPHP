@@ -15,7 +15,7 @@ class CLecturerOuter extends CPerson {
     
     public function attributeLabels() {
     	return array(
-    			"fio" => "ФИО",
+    			"FIO" => "ФИО",
     			"FIO_short" => "ФИО (краткое)",
     			"comment" => "Комментарий"
     	);
@@ -75,6 +75,15 @@ class CLecturerOuter extends CPerson {
     					"managerOrder" => "`datetime_quest` desc"
     			)
     	);
+    }
+       
+    /**
+     * Пользователь
+     *
+     * @return CUser
+     */
+    public function getUser() {
+    	return $this;
     }
     
     /**
