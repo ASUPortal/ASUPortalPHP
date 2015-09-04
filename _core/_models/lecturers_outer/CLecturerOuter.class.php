@@ -12,6 +12,11 @@ class CLecturerOuter extends CPerson {
     private $_pages = null;
     private $_manuals = null;
     private $_questions = null;
+    private $_graduatesCurrentYear = null;
+    private $_graduatesOld = null;
+    private $_aspirantsCurrent = null;
+    private $_aspirantsOld = null;
+    private $_supervisedGroups = null;
     
     public function attributeLabels() {
     	return array(
@@ -133,5 +138,45 @@ class CLecturerOuter extends CPerson {
     		}
     	}
     	return $this->_manuals;
+    }
+    
+    /**
+     * Дипломники текущего учебного года
+     *
+     * @return CArrayList
+     */
+    public function getGraduatesCurrentYear() {
+    	$this->_graduatesCurrentYear = new CArrayList();
+    	return $this->_graduatesCurrentYear;
+    }
+    
+    /**
+     * Дипломники предыдущих учебных лет
+     *
+     * @return CArrayList
+     */
+    public function getGraduatesOld() {
+    	$this->_graduatesOld = new CArrayList();
+    	return $this->_graduatesOld;
+    }
+    
+    /**
+     * Подготовка аспирантов, текущие
+     *
+     * @return CArrayList
+     */
+    public function getAspirantsCurrent() {
+    	$this->_aspirantsCurrent = new CArrayList();
+    	return $this->_aspirantsCurrent;
+    }
+    
+    /**
+     * Подготовка аспирантов, архив
+     *
+     * @return CArrayList
+     */
+    public function getAspirantsOld() {
+    	$this->_aspirantsOld = new CArrayList();
+    	return $this->_aspirantsOld;
     }
 }
