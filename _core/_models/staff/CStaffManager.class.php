@@ -19,6 +19,7 @@ class CStaffManager{
     private static $_cacheStudents = null;
     private static $_cacheStudentsInit = false;
     private static $_cacheRoles = null;
+    private static $_cacheRolesGroups = null;
     private static $_cacheUserGroups = null;
     private static $_cacheUserGroupsInit = false;
     private static $_cacheOrders = null;
@@ -628,6 +629,62 @@ class CStaffManager{
         }
         return self::getCacheUserGroups()->getItem($key);
     }
+    
+    /**
+     * Кэш ролей групп пользователей
+     *
+     * @static
+     * @return CArrayList
+     */
+    private static function getCacheRolesGroups() {
+        if (is_null(self::$_cacheRolesGroups)) {
+            self::$_cacheRolesGroups = new CArrayList();
+        }
+        return self::$_cacheRolesGroups;
+    }
+    
+    /**
+     * Получить роли по идентификатору задачи
+     *
+     * @param CUserRole $key
+     * @return CArrayList
+     */
+    public static function getRolesByTask(CUserRole $key) {
+    	$roles = new CArrayList();
+    	if (!self::getCacheRolesGroups()->hasElement($key->id)) {
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_GROUP_HAS_ROLES, "task_id = '".$key->id."'")->getItems() as $item) {
+    			$role = new CUserRoleGroup($item);
+    			$roles->add($role->getId(), $role);
+    			self::getCacheRolesGroups()->add($role->id, $role);
+    		}
+    	}
+    	return $roles;
+    }
+    
+    /**
+     * Получить роли по идентификатору задачи выбранного сотрудника 
+     * @param CUserRole $key
+     * @param CUser $user
+     * @return CArrayList
+     */
+    public static function getRolesByTaskByUser(CUserRole $key, CUser $user) {
+    	$roles = new CArrayList();
+    	$users = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_IN_GROUPS, "user_id = '".$user->getId()."'")->getItems() as $item) {
+    		$user = new CUser($item);
+    		$users->add($user->getId(), $user);
+    	}
+    	foreach (CStaffManager::getRolesByTask($key)->getItems() as $role) {
+    		foreach ($users->getItems() as $user) {
+    			if ($role->user_group_id == $user->group_id) {
+    				$roles->add($role->getId(), $role);
+    				self::getCacheRolesGroups()->add($role->id, $role);
+    			}
+    		}
+    	}
+    	return $roles;
+    }
+    
     /**
      * Все пользователи
      *

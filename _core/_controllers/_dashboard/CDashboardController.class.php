@@ -92,19 +92,43 @@ class CDashboardController extends CBaseController {
         foreach ($groups->getItems() as $group) {
             $dashboards->add($group->comment, $group->dashboardItems);
         }
+        $roles = new CArrayList();
+        foreach (CSession::getCurrentUser()->getRoles()->getItems() as $role) {
+			if ($role->hidden!=1) {
+				$roles->add($role->getId(), $role);
+			}
+        }
+        $sort = new CArrayList();
+        foreach ($roles->getItems() as $i) {
+			$sort->add($i->name, $i->getId());
+        }
+        $tasks = new CArrayList();
+        foreach ($sort->getSortedByKey(true)->getItems() as $i) {
+			$item = $roles->getItem($i);
+			$tasks->add($item->getId(), $item);
+        }
+        $this->setData("tasks", $tasks);
 		$this->setData("dashboards", $dashboards);
         $this->setData("settings", $settings);
         $this->addJSInclude("_modules/_dashboard/script.js");
 		$this->renderView("_dashboard/index.tpl");
 	}
 	public function actionTasks() {
-		$tasks = array();
+		$roles = new CArrayList();
 		foreach (CSession::getCurrentUser()->getRoles()->getItems() as $role) {
 			if ($role->hidden!=1) {
-				$tasks["$role->url"] = $role->name;
+				$roles->add($role->getId(), $role);
 			}
 		}
-		asort($tasks);
+		$sort = new CArrayList();
+		foreach ($roles->getItems() as $i) {
+			$sort->add($i->name, $i->getId());
+		}
+		$tasks = new CArrayList();
+		foreach ($sort->getSortedByKey(true)->getItems() as $i) {
+			$item = $roles->getItem($i);
+			$tasks->add($item->getId(), $item);
+		}
 		$this->setData("tasks", $tasks);
 		$this->renderView("_dashboard/tasks.tpl");
 	}
