@@ -40,7 +40,7 @@
                 method = "POST";
             }
             jQuery.ajax({
-                url: this._controllerUrl,
+                url: url,
                 data: data,
                 cache: false,
                 method: method,
@@ -125,14 +125,14 @@
              * Тут такой вот хак, так как формы напрямую не находятся
              */
             var form = jQuery("button", data).closest("form");
-            jQuery(form).on("submit", jQuery.proxy(this._formSubmit, this));
+            jQuery(form).on("submit", jQuery.proxy(this._formSubmit, this, form[0]));
             jQuery("a#_saveAndContinue", data).on("click", function(){
                 /**
                  * Ставим признак продолжения редактирования формы
                  */
                 var form = jQuery(this).parents("form:first");
                 jQuery("input[name=_continueEdit]", form).val("1");
-                that._formSubmit();
+                that._formSubmit(form);
                 return false;
             });
             jQuery("a#_saveAndBack", data).on("click", function(){
@@ -141,7 +141,7 @@
                  */
                 var form = jQuery(this).parents("form:first");
                 jQuery("input[name=_continueEdit]", form).val("0");
-                that._formSubmit();
+                that._formSubmit(form);
                 return false;
             });
             /**
@@ -160,11 +160,10 @@
          *
          * @private
          */
-        this._formSubmit = function(){
+        this._formSubmit = function(form){
             /**
              * Соберем параметры формы
              */
-            var form = jQuery("form", this);
             var paramsArr = jQuery(form).serializeArray();
             var params = {};
             jQuery.each(paramsArr, function(index, obj){
@@ -173,7 +172,7 @@
             /**
              * Теперь надо узнать, куда ее сабмитить
              */
-            var href = jQuery("form").attr("action");
+            var href = jQuery(form).attr("action");
             this._loadData(href, params, true);
             return false;
         };

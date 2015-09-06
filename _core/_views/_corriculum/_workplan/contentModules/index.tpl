@@ -8,6 +8,8 @@
     {else}
         {foreach $objects->getItems() as $module}
             <h3>Модуль {$module->title} </h3>
+
+            {include file="_corriculum/_workplan/contentModules/subform.sections.tpl"}
         {/foreach}
     {/if}
 {/block}

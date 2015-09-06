@@ -1,25 +1,48 @@
 <form action="workplancontentsections.php" method="post" enctype="multipart/form-data" class="form-horizontal">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $object)}
-    {CHtml::activeHiddenField("plan_id", $object)}
 
     {CHtml::errorSummary($object)}
 
-<div class="control-group">
-    {CHtml::activeLabel("name", $object)}
-    <div class="controls">
-        {CHtml::activeTextBox("name", $object)}
-        {CHtml::error("name", $object)}
+    <div class="control-group">
+        {CHtml::activeLabel("name", $object)}
+        <div class="controls">
+            {CHtml::activeTextBox("name", $object)}
+            {CHtml::error("name", $object)}
+        </div>
     </div>
-</div>
 
-<div class="control-group">
-    {CHtml::activeLabel("sectionIndex", $object)}
-    <div class="controls">
-        {CHtml::activeTextField("sectionIndex", $object)}
-        {CHtml::error("sectionIndex", $object)}
+    <div class="control-group">
+        {CHtml::activeLabel("content", $object)}
+        <div class="controls">
+            {CHtml::activeTextBox("content", $object)}
+            {CHtml::error("content", $object)}
+        </div>
     </div>
-</div>
+
+    <div class="control-group">
+        {CHtml::activeLabel("sectionIndex", $object)}
+        <div class="controls">
+            {CHtml::activeTextField("sectionIndex", $object)}
+            {CHtml::error("sectionIndex", $object)}
+        </div>
+    </div>
+
+    <div class="control-group">
+        {CHtml::activeLabel("module_id", $object)}
+        <div class="controls">
+            {CHtml::activeLookup("module_id", $object, "class.CSearchCatalogWorkPlanModules", false, ["plan_id" => $object->module->plan_id])}
+            {CHtml::error("module_id", $object)}
+        </div>
+    </div>
+
+    <div class="control-group">
+        {CHtml::activeLabel("controls", $object)}
+        <div class="controls">
+            {CHtml::activeLookup("controls", $object, "corriculum_control_form", true)}
+            {CHtml::error("controls", $object)}
+        </div>
+    </div>
 
     <div class="control-group">
         <div class="controls">

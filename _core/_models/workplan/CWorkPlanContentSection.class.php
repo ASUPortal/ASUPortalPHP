@@ -7,10 +7,10 @@
  *
  * @property int sectionIndex
  * @property string name
- * @property CArrayList lectures
  * @property CArrayList controls
- * @property int plan_id
+ * @property int module_id
  * @property CWorkPlan plan
+ * @property CWorkPlanContentModule module
  */
 class CWorkPlanContentSection extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_CONTENT_SECTIONS;
@@ -19,13 +19,6 @@ class CWorkPlanContentSection extends CActiveModel{
 
     protected function relations() {
         return array(
-            "lectures" => array(
-                "relationPower" => RELATION_HAS_MANY,
-                "storageProperty" => "_lectures",
-                "storageTable" => TABLE_WORK_PLAN_CONTENT_LECTURES,
-                "storageCondition" => "section_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "targetClass" => "CWorkPlanContentLecture"
-            ),
             "controls" => array(
                 "relationPower" => RELATION_MANY_TO_MANY,
                 "storageProperty" => "_controls",
@@ -35,11 +28,13 @@ class CWorkPlanContentSection extends CActiveModel{
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
             ),
-            "plan" => array(
+            "module" => array(
                 "relationPower" => RELATION_HAS_ONE,
-                "storageField" => "plan_id",
-                "targetClass" => "CWorkPlan"
-            )
+                "storageProperty" => "_module",
+                "storageField" => "module_id",
+                "managerClass" => "CBaseManager",
+                "managerGetObject" => "getWorkPlanContentModule"
+            ),
         );
     }
 
@@ -47,7 +42,9 @@ class CWorkPlanContentSection extends CActiveModel{
         return array(
             "required" => array(
                 "name",
-                "sectionIndex"
+                "sectionIndex",
+                "controls",
+                "module_id"
             )
         );
     }
@@ -56,8 +53,9 @@ class CWorkPlanContentSection extends CActiveModel{
         return array(
             "name" => "Название раздела",
             "sectionIndex" => "Номер раздела",
-            "lectures" => "Содержание раздела",
-            "controls" => "Форма текущего контроля"
+            "module_id" => "Модуль",
+            "controls" => "Формы текущего контроля",
+            "content" => "Содержание раздела"
         );
     }
 
