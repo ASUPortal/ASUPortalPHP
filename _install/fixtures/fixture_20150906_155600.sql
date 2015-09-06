@@ -6,7 +6,7 @@ CREATE TABLE `pl_corriculum_workplan_authors` (
 `id` int(11) NOT NULL,
   `plan_id` int(11) NOT NULL,
   `person_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 ALTER TABLE `pl_corriculum_workplan_authors`

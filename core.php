@@ -309,14 +309,7 @@
     define("TABLE_WORK_PLAN_DISCIPLINES_BEFORE", "pl_corriculum_workplan_disciplines_before");
     define("TABLE_WORK_PLAN_DISCIPLINES_AFTER", "pl_corriculum_workplan_disciplines_after");
     define("TABLE_WORK_PLAN_CONTENT_SECTIONS", "pl_corriculum_workplan_content_sections");
-    define("TABLE_WORK_PLAN_CONTENT_LECTURES", "pl_corriculum_workplan_content_lectures");
-    define("TABLE_WORK_PLAN_CONTENT_CONTROLS", "pl_corriculum_workplan_content_controls");
     define("TABLE_WORK_PLAN_TERMS", "pl_corriculum_workplan_terms");
-    define("TABLE_WORK_PLAN_TERM_LOADS", "pl_corriculum_workplan_term_loads");
-    define("TABLE_WORK_PLAN_TERM_SECTIONS", "pl_corriculum_workplan_term_sections");
-    define("TABLE_WORK_PLAN_TERM_SECTION_LOADS", "pl_corriculum_workplan_term_section_loads");
-    define("TABLE_WORK_PLAN_TERM_LABS", "pl_corriculum_workplan_term_labs");
-    define("TABLE_WORK_PLAN_TERM_PRACTICES", "pl_corriculum_workplan_term_practices");
     define("TABLE_WORK_PLAN_PROJECT_THEMES", "pl_corriculum_workplan_projects");
     define("TABLE_WORK_PLAN_SELFEDUCATION", "pl_corriculum_workplan_selfeducation");
     define("TABLE_WORK_PLAN_TECHNOLOGY_TERMS", "pl_corriculum_workplan_technology_term");
@@ -329,6 +322,7 @@
     define("TABLE_WORK_PLAN_LITERATURE", "pl_corriculum_workplan_literature");
     define("TABLE_WORK_PLAN_SOFTWARE", "pl_corriculum_workplan_software");
     define("TABLE_WORK_PLAN_AUTHORS", "pl_corriculum_workplan_authors");
+    define("TABLE_WORK_PLAN_CONTENT_MODULES", "pl_corriculum_workplan_content_modules");
     /**
      * Константы пагинатора
      */
