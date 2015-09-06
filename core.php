@@ -328,6 +328,7 @@
     define("TABLE_WORK_PLAN_BRS", "pl_corriculum_workplan_brs");
     define("TABLE_WORK_PLAN_LITERATURE", "pl_corriculum_workplan_literature");
     define("TABLE_WORK_PLAN_SOFTWARE", "pl_corriculum_workplan_software");
+    define("TABLE_WORK_PLAN_AUTHORS", "pl_corriculum_workplan_authors");
     /**
      * Константы пагинатора
      */

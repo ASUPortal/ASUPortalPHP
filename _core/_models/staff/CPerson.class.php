@@ -219,10 +219,13 @@ class CPerson extends CActiveModel{
     			"managerGetObject" => "getStudentGroup"
     		),
             "workplans" => array(
-                "relationPower" => RELATION_HAS_MANY,
-                "storageTable" => TABLE_WORK_PLANS,
-                "storageCondition" => "author_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "targetClass" => "CWorkPlan"
+                "relationPower" => RELATION_MANY_TO_MANY,
+                "storageProperty" => "_workplancs",
+                "joinTable" => TABLE_WORK_PLAN_AUTHORS,
+                "leftCondition" => "person_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "rightKey" => "plan_id",
+                "managerClass" => "CBaseManager",
+                "managerGetObject" => "getWorkPlan"
             )
         );
     }

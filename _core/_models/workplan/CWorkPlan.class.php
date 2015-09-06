@@ -15,7 +15,6 @@
  * @property int direction_id
  * @property int qualification_id
  * @property int education_form_id
- * @property int author_id
  * @property string year
  * @property string intended_for // предназначена для
  * @property string position
@@ -30,6 +29,7 @@
  * @property CArrayList sections
  * @property CArrayList terms
  * @property CArrayList projectThemes
+ * @property CArrayList authors
  */
 class CWorkPlan extends CActiveModel {
     protected $_table = TABLE_WORK_PLANS;
@@ -110,6 +110,15 @@ class CWorkPlan extends CActiveModel {
                 "storageTable" => TABLE_WORK_PLAN_PROJECT_THEMES,
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanProjectTheme"
+            ),
+            "authors" => array(
+                "relationPower" => RELATION_MANY_TO_MANY,
+                "storageProperty" => "_authors",
+                "joinTable" => TABLE_WORK_PLAN_AUTHORS,
+                "leftCondition" => "plan_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "rightKey" => "person_id",
+                "managerClass" => "CBaseManager",
+                "managerGetObject" => "getPerson"
             )
         );
     }
@@ -126,7 +135,7 @@ class CWorkPlan extends CActiveModel {
             "edufaction_form_id" => "Форма обучения",
             "year" => "Год",
             "intended_for" => "Предназначено для",
-            "author_id" => "Автор",
+            "authors" => "Авторы",
             "position" => "Место дисциплины",
             "disciplinesBefore" => "Предшествующие дисциплины",
             "disciplinesAfter" => "Последующие дисциплины",
@@ -144,7 +153,7 @@ class CWorkPlan extends CActiveModel {
             ),
             "selected" => array(
                 "department_id",
-                "author_id",
+                "authors",
                 "direction_id",
                 "qualification_id",
                 "education_form_id"

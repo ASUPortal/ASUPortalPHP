@@ -79,10 +79,10 @@
 </div>
 
 <div class="control-group">
-    {CHtml::activeLabel("author_id", $plan)}
+    {CHtml::activeLabel("authors", $plan)}
     <div class="controls">
-        {CHtml::activeLookup("author_id", $plan, "staff")}
-        {CHtml::error("author_id", $plan)}
+        {CHtml::activeLookup("authors", $plan, "staff", true)}
+        {CHtml::error("authors", $plan)}
     </div>
 </div>
 

@@ -76,7 +76,8 @@ class CWorkPlanController extends CBaseController{
             $plan->education_form_id = $corriculum->form_id;
         }
         $plan->year = date("Y");
-        $plan->author_id = CSession::getCurrentPerson()->getId();
+        $plan->authors = new CArrayList();
+        $plan->authors->add(CSession::getCurrentPerson()->getId(), CSession::getCurrentPerson()->getId());
         // место дисциплины в структуре плана
         if (!is_null($discipline->cycle)) {
             $plan->position = "Дисциплина относится к базовой части учебного цикла ".$discipline->cycle->title ;
