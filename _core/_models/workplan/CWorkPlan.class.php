@@ -26,10 +26,10 @@
  * @property CArrayList goals
  * @property CArrayList tasks
  * @property CArrayList competentions
- * @property CArrayList sections
  * @property CArrayList terms
  * @property CArrayList projectThemes
  * @property CArrayList authors
+ * @property CArrayList modules
  */
 class CWorkPlan extends CActiveModel {
     protected $_table = TABLE_WORK_PLANS;
@@ -91,12 +91,12 @@ class CWorkPlan extends CActiveModel {
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getDiscipline"
             ),
-            "sections" => array(
+            "modules" => array(
                 "relationPower" => RELATION_HAS_MANY,
-                "storageProperty" => "_sections",
-                "storageTable" => TABLE_WORK_PLAN_CONTENT_SECTIONS,
+                "storageProperty" => "_modules",
+                "storageTable" => TABLE_WORK_PLAN_CONTENT_MODULES,
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "targetClass" => "CWorkPlanContentSection"
+                "targetClass" => "CWorkPlanContentModule"
             ),
             "terms" => array(
                 "relationPower" => RELATION_HAS_MANY,

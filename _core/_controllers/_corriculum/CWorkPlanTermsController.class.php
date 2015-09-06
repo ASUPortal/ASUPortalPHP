@@ -19,50 +19,32 @@ class CWorkPlanTermsController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
-        /**
-         * Сформируем таблицу по всем семестрам
-         * указанного учебного плана
-         *
-         * @var $term CWorkPlanTerm
-         * @var $type CWorkPlanTermLoad
-         */
-        $data = array(array());
-        foreach ($plan->terms->getItems() as $term) {
-            foreach ($term->types->getItems() as $type) {
-                $data[$type->type->getValue()][$term->number] = $type->value;
-            }
+        $set = new CRecordSet();
+        $query = new CQuery();
+        $set->setQuery($query);
+        $query->select("t.*")
+            ->from(TABLE_WORK_PLAN_TERMS." as t")
+            ->order("t.id asc")
+            ->condition("plan_id=".CRequest::getInt("plan_id"));;
+        $objects = new CArrayList();
+        foreach ($set->getPaginated()->getItems() as $ar) {
+            $object = new CWorkPlanTask($ar);
+            $objects->add($object->getId(), $object);
         }
-        unset($data[0]);
-        $this->setData("data", $data);
-        /**
-         * Теперь соберем трудоемкость по отдельным семестрам
-         * по разделам
-         *
-         * @var $section CWorkPlanTermSection
-         * @var $load CWorkPlanTermSectionLoad
-         */
-        $terms = array();
-        foreach ($plan->terms->getItems() as $term) {
-            $termData = array(array());
-            foreach ($term->sections->getItems() as $section) {
-                foreach ($section->loads->getItems() as $load) {
-                    $termData[$section->title][$load->type->getValue()] = $load->value;
-                }
-            }
-            unset($termData[0]);
-            $terms[$term->number] = $termData;
-        }
-        $this->setData("termData", $terms);
-        $this->setData("plan", $plan);
+        $this->setData("objects", $objects);
+        $this->setData("paginator", $set->getPaginator());
         /**
          * Генерация меню
          */
-        $this->addActionsMenuItem(array(
+        $this->addActionsMenuItem(array(array(
+            "title" => "Обновить",
+            "link" => "workplanterms.php?action=index&plan_id=".CRequest::getInt("plan_id"),
+            "icon" => "actions/view-refresh.png"
+        ), array(
             "title" => "Добавить семестр",
             "link" => "workplanterms.php?action=add&id=".CRequest::getInt("plan_id"),
             "icon" => "actions/list-add.png"
-        ));
+        )));
         /**
          * Отображение представления
          */
@@ -95,10 +77,6 @@ class CWorkPlanTermsController extends CBaseController{
             "title" => "Назад",
             "link" => "workplanterms.php?action=index&plan_id=".$object->plan_id,
             "icon" => "actions/edit-undo.png"
-        ), array(
-            "title" => "Удалить семестр",
-            "link" => "workplanterms.php?action=delete&id=".$object->getId(),
-            "icon" => "actions/edit-delete.png"
         )));
         /**
          * Отображение представления
@@ -116,30 +94,6 @@ class CWorkPlanTermsController extends CBaseController{
         $object->setAttributes(CRequest::getArray($object::getClassName()));
         if ($object->validate()) {
             $object->save();
-            /**
-             * Добавим в семестр все виды нагрузки, которые есть
-             * в других семестрах этого плана
-             */
-            $types = array();
-            $plan = $object->plan;
-            /**
-             * @var $term CWorkPlanTerm
-             * @var $type CWorkPlanTermLoad
-             */
-            foreach ($plan->terms->getItems() as $term) {
-                foreach ($term->types->getItems() as $type) {
-                    if (!in_array($type->type_id, $types)) {
-                        $types[] = $type->type_id;
-                    }
-                }
-            }
-            foreach ($types as $type) {
-                $t = new CWorkPlanTermLoad();
-                $t->term_id = $object->getId();
-                $t->type_id = $type;
-                $t->value = 0;
-                $t->save();
-            }
             if ($this->continueEdit()) {
                 $this->redirect("workplanterms.php?action=edit&id=".$object->getId());
             } else {
