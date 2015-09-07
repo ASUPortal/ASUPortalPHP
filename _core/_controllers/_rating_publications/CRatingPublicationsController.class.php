@@ -24,11 +24,10 @@ class CRatingPublicationsController extends CBaseController{
     			"icon" => "apps/system-users.png"
     		),
     		array(
-    			"title" => "Печать по шаблону",
-    			"link" => "#",
-    			"icon" => "devices/printer.png",
-    			"template" => "formset_rating_publications"
-    		),
+    			"title" => "Публикации",
+    			"link" => WEB_ROOT."_modules/_staff/publications.php",
+    			"icon" => "actions/document-open.png"
+    		)
     	));
     	if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_ALL) {
     		$this->addActionsMenuItem(array(

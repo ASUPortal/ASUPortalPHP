@@ -66,12 +66,6 @@
         </div>
     </div>
 
-    <div class="container-fluid asu_footer">
-        <div class="row-fluid">
-
-        </div>
-    </div>
-
     {if !CSession::isAuth()}
         <div id="asu_auth" class="modal hide fade">
             <div class="modal-header">
