@@ -14,6 +14,7 @@
             <th>{CHtml::tableOrder("fio", $users->getFirstItem())}</th>
             <th>{CHtml::tableOrder("login", $users->getFirstItem())}</th>
             <th>{CHtml::tableOrder("kadri_id", $users->getFirstItem())}</th>
+            <th>Группы</th>
             <th>Комментарий</th>
         </tr>
         {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
@@ -28,6 +29,13 @@
                     {$user->getPerson()->getName()}
                 {/if}
             </td>
+            <td>
+            	<ul>
+					{foreach $user->getGroups()->getItems() as $group}
+						<li><a href="{$web_root}_modules/_users/groups.php?action=edit&id={$group->getId()}"><font color="{$group->color_mark}">{$group->comment}</font></a></li>
+					{/foreach}
+				</ul>
+			</td>
             <td>{$user->comment}</td>
         </tr>
         {/foreach}

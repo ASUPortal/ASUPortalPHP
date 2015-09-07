@@ -7,6 +7,9 @@
 			<li {if $items@index eq 0} class="active" {/if}><a data-toggle="tab" href="#tab-{$items@index}">{$title}</a></li>
 		{/if}
 	{/foreach}
+	{if ($settings->isShowAllTasks())}
+		<li><a data-toggle="tab" href="#tab-tasks">Все задачи</a></li>
+	{/if}
 	</ul>
 	<div class="tab-content">
 		{assign var=counter value=1}
@@ -17,6 +20,11 @@
 			</div>
 		{/if}
 	{/foreach}
+	{if ($settings->isShowAllTasks())}
+		<div class="tab-pane" id="tab-tasks">
+            {include file="_dashboard/subform.tasks.tpl"}
+        </div>
+	{/if}
 	</div>
 {/block}
 

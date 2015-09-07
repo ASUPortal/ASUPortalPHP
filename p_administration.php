@@ -281,7 +281,7 @@ else {
 
   //---------------------------------------------
   //добавляем информацию о днях рождения сотрудников, только тем, у кого открыт доступ к своей анкете
-  if (getTaskAccess($_SESSION['id'],'lect_anketa.php')) include 'kadri_bDays.php';	//именинники- преподаватели сегодня-завтра
+  //if (getTaskAccess($_SESSION['id'],'lect_anketa.php')) include 'kadri_bDays.php';	//именинники- преподаватели сегодня-завтра
     
   echo '<div class="middle_lite"> ';
 

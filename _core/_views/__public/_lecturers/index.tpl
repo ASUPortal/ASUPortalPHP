@@ -33,14 +33,26 @@
         <table class="table table-striped table-bordered table-hover table-condensed">
 			<tr>
 	            <th>#</th>
-	            <th>{CHtml::tableOrder("fio", $lects->getFirstItem())}</th>
+	            <th>
+	            	{if (CSettingsManager::getSettingValue("hide_person_data_rule"))}
+	            		{CHtml::tableOrder("FIO", $lects->getFirstItem())}
+	            	{else}	
+	            		{CHtml::tableOrder("fio", $lects->getFirstItem())}
+	            	{/if}
+	            </th>
 	            <th>Расписание</th>
 	        </tr>
             {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $lects->getItems() as $lect}
 		    <tr>
 		    	<td>{counter}</td>
-		        <td><a href="index.php?action=view&id={$lect->getUser()->id}">{$lect->fio}</a></td>
+		        <td><a href="index.php?action=view&id={$lect->getUser()->id}">
+			        {if (CSettingsManager::getSettingValue("hide_person_data_rule"))}
+			        	{$lect->FIO}</a>
+			        {else}
+			        	{$lect->fio}</a>
+			        {/if}
+		        </td>
 		        <td>
 					{if {$lect->getSchedule()->getCount()}!=0}
 						{foreach $lect->getSchedule()->getItems() as $rasp}
