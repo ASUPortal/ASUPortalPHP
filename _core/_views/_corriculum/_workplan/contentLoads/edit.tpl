@@ -6,6 +6,8 @@
     {CHtml::helpForCurrentPage()}
 
     {include file="_corriculum/_workplan/contentLoads/form.tpl"}
+
+    {CHtml::activeComponent("workplancontenttopics.php?load_id={$object->getId()}", $object)}
 {/block}
 
 {block name="asu_right"}
