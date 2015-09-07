@@ -11,6 +11,7 @@
  * @property int module_id
  * @property CWorkPlan plan
  * @property CWorkPlanContentModule module
+ * @property CArrayList loads
  */
 class CWorkPlanContentSection extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_CONTENT_SECTIONS;
@@ -35,6 +36,12 @@ class CWorkPlanContentSection extends CActiveModel{
                 "managerClass" => "CBaseManager",
                 "managerGetObject" => "getWorkPlanContentModule"
             ),
+            "loads" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageTable" => TABLE_WORK_PLAN_CONTENT_LOADS,
+                "storageCondition" => "section_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CWorkPlanContentSectionLoad"
+            )
         );
     }
 

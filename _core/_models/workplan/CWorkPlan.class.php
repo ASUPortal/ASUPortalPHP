@@ -161,5 +161,30 @@ class CWorkPlan extends CActiveModel {
         );
     }
 
+    /**
+     * @return CArrayList
+     */
+    public function getPractices() {
+        $practices = new CArrayList();
+        /**
+         * @var $module CWorkPlanContentModule
+         * @var $section CWorkPlanContentSection
+         * @var $load CWorkPlanContentSectionLoad
+         * @var $topic CWorkPlanContentSectionLoadTopic
+         */
+        foreach ($this->modules->getItems() as $module) {
+            foreach ($module->sections->getItems() as $section) {
+                foreach ($section->loads->getItems() as $load) {
+                    if ($load->loadType->getAlias() == "practice") {
+                        foreach ($load->topics as $topic) {
+                            $practices->add($topic->getId(), $topic);
+                        }
 
+                    }
+                }
+            }
+
+        }
+        return $practices;
+    }
 }
