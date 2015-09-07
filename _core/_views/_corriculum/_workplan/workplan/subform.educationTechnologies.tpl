@@ -10,7 +10,7 @@
 
 <h4>5.1. Интерактивные образовательные технологии</h4>
 
-{CHtml::activeComponent("workplantechnologyterms.php?plan_id={$plan->getId()}", $plan)}
+
 
 <script>
     jQuery(document).ready(function(){
