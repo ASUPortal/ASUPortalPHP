@@ -14,7 +14,7 @@
 		{/if}
 	{/if}
 	{if $files->getFirstItem()->getAuthorName() !== ""}
-    	<p><a href="?action=index&filter=author:{$files->getFirstItem()->getAuthorId()}">{$files->getFirstItem()->getAuthorName()}</a></p>
+    	<p><a href="{$web_root}_modules/_lecturers/index.php?action=view&id={$files->getFirstItem()->getAuthorId()}">{$files->getFirstItem()->getAuthorName()}</a></p>
     {/if}
     <table class="table table-striped table-bordered table-hover table-condensed">
 			<tr>
