@@ -23,7 +23,7 @@
                 <td>
                     <p>
                         {if $file->getAuthorName() !== ""}
-                            <a href="?action=index&filter=author:{$file->getAuthorId()}">{$file->getAuthorName()}</a>
+                            <a href="{$web_root}_modules/_lecturers/index.php?action=view&id={$file->getAuthorId()}">{$file->getAuthorName()}</a>
                         {/if}
                     </p>
                 </td>

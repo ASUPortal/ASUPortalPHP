@@ -27,6 +27,9 @@ class CPublicNewsController extends CBaseController {
 
         parent::__construct();
     }
+    protected function onActionBeforeExecute() {
+    
+    }
     public function actionIndex() {
         $set = new CRecordSet();
         $set->setPageSize(10);
