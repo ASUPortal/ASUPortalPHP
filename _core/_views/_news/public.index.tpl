@@ -15,6 +15,17 @@
                 jQuery("#full_" + news_id).show();
             }
         </script>
+		<script>
+			jQuery(document).ready(function(){
+				jQuery("a.image_clearboxy").colorbox({
+					maxHeight: "100%",
+					title: function(){
+						var url = $(this).attr('href');
+						return '<a href="' + url + '" target="_blank">Открыть в полном размере</a>';
+					}
+				});
+			});
+		</script>
 
         {CHtml::paginator($paginator, "?action=index")}
         <table class="table table-striped table-bordered table-hover table-condensed">
@@ -22,17 +33,6 @@
                 <tr>
 					<td width="120" valign="top">
 						<a href="{$web_root}{$newsItem->getImagePath()}" target="_blank" class="image_clearboxy"><img src="{$web_root}_modules/_thumbnails/?src={$newsItem->getImagePath()}&q=100&w=135" align="middle"></a>
-						<script>
-			                jQuery(document).ready(function(){
-			                    jQuery("a.image_clearboxy").colorbox({
-			                        maxHeight: "100%",
-			                        title: function(){
-			                            var url = $(this).attr('href');
-			                            return '<a href="' + url + '" target="_blank">Открыть в полном размере</a>';
-			                        }
-			                    });
-			                });
-			            </script>
                     </td>
                     <td valign="top" style="padding-left: 5px; padding-right: 5px; ">
                         <p><b>{$newsItem->title}</b> - {$newsItem->getPublicationDate()}</p>
