@@ -6,7 +6,7 @@ define("NO_RIGHT_COLUMN", true);
 include $files_path.'header.php';
 if (!isset($_GET['save']) && !isset($_GET['print'])) {
 	echo $head;
-    include_once($files_path.'task_menu.php');
+    //include_once($files_path.'task_menu.php');
 } else {
     echo $head1;
 }

@@ -14,6 +14,6 @@ echo $head;
 <?php
 $files_path='../';
   echo $end1;
-  include ('../display_voting.php');
+  //include ('../display_voting.php');
   echo $end2;
 ?>

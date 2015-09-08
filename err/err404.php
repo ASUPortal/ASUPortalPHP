@@ -31,6 +31,6 @@ $files_path='../';
 
 //$files_path='http://'.$_SERVER['SERVER_NAME'].'/'.$root_folder;
   echo $end1;
-  include ('../display_voting.php');
+  //include ('../display_voting.php');
   echo $end2;
 ?>

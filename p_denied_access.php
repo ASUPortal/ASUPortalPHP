@@ -42,7 +42,7 @@ else {$errMsg=$errMsgArr['self_load'];}
 
 echo '<h4>'.$errMsg.'</h4>';
 echo $end1;
-include $files_path."display_voting.php";
+//include $files_path."display_voting.php";
 define("CORRECT_FOOTER", true);
 echo $end2; include('footer.php'); 
 
