@@ -137,7 +137,7 @@ echo '</div><div class="middle2">'.$sess.' &nbsp;'.$def_settings['year_name'].' 
     //mysql_close();
 		if (!isset($_GET['wap'])) {
 		  echo $end1;
-		  include "display_voting.php";
+		  //include "display_voting.php";
 		  }
        define("CORRECT_FOOTER", true);
 		echo $end2; include('footer.php'); 
@@ -240,7 +240,7 @@ echo '</div><div class="middle2">'.$sess.' &nbsp;'.$def_settings['year_name'].' 
 	
 		if (!isset($_GET['wap'])) {
 		  echo $end1;
-		  include "display_voting.php";
+		  //include "display_voting.php";
 		  }
        define("CORRECT_FOOTER", true);
 		echo $end2; include('footer.php'); 
