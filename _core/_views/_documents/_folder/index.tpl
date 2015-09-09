@@ -2,7 +2,9 @@
 
 {block name="asu_center"}
     <h2>{$title}</h2>
-    {CHtml::helpForCurrentPage()}
+	{if (CSession::isAuth())}
+		{CHtml::helpForCurrentPage()}
+	{/if}
 
     {if ($objects->getCount() == 0)}
         Нет объектов для отображения
