@@ -93,6 +93,11 @@ class CWorkPlanController extends CBaseController{
                 "link" => "disciplines.php?action=edit&id=".$plan->corriculum_discipline_id,
                 "icon" => "actions/edit-undo.png"
             ),
+            array(
+                "title" => "Добавить модуль",
+                "link" => "workplancontentmodules.php?action=add&id=".$plan->getId(),
+                "icon" => "actions/list-add.png"
+            )
         ));
         $this->setData("plan", $plan);
 

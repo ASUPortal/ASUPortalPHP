@@ -1,15 +1,18 @@
+{if isset($object)}
+    {$module = $object}
+{/if}
 {if $module->sections->getCount() > 0}
     <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
-            <tr>
-                <th width="16">&nbsp;</th>
-                <th width="16">#</th>
-                <th width="16">&nbsp;</th>
-                <th>{CHtml::tableOrder("sectionIndex", $module->sections->getFirstItem())}</th>
-                <th>{CHtml::tableOrder("name", $module->sections->getFirstItem())}</th>
-                <th>{CHtml::tableOrder("content", $module->sections->getFirstItem())}</th>
-                <th>Формы текущего контроля</th>
-            </tr>
+        <tr>
+            <th width="16">&nbsp;</th>
+            <th width="16">#</th>
+            <th width="16">&nbsp;</th>
+            <th>{CHtml::tableOrder("sectionIndex", $module->sections->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("name", $module->sections->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("content", $module->sections->getFirstItem())}</th>
+            <th>Формы текущего контроля</th>
+        </tr>
         </thead>
         <tbody>
         {foreach $module->sections->getItems() as $section}
@@ -25,4 +28,6 @@
         {/foreach}
         </tbody>
     </table>
+{else}
+    Нет объектов для отображения
 {/if}

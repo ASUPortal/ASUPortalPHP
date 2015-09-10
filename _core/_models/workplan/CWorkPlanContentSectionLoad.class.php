@@ -10,6 +10,7 @@
  * @property CWorkPlanTerm term
  * @property CTerm loadType
  * @property CArrayList topics
+ * @property CArrayList technologies
  */
 class CWorkPlanContentSectionLoad extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_CONTENT_LOADS;
@@ -39,6 +40,12 @@ class CWorkPlanContentSectionLoad extends CActiveModel{
                 "storageTable" => TABLE_WORK_PLAN_CONTENT_TOPICS,
                 "storageCondition" => "load_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanContentSectionLoadTopic"
+            ),
+            "technologies" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageTable" => TABLE_WORK_PLAN_CONTENT_TECHNOLOGIES,
+                "storageCondition" => "load_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CWorkPlanContentSectionLoadTechnology"
             )
         );
     }

@@ -6,7 +6,7 @@
 
 <h4>4.1 Содержание разделов дисциплины</h4>
 
-{CHtml::activeComponent("workplancontentmodules.php?plan_id={$plan->getId()}", $plan)}
+{include file="_corriculum/_workplan/contentModules/subform.index.tpl"}
 
 <h4>4.2. Структура дисциплины</h4>
 

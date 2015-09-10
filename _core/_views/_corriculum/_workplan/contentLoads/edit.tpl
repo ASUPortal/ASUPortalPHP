@@ -1,4 +1,4 @@
-{extends file="_core.component.tpl"}
+{extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
     <h2>Редактирование нагрузки</h2>
@@ -7,9 +7,19 @@
 
     {include file="_corriculum/_workplan/contentLoads/form.tpl"}
 
-    {CHtml::activeComponent("workplancontenttopics.php?load_id={$object->getId()}", $object)}
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#themes" data-toggle="tab">Темы</a></li>
+        <li><a href="#technologies" data-toggle="tab">Образовательные технологии</a></li>
+    </ul>
 
-    {CHtml::activeComponent("workplancontenttechnologies.php?load_id={$object->getId()}", $object)}
+    <div class="tab-content">
+        <div class="tab-pane active" id="themes">
+            {include file="_corriculum/_workplan/contentLoads/subform.themes.tpl"}
+        </div>
+        <div class="tab-pane" id="technologies">
+            {include file="_corriculum/_workplan/contentLoads/subform.technologies.tpl"}
+        </div>
+    </div>
 {/block}
 
 {block name="asu_right"}

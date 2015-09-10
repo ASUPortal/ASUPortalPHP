@@ -1,7 +1,5 @@
 <?php
 class CWorkPlanContentModulesControllers extends CBaseController{
-    protected $_isComponent = true;
-
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -105,7 +103,7 @@ class CWorkPlanContentModulesControllers extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancontentmodules.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplans.php?action=edit&id=".$object->plan_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -121,8 +119,13 @@ class CWorkPlanContentModulesControllers extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancontentmodules.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplans.php?action=edit&id=".$object->plan_id,
             "icon" => "actions/edit-undo.png"
+        ));
+        $this->addActionsMenuItem(array(
+            "title" => "Добавить раздел",
+            "link" => "workplancontentsections.php?action=add&id=".$object->getId(),
+            "icon" => "actions/list-add.png"
         ));
         /**
          * Отображение представления

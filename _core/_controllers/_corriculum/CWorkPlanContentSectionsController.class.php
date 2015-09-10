@@ -1,7 +1,5 @@
 <?php
 class CWorkPlanContentSectionsController extends CBaseController{
-    protected $_isComponent = true;
-
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -57,7 +55,7 @@ class CWorkPlanContentSectionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancontentmodules.php?action=index&plan_id=".$module->plan_id,
+            "link" => "workplancontentmodules.php?action=edit&id=".$object->module_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -73,8 +71,13 @@ class CWorkPlanContentSectionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancontentmodules.php?action=index&plan_id=".$object->module->plan_id,
+            "link" => "workplancontentmodules.php?action=edit&id=".$object->module_id,
             "icon" => "actions/edit-undo.png"
+        ));
+        $this->addActionsMenuItem(array(
+            "title" => "Добавить нагрузку",
+            "link" => "workplancontentloads.php?action=add&id=".$object->getId(),
+            "icon" => "actions/list-add.png"
         ));
         /**
          * Отображение представления
@@ -83,9 +86,9 @@ class CWorkPlanContentSectionsController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
-        $plan = $object->module->plan_id;
+        $module = $object->module_id;
         $object->remove();
-        $this->redirect("workplancontentmodules.php?action=index&plan_id=".$plan);
+        $this->redirect("workplancontentmodules.php?action=edit&id=".$module);
     }
     public function actionSave() {
         $object = new CWorkPlanContentSection();
@@ -95,7 +98,7 @@ class CWorkPlanContentSectionsController extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("workplancontentsections.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplancontentmodules.php?action=index&plan_id=".$object->module->plan_id);
+                $this->redirect("workplancontentmodules.php?action=edit&id=".$object->module_id);
             }
             return true;
         }

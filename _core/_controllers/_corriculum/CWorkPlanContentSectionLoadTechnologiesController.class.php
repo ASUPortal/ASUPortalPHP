@@ -1,7 +1,5 @@
 <?php
 class CWorkPlanContentSectionLoadTechnologiesController extends CBaseController{
-    protected $_isComponent = true;
-
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -60,7 +58,7 @@ class CWorkPlanContentSectionLoadTechnologiesController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancontenttechnologies.php?action=index&load_id=".$object->load_id,
+            "link" => "workplancontentloads.php?action=edit&id=".$object->load_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -76,7 +74,7 @@ class CWorkPlanContentSectionLoadTechnologiesController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancontenttechnologies.php?action=index&load_id=".$object->load_id,
+            "link" => "workplancontentloads.php?action=edit&id=".$object->load_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -88,7 +86,7 @@ class CWorkPlanContentSectionLoadTechnologiesController extends CBaseController{
         $object = CBaseManager::getWorkPlanContentSectionLoadTechnology(CRequest::getInt("id"));
         $load = $object->load_id;
         $object->remove();
-        $this->redirect("workplancontenttechnologies.php?action=index&load_id=".$load);
+        $this->redirect("workplancontentloads.php?action=edit&id=".$load);
     }
     public function actionSave() {
         $object = new CWorkPlanContentSectionLoadTechnology();
@@ -98,7 +96,7 @@ class CWorkPlanContentSectionLoadTechnologiesController extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("workplancontenttechnologies.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplancontenttechnologies.php?action=index&load_id=".$object->load_id);
+                $this->redirect("workplancontentloads.php?action=edit&id=".$object->load_id);
             }
             return true;
         }
