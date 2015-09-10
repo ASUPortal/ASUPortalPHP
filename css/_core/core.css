@@ -229,6 +229,10 @@ p.error {
     min-height: 200px;
 }
 
+.asu_component {
+    border: 1px solid #c0c0c0;
+}
+
 .asu_component .menu_item_container a {
     width: 100px;
     display: block;
