@@ -30,7 +30,8 @@ class CWorkPlanBRS extends CActiveModel{
         return array(
             "range" => "Диапазон",
             "mark_id" => "Оценка",
-            "is_ok" => "Мера оценки"
+            "is_ok" => "Мера оценки",
+            "comment" => "Комментарий"
         );
     }
 

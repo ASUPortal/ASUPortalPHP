@@ -30,6 +30,14 @@
     </div>
 
     <div class="control-group">
+        {CHtml::activeLabel("comment", $object)}
+        <div class="controls">
+            {CHtml::activeTextBox("comment", $object)}
+            {CHtml::error("comment", $object)}
+        </div>
+    </div>
+
+    <div class="control-group">
         <div class="controls">
             {CHtml::submit("Сохранить")}
         </div>

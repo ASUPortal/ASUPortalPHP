@@ -13,6 +13,7 @@
                     <th>{CHtml::tableOrder("mark_id", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("range", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("is_ok", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("comment", $objects->getFirstItem())}</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,6 +32,7 @@
                             Аттестация не пройдена
                         {/if}
                     </td>
+                    <td>{$object->comment}</td>
                 </tr>
             {/foreach}
             </tbody>
