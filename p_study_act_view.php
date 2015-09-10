@@ -303,7 +303,7 @@ echo '<br>макс.число записей на странице:
 //------------------------------------------------------
 	if (!isset($_GET["wap"])) {
 	  echo $end1;
-	  include "display_voting.php";
+	  //include "display_voting.php";
 	  }
     define("CORRECT_FOOTER", true);
 	?>

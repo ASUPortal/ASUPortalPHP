@@ -99,7 +99,7 @@ class CNewsItem extends CActiveModel{
         if (!file_exists(CORE_CWD."/".$imgPath)) {
             $imgPath = "images/design/notice.gif";
         }
-        return IMAGE_RESIZER_URL."?src=".$imgPath."&q=100&w=135";
+        return $imgPath;
     }
 
     /**

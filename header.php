@@ -20,7 +20,7 @@ if (isset($use_benchmark) && $use_benchmark) {
 }
 //---------------------------------------
 //
-if (!$site_blocked) {include $files_path.'week.php';include $files_path.'holidays_main.php';}
+if (!$site_blocked) {include $files_path.'week.php';}
 
 $metaKeywords='';
 $pg_author='';
@@ -299,11 +299,6 @@ if (!defined("NO_RIGHT_COLUMN")) {
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="span12">
-                            '.$str_holidays.'
-                        </div>
-                    </div>
                 </div>
 ';
 }

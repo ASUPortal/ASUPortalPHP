@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 class CACLController extends CBaseController {
-    private $allowedAnonymous = array(
+    public $allowedAnonymous = array(
         "restorePassword",
         "savePasswordRecoveryRequest",
         "requestSent",

@@ -246,7 +246,7 @@ if(!isset($_SESSION['auth']) || $_SESSION['auth']!=1)	//не авторизов�
 else  
  {
 
-  include_once 'task_menu.php';
+  //include_once 'task_menu.php';
   echo'<br><div class="main">Консоль управления </div>
   <br>
   <div class="middle_lite">Здравствуйте, <b>'.$_SESSION['FIO'].',</b>';
@@ -367,9 +367,9 @@ $query='SELECT DISTINCT tasks.name,tasks.url,tasks.comment
   echo '</div>';}
  }
     echo $end1;
-    if (CSettingsManager::getSettingValue("display_voting_in_admin")) {
+    /*if (CSettingsManager::getSettingValue("display_voting_in_admin")) {
         include "display_voting.php";
-    }
+    }*/
     echo $end2;
 define("CORRECT_FOOTER", true);
     include('footer.php');
