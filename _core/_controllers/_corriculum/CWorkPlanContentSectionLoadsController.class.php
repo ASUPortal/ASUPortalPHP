@@ -87,6 +87,11 @@ class CWorkPlanContentSectionLoadsController extends CBaseController{
             "link" => "workplancontenttechnologies.php?action=add&id=".$object->getId(),
             "icon" => "actions/list-add.png"
         ));
+        $this->addActionsMenuItem(array(
+            "title" => "Добавить самостоятельную работу",
+            "link" => "workplanselfeducationblocks.php?action=add&id=".$object->getId(),
+            "icon" => "actions/list-add.png"
+        ));
         /**
          * Отображение представления
          */

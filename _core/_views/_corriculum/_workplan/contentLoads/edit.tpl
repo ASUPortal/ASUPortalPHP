@@ -10,6 +10,7 @@
     <ul class="nav nav-tabs">
         <li class="active"><a href="#themes" data-toggle="tab">Темы</a></li>
         <li><a href="#technologies" data-toggle="tab">Образовательные технологии</a></li>
+        <li><a href="#selfEducation" data-toggle="tab">Самостоятельное изучение</a></li>
     </ul>
 
     <div class="tab-content">
@@ -18,6 +19,9 @@
         </div>
         <div class="tab-pane" id="technologies">
             {include file="_corriculum/_workplan/contentLoads/subform.technologies.tpl"}
+        </div>
+        <div class="tab-pane" id="selfEducation">
+            {include file="_corriculum/_workplan/contentLoads/subform.selfeducation.tpl"}
         </div>
     </div>
 {/block}

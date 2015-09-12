@@ -1,7 +1,5 @@
 <?php
 class CWorkPlanSelfEducationBlocksController extends CBaseController{
-    protected $_isComponent = true;
-
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -48,14 +46,16 @@ class CWorkPlanSelfEducationBlocksController extends CBaseController{
     }
     public function actionAdd() {
         $object = new CWorkPlanSelfEducationBlock();
-        $object->plan_id = CRequest::getInt("id");
+        $load = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("id"));
+        $object->load_id = $load->getId();
+        $object->plan_id = $load->section->module->plan_id;
         $this->setData("object", $object);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplanselfeducationblocks.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplancontentloads.php?action=edit&id=".$object->load_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -71,7 +71,7 @@ class CWorkPlanSelfEducationBlocksController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplanselfeducationblocks.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplancontentloads.php?action=edit&id=".$object->load_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -81,9 +81,9 @@ class CWorkPlanSelfEducationBlocksController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanSelfEducationBlock(CRequest::getInt("id"));
-        $plan = $object->plan_id;
+        $load = $object->load_id;
         $object->remove();
-        $this->redirect("workplanselfeducationblocks.php?action=index&plan_id=".$plan);
+        $this->redirect("workplancontentloads.php?action=edit&id=".$load);
     }
     public function actionSave() {
         $object = new CWorkPlanSelfEducationBlock();
@@ -93,7 +93,7 @@ class CWorkPlanSelfEducationBlocksController extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("workplanselfeducationblocks.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplanselfeducationblocks.php?action=index&plan_id=".$object->plan_id);
+                $this->redirect("workplancontentloads.php?action=edit&id=".$object->load_id);
             }
             return true;
         }

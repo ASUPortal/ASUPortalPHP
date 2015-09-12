@@ -6,6 +6,7 @@
  * Time: 22:39
  *
  * @property int plan_id
+ * @property int load_id
  * @property string question_title
  * @property string question_hours
  */

@@ -30,6 +30,7 @@
  * @property CArrayList projectThemes
  * @property CArrayList authors
  * @property CArrayList modules
+ * @property CArrayList selfEducations
  */
 class CWorkPlan extends CActiveModel {
     protected $_table = TABLE_WORK_PLANS;
@@ -119,6 +120,12 @@ class CWorkPlan extends CActiveModel {
                 "rightKey" => "person_id",
                 "managerClass" => "CBaseManager",
                 "managerGetObject" => "getPerson"
+            ),
+            "selfEducations" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageTable" => TABLE_WORK_PLAN_SELFEDUCATION,
+                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CWorkPlanSelfEducationBlock"
             )
         );
     }
@@ -132,7 +139,7 @@ class CWorkPlan extends CActiveModel {
             "direction_id" => "Направление подготовки",
             "profiles" => "Профили",
             "qualification_id" => "Квалификация",
-            "edufaction_form_id" => "Форма обучения",
+            "education_form_id" => "Форма обучения",
             "year" => "Год",
             "intended_for" => "Предназначено для",
             "authors" => "Авторы",
