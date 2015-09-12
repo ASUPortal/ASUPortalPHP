@@ -11,6 +11,7 @@
  * @property CArrayList knowledges
  * @property CArrayList skills
  * @property CArrayList experiences
+ * @property CArrayList canUse
  * @property CTerm competention
  */
 class CWorkPlanCompetention extends CActiveModel{
@@ -54,6 +55,15 @@ class CWorkPlanCompetention extends CActiveModel{
                 "rightKey" => "experience_id",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
+            ),
+            "canUse" => array(
+                "relationPower" => RELATION_MANY_TO_MANY,
+                "storageProperty" => "_canUse",
+                "joinTable" => TABLE_WORK_PLAN_COMPETENTION_CAN_USE,
+                "leftCondition" => "competention_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "rightKey" => "term_id",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getTerm"
             )
         );
     }
@@ -71,7 +81,8 @@ class CWorkPlanCompetention extends CActiveModel{
             "competention_id" => "Компетенция",
             "knowledges" => "Знания",
             "skills" => "Умения",
-            "experiences" => "Навыки"
+            "experiences" => "Навыки",
+            "canUse" => "Умеет использовать"
         );
     }
 

@@ -14,6 +14,7 @@
                     <th>{CHtml::tableOrder("knowledges", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("skills", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("experiences", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("canUse", $objects->getFirstItem())}</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,6 +41,11 @@
                     </td>
                     <td>
                         {foreach $object->experiences->getItems() as $o}
+                            <p>{$o}</p>
+                        {/foreach}
+                    </td>
+                    <td>
+                        {foreach $object->canUse->getItems() as $o}
                             <p>{$o}</p>
                         {/foreach}
                     </td>

@@ -39,6 +39,14 @@
     </div>
 
     <div class="control-group">
+        {CHtml::activeLabel("canUse", $object)}
+        <div class="controls">
+            {CHtml::activeLookup("canUse", $object, "corriculum_knowledges", true)}
+            {CHtml::error("canUse", $object)}
+        </div>
+    </div>
+
+    <div class="control-group">
         <div class="controls">
             {CHtml::submit("Сохранить")}
         </div>
