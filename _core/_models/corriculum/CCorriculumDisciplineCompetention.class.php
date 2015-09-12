@@ -1,4 +1,13 @@
 <?php
+
+/**
+ * Class CCorriculumDisciplineCompetention
+ *
+ * @property int competention_id
+ * @property int knowledge_id
+ * @property int skill_id
+ * @property int experience_id
+ */
 class CCorriculumDisciplineCompetention extends CActiveModel {
     protected $_table = TABLE_CORRICULUM_DISCIPLINE_COMPETENTIONS;
     protected $_competention = null;

@@ -11,6 +11,7 @@
  * @property CArrayList plans
  * @property CArrayList sections
  * @property CArrayList labors
+ * @property CArrayList competentions
  */
 class CCorriculumDiscipline extends CActiveModel {
     protected $_table = TABLE_CORRICULUM_DISCIPLINES;

@@ -6,6 +6,8 @@
  * Time: 23:56
  *
  * @property int plan_id
+ * @property int allow_delete
+ * @property int competention_id
  * @property CArrayList knowledges
  * @property CArrayList skills
  * @property CArrayList experiences
@@ -16,6 +18,8 @@ class CWorkPlanCompetention extends CActiveModel{
     protected $_knowledges;
     protected $_skills;
     protected $_experiences;
+
+    public $allow_delete = 1;
 
     protected function relations() {
         return array(

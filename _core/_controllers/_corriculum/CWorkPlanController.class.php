@@ -57,6 +57,7 @@ class CWorkPlanController extends CBaseController{
         /**
          * получим дисциплину, по которой делаем рабочую программу
          * @var CCorriculumDiscipline $discipline
+         * @var CCorriculum $corriculum
          */
         $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("id"));
         $corriculum = $discipline->cycle->corriculum;
@@ -83,6 +84,26 @@ class CWorkPlanController extends CBaseController{
             $plan->position = "Дисциплина относится к базовой части учебного цикла ".$discipline->cycle->title ;
         }
         $plan->save();
+        /**
+         * Скопируем компетенции из плана
+         * @var CCorriculumDisciplineCompetention $competention
+         */
+        foreach ($discipline->competentions->getItems() as $competention) {
+            $planCompetention = new CWorkPlanCompetention();
+            $planCompetention->plan_id = $plan->getId();
+            $planCompetention->allow_delete = 0;
+            $planCompetention->competention_id = $competention->competention_id;
+            if ($competention->knowledge_id != 0) {
+                $planCompetention->knowledges->add($competention->knowledge_id, $competention->knowledge_id);
+            }
+            if ($competention->skill_id != 0) {
+                $planCompetention->skills->add($competention->skill_id, $competention->skill_id);
+            }
+            if ($competention->experience_id != 0) {
+                $planCompetention->experiences->add($competention->experience_id, $competention->experience_id);
+            }
+            $planCompetention->save();
+        }
         $this->redirect("?action=edit&id=".$plan->getId());
     }
     public function actionEdit() {

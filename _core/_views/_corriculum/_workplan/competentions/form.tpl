@@ -2,6 +2,7 @@
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $object)}
     {CHtml::activeHiddenField("plan_id", $object)}
+    {CHtml::activeHiddenField("allow_delete", $object)}
 
     {CHtml::errorSummary($object)}
 

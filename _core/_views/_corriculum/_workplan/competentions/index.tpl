@@ -20,7 +20,11 @@
             {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $objects->getItems() as $object}
                 <tr>
-                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить компетенция')) { location.href='workplancompetentions.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
+                    <td>
+                        {if $object->allow_delete == "1"}
+                            <a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить компетенция')) { location.href='workplancompetentions.php?action=delete&id={$object->getId()}'; }; return false;"></a>
+                        {/if}
+                    </td>
                     <td>{counter}</td>
                     <td><a href="workplancompetentions.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
                     <td>{if (!is_null($object->competention))}{$object->competention}{/if}</td>
