@@ -136,7 +136,7 @@ class CWorkPlanContentModulesControllers extends CBaseController{
         $object = CBaseManager::getWorkPlanContentModule(CRequest::getInt("id"));
         $plan = $object->plan_id;
         $object->remove();
-        $this->redirect("workplancontentmodules.php?action=index&plan_id=".$plan);
+        $this->redirect("workplans.php?action=edit&id=".$plan);
     }
     public function actionSave() {
         $object = new CWorkPlanContentModule();

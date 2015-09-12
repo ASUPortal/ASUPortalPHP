@@ -1,7 +1,5 @@
 <?php
 class CWorkPlanGoalsController extends CBaseController{
-    protected $_isComponent = true;
-
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -37,9 +35,9 @@ class CWorkPlanGoalsController extends CBaseController{
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
-            "title" => "Добавить цель",
-            "link" => "workplangoals.php?action=add&id=".CRequest::getInt("plan_id"),
-            "icon" => "actions/list-add.png"
+            "title" => "Обновить",
+            "link" => "workplangoals.php?action=index&plan_id=".CRequest::getInt("plan_id"),
+            "icon" => "actions/view-refresh.png"
         ));
         /**
          * Отображение представления
@@ -55,7 +53,7 @@ class CWorkPlanGoalsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplangoals.php?action=index&plan_id=".CRequest::getInt("id"),
+            "link" => "workplans.php?action=edit&id=".CRequest::getInt("id"),
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -71,8 +69,13 @@ class CWorkPlanGoalsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplangoals.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplans.php?action=edit&id=".$object->plan_id,
             "icon" => "actions/edit-undo.png"
+        ));
+        $this->addActionsMenuItem(array(
+            "title" => "Добавить задачу",
+            "link" => "workplantasks.php?action=add&id=".$object->getId(),
+            "icon" => "actions/list-add.png"
         ));
         /**
          * Отображение представления
@@ -83,7 +86,7 @@ class CWorkPlanGoalsController extends CBaseController{
         $object = CBaseManager::getWorkPlanGoal(CRequest::getInt("id"));
         $plan = $object->plan_id;
         $object->remove();
-        $this->redirect("workplangoals.php?action=index&plan_id=".$plan);
+        $this->redirect("workplans.php?action=edit&id=".$plan);
     }
     public function actionSave() {
         $object = new CWorkPlanGoal();
@@ -93,7 +96,7 @@ class CWorkPlanGoalsController extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("workplangoals.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplangoals.php?action=index&plan_id=".$object->plan_id);
+                $this->redirect("workplans.php?action=edit&id=".$object->plan_id);
             }
             return true;
         }

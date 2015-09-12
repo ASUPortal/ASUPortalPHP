@@ -7,6 +7,7 @@
             <h3>Модуль {$module->title} </h3>
 
             <a href="{$web_root}_modules/_corriculum/workplancontentsections.php?action=add&id={$module->getId()}" class="btn btn-success">Добавить раздел</a>
+            <a href="{$web_root}_modules/_corriculum/workplancontentmodules.php?action=delete&id={$module->getId()}" class="btn btn-danger">Удалить модуль</a>
             {include file="_corriculum/_workplan/contentModules/subform.sections.tpl"}
         {/foreach}
     {/if}

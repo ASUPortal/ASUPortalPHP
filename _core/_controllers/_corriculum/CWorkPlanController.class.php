@@ -97,6 +97,11 @@ class CWorkPlanController extends CBaseController{
                 "title" => "Добавить модуль",
                 "link" => "workplancontentmodules.php?action=add&id=".$plan->getId(),
                 "icon" => "actions/list-add.png"
+            ),
+            array(
+                "title" => "Добавить цель",
+                "link" => "workplangoals.php?action=add&id=".$plan->getId(),
+                "icon" => "actions/list-add.png"
             )
         ));
         $this->setData("plan", $plan);
