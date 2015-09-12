@@ -1118,7 +1118,9 @@ class CHtml {
         );
         foreach (CRequest::getGlobalRequestVariables()->getItems() as $key=>$value) {
             if (!in_array($key, $exclude)) {
-                $actions[] = $key."=".$value;
+                if (is_scalar($value)) {
+                    $actions[] = $key."=".$value;
+                }
             }
         }
         /**

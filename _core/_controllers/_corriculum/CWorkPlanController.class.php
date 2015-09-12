@@ -144,6 +144,9 @@ class CWorkPlanController extends CBaseController{
             } else {
                 $this->redirect("disciplines.php?action=edit&id=".$plan->corriculum_discipline_id);
             }
+            return true;
         }
+        $this->setData("plan", $plan);
+        $this->renderView("_corriculum/_workplan/workplan/edit.tpl");
     }
 }

@@ -325,6 +325,7 @@
     define("TABLE_WORK_PLAN_CONTENT_TOPICS", "pl_corriculum_workplan_content_section_load_topics");
     define("TABLE_WORK_PLAN_CONTENT_TECHNOLOGIES", "pl_corriculum_workplan_content_section_load_technologies");
     define("TABLE_WORK_PLAN_COMPETENTION_CAN_USE", "pl_corriculum_workplan_competention_can_use");
+    define("TABLE_WORK_PLAN_ADDITIONAL_SUPPLY", "pl_corriculum_workplan_additional_supply");
     /**
      * Константы пагинатора
      */

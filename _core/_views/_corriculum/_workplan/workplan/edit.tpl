@@ -10,6 +10,8 @@
         {CHtml::activeHiddenField("corriculum_discipline_id", $plan)}
         {CHtml::activeHiddenField("id", $plan)}
 
+        {CHtml::errorSummary($plan)}
+
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#common">Общая информация</a></li>
             <li><a data-toggle="tab" href="#competentions">Компетенции</a></li>

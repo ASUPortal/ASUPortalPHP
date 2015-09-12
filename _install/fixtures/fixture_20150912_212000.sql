@@ -26,3 +26,25 @@ ALTER TABLE `pl_corriculum_workplan_selfeducation`  ADD `load_id` INT NOT NULL  
 TRUNCATE TABLE `pl_corriculum_workplan_selfeducation`;
 
 ALTER TABLE `pl_corriculum_workplan_selfeducation` ADD  FOREIGN KEY (`load_id`) REFERENCES `asu_portal_20150315`.`pl_corriculum_workplan_content_section_loads`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+CREATE TABLE `pl_corriculum_workplan_additional_supply` (
+  `id` int(11) NOT NULL,
+  `plan_id` int(11) NOT NULL,
+  `supply_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+ALTER TABLE `pl_corriculum_workplan_additional_supply`
+ADD PRIMARY KEY (`id`), ADD KEY `plan_id` (`plan_id`), ADD KEY `supply_id` (`supply_id`);
+
+
+ALTER TABLE `pl_corriculum_workplan_additional_supply`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `pl_corriculum_workplan_additional_supply`
+ADD CONSTRAINT `pl_corriculum_workplan_additional_supply_ibfk_2` FOREIGN KEY (`supply_id`) REFERENCES `taxonomy_terms` (`id`) ON UPDATE CASCADE,
+ADD CONSTRAINT `pl_corriculum_workplan_additional_supply_ibfk_1` FOREIGN KEY (`plan_id`) REFERENCES `pl_corriculum_workplans` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+INSERT INTO `taxonomy` (`id`, `name`, `alias`, `comment`, `child_taxonomy_id`) VALUES (NULL, 'Материальное обеспечение', 'corriculum_supply', '', '0');
+
+ALTER TABLE `pl_corriculum_workplans` DROP `hardware`;

@@ -16,13 +16,7 @@
 
 <h3>8. Материальное обеспечение</h3>
 
-<div class="control-group">
-    {CHtml::activeLabel("hardware", $plan)}
-    <div class="controls">
-        {CHtml::activeTextBox("hardware", $plan, "hardware")}
-        {CHtml::error("hardware", $plan)}
-    </div>
-</div>
+{CHtml::activeComponent("workplansupplies.php?&plan_id={$plan->getId()}", $plan)}
 
 <script>
     jQuery(document).ready(function(){
