@@ -12,6 +12,7 @@
 
 <h4>4.3. Лабораторные работы</h4>
 
+{CHtml::activeComponent("workplancontent.php?plan_id={$plan->getId()}", $plan, ["defaultAction" => "labworks"])}
 
 <h4>4.4. Практические занятия (семинары)</h4>
 

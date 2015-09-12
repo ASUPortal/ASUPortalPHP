@@ -6,6 +6,7 @@
  * Time: 21:11
  *
  * @property int section_id
+ * @property int term_id
  * @property CWorkPlanContentSection section
  * @property CWorkPlanTerm term
  * @property CTerm loadType

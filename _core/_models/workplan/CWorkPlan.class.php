@@ -194,4 +194,43 @@ class CWorkPlan extends CActiveModel {
         }
         return $practices;
     }
+
+    /**
+     * Все лабораторные работы, сгруппированные по семестрам
+     *
+     * @return CArrayList
+     */
+    public function getLabWorks() {
+        $labs = new CArrayList();
+        /**
+         * @var $module CWorkPlanContentModule
+         * @var $section CWorkPlanContentSection
+         * @var $load CWorkPlanContentSectionLoad
+         * @var $topic CWorkPlanContentSectionLoadTopic
+         */
+        $loads = new CArrayList();
+        foreach ($this->modules->getItems() as $module) {
+            foreach ($module->sections->getItems() as $section) {
+                foreach ($section->loads->getItems() as $load) {
+                    if ($load->loadType->getAlias() == "labwork") {
+                        if ($load->topics->getCount() > 0) {
+                            $loads->add($load->getId(), $load);
+                        }
+                    }
+                }
+            }
+        }
+        foreach ($loads as $load) {
+            $term_id = $load->term_id;
+            $termData = new CArrayList();
+            if ($labs->hasElement($term_id)) {
+                $termData = $labs->getItem($term_id);
+            }
+            foreach ($load->topics->getItems() as $topic) {
+                $termData->add($topic->getId(), $topic);
+            }
+            $labs->add($term_id, $termData);
+        }
+        return $labs;
+    }
 }

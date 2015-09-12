@@ -35,4 +35,14 @@ class CWorkPlanContentController extends CBaseController{
         $this->setData("objects", $plan->getPractices());
         $this->renderView("_corriculum/_workplan/content/practices.tpl");
     }
+    public function actionLabWorks() {
+        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
+        $this->addActionsMenuItem(array(
+            "title" => "Обновить",
+            "link" => "workplancontent.php?action=labworks&plan_id=".CRequest::getInt("plan_id"),
+            "icon" => "actions/view-refresh.png"
+        ));
+        $this->setData("objects", $plan->getLabWorks());
+        $this->renderView("_corriculum/_workplan/content/labworks.tpl");
+    }
 }
