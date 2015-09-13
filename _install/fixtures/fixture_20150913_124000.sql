@@ -1,0 +1,2 @@
+ALTER TABLE `pl_corriculum_workplans`  ADD `title_display` TEXT NOT NULL  AFTER `title`;
+ALTER TABLE `pl_corriculum_workplans`  ADD `is_archive` INT NOT NULL DEFAULT '0'  AFTER `education_technologies`;

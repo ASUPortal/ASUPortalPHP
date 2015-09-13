@@ -34,6 +34,7 @@
  */
 class CWorkPlan extends CActiveModel {
     protected $_table = TABLE_WORK_PLANS;
+    public $is_archive = 0;
 
     protected function relations() {
         return array(
@@ -133,6 +134,7 @@ class CWorkPlan extends CActiveModel {
     public function attributeLabels() {
         return array(
             "title" => "Наименование",
+            "title_display" => "Отображаемое наименование",
             "department_id" => "Кафедра",
             "approver_post" => "Должность утверждающего",
             "approver_name" => "Утверждающий",
@@ -148,7 +150,8 @@ class CWorkPlan extends CActiveModel {
             "disciplinesAfter" => "Последующие дисциплины",
             "project_description" => "Курсовой проект",
             "education_technologies" => "Образовательные технологии",
-            "hardware" => "Скобяные изделия"
+            "hardware" => "Скобяные изделия",
+            "is_archive" => "В архиве"
         );
     }
 
@@ -156,6 +159,7 @@ class CWorkPlan extends CActiveModel {
         return array(
             "required" => array(
                 "title",
+                "title_display",
                 "year"
             ),
             "selected" => array(

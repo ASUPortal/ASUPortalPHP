@@ -13,7 +13,7 @@
                 <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить рабочую программу?')) { location.href='workplans.php?action=delete&id={$plan->getId()}'; }; return false;"></a></td>
                 <td>
                     {if !is_null($plan->discipline)}
-                        <a href="workplans.php?action=edit&id={$plan->getId()}">{$plan->discipline->getValue()}</a>
+                        <a href="workplans.php?action=edit&id={$plan->getId()}">{$plan->title_display}</a>
                     {/if}
                 </td>
             </tr>

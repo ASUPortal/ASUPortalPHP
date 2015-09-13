@@ -1,8 +1,24 @@
 <div class="control-group">
+    {CHtml::activeLabel("title_display", $plan)}
+    <div class="controls">
+        {CHtml::activeTextBox("title_display", $plan)}
+        {CHtml::error("title_display", $plan)}
+    </div>
+</div>
+
+<div class="control-group">
     {CHtml::activeLabel("title", $plan)}
     <div class="controls">
         {CHtml::activeTextBox("title", $plan)}
         {CHtml::error("title", $plan)}
+    </div>
+</div>
+
+<div class="control-group">
+    {CHtml::activeLabel("is_archive", $plan)}
+    <div class="controls">
+        {CHtml::activeCheckBox("is_archive", $plan)}
+        {CHtml::error("is_archive", $plan)}
     </div>
 </div>
 

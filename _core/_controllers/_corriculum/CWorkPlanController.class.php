@@ -64,6 +64,7 @@ class CWorkPlanController extends CBaseController{
         //
         $plan = new CWorkPlan();
         $plan->title = "Наименование не указано";
+        $plan->title_display = $plan->title;
         // дисциплина из учебного плана
         $plan->corriculum_discipline_id = $discipline->getId();
         // дисциплина из справочника
