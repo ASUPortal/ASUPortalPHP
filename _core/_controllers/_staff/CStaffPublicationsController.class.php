@@ -163,5 +163,5 @@ class CStaffPublicationsController extends CBaseController{
             );
         }
         echo json_encode($res);
-   }
+    }
 }

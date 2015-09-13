@@ -31,6 +31,13 @@ class CWorkPlanController extends CBaseController{
         $set->setQuery($query);
         $query->select("wp.*")
             ->from(TABLE_WORK_PLANS." as wp");
+        $isArchive = false;
+        if (CRequest::getInt("isArchive") == "1") {
+            $isArchive = true;
+        }
+        if (!$isArchive) {
+            $query->condition("wp.is_archive = 0");
+        }
         $paginated = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $plan = new CWorkPlan($ar);
@@ -43,6 +50,7 @@ class CWorkPlanController extends CBaseController{
                 "icon" => "actions/list-add.png"
             ),
         ));
+        $this->setData("isArchive", $isArchive);
         $this->setData("plans", $paginated);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_corriculum/_workplan/workplan/index.tpl");
@@ -112,7 +120,7 @@ class CWorkPlanController extends CBaseController{
         $this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
-                "link" => "disciplines.php?action=edit&id=".$plan->corriculum_discipline_id,
+                "link" => "workplans.php?action=index",
                 "icon" => "actions/edit-undo.png"
             ),
             array(
@@ -149,5 +157,26 @@ class CWorkPlanController extends CBaseController{
         }
         $this->setData("plan", $plan);
         $this->renderView("_corriculum/_workplan/workplan/edit.tpl");
+    }
+    public function actionSearch() {
+        $res = array();
+        $term = CRequest::getString("query");
+        /**
+         * Сначала поищем по учебного плана
+         */
+        $query = new CQuery();
+        $query->select("distinct(wp.id) as id, wp.title as title")
+            ->from(TABLE_WORK_PLANS." as wp")
+            ->condition("wp.title like '%".$term."%'")
+            ->limit(0, 5);
+        foreach ($query->execute()->getItems() as $item) {
+            $res[] = array(
+                "field" => "wp.id",
+                "value" => $item["id"],
+                "label" => $item["title"],
+                "class" => "CWorkPlan"
+            );
+        }
+        echo json_encode($res);
     }
 }

@@ -1039,4 +1039,9 @@ class CPerson extends CActiveModel{
     	return $result;
     }
 
+    function __toString() {
+        return $this->getName();
+    }
+
+
 }
