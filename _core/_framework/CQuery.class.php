@@ -139,7 +139,7 @@ class CQuery {
         }
         if(!is_null($this->_condition)) {
             $q .=
-                "WHERE ".$this->_condition;
+                "WHERE ".$this->_condition." ";
         }
         if (!is_null($this->_group)) {
             $q .= "GROUP BY ".$this->_group." ";
