@@ -233,4 +233,29 @@ class CWorkPlan extends CActiveModel {
         }
         return $labs;
     }
+
+    /**
+     * Все образовательные технологии
+     *
+     * @return CArrayList
+     */
+    public function getTechnologies() {
+        $technologies = new CArrayList();
+        /**
+         * @var $module CWorkPlanContentModule
+         * @var $section CWorkPlanContentSection
+         * @var $load CWorkPlanContentSectionLoad
+         * @var $technology CWorkPlanContentSectionLoadTechnology
+         */
+        foreach ($this->modules->getItems() as $module) {
+            foreach ($module->sections->getItems() as $section) {
+                foreach ($section->loads->getItems() as $load) {
+                    foreach ($load->technologies->getItems() as $technology) {
+                        $technologies->add($technology->getId(), $technology);
+                    }
+                }
+            }
+        }
+        return $technologies;
+    }
 }

@@ -7,12 +7,19 @@
  *
  * @property int load_id
  * @property CTerm technology
+ * @property CWorkPlanContentSectionLoad load
  */
 class CWorkPlanContentSectionLoadTechnology extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_CONTENT_TECHNOLOGIES;
 
     protected function relations() {
         return array(
+            "load" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_load",
+                "storageField" => "load_id",
+                "targetClass" => "CWorkPlanContentSectionLoad"
+            ),
             "technology" => array(
                 "relationPower" => RELATION_HAS_ONE,
                 "storageProperty" => "_technology",
