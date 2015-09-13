@@ -94,7 +94,7 @@ class CCorriculumsManager {
     public static function getAllCorriculums() {
         if (!self::$_cacheCorriculumsInit) {
             self::$_cacheCorriculumsInit = true;
-            foreach (CActiveRecordProvider::getAllFromTable(TABLE_CORRICULUMS)->getItems() as $ar) {
+            foreach (CActiveRecordProvider::getAllFromTable(TABLE_CORRICULUMS, "title asc")->getItems() as $ar) {
                 $cor = new CCorriculum($ar);
                 self::getCacheCorriculums()->add($cor->getId(), $cor);
             }

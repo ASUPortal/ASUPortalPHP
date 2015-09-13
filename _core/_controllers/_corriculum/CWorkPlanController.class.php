@@ -6,7 +6,7 @@
  * Time: 21:49
  */
 
-class CWorkPlanController extends CBaseController{
+class CWorkPlanController extends CFlowController{
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -24,7 +24,49 @@ class CWorkPlanController extends CBaseController{
         parent::__construct();
     }
 
+    /**
+     * Добавление плана из представления.
+     * Сначала надо выбрать учебный план
+     */
+    public function actionAddFromView() {
+        $items = new CArrayList();
+        $this->setData("items", $items);
+        /**
+         * @var $corriculum CCorriculum
+         */
+        foreach (CCorriculumsManager::getAllCorriculums()->getItems() as $corriculum) {
+            $items->add($corriculum->getId(), $corriculum->title);
+        }
+        $this->setData("items", $items);
+        $this->renderView("_flow/pickList.tpl", get_class($this), "AddFromView_SelectDiscipline");
+    }
 
+    /**
+     * Добавление плана из представления
+     * Выбор дисциплины в указанном учебном плане
+     */
+    public function actionAddFromView_SelectDiscipline() {
+        $selected = CRequest::getArray("selected");
+        $items = new CArrayList();
+        $corriculum = CCorriculumsManager::getCorriculum($selected[0]);
+        /**
+         * @var $cycle CCorriculumCycle
+         */
+        foreach ($corriculum->getDisciplines() as $discipline) {
+            $items->add($discipline->getId(), $discipline->discipline->getValue());
+        }
+        $this->setData("items", $items);
+        $this->renderView("_flow/pickList.tpl", get_class($this), "AddFromView_CreateWorkPlan");
+    }
+
+    /**
+     * Добавление плана из представления
+     * Переадресация на стандартную функцию создания
+     */
+    public function actionAddFromView_CreateWorkPlan() {
+        $selected = CRequest::getArray("selected");
+        $this->redirect("workplans.php?action=add&id=".$selected[0]);
+    }
     public function actionIndex() {
         $set = new CRecordSet();
         $query = new CQuery();
@@ -43,13 +85,6 @@ class CWorkPlanController extends CBaseController{
             $plan = new CWorkPlan($ar);
             $paginated->add($plan->getId(), $plan);
         }
-        $this->addActionsMenuItem(array(
-            array(
-                "title" => "Добавить",
-                "link" => "?action=add",
-                "icon" => "actions/list-add.png"
-            ),
-        ));
         $this->setData("isArchive", $isArchive);
         $this->setData("plans", $paginated);
         $this->setData("paginator", $set->getPaginator());

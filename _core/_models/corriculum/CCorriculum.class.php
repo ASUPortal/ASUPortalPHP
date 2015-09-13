@@ -8,6 +8,7 @@
  * @property int direction_id
  * @property int qualification_id
  * @property int form_id
+ * @property CArrayList cycles
  */
 class CCorriculum extends CActiveModel{
     protected $_table = TABLE_CORRICULUMS;
@@ -111,7 +112,8 @@ class CCorriculum extends CActiveModel{
                 "direction_id",
                 "profile_id",
                 "qualification_id",
-                "form_id"
+                "form_id",
+                "speciality_direction_id"
             )
         );
     }
@@ -133,6 +135,27 @@ class CCorriculum extends CActiveModel{
             }
         }
         return $cycle;
+    }
+
+    /**
+     * Все дисциплины учебного плана в алфавитном порядке
+     *
+     * @return CArrayList
+     */
+    public function getDisciplines() {
+        $disciplines = new CArrayList();
+        $query = new CQuery();
+        $query->select("d.*")
+            ->from(TABLE_CORRICULUM_DISCIPLINES." as d")
+            ->innerJoin(TABLE_CORRICULUM_CYCLES." as cycle", "d.cycle_id = cycle.id")
+            ->condition("cycle.corriculum_id = ".$this->getId())
+            ->innerJoin(TABLE_DISCIPLINES." as discipline", "discipline.id = d.discipline_id")
+            ->order("discipline.name");
+        foreach ($query->execute() as $ar) {
+            $discipline = new CCorriculumDiscipline(new CActiveRecord($ar));
+            $disciplines->add($discipline->getId(), $discipline);
+        }
+        return $disciplines;
     }
 
     /**

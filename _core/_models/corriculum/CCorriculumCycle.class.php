@@ -8,6 +8,7 @@
  *
  * @property CCorriculum corriculum
  * @property string title
+ * @property CArrayList disciplines
  */
 class CCorriculumCycle extends CActiveModel {
     protected $_table = TABLE_CORRICULUM_CYCLES;
