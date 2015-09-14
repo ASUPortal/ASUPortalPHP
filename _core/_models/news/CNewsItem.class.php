@@ -204,12 +204,24 @@ class CNewsItem extends CActiveModel{
          * Если новость получилась длинная, то сокращаем ее
          */
         $result = "";
-        if (mb_strlen($s) > 200) {
+        if (mb_strlen($s) > 250) {
             $result = '<div id="full_'.$this->getId().'" style="display: none;">';
             $result .= $s;
             $result .= '</div>';
             $result .= '<div id="preview_'.$this->getId().'">';
-            $result .= mb_substr($s, 0, 200);
+            $symbols = 250; // Количество симловов которые надо вывести
+            $text = "";
+            $words = explode(" ", $s);
+            for ($i=0; $i<count($words); $i++) {
+            	$nv_str=$text.$words[$i]." ";
+	            if(strlen($nv_str)<$symbols){
+	            	$text = $nv_str;
+	            }
+	            else {
+	            	break;
+	            }
+            }
+            $result .= $text."...";
             $result .= '<div style="clear: both; "></div>';
             $result .= '<div class="asu_more" onclick="news_show_full('.$this->getId().');">Подробнее</div>';
             $result .= '</div>';
