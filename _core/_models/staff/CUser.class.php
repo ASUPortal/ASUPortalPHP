@@ -97,15 +97,25 @@ class CUser extends CActiveModel {
      * @return int
      */
     public function getLevelForCurrentTask() {
-        $level = ACCESS_LEVEL_NO_ACCESS;
-        $task = CSession::getCurrentTask();
-        if (!is_null($task)) {
-            if ($this->getRoles()->hasElement($task->getId())) {
-                $personTask = $this->getRoles()->getItem($task->getId());
-                $level = $personTask->level;
-            }
-        }
-        return $level;
+		$levels = array();
+		$levels[] = ACCESS_LEVEL_NO_ACCESS;
+		$task = CSession::getCurrentTask();
+		if (!is_null($task)) {
+			if ($this->getRoles()->hasElement($task->getId())) {
+				$personTask = $this->getRoles()->getItem($task->getId());
+				$level = $personTask->level;
+			}
+			foreach ($this->getGroups()->getItems() as $group) {
+				foreach ($group->getRoles()->getItems() as $role) {
+					if ($task->getId() == $role->getId()) {
+						$levels[] = $role->level;
+					}
+				}
+			}
+		}
+		arsort($levels);
+		$level = current($levels);
+		return $level;
     }
 
     /**
