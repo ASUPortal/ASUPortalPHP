@@ -41,7 +41,7 @@
     <div class="control-group">
         {CHtml::activeLabel("canUse", $object)}
         <div class="controls">
-            {CHtml::activeLookup("canUse", $object, "corriculum_knowledges", true)}
+            {CHtml::activeLookup("canUse", $object, "corriculum_knowledges", true, array(), true)}
             {CHtml::error("canUse", $object)}
         </div>
     </div>
