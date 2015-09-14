@@ -97,15 +97,37 @@ class CUser extends CActiveModel {
      * @return int
      */
     public function getLevelForCurrentTask() {
-        $level = ACCESS_LEVEL_NO_ACCESS;
-        $task = CSession::getCurrentTask();
-        if (!is_null($task)) {
-            if ($this->getRoles()->hasElement($task->getId())) {
-                $personTask = $this->getRoles()->getItem($task->getId());
-                $level = $personTask->level;
-            }
-        }
-        return $level;
+    	$levels = array();
+    	$task = CSession::getCurrentTask();
+    	if (!is_null($task)) {
+    		if ($this->getRoles()->hasElement($task->getId())) {
+    			foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_HAS_ROLES, "user_id=".$this->getId())->getItems() as $ar) {
+    				$role = CStaffManager::getUserRole($ar->getItemValue("task_id"));
+    				if (!is_null($role)) {
+    					if ($task->getId() == $role->id) {
+    						$levels[] = $ar->getItemValue("task_rights_id");
+    					}
+    				}
+    			}
+    			if (empty($levels)) {
+    				foreach ($this->getGroups()->getItems() as $group) {
+    					foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_GROUP_HAS_ROLES, "task_id=".$task->getId())->getItems() as $ar) {
+    						$group_id = $group->id;
+    						$user_group_id = $ar->getItemValue("user_group_id");
+    						if ($user_group_id == $group_id) {
+    							$levels[] = $ar->getItemValue("task_rights_id");
+    						}
+    					}
+    				}
+    			}
+    		}
+    	}
+    	else {
+    		$levels[] = ACCESS_LEVEL_NO_ACCESS;
+    	}
+    	arsort($levels);
+    	$level = current($levels);
+    	return $level;
     }
 
     /**
