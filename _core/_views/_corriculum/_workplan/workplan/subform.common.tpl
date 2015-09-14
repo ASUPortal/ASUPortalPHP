@@ -57,7 +57,7 @@
 <div class="control-group">
     {CHtml::activeLabel("profiles", $plan)}
     <div class="controls">
-        {CHtml::activeLookup("profiles", $plan, "corriculum_speciality_directions", true)}
+        {CHtml::activeLookup("profiles", $plan, "corriculum_profiles", true)}
         {CHtml::error("profiles", $plan)}
     </div>
 </div>
