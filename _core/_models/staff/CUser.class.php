@@ -62,17 +62,24 @@ class CUser extends CActiveModel {
      * @return CArrayList
      */
     public function getRoles() {
-        if (is_null($this->_roles)) {
-            $this->_roles = new CArrayList();
-            // сначала глянем, в какие группы входит пользователь и какие роли он получил от них
-            foreach ($this->getGroups()->getItems() as $group) {
-                foreach ($group->getRoles()->getItems() as $role) {
-                    $this->_roles->add($role->getId(), $role);
-                }
-            }
-            // теперь смотрим, какие личные права он имеет
-            if (!is_null($this->getId())) {
-                foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_HAS_ROLES, "user_id=".$this->getId())->getItems() as $ar) {
+		if (is_null($this->_roles)) {
+    		$this->_roles = new CArrayList();
+    		// сначала глянем, в какие группы входит пользователь и какие роли он получил от них
+    		foreach ($this->getGroups()->getItems() as $group) {
+    			foreach ($group->getRoles()->getItems() as $role) {
+    				if (!$this->_roles->hasElement($role->getId())) {
+    					$this->_roles->add($role->getId(), $role);
+    				} else {
+    					$currentRole = $this->_roles->getItem($role->getId());
+    					if ($role->level > $currentRole->level) {
+    						$this->_roles->add($role->getId(), $role);
+    					}
+    				}
+    			}
+    		}
+    		// теперь смотрим, какие личные права он имеет
+    		if (!is_null($this->getId())) {
+    			foreach (CActiveRecordProvider::getWithCondition(TABLE_USER_HAS_ROLES, "user_id=".$this->getId())->getItems() as $ar) {
                     $role = CStaffManager::getUserRole($ar->getItemValue("task_id"));
                     if (!is_null($role)) {
                         $role->level = $ar->getItemValue("task_rights_id");
@@ -86,9 +93,9 @@ class CUser extends CActiveModel {
                         $this->_roles->add($role->getId(), $role);
                     }
                 }
-            }
-        }
-        return $this->_roles;
+    		}
+    	}
+    	return $this->_roles;
     }
 
     /**
@@ -96,16 +103,17 @@ class CUser extends CActiveModel {
      *
      * @return int
      */
+    
     public function getLevelForCurrentTask() {
-        $level = ACCESS_LEVEL_NO_ACCESS;
-        $task = CSession::getCurrentTask();
-        if (!is_null($task)) {
-            if ($this->getRoles()->hasElement($task->getId())) {
-                $personTask = $this->getRoles()->getItem($task->getId());
-                $level = $personTask->level;
-            }
-        }
-        return $level;
+    	$level = ACCESS_LEVEL_NO_ACCESS;
+    	$task = CSession::getCurrentTask();
+    	if (!is_null($task)) {
+    		if ($this->getRoles()->hasElement($task->getId())) {
+    			$personTask = $this->getRoles()->getItem($task->getId());
+    			$level = $personTask->level;
+    		}
+    	}
+    	return $level;
     }
 
     /**
