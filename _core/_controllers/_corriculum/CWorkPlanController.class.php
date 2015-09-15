@@ -167,7 +167,13 @@ class CWorkPlanController extends CFlowController{
                 "title" => "Добавить цель",
                 "link" => "workplangoals.php?action=add&id=".$plan->getId(),
                 "icon" => "actions/list-add.png"
-            )
+            ),
+        	array(
+        		"title" => "Печать по шаблону",
+        		"link" => "#",
+        		"icon" => "devices/printer.png",
+        		"template" => "formset_workplans"
+        	)
         ));
         $this->setData("plan", $plan);
 

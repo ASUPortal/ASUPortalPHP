@@ -28,7 +28,7 @@ class CWorkPlanTermsController extends CBaseController{
             ->condition("plan_id=".CRequest::getInt("plan_id"));;
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
-            $object = new CWorkPlanTask($ar);
+            $object = new CWorkPlanTerm($ar);
             $objects->add($object->getId(), $object);
         }
         $this->setData("objects", $objects);

@@ -209,7 +209,7 @@ class CNewsItem extends CActiveModel{
             $result .= $s;
             $result .= '</div>';
             $result .= '<div id="preview_'.$this->getId().'">';
-            $symbols = 250; // Количество симловов которые надо вывести
+            $symbols = 250; // Количество символов которые надо вывести
             $text = "";
             $words = explode(" ", $s);
             for ($i=0; $i<count($words); $i++) {

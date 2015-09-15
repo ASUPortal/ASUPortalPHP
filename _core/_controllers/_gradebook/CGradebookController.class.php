@@ -452,7 +452,7 @@ class CGradebookController extends CBaseController {
      * Большой поиск по всему-всему-всему
      */
     public function actionSearch() {
-        $term = CRequest::getString("term");
+        $term = CRequest::getString("query");
         $res = array();
         /**
          * Поищем сначала преподавателей. 5 будет достаточно за один раз
