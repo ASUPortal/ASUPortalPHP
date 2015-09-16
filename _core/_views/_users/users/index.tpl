@@ -11,7 +11,7 @@
         <tr>
             <th></th>
             <th>#</th>
-            <th>{CHtml::tableOrder("fio", $users->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("FIO", $users->getFirstItem())}</th>
             <th>{CHtml::tableOrder("login", $users->getFirstItem())}</th>
             <th>{CHtml::tableOrder("kadri_id", $users->getFirstItem())}</th>
             <th>Группы</th>

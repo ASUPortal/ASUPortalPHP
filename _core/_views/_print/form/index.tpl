@@ -14,7 +14,7 @@
         <th>Активен</th>
         <th></th>
     </tr>
-
+	{counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
     {foreach $forms->getItems() as $form}
         <tr>
             <td valign="top"><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить шаблон {$form->title}')) { location.href='?action=delete&id={$form->id}'; }; return false;"></a></td>

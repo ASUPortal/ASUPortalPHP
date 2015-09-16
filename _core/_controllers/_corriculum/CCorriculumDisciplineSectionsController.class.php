@@ -52,7 +52,7 @@ class CCorriculumDisciplineSectionsController extends CBaseController{
     public function actionDelete() {
         $object = CCorriculumsManager::getDisciplineSection(CRequest::getInt("id"));
         $object->remove();
-        $this->redirect("disciplineSections.php?action=index");
+        $this->redirect("disciplines.php?action=edit&id=".CRequest::getInt("discipline_id"));
     }
     public function actionSave() {
         $object = new CCorriculumDisciplineSection();
