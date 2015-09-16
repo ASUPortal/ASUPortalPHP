@@ -12,12 +12,12 @@ if (isset($_GET['gr_mode']) && intval($_GET['gr_mode'])>0 ) {$gr_mode=intval($_G
 if (isset($_GET['idlect']) && intval($_GET['idlect'])>0) {$idlect=intval($_GET['idlect']);}
 if (isset($_GET['idlect2']) && intval($_GET['idlect2'])>0) {$idlect2=intval($_GET['idlect2']);}
 
-$fiolect='';
+/*$fiolect='';
 if (!$hide_person_data_rule && ($idlect>0 || $idlect2>0) ) {
   if (isset($_GET['gr_mode']) && $_GET['gr_mode']==1) $fiolect=getScalarVal('select name from study_groups where id="'.$idlect.'"');
   else $fiolect=getScalarVal('select FIO from users where id="'.($idlect>0?$idlect:$idlect2).'"');
   if ($fiolect!='') $head_title=$fiolect.'. '.$head_title;
-}
+}*/
 
 
 if (!isset($_GET['onget']))
@@ -310,7 +310,12 @@ for ($num=1;$num<=count($time);$num++)
 				  if (isset($b['length']))	{$b['length']=	$b['length']." нед. ";}	//номера недель
 				if (isset($b['place']))		{$b['place']=	', ауд.'.$b['place'].', ';}	//кабинет
 				if (isset($b['kind']))		{$b['kind']=	' ('.$b['kind'].')';}	//тип занятия (пр,лаб,л)
-				if (isset($b['study_short'])) {$b['study_short']=	'<b>'.$b['study_short'].'</b>';}	//название предмета 
+				//название предмета
+				if (isset($b['study_short']) and ($b['study_short']) != "") {
+					$b['study_short'] = '<b>'.$b['study_short'].'</b>';
+				} else {
+					$b['study_short'] = '<b>'.$b['study'].'</b>';
+				}
 				
 			    if($prev_cell_lab!=''){$prev_cell_lab.='<hr>';}
 			    
@@ -418,7 +423,7 @@ for ($num=1;$num<=count($time);$num++)
 echo "<tr><td class=light_color_max align=left width=120 ><font size=2><b>".$num."</b>&nbsp;".$time[$num]."</font> &nbsp;</td>";
 for ($day=1;$day<=6;$day++) 
 {
-$query_cell2='select time.length,time.place,time_kind.name as kind,subjects.name_short as study_short,subjects.name as study, study_groups.name as grup from time 
+$query_cell2='select time.length,time.place,time_kind.name as kind,subjects.name_short as study_short,subjects.name as study, study_groups.name as grup, time.study as study_id from time 
 	left join subjects on subjects.id=time.study
 	left join study_groups on study_groups.id=time.grup			
 	left join time_kind	on  time_kind.id=time.kind 	
@@ -431,7 +436,7 @@ $query_cell2='select time.length,time.place,time_kind.name as kind,subjects.name
 				$j=0;
 		if($num_rows2==0) 
 		{
-		    if ($mas[$day]!='') 
+		    if (isset($mas[$day]) && $mas[$day]!='') 
 			{echo $mas[$day].'</td>';}
 			else
 			{echo'&nbsp';}
@@ -442,22 +447,42 @@ $query_cell2='select time.length,time.place,time_kind.name as kind,subjects.name
 if (isset($b2['length']))	{$b2['length']=	$b2['length']." нед. ";}	//номера недель
 if (isset($b2['place']))		{$b2['place']=	', ауд.'.$b2['place'].',';}	//кабинет
 if (isset($b2['kind']))		{$b2['kind']=	' ('.$b2['kind'].')';}	//тип занятия (пр,лаб,л)
-if (isset($b2['study_short'])) {$b2['study_short']=	'<b>'.$b2['study_short'].'</b>';}	//название предмета 
-		if(($mas[$day]!='')&& ($j==0))
+//название предмета
+if (isset($b2['study_short']) and ($b2['study_short']) != "") {
+	$b2['study_short'] = '<b>'.$b2['study_short'].'</b>';
+} else {
+	$b2['study_short'] = '<b>'.$b2['study'].'</b>';
+}
+
+//-----ссылка на страницы предмета (скачка пособий, если есть)
+$query_subj2='SELECT nameFolder  FROM `documents` WHERE `subj_id` = '.$b2['study_id'].' AND `user_id` = '.$idlect2.'';
+$res_subj2=mysql_query($query_subj2);
+$num_rows_subj2=mysql_num_rows($res_subj2);
+$link_style2='';$link2='#';
+if ($num_rows_subj2>0) {
+	$b_subj2=mysql_fetch_array($res_subj2);
+	$link2='_modules/_library/index.php?action=publicView&id='.$b_subj2['nameFolder'].'';$link_style2='';
+}
+else {
+	$link2='#';$link_style2='style="color:#666666;"';
+}
+//-----------------
+
+		if(isset($mas[$day]) && ($mas[$day]!='') && ($j==0))
 		{echo $mas[$day].'<hr>'; $mas[$day]='';}
 		echo ''.$b2['length'].$b2['grup'].$b2['place'].
-		' <a href="#" title="'.$b2['study'].'">'.$b2['study_short'].'</a>'.$b2['kind'].'';
+		' <a '.$link_style2.' href="'.$link2.'" title="'.$b2['study'].'">'.$b2['study_short'].'</a>'.$b2['kind'].'';
 			if ($i2<$num_rows2) {echo '<hr>';}
 				$i2++; 
 
 				if(isset($b2['kind']) && $b2['kind']==' (л/р)')
 					{
-				 if($mas[$day]!='') {$mas[$day]=$mas[$day].'<hr>';}
-		    	 $mas[$day]='<font color="silver">'.$mas[$day].$b2['length'].$b2['grup'].$b2['place'].$b2['study_short'].$b2['kind'].'</font>';
+				 if(isset($mas[$day]) && $mas[$day]!='') {$mas[$day]=$mas[$day].'<hr>';}
+		    	 $mas[$day]='<font color="silver">'.$b2['length'].$b2['grup'].$b2['place'].$b2['study_short'].$b2['kind'].'</font>';
 			    ++$j;
 					}
 					else
-					{if($mas[$day]=='')
+					{if(isset($mas[$day]) && $mas[$day]=='')
 					 {$mas[$day]='';}}
 				 }
 			echo '</td>';
