@@ -202,7 +202,7 @@ class CQuery {
             foreach ($this->_fields as $key=>$value) {
                 if ($key != "id") {
                     $columns[] = "`".$key."`";
-                    $values[":".$key] = $value;
+                    $values[":".$key] = addslashes($value);
                     $placeholders[] = ":".$key;
                 }
             }
@@ -222,7 +222,7 @@ class CQuery {
             foreach ($this->_fields as $key=>$value) {
                 if ($key != "id") {
                     $columns[] = "`".$key."`";
-                    $values[] = "'".$value."'";
+                    $values[] = "'".addslashes($value)."'";
                 }
             }
             $q =
@@ -247,7 +247,7 @@ class CQuery {
             foreach($this->_update as $key=>$value) {
                 if ($key != "id") {
                     $t[] = "`".$key."` = :".$key;
-                    $values[":".$key] = $value;
+                    $values[":".$key] = addslashes($value);
                 }
             }
             $q =
@@ -270,9 +270,9 @@ class CQuery {
             foreach($this->_update as $key=>$value) {
                 if ($key != "id") {
                     if (is_int($value)) {
-                        $t[] = "`".$key."` = ".$value;
+                        $t[] = "`".$key."` = ".addslashes($value);
                     } elseif(is_string($value)) {
-                        $t[] = "`".$key."` = '".$value."'";
+                        $t[] = "`".$key."` = '".addslashes($value)."'";
                     }
                 }
             }
