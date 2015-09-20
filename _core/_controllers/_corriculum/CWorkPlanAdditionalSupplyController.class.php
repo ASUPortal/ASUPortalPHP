@@ -24,7 +24,8 @@ class CWorkPlanAdditionalSupplyController extends CBaseController{
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_ADDITIONAL_SUPPLY." as t")
-            ->order("t.id asc");
+            ->order("t.id asc")
+            ->condition("plan_id=".CRequest::getInt("plan_id"));
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanAdditionalSupply($ar);

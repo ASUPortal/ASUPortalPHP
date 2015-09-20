@@ -8,7 +8,7 @@
     <div class="control-group">
         {CHtml::activeLabel("technology_id", $object)}
         <div class="controls">
-            {CHtml::activeLookup("technology_id", $object, "corriculum_education_technologies")}
+            {CHtml::activeLookup("technology_id", $object, "corriculum_education_technologies", false, array(), true)}
             {CHtml::error("technology_id", $object)}
         </div>
     </div>

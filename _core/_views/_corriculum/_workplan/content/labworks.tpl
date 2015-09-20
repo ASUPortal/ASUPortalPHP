@@ -4,6 +4,8 @@
     {if $objects->getCount() == 0}
         Нет объектов для отображения
     {else}
+    	{foreach $objects->getItems() as $term_id=>$termData}
+    	<h4>{CBaseManager::getWorkPlanTerm($term_id)->number} семестр</h4>
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
             <tr>
@@ -14,12 +16,6 @@
             </tr>
             </thead>
             <tbody>
-            {foreach $objects->getItems() as $term_id=>$termData}
-                <tr>
-                    <td colspan="4">
-                        {CBaseManager::getWorkPlanTerm($term_id)}
-                    </td>
-                </tr>
                 {foreach $termData as $lab}
                     <tr>
                         <td>{counter}</td>
@@ -28,9 +24,9 @@
                         <td>{$lab->value}</td>
                     </tr>
                 {/foreach}
-            {/foreach}
             </tbody>
         </table>
+        {/foreach}
     {/if}
 {/block}
 

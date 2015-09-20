@@ -35,14 +35,21 @@ class CWorkPlanContentSectionLoadsController extends CBaseController{
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
-            "title" => "Обновить",
-            "link" => "workplancontentloads.php?action=index&section_id=".CRequest::getInt("section_id"),
-            "icon" => "actions/view-refresh.png"
-        ));
-        $this->addActionsMenuItem(array(
-            "title" => "Добавить нагрузку",
-            "link" => "workplancontentloads.php?action=add&id=".CRequest::getInt("section_id"),
-            "icon" => "actions/list-add.png"
+			array(
+				"title" => "Назад",
+				"link" => "workplancontentsections.php?action=edit&id=".$object->section_id,
+				"icon" => "actions/edit-undo.png"
+			),
+			array(
+				"title" => "Обновить",
+				"link" => "workplancontentloads.php?action=index&section_id=".CRequest::getInt("section_id"),
+				"icon" => "actions/view-refresh.png"
+			),
+			array(
+				"title" => "Добавить нагрузку",
+				"link" => "workplancontentloads.php?action=add&id=".CRequest::getInt("section_id"),
+				"icon" => "actions/list-add.png"
+			),
         ));
         /**
          * Отображение представления
