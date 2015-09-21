@@ -23,8 +23,8 @@ class CWorkPlanDiscipline extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		if (!is_null($contextObject->corriculum_discipline_id)) {
-			$result = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id)->discipline->name;
+		if (!is_null($contextObject->discipline)) {
+			$result = $contextObject->discipline->getValue();
 		}
         return $result;
     }
