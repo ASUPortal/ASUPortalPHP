@@ -14,5 +14,5 @@ interface ISearchCatalogInterface{
     public function actionGetCreationActionUrl();
     public function actionGetCatalogProperties();
     public function actionGetDefaultCatalogProperties();
-    public function actionGetObject($id);
+    //public function actionGetObject($id);
 }

@@ -15,6 +15,7 @@
         </tr>
         </thead>
         <tbody>
+        {counter start=0 print=false}
         {foreach $module->sections->getItems() as $section}
             <tr>
                 <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить раздел')) { location.href='workplancontentsections.php?action=delete&id={$section->getId()}'; }; return false;"></a></td>

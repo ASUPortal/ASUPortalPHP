@@ -30,8 +30,7 @@
     {/if}
 
     {foreach $termSectionsData as $termId=>$termData}
-        <h4>Разделы дисциплины, изчучаемые в {CBaseManager::getWorkPlanTerm($termId)->number}-м семестре</h4>
-
+        <h4>Разделы дисциплины, изучаемые в {CBaseManager::getWorkPlanTerm($termId)->number}-м семестре</h4>
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
                 <tr>
