@@ -23,8 +23,8 @@ class CWorkPlanDepartment extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		if (!is_null($contextObject->department_id)) {
-			$result = CTaxonomyManager::getTerm($contextObject->department_id)->name;
+		if (!is_null($contextObject->department)) {
+			$result = $contextObject->department->getValue();
 		}
         return $result;
     }
