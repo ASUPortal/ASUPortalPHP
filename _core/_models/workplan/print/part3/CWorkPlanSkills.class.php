@@ -18,21 +18,24 @@ class CWorkPlanSkills extends CAbstractPrintClassField {
 
     public function getFieldType()
     {
-        return self::FIELD_TEXT;
+        return self::FIELD_TABLE;
     }
 
     public function execute($contextObject)
     {
-		$items = array();
-		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_COMPETENTIONS, "plan_id = ".$contextObject->getId())->getItems() as $ar) {
-			$item = new CWorkPlanCompetention($ar);
-			if (!is_null($item->skills)) {
-				foreach ($item->skills->getItems() as $item) {
-					$items[] = CTaxonomyManager::getTerm($item->id)->name;
-				}
-			}
-		}
-		$result = implode("; ", $items);
-        return $result;
+    	$result = array();
+    	if (!is_null($contextObject->competentions)) {
+    		foreach ($contextObject->competentions->getItems() as $item) {
+    			if (!is_null($item->skills)) {
+    				foreach ($item->skills->getItems() as $item) {
+    					$dataRow = array();
+    					$dataRow[0] = "•";
+    					$dataRow[1] = $item->getValue();
+    					$result[] = $dataRow;
+    				}
+    			}
+    		}
+    	}
+    	return $result;
     }
 }
