@@ -23,9 +23,8 @@ class CWorkPlanTasks extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
 		$items = array();
-		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_TASKS, "plan_id = ".$plan->getId())->getItems() as $ar) {
+		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_TASKS, "plan_id = ".$contextObject->getId())->getItems() as $ar) {
 			$item = new CWorkPlanTask($ar);
 			$items[] = $item->task;
 		}

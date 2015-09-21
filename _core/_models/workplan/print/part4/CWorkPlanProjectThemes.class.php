@@ -24,12 +24,11 @@ class CWorkPlanProjectThemes extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = array();
-        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
         $query = new CQuery();
         $query->select("t.*")
 	        ->from(TABLE_WORK_PLAN_PROJECT_THEMES." as t")
 	        ->order("t.id asc")
-	        ->condition("plan_id=".$plan->getId());
+	        ->condition("plan_id=".$contextObject->getId());
         $objects = $query->execute();
         foreach ($objects->getItems() as $row) {
         	$dataRow = array();

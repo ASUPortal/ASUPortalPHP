@@ -23,10 +23,9 @@ class CWorkPlanDisciplinesBefore extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
 		$disciplines = array();
-		if (!is_null($plan->disciplinesBefore)) {
-			foreach ($plan->disciplinesBefore->getItems() as $discipline) {
+		if (!is_null($contextObject->disciplinesBefore)) {
+			foreach ($contextObject->disciplinesBefore->getItems() as $discipline) {
 				$discipline = CTaxonomyManager::getDiscipline($discipline->id);
 				$disciplines[] = $discipline->name;
 			}

@@ -23,9 +23,8 @@ class CWorkPlanEducationForm extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-		if (!is_null($plan->education_form_id)) {
-			$result = CTaxonomyManager::getEductionForm($plan->education_form_id)->name;
+		if (!is_null($contextObject->education_form_id)) {
+			$result = CTaxonomyManager::getEductionForm($contextObject->education_form_id)->name;
 		}
         return $result;
     }

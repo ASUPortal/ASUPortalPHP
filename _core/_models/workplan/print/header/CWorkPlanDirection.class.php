@@ -23,9 +23,8 @@ class CWorkPlanDirection extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-		if (!is_null($plan->direction_id)) {
-			$result = CTaxonomyManager::getTerm($plan->direction_id)->name;
+		if (!is_null($contextObject->direction_id)) {
+			$result = CTaxonomyManager::getTerm($contextObject->direction_id)->name;
 		}
         return $result;
     }

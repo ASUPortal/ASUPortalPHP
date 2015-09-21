@@ -24,8 +24,7 @@ class CWorkPlanLabWorks extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = array();
-        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-        foreach ($plan->getLabWorks()->getItems() as $termData) {
+        foreach ($contextObject->getLabWorks()->getItems() as $termData) {
         	foreach ($termData as $row) {
         		$dataRow = array();
         		$dataRow[0] = count($result) + 1;

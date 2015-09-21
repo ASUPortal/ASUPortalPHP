@@ -23,10 +23,9 @@ class CWorkPlanAuthor extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
 		$authors = array();
-		if (!is_null($plan->authors)) {
-			foreach ($plan->authors->getItems() as $author) {
+		if (!is_null($contextObject->authors)) {
+			foreach ($contextObject->authors->getItems() as $author) {
 				$person = CStaffManager::getPerson($author->id);
 				$authors[] = $person->fio_short;
 			}

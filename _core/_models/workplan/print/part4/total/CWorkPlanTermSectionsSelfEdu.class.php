@@ -23,9 +23,8 @@ class CWorkPlanTermSectionsSelfEdu extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
 		$termSectionsData = new CArrayList();
-        foreach ($plan->terms->getItems() as $term) {
+        foreach ($contextObject->terms->getItems() as $term) {
             $query = new CQuery();
             $select = array();
             $select[] = "section.sectionIndex";

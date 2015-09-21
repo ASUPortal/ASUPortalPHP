@@ -23,7 +23,6 @@ class CWorkPlanAdditionalSupplyPrint extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
 		$result = array();
         $set = new CRecordSet();
         $query = new CQuery();
@@ -31,7 +30,7 @@ class CWorkPlanAdditionalSupplyPrint extends CAbstractPrintClassField {
         $query->select("t.*")
 	        ->from(TABLE_WORK_PLAN_ADDITIONAL_SUPPLY." as t")
 	        ->order("t.id asc")
-	        ->condition("plan_id=".$plan->getId());
+	        ->condition("plan_id=".$contextObject->getId());
         $objects = new CArrayList();
         foreach ($set->getItems() as $ar) {
         	$object = new CWorkPlanAdditionalSupply($ar);

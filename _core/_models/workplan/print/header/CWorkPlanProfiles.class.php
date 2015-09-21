@@ -23,10 +23,9 @@ class CWorkPlanProfiles extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
 		$profiles = array();
-		if (!is_null($plan->profiles)) {
-			foreach ($plan->profiles->getItems() as $profil) {
+		if (!is_null($contextObject->profiles)) {
+			foreach ($contextObject->profiles->getItems() as $profil) {
 				$profiles[] = CTaxonomyManager::getTerm($profil->id)->name;
 			}
 		}

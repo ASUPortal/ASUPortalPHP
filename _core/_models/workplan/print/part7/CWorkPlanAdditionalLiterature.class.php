@@ -23,7 +23,6 @@ class CWorkPlanAdditionalLiterature extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
 		$result = array();
         $set = new CRecordSet();
         $query = new CQuery();
@@ -31,7 +30,7 @@ class CWorkPlanAdditionalLiterature extends CAbstractPrintClassField {
         $query->select("t.*")
 	        ->from(TABLE_WORK_PLAN_LITERATURE." as t")
 	        ->order("t.id asc")
-	        ->condition("plan_id=".$plan->getId()." AND type=2");
+	        ->condition("plan_id=".$contextObject->getId()." AND type=2");
         $objects = new CArrayList();
         foreach ($set->getItems() as $ar) {
         	$object = new CWorkPlanLiterature($ar);

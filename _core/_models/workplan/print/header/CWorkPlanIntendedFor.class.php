@@ -23,8 +23,7 @@ class CWorkPlanIntendedFor extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-		$result = $plan->intended_for;
+		$result = $contextObject->intended_for;
         return $result;
     }
 }

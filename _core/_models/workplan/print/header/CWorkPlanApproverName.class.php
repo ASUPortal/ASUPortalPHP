@@ -23,8 +23,7 @@ class CWorkPlanApproverName extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-		$result = $plan->approver_name;
+		$result = $contextObject->approver_name;
         return $result;
     }
 }
