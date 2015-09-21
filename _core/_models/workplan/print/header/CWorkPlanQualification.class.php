@@ -23,9 +23,8 @@ class CWorkPlanQualification extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-		if (!is_null($plan->qualification_id)) {
-			$result = CTaxonomyManager::getTerm($plan->qualification_id)->name;
+		if (!is_null($contextObject->qualification_id)) {
+			$result = CTaxonomyManager::getTerm($contextObject->qualification_id)->name;
 		}
         return $result;
     }

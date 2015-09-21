@@ -23,8 +23,7 @@ class CWorkPlanProjectDescription extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-		$result = $plan->project_description;
+		$result = $contextObject->project_description;
         return $result;
     }
 }

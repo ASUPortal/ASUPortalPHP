@@ -23,9 +23,8 @@ class CWorkPlanGoals extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
 		$items = array();
-		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_GOALS, "plan_id = ".$plan->getId())->getItems() as $ar) {
+		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_GOALS, "plan_id = ".$contextObject->getId())->getItems() as $ar) {
 			$item = new CWorkPlanGoal($ar);
 			$items[] = $item->goal;
 		}

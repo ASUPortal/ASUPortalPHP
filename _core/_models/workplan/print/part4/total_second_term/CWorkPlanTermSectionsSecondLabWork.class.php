@@ -23,15 +23,14 @@ class CWorkPlanTermSectionsSecondLabWork extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-		if (!is_null($plan->terms)) {
+		if (!is_null($contextObject->terms)) {
         	$terms = array();
-        	foreach ($plan->terms->getItems() as $term) {
+        	foreach ($contextObject->terms->getItems() as $term) {
         		$terms[] = $term->number;
         	}
         }
 		$termSectionsData = new CArrayList();
-        foreach ($plan->terms->getItems() as $term) {
+        foreach ($contextObject->terms->getItems() as $term) {
             $query = new CQuery();
             $select = array();
             $select[] = "section.sectionIndex";

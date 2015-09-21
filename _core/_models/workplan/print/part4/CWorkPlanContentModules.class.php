@@ -24,9 +24,8 @@ class CWorkPlanContentModules extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = array();
-        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-        if (!is_null($plan->modules)) {
-        	foreach ($plan->modules->getItems() as $module) {
+        if (!is_null($contextObject->modules)) {
+        	foreach ($contextObject->modules->getItems() as $module) {
         		if (!is_null($module->sections)) {
         			foreach ($module->sections->getItems() as $row) {
         				$dataRow = array();

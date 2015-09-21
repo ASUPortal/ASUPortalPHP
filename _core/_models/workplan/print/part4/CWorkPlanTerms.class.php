@@ -24,10 +24,9 @@ class CWorkPlanTerms extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = array();
-        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-        if (!is_null($plan->terms)) {
+        if (!is_null($contextObject->terms)) {
         	$arr = array(1);
-        	foreach ($plan->terms->getItems() as $term) {
+        	foreach ($contextObject->terms->getItems() as $term) {
         		$arr[] = $term->number." семестр";
         	}
         	$result[] = $arr;

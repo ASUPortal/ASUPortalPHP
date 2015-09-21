@@ -23,11 +23,10 @@ class CWorkPlanTotalHours extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
         $terms = array();
         $terms[] = "term.name";
         $termIds = array();
-        foreach ($plan->terms->getItems() as $term) {
+        foreach ($contextObject->terms->getItems() as $term) {
         	$termIds[] = $term->getId();
         	$terms[] = "sum(if(l.term_id = ".$term->getId().", l.value, 0)) as t_".$term->getId();
         }
@@ -40,7 +39,7 @@ class CWorkPlanTotalHours extends CAbstractPrintClassField {
 	        ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
 	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
 	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_MODULES." as module", "section.module_id = module.id")
-	        ->condition("module.plan_id = ".$plan->getId())
+	        ->condition("module.plan_id = ".$contextObject->getId())
 	        ->group("l.load_type_id")
 	        ->order("term.name");
         $objects = $query->execute();

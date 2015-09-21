@@ -24,8 +24,7 @@ class CWorkPlanSelfEdu extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = array();
-        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-        foreach ($plan->selfEducations->getItems() as $row) {
+        foreach ($contextObject->selfEducations->getItems() as $row) {
         	$dataRow = array();
         	$dataRow[0] = $row->load->section->sectionIndex;
         	$dataRow[1] = $row->question_title;

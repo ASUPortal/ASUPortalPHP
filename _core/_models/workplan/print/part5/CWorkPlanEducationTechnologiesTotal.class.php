@@ -24,9 +24,8 @@ class CWorkPlanEducationTechnologiesTotal extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = array();
-        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
         $result = 0;
-        foreach ($plan->getTechnologies()->getItems() as $row) {
+        foreach ($contextObject->getTechnologies()->getItems() as $row) {
         	$result += $row->value;
         }
         return $result;

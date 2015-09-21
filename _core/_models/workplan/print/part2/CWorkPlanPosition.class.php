@@ -23,8 +23,7 @@ class CWorkPlanPosition extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-		$result = $plan->position;
+		$result = $contextObject->position;
         return $result;
     }
 }

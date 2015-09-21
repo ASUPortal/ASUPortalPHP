@@ -23,7 +23,6 @@ class CWorkPlanMarkTypes extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
 		$result = array();
         $set = new CRecordSet();
         $query = new CQuery();
@@ -31,7 +30,7 @@ class CWorkPlanMarkTypes extends CAbstractPrintClassField {
         $query->select("t.*")
 	        ->from(TABLE_WORK_PLAN_MARK_TYPES." as t")
 	        ->order("t.id asc")
-	        ->condition("plan_id=".$plan->getId());
+	        ->condition("plan_id=".$contextObject->getId());
         $objects = new CArrayList();
         foreach ($set->getItems() as $ar) {
         	$object = new CWorkPlanMarkType($ar);

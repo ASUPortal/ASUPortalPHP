@@ -24,8 +24,7 @@ class CWorkPlanPractices extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = array();
-        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-        foreach ($plan->getPractices()->getItems() as $row) {
+        foreach ($contextObject->getPractices()->getItems() as $row) {
         	$dataRow = array();
         	$dataRow[0] = count($result) + 1;
         	$dataRow[1] = $row->load->section->sectionIndex;

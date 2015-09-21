@@ -23,9 +23,8 @@ class CWorkPlanCompetentionsOK extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
 		$items = array();
-		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_COMPETENTIONS, "plan_id = ".$plan->getId())->getItems() as $ar) {
+		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_COMPETENTIONS, "plan_id = ".$contextObject->getId())->getItems() as $ar) {
 			$item = new CWorkPlanCompetention($ar);
 			if (!is_null($item->competention)) {
 				if (strpos($item->competention->getValue(), "(ОК-") !== false) {

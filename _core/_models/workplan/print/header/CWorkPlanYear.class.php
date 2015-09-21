@@ -23,8 +23,7 @@ class CWorkPlanYear extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-		$result = $plan->year;
+		$result = $contextObject->year;
         return $result;
     }
 }

@@ -23,8 +23,7 @@ class CWorkPlanEducationTechnologiesDescription extends CAbstractPrintClassField
 
     public function execute($contextObject)
     {
-		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-		$result = $plan->education_technologies;
+		$result = $contextObject->education_technologies;
         return $result;
     }
 }
