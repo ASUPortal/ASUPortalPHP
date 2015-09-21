@@ -26,7 +26,7 @@ class CWorkPlanProfiles extends CAbstractPrintClassField {
 		$profiles = array();
 		if (!is_null($contextObject->profiles)) {
 			foreach ($contextObject->profiles->getItems() as $profil) {
-				$profiles[] = CTaxonomyManager::getTerm($profil->id)->name;
+				$profiles[] = $profil->getValue();
 			}
 		}
 		$result = implode(", ", $profiles);
