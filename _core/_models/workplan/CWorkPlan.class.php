@@ -127,6 +127,13 @@ class CWorkPlan extends CActiveModel {
                 "storageTable" => TABLE_WORK_PLAN_SELFEDUCATION,
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanSelfEducationBlock"
+            ),
+            "department" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_department",
+                "storageField" => "department_id",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getTerm"
             )
         );
     }
