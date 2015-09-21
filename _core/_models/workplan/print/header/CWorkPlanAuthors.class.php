@@ -26,13 +26,12 @@ class CWorkPlanAuthors extends CAbstractPrintClassField {
 		$authors = array();
 		if (!is_null($contextObject->authors)) {
 			foreach ($contextObject->authors->getItems() as $author) {
-				$person = CStaffManager::getPerson($author->id);
-				$persons = $person->fio_short;
-				if (!is_null($person->degree)) {
-					$persons .= ", ".$person->degree->name_short;
+				$persons = $author->getNameShort();
+				if (!is_null($author->degree)) {
+					$persons .= ", ".$author->degree->getValue();
 				}
-				if (!is_null($person->title)) {
-					$persons .= ", ".$person->title->getValue();
+				if (!is_null($author->title)) {
+					$persons .= ", ".$author->title->getValue();
 				}
 				$authors[] = $persons;
 			}

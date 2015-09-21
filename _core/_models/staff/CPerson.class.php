@@ -338,6 +338,14 @@ class CPerson extends CActiveModel{
     public function getName() {
         return (string) $this->getRecord()->getItemValue("fio");
     }
+    /**
+     * Краткое имя сотрудника
+     *
+     * @return string
+     */
+    public function getNameShort() {
+		return (string) $this->getRecord()->getItemValue("fio_short");
+    }
     public function getDisplayName() {
         if (!CSettingsManager::getSettingValue("hide_personal_data")) {
             return $this->getName();
