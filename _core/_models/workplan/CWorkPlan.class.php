@@ -141,6 +141,13 @@ class CWorkPlan extends CActiveModel {
         		"storageField" => "direction_id",
         		"managerClass" => "CTaxonomyManager",
         		"managerGetObject" => "getTerm"
+        	),
+        	"educationForm" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_educationForm",
+        		"storageField" => "education_form_id",
+        		"managerClass" => "CTaxonomyManager",
+        		"managerGetObject" => "getEductionForm"
         	)
         );
     }
