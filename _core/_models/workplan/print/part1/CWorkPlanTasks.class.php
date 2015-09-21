@@ -18,17 +18,20 @@ class CWorkPlanTasks extends CAbstractPrintClassField {
 
     public function getFieldType()
     {
-        return self::FIELD_TEXT;
+        return self::FIELD_TABLE;
     }
 
     public function execute($contextObject)
     {
-		$items = array();
-		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_TASKS, "plan_id = ".$contextObject->getId())->getItems() as $ar) {
-			$item = new CWorkPlanTask($ar);
-			$items[] = $item->task;
-		}
-		$result = implode("; ", $items);
-        return $result;
+    	$result = array();
+    	if (!is_null($contextObject->tasks)) {
+    		foreach ($contextObject->tasks->getItems() as $item) {
+    			$dataRow = array();
+    			$dataRow[0] = "•";
+    			$dataRow[1] = $item->task;
+    			$result[] = $dataRow;
+    		}
+    	}
+    	return $result;
     }
 }
