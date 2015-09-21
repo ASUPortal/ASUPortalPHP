@@ -18,19 +18,20 @@ class CWorkPlanDisciplinesAfter extends CAbstractPrintClassField {
 
     public function getFieldType()
     {
-        return self::FIELD_TEXT;
+        return self::FIELD_TABLE;
     }
 
     public function execute($contextObject)
     {
-		$disciplines = array();
-		if (!is_null($contextObject->disciplinesAfter)) {
-			foreach ($contextObject->disciplinesAfter->getItems() as $discipline) {
-				$discipline = CTaxonomyManager::getDiscipline($discipline->id);
-				$disciplines[] = $discipline->name;
-			}
-		}
-		$result = implode("; ", $disciplines);
-        return $result;
+    	$result = array();
+    	if (!is_null($contextObject->disciplinesAfter)) {
+    		foreach ($contextObject->disciplinesAfter->getItems() as $item) {
+    			$dataRow = array();
+    			$dataRow[0] = "•";
+    			$dataRow[1] = $item->name;
+    			$result[] = $dataRow;
+    		}
+    	}
+    	return $result;
     }
 }
