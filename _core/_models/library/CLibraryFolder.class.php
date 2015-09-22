@@ -79,7 +79,7 @@ class CLibraryFolder{
 		$query->select("doc.user_id")
 			->from(TABLE_LIBRARY_DOCUMENTS." as doc")
 			->innerJoin(TABLE_LIBRARY_FILES." as file", "doc.nameFolder = file.nameFolder")
-			->condition("doc.nameFolder = ".$key);
+			->condition('doc.nameFolder = "'.$key.'"');
 		$materialsCount = $query->execute()->getCount();
         return $materialsCount;
     }
