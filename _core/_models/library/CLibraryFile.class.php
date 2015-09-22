@@ -34,7 +34,7 @@ class CLibraryFile extends CActiveModel{
     	return array(
     			'nameFile' => array(
     					'type'  => FIELD_UPLOADABLE,
-    					'upload_dir' => CORE_CWD.CORE_DS."library".CORE_DS.CRequest::getInt("id").CORE_DS
+    					'upload_dir' => CORE_CWD.CORE_DS."library".CORE_DS.CRequest::getString("id").CORE_DS
     			)
     	);
     }

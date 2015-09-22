@@ -167,17 +167,7 @@ class CPublicLibraryController extends CBaseController{
     	$this->renderView("_library/public/public.view.tpl");
     }
     public function actionAddDocument() {
-    	$query = new CQuery();
-    	$query->select("doc.*")
-	    	->from(TABLE_LIBRARY_DOCUMENTS." as doc");
-    	foreach ($query->execute()->getItems() as $ar) {
-    		$document = new CLibraryDocument(new CActiveRecord($ar));
-    		$nameFolder=0;
-    		if ($document->nameFolder > $nameFolder) {
-    			$nameFolder=$document->nameFolder;
-    		}
-    		$nameFolder++;
-    	}
+    	$nameFolder = uniqid();
     	$document = new CLibraryDocument();
     	if (!is_null(CRequest::getFilter("author"))) {
     		$document->user_id = CRequest::getFilter("author");
@@ -295,7 +285,7 @@ class CPublicLibraryController extends CBaseController{
     				$this->addActionsMenuItem(array(
     					array(
     						"title" => "Добавить файл",
-    						"link" => WEB_ROOT."_modules/_library/index.php?action=addFile&id=".CRequest::getInt("id")."&filter=author:".CRequest::getFilter("author"),
+    						"link" => WEB_ROOT."_modules/_library/index.php?action=addFile&id=".CRequest::getString("id")."&filter=author:".CRequest::getFilter("author"),
     						"icon" => "actions/list-add.png"
     				)
     			)
@@ -313,7 +303,7 @@ class CPublicLibraryController extends CBaseController{
     		$file->user_id = CSession::getCurrentUser()->getId();
     		$author = CSession::getCurrentUser()->getId();
     	}
-    	$file->nameFolder = CRequest::getInt("id");
+    	$file->nameFolder = CRequest::getString("id");
     	$file->date_time = date("Y-m-d H:i:s");
 		$this->addActionsMenuItem(array(
 			array(
