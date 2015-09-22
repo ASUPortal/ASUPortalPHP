@@ -167,7 +167,10 @@ class CPublicLibraryController extends CBaseController{
     	$this->renderView("_library/public/public.view.tpl");
     }
     public function actionAddDocument() {
-    	$nameFolder = uniqid();
+    	do {
+    		$nameFolder = uniqid();
+    		$file = CORE_CWD.CORE_DS."library/".$nameFolder;
+    	} while (is_dir($file));
     	$document = new CLibraryDocument();
     	if (!is_null(CRequest::getFilter("author"))) {
     		$document->user_id = CRequest::getFilter("author");
@@ -207,14 +210,16 @@ class CPublicLibraryController extends CBaseController{
     	$document = CLibraryManager::getDocument(CRequest::getInt("id"));
     	if (!is_null($document)) {
     		$directory = CORE_CWD.CORE_DS."library".CORE_DS.$document->nameFolder.CORE_DS;
-    		$handle = opendir($directory);
-    		while (false !== ($file = readdir($handle))) {
-    			if (is_file($directory.CORE_DS.$file)) {
-    				unlink($directory.CORE_DS.$file);
+    		if (is_dir($directory)) {
+    			$handle = opendir($directory);
+    			while (false !== ($file = readdir($handle))) {
+    				if (is_file($directory.CORE_DS.$file)) {
+    					unlink($directory.CORE_DS.$file);
+    				}
     			}
+    			closedir($handle);
+    			rmdir($directory);
     		}
-    		closedir($handle);
-    		rmdir($directory);
     		$document->remove();
     	}
     	$this->redirect("?action=view");
