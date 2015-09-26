@@ -1,5 +1,13 @@
 <h3>4. Содержание и структура дисциплины (модуля)</h3>
 
+<div class="control-group">
+    {CHtml::activeLabel("module_id", $plan)}
+    <div class="controls">
+        {CHtml::activeLookup("module_id", $plan, "class.CSearchCatalogWorkPlanDisciplineModules", false, ["plan_id" => $plan->getId()])}
+        {CHtml::error("module_id", $plan)}
+    </div>
+</div>
+
 <h4>Семестры, в которых изучается дисциплина</h4>
 
 {CHtml::activeComponent("workplanterms.php?plan_id={$plan->getId()}", $plan)}

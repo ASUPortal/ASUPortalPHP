@@ -1,0 +1,1 @@
+ALTER TABLE `pl_corriculum_workplans` ADD `module_id` INT NOT NULL , ADD INDEX (`module_id`) ;

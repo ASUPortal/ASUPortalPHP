@@ -180,7 +180,8 @@ class CWorkPlan extends CActiveModel {
             "education_technologies" => "Образовательные технологии",
             "hardware" => "Скобяные изделия",
             "is_archive" => "В архиве",
-            "discipline_id" => "Дисциплина"
+            "discipline_id" => "Дисциплина",
+            "module_id" => "Модуль"
         );
     }
 
