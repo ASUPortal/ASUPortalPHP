@@ -64,7 +64,21 @@ class CWorkPlanCompetention extends CActiveModel{
                 "rightKey" => "term_id",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
-            )
+            ),
+        	"level" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_level",
+        		"storageField" => "level_id",
+        		"managerClass" => "CTaxonomyManager",
+        		"managerGetObject" => "getTerm"
+        	),
+        	"discipline" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_discipline",
+        		"storageField" => "discipline_id",
+        		"managerClass" => "CTaxonomyManager",
+        		"managerGetObject" => "getDiscipline"
+        	)
         );
     }
 
@@ -82,7 +96,9 @@ class CWorkPlanCompetention extends CActiveModel{
             "knowledges" => "Знания",
             "skills" => "Умения",
             "experiences" => "Навыки",
-            "canUse" => "Умеет использовать"
+            "canUse" => "Умеет использовать",
+            "level_id" => "Уровень освоения",
+            "discipline_id" => "Дисциплина, сформировавшая компетенцию"
         );
     }
 
