@@ -29,6 +29,18 @@ class CCorriculumDisciplineCompetention extends CActiveModel {
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
             ),
+        	"level" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_level",
+        		"storageField" => "level_id",
+        		"managerClass" => "CTaxonomyManager",
+        		"managerGetObject" => "getTerm"
+        	)
         );
+    }
+    public function attributeLabels() {
+    	return array(
+    			"level_id" => "Уровень освоения"
+    	);
     }
 }

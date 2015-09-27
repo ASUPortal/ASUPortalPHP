@@ -1,3 +1,15 @@
+<script>
+	jQuery(document).ready(function(){
+		jQuery("#date").datepicker({
+			dateFormat: "dd.mm.yy",
+			showOn: "button",
+            buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
+            buttonImageOnly: true,
+            changeYear: true
+		});
+	});
+</script>
+
 <div class="control-group">
     {CHtml::activeLabel("title_display", $plan)}
     <div class="controls">
@@ -47,6 +59,14 @@
 </div>
 
 <div class="control-group">
+    {CHtml::activeLabel("level_id", $plan)}
+    <div class="controls">
+        {CHtml::activeLookup("level_id", $plan, "corriculum_level_of_training", false, array(), true)}
+        {CHtml::error("level_id", $plan)}
+    </div>
+</div>
+
+<div class="control-group">
     {CHtml::activeLabel("direction_id", $plan)}
     <div class="controls">
         {CHtml::activeLookup("direction_id", $plan, "corriculum_speciality_directions")}
@@ -57,7 +77,7 @@
 <div class="control-group">
     {CHtml::activeLabel("profiles", $plan)}
     <div class="controls">
-        {CHtml::activeLookup("profiles", $plan, "corriculum_profiles", true)}
+        {CHtml::activeLookup("profiles", $plan, "corriculum_profiles", true, array(), true)}
         {CHtml::error("profiles", $plan)}
     </div>
 </div>
@@ -76,6 +96,14 @@
         {CHtml::activeLookup("education_form_id", $plan, "study_forms")}
         {CHtml::error("education_form_id", $plan)}
     </div>
+</div>
+
+<div class="control-group">
+	{CHtml::activeLabel("date", $plan)}
+	<div class="controls">
+		{CHtml::activeTextField("date", $plan, "date", "", 'style="width: 100px;"')}
+		{CHtml::error("date", $plan)}
+	</div>
 </div>
 
 <div class="control-group">

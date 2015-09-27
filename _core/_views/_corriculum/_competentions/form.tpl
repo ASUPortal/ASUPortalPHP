@@ -12,6 +12,14 @@
             {CHtml::error("competention_id", $object)}
         </div>
     </div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("level_id", $object)}
+        <div class="controls">
+            {CHtml::activeLookup("level_id", $object, "corriculum_level_of_development", false, array(), true)}
+            {CHtml::error("level_id", $object)}
+        </div>
+    </div>
 
     <div class="control-group">
         {CHtml::activeLabel("knowledge_id", $object)}

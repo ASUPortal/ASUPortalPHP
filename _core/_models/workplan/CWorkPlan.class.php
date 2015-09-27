@@ -155,6 +155,13 @@ class CWorkPlan extends CActiveModel {
         		"storageField" => "qualification_id",
         		"managerClass" => "CTaxonomyManager",
         		"managerGetObject" => "getTerm"
+        	),
+        	"level" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_level",
+        		"storageField" => "level_id",
+        		"managerClass" => "CTaxonomyManager",
+        		"managerGetObject" => "getTerm"
         	)
         );
     }
@@ -181,7 +188,9 @@ class CWorkPlan extends CActiveModel {
             "hardware" => "Скобяные изделия",
             "is_archive" => "В архиве",
             "discipline_id" => "Дисциплина",
-            "module_id" => "Модуль"
+            "module_id" => "Модуль",
+            "level_id" => "Уровень подготовки",
+            "date" => "Дата формирования"
         );
     }
 
