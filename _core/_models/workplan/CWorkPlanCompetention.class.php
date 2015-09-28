@@ -83,11 +83,21 @@ class CWorkPlanCompetention extends CActiveModel{
     }
 
     protected function validationRules() {
-        return array(
-            "selected" => array(
-                "competention_id"
-            )
-        );
+    	if ($this->type != 0) {
+    		return array(
+    				"selected" => array(
+    						"competention_id",
+    						"level_id",
+    						"discipline_id"
+    				)
+    		);
+    	} else {
+    		return array(
+    				"selected" => array(
+    						"competention_id"
+    				)
+    		);
+    	}
     }
 
     public function attributeLabels() {

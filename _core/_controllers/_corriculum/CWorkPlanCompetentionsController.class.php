@@ -44,11 +44,7 @@ class CWorkPlanCompetentionsController extends CBaseController{
         /**
          * Отображение представления
          */
-        if (CRequest::getInt("type") == 0) {
-        	$this->renderView("_corriculum/_workplan/competentions/index.tpl");
-        } else {
-        	$this->renderView("_corriculum/_workplan/competentions/indexInOut.tpl");
-        }
+        $this->renderView("_corriculum/_workplan/competentions/index.tpl");
     }
     public function actionAdd() {
         $object = new CWorkPlanCompetention();
@@ -66,11 +62,7 @@ class CWorkPlanCompetentionsController extends CBaseController{
         /**
          * Отображение представления
          */
-        if (CRequest::getInt("type") == 0) {
-        	$this->renderView("_corriculum/_workplan/competentions/add.tpl");
-        } else {
-        	$this->renderView("_corriculum/_workplan/competentions/addInOut.tpl");
-        }
+        $this->renderView("_corriculum/_workplan/competentions/add.tpl");
     }
     public function actionEdit() {
         $object = CBaseManager::getWorkPlanCompetention(CRequest::getInt("id"));
@@ -86,11 +78,7 @@ class CWorkPlanCompetentionsController extends CBaseController{
         /**
          * Отображение представления
          */
-        if ($object->type == 0) {
-        	$this->renderView("_corriculum/_workplan/competentions/edit.tpl");
-        } else {
-        	$this->renderView("_corriculum/_workplan/competentions/editInOut.tpl");
-        }
+        $this->renderView("_corriculum/_workplan/competentions/edit.tpl");
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanCompetention(CRequest::getInt("id"));
@@ -112,10 +100,6 @@ class CWorkPlanCompetentionsController extends CBaseController{
             return true;
         }
         $this->setData("object", $object);
-        if ($object->type == 0) {
-        	$this->renderView("_corriculum/_workplan/competentions/edit.tpl");
-        } else {
-        	$this->renderView("_corriculum/_workplan/competentions/editInOut.tpl");
-        }
+        $this->renderView("_corriculum/_workplan/competentions/edit.tpl");
     }
 }
