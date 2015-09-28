@@ -416,13 +416,15 @@ class CPerson extends CActiveModel{
      * @return CUser
      */
     public function getUser() {
-        if (is_null($this->_user)) {
-            foreach (CActiveRecordProvider::getWithCondition(TABLE_USERS, "kadri_id=".$this->getId())->getItems() as $item) {
-                $user = new CUser($item);
-                $this->_user = $user;
-                break;
-            }
-        }
+    	if (!is_null($this->getId())) {
+    		if (is_null($this->_user)) {
+    			foreach (CActiveRecordProvider::getWithCondition(TABLE_USERS, "kadri_id=".$this->getId())->getItems() as $item) {
+    				$user = new CUser($item);
+    				$this->_user = $user;
+    				break;
+    			}
+    		}
+    	}
         return $this->_user;
     }
     /**
