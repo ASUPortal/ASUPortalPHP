@@ -3,6 +3,7 @@
         <th>#</th>
         <th>&nbsp;</th>
         <th>Компетенция</th>
+        <th>Уровень освоения</th>
         <th>ЗУН</th>
     </tr>
     {foreach $discipline->competentions->getItems() as $comp}
@@ -12,6 +13,11 @@
             <td>
                 {if !is_null($comp->competention)}
                     <a href="competentions.php?action=edit&id={$comp->getId()}">{$comp->competention->getValue()}</a>
+                {/if}
+            </td>
+            <td>
+                {if !is_null($comp->level)}
+                    {$comp->level->getValue()}
                 {/if}
             </td>
             <td>

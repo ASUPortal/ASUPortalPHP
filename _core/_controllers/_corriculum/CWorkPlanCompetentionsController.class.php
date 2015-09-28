@@ -25,7 +25,7 @@ class CWorkPlanCompetentionsController extends CBaseController{
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_COMPETENTIONS." as t")
             ->order("t.id asc")
-            ->condition("plan_id=".CRequest::getInt("plan_id"));
+            ->condition("plan_id=".CRequest::getInt("plan_id")." AND type=".CRequest::getInt("type"));
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanCompetention($ar);
@@ -38,7 +38,7 @@ class CWorkPlanCompetentionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Добавить компетенцию",
-            "link" => "workplancompetentions.php?action=add&id=".CRequest::getInt("plan_id"),
+            "link" => "workplancompetentions.php?action=add&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
             "icon" => "actions/list-add.png"
         ));
         /**
@@ -49,13 +49,14 @@ class CWorkPlanCompetentionsController extends CBaseController{
     public function actionAdd() {
         $object = new CWorkPlanCompetention();
         $object->plan_id = CRequest::getArray("id");
+        $object->type = CRequest::getInt("type");
         $this->setData("object", $object);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancompetentions.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplancompetentions.php?action=index&plan_id=".$object->plan_id."&type=".$object->type,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -71,7 +72,7 @@ class CWorkPlanCompetentionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancompetentions.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplancompetentions.php?action=index&plan_id=".$object->plan_id."&type=".$object->type,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -82,8 +83,9 @@ class CWorkPlanCompetentionsController extends CBaseController{
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanCompetention(CRequest::getInt("id"));
         $plan = $object->plan_id;
+        $type = $object->type;
         $object->remove();
-        $this->redirect("workplancompetentions.php?action=index&plan_id=".$plan);
+        $this->redirect("workplancompetentions.php?action=index&plan_id=".$plan."&type=".$type);
     }
     public function actionSave() {
         $object = new CWorkPlanCompetention();
@@ -93,7 +95,7 @@ class CWorkPlanCompetentionsController extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("workplancompetentions.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplancompetentions.php?action=index&plan_id=".$object->plan_id);
+                $this->redirect("workplancompetentions.php?action=index&plan_id=".$object->plan_id."&type=".$object->type);
             }
             return true;
         }
