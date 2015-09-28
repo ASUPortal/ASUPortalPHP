@@ -5,9 +5,9 @@
 
     {CHtml::helpForCurrentPage()}
 
-    {include file="_corriculum/_workplan/competentionsInputs/form.tpl"}
+    {include file="_corriculum/_workplan/competentions/formInOut.tpl"}
 {/block}
 
 {block name="asu_right"}
-    {include file="_corriculum/_workplan/competentionsInputs/common.right.tpl"}
+    {include file="_corriculum/_workplan/competentions/common.right.tpl"}
 {/block}

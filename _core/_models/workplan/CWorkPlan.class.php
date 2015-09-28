@@ -190,7 +190,7 @@ class CWorkPlan extends CActiveModel {
             "discipline_id" => "Дисциплина",
             "module_id" => "Модуль",
             "level_id" => "Уровень подготовки",
-            "date" => "Дата формирования"
+            "date_of_formation" => "Дата формирования"
         );
     }
 
@@ -206,7 +206,8 @@ class CWorkPlan extends CActiveModel {
                 "authors",
                 "direction_id",
                 "qualification_id",
-                "education_form_id"
+                "education_form_id",
+                "level_id"
             )
         );
     }

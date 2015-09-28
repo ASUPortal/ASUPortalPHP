@@ -43,4 +43,11 @@ class CCorriculumDisciplineCompetention extends CActiveModel {
     			"level_id" => "Уровень освоения"
     	);
     }
+    protected function validationRules() {
+    	return array(
+    			"selected" => array(
+    				"level_id"
+    			)
+    	);
+    }
 }

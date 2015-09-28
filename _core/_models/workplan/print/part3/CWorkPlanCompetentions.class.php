@@ -26,7 +26,7 @@ class CWorkPlanCompetentions extends CAbstractPrintClassField {
 		$result = array();
         if (!is_null($contextObject->competentions)) {
         	foreach ($contextObject->competentions->getItems() as $item) {
-        		if ($item->discipline_id == 0) {
+        		if ($item->type == 0) {
         			$dataRow = array();
         			$dataRow[0] = count($result) + 1;
 	        		if (!is_null($item->competention)) {

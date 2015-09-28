@@ -25,7 +25,7 @@
                         {/if}
                     </td>
                     <td>{counter}</td>
-                    <td><a href="workplancompetentionsonputs.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
+                    <td><a href="workplancompetentions.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
                     <td>
                     	{if (!is_null($object->competention))}
                     		{$object->competention}
@@ -46,10 +46,10 @@
             </tbody>
         </table>
 
-        {CHtml::paginator($paginator, "workplancompetentionsouts.php?action=index")}
+        {CHtml::paginator($paginator, "workplancompetentions.php?action=index")}
     {/if}
 {/block}
 
 {block name="asu_right"}
-    {include file="_corriculum/_workplan/competentionsOuts/common.right.tpl"}
+    {include file="_corriculum/_workplan/competentions/common.right.tpl"}
 {/block}

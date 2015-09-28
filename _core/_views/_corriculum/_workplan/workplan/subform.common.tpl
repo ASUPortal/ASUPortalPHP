@@ -1,6 +1,6 @@
 <script>
 	jQuery(document).ready(function(){
-		jQuery("#date").datepicker({
+		jQuery("#date_of_formation").datepicker({
 			dateFormat: "dd.mm.yy",
 			showOn: "button",
             buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
@@ -99,10 +99,10 @@
 </div>
 
 <div class="control-group">
-	{CHtml::activeLabel("date", $plan)}
+	{CHtml::activeLabel("date_of_formation", $plan)}
 	<div class="controls">
-		{CHtml::activeTextField("date", $plan, "date", "", 'style="width: 100px;"')}
-		{CHtml::error("date", $plan)}
+		{CHtml::activeTextField("date_of_formation", $plan, "date_of_formation", "", 'style="width: 100px;"')}
+		{CHtml::error("date_of_formation", $plan)}
 	</div>
 </div>
 

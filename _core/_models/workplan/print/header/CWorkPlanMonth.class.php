@@ -23,9 +23,7 @@ class CWorkPlanMonth extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$month = date("m", strtotime($contextObject->date));
-		if ($month > 12 || $month < 1) return FALSE;
-		$aMonth = array('января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря');
-		return $aMonth[$month - 1];
+		$monthNum = date("m", strtotime($contextObject->date));
+		return CUtils::getMonthAsWord($monthNum);
     }
 }
