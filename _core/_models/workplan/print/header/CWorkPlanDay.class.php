@@ -23,7 +23,7 @@ class CWorkPlanDay extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$result = date("d", strtotime($contextObject->date));
+		$result = date("d", strtotime($contextObject->date_of_formation));
         return $result;
     }
 }

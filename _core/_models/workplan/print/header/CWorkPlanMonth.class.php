@@ -23,7 +23,7 @@ class CWorkPlanMonth extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$monthNum = date("m", strtotime($contextObject->date));
+		$monthNum = date("m", strtotime($contextObject->date_of_formation));
 		return CUtils::getMonthAsWord($monthNum);
     }
 }
