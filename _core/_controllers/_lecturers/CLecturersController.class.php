@@ -23,19 +23,19 @@ class CLecturersController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
-    	if (CSettingsManager::getSettingValue("hide_person_data_rule")) {
+    	if (CSettingsManager::getSettingValue("web_root") == "http://asu.ugatu.ac.ru/") {
     		$set = new CRecordSet();
     		$query = new CQuery();
     		$query->select("users.*")
 	    		->from(TABLE_USERS." as users")
 	    		->innerJoin(TABLE_USER_IN_GROUPS." as userGroup", "userGroup.user_id=users.id")
-	    		->condition("userGroup.group_id=1")
+	    		->condition("userGroup.group_id=1 and users.FIO not like '%/_%'ESCAPE'/'")
 	    		->order("users.FIO asc");
     		$queryLetter = new CQuery();
     		$queryLetter->select("users.*, UPPER(left(users.FIO,1)) as name, count(*) as cnt")
 	    		->from(TABLE_USERS." as users")
 	    		->innerJoin(TABLE_USER_IN_GROUPS." as userGroup", "userGroup.user_id=users.id")
-	    		->condition("userGroup.group_id=1 ")
+	    		->condition("userGroup.group_id=1 and users.FIO not like '%/_%'ESCAPE'/' ")
 	    		->group(1)
 	    		->order("users.FIO asc");
     		$resRus = array();
@@ -70,14 +70,14 @@ class CLecturersController extends CBaseController {
 	    		->from(TABLE_PERSON." as person")
 	    		->innerJoin(TABLE_USERS." as users", "users.kadri_id=person.id")
 	    		->innerJoin(TABLE_USER_IN_GROUPS." as userGroup", "userGroup.user_id=users.id")
-	    		->condition("userGroup.group_id=1")
+	    		->condition("userGroup.group_id=1 and person.fio not like '%/_%'ESCAPE'/'")
 	    		->order("person.fio asc");
     		$queryLetter = new CQuery();
     		$queryLetter->select("person.*, UPPER(left(person.fio,1)) as name, count(*) as cnt")
 	    		->from(TABLE_PERSON." as person")
 	    		->innerJoin(TABLE_USERS." as users", "users.kadri_id=person.id")
 	    		->innerJoin(TABLE_USER_IN_GROUPS." as userGroup", "userGroup.user_id=users.id")
-	    		->condition("userGroup.group_id=1 ")
+	    		->condition("userGroup.group_id=1 and person.fio not like '%/_%'ESCAPE'/' ")
 	    		->group(1)
 	    		->order("person.fio asc");
     		$resRus = array();
@@ -132,7 +132,7 @@ class CLecturersController extends CBaseController {
 				"icon" => "actions/edit-undo.png"
 			)
 		));
-    	if (CSettingsManager::getSettingValue("hide_person_data_rule")) {
+    	if (CSettingsManager::getSettingValue("web_root") == "http://asu.ugatu.ac.ru/") {
     		$lect = CBaseManager::getLecturerOuter(CRequest::getInt("id"));
     		$this->setData("lect", $lect);
     		$this->renderView("__public/_lecturers/viewOuter.tpl");
@@ -149,7 +149,7 @@ class CLecturersController extends CBaseController {
 		/**
     	 * Поиск по ФИО преподавателя
     	 */
-        if (CSettingsManager::getSettingValue("hide_person_data_rule")) {
+        if (CSettingsManager::getSettingValue("web_root") == "http://asu.ugatu.ac.ru/") {
         	$query = new CQuery();
         	$query->select("distinct(users.id) as id, users.FIO as name")
 	        	->from(TABLE_USERS." as users")
