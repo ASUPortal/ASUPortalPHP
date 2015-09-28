@@ -23,7 +23,7 @@ class CLecturersController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
-    	if (CSettingsManager::getSettingValue("web_root") == "http://asu.ugatu.ac.ru/") {
+    	if (CSettingsManager::getSettingValue("lecturers_from_users")) {
     		$set = new CRecordSet();
     		$query = new CQuery();
     		$query->select("users.*")
@@ -132,7 +132,7 @@ class CLecturersController extends CBaseController {
 				"icon" => "actions/edit-undo.png"
 			)
 		));
-    	if (CSettingsManager::getSettingValue("web_root") == "http://asu.ugatu.ac.ru/") {
+    	if (CSettingsManager::getSettingValue("lecturers_from_users")) {
     		$lect = CBaseManager::getLecturerOuter(CRequest::getInt("id"));
     		$this->setData("lect", $lect);
     		$this->renderView("__public/_lecturers/viewOuter.tpl");
@@ -149,7 +149,7 @@ class CLecturersController extends CBaseController {
 		/**
     	 * Поиск по ФИО преподавателя
     	 */
-        if (CSettingsManager::getSettingValue("web_root") == "http://asu.ugatu.ac.ru/") {
+        if (CSettingsManager::getSettingValue("lecturers_from_users")) {
         	$query = new CQuery();
         	$query->select("distinct(users.id) as id, users.FIO as name")
 	        	->from(TABLE_USERS." as users")
