@@ -1,6 +1,8 @@
 {if ($form->person->getBiographies()->getCount() == 0)}
-		У Вас ещё не заполнена биография!
+	У Вас ещё не заполнена биография!
+	{if !is_null($form->person->getUser())}
 		<div><input name="" onclick="location.href='{$web_root}_modules/_biography/index.php?action=addBiography&user_id={$form->person->getUserId()}'" type="button" class="btn" value="Добавить"></div>
+	{/if}
 {else}
         <table class="table table-striped table-bordered table-hover table-condensed">
 			<tr>
