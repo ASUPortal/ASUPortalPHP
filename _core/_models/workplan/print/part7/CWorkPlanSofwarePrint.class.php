@@ -24,23 +24,13 @@ class CWorkPlanSofwarePrint extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
 		$result = array();
-        $set = new CRecordSet();
-        $query = new CQuery();
-        $set->setQuery($query);
-        $query->select("t.*")
-	        ->from(TABLE_WORK_PLAN_SOFTWARE." as t")
-	        ->order("t.id asc")
-	        ->condition("plan_id=".$contextObject->getId());
-        $objects = new CArrayList();
-        foreach ($set->getItems() as $ar) {
-        	$object = new CWorkPlanSoftware($ar);
-        	$objects->add($object->getId(), $object);
-        }
-        foreach ($objects->getItems() as $row) {
-        	$dataRow = array();
-        	$dataRow[0] = (count($result) + 1).".";
-        	$dataRow[1] = $row->software;
-        	$result[] = $dataRow;
+        if (!is_null($contextObject->sofware)) {
+        	foreach ($contextObject->sofware->getItems() as $row) {
+	        	$dataRow = array();
+	        	$dataRow[0] = (count($result) + 1).".";
+	        	$dataRow[1] = $row->software;
+	        	$result[] = $dataRow;
+        	}
         }
         return $result;
     }
