@@ -162,6 +162,12 @@ class CWorkPlan extends CActiveModel {
         		"storageField" => "level_id",
         		"managerClass" => "CTaxonomyManager",
         		"managerGetObject" => "getTerm"
+        	),
+        	"fundMarkTypes" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_FUND_MARK_TYPES,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanFundMarkType"
         	)
         );
     }
