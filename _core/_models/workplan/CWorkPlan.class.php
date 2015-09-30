@@ -204,6 +204,12 @@ class CWorkPlan extends CActiveModel {
         		"storageTable" => TABLE_WORK_PLAN_SOFTWARE,
         		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
         		"targetClass" => "CWorkPlanSoftware"
+        	),
+        	"additionalSupply" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_ADDITIONAL_SUPPLY,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanAdditionalSupply"
         	)
         );
     }
