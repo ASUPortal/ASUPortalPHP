@@ -23,7 +23,7 @@ class CLecturersController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
-    	if (CSettingsManager::getSettingValue("lecturers_from_users")) {
+    	if (CSettingsManager::getSettingValue("hide_personal_data")) {
     		$set = new CRecordSet();
     		$query = new CQuery();
     		$query->select("users.*")
@@ -132,7 +132,7 @@ class CLecturersController extends CBaseController {
 				"icon" => "actions/edit-undo.png"
 			)
 		));
-    	if (CSettingsManager::getSettingValue("lecturers_from_users")) {
+    	if (CSettingsManager::getSettingValue("hide_personal_data")) {
     		$lect = CBaseManager::getLecturerOuter(CRequest::getInt("id"));
     		$this->setData("lect", $lect);
     		$this->renderView("__public/_lecturers/viewOuter.tpl");
@@ -149,7 +149,7 @@ class CLecturersController extends CBaseController {
 		/**
     	 * Поиск по ФИО преподавателя
     	 */
-        if (CSettingsManager::getSettingValue("lecturers_from_users")) {
+        if (CSettingsManager::getSettingValue("hide_personal_data")) {
         	$query = new CQuery();
         	$query->select("distinct(users.id) as id, users.FIO as name")
 	        	->from(TABLE_USERS." as users")

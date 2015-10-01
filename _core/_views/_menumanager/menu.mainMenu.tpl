@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs nav-stacked">
     {foreach CMenuManager::getMenu("main_menu")->getMenuPublishedItemsInHierarchy()->getItems() as $item}
-    	{if (CSettingsManager::getSettingValue("lecturers_from_users") and $item->getId() == 47)}
+    	{if (CSettingsManager::getSettingValue("hide_personal_data") and $item->getId() == 47)}
     	{else}
 	        {if ($item->getChilds()->getCount() > 0)}
 	            <li class="dropdown-submenu">

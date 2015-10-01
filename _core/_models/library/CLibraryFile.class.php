@@ -98,7 +98,7 @@ class CLibraryFile extends CActiveModel{
      */
     public function getFileDownloadLink() {
     	// условие для внешней базы данных с закрытым доступом на обновление
-    	if (CSettingsManager::getSettingValue("lecturers_from_users") == false) {
+    	if (CSettingsManager::getSettingValue("hide_personal_data") == false) {
     		$file = CLibraryManager::getFile($this->getId());
     		$file->entry = $file->entry+1;
     		$file->save();
