@@ -8,7 +8,7 @@ class CSearchCatalogWorkPlanCompetentions extends CAbstractSearchCatalog {
         $query->select("term.id as id, term.name as name")
             ->from(TABLE_WORK_PLAN_COMPETENTIONS." as competention")
             ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = competention.competention_id")
-            ->condition("term.name like '%".$lookup."%' AND competention.plan_id=".CRequest::getInt("plan_id"))
+            ->condition("term.name like '%".$lookup."%' AND competention.plan_id=".CRequest::getInt("plan_id")." AND competention.type=0")
             ->limit(0, 10);
         foreach ($query->execute()->getItems() as $item) {
             $result[$item["id"]] = $item["name"];
@@ -31,7 +31,7 @@ class CSearchCatalogWorkPlanCompetentions extends CAbstractSearchCatalog {
         $query->select("term.id as id, term.name as name")
             ->from(TABLE_WORK_PLAN_COMPETENTIONS." as competention")
             ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = competention.competention_id")
-            ->condition("competention.plan_id=".CRequest::getInt("plan_id"))
+            ->condition("competention.plan_id=".CRequest::getInt("plan_id")." AND competention.type=0")
             ->limit(0, 10);
         foreach ($query->execute()->getItems() as $item) {
             $result[$item["id"]] = $item["name"];
