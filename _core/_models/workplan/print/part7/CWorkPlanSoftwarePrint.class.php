@@ -1,6 +1,6 @@
 <?php
 
-class CWorkPlanSofwarePrint extends CAbstractPrintClassField {
+class CWorkPlanSoftwarePrint extends CAbstractPrintClassField {
     public function getFieldName()
     {
         return "Программное обеспечение";
@@ -24,8 +24,8 @@ class CWorkPlanSofwarePrint extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
 		$result = array();
-        if (!is_null($contextObject->sofware)) {
-        	foreach ($contextObject->sofware->getItems() as $row) {
+        if (!is_null($contextObject->software)) {
+        	foreach ($contextObject->software->getItems() as $row) {
 	        	$dataRow = array();
 	        	$dataRow[0] = (count($result) + 1).".";
 	        	$dataRow[1] = $row->software;
