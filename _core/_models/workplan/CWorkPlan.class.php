@@ -98,7 +98,7 @@ class CWorkPlan extends CActiveModel {
                 "storageProperty" => "_modules",
                 "storageTable" => TABLE_WORK_PLAN_CONTENT_MODULES,
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "targetClass" => "CWorkPlanContentModule"
+                "targetClass" => "CWorkPlanContentCategory"
             ),
             "terms" => array(
                 "relationPower" => RELATION_HAS_MANY,
@@ -266,7 +266,7 @@ class CWorkPlan extends CActiveModel {
     public function getPractices() {
         $practices = new CArrayList();
         /**
-         * @var $module CWorkPlanContentModule
+         * @var $module CWorkPlanContentCategory
          * @var $section CWorkPlanContentSection
          * @var $load CWorkPlanContentSectionLoad
          * @var $topic CWorkPlanContentSectionLoadTopic
@@ -295,7 +295,7 @@ class CWorkPlan extends CActiveModel {
     public function getLabWorks() {
         $labs = new CArrayList();
         /**
-         * @var $module CWorkPlanContentModule
+         * @var $module CWorkPlanContentCategory
          * @var $section CWorkPlanContentSection
          * @var $load CWorkPlanContentSectionLoad
          * @var $topic CWorkPlanContentSectionLoadTopic
@@ -334,7 +334,7 @@ class CWorkPlan extends CActiveModel {
     public function getTechnologies() {
         $technologies = new CArrayList();
         /**
-         * @var $module CWorkPlanContentModule
+         * @var $module CWorkPlanContentCategory
          * @var $section CWorkPlanContentSection
          * @var $load CWorkPlanContentSectionLoad
          * @var $technology CWorkPlanContentSectionLoadTechnology

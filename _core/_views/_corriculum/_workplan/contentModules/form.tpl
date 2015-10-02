@@ -1,4 +1,4 @@
-<form action="workplancontentmodules.php" method="post" enctype="multipart/form-data" class="form-horizontal">
+<form action="workplancontentcategories.php" method="post" enctype="multipart/form-data" class="form-horizontal">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $object)}
     {CHtml::activeHiddenField("plan_id", $object)}

@@ -1,7 +1,7 @@
 {extends file="_core.3col.tpl"}
 
 {block name="asu_center"}
-    <h2>Добавление модуля</h2>
+    <h2>Добавление категории</h2>
 
     {CHtml::helpForCurrentPage()}
 
