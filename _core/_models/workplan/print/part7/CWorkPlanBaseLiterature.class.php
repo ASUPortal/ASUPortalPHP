@@ -24,23 +24,13 @@ class CWorkPlanBaseLiterature extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
 		$result = array();
-        $set = new CRecordSet();
-        $query = new CQuery();
-        $set->setQuery($query);
-        $query->select("t.*")
-	        ->from(TABLE_WORK_PLAN_LITERATURE." as t")
-	        ->order("t.id asc")
-	        ->condition("plan_id=".$contextObject->getId()." AND type=1");
-        $objects = new CArrayList();
-        foreach ($set->getItems() as $ar) {
-        	$object = new CWorkPlanLiterature($ar);
-        	$objects->add($object->getId(), $object);
-        }
-        foreach ($objects->getItems() as $row) {
-        	$dataRow = array();
-        	$dataRow[0] = (count($result) + 1).".";
-        	$dataRow[1] = $row->book;
-        	$result[] = $dataRow;
+        if (!is_null($contextObject->baseLiterature)) {
+        	foreach ($contextObject->baseLiterature->getItems() as $row) {
+        		$dataRow = array();
+        		$dataRow[0] = (count($result) + 1).".";
+        		$dataRow[1] = $row->book;
+        		$result[] = $dataRow;
+        	}
         }
         return $result;
     }

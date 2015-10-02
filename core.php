@@ -315,6 +315,10 @@
     define("TABLE_WORK_PLAN_MARK_TYPES", "pl_corriculum_workplan_marktypes");
     define("TABLE_WORK_PLAN_MARK_TYPE_FUNDS", "pl_corriculum_workplan_marktype_fund");
     define("TABLE_WORK_PLAN_MARK_TYPE_PLACES", "pl_corriculum_workplan_marktype_place");
+    define("TABLE_WORK_PLAN_FUND_MARK_TYPES", "pl_corriculum_workplan_fund_marktypes");
+    define("TABLE_WORK_PLAN_FUND_MARK_TYPES_COMPETENTIONS", "pl_corriculum_workplan_fund_marktypes_competention");
+    define("TABLE_WORK_PLAN_FUND_MARK_TYPES_LEVELS", "pl_corriculum_workplan_fund_marktypes_level");
+    define("TABLE_WORK_PLAN_FUND_MARK_TYPES_CONTROLS", "pl_corriculum_workplan_fund_marktypes_control");
     define("TABLE_WORK_PLAN_BRS", "pl_corriculum_workplan_brs");
     define("TABLE_WORK_PLAN_LITERATURE", "pl_corriculum_workplan_literature");
     define("TABLE_WORK_PLAN_SOFTWARE", "pl_corriculum_workplan_software");

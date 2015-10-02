@@ -1,9 +1,9 @@
 <?php
 
-class CWorkPlanAdditionalSupplyPrint extends CAbstractPrintClassField {
+class CWorkPlanSoftwarePrint extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Материальное обеспечение";
+        return "Программное обеспечение";
     }
 
     public function getFieldDescription()
@@ -24,11 +24,11 @@ class CWorkPlanAdditionalSupplyPrint extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
 		$result = array();
-        if (!is_null($contextObject->additionalSupply)) {
-        	foreach ($contextObject->additionalSupply->getItems() as $row) {
+        if (!is_null($contextObject->software)) {
+        	foreach ($contextObject->software->getItems() as $row) {
 	        	$dataRow = array();
 	        	$dataRow[0] = (count($result) + 1).".";
-	        	$dataRow[1] = $row->supply;
+	        	$dataRow[1] = $row->software;
 	        	$result[] = $dataRow;
         	}
         }

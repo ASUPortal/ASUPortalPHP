@@ -162,6 +162,54 @@ class CWorkPlan extends CActiveModel {
         		"storageField" => "level_id",
         		"managerClass" => "CTaxonomyManager",
         		"managerGetObject" => "getTerm"
+        	),
+        	"fundMarkTypes" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_FUND_MARK_TYPES,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanFundMarkType"
+        	),
+        	"BRS" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_BRS,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanBRS"
+        	),
+        	"markTypes" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_MARK_TYPES,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanMarkType"
+        	),
+        	"baseLiterature" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_LITERATURE,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=1",
+        		"targetClass" => "CWorkPlanLiterature"
+        	),
+        	"additionalLiterature" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_LITERATURE,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=2",
+        		"targetClass" => "CWorkPlanLiterature"
+        	),
+        	"internetResources" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_LITERATURE,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=3",
+        		"targetClass" => "CWorkPlanLiterature"
+        	),
+        	"software" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_SOFTWARE,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanSoftware"
+        	),
+        	"additionalSupply" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_ADDITIONAL_SUPPLY,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanAdditionalSupply"
         	)
         );
     }

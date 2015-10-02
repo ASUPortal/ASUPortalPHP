@@ -34,7 +34,7 @@
 			<tr>
 	            <th>#</th>
 	            <th>
-	            	{if (CSettingsManager::getSettingValue("lecturers_from_users"))}
+	            	{if (CSettingsManager::getSettingValue("hide_personal_data"))}
 	            		{CHtml::tableOrder("FIO", $lects->getFirstItem())}
 	            	{else}	
 	            		{CHtml::tableOrder("fio", $lects->getFirstItem())}
@@ -47,7 +47,7 @@
 		    <tr>
 		    	<td>{counter}</td>
 		        <td><a href="index.php?action=view&id={$lect->getUser()->id}">
-			        {if (CSettingsManager::getSettingValue("lecturers_from_users"))}
+			        {if (CSettingsManager::getSettingValue("hide_personal_data"))}
 			        	{$lect->FIO}</a>
 			        {else}
 			        	{$lect->fio}</a>
