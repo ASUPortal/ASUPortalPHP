@@ -1,7 +1,7 @@
 {extends file="_core.component.tpl"}
 
 {block name="asu_center"}
-    <h2>Модули</h2>
+    <h2>Категории</h2>
 
     {if ($objects->getCount() == 0)}
         Нет объектов для отображения

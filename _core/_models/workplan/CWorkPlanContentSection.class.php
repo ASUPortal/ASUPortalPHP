@@ -60,7 +60,7 @@ class CWorkPlanContentSection extends CActiveModel{
         return array(
             "name" => "Название раздела",
             "sectionIndex" => "Номер раздела",
-            "module_id" => "Модуль",
+            "module_id" => "Категория",
             "controls" => "Формы текущего контроля",
             "content" => "Содержание раздела"
         );

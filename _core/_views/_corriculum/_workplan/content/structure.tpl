@@ -12,7 +12,7 @@
             </tr>
             <tr>
                 {foreach $terms as $term}
-                    <td>{$term}</td>
+                    <td>{$term} семестр</td>
                 {/foreach}
                 <td>Всего</td>
             </tr>

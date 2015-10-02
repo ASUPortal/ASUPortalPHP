@@ -21,7 +21,7 @@ class CWorkPlanContentController extends CBaseController{
         }
 
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Управление модулями");
+        $this->setPageTitle("Управление категориями");
 
         parent::__construct();
     }

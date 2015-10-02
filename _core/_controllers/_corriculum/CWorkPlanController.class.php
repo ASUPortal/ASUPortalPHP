@@ -159,7 +159,7 @@ class CWorkPlanController extends CFlowController{
                 "icon" => "actions/edit-undo.png"
             ),
             array(
-                "title" => "Добавить модуль",
+                "title" => "Добавить категорию",
                 "link" => "workplancontentmodules.php?action=add&id=".$plan->getId(),
                 "icon" => "actions/list-add.png"
             ),

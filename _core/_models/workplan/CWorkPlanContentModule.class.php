@@ -27,7 +27,7 @@ class CWorkPlanContentModule extends CActiveModel {
 
     public function attributeLabels() {
         return array(
-            "title" => "Название модуля",
+            "title" => "Название категории",
             "order" => "Порядковый номер"
         );
     }
