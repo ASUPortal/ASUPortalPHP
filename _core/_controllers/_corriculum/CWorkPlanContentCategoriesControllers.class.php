@@ -112,7 +112,7 @@ class CWorkPlanContentCategoriesControllers extends CBaseController{
         $this->renderView("_corriculum/_workplan/contentModules/add.tpl");
     }
     public function actionEdit() {
-        $object = CBaseManager::getWorkPlanContentModule(CRequest::getInt("id"));
+        $object = CBaseManager::getWorkPlanContentCategory(CRequest::getInt("id"));
         $this->setData("object", $object);
         /**
          * Генерация меню
@@ -133,7 +133,7 @@ class CWorkPlanContentCategoriesControllers extends CBaseController{
         $this->renderView("_corriculum/_workplan/contentModules/edit.tpl");
     }
     public function actionDelete() {
-        $object = CBaseManager::getWorkPlanContentModule(CRequest::getInt("id"));
+        $object = CBaseManager::getWorkPlanContentCategory(CRequest::getInt("id"));
         $plan = $object->plan_id;
         $object->remove();
         $this->redirect("workplans.php?action=edit&id=".$plan);
