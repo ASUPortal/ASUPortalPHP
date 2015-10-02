@@ -39,7 +39,7 @@ class CWorkPlanStructure extends CAbstractPrintClassField {
 	        ->from(TABLE_WORK_PLAN_CONTENT_LOADS." as l")
 	        ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
 	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
-	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "category.category_id = category.id")
+	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
 	        ->condition("category.plan_id = ".$contextObject->getId())
 	        ->group("l.load_type_id")
 	        ->order("term.name");

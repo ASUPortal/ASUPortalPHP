@@ -325,6 +325,35 @@ class CWorkPlan extends CActiveModel {
         }
         return $labs;
     }
+    
+    /**
+     * Все лекции
+     * 
+     * @return CArrayList
+     */
+    public function getLectures() {
+    	$lectures = new CArrayList();
+    	/**
+    	 * @var $category CWorkPlanContentCategory
+    	 * @var $section CWorkPlanContentSection
+    	 * @var $load CWorkPlanContentSectionLoad
+    	 * @var $topic CWorkPlanContentSectionLoadTopic
+    	*/
+    	foreach ($this->categories->getItems() as $category) {
+    		foreach ($category->sections->getItems() as $section) {
+    			foreach ($section->loads->getItems() as $load) {
+    				if ($load->loadType->getAlias() == "lecture") {
+    					foreach ($load->topics as $topic) {
+    						$lectures->add($topic->getId(), $topic);
+    					}
+    
+    				}
+    			}
+    		}
+    
+    	}
+    	return $lectures;
+    }
 
     /**
      * Все образовательные технологии

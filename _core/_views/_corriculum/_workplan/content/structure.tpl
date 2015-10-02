@@ -40,13 +40,14 @@
                 </tr>
                 <tr>
                     <th rowspan="2">Всего</th>
-                    <th colspan="3">Аудиторная работа</th>
+                    <th colspan="4">Аудиторная работа</th>
                     <th rowspan="2">СРС</th>
                 </tr>
                 <tr>
                     <th>Л</th>
                     <th>ПЗ</th>
                     <th>ЛР</th>
+                    <th>КСР</th>
                 </tr>
             </thead>
             <tbody>

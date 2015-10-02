@@ -28,7 +28,11 @@
 
 {CHtml::activeComponent("workplancontent.php?plan_id={$plan->getId()}", $plan, ["defaultAction" => "practices"])}
 
-<h4>4.5. Курсовой проект</h4>
+<h4>4.5. Темы лекций</h4>
+
+{CHtml::activeComponent("workplancontent.php?plan_id={$plan->getId()}", $plan, ["defaultAction" => "lectures"])}
+
+<h4>4.6. Курсовой проект (работа)</h4>
 
 <div class="control-group">
     {CHtml::activeLabel("project_description", $plan)}
@@ -38,11 +42,11 @@
     </div>
 </div>
 
-<strong>Темы курсовых проектов</strong>
+<strong>Темы курсовых проектов (работ)</strong>
 
 {CHtml::activeComponent("workplanprojectthemes.php?plan_id={$plan->getId()}", $plan)}
 
-<h4>4.6. Самостоятельное изучение разделов дисциплины</h4>
+<h4>4.7. Самостоятельное изучение разделов дисциплины</h4>
 
 {include file="_corriculum/_workplan/selfEducationBlocks/subform.index.tpl"}
 
