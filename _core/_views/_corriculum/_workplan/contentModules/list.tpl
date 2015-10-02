@@ -20,9 +20,9 @@
             {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $objects->getItems() as $object}
                 <tr>
-                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить модуль')) { location.href='workplancontentmodules.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
+                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить категорию')) { location.href='workplancontentcategories.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{counter}</td>
-                    <td><a href="workplancontentmodules.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
+                    <td><a href="workplancontentcategories.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
                     <td>{$object->order}</td>
                     <td>{$object->title}</td>
                 </tr>

@@ -1,5 +1,5 @@
 <?php
-class CWorkPlanContentModulesControllers extends CBaseController{
+class CWorkPlanContentCategoriesControllers extends CBaseController{
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -12,7 +12,7 @@ class CWorkPlanContentModulesControllers extends CBaseController{
         }
 
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Управление модулями");
+        $this->setPageTitle("Управление категориями");
 
         parent::__construct();
     }
@@ -25,11 +25,11 @@ class CWorkPlanContentModulesControllers extends CBaseController{
         $menu = array(
             array(
                 "title" => "Обновить",
-                "link" => "workplancontentmodules.php?action=index&plan_id=".CRequest::getInt("plan_id"),
+                "link" => "workplancontentcategories.php?action=index&plan_id=".CRequest::getInt("plan_id"),
                 "icon" => "actions/view-refresh.png"
             ), array(
                 "title" => "Добавить модуль",
-                "link" => "workplancontentmodules.php?action=add&id=".CRequest::getInt("plan_id"),
+                "link" => "workplancontentcategories.php?action=add&id=".CRequest::getInt("plan_id"),
                 "icon" => "actions/list-add.png"
             )
         );
@@ -43,7 +43,7 @@ class CWorkPlanContentModulesControllers extends CBaseController{
         }
         $menu[] = array(
             "title" => "К списку",
-            "link" => "workplancontentmodules.php?action=list&plan_id=".CRequest::getInt("plan_id"),
+            "link" => "workplancontentcategories.php?action=list&plan_id=".CRequest::getInt("plan_id"),
             "icon" => "actions/format-justify-fill.png"
         );
         $this->addActionsMenuItem($menu);
@@ -63,7 +63,7 @@ class CWorkPlanContentModulesControllers extends CBaseController{
             ->order("t.order asc");
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
-            $object = new CWorkPlanContentModule($ar);
+            $object = new CWorkPlanContentCategory($ar);
             $objects->add($object->getId(), $object);
         }
         $this->setData("objects", $objects);
@@ -74,15 +74,15 @@ class CWorkPlanContentModulesControllers extends CBaseController{
         $menu = array(
             array(
                 "title" => "Обновить",
-                "link" => "workplancontentmodules.php?action=list&plan_id=".CRequest::getInt("plan_id"),
+                "link" => "workplancontentcategories.php?action=list&plan_id=".CRequest::getInt("plan_id"),
                 "icon" => "actions/view-refresh.png"
             ), array(
                 "title" => "К полному представлению",
-                "link" => "workplancontentmodules.php?action=index&id=".CRequest::getInt("plan_id"),
+                "link" => "workplancontentcategories.php?action=index&id=".CRequest::getInt("plan_id"),
                 "icon" => "actions/edit-undo.png"
             ), array(
-                "title" => "Добавить модуль",
-                "link" => "workplancontentmodules.php?action=add&id=".CRequest::getInt("plan_id"),
+                "title" => "Добавить категорию",
+                "link" => "workplancontentcategories.php?action=add&id=".CRequest::getInt("plan_id"),
                 "icon" => "actions/list-add.png"
             )
         );
@@ -93,7 +93,7 @@ class CWorkPlanContentModulesControllers extends CBaseController{
         $this->renderView("_corriculum/_workplan/contentModules/list.tpl");
     }
     public function actionAdd() {
-        $object = new CWorkPlanContentModule();
+        $object = new CWorkPlanContentCategory();
         $object->plan_id = CRequest::getInt("id");
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
         $object->order = $plan->modules->getCount() + 1;
@@ -139,14 +139,14 @@ class CWorkPlanContentModulesControllers extends CBaseController{
         $this->redirect("workplans.php?action=edit&id=".$plan);
     }
     public function actionSave() {
-        $object = new CWorkPlanContentModule();
+        $object = new CWorkPlanContentCategory();
         $object->setAttributes(CRequest::getArray($object::getClassName()));
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplancontentmodules.php?action=edit&id=".$object->getId());
+                $this->redirect("workplancontentcategories.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplancontentmodules.php?action=index&plan_id=".$object->plan_id);
+                $this->redirect("workplancontentcategories.php?action=index&plan_id=".$object->plan_id);
             }
             return true;
         }

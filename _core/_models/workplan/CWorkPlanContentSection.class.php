@@ -10,7 +10,7 @@
  * @property CArrayList controls
  * @property int module_id
  * @property CWorkPlan plan
- * @property CWorkPlanContentModule module
+ * @property CWorkPlanContentCategory module
  * @property CArrayList loads
  */
 class CWorkPlanContentSection extends CActiveModel{
@@ -34,7 +34,7 @@ class CWorkPlanContentSection extends CActiveModel{
                 "storageProperty" => "_module",
                 "storageField" => "module_id",
                 "managerClass" => "CBaseManager",
-                "managerGetObject" => "getWorkPlanContentModule"
+                "managerGetObject" => "getWorkPlanContentCategory"
             ),
             "loads" => array(
                 "relationPower" => RELATION_HAS_MANY,

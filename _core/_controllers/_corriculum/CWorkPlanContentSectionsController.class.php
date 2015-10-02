@@ -55,7 +55,7 @@ class CWorkPlanContentSectionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancontentmodules.php?action=edit&id=".$object->module_id,
+            "link" => "workplancontentcategories.php?action=edit&id=".$object->module_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -71,7 +71,7 @@ class CWorkPlanContentSectionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancontentmodules.php?action=edit&id=".$object->module_id,
+            "link" => "workplancontentcategories.php?action=edit&id=".$object->module_id,
             "icon" => "actions/edit-undo.png"
         ));
         $this->addActionsMenuItem(array(
@@ -88,7 +88,7 @@ class CWorkPlanContentSectionsController extends CBaseController{
         $object = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
         $module = $object->module_id;
         $object->remove();
-        $this->redirect("workplancontentmodules.php?action=edit&id=".$module);
+        $this->redirect("workplancontentcategories.php?action=edit&id=".$module);
     }
     public function actionSave() {
         $object = new CWorkPlanContentSection();
@@ -98,7 +98,7 @@ class CWorkPlanContentSectionsController extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("workplancontentsections.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplancontentmodules.php?action=edit&id=".$object->module_id);
+                $this->redirect("workplancontentcategories.php?action=edit&id=".$object->module_id);
             }
             return true;
         }

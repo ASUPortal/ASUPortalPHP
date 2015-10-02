@@ -11,7 +11,7 @@
  *
  * @property CArrayList sections
  */
-class CWorkPlanContentModule extends CActiveModel {
+class CWorkPlanContentCategory extends CActiveModel {
     protected $_table = TABLE_WORK_PLAN_CONTENT_MODULES;
 
     protected function relations() {

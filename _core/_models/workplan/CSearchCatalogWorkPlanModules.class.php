@@ -50,6 +50,6 @@ class CSearchCatalogWorkPlanModules extends CAbstractSearchCatalog {
     }
 
     public function actionGetObject($id) {
-        return CBaseManager::getWorkPlanContentModule($id);
+        return CBaseManager::getWorkPlanContentCategory($id);
     }
 }

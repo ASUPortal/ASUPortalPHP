@@ -1,6 +1,6 @@
 <?php
 
-class CWorkPlanContentModules extends CAbstractPrintClassField {
+class CWorkPlanContentCategories extends CAbstractPrintClassField {
     public function getFieldName()
     {
         return "Содержание разделов";
