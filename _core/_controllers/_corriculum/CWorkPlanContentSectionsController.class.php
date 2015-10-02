@@ -45,7 +45,7 @@ class CWorkPlanContentSectionsController extends CBaseController{
         $this->renderView("_corriculum/_workplan/contentSections/index.tpl");
     }
     public function actionAdd() {
-        $module = CBaseManager::getWorkPlanContentModule(CRequest::getInt("id"));
+        $module = CBaseManager::getWorkPlanContentCategory(CRequest::getInt("id"));
         $object = new CWorkPlanContentSection();
         $object->module_id = $module->getId();
         $object->sectionIndex = $module->sections->getCount() + 1;
