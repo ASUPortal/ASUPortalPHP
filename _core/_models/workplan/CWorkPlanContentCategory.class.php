@@ -12,14 +12,14 @@
  * @property CArrayList sections
  */
 class CWorkPlanContentCategory extends CActiveModel {
-    protected $_table = TABLE_WORK_PLAN_CONTENT_MODULES;
+    protected $_table = TABLE_WORK_PLAN_CONTENT_CATEGORIES;
 
     protected function relations() {
         return array(
             "sections" => array(
                 "relationPower" => RELATION_HAS_MANY,
                 "storageTable" => TABLE_WORK_PLAN_CONTENT_SECTIONS,
-                "storageCondition" => "module_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "storageCondition" => "category_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanContentSection"
             )
         );

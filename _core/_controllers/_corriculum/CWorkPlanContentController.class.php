@@ -86,8 +86,8 @@ class CWorkPlanContentController extends CBaseController{
             ->from(TABLE_WORK_PLAN_CONTENT_LOADS." as l")
             ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
             ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
-            ->innerJoin(TABLE_WORK_PLAN_CONTENT_MODULES." as module", "section.module_id = module.id")
-            ->condition("module.plan_id = ".$plan->getId())
+            ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
+            ->condition("category.plan_id = ".$plan->getId())
             ->group("l.load_type_id")
             ->order("term.name");
         $objects = $query->execute();

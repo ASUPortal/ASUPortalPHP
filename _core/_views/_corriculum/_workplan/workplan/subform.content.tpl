@@ -14,7 +14,7 @@
 
 <h4>4.1 Содержание разделов дисциплины</h4>
 
-{include file="_corriculum/_workplan/contentModules/subform.index.tpl"}
+{include file="_corriculum/_workplan/contentCategories/subform.index.tpl"}
 
 <h4>4.2. Структура дисциплины</h4>
 

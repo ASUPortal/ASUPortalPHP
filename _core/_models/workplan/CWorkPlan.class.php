@@ -29,7 +29,7 @@
  * @property CArrayList terms
  * @property CArrayList projectThemes
  * @property CArrayList authors
- * @property CArrayList modules
+ * @property CArrayList categories
  * @property CArrayList selfEducations
  */
 class CWorkPlan extends CActiveModel {
@@ -93,10 +93,10 @@ class CWorkPlan extends CActiveModel {
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getDiscipline"
             ),
-            "modules" => array(
+            "categories" => array(
                 "relationPower" => RELATION_HAS_MANY,
-                "storageProperty" => "_modules",
-                "storageTable" => TABLE_WORK_PLAN_CONTENT_MODULES,
+                "storageProperty" => "_categories",
+                "storageTable" => TABLE_WORK_PLAN_CONTENT_CATEGORIES,
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanContentCategory"
             ),
@@ -266,13 +266,13 @@ class CWorkPlan extends CActiveModel {
     public function getPractices() {
         $practices = new CArrayList();
         /**
-         * @var $module CWorkPlanContentCategory
+         * @var $category CWorkPlanContentCategory
          * @var $section CWorkPlanContentSection
          * @var $load CWorkPlanContentSectionLoad
          * @var $topic CWorkPlanContentSectionLoadTopic
          */
-        foreach ($this->modules->getItems() as $module) {
-            foreach ($module->sections->getItems() as $section) {
+        foreach ($this->categories->getItems() as $category) {
+            foreach ($category->sections->getItems() as $section) {
                 foreach ($section->loads->getItems() as $load) {
                     if ($load->loadType->getAlias() == "practice") {
                         foreach ($load->topics as $topic) {
@@ -295,14 +295,14 @@ class CWorkPlan extends CActiveModel {
     public function getLabWorks() {
         $labs = new CArrayList();
         /**
-         * @var $module CWorkPlanContentCategory
+         * @var $category CWorkPlanContentCategory
          * @var $section CWorkPlanContentSection
          * @var $load CWorkPlanContentSectionLoad
          * @var $topic CWorkPlanContentSectionLoadTopic
          */
         $loads = new CArrayList();
-        foreach ($this->modules->getItems() as $module) {
-            foreach ($module->sections->getItems() as $section) {
+        foreach ($this->categories->getItems() as $category) {
+            foreach ($category->sections->getItems() as $section) {
                 foreach ($section->loads->getItems() as $load) {
                     if ($load->loadType->getAlias() == "labwork") {
                         if ($load->topics->getCount() > 0) {
@@ -334,13 +334,13 @@ class CWorkPlan extends CActiveModel {
     public function getTechnologies() {
         $technologies = new CArrayList();
         /**
-         * @var $module CWorkPlanContentCategory
+         * @var $category CWorkPlanContentCategory
          * @var $section CWorkPlanContentSection
          * @var $load CWorkPlanContentSectionLoad
          * @var $technology CWorkPlanContentSectionLoadTechnology
          */
-        foreach ($this->modules->getItems() as $module) {
-            foreach ($module->sections->getItems() as $section) {
+        foreach ($this->categories->getItems() as $category) {
+            foreach ($category->sections->getItems() as $section) {
                 foreach ($section->loads->getItems() as $load) {
                     foreach ($load->technologies->getItems() as $technology) {
                         $technologies->add($technology->getId(), $technology);

@@ -8,9 +8,9 @@
  * @property int sectionIndex
  * @property string name
  * @property CArrayList controls
- * @property int module_id
+ * @property int category_id
  * @property CWorkPlan plan
- * @property CWorkPlanContentCategory module
+ * @property CWorkPlanContentCategory category
  * @property CArrayList loads
  */
 class CWorkPlanContentSection extends CActiveModel{
@@ -29,10 +29,10 @@ class CWorkPlanContentSection extends CActiveModel{
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
             ),
-            "module" => array(
+            "category" => array(
                 "relationPower" => RELATION_HAS_ONE,
-                "storageProperty" => "_module",
-                "storageField" => "module_id",
+                "storageProperty" => "_category",
+                "storageField" => "category_id",
                 "managerClass" => "CBaseManager",
                 "managerGetObject" => "getWorkPlanContentCategory"
             ),
@@ -51,7 +51,7 @@ class CWorkPlanContentSection extends CActiveModel{
                 "name",
                 "sectionIndex",
                 "controls",
-                "module_id"
+                "category_id"
             )
         );
     }
@@ -60,7 +60,7 @@ class CWorkPlanContentSection extends CActiveModel{
         return array(
             "name" => "Название раздела",
             "sectionIndex" => "Номер раздела",
-            "module_id" => "Категория",
+            "category_id" => "Категория",
             "controls" => "Формы текущего контроля",
             "content" => "Содержание раздела"
         );

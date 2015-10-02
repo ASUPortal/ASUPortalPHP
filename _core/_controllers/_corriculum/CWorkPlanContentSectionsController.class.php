@@ -45,17 +45,17 @@ class CWorkPlanContentSectionsController extends CBaseController{
         $this->renderView("_corriculum/_workplan/contentSections/index.tpl");
     }
     public function actionAdd() {
-        $module = CBaseManager::getWorkPlanContentCategory(CRequest::getInt("id"));
+        $category = CBaseManager::getWorkPlanContentCategory(CRequest::getInt("id"));
         $object = new CWorkPlanContentSection();
-        $object->module_id = $module->getId();
-        $object->sectionIndex = $module->sections->getCount() + 1;
+        $object->category_id = $category->getId();
+        $object->sectionIndex = $category->sections->getCount() + 1;
         $this->setData("object", $object);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancontentcategories.php?action=edit&id=".$object->module_id,
+            "link" => "workplancontentcategories.php?action=edit&id=".$object->category_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -71,7 +71,7 @@ class CWorkPlanContentSectionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancontentcategories.php?action=edit&id=".$object->module_id,
+            "link" => "workplancontentcategories.php?action=edit&id=".$object->category_id,
             "icon" => "actions/edit-undo.png"
         ));
         $this->addActionsMenuItem(array(
@@ -86,9 +86,9 @@ class CWorkPlanContentSectionsController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
-        $module = $object->module_id;
+        $category = $object->category_id;
         $object->remove();
-        $this->redirect("workplancontentcategories.php?action=edit&id=".$module);
+        $this->redirect("workplancontentcategories.php?action=edit&id=".$category);
     }
     public function actionSave() {
         $object = new CWorkPlanContentSection();
@@ -98,7 +98,7 @@ class CWorkPlanContentSectionsController extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("workplancontentsections.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplancontentcategories.php?action=edit&id=".$object->module_id);
+                $this->redirect("workplancontentcategories.php?action=edit&id=".$object->category_id);
             }
             return true;
         }

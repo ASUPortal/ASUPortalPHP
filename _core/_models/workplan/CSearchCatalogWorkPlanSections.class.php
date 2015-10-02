@@ -7,8 +7,8 @@ class CSearchCatalogWorkPlanSections extends CAbstractSearchCatalog {
         $query = new CQuery();
         $query->select("section.id as id, section.name as name")
             ->from(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section")
-            ->innerJoin(TABLE_WORK_PLAN_CONTENT_MODULES." as module", "module.id = section.module_id")
-            ->condition("section.name like '%".$lookup."%' AND module.plan_id=".CRequest::getInt("plan_id"))
+            ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "category.id = section.category_id")
+            ->condition("section.name like '%".$lookup."%' AND category.plan_id=".CRequest::getInt("plan_id"))
             ->limit(0, 10);
         foreach ($query->execute()->getItems() as $item) {
             $result[$item["id"]] = $item["name"];
@@ -30,8 +30,8 @@ class CSearchCatalogWorkPlanSections extends CAbstractSearchCatalog {
         $query = new CQuery();
         $query->select("section.id as id, section.name as name")
             ->from(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section")
-            ->innerJoin(TABLE_WORK_PLAN_CONTENT_MODULES." as module", "module.id = section.module_id")
-            ->condition("module.plan_id=".CRequest::getInt("plan_id"))
+            ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "category.id = section.category_id")
+            ->condition("category.plan_id=".CRequest::getInt("plan_id"))
             ->limit(0, 10);
         foreach ($query->execute()->getItems() as $item) {
             $result[$item["id"]] = $item["name"];
