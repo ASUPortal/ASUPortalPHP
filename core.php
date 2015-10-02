@@ -323,7 +323,7 @@
     define("TABLE_WORK_PLAN_LITERATURE", "pl_corriculum_workplan_literature");
     define("TABLE_WORK_PLAN_SOFTWARE", "pl_corriculum_workplan_software");
     define("TABLE_WORK_PLAN_AUTHORS", "pl_corriculum_workplan_authors");
-    define("TABLE_WORK_PLAN_CONTENT_MODULES", "pl_corriculum_workplan_content_modules");
+    define("TABLE_WORK_PLAN_CONTENT_CATEGORIES", "pl_corriculum_workplan_content_categories");
     define("TABLE_WORK_PLAN_CONTENT_CONTROLS", "pl_corriculum_workplan_content_section_controls");
     define("TABLE_WORK_PLAN_CONTENT_LOADS", "pl_corriculum_workplan_content_section_loads");
     define("TABLE_WORK_PLAN_CONTENT_TOPICS", "pl_corriculum_workplan_content_section_load_topics");

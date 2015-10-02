@@ -18,7 +18,7 @@ class CWorkPlanContentCategoriesControllers extends CBaseController{
     }
     public function actionIndex() {
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
-        $this->setData("objects", $plan->modules);
+        $this->setData("objects", $plan->categories);
         /**
          * Генерация меню
          */
@@ -28,16 +28,16 @@ class CWorkPlanContentCategoriesControllers extends CBaseController{
                 "link" => "workplancontentcategories.php?action=index&plan_id=".CRequest::getInt("plan_id"),
                 "icon" => "actions/view-refresh.png"
             ), array(
-                "title" => "Добавить модуль",
+                "title" => "Добавить категорию",
                 "link" => "workplancontentcategories.php?action=add&id=".CRequest::getInt("plan_id"),
                 "icon" => "actions/list-add.png"
             )
         );
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
-        if ($plan->modules->getCount() > 0) {
+        if ($plan->categories->getCount() > 0) {
             $menu[] = array(
                 "title" => "Добавить раздел",
-                "link" => "workplancontentsections.php?action=add&id=".$plan->modules->getFirstItem()->getId(),
+                "link" => "workplancontentsections.php?action=add&id=".$plan->categories->getFirstItem()->getId(),
                 "icon" => "actions/list-add.png"
             );
         }
@@ -50,14 +50,14 @@ class CWorkPlanContentCategoriesControllers extends CBaseController{
         /**
          * Отображение представления
          */
-        $this->renderView("_corriculum/_workplan/contentModules/index.tpl");
+        $this->renderView("_corriculum/_workplan/contentCategories/index.tpl");
     }
     public function actionList() {
         $set = new CRecordSet();
         $query = new CQuery();
         $set->setQuery($query);
         $query->select("t.*")
-            ->from(TABLE_WORK_PLAN_CONTENT_MODULES." as t")
+            ->from(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as t")
             ->order("t.id asc")
             ->condition("plan_id=".CRequest::getInt("plan_id"))
             ->order("t.order asc");
@@ -90,13 +90,13 @@ class CWorkPlanContentCategoriesControllers extends CBaseController{
         /**
          * Отображение представления
          */
-        $this->renderView("_corriculum/_workplan/contentModules/list.tpl");
+        $this->renderView("_corriculum/_workplan/contentCategories/list.tpl");
     }
     public function actionAdd() {
         $object = new CWorkPlanContentCategory();
         $object->plan_id = CRequest::getInt("id");
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-        $object->order = $plan->modules->getCount() + 1;
+        $object->order = $plan->categories->getCount() + 1;
         $this->setData("object", $object);
         /**
          * Генерация меню
@@ -109,7 +109,7 @@ class CWorkPlanContentCategoriesControllers extends CBaseController{
         /**
          * Отображение представления
          */
-        $this->renderView("_corriculum/_workplan/contentModules/add.tpl");
+        $this->renderView("_corriculum/_workplan/contentCategories/add.tpl");
     }
     public function actionEdit() {
         $object = CBaseManager::getWorkPlanContentCategory(CRequest::getInt("id"));
@@ -130,7 +130,7 @@ class CWorkPlanContentCategoriesControllers extends CBaseController{
         /**
          * Отображение представления
          */
-        $this->renderView("_corriculum/_workplan/contentModules/edit.tpl");
+        $this->renderView("_corriculum/_workplan/contentCategories/edit.tpl");
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanContentCategory(CRequest::getInt("id"));
@@ -151,6 +151,6 @@ class CWorkPlanContentCategoriesControllers extends CBaseController{
             return true;
         }
         $this->setData("object", $object);
-        $this->renderView("_corriculum/_workplan/contentModules/edit.tpl");
+        $this->renderView("_corriculum/_workplan/contentCategories/edit.tpl");
     }
 }

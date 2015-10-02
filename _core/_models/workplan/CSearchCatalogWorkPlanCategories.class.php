@@ -6,15 +6,15 @@
  * Time: 19:49
  */
 
-class CSearchCatalogWorkPlanModules extends CAbstractSearchCatalog {
+class CSearchCatalogWorkPlanCategories extends CAbstractSearchCatalog {
 
     public function actionTypeAhead($lookup){
         $result = array();
         // выбор сотрудников
         $query = new CQuery();
-        $query->select("module.id as id, module.title as name")
-            ->from(TABLE_WORK_PLAN_CONTENT_MODULES." as module")
-            ->condition("module.title like '%".$lookup."%' AND plan_id=".CRequest::getInt("plan_id"))
+        $query->select("category.id as id, category.title as name")
+            ->from(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category")
+            ->condition("category.title like '%".$lookup."%' AND plan_id=".CRequest::getInt("plan_id"))
             ->limit(0, 10);
         foreach ($query->execute()->getItems() as $item) {
             $result[$item["id"]] = $item["name"];
@@ -35,8 +35,8 @@ class CSearchCatalogWorkPlanModules extends CAbstractSearchCatalog {
         $result = array();
         // выбор сотрудников
         $query = new CQuery();
-        $query->select("module.id as id, module.title as name")
-            ->from(TABLE_WORK_PLAN_CONTENT_MODULES." as module")
+        $query->select("category.id as id, category.title as name")
+            ->from(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category")
             ->condition("plan_id=".CRequest::getInt("plan_id"))
             ->limit(0, 10);
         foreach ($query->execute()->getItems() as $item) {

@@ -24,10 +24,10 @@ class CWorkPlanContentCategories extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = array();
-        if (!is_null($contextObject->modules)) {
-        	foreach ($contextObject->modules->getItems() as $module) {
-        		if (!is_null($module->sections)) {
-        			foreach ($module->sections->getItems() as $row) {
+        if (!is_null($contextObject->categories)) {
+        	foreach ($contextObject->categories->getItems() as $category) {
+        		if (!is_null($category->sections)) {
+        			foreach ($category->sections->getItems() as $row) {
         				$dataRow = array();
         				$dataRow[0] = $row->sectionIndex;
         				$dataRow[1] = $row->name;
