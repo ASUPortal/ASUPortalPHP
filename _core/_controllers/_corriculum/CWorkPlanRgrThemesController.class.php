@@ -1,5 +1,7 @@
 <?php
-class CWorkPlanContentSectionsController extends CBaseController{
+class CWorkPlanRgrThemesController extends CBaseController{
+    protected $_isComponent = true;
+
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -12,7 +14,7 @@ class CWorkPlanContentSectionsController extends CBaseController{
         }
 
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Содержание разделов дисциплины");
+        $this->setPageTitle("Темы РГР");
 
         parent::__construct();
     }
@@ -21,12 +23,12 @@ class CWorkPlanContentSectionsController extends CBaseController{
         $query = new CQuery();
         $set->setQuery($query);
         $query->select("t.*")
-            ->from(TABLE_WORK_PLAN_CONTENT_SECTIONS." as t")
+            ->from(TABLE_WORK_PLAN_RGR_THEMES." as t")
             ->order("t.id asc")
             ->condition("plan_id=".CRequest::getInt("plan_id"));
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
-            $object = new CWorkPlanContentSection($ar);
+            $object = new CWorkPlanRgrTheme($ar);
             $objects->add($object->getId(), $object);
         }
         $this->setData("objects", $objects);
@@ -36,78 +38,66 @@ class CWorkPlanContentSectionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Добавить",
-            "link" => "workplancontentsections.php?action=add&id=".CRequest::getInt("plan_id"),
+            "link" => "workplanrgrthemes.php?action=add&id=".CRequest::getInt("plan_id"),
             "icon" => "actions/list-add.png"
         ));
         /**
          * Отображение представления
          */
-        $this->renderView("_corriculum/_workplan/contentSections/index.tpl");
+        $this->renderView("_corriculum/_workplan/rgrThemes/index.tpl");
     }
     public function actionAdd() {
-        $category = CBaseManager::getWorkPlanContentCategory(CRequest::getInt("id"));
-        $object = new CWorkPlanContentSection();
-        $object->category_id = $category->getId();
-        $object->sectionIndex = $category->sections->getCount() + 1;
+        $object = new CWorkPlanRgrTheme();
+        $object->plan_id = CRequest::getInt("id");
         $this->setData("object", $object);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancontentcategories.php?action=edit&id=".$object->category_id,
+            "link" => "workplanrgrthemes.php?action=index&plan_id=".$object->plan_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
          * Отображение представления
          */
-        $this->renderView("_corriculum/_workplan/contentSections/add.tpl");
+        $this->renderView("_corriculum/_workplan/rgrThemes/add.tpl");
     }
     public function actionEdit() {
-        $object = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
+        $object = CBaseManager::getWorkPlanRgrTheme(CRequest::getInt("id"));
         $this->setData("object", $object);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancontentcategories.php?action=edit&id=".$object->category_id,
+            "link" => "workplanrgrthemes.php?action=index&plan_id=".$object->plan_id,
             "icon" => "actions/edit-undo.png"
-        ));
-        $this->addActionsMenuItem(array(
-            "title" => "Добавить нагрузку",
-            "link" => "workplancontentloads.php?action=add&id=".$object->getId(),
-            "icon" => "actions/list-add.png"
-        ));
-        $this->addActionsMenuItem(array(
-        	"title" => "Добавить вид итогового контроля",
-        	"link" => "workplancontentfinalcontrol.php?action=add&id=".$object->getId(),
-        	"icon" => "actions/list-add.png"
         ));
         /**
          * Отображение представления
          */
-        $this->renderView("_corriculum/_workplan/contentSections/edit.tpl");
+        $this->renderView("_corriculum/_workplan/rgrThemes/edit.tpl");
     }
     public function actionDelete() {
-        $object = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
-        $category = $object->category_id;
+        $object = CBaseManager::getWorkPlanRgrTheme(CRequest::getInt("id"));
+        $plan = $object->plan_id;
         $object->remove();
-        $this->redirect("workplancontentcategories.php?action=edit&id=".$category);
+        $this->redirect("workplanrgrthemes.php?action=index&plan_id=".$plan);
     }
     public function actionSave() {
-        $object = new CWorkPlanContentSection();
+        $object = new CWorkPlanRgrTheme();
         $object->setAttributes(CRequest::getArray($object::getClassName()));
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplancontentsections.php?action=edit&id=".$object->getId());
+                $this->redirect("workplanrgrthemes.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplancontentcategories.php?action=edit&id=".$object->category_id);
+                $this->redirect("workplanrgrthemes.php?action=index&plan_id=".$object->plan_id);
             }
             return true;
         }
         $this->setData("object", $object);
-        $this->renderView("_corriculum/_workplan/contentSections/edit.tpl");
+        $this->renderView("_corriculum/_workplan/rgrThemes/edit.tpl");
     }
 }

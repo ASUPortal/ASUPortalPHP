@@ -148,6 +148,11 @@ class CWorkPlanController extends CFlowController{
             }
             $planCompetention->save();
         }
+        $category = new CWorkPlanContentCategory();
+        $category->plan_id = $plan->getId();
+        $category->order = 1;
+        $category->title = "Пустая категория";
+        $category->save();
         $this->redirect("?action=edit&id=".$plan->getId());
     }
     public function actionEdit() {

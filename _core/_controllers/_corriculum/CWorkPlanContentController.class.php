@@ -132,6 +132,17 @@ class CWorkPlanContentController extends CBaseController{
             }
         }
         $this->setData("termSectionsData", $termSectionsData);
+        $queryControl = new CQuery();
+        $queryControl->select("term.name as name, l.term_id as termId")
+	        ->from(TABLE_WORK_PLAN_CONTENT_FINAL_CONTROL." as l")
+	        ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.control_type_id")
+	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
+	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
+	        ->condition("category.plan_id = ".$plan->getId())
+	        ->group("l.control_type_id")
+	        ->order("name");
+        $finalControls = $queryControl->execute();
+        $this->setData("finalControls", $finalControls);
         $this->renderView("_corriculum/_workplan/content/structure.tpl");
     }
 }

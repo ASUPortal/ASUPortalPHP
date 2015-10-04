@@ -28,6 +28,30 @@
             </tbody>
         </table>
     {/if}
+    
+    <h4>Вид итогового контроля</h4>
+    {if $finalControls->getCount() == 0}
+        Нет объектов для отображения
+    {else}
+        <table class="table table-striped table-bordered table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Вид контроля</th>
+                <th>Семестр</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $finalControls->getItems() as $control}
+                <tr>
+                    <td>{counter}</td>
+                    <td>{$control["name"]}</td>
+                    <td>{CBaseManager::getWorkPlanTerm($control["termId"])->number}</td>
+                </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    {/if}
 
     {foreach $termSectionsData as $termId=>$termData}
         <h4>Разделы дисциплины, изучаемые в {CBaseManager::getWorkPlanTerm($termId)->number}-м семестре</h4>

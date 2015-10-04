@@ -46,7 +46,21 @@
 
 {CHtml::activeComponent("workplanprojectthemes.php?plan_id={$plan->getId()}", $plan)}
 
-<h4>4.7. Самостоятельное изучение разделов дисциплины</h4>
+<h4>4.7. Расчётно-графическая работа</h4>
+
+<div class="control-group">
+    {CHtml::activeLabel("rgr_description", $plan)}
+    <div class="controls">
+        {CHtml::activeTextBox("rgr_description", $plan, "rgr_description")}
+        {CHtml::error("rgr_description", $plan)}
+    </div>
+</div>
+
+<strong>Темы расчётно-графических работ</strong>
+
+{CHtml::activeComponent("workplanrgrthemes.php?plan_id={$plan->getId()}", $plan)}
+
+<h4>4.8. Самостоятельное изучение разделов дисциплины</h4>
 
 {include file="_corriculum/_workplan/selfEducationBlocks/subform.index.tpl"}
 
@@ -55,5 +69,8 @@
         jQuery("#project_description").redactor({
             imageUpload: '{$web_root}_modules/_redactor/image_upload.php'
         });
-    });
+        jQuery("#rgr_description").redactor({
+            imageUpload: '{$web_root}_modules/_redactor/image_upload.php'
+        });
+    });.
 </script>

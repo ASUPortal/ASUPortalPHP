@@ -311,6 +311,7 @@
     define("TABLE_WORK_PLAN_CONTENT_SECTIONS", "pl_corriculum_workplan_content_sections");
     define("TABLE_WORK_PLAN_TERMS", "pl_corriculum_workplan_terms");
     define("TABLE_WORK_PLAN_PROJECT_THEMES", "pl_corriculum_workplan_projects");
+    define("TABLE_WORK_PLAN_RGR_THEMES", "pl_corriculum_workplan_rgrs");
     define("TABLE_WORK_PLAN_SELFEDUCATION", "pl_corriculum_workplan_selfeducation");
     define("TABLE_WORK_PLAN_MARK_TYPES", "pl_corriculum_workplan_marktypes");
     define("TABLE_WORK_PLAN_MARK_TYPE_FUNDS", "pl_corriculum_workplan_marktype_fund");
@@ -326,10 +327,12 @@
     define("TABLE_WORK_PLAN_CONTENT_CATEGORIES", "pl_corriculum_workplan_content_categories");
     define("TABLE_WORK_PLAN_CONTENT_CONTROLS", "pl_corriculum_workplan_content_section_controls");
     define("TABLE_WORK_PLAN_CONTENT_LOADS", "pl_corriculum_workplan_content_section_loads");
+    define("TABLE_WORK_PLAN_CONTENT_FINAL_CONTROL", "pl_corriculum_workplan_content_section_final_control");
     define("TABLE_WORK_PLAN_CONTENT_TOPICS", "pl_corriculum_workplan_content_section_load_topics");
     define("TABLE_WORK_PLAN_CONTENT_TECHNOLOGIES", "pl_corriculum_workplan_content_section_load_technologies");
     define("TABLE_WORK_PLAN_COMPETENTION_CAN_USE", "pl_corriculum_workplan_competention_can_use");
     define("TABLE_WORK_PLAN_ADDITIONAL_SUPPLY", "pl_corriculum_workplan_additional_supply");
+    define("TABLE_WORK_PLAN_TYPES_CONTROL", "pl_corriculum_workplan_types_control");
     /**
      * Константы пагинатора
      */
@@ -430,7 +433,7 @@
     /**
      * Кастомный обработчик ошибок
      */
-    if (APP_DEBUG) {
+    /*if (APP_DEBUG) {
         set_error_handler("customErrorHandler");
         set_exception_handler("customExceptionHandler");
     }
@@ -464,4 +467,4 @@
     }
     function customExceptionHandler($exception) {
         echo "Неперехватываемое исключение: " , $exception->getMessage(), "\n";
-    }
+    }*/

@@ -41,7 +41,13 @@ class CWorkPlanContentSection extends CActiveModel{
                 "storageTable" => TABLE_WORK_PLAN_CONTENT_LOADS,
                 "storageCondition" => "section_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanContentSectionLoad"
-            )
+            ),
+        	"final_control" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_CONTENT_FINAL_CONTROL,
+        		"storageCondition" => "section_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanContentSectionFinalControl"
+        	)
         );
     }
 

@@ -19,7 +19,13 @@
  * @property string intended_for // предназначена для
  * @property string position
  * @property string project_description
+ * @property string rgr_description
  * @property string education_technologies
+ * @property string changes
+ * @property string method_instructs
+ * @property string adapt_for_ovz
+ * @property string director_of_library
+ * @property string chief_umr
  *
  * @property CTerm discipline
  * @property CArrayList profiles
@@ -28,6 +34,7 @@
  * @property CArrayList competentions
  * @property CArrayList terms
  * @property CArrayList projectThemes
+ * @property CArrayList rgrThemes
  * @property CArrayList authors
  * @property CArrayList categories
  * @property CArrayList selfEducations
@@ -210,6 +217,12 @@ class CWorkPlan extends CActiveModel {
         		"storageTable" => TABLE_WORK_PLAN_ADDITIONAL_SUPPLY,
         		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
         		"targetClass" => "CWorkPlanAdditionalSupply"
+        	),
+        	"rgrThemes" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_RGR_THEMES,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanRgrTheme"
         	)
         );
     }
@@ -238,7 +251,13 @@ class CWorkPlan extends CActiveModel {
             "discipline_id" => "Дисциплина",
             "module_id" => "Модуль",
             "level_id" => "Уровень подготовки",
-            "date_of_formation" => "Дата формирования"
+            "date_of_formation" => "Дата формирования",
+        	"method_instructs" => "Методические указания по освоению дисциплины",
+        	"adapt_for_ovz" => "Адаптация рабочей программы для лиц с ОВЗ",
+        	"changes" => "Изменения в рабочей программе",
+        	"director_of_library" => "Директор библиотеки",
+        	"chief_umr" => "Начальник УМР",
+        	"rgr_description" => "Расчётно-графическая работа"
         );
     }
 
