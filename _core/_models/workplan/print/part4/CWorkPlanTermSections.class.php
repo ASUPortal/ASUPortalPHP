@@ -3,7 +3,7 @@
 class CWorkPlanTermSections extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Нагрузка по разделам дисциплины";
+        return "Нагрузка по разделам дисциплины с КСР";
     }
 
     public function getFieldDescription()
@@ -37,7 +37,7 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         	$select[] = "section.sectionIndex";
         	$select[] = "section.name";
         	$select[] = "section.content";
-        	$select[] = "sum(if(term.alias in ('lecture', 'practice', 'labwork'), l.value, 0)) + sum(selfedu.question_hours) as total";
+        	$select[] = "sum(if(term.alias in ('lecture', 'practice', 'labwork', 'ksr'), l.value, 0)) + sum(selfedu.question_hours) as total";
         	$select[] = "sum(if(term.alias = 'lecture', l.value, 0)) as lecture";
         	$select[] = "sum(if(term.alias = 'practice', l.value, 0)) as practice";
         	$select[] = "sum(if(term.alias = 'labwork', l.value, 0)) as labwork";
@@ -60,12 +60,12 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         		$dataRow = array();
         		$dataRow[0] = $row["sectionIndex"];
         		$dataRow[1] = $row["name"].": ".$row["content"];
-        		$dataRow[2] = $row["total"];
-        		$dataRow[3] = $row["lecture"];
-        		$dataRow[4] = $row["practice"];
-        		$dataRow[5] = $row["labwork"];
+        		$dataRow[2] = $row["lecture"];
+        		$dataRow[3] = $row["practice"];
+        		$dataRow[4] = $row["labwork"];
+        		$dataRow[5] = $row["ksr"];
         		$dataRow[6] = $row["selfedu"];
-        		$dataRow[7] = $row["ksr"];
+        		$dataRow[7] = $row["total"];
         		$dataRow[8] = "";
         		$dataRow[9] = "";
         		$result[] = $dataRow;
