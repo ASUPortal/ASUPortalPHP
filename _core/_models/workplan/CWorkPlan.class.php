@@ -34,7 +34,6 @@
  * @property CArrayList competentions
  * @property CArrayList terms
  * @property CArrayList projectThemes
- * @property CArrayList rgrThemes
  * @property CArrayList authors
  * @property CArrayList categories
  * @property CArrayList selfEducations
@@ -220,9 +219,9 @@ class CWorkPlan extends CActiveModel {
         	),
         	"rgrThemes" => array(
         		"relationPower" => RELATION_HAS_MANY,
-        		"storageTable" => TABLE_WORK_PLAN_RGR_THEMES,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-        		"targetClass" => "CWorkPlanRgrTheme"
+        		"storageTable" => TABLE_WORK_PLAN_PROJECT_THEMES,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=1",
+        		"targetClass" => "CWorkPlanProjectTheme"
         	)
         );
     }
