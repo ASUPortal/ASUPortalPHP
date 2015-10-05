@@ -120,7 +120,7 @@ class CWorkPlanController extends CFlowController{
             $plan->qualification_id = $corriculum->qualification_id;
             $plan->education_form_id = $corriculum->form_id;
         }
-        $plan->date_of_formation = date("d.m.Y");
+        $plan->date_of_formation = date("Y-m-d");
         $plan->year = date("Y");
         $plan->authors = new CArrayList();
         $plan->authors->add(CSession::getCurrentPerson()->getId(), CSession::getCurrentPerson()->getId());
