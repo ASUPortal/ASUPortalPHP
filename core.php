@@ -397,7 +397,7 @@
     define("ZIP_DOCUMENTS_URL", WEB_ROOT."/tmp/zip/");
     define("ADMIN_EMAIL", CSettingsManager::getSettingValue("admin_email"));
 
-    define("APP_DEBUG", true);
+    define("APP_DEBUG", false);
     /**
      * Путь к библиотекам jQuery на сервере
      */
@@ -433,7 +433,7 @@
     /**
      * Кастомный обработчик ошибок
      */
-    /*if (APP_DEBUG) {
+    if (APP_DEBUG) {
         set_error_handler("customErrorHandler");
         set_exception_handler("customExceptionHandler");
     }
@@ -467,4 +467,4 @@
     }
     function customExceptionHandler($exception) {
         echo "Неперехватываемое исключение: " , $exception->getMessage(), "\n";
-    }*/
+    }

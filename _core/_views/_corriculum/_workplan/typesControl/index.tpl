@@ -18,8 +18,8 @@
                     <th colspan="2">Баллы</th>
                 </tr>
                 <tr>
-                    <td>{CHtml::tableOrder("min", $objects->getFirstItem())}</td>
-                    <td>{CHtml::tableOrder("max", $objects->getFirstItem())}</td>
+                    <th>{CHtml::tableOrder("min", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("max", $objects->getFirstItem())}</th>
             	</tr>
             </thead>
             <tbody>

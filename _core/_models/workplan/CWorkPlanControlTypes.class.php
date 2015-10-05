@@ -7,7 +7,7 @@
  * @property CTerm type
  * @property CTerm form
  */
-class CWorkPlanTypesControl extends CActiveModel{
+class CWorkPlanControlTypes extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_TYPES_CONTROL;
 
     protected function relations() {

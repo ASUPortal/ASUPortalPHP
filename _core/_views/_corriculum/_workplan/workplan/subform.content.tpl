@@ -58,7 +58,7 @@
 
 <strong>Темы расчётно-графических работ</strong>
 
-{CHtml::activeComponent("workplanrgrthemes.php?plan_id={$plan->getId()}", $plan)}
+{CHtml::activeComponent("workplanprojectthemes.php?type=1&plan_id={$plan->getId()}", $plan)}
 
 <h4>4.8. Самостоятельное изучение разделов дисциплины</h4>
 
@@ -72,5 +72,5 @@
         jQuery("#rgr_description").redactor({
             imageUpload: '{$web_root}_modules/_redactor/image_upload.php'
         });
-    });.
+    });
 </script>

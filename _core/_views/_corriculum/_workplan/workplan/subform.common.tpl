@@ -1,15 +1,3 @@
-<script>
-	jQuery(document).ready(function(){
-		jQuery("#date_of_formation").datepicker({
-			dateFormat: "dd.mm.yy",
-			showOn: "button",
-            buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
-            buttonImageOnly: true,
-            changeYear: true
-		});
-	});
-</script>
-
 <div class="control-group">
     {CHtml::activeLabel("title_display", $plan)}
     <div class="controls">
@@ -101,7 +89,7 @@
 <div class="control-group">
 	{CHtml::activeLabel("date_of_formation", $plan)}
 	<div class="controls">
-		{CHtml::activeTextField("date_of_formation", $plan, "date_of_formation", "", 'style="width: 100px;"')}
+		{CHtml::activeDateField("date_of_formation", $plan)}
 		{CHtml::error("date_of_formation", $plan)}
 	</div>
 </div>

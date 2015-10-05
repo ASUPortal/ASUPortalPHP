@@ -120,6 +120,7 @@ class CWorkPlanController extends CFlowController{
             $plan->qualification_id = $corriculum->qualification_id;
             $plan->education_form_id = $corriculum->form_id;
         }
+        $plan->date_of_formation = date("d.m.Y");
         $plan->year = date("Y");
         $plan->authors = new CArrayList();
         $plan->authors->add(CSession::getCurrentPerson()->getId(), CSession::getCurrentPerson()->getId());
@@ -157,6 +158,7 @@ class CWorkPlanController extends CFlowController{
     }
     public function actionEdit() {
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+        $plan->date_of_formation = date("d.m.Y", strtotime($plan->date_of_formation));
         $this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
@@ -182,7 +184,7 @@ class CWorkPlanController extends CFlowController{
         ));
         $this->setData("plan", $plan);
 
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        //$this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->addCSSInclude("_modules/_redactor/redactor.css");
         $this->addJSInclude("_modules/_redactor/redactor.min.js");
@@ -193,6 +195,7 @@ class CWorkPlanController extends CFlowController{
         $plan = new CWorkPlan();
         $plan->setAttributes(CRequest::getArray($plan->getClassName()));
         if ($plan->validate()) {
+        	$plan->date_of_formation = date("Y-m-d", strtotime($plan->date_of_formation));
             $plan->save();
             if ($this->continueEdit()) {
                 $this->redirect("workplans.php?action=edit&id=".$plan->getId());
@@ -201,6 +204,7 @@ class CWorkPlanController extends CFlowController{
             }
             return true;
         }
+        $plan->date_of_formation = date("d.m.Y", strtotime($plan->date_of_formation));
         $this->setData("plan", $plan);
         $this->renderView("_corriculum/_workplan/workplan/edit.tpl");
     }
