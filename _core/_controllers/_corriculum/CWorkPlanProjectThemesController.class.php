@@ -25,7 +25,7 @@ class CWorkPlanProjectThemesController extends CBaseController{
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_PROJECT_THEMES." as t")
             ->order("t.id asc")
-            ->condition("plan_id=".CRequest::getInt("plan_id"));
+            ->condition("plan_id=".CRequest::getInt("plan_id")." AND type=".CRequest::getInt("type"));
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanProjectTheme($ar);
@@ -38,7 +38,7 @@ class CWorkPlanProjectThemesController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Добавить",
-            "link" => "workplanprojectthemes.php?action=add&id=".CRequest::getInt("plan_id"),
+            "link" => "workplanprojectthemes.php?action=add&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
             "icon" => "actions/list-add.png"
         ));
         /**
@@ -49,13 +49,14 @@ class CWorkPlanProjectThemesController extends CBaseController{
     public function actionAdd() {
         $object = new CWorkPlanProjectTheme();
         $object->plan_id = CRequest::getInt("id");
+        $object->type = CRequest::getInt("type");
         $this->setData("object", $object);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplanprojectthemes.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplanprojectthemes.php?action=index&plan_id=".$object->plan_id."&type=".$object->type,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -71,7 +72,7 @@ class CWorkPlanProjectThemesController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplanprojectthemes.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplanprojectthemes.php?action=index&plan_id=".$object->plan_id."&type=".$object->type,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -82,8 +83,9 @@ class CWorkPlanProjectThemesController extends CBaseController{
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanProjectTheme(CRequest::getInt("id"));
         $plan = $object->plan_id;
+        $type = $object->type;
         $object->remove();
-        $this->redirect("workplanprojectthemes.php?action=index&plan_id=".$plan);
+        $this->redirect("workplanprojectthemes.php?action=index&plan_id=".$plan."&type=".$type);
     }
     public function actionSave() {
         $object = new CWorkPlanProjectTheme();
@@ -93,7 +95,7 @@ class CWorkPlanProjectThemesController extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("workplanprojectthemes.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplanprojectthemes.php?action=index&plan_id=".$object->plan_id);
+                $this->redirect("workplanprojectthemes.php?action=index&plan_id=".$object->plan_id."&type=".$object->type);
             }
             return true;
         }

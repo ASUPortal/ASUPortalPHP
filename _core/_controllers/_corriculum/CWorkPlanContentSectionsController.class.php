@@ -79,6 +79,11 @@ class CWorkPlanContentSectionsController extends CBaseController{
             "link" => "workplancontentloads.php?action=add&id=".$object->getId(),
             "icon" => "actions/list-add.png"
         ));
+        $this->addActionsMenuItem(array(
+        	"title" => "Добавить вид итогового контроля",
+        	"link" => "workplancontentfinalcontrol.php?action=add&id=".$object->getId(),
+        	"icon" => "actions/list-add.png"
+        ));
         /**
          * Отображение представления
          */

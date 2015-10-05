@@ -45,6 +45,16 @@ class CWorkPlanContentController extends CBaseController{
         $this->setData("objects", $plan->getLabWorks());
         $this->renderView("_corriculum/_workplan/content/labworks.tpl");
     }
+    public function actionLectures() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
+    	$this->addActionsMenuItem(array(
+    			"title" => "Обновить",
+    			"link" => "workplancontent.php?action=lectures&plan_id=".CRequest::getInt("plan_id"),
+    			"icon" => "actions/view-refresh.png"
+    	));
+    	$this->setData("objects", $plan->getLectures());
+    	$this->renderView("_corriculum/_workplan/content/lectures.tpl");
+    }
     public function actionTechnologies() {
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
         $this->addActionsMenuItem(array(
@@ -103,10 +113,11 @@ class CWorkPlanContentController extends CBaseController{
             $select = array();
             $select[] = "section.sectionIndex";
             $select[] = "section.name";
-            $select[] = "sum(if(term.alias in ('lecture', 'practice', 'labwork'), l.value, 0)) + sum(selfedu.question_hours) as total";
+            $select[] = "sum(if(term.alias in ('lecture', 'practice', 'labwork', 'ksr'), l.value, 0)) + sum(selfedu.question_hours) as total";
             $select[] = "sum(if(term.alias = 'lecture', l.value, 0)) as lecture";
             $select[] = "sum(if(term.alias = 'practice', l.value, 0)) as practice";
             $select[] = "sum(if(term.alias = 'labwork', l.value, 0)) as labwork";
+            $select[] = "sum(if(term.alias = 'ksr', l.value, 0)) as ksr";
             $select[] = "sum(selfedu.question_hours) as selfedu";
             $query->select(join(", ", $select))
                 ->from(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section")
@@ -121,6 +132,17 @@ class CWorkPlanContentController extends CBaseController{
             }
         }
         $this->setData("termSectionsData", $termSectionsData);
+        $queryControl = new CQuery();
+        $queryControl->select("term.name as name, l.term_id as termId")
+	        ->from(TABLE_WORK_PLAN_CONTENT_FINAL_CONTROL." as l")
+	        ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.control_type_id")
+	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
+	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
+	        ->condition("category.plan_id = ".$plan->getId())
+	        ->group("l.control_type_id")
+	        ->order("name");
+        $finalControls = $queryControl->execute();
+        $this->setData("finalControls", $finalControls);
         $this->renderView("_corriculum/_workplan/content/structure.tpl");
     }
 }
