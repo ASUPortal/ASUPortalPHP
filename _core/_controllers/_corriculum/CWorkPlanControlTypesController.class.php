@@ -64,7 +64,7 @@ class CWorkPlanControlTypesController extends CBaseController{
         $this->renderView("_corriculum/_workplan/typesControl/add.tpl");
     }
     public function actionEdit() {
-        $object = CBaseManager::getWorkPlanTypesControl(CRequest::getInt("id"));
+        $object = CBaseManager::getWorkPlanControlTypes(CRequest::getInt("id"));
         $this->setData("object", $object);
         /**
          * Генерация меню
@@ -80,7 +80,7 @@ class CWorkPlanControlTypesController extends CBaseController{
         $this->renderView("_corriculum/_workplan/typesControl/edit.tpl");
     }
     public function actionDelete() {
-        $object = CBaseManager::getWorkPlanTypesControl(CRequest::getInt("id"));
+        $object = CBaseManager::getWorkPlanControlTypes(CRequest::getInt("id"));
         $plan = $object->plan_id;
         $object->remove();
         $this->redirect("workplantypescontrol.php?action=index&plan_id=".$plan);
