@@ -397,7 +397,7 @@
     define("ZIP_DOCUMENTS_URL", WEB_ROOT."/tmp/zip/");
     define("ADMIN_EMAIL", CSettingsManager::getSettingValue("admin_email"));
 
-    define("APP_DEBUG", false);
+    define("APP_DEBUG", true);
     /**
      * Путь к библиотекам jQuery на сервере
      */
