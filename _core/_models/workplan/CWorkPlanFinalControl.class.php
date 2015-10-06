@@ -1,23 +1,16 @@
 <?php
 /**
  * 
- * @property int section_id
+ * @property int plan_id
  * @property int term_id
- * @property CWorkPlanContentSection section
  * @property CWorkPlanTerm term
  * @property CTerm controlType
  */
-class CWorkPlanContentSectionFinalControl extends CActiveModel{
-    protected $_table = TABLE_WORK_PLAN_CONTENT_FINAL_CONTROL;
+class CWorkPlanFinalControl extends CActiveModel{
+    protected $_table = TABLE_WORK_PLAN_FINAL_CONTROL;
 
     protected function relations() {
         return array(
-            "section" => array(
-                "relationPower" => RELATION_HAS_ONE,
-                "storageProperty" => "_section",
-                "storageField" => "section_id",
-                "targetClass" => "CWorkPlanContentSection"
-            ),
             "term" => array(
                 "relationPower" => RELATION_HAS_ONE,
                 "storageProperty" => "_term",

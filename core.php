@@ -327,7 +327,7 @@
     define("TABLE_WORK_PLAN_CONTENT_CATEGORIES", "pl_corriculum_workplan_content_categories");
     define("TABLE_WORK_PLAN_CONTENT_CONTROLS", "pl_corriculum_workplan_content_section_controls");
     define("TABLE_WORK_PLAN_CONTENT_LOADS", "pl_corriculum_workplan_content_section_loads");
-    define("TABLE_WORK_PLAN_CONTENT_FINAL_CONTROL", "pl_corriculum_workplan_content_section_final_control");
+    define("TABLE_WORK_PLAN_FINAL_CONTROL", "pl_corriculum_workplan_final_control");
     define("TABLE_WORK_PLAN_CONTENT_TOPICS", "pl_corriculum_workplan_content_section_load_topics");
     define("TABLE_WORK_PLAN_CONTENT_TECHNOLOGIES", "pl_corriculum_workplan_content_section_load_technologies");
     define("TABLE_WORK_PLAN_COMPETENTION_CAN_USE", "pl_corriculum_workplan_competention_can_use");
@@ -335,6 +335,7 @@
     define("TABLE_WORK_PLAN_TYPES_CONTROL", "pl_corriculum_workplan_types_control");
     define("TABLE_WORK_PLAN_CRITERIA_OF_EVALUATION", "pl_corriculum_workplan_criteria_of_evaluation");
     define("TABLE_WORK_PLAN_EVALUATION_MATERIALS", "pl_corriculum_workplan_evaluation_materials");
+    define("TABLE_WORK_PLAN_MARKS_STUDY_ACTIVITY", "pl_corriculum_workplan_marks_study_activity");
     /**
      * Константы пагинатора
      */

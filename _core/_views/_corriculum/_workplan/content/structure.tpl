@@ -66,25 +66,26 @@
             </tbody>
         </table>
     {/if}
-    
-    <h4>Вид итогового контроля</h4>
-    {if $finalControls->getCount() == 0}
+      
+    <h4>Описание и количество баллов по видам учебной деятельности</h4>
+    {if $marks->getCount() == 0}
         Нет объектов для отображения
     {else}
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
             <tr>
                 <th>#</th>
-                <th>Вид контроля</th>
-                <th>Семестр</th>
+                <th>Вид учебной деятельности</th>
+                <th>Описание</th>
             </tr>
             </thead>
             <tbody>
-            {foreach $finalControls->getItems() as $control}
+            {counter start=0 print=false}
+            {foreach $marks->getItems() as $mark}
                 <tr>
                     <td>{counter}</td>
-                    <td>{$control["name"]}</td>
-                    <td>{CBaseManager::getWorkPlanTerm($control["termId"])->number}</td>
+                    <td>{$mark["name"]}</td>
+                    <td>{$mark["mark"]}</td>
                 </tr>
             {/foreach}
             </tbody>

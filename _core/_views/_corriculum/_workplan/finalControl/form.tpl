@@ -1,7 +1,7 @@
-<form action="workplancontentfinalcontrol.php" method="post" enctype="multipart/form-data" class="form-horizontal">
+<form action="workplanfinalcontrol.php" method="post" enctype="multipart/form-data" class="form-horizontal">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $object)}
-    {CHtml::activeHiddenField("section_id", $object)}
+    {CHtml::activeHiddenField("plan_id", $object)}
 
     {CHtml::errorSummary($object)}
 
@@ -16,7 +16,7 @@
     <div class="control-group">
         {CHtml::activeLabel("term_id", $object)}
         <div class="controls">
-            {CHtml::activeLookup("term_id", $object, "class.CSearchCatalogWorkPlanTerms", false, ["plan_id" => $object->section->category->plan_id])}
+            {CHtml::activeLookup("term_id", $object, "class.CSearchCatalogWorkPlanTerms", false, ["plan_id" => $object->plan_id])}
             {CHtml::error("term_id", $object)}
         </div>
     </div>

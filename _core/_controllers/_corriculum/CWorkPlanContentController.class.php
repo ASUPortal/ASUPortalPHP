@@ -152,19 +152,21 @@ class CWorkPlanContentController extends CBaseController{
         }
         $this->setData("controlTypes", $controlTypes);
         /**
-         * Вид итогового контроля
+         * Описание и количество баллов по видам учебной деятельности
          */
-        $queryControl = new CQuery();
-        $queryControl->select("term.name as name, l.term_id as termId")
-	        ->from(TABLE_WORK_PLAN_CONTENT_FINAL_CONTROL." as l")
-	        ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.control_type_id")
-	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
+        $setMarks = new CRecordSet();
+        $queryMarks = new CQuery();
+        $setMarks->setQuery($queryMarks);
+        $queryMarks->select("term.name as name, t.mark as mark")
+	        ->from(TABLE_WORK_PLAN_MARKS_STUDY_ACTIVITY." as t")
+	        ->innerJoin(TABLE_WORK_PLAN_TYPES_CONTROL." as control", "t.activity_id = control.id")
+	        ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = control.type_study_activity_id")
+	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "control.section_id = section.id")
 	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
 	        ->condition("category.plan_id = ".$plan->getId())
-	        ->group("l.control_type_id")
-	        ->order("name");
-        $finalControls = $queryControl->execute();
-        $this->setData("finalControls", $finalControls);
+	        ->order("t.mark asc");
+        $marks = $queryMarks->execute();
+        $this->setData("marks", $marks);
         $this->renderView("_corriculum/_workplan/content/structure.tpl");
     }
 }

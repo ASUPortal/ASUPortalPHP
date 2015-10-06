@@ -1,5 +1,7 @@
 <?php
-class CWorkPlanContentSectionFinalControlController extends CBaseController{
+class CWorkPlanFinalControlController extends CBaseController{
+	protected $_isComponent = true;
+	
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -21,12 +23,12 @@ class CWorkPlanContentSectionFinalControlController extends CBaseController{
         $query = new CQuery();
         $set->setQuery($query);
         $query->select("t.*")
-            ->from(TABLE_WORK_PLAN_CONTENT_FINAL_CONTROL." as t")
-            ->condition("section_id=".CRequest::getInt("section_id"))
+            ->from(TABLE_WORK_PLAN_FINAL_CONTROL." as t")
+            ->condition("plan_id=".CRequest::getInt("plan_id"))
             ->order("t.id asc");
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
-            $object = new CWorkPlanContentSectionFinalControl($ar);
+            $object = new CWorkPlanFinalControl($ar);
             $objects->add($object->getId(), $object);
         }
         $this->setData("objects", $objects);
@@ -35,79 +37,67 @@ class CWorkPlanContentSectionFinalControlController extends CBaseController{
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
-			array(
-				"title" => "Назад",
-				"link" => "workplancontentsections.php?action=edit&id=".$object->section_id,
-				"icon" => "actions/edit-undo.png"
-			),
-			array(
-				"title" => "Обновить",
-				"link" => "workplancontentfinalcontrol.php?action=index&section_id=".CRequest::getInt("section_id"),
-				"icon" => "actions/view-refresh.png"
-			),
-			array(
-				"title" => "Добавить нагрузку",
-				"link" => "workplancontentfinalcontrol.php?action=add&id=".CRequest::getInt("section_id"),
-				"icon" => "actions/list-add.png"
-			),
+            "title" => "Добавить",
+            "link" => "workplanfinalcontrol.php?action=add&id=".CRequest::getInt("plan_id"),
+            "icon" => "actions/list-add.png"
         ));
         /**
          * Отображение представления
          */
-        $this->renderView("_corriculum/_workplan/contentLoads/index.tpl");
+        $this->renderView("_corriculum/_workplan/finalControl/index.tpl");
     }
     public function actionAdd() {
-        $object = new CWorkPlanContentSectionFinalControl();
-        $object->section_id = CRequest::getInt("id");
+        $object = new CWorkPlanFinalControl();
+        $object->plan_id = CRequest::getInt("id");
         $this->setData("object", $object);
-        /**
+        /** 
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancontentfinalcontrol.php?action=index&section_id=".$object->section_id,
+            "link" => "workplanfinalcontrol.php?action=index&plan_id=".$object->plan_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
          * Отображение представления
          */
-        $this->renderView("_corriculum/_workplan/contentFinalControl/add.tpl");
+        $this->renderView("_corriculum/_workplan/finalControl/add.tpl");
     }
     public function actionEdit() {
-        $object = CBaseManager::getWorkPlanContentSectionFinalControl(CRequest::getInt("id"));
+        $object = CBaseManager::getWorkPlanFinalControl(CRequest::getInt("id"));
         $this->setData("object", $object);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancontentsections.php?action=edit&id=".$object->section_id,
+            "link" => "workplanfinalcontrol.php?action=index&id=".$object->plan_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
          * Отображение представления
          */
-        $this->renderView("_corriculum/_workplan/contentFinalControl/edit.tpl");
+        $this->renderView("_corriculum/_workplan/finalControl/edit.tpl");
     }
     public function actionDelete() {
-        $object = CBaseManager::getWorkPlanContentSectionFinalControl(CRequest::getInt("id"));
-        $section = $object->section_id;
+        $object = CBaseManager::getWorkPlanFinalControl(CRequest::getInt("id"));
+        $plan = $object->plan_id;
         $object->remove();
-        $this->redirect("workplancontentfinalcontrol.php?action=index&section_id=".$section);
+        $this->redirect("workplanfinalcontrol.php?action=index&plan_id=".$plan);
     }
     public function actionSave() {
-        $object = new CWorkPlanContentSectionFinalControl();
+        $object = new CWorkPlanFinalControl();
         $object->setAttributes(CRequest::getArray($object::getClassName()));
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplancontentfinalcontrol.php?action=edit&id=".$object->getId());
+                $this->redirect("workplanfinalcontrol.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplancontentfinalcontrol.php?action=index&section_id=".$object->section_id);
+                $this->redirect("workplanfinalcontrol.php?action=index&plan_id=".$object->plan_id);
             }
             return true;
         }
         $this->setData("object", $object);
-        $this->renderView("_corriculum/_workplan/contentFinalControl/edit.tpl");
+        $this->renderView("_corriculum/_workplan/finalControl/edit.tpl");
     }
 }

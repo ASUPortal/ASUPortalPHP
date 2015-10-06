@@ -12,6 +12,10 @@
 
 {CHtml::activeComponent("workplanterms.php?plan_id={$plan->getId()}", $plan)}
 
+<h4>Вид итогового контроля</h4>
+
+{CHtml::activeComponent("workplanfinalcontrol.php?plan_id={$plan->getId()}", $plan)}
+
 <h4>4.1 Содержание разделов дисциплины</h4>
 
 {include file="_corriculum/_workplan/contentCategories/subform.index.tpl"}
