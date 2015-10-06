@@ -71,7 +71,7 @@ class CWorkPlanFinalControlController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplanfinalcontrol.php?action=index&id=".$object->plan_id,
+            "link" => "workplanfinalcontrol.php?action=index&plan_id=".$object->plan_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
