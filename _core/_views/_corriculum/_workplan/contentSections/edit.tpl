@@ -9,12 +9,16 @@
 
     <ul class="nav nav-tabs">
         <li class="active"><a href="#loads" data-toggle="tab">Нагрузка</a></li>
+        <li><a href="#controltypes" data-toggle="tab">Виды контроля</a></li>
         <li><a href="#control" data-toggle="tab">Вид итогового контроля</a></li>
     </ul>
 
     <div class="tab-content">
         <div class="tab-pane active" id="loads">
             {include file="_corriculum/_workplan/contentSections/subform.load.tpl"}
+        </div>
+        <div class="tab-pane" id="controltypes">
+            {CHtml::activeComponent("workplantypescontrol.php?id={$object->getId()}", $object)}
         </div>
         <div class="tab-pane" id="control">
             {include file="_corriculum/_workplan/contentSections/subform.control.tpl"}
