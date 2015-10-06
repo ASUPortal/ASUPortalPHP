@@ -333,6 +333,8 @@
     define("TABLE_WORK_PLAN_COMPETENTION_CAN_USE", "pl_corriculum_workplan_competention_can_use");
     define("TABLE_WORK_PLAN_ADDITIONAL_SUPPLY", "pl_corriculum_workplan_additional_supply");
     define("TABLE_WORK_PLAN_TYPES_CONTROL", "pl_corriculum_workplan_types_control");
+    define("TABLE_WORK_PLAN_CRITERIA_OF_EVALUATION", "pl_corriculum_workplan_criteria_of_evaluation");
+    define("TABLE_WORK_PLAN_EVALUATION_MATERIALS", "pl_corriculum_workplan_evaluation_materials");
     /**
      * Константы пагинатора
      */

@@ -20,17 +20,17 @@
 
 {CHtml::activeComponent("workplancontent.php?plan_id={$plan->getId()}", $plan, ["defaultAction" => "structure"])}
 
-<h4>4.3. Лабораторные работы</h4>
+<h4>4.3. Темы лекций</h4>
+
+{CHtml::activeComponent("workplancontent.php?plan_id={$plan->getId()}", $plan, ["defaultAction" => "lectures"])}
+
+<h4>4.4. Лабораторные работы</h4>
 
 {CHtml::activeComponent("workplancontent.php?plan_id={$plan->getId()}", $plan, ["defaultAction" => "labworks"])}
 
-<h4>4.4. Практические занятия (семинары)</h4>
+<h4>4.5. Практические занятия (семинары)</h4>
 
 {CHtml::activeComponent("workplancontent.php?plan_id={$plan->getId()}", $plan, ["defaultAction" => "practices"])}
-
-<h4>4.5. Темы лекций</h4>
-
-{CHtml::activeComponent("workplancontent.php?plan_id={$plan->getId()}", $plan, ["defaultAction" => "lectures"])}
 
 <h4>4.6. Курсовой проект (работа)</h4>
 
