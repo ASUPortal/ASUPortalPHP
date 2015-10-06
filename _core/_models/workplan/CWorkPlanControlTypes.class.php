@@ -1,7 +1,6 @@
 <?php
 /**
  *
- * @property int plan_id
  * @property int type_study_activity_id
  *
  * @property CTerm type

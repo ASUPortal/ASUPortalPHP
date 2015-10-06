@@ -15,7 +15,6 @@
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#common">Общая информация</a></li>
             <li><a data-toggle="tab" href="#competentions">Компетенции</a></li>
-            <li><a data-toggle="tab" href="#typesControl">Виды контроля</a></li>
             <li><a data-toggle="tab" href="#content">Содержание</a></li>
             <li><a data-toggle="tab" href="#eduTechnologies">Образовательные технологии</a></li>
             <li><a data-toggle="tab" href="#markTypes">Оценочные средства</a></li>
@@ -28,9 +27,6 @@
             </div>
             <div id="competentions" class="tab-pane">
                 {include file="_corriculum/_workplan/workplan/subform.competentions.tpl"}
-            </div>
-            <div id="typesControl" class="tab-pane">
-                {include file="_corriculum/_workplan/workplan/subform.typesControl.tpl"}
             </div>
             <div id="content" class="tab-pane">
                 {include file="_corriculum/_workplan/workplan/subform.content.tpl"}

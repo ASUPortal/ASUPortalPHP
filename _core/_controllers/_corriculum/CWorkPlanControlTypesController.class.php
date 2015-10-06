@@ -25,7 +25,7 @@ class CWorkPlanControlTypesController extends CBaseController{
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_TYPES_CONTROL." as t")
             ->order("t.id asc")
-            ->condition("plan_id=".CRequest::getInt("plan_id"));
+            ->condition("section_id=".CRequest::getInt("id"));
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanControlTypes($ar);
@@ -38,7 +38,7 @@ class CWorkPlanControlTypesController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Добавить",
-            "link" => "workplantypescontrol.php?action=add&id=".CRequest::getInt("plan_id"),
+            "link" => "workplantypescontrol.php?action=add&id=".CRequest::getInt("id"),
             "icon" => "actions/list-add.png"
         ));
         /**
@@ -48,14 +48,14 @@ class CWorkPlanControlTypesController extends CBaseController{
     }
     public function actionAdd() {
         $object = new CWorkPlanControlTypes();
-        $object->plan_id = CRequest::getInt("id");
+        $object->section_id = CRequest::getInt("id");
         $this->setData("object", $object);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplantypescontrol.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplantypescontrol.php?action=index&id=".$object->section_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -71,7 +71,7 @@ class CWorkPlanControlTypesController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplantypescontrol.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplantypescontrol.php?action=index&id=".$object->section_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -81,9 +81,8 @@ class CWorkPlanControlTypesController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanControlTypes(CRequest::getInt("id"));
-        $plan = $object->plan_id;
         $object->remove();
-        $this->redirect("workplantypescontrol.php?action=index&plan_id=".$plan);
+        $this->redirect("workplantypescontrol.php?action=index&id=".$object->section_id);
     }
     public function actionSave() {
         $object = new CWorkPlanControlTypes();
@@ -93,7 +92,7 @@ class CWorkPlanControlTypesController extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("workplantypescontrol.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplantypescontrol.php?action=index&plan_id=".$object->plan_id);
+                $this->redirect("workplantypescontrol.php?action=index&id=".$object->section_id);
             }
             return true;
         }
