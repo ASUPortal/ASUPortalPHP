@@ -29,6 +29,44 @@
         </table>
     {/if}
     
+    <h4>Виды контроля</h4>
+    {if $controlTypes->getCount() == 0}
+        Нет объектов для отображения
+    {else}
+    	<table class="table table-striped table-bordered table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th rowspan="2" width="16">#</th>
+                    <th rowspan="2">{CHtml::tableOrder("type_study_activity_id", $controlTypes->getFirstItem())}</th>
+                    <th rowspan="2">{CHtml::tableOrder("section_id", $controlTypes->getFirstItem())}</th>
+                    <th rowspan="2">{CHtml::tableOrder("control_id", $controlTypes->getFirstItem())}</th>
+                    <th rowspan="2">{CHtml::tableOrder("mark", $controlTypes->getFirstItem())}</th>
+                    <th rowspan="2">{CHtml::tableOrder("amount_labors", $controlTypes->getFirstItem())}</th>
+                    <th colspan="2">Баллы</th>
+                </tr>
+                <tr>
+                    <th>{CHtml::tableOrder("min", $controlTypes->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("max", $controlTypes->getFirstItem())}</th>
+            	</tr>
+            </thead>
+            <tbody>
+            
+            {foreach $controlTypes->getItems() as $object}
+                <tr>
+                    <td>{counter}</td>
+                    <td>{$object->type}</td>
+                    <td>{$object->section->name}</td>
+                    <td>{$object->control}</td>
+                    <td>{$object->mark}</td>
+                    <td>{$object->amount_labors}</td>
+                    <td>{$object->min}</td>
+                    <td>{$object->max}</td>
+                </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    {/if}
+    
     <h4>Вид итогового контроля</h4>
     {if $finalControls->getCount() == 0}
         Нет объектов для отображения

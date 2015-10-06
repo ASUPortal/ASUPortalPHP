@@ -132,6 +132,28 @@ class CWorkPlanContentController extends CBaseController{
             }
         }
         $this->setData("termSectionsData", $termSectionsData);
+        /**
+         * Виды контроля
+         */
+        $set = new CRecordSet();
+		$queryControlTypes = new CQuery();
+        $set->setQuery($queryControlTypes);
+        $queryControlTypes->select("l.*")
+	        ->from(TABLE_WORK_PLAN_TYPES_CONTROL." as l")
+	        ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.control_id")
+	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
+	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
+	        ->condition("category.plan_id = ".$plan->getId())
+	        ->order("term.name asc");
+        $controlTypes = new CArrayList();
+        foreach ($set->getItems() as $ar) {
+        	$controlType = new CWorkPlanControlTypes($ar);
+        	$controlTypes->add($controlType->getId(), $controlType);
+        }
+        $this->setData("controlTypes", $controlTypes);
+        /**
+         * Вид итогового контроля
+         */
         $queryControl = new CQuery();
         $queryControl->select("term.name as name, l.term_id as termId")
 	        ->from(TABLE_WORK_PLAN_CONTENT_FINAL_CONTROL." as l")
