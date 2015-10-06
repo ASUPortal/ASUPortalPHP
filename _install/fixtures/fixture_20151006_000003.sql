@@ -1,21 +1,4 @@
-CREATE TABLE `pl_corriculum_workplan_exam_questions` (
-  `id` int(11) NOT NULL,
-  `plan_id` int(11) NOT NULL,
-  `type` int(11) NOT NULL,
-  `question` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-ALTER TABLE `pl_corriculum_workplan_exam_questions`
- ADD PRIMARY KEY (`id`), ADD KEY `plan_id` (`plan_id`);
-
-
-ALTER TABLE `pl_corriculum_workplan_exam_questions`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `pl_corriculum_workplan_exam_questions`
-ADD CONSTRAINT `pl_corriculum_workplan_exam_questions_ibfk_1` FOREIGN KEY (`plan_id`) REFERENCES `pl_corriculum_workplans` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
+ALTER TABLE `questions` ADD `plan_id` INT NOT NULL AFTER `text`, ADD `type` INT NOT NULL AFTER `plan_id`;
 
 
 CREATE TABLE `pl_corriculum_workplan_criteria_of_evaluation` (
