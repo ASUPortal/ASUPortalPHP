@@ -228,6 +228,42 @@ class CWorkPlan extends CActiveModel {
         		"storageTable" => TABLE_WORK_PLAN_FINAL_CONTROL,
         		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
         		"targetClass" => "CWorkPlanFinalControl"
+        	),
+        	"examQuestions" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_EXAMINATION_QUESTIONS,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=1",
+        		"targetClass" => "CExamQuestion"
+        	),
+        	"creditQuestions" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_EXAMINATION_QUESTIONS,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=2",
+        		"targetClass" => "CExamQuestion"
+        	),
+        	"materialsOfEvaluation" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_EVALUATION_MATERIALS,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanEvaluationMaterial"
+        	),
+        	"criteriaExamOfEvaluation" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_CRITERIA_OF_EVALUATION,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=1",
+        		"targetClass" => "CWorkPlanCriteriaOfEvaluation"
+        	),
+        	"criteriaCreditOfEvaluation" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_CRITERIA_OF_EVALUATION,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=2",
+        		"targetClass" => "CWorkPlanCriteriaOfEvaluation"
+        	),
+        	"criteriaMaterialsOfEvaluation" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_CRITERIA_OF_EVALUATION,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=3",
+        		"targetClass" => "CWorkPlanCriteriaOfEvaluation"
         	)
         );
     }
