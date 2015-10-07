@@ -82,6 +82,13 @@ class CCorriculum extends CActiveModel{
                 "managerClass" => "CCorriculumsManager",
                 "managerGetObject" => "getAttestation"
             ),
+        	"nisChairman" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_nis_chairman_id",
+        		"storageField" => "nis_chairman_id",
+        		"managerClass" => "CStaffManager",
+        		"managerGetObject" => "getPerson"
+        	)
         );
     }
     public function attributeLabels() {
@@ -99,7 +106,8 @@ class CCorriculum extends CActiveModel{
         	"load_total" => "Общая нагрузка",
             "form_id" => "Форма обучения",
 			"load_as_fullday" => "Срок обучения по очной форме",
-			"speciality_direction_id" => "Специальность/направление по уч. плану"
+			"speciality_direction_id" => "Специальность/направление по уч. плану",
+        	"nis_chairman_id" => "Председатель НМС"
         );
     }
     public function validationRules() {
