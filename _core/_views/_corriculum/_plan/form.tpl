@@ -25,6 +25,14 @@
             {CHtml::error("direction_id", $corriculum)}
         </div>
     </div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("nis_chairman_id", $corriculum)}
+        <div class="controls">
+            {CHtml::activeDropDownList("nis_chairman_id", $corriculum, CStaffManager::getPersonsList())}
+            {CHtml::error("nis_chairman_id", $corriculum)}
+        </div>
+    </div>
 
     <div class="control-group">
         {CHtml::activeLabel("basic_education_id", $corriculum)}
