@@ -12,6 +12,7 @@
  * @property CWorkPlan plan
  * @property CWorkPlanContentCategory category
  * @property CArrayList loads
+ * @property CArrayList controlTypes
  */
 class CWorkPlanContentSection extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_CONTENT_SECTIONS;
@@ -42,11 +43,11 @@ class CWorkPlanContentSection extends CActiveModel{
                 "storageCondition" => "section_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanContentSectionLoad"
             ),
-        	"final_control" => array(
+        	"controlTypes" => array(
         		"relationPower" => RELATION_HAS_MANY,
-        		"storageTable" => TABLE_WORK_PLAN_CONTENT_FINAL_CONTROL,
+        		"storageTable" => TABLE_WORK_PLAN_TYPES_CONTROL,
         		"storageCondition" => "section_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-        		"targetClass" => "CWorkPlanContentSectionFinalControl"
+        		"targetClass" => "CWorkPlanControlTypes"
         	)
         );
     }

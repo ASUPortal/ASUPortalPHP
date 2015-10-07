@@ -222,6 +222,12 @@ class CWorkPlan extends CActiveModel {
         		"storageTable" => TABLE_WORK_PLAN_PROJECT_THEMES,
         		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=1",
         		"targetClass" => "CWorkPlanProjectTheme"
+        	),
+        	"finalControls" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_FINAL_CONTROL,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanFinalControl"
         	)
         );
     }
@@ -396,5 +402,28 @@ class CWorkPlan extends CActiveModel {
             }
         }
         return $technologies;
+    }
+    
+    /**
+     * Все виды контроля
+     *
+     * @return CArrayList
+     */
+    public function getControlTypes() {
+    	$controls = new CArrayList();
+    	/**
+    	 * @var $category CWorkPlanContentCategory
+    	 * @var $section CWorkPlanContentSection
+    	 * @var $load CWorkPlanContentSectionLoad
+    	 * @var $technology CWorkPlanContentSectionLoadTechnology
+    	*/
+    	foreach ($this->categories->getItems() as $category) {
+    		foreach ($category->sections->getItems() as $section) {
+    			foreach ($section->controlTypes->getItems() as $control) {
+    				$controls->add($control->getId(), $control);
+    			}
+    		}
+    	}
+    	return $controls;
     }
 }
