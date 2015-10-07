@@ -26,6 +26,12 @@ class CWorkPlanControlTypes extends CActiveModel{
         		"relationPower" => RELATION_HAS_ONE,
         		"storageField" => "control_id",
         		"targetClass" => "CTerm"
+        	),
+        	"marks" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_MARKS_STUDY_ACTIVITY,
+        		"storageCondition" => "activity_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanMarkStudyActivity"
         	)
         );
     }
