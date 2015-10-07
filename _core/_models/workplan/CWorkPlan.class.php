@@ -414,8 +414,7 @@ class CWorkPlan extends CActiveModel {
     	/**
     	 * @var $category CWorkPlanContentCategory
     	 * @var $section CWorkPlanContentSection
-    	 * @var $load CWorkPlanContentSectionLoad
-    	 * @var $technology CWorkPlanContentSectionLoadTechnology
+    	 * @var $control CWorkPlanControlTypes
     	*/
     	foreach ($this->categories->getItems() as $category) {
     		foreach ($category->sections->getItems() as $section) {

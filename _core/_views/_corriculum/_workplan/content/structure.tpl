@@ -84,8 +84,12 @@
             {foreach $marks->getItems() as $mark}
                 <tr>
                     <td>{counter}</td>
-                    <td>{$mark["name"]}</td>
-                    <td>{$mark["mark"]}</td>
+                    <td>{$mark->type->getValue()}</td>
+                    <td>
+                    	{foreach $mark->marks->getItems() as $control}
+                            <p>{$control->mark}</p>
+                        {/foreach}
+                    </td>
                 </tr>
             {/foreach}
             </tbody>
