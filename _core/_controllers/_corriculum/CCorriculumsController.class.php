@@ -117,30 +117,34 @@ class CCorriculumsController extends CBaseController {
                  * Копируем семестры
                  * @var CCorriculumDisciplineSection $section
                  */
-                foreach ($discipline->sections->getItems() as $section) {
-                    $newSection = $section->copy();
-                    $newSection->discipline_id = $newDiscipline->getId();
-                    $newSection->save();
-                    /**
-                     * Копируем виды нагрузку из семестров
-                     * @var CCorriculumDisciplineLabor $labor
-                     */
-                    foreach ($section->labors->getItems() as $labor) {
-                        $newLabor = $labor->copy();
-                        $newLabor->section_id = $newSection->getId();
-                        $newLabor->type_id = $labor->type_id;
-                        $newLabor->save();
-                    }
-                }
-                /**
-                 * Клонируем нагрузку из дисциплин
-                 */
-                foreach ($discipline->labors->getItems() as $labor) {
-                    $newLabor = $labor->copy();
-                    $newLabor->discipline_id = $newDiscipline->getId();
-                    $newLabor->type_id = $labor->type_id;
-                    $newLabor->save();
-                }
+				if ($discipline->sections->getCount() > 0) {
+					foreach ($discipline->sections->getItems() as $section) {
+						$newSection = $section->copy();
+						$newSection->discipline_id = $newDiscipline->getId();
+						$newSection->save();
+						/**
+						 * Копируем виды нагрузку из семестров
+						 * @var CCorriculumDisciplineLabor $labor
+						 */
+						foreach ($section->labors->getItems() as $labor) {
+							$newLabor = $labor->copy();
+							$newLabor->section_id = $newSection->getId();
+							$newLabor->type_id = $labor->type_id;
+							$newLabor->discipline_id = $newDiscipline->getId();
+							$newLabor->save();
+						}
+					}
+				} else {
+					/**
+					 * Клонируем нагрузку из дисциплин
+					 */
+					foreach ($discipline->labors->getItems() as $labor) {
+						$newLabor = $labor->copy();
+						$newLabor->discipline_id = $newDiscipline->getId();
+						$newLabor->type_id = $labor->type_id;
+						$newLabor->save();
+					}
+				}
 				// копируем дочерние дисциплины
 				foreach ($discipline->children->getItems() as $child) {
 					$newChildDiscipline = $child->copy();
@@ -151,29 +155,33 @@ class CCorriculumsController extends CBaseController {
                      * Копируем семестры
                      * @var CCorriculumDisciplineSection $section
                      */
-                    foreach ($child->sections->getItems() as $section) {
-                        $newSection = $section->copy();
-                        $newSection->discipline_id = $newChildDiscipline->getId();
-                        $newSection->save();
-                        /**
-                         * Копируем виды нагрузку из семестров
-                         * @var CCorriculumDisciplineLabor $labor
-                         */
-                        foreach ($section->labors->getItems() as $labor) {
-                            $newLabor = $labor->copy();
-                            $newLabor->section_id = $newSection->getId();
-                            $newLabor->type_id = $labor->type_id;
-                            $newLabor->save();
-                        }
-                    }
-					/**
-					 * Клонируем нагрузку из дисциплин
-					 */
-					foreach ($child->labors->getItems() as $labor) {
-						$newLabor = $labor->copy();
-						$newLabor->discipline_id = $newChildDiscipline->getId();
-						$newLabor->type_id = $labor->type_id;
-						$newLabor->save();
+					if ($child->sections->getCount() > 0) {
+						foreach ($child->sections->getItems() as $section) {
+							$newSection = $section->copy();
+							$newSection->discipline_id = $newChildDiscipline->getId();
+							$newSection->save();
+							/**
+							 * Копируем виды нагрузку из семестров
+							 * @var CCorriculumDisciplineLabor $labor
+							 */
+							foreach ($section->labors->getItems() as $labor) {
+								$newLabor = $labor->copy();
+								$newLabor->section_id = $newSection->getId();
+								$newLabor->type_id = $labor->type_id;
+								$newLabor->discipline_id = $newChildDiscipline->getId();
+								$newLabor->save();
+							}
+						}
+					} else {
+						/**
+						 * Клонируем нагрузку из дисциплин
+						 */
+						foreach ($child->labors->getItems() as $labor) {
+							$newLabor = $labor->copy();
+							$newLabor->discipline_id = $newChildDiscipline->getId();
+							$newLabor->type_id = $labor->type_id;
+							$newLabor->save();
+						}
 					}
 				}
             }
