@@ -1,9 +1,9 @@
 <?php
 
-class CWorkPlanSelfEduTotal extends CAbstractPrintClassField {
+class CWorkPlanSelfWorkValueOfLoad extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Самостоятельное изучение разделов дисциплины. Всего часов";
+        return "Значение нагрузки по самостоятельной работе";
     }
 
     public function getFieldDescription()
@@ -23,10 +23,11 @@ class CWorkPlanSelfEduTotal extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-        $result = 0;
-        foreach ($contextObject->selfEducations->getItems() as $row) {
-        	$result += $row->question_hours;
+		foreach ($contextObject->corriculumDiscipline->labors->getItems() as $labor) {
+        	if ($labor->type->getAlias() == "self_work") {
+        		$result = $labor->value;
+        	}
         }
-        return $result;
+		return $result;
     }
 }

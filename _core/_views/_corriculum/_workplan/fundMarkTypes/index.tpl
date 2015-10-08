@@ -34,11 +34,7 @@
                             <p>{$level}</p>
                         {/foreach}
                     </td>
-                    <td>
-                        {foreach $object->controls as $control}
-                            <p>{$control}</p>
-                        {/foreach}
-                    </td>
+                    <td>{", "|join:$object->controls->getItems()}</td>
                 </tr>
             {/foreach}
             </tbody>

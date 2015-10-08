@@ -94,7 +94,7 @@ class CWorkPlanController extends CFlowController{
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
         $discipline = $plan->corriculum_discipline_id;
         $plan->remove();
-        $this->redirect("disciplines.php?action=edit&id=".$discipline);
+        $this->redirect("workplans.php");
     }
     public function actionAdd() {
         /**
