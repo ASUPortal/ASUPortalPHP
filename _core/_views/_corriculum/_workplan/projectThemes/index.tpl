@@ -17,7 +17,7 @@
             {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $objects->getItems() as $object}
                 <tr>
-                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить тема курсового проекта')) { location.href='workplanprojectthemes.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
+                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить тему {$object->project_title}')) { location.href='workplanprojectthemes.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{counter}</td>
                     <td><a href="workplanprojectthemes.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
                     <td>{$object->project_title}</td>
