@@ -23,27 +23,39 @@ class CWorkPlanTermSectionsTotal extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$termSectionsData = new CArrayList();
-        foreach ($contextObject->terms->getItems() as $term) {
-            $query = new CQuery();
-            $query->select("sum(if(term.alias in ('lecture', 'practice', 'labwork', 'ksr'), l.value, 0)) + sum(selfedu.question_hours) as total")
-                ->from(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section")
-                ->innerJoin(TABLE_WORK_PLAN_CONTENT_LOADS." as l", "l.section_id = section.id")
-                ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
-                ->leftJoin(TABLE_WORK_PLAN_SELFEDUCATION." as selfedu", "selfedu.load_id = l.id")
-                ->group("l.section_id")
-                ->condition("l.term_id = ".$term->getId());
-            $items = $query->execute();
-            if ($items->getCount() > 0) {
-                $termSectionsData->add($term->getId(), $items);
-            }
-        }
-        $result = 0;
-        foreach ($termSectionsData->getItems() as $termId=>$termData) {
-        	foreach ($termData as $row) {
-        		$result += $row["total"];
-        	}
-        }
-        return $result;
+    	$values = array();
+    	$terms = array();
+    	foreach ($contextObject->terms->getItems() as $term) {
+    		$terms[] = "sum(if(l.term_id = ".$term->getId().", l.value, 0)) as t_".$term->getId();
+    	}
+    	$query = new CQuery();
+    	$query->select(join(", ", $terms))
+    	->from(TABLE_WORK_PLAN_CONTENT_LOADS." as l")
+    	->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
+    	->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
+    	->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
+    	->condition("category.plan_id = ".$contextObject->getId())
+    	->group("l.load_type_id")
+    	->order("term.name");
+    	$objects = $query->execute();
+    	$auditorTotal = 0;
+    	foreach ($objects->getItems() as $key=>$value) {
+    		$arr = array_values($value);
+    		$dataRow = array();
+    		for ($i = 0; $i <= count($value)-1; $i++) {
+    			$dataRow[$i] = $arr[$i];
+    		}
+    		foreach($dataRow as $i) {
+    			$auditorTotal += $i;
+    		}
+    	}
+    	
+    	foreach ($contextObject->corriculumDiscipline->labors->getItems() as $labor) {
+    		if ($labor->type->getAlias() == "self_work") {
+    			$selfWorkValueOfLoad = $labor->value;
+    		}
+    	}
+    	
+    	return $auditorTotal+$selfWorkValueOfLoad;
     }
 }

@@ -26,7 +26,7 @@ class CWorkPlanTermSectionsSelfEdu extends CAbstractPrintClassField {
 		$termSectionsData = new CArrayList();
         foreach ($contextObject->terms->getItems() as $term) {
             $query = new CQuery();
-            $query->select("sum(selfedu.question_hours) as selfedu")
+            $query->select("sum(ifnull(selfedu.question_hours, 0)) as selfedu")
                 ->from(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section")
                 ->innerJoin(TABLE_WORK_PLAN_CONTENT_LOADS." as l", "l.section_id = section.id")
                 ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
