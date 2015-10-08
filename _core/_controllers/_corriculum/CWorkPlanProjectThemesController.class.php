@@ -47,16 +47,17 @@ class CWorkPlanProjectThemesController extends CBaseController{
         $this->renderView("_corriculum/_workplan/projectThemes/index.tpl");
     }
     public function actionAdd() {
-        $object = new CWorkPlanProjectTheme();
-        $object->plan_id = CRequest::getInt("id");
-        $object->type = CRequest::getInt("type");
-        $this->setData("object", $object);
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$group = new CWorkPlanProjectThemeGroupAdd();
+    	$group->plan_id = CRequest::getInt("id");
+    	$group->type = CRequest::getInt("type");
+    	$this->setData("group", $group);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplanprojectthemes.php?action=index&plan_id=".$object->plan_id."&type=".$object->type,
+            "link" => "workplanprojectthemes.php?action=index&plan_id=".$group->plan_id."&type=".$group->type,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -88,18 +89,31 @@ class CWorkPlanProjectThemesController extends CBaseController{
         $this->redirect("workplanprojectthemes.php?action=index&plan_id=".$plan."&type=".$type);
     }
     public function actionSave() {
-        $object = new CWorkPlanProjectTheme();
-        $object->setAttributes(CRequest::getArray($object::getClassName()));
-        if ($object->validate()) {
-            $object->save();
-            if ($this->continueEdit()) {
-                $this->redirect("workplanprojectthemes.php?action=edit&id=".$object->getId());
-            } else {
-                $this->redirect("workplanprojectthemes.php?action=index&plan_id=".$object->plan_id."&type=".$object->type);
-            }
-            return true;
-        }
-        $this->setData("object", $object);
-        $this->renderView("_corriculum/_workplan/projectThemes/edit.tpl");
+    	$object = new CWorkPlanProjectTheme();
+    	$object->setAttributes(CRequest::getArray($object::getClassName()));
+    	if ($object->validate()) {
+    		$object->save();
+    		if ($this->continueEdit()) {
+    			$this->redirect("workplanprojectthemes.php?action=edit&id=".$object->getId());
+    		} else {
+    			$this->redirect("workplanprojectthemes.php?action=index&plan_id=".$object->plan_id."&type=".$object->type);
+    		}
+    		return true;
+    	}
+    	$this->setData("object", $object);
+    	$this->renderView("_corriculum/_workplan/projectThemes/edit.tpl");
+    }
+    public function actionSaveGroup() {
+    	$group = new CWorkPlanProjectThemeGroupAdd();
+    	$group->setAttributes(CRequest::getArray($group::getClassName()));
+    	$texts = explode(chr(13), $group->project_title);
+    	foreach ($texts as $text) {
+    		$q = new CWorkPlanProjectTheme();
+    		$q->plan_id = $group->plan_id;
+    		$q->type = $group->type;
+    		$q->project_title = trim($text);
+    		$q->save();
+    	}
+    	$this->redirect("workplanprojectthemes.php?action=index&plan_id=".$q->plan_id."&type=".$q->type);
     }
 }
