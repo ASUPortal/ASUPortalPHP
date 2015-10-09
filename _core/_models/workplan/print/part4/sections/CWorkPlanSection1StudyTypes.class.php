@@ -3,7 +3,7 @@
 class CWorkPlanSection1StudyTypes extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Виды учебной деятельности для первого раздела текущего контроля";
+        return "Виды учебной деятельности для ".$this->getNumberSection()." раздела текущего контроля";
     }
 
     public function getFieldDescription()
@@ -15,6 +15,11 @@ class CWorkPlanSection1StudyTypes extends CAbstractPrintClassField {
     {
 
     }
+    
+    public function getNumberSection()
+    {
+    	return 1;
+    }
 
     public function getFieldType()
     {
@@ -25,7 +30,7 @@ class CWorkPlanSection1StudyTypes extends CAbstractPrintClassField {
     {
         $result = array();
         foreach ($contextObject->getControlTypes()->getItems() as $row) {
-        	if ($row->section->sectionIndex == 1 and $row->control->getAlias() == "current") {
+        	if ($row->section->sectionIndex == $this->getNumberSection() and $row->control->getAlias() == "current") {
         		$dataRow = array();
 	        	$dataRow[0] = "– ".$row->type->getValue();
 	        	$dataRow[1] = $row->mark;

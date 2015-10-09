@@ -49,7 +49,7 @@ class CWorkPlanTermSectionsTotal extends CAbstractPrintClassField {
     			$auditorTotal += $i;
     		}
     	}
-    	
+    	$selfWorkValueOfLoad = 0;
     	foreach ($contextObject->corriculumDiscipline->labors->getItems() as $labor) {
     		if ($labor->type->getAlias() == "self_work") {
     			$selfWorkValueOfLoad = $labor->value;

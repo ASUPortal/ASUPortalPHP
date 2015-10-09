@@ -23,11 +23,13 @@ class CWorkPlanSelfWork extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
+    	$selfWorkValueOfLoad = 0;
     	foreach ($contextObject->corriculumDiscipline->labors->getItems() as $labor) {
     		if ($labor->type->getAlias() == "self_work") {
     			$selfWorkValueOfLoad = $labor->value;
     		}
     	}
+    	$projectValueOfLoad = 0;
     	foreach ($contextObject->corriculumDiscipline->labors->getItems() as $labor) {
     		if ($labor->type->getAlias() == "course_work") {
     			$projectValueOfLoad = $labor->value;
