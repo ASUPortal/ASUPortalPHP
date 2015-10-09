@@ -22,7 +22,8 @@ class CIndPlanLoadController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet(true);
+        $selectedYear = null;
+        $set = new CRecordSet(false);
         $query = new CQuery();
         $set->setQuery($query);
 
@@ -36,6 +37,32 @@ class CIndPlanLoadController extends CBaseController{
             } else {
                 $query->condition("p.id = ".CSession::getCurrentPerson()->getId());
             }
+        }
+        if (CRequest::getString("order") == "fio") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->order("fio ".$direction);
+        }
+        // фильтр по году
+        if (!is_null(CRequest::getFilter("year"))) {
+        	$query->innerJoin(TABLE_IND_PLAN_LOADS." as l", "l.person_id = p.id");
+        	$query->innerJoin(TABLE_YEARS." as year", "l.year_id = year.id");
+        	$query->condition("year.id =".CRequest::getFilter("year"));
+        	$selectedYear = CRequest::getFilter("year");
+        }
+        // фильтр по ФИО
+        if (!is_null(CRequest::getFilter("fio"))) {
+        	$query->condition("p.id = ".CRequest::getFilter("fio"));
+        }
+        $yearsQuery = new CQuery();
+        $yearsQuery->select("year.*")
+	        ->from(TABLE_YEARS." as year")
+	        ->order("year.name asc");
+        $years = array();
+        foreach ($yearsQuery->execute()->getItems() as $ar) {
+        	$year = new CTimeIntervals(new CActiveRecord($ar));
+        	$years[$year->getId()] = $year->name;
         }
 
         $persons = new CArrayList();
@@ -63,6 +90,8 @@ class CIndPlanLoadController extends CBaseController{
 
         $this->setData("paginator", $set->getPaginator());
         $this->setData("persons", $persons);
+        $this->setData("years", $years);
+        $this->setData("selectedYear", $selectedYear);
         $this->renderView("_individual_plan/load/index.tpl");
     }
     public function actionView() {
@@ -149,15 +178,15 @@ class CIndPlanLoadController extends CBaseController{
     	*/
     	$query = new CQuery();
     	$query->select("distinct(person.id) as id, person.fio as name")
-    	->from(TABLE_PERSON." as person")
-    	->condition("person.fio like '%".$term."%'")
-    	->limit(0, 5);
+	    	->from(TABLE_PERSON." as person")
+	    	->condition("person.fio like '%".$term."%'")
+	    	->limit(0, 5);
     	foreach ($query->execute()->getItems() as $item) {
     		$res[] = array(
-    				"field" => "id",
-    				"value" => $item["id"],
     				"label" => $item["name"],
-    				"class" => "CPerson"
+    				"value" => $item["name"],
+    				"object_id" => $item["id"],
+    				"type" => 1
     		);
     	}
     	echo json_encode($res);
