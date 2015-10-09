@@ -23,7 +23,7 @@ class CIndPlanLoadController extends CBaseController{
     }
     public function actionIndex() {
         $selectedYear = null;
-        $set = new CRecordSet(false);
+        $set = new CRecordSet();
         $query = new CQuery();
         $set->setQuery($query);
 
@@ -38,22 +38,11 @@ class CIndPlanLoadController extends CBaseController{
                 $query->condition("p.id = ".CSession::getCurrentPerson()->getId());
             }
         }
-        if (CRequest::getString("order") == "fio") {
-        	$direction = "asc";
-        	if (CRequest::getString("direction") != "") {
-        		$direction = CRequest::getString("direction");}
-        		$query->order("fio ".$direction);
-        }
         // фильтр по году
-        if (!is_null(CRequest::getFilter("year"))) {
+        if (!is_null(CRequest::getFilter("year.id"))) {
         	$query->innerJoin(TABLE_IND_PLAN_LOADS." as l", "l.person_id = p.id");
         	$query->innerJoin(TABLE_YEARS." as year", "l.year_id = year.id");
-        	$query->condition("year.id =".CRequest::getFilter("year"));
-        	$selectedYear = CRequest::getFilter("year");
-        }
-        // фильтр по ФИО
-        if (!is_null(CRequest::getFilter("fio"))) {
-        	$query->condition("p.id = ".CRequest::getFilter("fio"));
+        	$selectedYear = CRequest::getFilter("year.id");
         }
         $yearsQuery = new CQuery();
         $yearsQuery->select("year.*")
@@ -178,15 +167,15 @@ class CIndPlanLoadController extends CBaseController{
     	*/
     	$query = new CQuery();
     	$query->select("distinct(person.id) as id, person.fio as name")
-	    	->from(TABLE_PERSON." as person")
-	    	->condition("person.fio like '%".$term."%'")
-	    	->limit(0, 5);
+    	->from(TABLE_PERSON." as person")
+    	->condition("person.fio like '%".$term."%'")
+    	->limit(0, 5);
     	foreach ($query->execute()->getItems() as $item) {
     		$res[] = array(
+    				"field" => "id",
+    				"value" => $item["id"],
     				"label" => $item["name"],
-    				"value" => $item["name"],
-    				"object_id" => $item["id"],
-    				"type" => 1
+    				"class" => "CPerson"
     		);
     	}
     	echo json_encode($res);
