@@ -28,7 +28,9 @@
     <h2>Индивидуальные планы преподавателей</h2>
 
     {CHtml::helpForCurrentPage()}
-    {include file="_core.searchLocal.tpl"}
+    {if (CSession::getCurrentUser()->getLevelForCurrentTask() == 4)}
+		{include file="_core.searchLocal.tpl"}
+    {/if}
 
     {if $persons->getCount() == 0}
         <div class="alert">
