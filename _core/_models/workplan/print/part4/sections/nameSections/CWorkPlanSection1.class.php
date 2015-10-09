@@ -1,9 +1,9 @@
 <?php
 
-class CWorkPlanSection12 extends CAbstractPrintClassField {
+class CWorkPlanSection1 extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Название двенадцатого раздела";
+        return "Название первого раздела";
     }
 
     public function getFieldDescription()
@@ -15,6 +15,12 @@ class CWorkPlanSection12 extends CAbstractPrintClassField {
     {
 
     }
+    
+    public function getNumberSection()
+    {
+    	$str = get_class($this);
+    	return preg_replace('|[^0-9]*|','',$str);
+    }
 
     public function getFieldType()
     {
@@ -25,7 +31,7 @@ class CWorkPlanSection12 extends CAbstractPrintClassField {
     {
 		$result = "";
         foreach ($contextObject->getControlTypes()->getItems() as $control) {
-        	if ($control->section->sectionIndex == 12) {
+        	if ($control->section->sectionIndex == $this->getNumberSection()) {
         		$result = $control->section->name;
         	}
         }

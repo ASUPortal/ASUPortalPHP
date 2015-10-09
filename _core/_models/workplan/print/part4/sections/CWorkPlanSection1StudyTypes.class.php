@@ -15,6 +15,12 @@ class CWorkPlanSection1StudyTypes extends CAbstractPrintClassField {
     {
 
     }
+    
+    public function getNumberSection()
+    {
+    	$str = get_class($this);
+    	return preg_replace('|[^0-9]*|','',$str);
+    }
 
     public function getFieldType()
     {
@@ -25,7 +31,7 @@ class CWorkPlanSection1StudyTypes extends CAbstractPrintClassField {
     {
         $result = array();
         foreach ($contextObject->getControlTypes()->getItems() as $row) {
-        	if ($row->section->sectionIndex == 1 and $row->control->getAlias() == "current") {
+        	if ($row->section->sectionIndex == $this->getNumberSection() and $row->control->getAlias() == "current") {
         		$dataRow = array();
 	        	$dataRow[0] = "– ".$row->type->getValue();
 	        	$dataRow[1] = $row->mark;
