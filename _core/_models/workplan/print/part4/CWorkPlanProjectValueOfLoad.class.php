@@ -23,6 +23,7 @@ class CWorkPlanProjectValueOfLoad extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
+    	$result = 0;
 		foreach ($contextObject->corriculumDiscipline->labors->getItems() as $labor) {
         	if ($labor->type->getAlias() == "course_work") {
         		$result = $labor->value;
