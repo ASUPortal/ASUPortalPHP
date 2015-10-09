@@ -28,6 +28,7 @@
  * @property string chief_umr
  *
  * @property CTerm discipline
+ * @property CCorriculumDiscipline corriculumDiscipline
  * @property CArrayList profiles
  * @property CArrayList goals
  * @property CArrayList tasks
@@ -51,6 +52,13 @@ class CWorkPlan extends CActiveModel {
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getDiscipline"
             ),
+        	"corriculumDiscipline" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_corriculum_discipline_id",
+        		"storageField" => "corriculum_discipline_id",
+        		"managerClass" => "CCorriculumsManager",
+        		"managerGetObject" => "getDiscipline"
+        	),
             "profiles" => array(
                 "relationPower" => RELATION_MANY_TO_MANY,
                 "storageProperty" => "_profiles",

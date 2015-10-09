@@ -37,12 +37,12 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         	$select[] = "section.sectionIndex";
         	$select[] = "section.name";
         	$select[] = "section.content";
-        	$select[] = "sum(if(term.alias in ('lecture', 'practice', 'labwork', 'ksr'), l.value, 0)) + sum(selfedu.question_hours) as total";
+        	$select[] = "sum(if(term.alias in ('lecture', 'practice', 'labwork', 'ksr'), l.value, 0)) + sum(ifnull(selfedu.question_hours, 0)) as total";
         	$select[] = "sum(if(term.alias = 'lecture', l.value, 0)) as lecture";
         	$select[] = "sum(if(term.alias = 'practice', l.value, 0)) as practice";
         	$select[] = "sum(if(term.alias = 'labwork', l.value, 0)) as labwork";
         	$select[] = "sum(if(term.alias = 'ksr', l.value, 0)) as ksr";
-        	$select[] = "sum(selfedu.question_hours) as selfedu";
+        	$select[] = "sum(ifnull(selfedu.question_hours, 0)) as selfedu";
         	$query->select(join(", ", $select))
 	        	->from(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section")
 	        	->innerJoin(TABLE_WORK_PLAN_CONTENT_LOADS." as l", "l.section_id = section.id")
