@@ -3,7 +3,7 @@
 class CWorkPlanSection1StudyTypes extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Виды учебной деятельности для первого раздела текущего контроля";
+        return "Виды учебной деятельности для ".$this->getNumberSection()." раздела текущего контроля";
     }
 
     public function getFieldDescription()
@@ -18,8 +18,7 @@ class CWorkPlanSection1StudyTypes extends CAbstractPrintClassField {
     
     public function getNumberSection()
     {
-    	$str = get_class($this);
-    	return preg_replace('|[^0-9]*|','',$str);
+    	return 1;
     }
 
     public function getFieldType()

@@ -3,7 +3,7 @@
 class CWorkPlanSection1 extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Название первого раздела";
+        return "Название ".$this->getNumberSection()." раздела";
     }
 
     public function getFieldDescription()
@@ -16,10 +16,9 @@ class CWorkPlanSection1 extends CAbstractPrintClassField {
 
     }
     
-    public function getNumberSection()
+	public function getNumberSection()
     {
-    	$str = get_class($this);
-    	return preg_replace('|[^0-9]*|','',$str);
+    	return 1;
     }
 
     public function getFieldType()
