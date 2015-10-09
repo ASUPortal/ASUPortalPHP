@@ -1,29 +1,42 @@
 {extends file="_core.3col.tpl"}
 
+{block name="localSearchContent"}
+    <script>
+        jQuery(document).ready(function(){
+            jQuery("#year_selector").change(function(){
+                window.location.href=web_root + "_modules/_individual_plan/load.php?filter=year.id:" + jQuery(this).val();
+            });
+        	jQuery("#selectAll").change(function(){
+        		var items = jQuery("input[name='selectedDoc[]']")
+                for (var i = 0; i < items.length; i++) {
+                    items[i].checked = this.checked;
+                }
+            });
+        });
+    </script>
+    <div class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label" for="year.id">Учебный год</label>
+            <div class="controls">
+            	{CHtml::dropDownList("year.id", $years, $selectedYear, "year_selector", "span12")}
+            </div>
+        </div>
+    </div>
+{/block}
+
 {block name="asu_center"}
     <h2>Индивидуальные планы преподавателей</h2>
 
     {CHtml::helpForCurrentPage()}
+    {if (CSession::getCurrentUser()->getLevelForCurrentTask() == 4)}
+		{include file="_core.searchLocal.tpl"}
+    {/if}
 
     {if $persons->getCount() == 0}
         <div class="alert">
             Нет документов для отображения
         </div>
     {else}
-		{if (CSession::getCurrentUser()->getLevelForCurrentTask() == 2 or CSession::getCurrentUser()->getLevelForCurrentTask() == 4)}
-			{include file="_core.searchLocal.tpl"}
-		{/if}
-
-        <script>
-            jQuery(document).ready(function(){
-                jQuery("#selectAll").change(function(){
-                    var items = jQuery("input[name='selectedDoc[]']")
-                    for (var i = 0; i < items.length; i++) {
-                        items[i].checked = this.checked;
-                    }
-                });
-            });
-        </script>
 
         <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
