@@ -195,6 +195,12 @@ class CWorkPlan extends CActiveModel {
         		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
         		"targetClass" => "CWorkPlanMarkType"
         	),
+        	"literature" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_LITERATURE,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanLiterature"
+        	),
         	"baseLiterature" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_LITERATURE,
@@ -237,6 +243,12 @@ class CWorkPlan extends CActiveModel {
         		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
         		"targetClass" => "CWorkPlanFinalControl"
         	),
+        	"questions" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_EXAMINATION_QUESTIONS,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CExamQuestion"
+        	),
         	"examQuestions" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_EXAMINATION_QUESTIONS,
@@ -254,6 +266,12 @@ class CWorkPlan extends CActiveModel {
         		"storageTable" => TABLE_WORK_PLAN_EVALUATION_MATERIALS,
         		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
         		"targetClass" => "CWorkPlanEvaluationMaterial"
+        	),
+        	"criteria" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_CRITERIA_OF_EVALUATION,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanCriteriaOfEvaluation"
         	),
         	"criteriaExamOfEvaluation" => array(
         		"relationPower" => RELATION_HAS_MANY,

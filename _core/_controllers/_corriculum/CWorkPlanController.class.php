@@ -180,6 +180,11 @@ class CWorkPlanController extends CFlowController{
         		"link" => "#",
         		"icon" => "devices/printer.png",
         		"template" => "formset_workplans"
+        	),
+        	array(
+        		"title" => "Копировать раб. программу",
+        		"link" => "workplans.php?action=copyWorkPlan&id=".$plan->getId(),
+        		"icon" => "actions/edit-copy.png"
         	)
         ));
         $this->setData("plan", $plan);
@@ -228,5 +233,353 @@ class CWorkPlanController extends CFlowController{
             );
         }
         echo json_encode($res);
+    }
+    public function actionCopyWorkPlan() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$discipline = CCorriculumsManager::getDiscipline($plan->corriculum_discipline_id);
+    	$this->setData("cycle", $discipline->cycle);
+    	$this->setData("plan", $plan);
+    	$this->renderView("_corriculum/_workplan/workplan/copy.tpl");
+    }
+    public function actionCopy() {
+    	$pl = new CWorkPlan();
+    	$pl->setAttributes(CRequest::getArray($pl->getClassName()));
+    	$plan = CWorkPlanManager::getWorkplan($pl->getId());
+    	/**
+    	 * Клонируем саму рабочую программу
+    	*/
+    	$newPlan = $plan->copy();
+    	$newPlan->title = "Копия ".$newPlan->title;
+    	$newPlan->corriculum_discipline_id = $pl->corriculum_discipline_id;
+    	$discipline = CCorriculumsManager::getDiscipline($pl->corriculum_discipline_id);
+    	if (!is_null($discipline->discipline)) {
+    		$newPlan->discipline_id = $discipline->discipline->getId();
+    	}
+    	$newPlan->save();
+    	/**
+    	 * Клонируем профили рабочей программы
+    	*/
+    	/*foreach ($plan->profiles->getItems() as $profile) {
+    		$newProfile = $profile->copy();
+    		$newProfile->plan_id = $newPlan->getId();
+    		$newProfile->save();
+    	}*/
+    	/**
+    	 * Клонируем цели рабочей программы
+    	 */
+    	foreach ($plan->goals->getItems() as $goal) {
+    		$newGoal = $goal->copy();
+    		$newGoal->plan_id = $newPlan->getId();
+    		$newGoal->save();
+    	}
+    	/**
+    	 * Клонируем задачи рабочей программы
+    	 */
+    	foreach ($plan->tasks->getItems() as $task) {
+    		$newTask = $task->copy();
+    		$newTask->plan_id = $newPlan->getId();
+    		$newTask->save();
+    	}
+    	/**
+    	 * Клонируем компетенции рабочей программы
+    	 */
+    	foreach ($plan->competentions->getItems() as $competention) {
+    		$newCompetention = $competention->copy();
+    		$newCompetention->plan_id = $newPlan->getId();
+    		$newCompetention->save();
+    		/**
+    		 * Копируем знания из компетенций
+    		 * @var CTerm $knowledge
+    		 */
+    		/*foreach ($competention->knowledges->getItems() as $knowledge) {
+    			$newKnowledge = $knowledge->copy();
+    			$newKnowledge->competention_id = $newCompetention->getId();
+    			$newKnowledge->save();
+    		}*/
+    		/**
+    		 * Копируем умения из компетенций
+    		 * @var CTerm $knowledge
+    		 */
+    		/*foreach ($competention->skills->getItems() as $skill) {
+    			$newSkill = $skill->copy();
+    			$newSkill->competention_id = $newCompetention->getId();
+    			$newSkill->save();
+    		}*/
+    		/**
+    		 * Копируем навыки из компетенций
+    		 * @var CTerm $knowledge
+    		 */
+    		/*foreach ($competention->experiences->getItems() as $experience) {
+    			$newExperience = $experience->copy();
+    			$newExperience->competention_id = $newCompetention->getId();
+    			$newExperience->save();
+    		}*/
+    		/**
+    		 * Копируем умеет использовать из компетенций
+    		 * @var CTerm $knowledge
+    		 */
+    		/*foreach ($competention->canUse->getItems() as $canUse) {
+    			$newCanUse = $canUse->copy();
+    			$newCanUse->competention_id = $newCompetention->getId();
+    			$newCanUse->save();
+    		}*/
+    	}
+    	/**
+    	 * Клонируем предшествующие дисциплины рабочей программы
+    	 */
+    	/*foreach ($plan->disciplinesBefore->getItems() as $disciplineBefore) {
+    		$newDisciplineBefore = $disciplineBefore->copy();
+    		$newDisciplineBefore->plan_id = $newPlan->getId();
+    		$newDisciplineBefore->save();
+    	}*/
+    	/**
+    	 * Клонируем последующие дисциплины рабочей программы
+    	 */
+    	/*foreach ($plan->disciplinesAfter->getItems() as $disciplinesAfter) {
+    		$newDisciplinesAfter = $disciplinesAfter->copy();
+    		$newDisciplinesAfter->plan_id = $newPlan->getId();
+    		$newDisciplinesAfter->save();
+    	}*/
+    	/**
+    	 * Клонируем категории рабочей программы
+    	 */
+    	foreach ($plan->categories->getItems() as $categorie) {
+    		$newCategorie = $categorie->copy();
+    		$newCategorie->plan_id = $newPlan->getId();
+    		$newCategorie->save();
+    		/**
+    		 * Копируем разделы из категорий
+    		 * @var CWorkPlanContentSection $section
+    		 */
+    		foreach ($categorie->sections->getItems() as $section) {
+    			$newSection = $categorie->copy();
+    			$newSection->category_id = $newCategorie->getId();
+    			$newSection->save();
+    			/**
+    			 * Копируем формы контроля из разделов
+    			 * @var CTerm $control
+    			 */
+    			/*foreach ($section->controls->getItems() as $control) {
+    				$newControl = $categorie->copy();
+    				$newControl->section_id = $newSection->getId();
+    				$newControl->save();
+    			}*/
+    			/**
+    			 * Копируем нагрузку из разделов
+    			 * @var CWorkPlanContentSectionLoad $load
+    			 */
+    			foreach ($section->loads->getItems() as $load) {
+    				$newLoad = $load->copy();
+    				$newLoad->section_id = $newSection->getId();
+    				$newLoad->save();
+    				/**
+    				 * Копируем темы из нагрузки
+    				 * @var CWorkPlanContentSectionLoadTopic $topic
+    				 */
+    				foreach ($load->topics->getItems() as $topic) {
+    					$newTopic = $topic->copy();
+    					$newTopic->load_id = $newLoad->getId();
+    					$newTopic->save();
+    				}
+    				/**
+    				 * Копируем технологии из нагрузки
+    				 * @var CWorkPlanContentSectionLoadTechnology $technologie
+    				 */
+    				foreach ($load->technologies->getItems() as $technologie) {
+    					$newTechnologie = $technologie->copy();
+    					$newTechnologie->load_id = $newLoad->getId();
+    					$newTechnologie->save();
+    				}
+    				/**
+    				 * Копируем вопросы самоподготовки из нагрузки
+    				 * @var CWorkPlanSelfEducationBlock $selfEducation
+    				 */
+    				foreach ($load->selfEducations->getItems() as $selfEducation) {
+    					$newSelfEducation = $load->copy();
+    					$newSelfEducation->load_id = $newLoad->getId();
+    					$newSelfEducation->save();
+    				}
+    			}
+    			/**
+    			 * Копируем виды контроля из разделов
+    			 * @var CWorkPlanControlTypes $controlType
+    			 */
+    			foreach ($section->controlTypes->getItems() as $controlType) {
+    				$newControlType = $controlType->copy();
+    				$newControlType->section_id = $newSection->getId();
+    				$newControlType->save();
+    				/**
+    				 * Копируем баллы из видов контроля
+    				 * @var CWorkPlanMarkStudyActivity $mark
+    				 */
+    				foreach ($controlType->marks->getItems() as $mark) {
+    					$newMark = $mark->copy();
+    					$newMark->activity_id = $newControlType->getId();
+    					$newMark->save();
+    				}
+    			}
+    		}
+    	}
+    	/**
+    	 * Клонируем семестры рабочей программы
+    	 */
+    	foreach ($plan->terms->getItems() as $term) {
+    		$newTerm = $term->copy();
+    		$newTerm->plan_id = $newPlan->getId();
+    		$newTerm->save();
+    	}
+    	/**
+    	 * Клонируем темы курсовых и РГР рабочей программы
+    	 */
+    	foreach ($plan->projectThemes->getItems() as $projectTheme) {
+    		$newProjectTheme = $projectTheme->copy();
+    		$newProjectTheme->plan_id = $newPlan->getId();
+    		$newProjectTheme->save();
+    	}
+    	/**
+    	 * Клонируем авторов рабочей программы
+    	 */
+    	/*foreach ($plan->authors->getItems() as $author) {
+    		$newAuthor = $author->copy();
+    		$newAuthor->plan_id = $newPlan->getId();
+    		$newAuthor->save();
+    	}*/
+    	/**
+    	 * Клонируем самостоятельное изучение рабочей программы
+    	 */
+		foreach ($plan->selfEducations->getItems() as $selfEducation) {
+    		$newSelfEducation = $selfEducation->copy();
+    		$newSelfEducation->plan_id = $newPlan->getId();
+    		$newSelfEducation->save();
+    	}
+    	/**
+    	 * Клонируем фонд оценочных средств рабочей программы
+    	 */
+    	foreach ($plan->fundMarkTypes->getItems() as $fundMarkType) {
+    		$newFundMarkType = $fundMarkType->copy();
+    		$newFundMarkType->plan_id = $newPlan->getId();
+    		$newFundMarkType->save();
+    		/**
+    		 * Копируем компетенции из фонда оценочных средств
+    		 * @var CTerm $competention
+    		 */
+    		/*foreach ($fundMarkType->competentions->getItems() as $competention) {
+    			$newCompetention = $competention->copy();
+    			$newCompetention->fund_id = $newFundMarkType->getId();
+    			$newCompetention->save();
+    		}*/
+    		/**
+    		 * Копируем уровни освоения из фонда оценочных средств
+    		 * @var CTerm $level
+    		 */
+    		/*foreach ($fundMarkType->levels->getItems() as $level) {
+    			$newLevel = $level->copy();
+    			$newLevel->fund_id = $newFundMarkType->getId();
+    			$newLevel->save();
+    		}*/
+    		/**
+    		 * Копируем оценочные средства из фонда оценочных средств
+    		 * @var CTerm $level
+    		 */
+    		/*foreach ($fundMarkType->controls->getItems() as $control) {
+    			$newControl = $control->copy();
+    			$newControl->fund_id = $newFundMarkType->getId();
+    			$newControl->save();
+    		}*/
+    	}
+    	/**
+    	 * Клонируем балльно-рейтинговую систему рабочей программы
+    	 */
+    	foreach ($plan->BRS->getItems() as $BRS) {
+    		$newBRS = $BRS->copy();
+    		$newBRS->plan_id = $newPlan->getId();
+    		$newBRS->save();
+    	}
+    	/**
+    	 * Клонируем оценочные средства рабочей программы
+    	 */
+    	foreach ($plan->markTypes->getItems() as $markTypes) {
+    		$newMarkTypes = $markTypes->copy();
+    		$newMarkTypes->plan_id = $newPlan->getId();
+    		$newMarkTypes->save();
+    		/**
+    		 * Копируем фонды оценочных средств из перечня оченочных средств
+    		 * @var CTerm $fund
+    		 */
+    		/*foreach ($markTypes->funds->getItems() as $fund) {
+    			$newFund = $fund->copy();
+    			$newFund->mark_id = $newMarkTypes->getId();
+    			$newFund->save();
+    		}*/
+    		/**
+    		 * Копируем места размещения оценочных средств из перечня оченочных средств
+    		 * @var CTerm $place
+    		 */
+    		/*foreach ($markTypes->places->getItems() as $place) {
+    			$newPlace = $place->copy();
+    			$newPlace->mark_id = $newMarkTypes->getId();
+    			$newPlace->save();
+    		}*/
+    	}
+    	/**
+    	 * Клонируем литературу рабочей программы
+    	 */
+    	foreach ($plan->literature->getItems() as $literature) {
+    		$newLiterature = $literature->copy();
+    		$newLiterature->plan_id = $newPlan->getId();
+    		$newLiterature->save();
+    	}
+    	/**
+    	 * Клонируем программное обеспечение рабочей программы
+    	 */
+    	foreach ($plan->software->getItems() as $software) {
+    		$newSoftware = $software->copy();
+    		$newSoftware->plan_id = $newPlan->getId();
+    		$newSoftware->save();
+    	}
+    	/**
+    	 * Клонируем доп. обеспечение рабочей программы
+    	 */
+    	foreach ($plan->additionalSupply->getItems() as $additionalSupply) {
+    		$newAdditionalSupply = $additionalSupply->copy();
+    		$newAdditionalSupply->plan_id = $newPlan->getId();
+    		$newAdditionalSupply->save();
+    	}
+    	/**
+    	 * Клонируем итоговый контроль рабочей программы
+    	 */
+    	foreach ($plan->finalControls->getItems() as $finalControl) {
+    		$newFinalControl = $finalControl->copy();
+    		$newFinalControl->plan_id = $newPlan->getId();
+    		$newFinalControl->save();
+    	}
+    	/**
+    	 * Клонируем вопросы к экзамену и зачету рабочей программы
+    	 */
+    	foreach ($plan->questions->getItems() as $question) {
+    		$newQuestion = $question->copy();
+    		$newQuestion->plan_id = $newPlan->getId();
+    		$newQuestion->save();
+    	}
+    	/**
+    	 * Клонируем оценочные материалы рабочей программы
+    	 */
+    	foreach ($plan->materialsOfEvaluation->getItems() as $materialOfEvaluation) {
+    		$newMaterialOfEvaluation = $materialOfEvaluation->copy();
+    		$newMaterialOfEvaluation->plan_id = $newPlan->getId();
+    		$newMaterialOfEvaluation->save();
+    	}
+    	/**
+    	 * Клонируем оценочные критерии рабочей программы
+    	 */
+    	foreach ($plan->criteria->getItems() as $criteria) {
+    		$newCriteria = $criteria->copy();
+    		$newCriteria->plan_id = $newPlan->getId();
+    		$newCriteria->save();
+    	}
+    	/**
+    	 * Редирект на страницу со списком
+    	 */
+    	$this->redirect("workplans.php?action=index");
     }
 }
