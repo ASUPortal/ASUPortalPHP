@@ -45,7 +45,7 @@
 	        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
 	        {foreach $plans->getItems() as $plan}
 	        <tr>
-	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить план {$plan->title}')) { location.href='?action=delete&id={$plan->id}'; }; return false;"></a></td>
+	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить рабочую программу дисциплины {$plan->discipline}')) { location.href='?action=delete&id={$plan->id}'; }; return false;"></a></td>
 	            <td><input type="checkbox" value="{$plan->getId()}" name="selectedDoc[]"></td>
 	            <td>{counter}</td>
 	            <td><a href="?action=edit&id={$plan->getId()}" class="icon-pencil"></a></td>
