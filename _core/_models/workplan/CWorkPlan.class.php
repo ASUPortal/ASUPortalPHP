@@ -324,7 +324,8 @@ class CWorkPlan extends CActiveModel {
         	"changes" => "Изменения в рабочей программе",
         	"director_of_library" => "Директор библиотеки",
         	"chief_umr" => "Начальник УМР",
-        	"rgr_description" => "Расчётно-графическая работа"
+        	"rgr_description" => "Расчётно-графическая работа",
+        	"corriculum_discipline_id" => "Выберите название дисциплины из учебного плана"
         );
     }
 

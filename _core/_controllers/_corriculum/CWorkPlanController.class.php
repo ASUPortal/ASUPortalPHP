@@ -259,11 +259,16 @@ class CWorkPlanController extends CFlowController{
     	/**
     	 * Клонируем профили рабочей программы
     	*/
-    	/*foreach ($plan->profiles->getItems() as $profile) {
-    		$newProfile = $profile->copy();
-    		$newProfile->plan_id = $newPlan->getId();
-    		$newProfile->save();
-    	}*/
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_PROFILES, "plan_id=".$plan->getId())->getItems() as $ar) {
+    		$profile = new CActiveModel($ar);
+    		$ar = new CActiveRecord(array(
+    			"plan_id" => $newPlan->getId(),
+    			"profile_id" => $profile->profile_id,
+    			"id" => null
+    		));
+    		$ar->setTable(TABLE_WORK_PLAN_PROFILES);
+    		$ar->insert();
+    	}
     	/**
     	 * Клонируем цели рабочей программы
     	 */
@@ -291,55 +296,85 @@ class CWorkPlanController extends CFlowController{
     		 * Копируем знания из компетенций
     		 * @var CTerm $knowledge
     		 */
-    		/*foreach ($competention->knowledges->getItems() as $knowledge) {
-    			$newKnowledge = $knowledge->copy();
-    			$newKnowledge->competention_id = $newCompetention->getId();
-    			$newKnowledge->save();
-    		}*/
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_KNOWLEDGES, "competention_id=".$competention->getId())->getItems() as $ar) {
+    			$item = new CActiveModel($ar);
+    			$ar = new CActiveRecord(array(
+    					"competention_id" => $newCompetention->getId(),
+    					"knowledge_id" => $item->knowledge_id,
+    					"id" => null
+    			));
+    			$ar->setTable(TABLE_WORK_PLAN_KNOWLEDGES);
+    			$ar->insert();
+    		}
     		/**
     		 * Копируем умения из компетенций
-    		 * @var CTerm $knowledge
+    		 * @var CTerm $skill
     		 */
-    		/*foreach ($competention->skills->getItems() as $skill) {
-    			$newSkill = $skill->copy();
-    			$newSkill->competention_id = $newCompetention->getId();
-    			$newSkill->save();
-    		}*/
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_SKILLS, "competention_id=".$competention->getId())->getItems() as $ar) {
+    			$item = new CActiveModel($ar);
+    			$ar = new CActiveRecord(array(
+    				"competention_id" => $newCompetention->getId(),
+    				"skill_id" => $item->skill_id,
+    				"id" => null
+    			));
+    			$ar->setTable(TABLE_WORK_PLAN_SKILLS);
+    			$ar->insert();
+    		}
     		/**
     		 * Копируем навыки из компетенций
-    		 * @var CTerm $knowledge
+    		 * @var CTerm $experience
     		 */
-    		/*foreach ($competention->experiences->getItems() as $experience) {
-    			$newExperience = $experience->copy();
-    			$newExperience->competention_id = $newCompetention->getId();
-    			$newExperience->save();
-    		}*/
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_EXPERIENCES, "competention_id=".$competention->getId())->getItems() as $ar) {
+    			$item = new CActiveModel($ar);
+    			$ar = new CActiveRecord(array(
+    				"competention_id" => $newCompetention->getId(),
+    				"experience_id" => $item->experience_id,
+    				"id" => null
+    			));
+    			$ar->setTable(TABLE_WORK_PLAN_EXPERIENCES);
+    			$ar->insert();
+    		}
     		/**
     		 * Копируем умеет использовать из компетенций
-    		 * @var CTerm $knowledge
+    		 * @var CTerm $canUse
     		 */
-    		/*foreach ($competention->canUse->getItems() as $canUse) {
-    			$newCanUse = $canUse->copy();
-    			$newCanUse->competention_id = $newCompetention->getId();
-    			$newCanUse->save();
-    		}*/
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_COMPETENTION_CAN_USE, "competention_id=".$competention->getId())->getItems() as $ar) {
+    			$item = new CActiveModel($ar);
+    			$ar = new CActiveRecord(array(
+    					"competention_id" => $newCompetention->getId(),
+    					"term_id" => $item->term_id,
+    					"id" => null
+    			));
+    			$ar->setTable(TABLE_WORK_PLAN_COMPETENTION_CAN_USE);
+    			$ar->insert();
+    		}
     	}
     	/**
     	 * Клонируем предшествующие дисциплины рабочей программы
     	 */
-    	/*foreach ($plan->disciplinesBefore->getItems() as $disciplineBefore) {
-    		$newDisciplineBefore = $disciplineBefore->copy();
-    		$newDisciplineBefore->plan_id = $newPlan->getId();
-    		$newDisciplineBefore->save();
-    	}*/
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_DISCIPLINES_BEFORE, "plan_id=".$plan->getId())->getItems() as $ar) {
+    		$item = new CActiveModel($ar);
+    		$ar = new CActiveRecord(array(
+    			"plan_id" => $newPlan->getId(),
+    			"discipline_id" => $item->discipline_id,
+    			"id" => null
+    		));
+    		$ar->setTable(TABLE_WORK_PLAN_DISCIPLINES_BEFORE);
+    		$ar->insert();
+    	}
     	/**
     	 * Клонируем последующие дисциплины рабочей программы
     	 */
-    	/*foreach ($plan->disciplinesAfter->getItems() as $disciplinesAfter) {
-    		$newDisciplinesAfter = $disciplinesAfter->copy();
-    		$newDisciplinesAfter->plan_id = $newPlan->getId();
-    		$newDisciplinesAfter->save();
-    	}*/
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_DISCIPLINES_AFTER, "plan_id=".$plan->getId())->getItems() as $ar) {
+    		$item = new CActiveModel($ar);
+    		$ar = new CActiveRecord(array(
+    			"plan_id" => $newPlan->getId(),
+    			"discipline_id" => $item->discipline_id,
+    			"id" => null
+    		));
+    		$ar->setTable(TABLE_WORK_PLAN_DISCIPLINES_AFTER);
+    		$ar->insert();
+    	}
     	/**
     	 * Клонируем категории рабочей программы
     	 */
@@ -352,18 +387,24 @@ class CWorkPlanController extends CFlowController{
     		 * @var CWorkPlanContentSection $section
     		 */
     		foreach ($categorie->sections->getItems() as $section) {
-    			$newSection = $categorie->copy();
+    			$newSection = $section->copy();
     			$newSection->category_id = $newCategorie->getId();
     			$newSection->save();
+    			echo $newSection->getId();
     			/**
     			 * Копируем формы контроля из разделов
     			 * @var CTerm $control
     			 */
-    			/*foreach ($section->controls->getItems() as $control) {
-    				$newControl = $categorie->copy();
-    				$newControl->section_id = $newSection->getId();
-    				$newControl->save();
-    			}*/
+    			foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_CONTENT_CONTROLS, "section_id=".$section->getId())->getItems() as $ar) {
+    				$item = new CActiveModel($ar);
+    				$ar = new CActiveRecord(array(
+    					"section_id" => $newSection->getId(),
+    					"control_id" => $item->control_id,
+    					"id" => null
+    				));
+    				$ar->setTable(TABLE_WORK_PLAN_CONTENT_CONTROLS);
+    				$ar->insert();
+    			}
     			/**
     			 * Копируем нагрузку из разделов
     			 * @var CWorkPlanContentSectionLoad $load
@@ -395,7 +436,7 @@ class CWorkPlanController extends CFlowController{
     				 * @var CWorkPlanSelfEducationBlock $selfEducation
     				 */
     				foreach ($load->selfEducations->getItems() as $selfEducation) {
-    					$newSelfEducation = $load->copy();
+    					$newSelfEducation = $selfEducation->copy();
     					$newSelfEducation->load_id = $newLoad->getId();
     					$newSelfEducation->save();
     				}
@@ -439,11 +480,16 @@ class CWorkPlanController extends CFlowController{
     	/**
     	 * Клонируем авторов рабочей программы
     	 */
-    	/*foreach ($plan->authors->getItems() as $author) {
-    		$newAuthor = $author->copy();
-    		$newAuthor->plan_id = $newPlan->getId();
-    		$newAuthor->save();
-    	}*/
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_AUTHORS, "plan_id=".$plan->getId())->getItems() as $ar) {
+    		$item = new CActiveModel($ar);
+    		$ar = new CActiveRecord(array(
+    			"plan_id" => $newPlan->getId(),
+    			"person_id" => $item->person_id,
+    			"id" => null
+    		));
+    		$ar->setTable(TABLE_WORK_PLAN_AUTHORS);
+    		$ar->insert();
+    	}
     	/**
     	 * Клонируем самостоятельное изучение рабочей программы
     	 */
@@ -463,29 +509,44 @@ class CWorkPlanController extends CFlowController{
     		 * Копируем компетенции из фонда оценочных средств
     		 * @var CTerm $competention
     		 */
-    		/*foreach ($fundMarkType->competentions->getItems() as $competention) {
-    			$newCompetention = $competention->copy();
-    			$newCompetention->fund_id = $newFundMarkType->getId();
-    			$newCompetention->save();
-    		}*/
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_FUND_MARK_TYPES_COMPETENTIONS, "fund_id=".$fundMarkType->getId())->getItems() as $ar) {
+    			$item = new CActiveModel($ar);
+    			$ar = new CActiveRecord(array(
+    					"fund_id" => $newFundMarkType->getId(),
+    					"competention_id" => $item->competention_id,
+    					"id" => null
+    			));
+    			$ar->setTable(TABLE_WORK_PLAN_FUND_MARK_TYPES_COMPETENTIONS);
+    			$ar->insert();
+    		}
     		/**
     		 * Копируем уровни освоения из фонда оценочных средств
     		 * @var CTerm $level
     		 */
-    		/*foreach ($fundMarkType->levels->getItems() as $level) {
-    			$newLevel = $level->copy();
-    			$newLevel->fund_id = $newFundMarkType->getId();
-    			$newLevel->save();
-    		}*/
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_FUND_MARK_TYPES_LEVELS, "fund_id=".$fundMarkType->getId())->getItems() as $ar) {
+    			$item = new CActiveModel($ar);
+    			$ar = new CActiveRecord(array(
+    					"fund_id" => $newFundMarkType->getId(),
+    					"level_id" => $item->level_id,
+    					"id" => null
+    			));
+    			$ar->setTable(TABLE_WORK_PLAN_FUND_MARK_TYPES_LEVELS);
+    			$ar->insert();
+    		}
     		/**
     		 * Копируем оценочные средства из фонда оценочных средств
     		 * @var CTerm $level
     		 */
-    		/*foreach ($fundMarkType->controls->getItems() as $control) {
-    			$newControl = $control->copy();
-    			$newControl->fund_id = $newFundMarkType->getId();
-    			$newControl->save();
-    		}*/
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_FUND_MARK_TYPES_CONTROLS, "fund_id=".$fundMarkType->getId())->getItems() as $ar) {
+    			$item = new CActiveModel($ar);
+    			$ar = new CActiveRecord(array(
+    					"fund_id" => $newFundMarkType->getId(),
+    					"control_id" => $item->control_id,
+    					"id" => null
+    			));
+    			$ar->setTable(TABLE_WORK_PLAN_FUND_MARK_TYPES_CONTROLS);
+    			$ar->insert();
+    		}
     	}
     	/**
     	 * Клонируем балльно-рейтинговую систему рабочей программы
@@ -506,20 +567,30 @@ class CWorkPlanController extends CFlowController{
     		 * Копируем фонды оценочных средств из перечня оченочных средств
     		 * @var CTerm $fund
     		 */
-    		/*foreach ($markTypes->funds->getItems() as $fund) {
-    			$newFund = $fund->copy();
-    			$newFund->mark_id = $newMarkTypes->getId();
-    			$newFund->save();
-    		}*/
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_MARK_TYPE_FUNDS, "mark_id=".$markTypes->getId())->getItems() as $ar) {
+    			$item = new CActiveModel($ar);
+    			$ar = new CActiveRecord(array(
+    					"mark_id" => $newMarkTypes->getId(),
+    					"fund_id" => $item->fund_id,
+    					"id" => null
+    			));
+    			$ar->setTable(TABLE_WORK_PLAN_MARK_TYPE_FUNDS);
+    			$ar->insert();
+    		}
     		/**
     		 * Копируем места размещения оценочных средств из перечня оченочных средств
     		 * @var CTerm $place
     		 */
-    		/*foreach ($markTypes->places->getItems() as $place) {
-    			$newPlace = $place->copy();
-    			$newPlace->mark_id = $newMarkTypes->getId();
-    			$newPlace->save();
-    		}*/
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_MARK_TYPE_PLACES, "mark_id=".$markTypes->getId())->getItems() as $ar) {
+    			$item = new CActiveModel($ar);
+    			$ar = new CActiveRecord(array(
+    					"mark_id" => $newMarkTypes->getId(),
+    					"place_id" => $item->place_id,
+    					"id" => null
+    			));
+    			$ar->setTable(TABLE_WORK_PLAN_MARK_TYPE_PLACES);
+    			$ar->insert();
+    		}
     	}
     	/**
     	 * Клонируем литературу рабочей программы
