@@ -23,6 +23,7 @@ class CWorkPlanNmsChairman extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
+    	$result = "";
     	if (!is_null(CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id)->cycle->corriculum->nisChairman)) {
     		$result = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id)->cycle->corriculum->nisChairman->getNameShort();
     	}
