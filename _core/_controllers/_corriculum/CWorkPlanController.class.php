@@ -376,6 +376,14 @@ class CWorkPlanController extends CFlowController{
     		$ar->insert();
     	}
     	/**
+    	 * Клонируем семестры рабочей программы
+    	 */
+    	foreach ($plan->terms->getItems() as $term) {
+    		$newTerm = $term->copy();
+    		$newTerm->plan_id = $newPlan->getId();
+    		$newTerm->save();
+    	}
+    	/**
     	 * Клонируем категории рабочей программы
     	 */
     	foreach ($plan->categories->getItems() as $categorie) {
@@ -412,6 +420,7 @@ class CWorkPlanController extends CFlowController{
     			foreach ($section->loads->getItems() as $load) {
     				$newLoad = $load->copy();
     				$newLoad->section_id = $newSection->getId();
+    				$newLoad->term_id = $newTerm->getId();
     				$newLoad->save();
     				/**
     				 * Копируем темы из нагрузки
@@ -460,14 +469,6 @@ class CWorkPlanController extends CFlowController{
     				}
     			}
     		}
-    	}
-    	/**
-    	 * Клонируем семестры рабочей программы
-    	 */
-    	foreach ($plan->terms->getItems() as $term) {
-    		$newTerm = $term->copy();
-    		$newTerm->plan_id = $newPlan->getId();
-    		$newTerm->save();
     	}
     	/**
     	 * Клонируем темы курсовых и РГР рабочей программы
