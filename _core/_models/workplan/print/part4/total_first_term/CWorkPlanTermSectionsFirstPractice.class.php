@@ -23,6 +23,7 @@ class CWorkPlanTermSectionsFirstPractice extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
+    	$result = 0;
 		if (!is_null($contextObject->terms)) {
         	$terms = array();
         	foreach ($contextObject->terms->getItems() as $term) {

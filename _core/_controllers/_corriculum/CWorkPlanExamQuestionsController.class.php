@@ -27,7 +27,7 @@ class CWorkPlanExamQuestionsController extends CBaseController{
             ->order("t.id asc")
             ->condition("plan_id=".CRequest::getInt("plan_id")." AND type=".CRequest::getInt("type"));
         $objects = new CArrayList();
-        foreach ($set->getPaginated()->getItems() as $ar) {
+        foreach ($set->getItems() as $ar) {
             $object = new CExamQuestion($ar);
             $objects->add($object->getId(), $object);
         }
