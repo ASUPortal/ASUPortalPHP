@@ -1,4 +1,7 @@
 <table border="0" width="100%">
+	<tr>
+		{block name="localSearchContent"}{/block}
+	</tr>
     <tr>
         <td valign="top">
             <table cellspacing="2">
