@@ -45,8 +45,8 @@
                     	{/if}
                     </td>
                     <td>
-                    	{if (!is_null($object->discipline))}
-                    		{$object->discipline->getValue()}
+                    	{if (!is_null($object->discipline->discipline))}
+                    		{$object->discipline->discipline->getValue()}
                     	{/if}
                     </td>
                 {else}

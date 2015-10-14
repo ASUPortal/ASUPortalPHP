@@ -44,7 +44,7 @@ class CWorkPlanCompetentionsOuts extends CAbstractPrintClassField {
         				$dataRow[3] = $item->level->getValue();
         			}
         			if (!is_null($item->discipline)) {
-        				$dataRow[4] = $item->discipline->getValue();
+        				$dataRow[4] = $item->discipline->discipline->getValue();
         			}
         			$result[] = $dataRow;
         		}	

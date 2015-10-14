@@ -27,7 +27,7 @@
     <div class="control-group">
         {CHtml::activeLabel("discipline_id", $object)}
         <div class="controls">
-            {CHtml::activeDropDownList("discipline_id", $object, CTaxonomyManager::getDisciplinesList())}
+            {CHtml::activeLookup("discipline_id", $object, "class.CSearchCatalogCorriculumDisciplines", false, ["plan_id" => $object->plan_id])}
             {CHtml::error("discipline_id", $object)}
         </div>
     </div>

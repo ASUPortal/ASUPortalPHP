@@ -41,6 +41,11 @@ class CWorkPlanCompetentionsController extends CBaseController{
             "link" => "workplancompetentions.php?action=add&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
             "icon" => "actions/list-add.png"
         ));
+        $this->addActionsMenuItem(array(
+        	"title" => "Обновить",
+        	"link" => "workplancompetentions.php?action=update&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
+        	"icon" => "actions/view-refresh.png"
+        ));
         /**
          * Отображение представления
          */
@@ -48,7 +53,7 @@ class CWorkPlanCompetentionsController extends CBaseController{
     }
     public function actionAdd() {
         $object = new CWorkPlanCompetention();
-        $object->plan_id = CRequest::getArray("id");
+        $object->plan_id = CRequest::getInt("id");
         $object->type = CRequest::getInt("type");
         $this->setData("object", $object);
         /**
@@ -101,5 +106,42 @@ class CWorkPlanCompetentionsController extends CBaseController{
         }
         $this->setData("object", $object);
         $this->renderView("_corriculum/_workplan/competentions/edit.tpl");
+    }
+    public function actionUpdate() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$type = CRequest::getInt("type");
+    	if ($type == 1) {
+    		if (!is_null($plan->disciplinesBefore)) {
+    			foreach ($plan->disciplinesBefore->getItems() as $item) {
+    				foreach (CActiveRecordProvider::getWithCondition(TABLE_CORRICULUM_DISCIPLINE_COMPETENTIONS, "discipline_id=".$item->getId())->getItems() as $ar) {
+    					$competention = new CActiveModel($ar);
+    					$object = new CWorkPlanCompetention();
+    					$object->plan_id = $plan->getId();
+    					$object->type = $type;
+    					$object->competention_id = $competention->competention_id;
+    					$object->level_id = $competention->level_id;
+    					$object->discipline_id = $competention->discipline_id;
+    					$object->save();
+    				}
+    			}
+    		}
+    	}
+    	if ($type == 2) {
+    		if (!is_null($plan->disciplinesAfter)) {
+    			foreach ($plan->disciplinesAfter->getItems() as $item) {
+    				foreach (CActiveRecordProvider::getWithCondition(TABLE_CORRICULUM_DISCIPLINE_COMPETENTIONS, "discipline_id=".$item->getId())->getItems() as $ar) {
+    					$competention = new CActiveModel($ar);
+    					$object = new CWorkPlanCompetention();
+    					$object->plan_id = $plan->getId();
+    					$object->type = $type;
+    					$object->competention_id = $competention->competention_id;
+    					$object->level_id = $competention->level_id;
+    					$object->discipline_id = $competention->discipline_id;
+    					$object->save();
+    				}
+    			}
+    		}
+    	}
+    	$this->redirect("workplancompetentions.php?action=index&plan_id=".$plan->getId()."&type=".$type);
     }
 }

@@ -89,23 +89,19 @@ class CWorkPlan extends CActiveModel {
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanCompetention"
             ),
-            "disciplinesBefore" => array(
-                "relationPower" => RELATION_MANY_TO_MANY,
-                "storageProperty" => "_disciplinesBefore",
-                "joinTable" => TABLE_WORK_PLAN_DISCIPLINES_BEFORE,
-                "leftCondition" => "plan_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
-                "rightKey" => "discipline_id",
-                "managerClass" => "CTaxonomyManager",
-                "managerGetObject" => "getDiscipline"
-            ),
+        	"disciplinesBefore" => array(
+        		"relationPower" => RELATION_MANY_TO_MANY,
+        		"joinTable" => TABLE_WORK_PLAN_DISCIPLINES_BEFORE,
+        		"leftCondition" => "plan_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+        		"rightKey" => "discipline_id",
+        		"targetClass" => "CCorriculumDiscipline"
+        	),
             "disciplinesAfter" => array(
-                "relationPower" => RELATION_MANY_TO_MANY,
-                "storageProperty" => "_disciplinesAfter",
-                "joinTable" => TABLE_WORK_PLAN_DISCIPLINES_AFTER,
-                "leftCondition" => "plan_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
-                "rightKey" => "discipline_id",
-                "managerClass" => "CTaxonomyManager",
-                "managerGetObject" => "getDiscipline"
+        		"relationPower" => RELATION_MANY_TO_MANY,
+        		"joinTable" => TABLE_WORK_PLAN_DISCIPLINES_AFTER,
+        		"leftCondition" => "plan_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+        		"rightKey" => "discipline_id",
+        		"targetClass" => "CCorriculumDiscipline"	
             ),
             "categories" => array(
                 "relationPower" => RELATION_HAS_MANY,

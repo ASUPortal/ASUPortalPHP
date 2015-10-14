@@ -137,7 +137,7 @@
 <div class="control-group">
     {CHtml::activeLabel("disciplinesBefore", $plan)}
     <div class="controls">
-        {CHtml::activeLookup("disciplinesBefore", $plan, "subjects", true)}
+        {CHtml::activeLookup("disciplinesBefore", $plan, "class.CSearchCatalogCorriculumDisciplines", true, ["plan_id" => $plan->getId()])}
         {CHtml::error("disciplinesBefore", $plan)}
     </div>
 </div>
@@ -145,7 +145,7 @@
 <div class="control-group">
     {CHtml::activeLabel("disciplinesAfter", $plan)}
     <div class="controls">
-        {CHtml::activeLookup("disciplinesAfter", $plan, "subjects", true)}
+        {CHtml::activeLookup("disciplinesAfter", $plan, "class.CSearchCatalogCorriculumDisciplines", true, ["plan_id" => $plan->getId()])}
         {CHtml::error("disciplinesAfter", $plan)}
     </div>
 </div>
