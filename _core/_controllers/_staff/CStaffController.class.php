@@ -25,6 +25,7 @@ class CStaffController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
+    	$selectedType = null;
         $set = new CRecordSet(true, true);
         $query = new CQuery();
         $set->setQuery($query);
@@ -33,7 +34,29 @@ class CStaffController extends CBaseController{
          */
         $query->select("person.*")
             ->from(TABLE_PERSON." as person")
+            ->innerJoin(TABLE_PERSON_BY_TYPES." as types", "types.kadri_id = person.id")
             ->order("person.fio asc");
+        
+        $isAll = false;
+        if (CRequest::getInt("isAll") == "1") {
+        	$isAll = true;
+        }
+        if ($isAll) {
+        	$query->condition("types.person_type_id != -1");
+        } elseif (CRequest::getInt("type") != 0) {
+        	$selectedType = CRequest::getInt("type");
+        } else {
+        	$query->condition("types.person_type_id = 1 or types.person_type_id = 3");
+        }
+        $typesQuery = new CQuery();
+        $typesQuery->select("types.*")
+	        ->from(TABLE_TYPES." as types")
+	        ->order("types.name asc");
+        $types = array();
+        foreach ($typesQuery->execute()->getItems() as $ar) {
+        	$type = new CActiveModel(new CActiveRecord($ar));
+        	$types[$type->getId()] = $type->name;
+        }
         /**
          * Набираем выборку
          */
@@ -44,6 +67,9 @@ class CStaffController extends CBaseController{
         }
         $this->setData("paginator", $set->getPaginator());
         $this->setData("persons", $persons);
+        $this->setData("types", $types);
+        $this->setData("isAll", $isAll);
+        $this->setData("selectedType", $selectedType);
         /**
          * Генерация меню
          */

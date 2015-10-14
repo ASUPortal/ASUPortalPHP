@@ -77,8 +77,8 @@ class CWorkPlanController extends CFlowController{
         if (CRequest::getInt("isArchive") == "1") {
             $isArchive = true;
         }
-        if (!$isArchive) {
-            $query->condition("wp.is_archive = 0");
+        if ($isArchive) {
+            $query->condition("wp.is_archive = 1");
         }
         $paginated = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
