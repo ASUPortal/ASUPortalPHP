@@ -22,11 +22,11 @@
 {block name="asu_center"}
 	<h2>Рабочие программы</h2>
     {CHtml::helpForCurrentPage()}
+    {include file="_core.searchLocal.tpl"}
     
     {if $plans->getCount() == 0}
 		Нет планов для отображения
 	{else}
-		{include file="_core.searchLocal.tpl"}
 
 		<form action="workplans.php" method="post" id="MainView">
 	    <table class="table table-striped table-bordered table-hover table-condensed">

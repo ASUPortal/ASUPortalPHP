@@ -2,8 +2,31 @@
 
 {block name="asu_center"}
     <h2>Сотрудники кафедры</h2>
-
-    {CHtml::helpForCurrentPage()}
+	{CHtml::helpForCurrentPage()}
+	<table border="0" width="100%" class="tableBlank">
+		<tr>
+			<td valign="top">
+				<div class="form-horizontal">
+					<div class="control-group">
+						<label class="control-label" for="isAll">Показать всех</label>
+						<div class="controls">
+							{CHtml::checkBox("isAll", "1", $isAll, "isAll")}
+						</div>
+					</div>
+				</div>
+			</td>
+      		<td valign="top">
+			    <div class="form-horizontal">
+			        <div class="control-group">
+			            <label class="control-label" for="types.person_type_id">Тип участия на кафедре</label>
+			            <div class="controls">
+			            	{CHtml::dropDownList("types.person_type_id", $types, $selectedType, "type_selector", "span12")}
+			            </div>
+			        </div>
+			    </div>
+			</td>
+		</tr>
+	</table>
 
     {include file="_core.search.tpl"}
 
@@ -15,8 +38,14 @@
                     items[i].checked = this.checked;
                 }
             });
+            jQuery("#type_selector").change(function(){
+                window.location.href=web_root + "_modules/_staff/index.php?filter=types.person_type_id:" + jQuery(this).val() + "&type=" + jQuery(this).val();
+            });
+			jQuery("#isAll").change(function(){
+				window.location.href=web_root + "_modules/_staff/index.php?isAll=" + (jQuery(this).is(":checked") ? "1":"0");
+			});
         });
-    </script>
+	</script>
 
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
