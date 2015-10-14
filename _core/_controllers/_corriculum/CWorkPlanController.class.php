@@ -182,8 +182,8 @@ class CWorkPlanController extends CFlowController{
         		"template" => "formset_workplans"
         	),
         	array(
-        		"title" => "Копировать раб. программу",
-        		"link" => "workplans.php?action=copyWorkPlan&id=".$plan->getId(),
+        		"title" => "Копировать рабочую программу",
+        		"link" => "workplans.php?action=selectCorriculum&id=".$plan->getId(),
         		"icon" => "actions/edit-copy.png"
         	)
         ));
@@ -234,10 +234,26 @@ class CWorkPlanController extends CFlowController{
         }
         echo json_encode($res);
     }
-    public function actionCopyWorkPlan() {
+    public function actionSelectCorriculum() {
     	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-    	$discipline = CCorriculumsManager::getDiscipline($plan->corriculum_discipline_id);
-    	$this->setData("cycle", $discipline->cycle);
+    	$items = array();
+    	foreach (CCorriculumsManager::getAllCorriculums()->getItems() as $corriculum) {
+    		$items[$corriculum->getId()] = $corriculum->title;
+    	}
+    	$this->setData("items", $items);
+    	$this->setData("plan", $plan);
+    	$this->renderView("_corriculum/_workplan/workplan/select.tpl");
+    }
+    public function actionCopyWorkPlan() {
+    	$pl = new CWorkPlan();
+    	$pl->setAttributes(CRequest::getArray($pl->getClassName()));
+    	$plan = CWorkPlanManager::getWorkplan($pl->getId());
+    	$corriculum = CCorriculumsManager::getCorriculum($pl->corriculum_discipline_id);
+    	$items = array();
+    	foreach ($corriculum->getDisciplines() as $discipline) {
+    		$items[$discipline->getId()] = $discipline->discipline->getValue();
+    	}
+    	$this->setData("items", $items);
     	$this->setData("plan", $plan);
     	$this->renderView("_corriculum/_workplan/workplan/copy.tpl");
     }
