@@ -110,6 +110,27 @@ class CWorkPlanCompetentionsController extends CBaseController{
     public function actionUpdate() {
     	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
     	$type = CRequest::getInt("type");
+    	if ($type == 0) {
+    		if (!is_null($plan->corriculumDiscipline)) {
+    			foreach (CActiveRecordProvider::getWithCondition(TABLE_CORRICULUM_DISCIPLINE_COMPETENTIONS, "discipline_id=".$plan->corriculumDiscipline->getId())->getItems() as $ar) {
+    				$competention = new CActiveModel($ar);
+    				$object = new CWorkPlanCompetention();
+    				$object->plan_id = $plan->getId();
+    				$object->type = $type;
+    				$object->competention_id = $competention->competention_id;
+    				if ($competention->knowledge_id != 0) {
+    					$object->knowledges->add($competention->knowledge_id, $competention->knowledge_id);
+    				}
+    				if ($competention->skill_id != 0) {
+    					$object->skills->add($competention->skill_id, $competention->skill_id);
+    				}
+    				if ($competention->experience_id != 0) {
+    					$object->experiences->add($competention->experience_id, $competention->experience_id);
+    				}
+    				$object->save();
+    			}
+    		}
+    	}
     	if ($type == 1) {
     		if (!is_null($plan->disciplinesBefore)) {
     			foreach ($plan->disciplinesBefore->getItems() as $item) {
