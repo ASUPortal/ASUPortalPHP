@@ -28,7 +28,7 @@ class CWorkPlanDisciplinesBefore extends CAbstractPrintClassField {
     		foreach ($contextObject->disciplinesBefore->getItems() as $item) {
     			$dataRow = array();
     			$dataRow[0] = "•";
-    			$dataRow[1] = $item->name;
+    			$dataRow[1] = $item->discipline->getValue();
     			$result[] = $dataRow;
     		}
     	}

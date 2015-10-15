@@ -76,7 +76,7 @@ class CWorkPlanCompetention extends CActiveModel{
         		"relationPower" => RELATION_HAS_ONE,
         		"storageProperty" => "_discipline",
         		"storageField" => "discipline_id",
-        		"managerClass" => "CTaxonomyManager",
+        		"managerClass" => "CCorriculumsManager",
         		"managerGetObject" => "getDiscipline"
         	)
         );
