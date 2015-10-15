@@ -127,10 +127,10 @@ function mark_all(click_name,part_num)
 </script>
 <?php
 $part_num=1;
-$hour_kind_name=array('лекции', 'практич.', 'лаборатор. занятий', 'расчет.-грф. работы', 'рецензир. контр. работ', 'консультация', 'зачеты', 
+$hour_kind_name=array('лекции', 'практич.', 'лаборатор. занятий', 'расчет.-грф. работы', 'КСР', 'рецензир. контр. работ', 'консультация', 'зачеты', 
 	'экзамены', 'учебная практика', 'производств. практика', 'курсовые проекты', 'консультац. диплом. проект', 'ГЭК', 'занятия с аспирантами', 
 	'руководство аспирант.', 'посещение занятий');
-$hour_kind_code=array('lects', 'practs', 'labor', 'rgr', 'recenz', 'consult', 'test', 'exams', 'study_pract', 'work_pract', 'kurs_proj', 
+$hour_kind_code=array('lects', 'practs', 'labor', 'rgr', 'ksr', 'recenz', 'consult', 'test', 'exams', 'study_pract', 'work_pract', 'kurs_proj', 
 	'consult_dipl', 'gek', 'aspirants', 'aspir_manage', 'duty');
 
 
@@ -259,7 +259,7 @@ $q_fields_list.',
 //echo $query_all;
 //для расчета нагрузки - список показателей видов часов
 
-echo '<div align="center"> '.strtoupper($part).' СЕМЕСТР</div>';
+echo '<div align="center"> '.$part.' СЕМЕСТР</div>';
 
 $cols_disable=0;//число скрытых столцов
 $not_print_cols=0; //число непечатаемых столбцов (в нумерации столбцов)
