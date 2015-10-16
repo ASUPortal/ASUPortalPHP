@@ -2,7 +2,8 @@
 
 /**
  * Class CCorriculumDisciplineCompetention
- *
+ * 
+ * @property int discipline_id
  * @property int competention_id
  * @property int knowledge_id
  * @property int skill_id
@@ -15,6 +16,13 @@ class CCorriculumDisciplineCompetention extends CActiveModel {
 
     protected function relations() {
         return array(
+        	"discipline" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_discipline",
+        		"storageField" => "discipline_id",
+        		"managerClass" => "CCorriculumsManager",
+        		"managerGetObject" => "getDiscipline"
+        	),
             "competention" => array(
                 "relationPower" => RELATION_HAS_ONE,
                 "storageProperty" => "_competention",
