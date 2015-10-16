@@ -19,6 +19,15 @@ class CCorriculumDisciplinesController extends CBaseController {
     }
     public function actionEdit() {
         $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("id"));
+        $corriculum = CCorriculumsManager::getCorriculum($discipline->cycle->corriculum->getId());
+        $this->addActionsMenuItem(array(
+        	array(
+        		"title" => "Печать по шаблону",
+        		"link" => "#",
+        		"icon" => "devices/printer.png",
+        		"template" => "formset_corriculum_disciplines"
+        	)
+        ));
         /**
          * Подключаем скрипты для няшности
          */
