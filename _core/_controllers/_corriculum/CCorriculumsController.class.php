@@ -114,6 +114,16 @@ class CCorriculumsController extends CBaseController {
                 $newDiscipline->cycle_id = $newCycle->getId();
                 $newDiscipline->save();
                 /**
+                 * Копируем компетенции из дисциплин
+                 */
+                if ($discipline->competentions->getCount() > 0) {
+                	foreach ($discipline->competentions->getItems() as $competention) {
+                		$newCompetention = $competention->copy();
+                		$newCompetention->discipline_id = $newDiscipline->getId();
+                		$newCompetention->save();
+                	}
+                }
+                /**
                  * Копируем семестры
                  * @var CCorriculumDisciplineSection $section
                  */
@@ -151,6 +161,16 @@ class CCorriculumsController extends CBaseController {
 					$newChildDiscipline->parent_id = $newDiscipline->getId();
 					$newChildDiscipline->cycle_id = $newCycle->getId();
 					$newChildDiscipline->save();
+					/**
+					 * Копируем компетенции из дочерних дисциплин
+					 */
+					if ($child->competentions->getCount() > 0) {
+						foreach ($discipline->competentions->getItems() as $competention) {
+							$newChildCompetention = $competention->copy();
+							$newChildCompetention->discipline_id = $newChildDiscipline->getId();
+							$newChildCompetention->save();
+						}
+					}
                     /**
                      * Копируем семестры
                      * @var CCorriculumDisciplineSection $section
