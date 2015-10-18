@@ -24,6 +24,17 @@
     {CHtml::helpForCurrentPage()}
     {include file="_core.searchLocal.tpl"}
     
+    <script>
+	    jQuery(document).ready(function(){
+	    	jQuery("#selectAll").change(function(){
+	    		var items = jQuery("input[name='selectedDoc[]']")
+	            for (var i = 0; i < items.length; i++) {
+	                items[i].checked = this.checked;
+	            }
+	        });
+	    });
+    </script>
+    
     {if $plans->getCount() == 0}
 		Нет планов для отображения
 	{else}
@@ -37,6 +48,7 @@
 				<th></th>
 	            <th>{CHtml::tableOrder("title_display", $plans->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("discipline_id", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("corriculum", $plans->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("year", $plans->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("profiles", $plans->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("authors", $plans->getFirstItem())}</th>
@@ -51,6 +63,7 @@
 	            <td><a href="?action=edit&id={$plan->getId()}" class="icon-pencil"></a></td>
 	            <td>{$plan->title_display}</td>
 	            <td>{$plan->discipline}</td>
+	            <td><a href="{$web_root}_modules/_corriculum/?action=view&id={$plan->corriculumDiscipline->cycle->corriculum->getId()}">{$plan->corriculumDiscipline->cycle->corriculum->title}</a></td>
 	            <td>{$plan->year}</td>
 	            <td>{", "|join:$plan->profiles->getItems()}</td>
 				<td>{", "|join:$plan->authors->getItems()}</td>
