@@ -81,7 +81,7 @@
             dataType: "json",
             data: {
                 action: "JSONGetDisciplines",
-                id: "{$discipline->getId()}"
+                id: "{$corriculum->getId()}"
             }
         }).done(function(data) {
             jQuery.each(data, function(key, value){

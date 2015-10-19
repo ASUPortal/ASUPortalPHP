@@ -92,8 +92,12 @@ class CCorriculumsController extends CBaseController {
     	$corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("id"));
     	$arr = array();
     	foreach ($corriculum->getDisciplines()->getItems() as $discipline) {
-    		$arr[$discipline->getId()] = $discipline->discipline->getValue();
-    	}
+        	if (!is_null($discipline->competentions)) {
+        		foreach ($discipline->competentions->getItems() as $disc) {
+        			$arr[$discipline->getId()] = $discipline->discipline->getValue();
+        		}
+        	}
+        }
     	echo json_encode($arr);
     }
     public function actionCopy() {
