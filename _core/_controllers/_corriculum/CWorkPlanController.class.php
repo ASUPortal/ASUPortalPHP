@@ -85,6 +85,13 @@ class CWorkPlanController extends CFlowController{
             $plan = new CWorkPlan($ar);
             $paginated->add($plan->getId(), $plan);
         }
+        $this->addActionsMenuItem(array(
+        	"title" => "Удалить выделенные",
+        	"icon" => "actions/edit-delete.png",
+        	"form" => "#MainView",
+        	"link" => "workplans.php",
+        	"action" => "delete"
+        ));
         $this->setData("isArchive", $isArchive);
         $this->setData("plans", $paginated);
         $this->setData("paginator", $set->getPaginator());
@@ -92,8 +99,14 @@ class CWorkPlanController extends CFlowController{
     }
     public function actionDelete() {
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-        $discipline = $plan->corriculum_discipline_id;
-        $plan->remove();
+        if (!is_null($plan)) {
+        	$plan->remove();
+        }
+        $items = CRequest::getArray("selectedInView");
+        foreach ($items as $id){
+        	$plan = CWorkPlanManager::getWorkplan($id);
+        	$plan->remove();
+        }
         $this->redirect("workplans.php");
     }
     public function actionAdd() {

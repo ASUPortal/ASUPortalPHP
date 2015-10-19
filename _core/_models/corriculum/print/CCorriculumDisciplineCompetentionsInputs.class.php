@@ -24,6 +24,14 @@ class CCorriculumDisciplineCompetentionsInputs extends CAbstractPrintClassField 
     public function execute($contextObject)
     {
 		$corriculum = CCorriculumsManager::getCorriculum($contextObject->cycle->corriculum->getId());
+		$disciplinesBefore = array();
+		foreach ($contextObject->plans->getItems() as $plan) {
+			if (!is_null($plan->disciplinesBefore)) {
+				foreach ($plan->disciplinesBefore->getItems() as $disciplineBefore) {
+					$disciplinesBefore[$disciplineBefore->getId()] = $disciplineBefore->discipline->getValue();
+				}
+			}
+		}
     	$disciplines = array();
     	foreach ($corriculum->getDisciplines() as $disc) {
     		foreach (CActiveRecordProvider::getWithCondition(TABLE_CORRICULUM_DISCIPLINE_SECTIONS, "discipline_id=".$disc->getId())->getItems() as $ar) {
@@ -46,14 +54,18 @@ class CCorriculumDisciplineCompetentionsInputs extends CAbstractPrintClassField 
     			}
     		}
     	}
-    	$items = array();
-    	foreach ($disciplines as $section_id=>$section) {
-    		foreach ($competentions as $comp_id=>$competention) {
-    			if ($section_id == $comp_id) {
-    				$items[] = $comp_id;
-    			}
-    		}
-    	}
+    	$disciplinesCorriculum = array();
+        foreach ($disciplines as $section_id=>$section) {
+        	foreach ($competentions as $comp_id=>$competention) {
+        		if ($section_id == $comp_id) {
+        			$disciplinesCorriculum[$comp_id] = $competention;
+        		}
+        	}
+        }
+        $items = array();
+        foreach (array_intersect_key($disciplinesBefore, $disciplinesCorriculum) as $key=>$value) {
+        	$items[] = $key;
+        }
     	$result = array();
     	foreach ($items as $value) {
     		$discipl = CCorriculumsManager::getDiscipline($value);

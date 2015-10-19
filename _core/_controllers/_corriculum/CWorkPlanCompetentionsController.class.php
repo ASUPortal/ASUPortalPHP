@@ -44,8 +44,15 @@ class CWorkPlanCompetentionsController extends CBaseController{
         $this->addActionsMenuItem(array(
         	"title" => "Обновить",
         	"link" => "workplancompetentions.php?action=update&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
-        	"icon" => "actions/view-refresh.png"
+        	"icon" => "actions/format-indent-more.png"
         ));
+        if (CRequest::getInt("type") == 0) {
+        	$this->addActionsMenuItem(array(
+        		"title" => "Скопировать компетенции из РП в УП",
+        		"link" => "workplancompetentions.php?action=copyCompetentions&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
+        		"icon" => "actions/format-indent-less.png"
+        	));
+        }
         /**
          * Отображение представления
          */
@@ -162,6 +169,21 @@ class CWorkPlanCompetentionsController extends CBaseController{
     				}
     			}
     		}
+    	}
+    	$this->redirect("workplancompetentions.php?action=index&plan_id=".$plan->getId()."&type=".$type);
+    }
+    public function actionCopyCompetentions() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$corriculumDiscipline = $plan->corriculumDiscipline;
+    	$type = CRequest::getInt("type");
+    	foreach ($plan->competentionsFormed->getItems() as $competentionFormed) {
+    		$item = new CCorriculumDisciplineCompetention();
+    		$item->discipline_id = $corriculumDiscipline->getId();
+    		$item->competention_id = $competentionFormed->competention_id;
+    		$item->knowledge_id = 0;
+    		$item->skill_id = 0;
+    		$item->experience_id = 0;
+    		$item->save();
     	}
     	$this->redirect("workplancompetentions.php?action=index&plan_id=".$plan->getId()."&type=".$type);
     }

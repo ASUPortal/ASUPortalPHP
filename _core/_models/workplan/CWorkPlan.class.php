@@ -89,6 +89,13 @@ class CWorkPlan extends CActiveModel {
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanCompetention"
             ),
+        	"competentionsFormed" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageProperty" => "_competentionsFormed",
+        		"storageTable" => TABLE_WORK_PLAN_COMPETENTIONS,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=0",
+        		"targetClass" => "CWorkPlanCompetention"
+        	),
         	"disciplinesBefore" => array(
         		"relationPower" => RELATION_MANY_TO_MANY,
         		"joinTable" => TABLE_WORK_PLAN_DISCIPLINES_BEFORE,
@@ -321,7 +328,8 @@ class CWorkPlan extends CActiveModel {
         	"director_of_library" => "Директор библиотеки",
         	"chief_umr" => "Начальник УМР",
         	"rgr_description" => "Расчётно-графическая работа",
-        	"corriculum_discipline_id" => "Выберите название дисциплины из учебного плана"
+        	"corriculum_discipline_id" => "Выберите название дисциплины из учебного плана",
+        	"corriculum" => "Учебный план"
         );
     }
 
