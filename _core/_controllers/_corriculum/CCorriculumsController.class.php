@@ -79,9 +79,22 @@ class CCorriculumsController extends CBaseController {
         /**
          * Передаем данные представлению
          */
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("labors", $labors);
         $this->setData("corriculum", $corriculum);
         $this->renderView("_corriculum/_plan/view.tpl");
+    }
+    /**
+     * Получаем список дисциплин JSON-ом
+     */
+    public function actionJSONGetDisciplines() {
+    	$corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("id"));
+    	$arr = array();
+    	foreach ($corriculum->getDisciplines()->getItems() as $discipline) {
+    		$arr[$discipline->getId()] = $discipline->discipline->getValue();
+    	}
+    	echo json_encode($arr);
     }
     public function actionCopy() {
         $corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("id"));
