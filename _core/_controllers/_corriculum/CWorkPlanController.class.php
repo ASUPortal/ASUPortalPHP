@@ -102,7 +102,7 @@ class CWorkPlanController extends CFlowController{
         if (!is_null($plan)) {
         	$plan->remove();
         }
-        $items = CRequest::getArray("selectedDoc");
+        $items = CRequest::getArray("selectedInView");
         foreach ($items as $id){
         	$plan = CWorkPlanManager::getWorkplan($id);
         	$plan->remove();

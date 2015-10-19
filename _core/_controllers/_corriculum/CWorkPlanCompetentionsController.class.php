@@ -49,7 +49,7 @@ class CWorkPlanCompetentionsController extends CBaseController{
         if (CRequest::getInt("type") == 0) {
         	$this->addActionsMenuItem(array(
         		"title" => "Скопировать компетенции из РП в УП",
-        		"link" => "workplancompetentions.php?action=upload&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
+        		"link" => "workplancompetentions.php?action=copyCompetentions&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
         		"icon" => "actions/format-indent-less.png"
         	));
         }
@@ -172,22 +172,18 @@ class CWorkPlanCompetentionsController extends CBaseController{
     	}
     	$this->redirect("workplancompetentions.php?action=index&plan_id=".$plan->getId()."&type=".$type);
     }
-    public function actionUpload() {
+    public function actionCopyCompetentions() {
     	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
     	$corriculumDiscipline = $plan->corriculumDiscipline;
     	$type = CRequest::getInt("type");
-    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_COMPETENTIONS, "plan_id=".$plan->getId()." and type=0")->getItems() as $ar) {
-    		$item = new CActiveModel($ar);
-    		$ar = new CActiveRecord(array(
-    				"discipline_id" => $corriculumDiscipline->getId(),
-    				"competention_id" => $item->competention_id,
-    				"knowledge_id" => 0,
-    				"skill_id" => 0,
-    				"experience_id" => 0,
-    				"id" => null
-    		));
-    		$ar->setTable(TABLE_CORRICULUM_DISCIPLINE_COMPETENTIONS);
-    		$ar->insert();
+    	foreach ($plan->competentionsFormed->getItems() as $competentionFormed) {
+    		$item = new CCorriculumDisciplineCompetention();
+    		$item->discipline_id = $corriculumDiscipline->getId();
+    		$item->competention_id = $competentionFormed->competention_id;
+    		$item->knowledge_id = 0;
+    		$item->skill_id = 0;
+    		$item->experience_id = 0;
+    		$item->save();
     	}
     	$this->redirect("workplancompetentions.php?action=index&plan_id=".$plan->getId()."&type=".$type);
     }

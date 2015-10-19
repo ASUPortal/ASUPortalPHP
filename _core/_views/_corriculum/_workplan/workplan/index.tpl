@@ -24,17 +24,6 @@
     {CHtml::helpForCurrentPage()}
     {include file="_core.searchLocal.tpl"}
     
-    <script>
-	    jQuery(document).ready(function(){
-	    	jQuery("#selectAll").change(function(){
-	    		var items = jQuery("input[name='selectedDoc[]']")
-	            for (var i = 0; i < items.length; i++) {
-	                items[i].checked = this.checked;
-	            }
-	        });
-	    });
-    </script>
-    
     {if $plans->getCount() == 0}
 		Нет планов для отображения
 	{else}
@@ -43,7 +32,7 @@
 	    <table class="table table-striped table-bordered table-hover table-condensed">
 	        <tr>
 	            <th></th>
-	            <th><input type="checkbox" id="selectAll"></th>
+	            <th>{CHtml::activeViewGroupSelect("id", $plans->getFirstItem(), true)}</th>
 	            <th>№</th>
 				<th></th>
 	            <th>{CHtml::tableOrder("title_display", $plans->getFirstItem())}</th>
@@ -58,7 +47,7 @@
 	        {foreach $plans->getItems() as $plan}
 	        <tr>
 	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить рабочую программу дисциплины {$plan->discipline}')) { location.href='?action=delete&id={$plan->id}'; }; return false;"></a></td>
-	            <td><input type="checkbox" value="{$plan->getId()}" name="selectedDoc[]"></td>
+	            <td>{CHtml::activeViewGroupSelect("id", $plan)}</td>
 	            <td>{counter}</td>
 	            <td><a href="?action=edit&id={$plan->getId()}" class="icon-pencil"></a></td>
 	            <td>{$plan->title_display}</td>
