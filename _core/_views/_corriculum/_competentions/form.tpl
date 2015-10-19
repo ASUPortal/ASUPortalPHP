@@ -8,7 +8,7 @@
     <div class="control-group">
         {CHtml::activeLabel("competention_id", $object)}
         <div class="controls">
-            {CHtml::activeLookup("competention_id", $object, "corriculum_competentions")}
+            {CHtml::activeLookup("competention_id", $object, "corriculum_competentions", false, array(), true)}
             {CHtml::error("competention_id", $object)}
         </div>
     </div>
@@ -32,7 +32,7 @@
     <div class="control-group">
         {CHtml::activeLabel("skill_id", $object)}
         <div class="controls">
-            {CHtml::activeLookup("skill_id", $object, "corriculum_knowledges")}
+            {CHtml::activeLookup("skill_id", $object, "corriculum_knowledges", false, array(), true)}
             {CHtml::error("skill_id", $object)}
         </div>
     </div>
@@ -40,7 +40,7 @@
     <div class="control-group">
         {CHtml::activeLabel("experience_id", $object)}
         <div class="controls">
-            {CHtml::activeLookup("experience_id", $object, "corriculum_knowledges")}
+            {CHtml::activeLookup("experience_id", $object, "corriculum_knowledges", false, array(), true)}
             {CHtml::error("experience_id", $object)}
         </div>
     </div>
