@@ -48,7 +48,7 @@ class CWorkPlanCompetentionsController extends CBaseController{
         ));
         if (CRequest::getInt("type") == 0) {
         	$this->addActionsMenuItem(array(
-        		"title" => "Выгрузить",
+        		"title" => "Скопировать компетенции из РП в УП",
         		"link" => "workplancompetentions.php?action=upload&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
         		"icon" => "actions/format-indent-less.png"
         	));
