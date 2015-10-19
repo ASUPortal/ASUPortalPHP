@@ -33,8 +33,7 @@ class CWorkPlanCompetentionsInputs extends CAbstractPrintClassField {
     	}
     	$disciplines = array();
     	foreach ($corriculum->getDisciplines() as $disc) {
-    		foreach (CActiveRecordProvider::getWithCondition(TABLE_CORRICULUM_DISCIPLINE_SECTIONS, "discipline_id=".$disc->getId())->getItems() as $ar) {
-    			$section = new CActiveModel($ar);
+    		foreach ($disc->sections as $section) {
     			foreach ($corriculumDiscipline->sections->getItems() as $currentSection) {
     				if ($currentSection->title >= $section->title) {
     					$disciplines[$section->discipline_id] = $section->title;
@@ -44,8 +43,7 @@ class CWorkPlanCompetentionsInputs extends CAbstractPrintClassField {
     	}
     	$competentions = array();
     	foreach ($corriculum->getDisciplines() as $disc) {
-    		foreach (CActiveRecordProvider::getWithCondition(TABLE_CORRICULUM_DISCIPLINE_COMPETENTIONS, "discipline_id=".$disc->getId())->getItems() as $ar) {
-    			$competention = new CActiveModel($ar);
+    		foreach ($disc->competentions as $competention) {
     			foreach ($corriculumDiscipline->competentions->getItems() as $currentCompetention) {
     				if ($currentCompetention->competention_id == $competention->competention_id) {
     					$competentions[$competention->discipline_id] = $competention->competention_id;
