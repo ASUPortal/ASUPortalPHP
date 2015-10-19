@@ -25,10 +25,10 @@ class CWorkPlanCompetentionsOuts extends CAbstractPrintClassField {
     {
         $corriculumDiscipline = $contextObject->corriculumDiscipline;
     	$corriculum = CCorriculumsManager::getCorriculum($corriculumDiscipline->cycle->corriculum->getId());
-    	$disciplinesBefore = array();
-    	if (!is_null($contextObject->disciplinesBefore)) {
-    		foreach ($contextObject->disciplinesBefore->getItems() as $disciplineBefore) {
-    			$disciplinesBefore[$disciplineBefore->getId()] = $disciplineBefore->discipline->getValue();
+    	$disciplinesAfter = array();
+    	if (!is_null($contextObject->disciplinesAfter)) {
+    		foreach ($contextObject->disciplinesAfter->getItems() as $disciplineAfter) {
+    			$disciplinesAfter[$disciplineAfter->getId()] = $disciplineAfter->discipline->getValue();
     		}
     	}
     	$disciplines = array();
@@ -60,7 +60,7 @@ class CWorkPlanCompetentionsOuts extends CAbstractPrintClassField {
     		}
     	}
     	$items = array();
-    	foreach (array_intersect_key($disciplinesBefore, $disciplinesCorriculum) as $key=>$value) {
+    	foreach (array_intersect_key($disciplinesAfter, $disciplinesCorriculum) as $key=>$value) {
     		$items[] = $key;
     	}
     	$result = array();
