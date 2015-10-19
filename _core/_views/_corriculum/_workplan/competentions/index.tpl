@@ -8,11 +8,12 @@
             <thead>
                 <tr>
                     <th width="16">&nbsp;</th>
+                    <th>{CHtml::activeViewGroupSelect("id", $objects->getFirstItem(), true)}</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
                     <th>{CHtml::tableOrder("competention_id", $objects->getFirstItem())}</th>
-                {if (CRequest::getInt("type")) != 0}
                     <th>{CHtml::tableOrder("level_id", $objects->getFirstItem())}</th>
+                {if (CRequest::getInt("type")) != 0}
                     <th>{CHtml::tableOrder("discipline_id", $objects->getFirstItem())}</th>
                 {else}
                     <th>{CHtml::tableOrder("knowledges", $objects->getFirstItem())}</th>
@@ -31,6 +32,7 @@
                             <a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить компетенцию')) { location.href='workplancompetentions.php?action=delete&id={$object->getId()}'; }; return false;"></a>
                         {/if}
                     </td>
+                    <td>{CHtml::activeViewGroupSelect("id", $object)}</td>
                     <td>{counter}</td>
                     <td><a href="workplancompetentions.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
                     <td>
@@ -38,12 +40,12 @@
                     		{$object->competention}
                     	{/if}
                     </td>
-                {if ($object->type) != 0}
                     <td>
                     	{if (!is_null($object->level))}
                     		{$object->level->getValue()}
                     	{/if}
                     </td>
+                {if ($object->type) != 0}
                     <td>
                     	{if (!is_null($object->discipline->discipline))}
                     		{$object->discipline->discipline->getValue()}
