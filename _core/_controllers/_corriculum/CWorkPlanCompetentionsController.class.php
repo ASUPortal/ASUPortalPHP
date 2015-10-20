@@ -140,39 +140,18 @@ class CWorkPlanCompetentionsController extends CBaseController{
     				$object->type = $type;
     				$object->competention_id = $newCompetention->competention_id;
     				$object->level_id = $newCompetention->level_id;
-    				$object->save();
     				foreach ($plan->corriculumDiscipline->competentions->getItems() as $competention) {
-    					foreach (CActiveRecordProvider::getWithCondition(TABLE_CORRICULUM_DISCIPLINE_KNOWLEDGES, "competention_id=".$competention->getId())->getItems() as $ar) {
-    						$item = new CActiveModel($ar);
-    						$ar = new CActiveRecord(array(
-    							"competention_id" => $object->getId(),
-    							"knowledge_id" => $item->knowledge_id,
-    							"id" => null
-    						));
-    						$ar->setTable(TABLE_WORK_PLAN_KNOWLEDGES);
-    						$ar->insert();
+    					foreach ($competention->knowledges->getItems() as $knowledge) {
+    						$object->knowledges->add($knowledge->getId(), $knowledge->getId());
     					}
-    					foreach (CActiveRecordProvider::getWithCondition(TABLE_CORRICULUM_DISCIPLINE_SKILLS, "competention_id=".$competention->getId())->getItems() as $ar) {
-    						$item = new CActiveModel($ar);
-    						$ar = new CActiveRecord(array(
-    							"competention_id" => $object->getId(),
-    							"skill_id" => $item->skill_id,
-    							"id" => null
-    						));
-    						$ar->setTable(TABLE_WORK_PLAN_SKILLS);
-    						$ar->insert();
+    					foreach ($competention->skills->getItems() as $skill) {
+    						$object->skills->add($skill->getId(), $skill->getId());
     					}
-    					foreach (CActiveRecordProvider::getWithCondition(TABLE_CORRICULUM_DISCIPLINE_EXPERIENCES, "competention_id=".$competention->getId())->getItems() as $ar) {
-    						$item = new CActiveModel($ar);
-    						$ar = new CActiveRecord(array(
-    							"competention_id" => $object->getId(),
-    							"experience_id" => $item->experience_id,
-    							"id" => null
-    						));
-    						$ar->setTable(TABLE_WORK_PLAN_EXPERIENCES);
-    						$ar->insert();
+    					foreach ($competention->experiences->getItems() as $experience) {
+    						$object->experiences->add($experience->getId(), $experience->getId());
     					}
     				}
+    				$object->save();
     			}
     		}
     	}
@@ -219,37 +198,16 @@ class CWorkPlanCompetentionsController extends CBaseController{
     		$newItem->discipline_id = $corriculumDiscipline->getId();
     		$newItem->competention_id = $competentionFormed->competention_id;
     		$newItem->level_id = $competentionFormed->level_id;
+    		foreach ($competentionFormed->knowledges->getItems() as $knowledge) {
+    			$newItem->knowledges->add($knowledge->getId(), $knowledge->getId());
+    		}
+    		foreach ($competentionFormed->skills->getItems() as $skill) {
+    			$newItem->skills->add($skill->getId(), $skill->getId());
+    		}
+    		foreach ($competentionFormed->experiences->getItems() as $experience) {
+    			$newItem->experiences->add($experience->getId(), $experience->getId());
+    		}	
     		$newItem->save();
-    		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_KNOWLEDGES, "competention_id=".$competentionFormed->getId())->getItems() as $ar) {
-    			$item = new CActiveModel($ar);
-    			$ar = new CActiveRecord(array(
-    				"competention_id" => $newItem->getId(),
-    				"knowledge_id" => $item->knowledge_id,
-    				"id" => null
-    			));
-    			$ar->setTable(TABLE_CORRICULUM_DISCIPLINE_KNOWLEDGES);
-    			$ar->insert();
-    		}
-    		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_SKILLS, "competention_id=".$competentionFormed->getId())->getItems() as $ar) {
-    			$item = new CActiveModel($ar);
-    			$ar = new CActiveRecord(array(
-    					"competention_id" => $newItem->getId(),
-    					"skill_id" => $item->skill_id,
-    					"id" => null
-    			));
-    			$ar->setTable(TABLE_CORRICULUM_DISCIPLINE_SKILLS);
-    			$ar->insert();
-    		}
-    		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_EXPERIENCES, "competention_id=".$competentionFormed->getId())->getItems() as $ar) {
-    			$item = new CActiveModel($ar);
-    			$ar = new CActiveRecord(array(
-    					"competention_id" => $newItem->getId(),
-    					"experience_id" => $item->experience_id,
-    					"id" => null
-    			));
-    			$ar->setTable(TABLE_CORRICULUM_DISCIPLINE_EXPERIENCES);
-    			$ar->insert();
-    		}
     	}
     	$this->redirect("workplancompetentions.php?action=index&plan_id=".$plan->getId()."&type=".$type);
     }
