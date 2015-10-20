@@ -52,7 +52,14 @@ class CCorriculumDisciplineCompetentionsController extends CBaseController{
     public function actionDelete() {
         $object = CCorriculumsManager::getCompetention(CRequest::getInt("id"));
         $discipline_id = $object->discipline_id;
-        $object->remove();
+        if (!is_null($object)) {
+        	$object->remove();
+        }
+        $items = CRequest::getArray("selectedInView");
+        foreach ($items as $id){
+        	$object = CCorriculumsManager::getCompetention($id);
+        	$object->remove();
+        }
         $this->redirect("disciplines.php?action=edit&id=".$discipline_id);
     }
     public function actionSave() {

@@ -435,7 +435,6 @@ class CWorkPlanController extends CFlowController{
     			$newSection = $section->copy();
     			$newSection->category_id = $newCategorie->getId();
     			$newSection->save();
-    			echo $newSection->getId();
     			/**
     			 * Копируем формы контроля из разделов
     			 * @var CTerm $control

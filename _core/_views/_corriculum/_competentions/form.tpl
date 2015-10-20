@@ -22,26 +22,26 @@
     </div>
 
     <div class="control-group">
-        {CHtml::activeLabel("knowledge_id", $object)}
+        {CHtml::activeLabel("knowledges", $object)}
         <div class="controls">
-            {CHtml::activeLookup("knowledge_id", $object, "corriculum_knowledges", false, array(), true)}
-            {CHtml::error("knowledge_id", $object)}
+            {CHtml::activeLookup("knowledges", $object, "corriculum_knowledges", true, array(), true)}
+            {CHtml::error("knowledges", $object)}
         </div>
     </div>
         
     <div class="control-group">
-        {CHtml::activeLabel("skill_id", $object)}
+        {CHtml::activeLabel("skills", $object)}
         <div class="controls">
-            {CHtml::activeLookup("skill_id", $object, "corriculum_knowledges", false, array(), true)}
-            {CHtml::error("skill_id", $object)}
+            {CHtml::activeLookup("skills", $object, "corriculum_knowledges", true, array(), true)}
+            {CHtml::error("skills", $object)}
         </div>
     </div>
         
     <div class="control-group">
-        {CHtml::activeLabel("experience_id", $object)}
+        {CHtml::activeLabel("experiences", $object)}
         <div class="controls">
-            {CHtml::activeLookup("experience_id", $object, "corriculum_knowledges", false, array(), true)}
-            {CHtml::error("experience_id", $object)}
+            {CHtml::activeLookup("experiences", $object, "corriculum_knowledges", true, array(), true)}
+            {CHtml::error("experiences", $object)}
         </div>
     </div>
         

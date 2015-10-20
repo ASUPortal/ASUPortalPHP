@@ -14,8 +14,7 @@
             {CHtml::error("competention_id", $object)}
         </div>
     </div>
-	
-{if ($object->type) != 0}
+    
     <div class="control-group">
         {CHtml::activeLabel("level_id", $object)}
         <div class="controls">
@@ -24,6 +23,7 @@
         </div>
     </div>
 
+{if ($object->type) != 0}
     <div class="control-group">
         {CHtml::activeLabel("discipline_id", $object)}
         <div class="controls">
@@ -31,6 +31,7 @@
             {CHtml::error("discipline_id", $object)}
         </div>
     </div>
+    
 {else}
     <div class="control-group">
         {CHtml::activeLabel("knowledges", $object)}
