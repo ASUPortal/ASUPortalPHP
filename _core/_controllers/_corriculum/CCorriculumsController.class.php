@@ -94,7 +94,11 @@ class CCorriculumsController extends CBaseController {
     	foreach ($corriculum->getDisciplines()->getItems() as $discipline) {
         	if (!is_null($discipline->competentions)) {
         		foreach ($discipline->competentions->getItems() as $disc) {
-        			$arr[$discipline->getId()] = $discipline->discipline->getValue();
+        			if (!is_null($discipline->plans)) {
+        				foreach ($discipline->plans->getItems() as $disc) {
+        					$arr[$discipline->getId()] = $discipline->discipline->getValue();
+        				}
+        			}
         		}
         	}
         }
