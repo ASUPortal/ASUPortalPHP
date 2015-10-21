@@ -141,6 +141,24 @@ class CCorriculumsController extends CBaseController {
                 	foreach ($discipline->competentions->getItems() as $competention) {
                 		$newCompetention = $competention->copy();
                 		$newCompetention->discipline_id = $newDiscipline->getId();
+                		/**
+                		 * Копируем знания из компетенций
+                		 */
+                		foreach ($competention->knowledges->getItems() as $knowledge) {
+                			$newCompetention->knowledges->add($knowledge->getId(), $knowledge->getId());
+                		}
+                		/**
+                		 * Копируем умения из компетенций
+                		 */
+                		foreach ($competention->skills->getItems() as $skill) {
+                			$newCompetention->skills->add($skill->getId(), $skill->getId());
+                		}
+                		/**
+                		 * Копируем навыки из компетенций
+                		 */
+                		foreach ($competention->experiences->getItems() as $experience) {
+                			$newCompetention->experiences->add($experience->getId(), $experience->getId());
+                		}
                 		$newCompetention->save();
                 	}
                 }
@@ -186,9 +204,27 @@ class CCorriculumsController extends CBaseController {
 					 * Копируем компетенции из дочерних дисциплин
 					 */
 					if ($child->competentions->getCount() > 0) {
-						foreach ($discipline->competentions->getItems() as $competention) {
+						foreach ($child->competentions->getItems() as $competention) {
 							$newChildCompetention = $competention->copy();
 							$newChildCompetention->discipline_id = $newChildDiscipline->getId();
+							/**
+							 * Копируем знания из компетенций
+							 */
+							foreach ($competention->knowledges->getItems() as $knowledge) {
+								$newChildCompetention->knowledges->add($knowledge->getId(), $knowledge->getId());
+							}
+							/**
+							 * Копируем умения из компетенций
+							 */
+							foreach ($competention->skills->getItems() as $skill) {
+								$newChildCompetention->skills->add($skill->getId(), $skill->getId());
+							}
+							/**
+							 * Копируем навыки из компетенций
+							 */
+							foreach ($competention->experiences->getItems() as $experience) {
+								$newChildCompetention->experiences->add($experience->getId(), $experience->getId());
+							}
 							$newChildCompetention->save();
 						}
 					}
