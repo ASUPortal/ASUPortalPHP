@@ -26,6 +26,7 @@ class CWorkPlanSkills extends CAbstractPrintClassField {
     	$result = array();
     	if (!is_null($contextObject->competentions)) {
     		foreach ($contextObject->competentions->getItems() as $item) {
+    			//навыки формируемых компетенций рабочей программы
     			if ($item->type == 0) {
     				if (!is_null($item->skills)) {
     					foreach ($item->skills->getItems() as $item) {

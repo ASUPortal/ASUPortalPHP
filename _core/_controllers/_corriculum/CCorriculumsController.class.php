@@ -135,12 +135,41 @@ class CCorriculumsController extends CBaseController {
                 $newDiscipline->cycle_id = $newCycle->getId();
                 $newDiscipline->save();
                 /**
+                 * Копируем рабочие программы из дисциплин
+                 */
+                foreach ($discipline->plans->getItems() as $plan) {
+                	$newPlan = $plan->copy();
+                	$newPlan->corriculum_discipline_id = $newDiscipline->getId();
+                	if (!is_null($newDiscipline->discipline)) {
+                		$newPlan->discipline_id = $newDiscipline->discipline->getId();
+                	}
+                	$newPlan->save();
+                }
+                /**
                  * Копируем компетенции из дисциплин
                  */
                 if ($discipline->competentions->getCount() > 0) {
                 	foreach ($discipline->competentions->getItems() as $competention) {
                 		$newCompetention = $competention->copy();
                 		$newCompetention->discipline_id = $newDiscipline->getId();
+                		/**
+                		 * Копируем знания из компетенций
+                		 */
+                		foreach ($competention->knowledges->getItems() as $knowledge) {
+                			$newCompetention->knowledges->add($knowledge->getId(), $knowledge->getId());
+                		}
+                		/**
+                		 * Копируем умения из компетенций
+                		 */
+                		foreach ($competention->skills->getItems() as $skill) {
+                			$newCompetention->skills->add($skill->getId(), $skill->getId());
+                		}
+                		/**
+                		 * Копируем навыки из компетенций
+                		 */
+                		foreach ($competention->experiences->getItems() as $experience) {
+                			$newCompetention->experiences->add($experience->getId(), $experience->getId());
+                		}
                 		$newCompetention->save();
                 	}
                 }
@@ -182,13 +211,39 @@ class CCorriculumsController extends CBaseController {
 					$newChildDiscipline->parent_id = $newDiscipline->getId();
 					$newChildDiscipline->cycle_id = $newCycle->getId();
 					$newChildDiscipline->save();
+					foreach ($child->plans->getItems() as $plan) {
+						$newPlan = $plan->copy();
+						$newPlan->corriculum_discipline_id = $newChildDiscipline->getId();
+						if (!is_null($newChildDiscipline->discipline)) {
+							$newPlan->discipline_id = $newChildDiscipline->discipline->getId();
+						}
+						$newPlan->save();
+					}
 					/**
 					 * Копируем компетенции из дочерних дисциплин
 					 */
 					if ($child->competentions->getCount() > 0) {
-						foreach ($discipline->competentions->getItems() as $competention) {
+						foreach ($child->competentions->getItems() as $competention) {
 							$newChildCompetention = $competention->copy();
 							$newChildCompetention->discipline_id = $newChildDiscipline->getId();
+							/**
+							 * Копируем знания из компетенций
+							 */
+							foreach ($competention->knowledges->getItems() as $knowledge) {
+								$newChildCompetention->knowledges->add($knowledge->getId(), $knowledge->getId());
+							}
+							/**
+							 * Копируем умения из компетенций
+							 */
+							foreach ($competention->skills->getItems() as $skill) {
+								$newChildCompetention->skills->add($skill->getId(), $skill->getId());
+							}
+							/**
+							 * Копируем навыки из компетенций
+							 */
+							foreach ($competention->experiences->getItems() as $experience) {
+								$newChildCompetention->experiences->add($experience->getId(), $experience->getId());
+							}
 							$newChildCompetention->save();
 						}
 					}

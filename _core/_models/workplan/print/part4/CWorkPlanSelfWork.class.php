@@ -23,18 +23,21 @@ class CWorkPlanSelfWork extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
+    	//самостоятельная работа из нагрузки дисциплины учебного плана
     	$selfWorkValueOfLoad = 0;
     	foreach ($contextObject->corriculumDiscipline->labors->getItems() as $labor) {
     		if ($labor->type->getAlias() == "self_work") {
     			$selfWorkValueOfLoad = $labor->value;
     		}
     	}
+    	//курсовая работа из нагрузки дисциплины учебного плана
     	$projectValueOfLoad = 0;
     	foreach ($contextObject->corriculumDiscipline->labors->getItems() as $labor) {
     		if ($labor->type->getAlias() == "course_work") {
     			$projectValueOfLoad = $labor->value;
     		}
     	}
+    	//сумма часов по самостоятельному изучению разделов из рабочей программы
     	$selfEduTotal = 0;
     	foreach ($contextObject->selfEducations->getItems() as $row) {
     		$selfEduTotal += $row->question_hours;
