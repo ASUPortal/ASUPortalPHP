@@ -137,16 +137,13 @@ class CCorriculumsController extends CBaseController {
                 /**
                  * Копируем рабочие программы из дисциплин
                  */
-                if ($discipline->plans->getCount() > 0) {
-                	foreach ($discipline->plans->getItems() as $plan) {
-                		$newPlan = $plan->copy();
-                		$newPlan->corriculum_discipline_id = $newDiscipline->getId();
-                		$discipline = CCorriculumsManager::getDiscipline($newDiscipline->getId());
-                		if (!is_null($discipline->discipline)) {
-                			$newPlan->discipline_id = $discipline->discipline->getId();
-                		}
-                		$newPlan->save();
+                foreach ($discipline->plans->getItems() as $plan) {
+                	$newPlan = $plan->copy();
+                	$newPlan->corriculum_discipline_id = $newDiscipline->getId();
+                	if (!is_null($newDiscipline->discipline)) {
+                		$newPlan->discipline_id = $newDiscipline->discipline->getId();
                 	}
+                	$newPlan->save();
                 }
                 /**
                  * Копируем компетенции из дисциплин
@@ -214,17 +211,14 @@ class CCorriculumsController extends CBaseController {
 					$newChildDiscipline->parent_id = $newDiscipline->getId();
 					$newChildDiscipline->cycle_id = $newCycle->getId();
 					$newChildDiscipline->save();
-					if ($child->plans->getCount() > 0) {
-						foreach ($child->plans->getItems() as $plan) {
-							$newPlan = $plan->copy();
-							$newPlan->corriculum_discipline_id = $newChildDiscipline->getId();
-							$discipline = CCorriculumsManager::getDiscipline($newChildDiscipline->getId());
-							if (!is_null($discipline->discipline)) {
-								$newPlan->discipline_id = $discipline->discipline->getId();
-							}
-							$newPlan->save();
+					foreach ($child->plans->getItems() as $plan) {
+						$newPlan = $plan->copy();
+						$newPlan->corriculum_discipline_id = $newChildDiscipline->getId();
+						if (!is_null($newChildDiscipline->discipline)) {
+							$newPlan->discipline_id = $newChildDiscipline->discipline->getId();
 						}
-					}	
+						$newPlan->save();
+					}
 					/**
 					 * Копируем компетенции из дочерних дисциплин
 					 */
