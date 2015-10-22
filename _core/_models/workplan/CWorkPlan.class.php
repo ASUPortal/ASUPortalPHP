@@ -493,12 +493,12 @@ class CWorkPlan extends CActiveModel {
     	return $controls;
     }
     
-    public function copyWorkPlan($planId, $corriculumDisciplineId) {
+    public function copy($planId, $corriculumDisciplineId) {
     	$plan = CWorkPlanManager::getWorkplan($planId);
     	/**
     	 * Клонируем саму рабочую программу
     	*/
-    	$newPlan = $plan->copy();
+    	$newPlan = parent::copy();
     	$newPlan->title = "Копия ".$newPlan->title;
     	$newPlan->corriculum_discipline_id = $corriculumDisciplineId;
     	$discipline = CCorriculumsManager::getDiscipline($corriculumDisciplineId);

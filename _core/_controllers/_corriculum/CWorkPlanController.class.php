@@ -279,7 +279,7 @@ class CWorkPlanController extends CFlowController{
     	$pl = new CWorkPlan();
     	$pl->setAttributes(CRequest::getArray($pl->getClassName()));
     	$plan = CWorkPlanManager::getWorkplan($pl->getId());
-    	$plan->copyWorkPlan($pl->getId(), $pl->corriculum_discipline_id);
+    	$plan->copy($pl->getId(), $pl->corriculum_discipline_id);
     	/**
     	 * Редирект на страницу со списком
     	 */
