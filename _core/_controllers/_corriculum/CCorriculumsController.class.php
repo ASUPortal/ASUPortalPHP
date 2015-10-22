@@ -139,7 +139,13 @@ class CCorriculumsController extends CBaseController {
                  */
                 if ($discipline->plans->getCount() > 0) {
                 	foreach ($discipline->plans->getItems() as $plan) {
-                		$plan->copy($plan->getId(), $newDiscipline->getId());
+                		$newPlan = $plan->copy();
+                		$newPlan->corriculum_discipline_id = $newDiscipline->getId();
+                		$discipline = CCorriculumsManager::getDiscipline($newDiscipline->getId());
+                		if (!is_null($discipline->discipline)) {
+                			$newPlan->discipline_id = $discipline->discipline->getId();
+                		}
+                		$newPlan->save();
                 	}
                 }
                 /**
@@ -210,7 +216,13 @@ class CCorriculumsController extends CBaseController {
 					$newChildDiscipline->save();
 					if ($child->plans->getCount() > 0) {
 						foreach ($child->plans->getItems() as $plan) {
-							$plan->copy($plan->getId(), $newChildDiscipline->getId());
+							$newPlan = $plan->copy();
+							$newPlan->corriculum_discipline_id = $newChildDiscipline->getId();
+							$discipline = CCorriculumsManager::getDiscipline($newChildDiscipline->getId());
+							if (!is_null($discipline->discipline)) {
+								$newPlan->discipline_id = $discipline->discipline->getId();
+							}
+							$newPlan->save();
 						}
 					}	
 					/**
