@@ -64,10 +64,32 @@
                     jQuery(this._lookupDialog).on("shown", this, this._onDialogShown);
                     jQuery("[asu-action=ok]", this._lookupDialog).on("click", this, this._onDialogOkClick);
                     jQuery("[asu-action=create]", this._lookupDialog).on("click", this, this._onDialogCreateClick);
+                    jQuery("[asu-action=filter]", this._lookupDialog).on("keyup", this, this._onFilterChange);
                     jQuery(this._lookupDialog).modal();
                 }
             });
         };
+
+        /**
+         * Фильтр записей
+         */
+        this._onFilterChange = function(){
+            var filter = jQuery(this).val();
+            var parent = jQuery('table', jQuery(this).parents(".modal"));
+            // покажем все строки таблицы
+            var rows = jQuery('tr', parent);
+            jQuery(rows).each(function(index, row){
+                jQuery(row).show();
+            });
+            // если фильтра нет, то все на этом
+            if (!filter || filter == "") { return true; }
+            // скроем те, которые не подходят
+            jQuery(rows).each(function(index, row){
+                if (jQuery(row).text().toLowerCase().indexOf(filter.toLowerCase()) == -1) {
+                    jQuery(row).hide();
+                }
+            });
+        },
 
         // при показе диалога
         this._onDialogShow = function(event){
