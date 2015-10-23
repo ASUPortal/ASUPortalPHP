@@ -63,7 +63,7 @@
                     jQuery(this._lookupDialog).on("show", this, this._onDialogShow);
                     jQuery(this._lookupDialog).on("shown", this, this._onDialogShown);
                     jQuery("[asu-action=ok]", this._lookupDialog).on("click", this, this._onDialogOkClick);
-                    jQuery("[asu-action=search]", this._lookupDialog).on("click", this, this._onDialogSearchClick);
+                    jQuery("[asu-action=search]", this._lookupDialog).on("change", this, this._onDialogSearchChange);
                     jQuery("[asu-action=create]", this._lookupDialog).on("click", this, this._onDialogCreateClick);
                     jQuery(this._lookupDialog).modal();
                 }
@@ -281,9 +281,11 @@
         };
 
         // search в диалоге
-        this._onDialogSearchClick = function(event){
+        this._onDialogSearchChange = function(event){
         	var item_search = $('input[name="search_id"]').val();
         	//$('td:contains(' + item_search + ')').filter('td:contains(' + item_search + ')');
+        	//$("tr").not(":contains(' + item_search + ')").hide();
+        	//$('tr:contains(' + item_search + ')').show();
         	$('td:contains(' + item_search + ')').css("text-decoration", "underline");
         	// получаем выбранные элементы
             var items = jQuery("input:checked", dialog);

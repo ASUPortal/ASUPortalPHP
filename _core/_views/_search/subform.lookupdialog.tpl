@@ -2,8 +2,7 @@
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <p><b>Выбор из словаря или справочника</b></p>
-        <input type="text" name="search_id" placeholder="Введите текст для поиска" style="width: 95%; ">
-        <span class="btn" asu-action="search">Найти</span>
+        <input type="text" name="search_id" placeholder="Введите текст для поиска" asu-action="search" style="width: 95%; ">
     </div>
     <div class="modal-body" style="max-height: 300px; ">
 
