@@ -26,15 +26,17 @@ class CWorkPlanCanUse extends CAbstractPrintClassField {
     	$result = array();
     	if (!is_null($contextObject->competentions)) {
     		foreach ($contextObject->competentions->getItems() as $item) {
-    			if (!is_null($item->canUse)) {
-    				foreach ($item->canUse->getItems() as $item) {
-    					$dataRow = array();
-    					$dataRow[0] = "•";
-    					$dataRow[1] = $item->getValue();
-    					$result[] = $dataRow;
+    			//умения использовать формируемых компетенций рабочей программы
+    			if ($item->type == 0) {
+    				if (!is_null($item->canUse)) {
+    					foreach ($item->canUse->getItems() as $item) {
+    						$dataRow = array();
+    						$dataRow[0] = "•";
+    						$dataRow[1] = $item->getValue();
+    						$result[] = $dataRow;
+    					}
     				}
     			}
-    			
     		}
     	}
     	return $result;

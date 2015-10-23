@@ -105,6 +105,7 @@ class CLibraryManager {
         $query = new CQuery();
         $query->select("file.*")
             ->from(TABLE_LIBRARY_FILES." as file")
+            ->condition("user_id != 0")
             ->order("file.id desc")
             ->limit(0, 10);
         foreach ($query->execute()->getItems() as $data) {

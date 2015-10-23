@@ -32,3 +32,4 @@
             Добавить рабочую программу
         </center></a>
 </p>
+{CHtml::displayActionsMenu($_actions_menu)}

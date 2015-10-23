@@ -19,6 +19,20 @@ class CCorriculumDisciplinesController extends CBaseController {
     }
     public function actionEdit() {
         $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("id"));
+        $corriculum = CCorriculumsManager::getCorriculum($discipline->cycle->corriculum->getId());
+        $this->addActionsMenuItem(array(
+        	"title" => "Удалить выделенные компетенции",
+        	"icon" => "actions/edit-delete.png",
+        	"form" => "#MainView",
+        	"link" => "competentions.php",
+        	"action" => "delete"
+        ));
+        $this->addActionsMenuItem(array(
+        	"title" => "Печать по шаблону",
+        	"link" => "#",
+        	"icon" => "devices/printer.png",
+        	"template" => "formset_corriculum_disciplines"
+        ));
         /**
          * Подключаем скрипты для няшности
          */

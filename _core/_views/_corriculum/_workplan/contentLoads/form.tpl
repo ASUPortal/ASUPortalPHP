@@ -16,7 +16,7 @@
     <div class="control-group">
         {CHtml::activeLabel("term_id", $object)}
         <div class="controls">
-            {CHtml::activeLookup("term_id", $object, "class.CSearchCatalogWorkPlanTerms", false, ["plan_id" => $object->section->module->plan_id])}
+            {CHtml::activeLookup("term_id", $object, "class.CSearchCatalogWorkPlanTerms", false, ["plan_id" => $object->section->category->plan_id])}
             {CHtml::error("term_id", $object)}
         </div>
     </div>

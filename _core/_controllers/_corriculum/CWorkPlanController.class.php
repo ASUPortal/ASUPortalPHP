@@ -77,14 +77,21 @@ class CWorkPlanController extends CFlowController{
         if (CRequest::getInt("isArchive") == "1") {
             $isArchive = true;
         }
-        if (!$isArchive) {
-            $query->condition("wp.is_archive = 0");
+        if ($isArchive) {
+            $query->condition("wp.is_archive = 1");
         }
         $paginated = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $plan = new CWorkPlan($ar);
             $paginated->add($plan->getId(), $plan);
         }
+        $this->addActionsMenuItem(array(
+        	"title" => "Удалить выделенные",
+        	"icon" => "actions/edit-delete.png",
+        	"form" => "#MainView",
+        	"link" => "workplans.php",
+        	"action" => "delete"
+        ));
         $this->setData("isArchive", $isArchive);
         $this->setData("plans", $paginated);
         $this->setData("paginator", $set->getPaginator());
@@ -92,9 +99,15 @@ class CWorkPlanController extends CFlowController{
     }
     public function actionDelete() {
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-        $discipline = $plan->corriculum_discipline_id;
-        $plan->remove();
-        $this->redirect("disciplines.php?action=edit&id=".$discipline);
+        if (!is_null($plan)) {
+        	$plan->remove();
+        }
+        $items = CRequest::getArray("selectedInView");
+        foreach ($items as $id){
+        	$plan = CWorkPlanManager::getWorkplan($id);
+        	$plan->remove();
+        }
+        $this->redirect("workplans.php");
     }
     public function actionAdd() {
         /**
@@ -120,6 +133,7 @@ class CWorkPlanController extends CFlowController{
             $plan->qualification_id = $corriculum->qualification_id;
             $plan->education_form_id = $corriculum->form_id;
         }
+        $plan->date_of_formation = date("Y-m-d");
         $plan->year = date("Y");
         $plan->authors = new CArrayList();
         $plan->authors->add(CSession::getCurrentPerson()->getId(), CSession::getCurrentPerson()->getId());
@@ -148,19 +162,30 @@ class CWorkPlanController extends CFlowController{
             }
             $planCompetention->save();
         }
+        $category = new CWorkPlanContentCategory();
+        $category->plan_id = $plan->getId();
+        $category->order = 1;
+        $category->title = "Пустая категория";
+        $category->save();
         $this->redirect("?action=edit&id=".$plan->getId());
     }
     public function actionEdit() {
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+        $plan->date_of_formation = date("d.m.Y", strtotime($plan->date_of_formation));
         $this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
                 "link" => "workplans.php?action=index",
                 "icon" => "actions/edit-undo.png"
             ),
+        	array(
+        		"title" => "К дисциплине уч. плана",
+        		"link" => "disciplines.php?action=edit&id=".$plan->corriculum_discipline_id,
+        		"icon" => "actions/edit-undo.png"
+        	),
             array(
-                "title" => "Добавить модуль",
-                "link" => "workplancontentmodules.php?action=add&id=".$plan->getId(),
+                "title" => "Добавить категорию",
+                "link" => "workplancontentcategories.php?action=add&id=".$plan->getId(),
                 "icon" => "actions/list-add.png"
             ),
             array(
@@ -173,11 +198,16 @@ class CWorkPlanController extends CFlowController{
         		"link" => "#",
         		"icon" => "devices/printer.png",
         		"template" => "formset_workplans"
+        	),
+        	array(
+        		"title" => "Копировать рабочую программу",
+        		"link" => "workplans.php?action=selectCorriculum&id=".$plan->getId(),
+        		"icon" => "actions/edit-copy.png"
         	)
         ));
         $this->setData("plan", $plan);
 
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        //$this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->addCSSInclude("_modules/_redactor/redactor.css");
         $this->addJSInclude("_modules/_redactor/redactor.min.js");
@@ -188,6 +218,7 @@ class CWorkPlanController extends CFlowController{
         $plan = new CWorkPlan();
         $plan->setAttributes(CRequest::getArray($plan->getClassName()));
         if ($plan->validate()) {
+        	$plan->date_of_formation = date("Y-m-d", strtotime($plan->date_of_formation));
             $plan->save();
             if ($this->continueEdit()) {
                 $this->redirect("workplans.php?action=edit&id=".$plan->getId());
@@ -196,6 +227,7 @@ class CWorkPlanController extends CFlowController{
             }
             return true;
         }
+        $plan->date_of_formation = date("d.m.Y", strtotime($plan->date_of_formation));
         $this->setData("plan", $plan);
         $this->renderView("_corriculum/_workplan/workplan/edit.tpl");
     }
@@ -219,5 +251,44 @@ class CWorkPlanController extends CFlowController{
             );
         }
         echo json_encode($res);
+    }
+    public function actionSelectCorriculum() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$items = array();
+    	foreach (CCorriculumsManager::getAllCorriculums()->getItems() as $corriculum) {
+    		$items[$corriculum->getId()] = $corriculum->title;
+    	}
+    	$this->setData("items", $items);
+    	$this->setData("plan", $plan);
+    	$this->renderView("_corriculum/_workplan/workplan/select.tpl");
+    }
+    public function actionCopyWorkPlan() {
+    	$pl = new CWorkPlan();
+    	$pl->setAttributes(CRequest::getArray($pl->getClassName()));
+    	$plan = CWorkPlanManager::getWorkplan($pl->getId());
+    	$corriculum = CCorriculumsManager::getCorriculum($pl->corriculum_discipline_id);
+    	$items = array();
+    	foreach ($corriculum->getDisciplines() as $discipline) {
+    		$items[$discipline->getId()] = $discipline->discipline->getValue();
+    	}
+    	$this->setData("items", $items);
+    	$this->setData("plan", $plan);
+    	$this->renderView("_corriculum/_workplan/workplan/copy.tpl");
+    }
+    public function actionCopy() {
+    	$pl = new CWorkPlan();
+    	$pl->setAttributes(CRequest::getArray($pl->getClassName()));
+    	$plan = CWorkPlanManager::getWorkplan($pl->getId());
+    	$newPlan = $plan->copy();
+    	$newPlan->corriculum_discipline_id = $pl->corriculum_discipline_id;
+    	$discipline = CCorriculumsManager::getDiscipline($pl->corriculum_discipline_id);
+    	if (!is_null($discipline->discipline)) {
+    		$newPlan->discipline_id = $discipline->discipline->getId();
+    	}
+    	$newPlan->save();
+    	/**
+    	 * Редирект на страницу со списком
+    	 */
+    	$this->redirect("workplans.php?action=index");
     }
 }

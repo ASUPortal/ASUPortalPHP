@@ -47,6 +47,14 @@
 </div>
 
 <div class="control-group">
+    {CHtml::activeLabel("level_id", $plan)}
+    <div class="controls">
+        {CHtml::activeLookup("level_id", $plan, "corriculum_level_of_training", false, array(), true)}
+        {CHtml::error("level_id", $plan)}
+    </div>
+</div>
+
+<div class="control-group">
     {CHtml::activeLabel("direction_id", $plan)}
     <div class="controls">
         {CHtml::activeLookup("direction_id", $plan, "corriculum_speciality_directions")}
@@ -57,7 +65,7 @@
 <div class="control-group">
     {CHtml::activeLabel("profiles", $plan)}
     <div class="controls">
-        {CHtml::activeLookup("profiles", $plan, "corriculum_profiles", true)}
+        {CHtml::activeLookup("profiles", $plan, "corriculum_profiles", true, array(), true)}
         {CHtml::error("profiles", $plan)}
     </div>
 </div>
@@ -76,6 +84,14 @@
         {CHtml::activeLookup("education_form_id", $plan, "study_forms")}
         {CHtml::error("education_form_id", $plan)}
     </div>
+</div>
+
+<div class="control-group">
+	{CHtml::activeLabel("date_of_formation", $plan)}
+	<div class="controls">
+		{CHtml::activeDateField("date_of_formation", $plan)}
+		{CHtml::error("date_of_formation", $plan)}
+	</div>
 </div>
 
 <div class="control-group">
@@ -121,7 +137,7 @@
 <div class="control-group">
     {CHtml::activeLabel("disciplinesBefore", $plan)}
     <div class="controls">
-        {CHtml::activeLookup("disciplinesBefore", $plan, "subjects", true)}
+        {CHtml::activeLookup("disciplinesBefore", $plan, "class.CSearchCatalogCorriculumDisciplines", true, ["plan_id" => $plan->getId()])}
         {CHtml::error("disciplinesBefore", $plan)}
     </div>
 </div>
@@ -129,7 +145,7 @@
 <div class="control-group">
     {CHtml::activeLabel("disciplinesAfter", $plan)}
     <div class="controls">
-        {CHtml::activeLookup("disciplinesAfter", $plan, "subjects", true)}
+        {CHtml::activeLookup("disciplinesAfter", $plan, "class.CSearchCatalogCorriculumDisciplines", true, ["plan_id" => $plan->getId()])}
         {CHtml::error("disciplinesAfter", $plan)}
     </div>
 </div>

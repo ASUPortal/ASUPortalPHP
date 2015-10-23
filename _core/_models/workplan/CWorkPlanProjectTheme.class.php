@@ -6,6 +6,7 @@
  * Time: 22:25
  *
  * @property int plan_id
+ * @property int type
  * @property string project_title
  */
 class CWorkPlanProjectTheme extends CActiveModel{
@@ -13,7 +14,8 @@ class CWorkPlanProjectTheme extends CActiveModel{
 
     public function attributeLabels() {
         return array(
-            "project_title" => "Тема"
+            "project_title" => "Тема",
+        	"type" => "Тип"
         );
     }
 

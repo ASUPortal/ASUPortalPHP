@@ -25,7 +25,7 @@ class CWorkPlanCompetentionsController extends CBaseController{
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_COMPETENTIONS." as t")
             ->order("t.id asc")
-            ->condition("plan_id=".CRequest::getInt("plan_id"));
+            ->condition("plan_id=".CRequest::getInt("plan_id")." AND type=".CRequest::getInt("type"));
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanCompetention($ar);
@@ -38,8 +38,27 @@ class CWorkPlanCompetentionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Добавить компетенцию",
-            "link" => "workplancompetentions.php?action=add&id=".CRequest::getInt("plan_id"),
+            "link" => "workplancompetentions.php?action=add&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
             "icon" => "actions/list-add.png"
+        ));
+        $this->addActionsMenuItem(array(
+        	"title" => "Обновить",
+        	"link" => "workplancompetentions.php?action=update&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
+        	"icon" => "actions/format-indent-more.png"
+        ));
+        if (CRequest::getInt("type") == 0) {
+        	$this->addActionsMenuItem(array(
+        		"title" => "Скопировать компетенции из РП в УП",
+        		"link" => "workplancompetentions.php?action=copyCompetentions&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
+        		"icon" => "actions/format-indent-less.png"
+        	));
+        }
+        $this->addActionsMenuItem(array(
+        		"title" => "Удалить выделенные",
+        		"icon" => "actions/edit-delete.png",
+        		"form" => "#MainView",
+        		"link" => "workplans.php",
+        		"action" => "delete"
         ));
         /**
          * Отображение представления
@@ -48,14 +67,15 @@ class CWorkPlanCompetentionsController extends CBaseController{
     }
     public function actionAdd() {
         $object = new CWorkPlanCompetention();
-        $object->plan_id = CRequest::getArray("id");
+        $object->plan_id = CRequest::getInt("id");
+        $object->type = CRequest::getInt("type");
         $this->setData("object", $object);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancompetentions.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplancompetentions.php?action=index&plan_id=".$object->plan_id."&type=".$object->type,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -71,7 +91,7 @@ class CWorkPlanCompetentionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancompetentions.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplancompetentions.php?action=index&plan_id=".$object->plan_id."&type=".$object->type,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -82,8 +102,16 @@ class CWorkPlanCompetentionsController extends CBaseController{
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanCompetention(CRequest::getInt("id"));
         $plan = $object->plan_id;
-        $object->remove();
-        $this->redirect("workplancompetentions.php?action=index&plan_id=".$plan);
+        $type = $object->type;
+        if (!is_null($object)) {
+        	$object->remove();
+        }
+        $items = CRequest::getArray("selectedInView");
+        foreach ($items as $id){
+        	$object = CBaseManager::getWorkPlanCompetention($id);
+        	$object->remove();
+        }
+        $this->redirect("workplancompetentions.php?action=index&plan_id=".$plan."&type=".$type);
     }
     public function actionSave() {
         $object = new CWorkPlanCompetention();
@@ -93,11 +121,94 @@ class CWorkPlanCompetentionsController extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("workplancompetentions.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplancompetentions.php?action=index&plan_id=".$object->plan_id);
+                $this->redirect("workplancompetentions.php?action=index&plan_id=".$object->plan_id."&type=".$object->type);
             }
             return true;
         }
         $this->setData("object", $object);
         $this->renderView("_corriculum/_workplan/competentions/edit.tpl");
+    }
+    public function actionUpdate() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$type = CRequest::getInt("type");
+    	if ($type == 0) {
+    		if (!is_null($plan->corriculumDiscipline)) {
+    			foreach (CActiveRecordProvider::getWithCondition(TABLE_CORRICULUM_DISCIPLINE_COMPETENTIONS, "discipline_id=".$plan->corriculumDiscipline->getId())->getItems() as $ar) {
+    				$newCompetention = new CActiveModel($ar);
+    				$object = new CWorkPlanCompetention();
+    				$object->plan_id = $plan->getId();
+    				$object->type = $type;
+    				$object->competention_id = $newCompetention->competention_id;
+    				$object->level_id = $newCompetention->level_id;
+    				foreach ($plan->corriculumDiscipline->competentions->getItems() as $competention) {
+    					foreach ($competention->knowledges->getItems() as $knowledge) {
+    						$object->knowledges->add($knowledge->getId(), $knowledge->getId());
+    					}
+    					foreach ($competention->skills->getItems() as $skill) {
+    						$object->skills->add($skill->getId(), $skill->getId());
+    					}
+    					foreach ($competention->experiences->getItems() as $experience) {
+    						$object->experiences->add($experience->getId(), $experience->getId());
+    					}
+    				}
+    				$object->save();
+    			}
+    		}
+    	}
+    	if ($type == 1) {
+    		if (!is_null($plan->disciplinesBefore)) {
+    			foreach ($plan->disciplinesBefore->getItems() as $item) {
+    				foreach (CActiveRecordProvider::getWithCondition(TABLE_CORRICULUM_DISCIPLINE_COMPETENTIONS, "discipline_id=".$item->getId())->getItems() as $ar) {
+    					$competention = new CActiveModel($ar);
+    					$object = new CWorkPlanCompetention();
+    					$object->plan_id = $plan->getId();
+    					$object->type = $type;
+    					$object->competention_id = $competention->competention_id;
+    					$object->level_id = $competention->level_id;
+    					$object->discipline_id = $competention->discipline_id;
+    					$object->save();
+    				}
+    			}
+    		}
+    	}
+    	if ($type == 2) {
+    		if (!is_null($plan->disciplinesAfter)) {
+    			foreach ($plan->disciplinesAfter->getItems() as $item) {
+    				foreach (CActiveRecordProvider::getWithCondition(TABLE_CORRICULUM_DISCIPLINE_COMPETENTIONS, "discipline_id=".$item->getId())->getItems() as $ar) {
+    					$competention = new CActiveModel($ar);
+    					$object = new CWorkPlanCompetention();
+    					$object->plan_id = $plan->getId();
+    					$object->type = $type;
+    					$object->competention_id = $competention->competention_id;
+    					$object->level_id = $competention->level_id;
+    					$object->discipline_id = $competention->discipline_id;
+    					$object->save();
+    				}
+    			}
+    		}
+    	}
+    	$this->redirect("workplancompetentions.php?action=index&plan_id=".$plan->getId()."&type=".$type);
+    }
+    public function actionCopyCompetentions() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$corriculumDiscipline = $plan->corriculumDiscipline;
+    	$type = CRequest::getInt("type");
+    	foreach ($plan->competentionsFormed->getItems() as $competentionFormed) {
+    		$newItem = new CCorriculumDisciplineCompetention();
+    		$newItem->discipline_id = $corriculumDiscipline->getId();
+    		$newItem->competention_id = $competentionFormed->competention_id;
+    		$newItem->level_id = $competentionFormed->level_id;
+    		foreach ($competentionFormed->knowledges->getItems() as $knowledge) {
+    			$newItem->knowledges->add($knowledge->getId(), $knowledge->getId());
+    		}
+    		foreach ($competentionFormed->skills->getItems() as $skill) {
+    			$newItem->skills->add($skill->getId(), $skill->getId());
+    		}
+    		foreach ($competentionFormed->experiences->getItems() as $experience) {
+    			$newItem->experiences->add($experience->getId(), $experience->getId());
+    		}	
+    		$newItem->save();
+    	}
+    	$this->redirect("workplancompetentions.php?action=index&plan_id=".$plan->getId()."&type=".$type);
     }
 }

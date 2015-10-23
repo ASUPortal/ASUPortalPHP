@@ -225,6 +225,20 @@ class CStaffManager{
         return self::getCachePerson()->getItem($key);
     }
     /**
+     * Получение сотрудника по id должности
+     *
+     * @static
+     * @param $key
+     * @return CPerson
+     */
+    public static function getPersonByPostId($key) {
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_PERSON, "dolgnost = '".$key."'")->getItems() as $item) {
+    		$person = new CPerson($item);
+    		self::getCachePerson()->add($person->id, $person);
+    	}
+    	return $person;
+    }
+    /**
      * Строит организационную структуру
      *
      * @static

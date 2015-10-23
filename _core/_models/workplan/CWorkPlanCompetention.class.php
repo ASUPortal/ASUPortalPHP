@@ -64,16 +64,40 @@ class CWorkPlanCompetention extends CActiveModel{
                 "rightKey" => "term_id",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
-            )
+            ),
+        	"level" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_level",
+        		"storageField" => "level_id",
+        		"managerClass" => "CTaxonomyManager",
+        		"managerGetObject" => "getTerm"
+        	),
+        	"discipline" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_discipline",
+        		"storageField" => "discipline_id",
+        		"managerClass" => "CCorriculumsManager",
+        		"managerGetObject" => "getDiscipline"
+        	)
         );
     }
 
     protected function validationRules() {
-        return array(
-            "selected" => array(
-                "competention_id"
-            )
-        );
+    	if ($this->type != 0) {
+    		return array(
+    				"selected" => array(
+    						"competention_id",
+    						"level_id",
+    						"discipline_id"
+    				)
+    		);
+    	} else {
+    		return array(
+    				"selected" => array(
+    						"competention_id"
+    				)
+    		);
+    	}
     }
 
     public function attributeLabels() {
@@ -82,7 +106,9 @@ class CWorkPlanCompetention extends CActiveModel{
             "knowledges" => "Знания",
             "skills" => "Умения",
             "experiences" => "Навыки",
-            "canUse" => "Умеет использовать"
+            "canUse" => "Умеет использовать",
+            "level_id" => "Уровень освоения",
+            "discipline_id" => "Дисциплина, сформировавшая компетенцию"
         );
     }
 

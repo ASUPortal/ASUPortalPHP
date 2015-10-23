@@ -22,7 +22,8 @@ class CIndPlanLoadController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet(true);
+        $selectedYear = null;
+        $set = new CRecordSet();
         $query = new CQuery();
         $set->setQuery($query);
 
@@ -36,6 +37,21 @@ class CIndPlanLoadController extends CBaseController{
             } else {
                 $query->condition("p.id = ".CSession::getCurrentPerson()->getId());
             }
+        }
+        // фильтр по году
+        if (!is_null(CRequest::getFilter("year.id"))) {
+        	$query->innerJoin(TABLE_IND_PLAN_LOADS." as l", "l.person_id = p.id");
+        	$query->innerJoin(TABLE_YEARS." as year", "l.year_id = year.id");
+        	$selectedYear = CRequest::getFilter("year.id");
+        }
+        $yearsQuery = new CQuery();
+        $yearsQuery->select("year.*")
+	        ->from(TABLE_YEARS." as year")
+	        ->order("year.name asc");
+        $years = array();
+        foreach ($yearsQuery->execute()->getItems() as $ar) {
+        	$year = new CTimeIntervals(new CActiveRecord($ar));
+        	$years[$year->getId()] = $year->name;
         }
 
         $persons = new CArrayList();
@@ -63,6 +79,8 @@ class CIndPlanLoadController extends CBaseController{
 
         $this->setData("paginator", $set->getPaginator());
         $this->setData("persons", $persons);
+        $this->setData("years", $years);
+        $this->setData("selectedYear", $selectedYear);
         $this->renderView("_individual_plan/load/index.tpl");
     }
     public function actionView() {

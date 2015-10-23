@@ -48,7 +48,7 @@ class CWorkPlanSelfEducationBlocksController extends CBaseController{
         $object = new CWorkPlanSelfEducationBlock();
         $load = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("id"));
         $object->load_id = $load->getId();
-        $object->plan_id = $load->section->module->plan_id;
+        $object->plan_id = $load->section->category->plan_id;
         $this->setData("object", $object);
         /**
          * Генерация меню

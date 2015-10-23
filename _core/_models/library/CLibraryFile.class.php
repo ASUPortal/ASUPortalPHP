@@ -97,9 +97,12 @@ class CLibraryFile extends CActiveModel{
      * @return string
      */
     public function getFileDownloadLink() {
-    	$file = CLibraryManager::getFile($this->getId());
-    	$file->entry = $file->entry+1;
-    	$file->save();
+    	// условие для внешней базы данных с закрытым доступом на обновление
+    	if (CSettingsManager::getSettingValue("hide_personal_data") == false) {
+    		$file = CLibraryManager::getFile($this->getId());
+    		$file->entry = $file->entry+1;
+    		$file->save();
+    	}
         return WEB_ROOT."library/".$this->nameFolder."/".$this->nameFile;
     }
 }

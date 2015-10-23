@@ -79,9 +79,30 @@ class CCorriculumsController extends CBaseController {
         /**
          * Передаем данные представлению
          */
+        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("labors", $labors);
         $this->setData("corriculum", $corriculum);
         $this->renderView("_corriculum/_plan/view.tpl");
+    }
+    /**
+     * Получаем список дисциплин JSON-ом
+     */
+    public function actionJSONGetDisciplines() {
+    	$corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("id"));
+    	$arr = array();
+    	foreach ($corriculum->getDisciplines()->getItems() as $discipline) {
+        	if (!is_null($discipline->competentions)) {
+        		foreach ($discipline->competentions->getItems() as $disc) {
+        			if (!is_null($discipline->plans)) {
+        				foreach ($discipline->plans->getItems() as $disc) {
+        					$arr[$discipline->getId()] = $discipline->discipline->getValue();
+        				}
+        			}
+        		}
+        	}
+        }
+    	echo json_encode($arr);
     }
     public function actionCopy() {
         $corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("id"));
@@ -114,66 +135,149 @@ class CCorriculumsController extends CBaseController {
                 $newDiscipline->cycle_id = $newCycle->getId();
                 $newDiscipline->save();
                 /**
+                 * Копируем рабочие программы из дисциплин
+                 */
+                foreach ($discipline->plans->getItems() as $plan) {
+                	$newPlan = $plan->copy();
+                	$newPlan->corriculum_discipline_id = $newDiscipline->getId();
+                	if (!is_null($newDiscipline->discipline)) {
+                		$newPlan->discipline_id = $newDiscipline->discipline->getId();
+                	}
+                	$newPlan->save();
+                }
+                /**
+                 * Копируем компетенции из дисциплин
+                 */
+                if ($discipline->competentions->getCount() > 0) {
+                	foreach ($discipline->competentions->getItems() as $competention) {
+                		$newCompetention = $competention->copy();
+                		$newCompetention->discipline_id = $newDiscipline->getId();
+                		/**
+                		 * Копируем знания из компетенций
+                		 */
+                		foreach ($competention->knowledges->getItems() as $knowledge) {
+                			$newCompetention->knowledges->add($knowledge->getId(), $knowledge->getId());
+                		}
+                		/**
+                		 * Копируем умения из компетенций
+                		 */
+                		foreach ($competention->skills->getItems() as $skill) {
+                			$newCompetention->skills->add($skill->getId(), $skill->getId());
+                		}
+                		/**
+                		 * Копируем навыки из компетенций
+                		 */
+                		foreach ($competention->experiences->getItems() as $experience) {
+                			$newCompetention->experiences->add($experience->getId(), $experience->getId());
+                		}
+                		$newCompetention->save();
+                	}
+                }
+                /**
                  * Копируем семестры
                  * @var CCorriculumDisciplineSection $section
                  */
-                foreach ($discipline->sections->getItems() as $section) {
-                    $newSection = $section->copy();
-                    $newSection->discipline_id = $newDiscipline->getId();
-                    $newSection->save();
-                    /**
-                     * Копируем виды нагрузку из семестров
-                     * @var CCorriculumDisciplineLabor $labor
-                     */
-                    foreach ($section->labors->getItems() as $labor) {
-                        $newLabor = $labor->copy();
-                        $newLabor->section_id = $newSection->getId();
-                        $newLabor->type_id = $labor->type_id;
-                        $newLabor->save();
-                    }
-                }
-                /**
-                 * Клонируем нагрузку из дисциплин
-                 */
-                foreach ($discipline->labors->getItems() as $labor) {
-                    $newLabor = $labor->copy();
-                    $newLabor->discipline_id = $newDiscipline->getId();
-                    $newLabor->type_id = $labor->type_id;
-                    $newLabor->save();
-                }
+				if ($discipline->sections->getCount() > 0) {
+					foreach ($discipline->sections->getItems() as $section) {
+						$newSection = $section->copy();
+						$newSection->discipline_id = $newDiscipline->getId();
+						$newSection->save();
+						/**
+						 * Копируем виды нагрузку из семестров
+						 * @var CCorriculumDisciplineLabor $labor
+						 */
+						foreach ($section->labors->getItems() as $labor) {
+							$newLabor = $labor->copy();
+							$newLabor->section_id = $newSection->getId();
+							$newLabor->type_id = $labor->type_id;
+							$newLabor->discipline_id = $newDiscipline->getId();
+							$newLabor->save();
+						}
+					}
+				} else {
+					/**
+					 * Клонируем нагрузку из дисциплин
+					 */
+					foreach ($discipline->labors->getItems() as $labor) {
+						$newLabor = $labor->copy();
+						$newLabor->discipline_id = $newDiscipline->getId();
+						$newLabor->type_id = $labor->type_id;
+						$newLabor->save();
+					}
+				}
 				// копируем дочерние дисциплины
 				foreach ($discipline->children->getItems() as $child) {
 					$newChildDiscipline = $child->copy();
 					$newChildDiscipline->parent_id = $newDiscipline->getId();
 					$newChildDiscipline->cycle_id = $newCycle->getId();
 					$newChildDiscipline->save();
+					foreach ($child->plans->getItems() as $plan) {
+						$newPlan = $plan->copy();
+						$newPlan->corriculum_discipline_id = $newChildDiscipline->getId();
+						if (!is_null($newChildDiscipline->discipline)) {
+							$newPlan->discipline_id = $newChildDiscipline->discipline->getId();
+						}
+						$newPlan->save();
+					}
+					/**
+					 * Копируем компетенции из дочерних дисциплин
+					 */
+					if ($child->competentions->getCount() > 0) {
+						foreach ($child->competentions->getItems() as $competention) {
+							$newChildCompetention = $competention->copy();
+							$newChildCompetention->discipline_id = $newChildDiscipline->getId();
+							/**
+							 * Копируем знания из компетенций
+							 */
+							foreach ($competention->knowledges->getItems() as $knowledge) {
+								$newChildCompetention->knowledges->add($knowledge->getId(), $knowledge->getId());
+							}
+							/**
+							 * Копируем умения из компетенций
+							 */
+							foreach ($competention->skills->getItems() as $skill) {
+								$newChildCompetention->skills->add($skill->getId(), $skill->getId());
+							}
+							/**
+							 * Копируем навыки из компетенций
+							 */
+							foreach ($competention->experiences->getItems() as $experience) {
+								$newChildCompetention->experiences->add($experience->getId(), $experience->getId());
+							}
+							$newChildCompetention->save();
+						}
+					}
                     /**
                      * Копируем семестры
                      * @var CCorriculumDisciplineSection $section
                      */
-                    foreach ($child->sections->getItems() as $section) {
-                        $newSection = $section->copy();
-                        $newSection->discipline_id = $newChildDiscipline->getId();
-                        $newSection->save();
-                        /**
-                         * Копируем виды нагрузку из семестров
-                         * @var CCorriculumDisciplineLabor $labor
-                         */
-                        foreach ($section->labors->getItems() as $labor) {
-                            $newLabor = $labor->copy();
-                            $newLabor->section_id = $newSection->getId();
-                            $newLabor->type_id = $labor->type_id;
-                            $newLabor->save();
-                        }
-                    }
-					/**
-					 * Клонируем нагрузку из дисциплин
-					 */
-					foreach ($child->labors->getItems() as $labor) {
-						$newLabor = $labor->copy();
-						$newLabor->discipline_id = $newChildDiscipline->getId();
-						$newLabor->type_id = $labor->type_id;
-						$newLabor->save();
+					if ($child->sections->getCount() > 0) {
+						foreach ($child->sections->getItems() as $section) {
+							$newSection = $section->copy();
+							$newSection->discipline_id = $newChildDiscipline->getId();
+							$newSection->save();
+							/**
+							 * Копируем виды нагрузку из семестров
+							 * @var CCorriculumDisciplineLabor $labor
+							 */
+							foreach ($section->labors->getItems() as $labor) {
+								$newLabor = $labor->copy();
+								$newLabor->section_id = $newSection->getId();
+								$newLabor->type_id = $labor->type_id;
+								$newLabor->discipline_id = $newChildDiscipline->getId();
+								$newLabor->save();
+							}
+						}
+					} else {
+						/**
+						 * Клонируем нагрузку из дисциплин
+						 */
+						foreach ($child->labors->getItems() as $labor) {
+							$newLabor = $labor->copy();
+							$newLabor->discipline_id = $newChildDiscipline->getId();
+							$newLabor->type_id = $labor->type_id;
+							$newLabor->save();
+						}
 					}
 				}
             }

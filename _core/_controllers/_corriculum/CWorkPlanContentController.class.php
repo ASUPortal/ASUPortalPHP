@@ -21,7 +21,7 @@ class CWorkPlanContentController extends CBaseController{
         }
 
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Управление модулями");
+        $this->setPageTitle("Управление категориями");
 
         parent::__construct();
     }
@@ -44,6 +44,16 @@ class CWorkPlanContentController extends CBaseController{
         ));
         $this->setData("objects", $plan->getLabWorks());
         $this->renderView("_corriculum/_workplan/content/labworks.tpl");
+    }
+    public function actionLectures() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
+    	$this->addActionsMenuItem(array(
+    			"title" => "Обновить",
+    			"link" => "workplancontent.php?action=lectures&plan_id=".CRequest::getInt("plan_id"),
+    			"icon" => "actions/view-refresh.png"
+    	));
+    	$this->setData("objects", $plan->getLectures());
+    	$this->renderView("_corriculum/_workplan/content/lectures.tpl");
     }
     public function actionTechnologies() {
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
@@ -86,8 +96,8 @@ class CWorkPlanContentController extends CBaseController{
             ->from(TABLE_WORK_PLAN_CONTENT_LOADS." as l")
             ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
             ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
-            ->innerJoin(TABLE_WORK_PLAN_CONTENT_MODULES." as module", "section.module_id = module.id")
-            ->condition("module.plan_id = ".$plan->getId())
+            ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
+            ->condition("category.plan_id = ".$plan->getId())
             ->group("l.load_type_id")
             ->order("term.name");
         $objects = $query->execute();
@@ -103,11 +113,12 @@ class CWorkPlanContentController extends CBaseController{
             $select = array();
             $select[] = "section.sectionIndex";
             $select[] = "section.name";
-            $select[] = "sum(if(term.alias in ('lecture', 'practice', 'labwork'), l.value, 0)) + sum(selfedu.question_hours) as total";
+            $select[] = "sum(if(term.alias in ('lecture', 'practice', 'labwork', 'ksr'), l.value, 0)) + sum(ifnull(selfedu.question_hours, 0)) as total";
             $select[] = "sum(if(term.alias = 'lecture', l.value, 0)) as lecture";
             $select[] = "sum(if(term.alias = 'practice', l.value, 0)) as practice";
             $select[] = "sum(if(term.alias = 'labwork', l.value, 0)) as labwork";
-            $select[] = "sum(selfedu.question_hours) as selfedu";
+            $select[] = "sum(if(term.alias = 'ksr', l.value, 0)) as ksr";
+            $select[] = "sum(ifnull(selfedu.question_hours, 0)) as selfedu";
             $query->select(join(", ", $select))
                 ->from(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section")
                 ->innerJoin(TABLE_WORK_PLAN_CONTENT_LOADS." as l", "l.section_id = section.id")
@@ -121,6 +132,45 @@ class CWorkPlanContentController extends CBaseController{
             }
         }
         $this->setData("termSectionsData", $termSectionsData);
+        /**
+         * Виды контроля
+         */
+        $set = new CRecordSet();
+		$queryControlTypes = new CQuery();
+        $set->setQuery($queryControlTypes);
+        $queryControlTypes->select("l.*")
+	        ->from(TABLE_WORK_PLAN_TYPES_CONTROL." as l")
+	        ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.control_id")
+	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
+	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
+	        ->condition("category.plan_id = ".$plan->getId())
+	        ->order("term.name asc");
+        $controlTypes = new CArrayList();
+        foreach ($set->getItems() as $ar) {
+        	$controlType = new CWorkPlanControlTypes($ar);
+        	$controlTypes->add($controlType->getId(), $controlType);
+        }
+        $this->setData("controlTypes", $controlTypes);
+        /**
+         * Описание и количество баллов по видам учебной деятельности
+         */
+        $setMarks = new CRecordSet();
+        $queryMarks = new CQuery();
+        $setMarks->setQuery($queryMarks);
+        $queryMarks->select("control.*")
+	        ->from(TABLE_WORK_PLAN_TYPES_CONTROL." as control")
+	        ->innerJoin(TABLE_WORK_PLAN_MARKS_STUDY_ACTIVITY." as activity", "activity.activity_id = control.id")
+	        ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = control.type_study_activity_id")
+	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "control.section_id = section.id")
+	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
+	        ->condition("category.plan_id = ".$plan->getId())
+	        ->order("activity.mark asc");
+        $marks = new CArrayList();
+        foreach ($setMarks->getItems() as $ar) {
+        	$mark = new CWorkPlanControlTypes($ar);
+        	$marks->add($mark->getId(), $mark);
+        }
+        $this->setData("marks", $marks);
         $this->renderView("_corriculum/_workplan/content/structure.tpl");
     }
 }

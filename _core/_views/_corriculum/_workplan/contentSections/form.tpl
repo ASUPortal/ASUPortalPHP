@@ -29,10 +29,10 @@
     </div>
 
     <div class="control-group">
-        {CHtml::activeLabel("module_id", $object)}
+        {CHtml::activeLabel("category_id", $object)}
         <div class="controls">
-            {CHtml::activeLookup("module_id", $object, "class.CSearchCatalogWorkPlanModules", false, ["plan_id" => $object->module->plan_id])}
-            {CHtml::error("module_id", $object)}
+            {CHtml::activeLookup("category_id", $object, "class.CSearchCatalogWorkPlanCategories", false, ["plan_id" => $object->category->plan_id])}
+            {CHtml::error("category_id", $object)}
         </div>
     </div>
 

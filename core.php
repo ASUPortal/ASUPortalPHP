@@ -215,6 +215,9 @@
     define("TABLE_CORRICULUM_CYCLES", "pl_corriculum_cycles");
     define("TABLE_CORRICULUM_PRACTICES", "pl_corriculum_practices");
     define("TABLE_CORRICULUM_DISCIPLINE_COMPETENTIONS", "pl_corriculum_discipline_competentions");
+    define("TABLE_CORRICULUM_DISCIPLINE_KNOWLEDGES", "pl_corriculum_discipline_knowledges");
+    define("TABLE_CORRICULUM_DISCIPLINE_SKILLS", "pl_corriculum_discipline_skills");
+    define("TABLE_CORRICULUM_DISCIPLINE_EXPERIENCES", "pl_corriculum_discipline_experiences");
     define("TABLE_CORRICULUM_ATTESTATIONS", "pl_corriculum_attestations");
     define("TABLE_TAXONOMY", "taxonomy");
     define("TABLE_TAXONOMY_TERMS", "taxonomy_terms");
@@ -315,17 +318,26 @@
     define("TABLE_WORK_PLAN_MARK_TYPES", "pl_corriculum_workplan_marktypes");
     define("TABLE_WORK_PLAN_MARK_TYPE_FUNDS", "pl_corriculum_workplan_marktype_fund");
     define("TABLE_WORK_PLAN_MARK_TYPE_PLACES", "pl_corriculum_workplan_marktype_place");
+    define("TABLE_WORK_PLAN_FUND_MARK_TYPES", "pl_corriculum_workplan_fund_marktypes");
+    define("TABLE_WORK_PLAN_FUND_MARK_TYPES_COMPETENTIONS", "pl_corriculum_workplan_fund_marktypes_competention");
+    define("TABLE_WORK_PLAN_FUND_MARK_TYPES_LEVELS", "pl_corriculum_workplan_fund_marktypes_level");
+    define("TABLE_WORK_PLAN_FUND_MARK_TYPES_CONTROLS", "pl_corriculum_workplan_fund_marktypes_control");
     define("TABLE_WORK_PLAN_BRS", "pl_corriculum_workplan_brs");
     define("TABLE_WORK_PLAN_LITERATURE", "pl_corriculum_workplan_literature");
     define("TABLE_WORK_PLAN_SOFTWARE", "pl_corriculum_workplan_software");
     define("TABLE_WORK_PLAN_AUTHORS", "pl_corriculum_workplan_authors");
-    define("TABLE_WORK_PLAN_CONTENT_MODULES", "pl_corriculum_workplan_content_modules");
+    define("TABLE_WORK_PLAN_CONTENT_CATEGORIES", "pl_corriculum_workplan_content_categories");
     define("TABLE_WORK_PLAN_CONTENT_CONTROLS", "pl_corriculum_workplan_content_section_controls");
     define("TABLE_WORK_PLAN_CONTENT_LOADS", "pl_corriculum_workplan_content_section_loads");
+    define("TABLE_WORK_PLAN_FINAL_CONTROL", "pl_corriculum_workplan_final_control");
     define("TABLE_WORK_PLAN_CONTENT_TOPICS", "pl_corriculum_workplan_content_section_load_topics");
     define("TABLE_WORK_PLAN_CONTENT_TECHNOLOGIES", "pl_corriculum_workplan_content_section_load_technologies");
     define("TABLE_WORK_PLAN_COMPETENTION_CAN_USE", "pl_corriculum_workplan_competention_can_use");
     define("TABLE_WORK_PLAN_ADDITIONAL_SUPPLY", "pl_corriculum_workplan_additional_supply");
+    define("TABLE_WORK_PLAN_TYPES_CONTROL", "pl_corriculum_workplan_types_control");
+    define("TABLE_WORK_PLAN_CRITERIA_OF_EVALUATION", "pl_corriculum_workplan_criteria_of_evaluation");
+    define("TABLE_WORK_PLAN_EVALUATION_MATERIALS", "pl_corriculum_workplan_evaluation_materials");
+    define("TABLE_WORK_PLAN_MARKS_STUDY_ACTIVITY", "pl_corriculum_workplan_marks_study_activity");
     /**
      * Константы пагинатора
      */

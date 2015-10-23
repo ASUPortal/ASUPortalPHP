@@ -19,6 +19,7 @@
             <li><a data-toggle="tab" href="#eduTechnologies">Образовательные технологии</a></li>
             <li><a data-toggle="tab" href="#markTypes">Оценочные средства</a></li>
             <li><a data-toggle="tab" href="#library">Обеспечение</a></li>
+            <li><a data-toggle="tab" href="#changes">Изменения</a></li>
         </ul>
         <div class="tab-content">
             <div id="common" class="tab-pane active">
@@ -38,6 +39,9 @@
             </div>
             <div id="library" class="tab-pane">
                 {include file="_corriculum/_workplan/workplan/subform.library.tpl"}
+            </div>
+            <div id="changes" class="tab-pane">
+                {include file="_corriculum/_workplan/workplan/subform.changes.tpl"}
             </div>
         </div>
         <div class="control-group">

@@ -2,6 +2,7 @@
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $object)}
     {CHtml::activeHiddenField("plan_id", $object)}
+    {CHtml::activeHiddenField("type", $object)}
     {CHtml::activeHiddenField("allow_delete", $object)}
 
     {CHtml::errorSummary($object)}
@@ -13,7 +14,25 @@
             {CHtml::error("competention_id", $object)}
         </div>
     </div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("level_id", $object)}
+        <div class="controls">
+            {CHtml::activeLookup("level_id", $object, "corriculum_level_of_development", false, array(), true)}
+            {CHtml::error("level_id", $object)}
+        </div>
+    </div>
 
+{if ($object->type) != 0}
+    <div class="control-group">
+        {CHtml::activeLabel("discipline_id", $object)}
+        <div class="controls">
+            {CHtml::activeLookup("discipline_id", $object, "class.CSearchCatalogCorriculumDisciplines", false, ["plan_id" => $object->plan_id])}
+            {CHtml::error("discipline_id", $object)}
+        </div>
+    </div>
+    
+{else}
     <div class="control-group">
         {CHtml::activeLabel("knowledges", $object)}
         <div class="controls">
@@ -45,10 +64,12 @@
             {CHtml::error("canUse", $object)}
         </div>
     </div>
+{/if}
 
     <div class="control-group">
         <div class="controls">
             {CHtml::submit("Сохранить")}
         </div>
     </div>
+
 </form>
