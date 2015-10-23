@@ -274,6 +274,7 @@
                 var item = items[i];
                 event.data._addNewValue(jQuery(item).val());
             }
+            $("tr").show();
             // обновляем представление
             event.data._updateDisplay();
             // закрываем диалог
@@ -283,19 +284,8 @@
         // search в диалоге
         this._onDialogSearchChange = function(event){
         	var item_search = $('input[name="search_id"]').val();
-        	//$('td:contains(' + item_search + ')').filter('td:contains(' + item_search + ')');
-        	//$("tr").not(":contains(' + item_search + ')").hide();
-        	//$('tr:contains(' + item_search + ')').show();
-        	$('td:contains(' + item_search + ')').css("text-decoration", "underline");
-        	// получаем выбранные элементы
-            var items = jQuery("input:checked", dialog);
-            // добавляем их в выбиратор
-            for (var i = 0; i < items.length; i++) {
-                var item = items[i];
-                event.data._addNewValue(jQuery(item).val());
-            }
-        	// обновляем представление
-            event.data._updateDisplay();
+        	$("tr").not(":contains(' + item_search + ')").hide();
+        	$('tr:contains(' + item_search + ')').show();
         };
 
         // данные для диалога с сервера получены
