@@ -285,6 +285,8 @@
         	var item_search = $('input[name="search_id"]').val();
         	//$('td:contains(' + item_search + ')').filter('td:contains(' + item_search + ')');
         	$('td:contains(' + item_search + ')').css("text-decoration", "underline");
+            // обновляем представление
+            event.data._updateDisplay();
         };
 
         // данные для диалога с сервера получены
