@@ -285,7 +285,14 @@
         	var item_search = $('input[name="search_id"]').val();
         	//$('td:contains(' + item_search + ')').filter('td:contains(' + item_search + ')');
         	$('td:contains(' + item_search + ')').css("text-decoration", "underline");
-            // обновляем представление
+        	// получаем выбранные элементы
+            var items = jQuery("input:checked", dialog);
+            // добавляем их в выбиратор
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                event.data._addNewValue(jQuery(item).val());
+            }
+        	// обновляем представление
             event.data._updateDisplay();
         };
 
