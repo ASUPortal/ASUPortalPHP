@@ -279,26 +279,12 @@
             // закрываем диалог
             jQuery(dialog).modal("hide");
         };
-        
-        function search() {
-        	var item_search = document.getElementById('search_id').value;
-        	
-        }
 
         // search в диалоге
         this._onDialogSearchClick = function(event){
-            var dialog = jQuery(this).parents(".modal");
-            // получаем выбранные элементы
-            var items = jQuery("input:checked", dialog);
-            // добавляем их в выбиратор
-            for (var i = 0; i < items.length; i++) {
-                var item = items[i];
-                event.data._addNewValue(jQuery(item).val());
-            }
-            // обновляем представление
-            event.data._updateDisplay();
-            // закрываем диалог
-            jQuery(dialog).modal("hide");
+        	var item_search = $('input[name="search_id"]').val();
+        	//$('td:contains(' + item_search + ')').filter('td:contains(' + item_search + ')');
+        	$('td:contains(' + item_search + ')').css("text-decoration", "underline");
         };
 
         // данные для диалога с сервера получены
