@@ -274,7 +274,6 @@
                 var item = items[i];
                 event.data._addNewValue(jQuery(item).val());
             }
-            $("tr").show();
             // обновляем представление
             event.data._updateDisplay();
             // закрываем диалог
@@ -283,9 +282,11 @@
 
         // search в диалоге
         this._onDialogSearchChange = function(event){
-        	var item_search = $('input[name="search_id"]').val();
-        	$("tr").not(":contains(' + item_search + ')").hide();
-        	$('tr:contains(' + item_search + ')').show();
+        	var dialog = jQuery(this).parents(".modal");
+        	var searchs = jQuery($('input[name="search_item"]').val(), dialog);
+        	jQuery("tr", dialog).not(':contains(' + searchs.selector + ')').hide();
+        	jQuery('tr:contains(' + searchs.selector + ')', dialog).show();
+        	$(searchs).val("");
         };
 
         // данные для диалога с сервера получены
