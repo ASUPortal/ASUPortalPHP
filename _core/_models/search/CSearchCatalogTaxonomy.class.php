@@ -50,13 +50,8 @@ class CSearchCatalogTaxonomy extends CAbstractSearchCatalog{
     {
         // тут без кеша, так как иначе проблемы с добавлением
         // из диалога выбора из списка
-        // теперь с поддержкой кэша
-        //$cache_id = $this->taxonomy."_viewData";
-        //if (is_null(CApp::getApp()->cache->get($cache_id))) {
-            $taxonomy = CTaxonomyManager::getTaxonomy($this->taxonomy);
-            $result = $taxonomy->getTermsList();
-            //CApp::getApp()->cache->set($cache_id, $result, 30);
-        //}
+        $taxonomy = CTaxonomyManager::getTaxonomy($this->taxonomy);
+        $result = $taxonomy->getTermsList();
         return $result;
     }
 
