@@ -185,7 +185,10 @@ class CStudent extends CActiveModel {
      */
     public function getSpeciality() {
         if (is_null($this->_speciality)) {
-            $this->_speciality = $this->getGroup()->getSpeciality();
+        	$corriculum = $this->getCorriculum();
+        	if (!is_null($corriculum)) {
+        		$this->_speciality = $corriculum->speciality_direction;
+        	}
         }
         return $this->_speciality;
     }

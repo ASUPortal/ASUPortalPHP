@@ -47,6 +47,22 @@
 </div>
 
 <div class="control-group">
+    {CHtml::activeLabel("implement_recomendation", $diplom)}
+    <div class="controls">
+        {CHtml::activeCheckBox("implement_recomendation", $diplom)}
+        {CHtml::error("implement_recomendation", $diplom)}
+    </div>
+</div>
+
+<div class="control-group">
+    {CHtml::activeLabel("implemented", $diplom)}
+    <div class="controls">
+        {CHtml::activeCheckBox("implemented", $diplom)}
+        {CHtml::error("implemented", $diplom)}
+    </div>
+</div>
+
+<div class="control-group">
     {CHtml::activeLabel("protocol_2aspir_id", $diplom)}
     <div class="controls">
         {CHtml::activeDropDownList("protocol_2aspir_id", $diplom, CProtocolManager::getAllDepProtocolsList())}

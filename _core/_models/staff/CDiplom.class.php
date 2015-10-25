@@ -135,6 +135,8 @@ class CDiplom extends CActiveModel {
             "pages_diplom" => "Страниц в пояснительной записке",
             "pages_attach" => "Страниц чертежей (таблиц)",
             "aspire_recomendation" => "Рекомендован в аспирантуру",
+            "implement_recomendation" => "Рекомендовано к внедрению",
+            "implemented" => "Внедрено",
             "average_mark" => "Средний балл",
 			"normokontroler_id" => "Нормоконтролер",
         	"protocol" => "Номер протокола (номер защиты)",
