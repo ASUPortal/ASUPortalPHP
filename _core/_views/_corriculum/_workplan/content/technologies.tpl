@@ -16,7 +16,7 @@
             <tbody>
             {foreach $objects->getItems() as $object}
                 <tr>
-                    <td>{$object->load->term}</td>
+                    <td>{$object->load->term->corriculum_discipline_section->title}</td>
                     <td>{$object->load->loadType}</td>
                     <td>{$object->technology}</td>
                     <td>{$object->value}</td>

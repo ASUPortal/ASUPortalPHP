@@ -38,7 +38,7 @@ class CWorkPlanTermsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(array(
             "title" => "Обновить",
-            "link" => "workplanterms.php?action=index&plan_id=".CRequest::getInt("plan_id"),
+            "link" => "workplanterms.php?action=update&plan_id=".CRequest::getInt("plan_id"),
             "icon" => "actions/view-refresh.png"
         ), array(
             "title" => "Добавить семестр",
@@ -103,5 +103,18 @@ class CWorkPlanTermsController extends CBaseController{
         }
         $this->setData("object", $object);
         $this->renderView("_corriculum/_workplan/terms/edit.tpl");
+    }
+    public function actionUpdate() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
+    	if (!is_null($plan->corriculumDiscipline)) {
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_CORRICULUM_DISCIPLINE_SECTIONS, "discipline_id=".$plan->corriculumDiscipline->getId())->getItems() as $ar) {
+    			$term = new CActiveModel($ar);
+    			$object = new CWorkPlanTerm();
+    			$object->plan_id = $plan->getId();
+    			$object->number = $term->getId();
+    			$object->save();
+    		}
+    	}
+    	$this->redirect("workplanterms.php?action=index&plan_id=".$plan->getId());
     }
 }

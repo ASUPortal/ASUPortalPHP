@@ -5,7 +5,7 @@
         Нет объектов для отображения
     {else}
     	{foreach $objects->getItems() as $term_id=>$termData}
-    	<h4>{CBaseManager::getWorkPlanTerm($term_id)->number} семестр</h4>
+    	<h4>{CBaseManager::getWorkPlanTerm($term_id)->corriculum_discipline_section->title} семестр</h4>
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
             <tr>
