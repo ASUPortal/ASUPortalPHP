@@ -8,7 +8,7 @@
     <div class="control-group">
         {CHtml::activeLabel("number", $object)}
         <div class="controls">
-            {CHtml::activeTextField("number", $object)}
+        	{CHtml::activeLookup("number", $object, "class.CSearchCatalogCorriculumDisciplinesTerms", false, ["plan_id" => $object->plan_id])}
             {CHtml::error("number", $object)}
         </div>
     </div>

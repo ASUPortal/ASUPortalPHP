@@ -19,7 +19,7 @@
                 <td>{counter}</td>
                 <td><a href="workplancontentloads.php?action=edit&id={$load->getId()}" class="icon-pencil"></a></td>
                 <td>{$load->loadType}</td>
-                <td>{$load->term}</td>
+                <td>{$load->term->corriculum_discipline_section->title}</td>
                 <td>{$load->value}</td>
             </tr>
         {/foreach}

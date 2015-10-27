@@ -8,7 +8,7 @@
  * @property int plan_id
  * @property String number
  * @property CWorkPlan plan
-
+ * @property CCorriculumDisciplineSection number
  */
 class CWorkPlanTerm extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_TERMS;
@@ -19,7 +19,12 @@ class CWorkPlanTerm extends CActiveModel{
                 "relationPower" => RELATION_HAS_ONE,
                 "storageField" => "plan_id",
                 "targetClass" => "CWorkPlan"
-            )
+            ),
+        	"corriculum_discipline_section" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageField" => "number",
+        		"targetClass" => "CCorriculumDisciplineSection"
+        	)
         );
     }
 
@@ -31,7 +36,7 @@ class CWorkPlanTerm extends CActiveModel{
 
     protected function validationRules() {
         return array(
-            "required" => array(
+            "selected" => array(
                 "number"
             )
         );
