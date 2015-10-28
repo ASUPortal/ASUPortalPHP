@@ -53,6 +53,15 @@ class CTerm extends CActiveModel{
         }
     }
     /**
+     * Короткое название термина в зависимости от словаря, из которого
+     * он взят
+     *
+     * @return string
+     */
+    public function getShortValue() {
+    	return $this->getRecord()->getItemValue("name_short");
+    }
+    /**
      * Объект таксономии, к которой данный термин привязан.
      * Если это самостоятельный объект словаря, то null
      *
