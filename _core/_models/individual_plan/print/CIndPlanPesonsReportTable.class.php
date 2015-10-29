@@ -72,13 +72,13 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
             $row[2] = "";
             if (!is_null($plan->person)) {
                 if (!is_null($plan->person->getPost())) {
-                    $row[2] = $plan->person->getPost()->getShortValue();
+                    $row[2] = $plan->person->getPost()->name_short;
                 }
             }
             $row[3] = "";
             if (!is_null($plan->person)) {
                 if (!is_null($plan->person->degree)) {
-                    $row[3] = $plan->person->degree->getShortValue();
+                    $row[3] = $plan->person->degree->comment;
                 }
             }
             $row[4] = "";
