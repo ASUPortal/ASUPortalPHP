@@ -91,7 +91,7 @@ class CWorkPlanMarkTypesController extends CBaseController{
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplanmarktypes.php?action=edit&id=".$object->getId());
+                $this->redirect("workplanmarktypes.php?action=index&plan_id=".$object->plan_id);
             } else {
                 $this->redirect("workplanmarktypes.php?action=index&plan_id=".$object->plan_id);
             }

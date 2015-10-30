@@ -91,7 +91,7 @@ public function actionIndex() {
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplanmarksstudyactivity.php?action=edit&id=".$object->getId());
+                $this->redirect("workplanmarksstudyactivity.php?action=index&id=".$object->activity_id);
             } else {
                 $this->redirect("workplanmarksstudyactivity.php?action=index&id=".$object->activity_id);
             }

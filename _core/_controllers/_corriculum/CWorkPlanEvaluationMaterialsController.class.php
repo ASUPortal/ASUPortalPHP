@@ -88,7 +88,7 @@ protected $_isComponent = true;
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplanevaluationmaterials.php?action=edit&id=".$object->getId());
+                $this->redirect("workplanevaluationmaterials.php?action=index&plan_id=".$object->plan_id);
             } else {
                 $this->redirect("workplanevaluationmaterials.php?action=index&plan_id=".$object->plan_id);
             }

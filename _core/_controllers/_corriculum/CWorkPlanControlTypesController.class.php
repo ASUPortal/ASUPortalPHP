@@ -90,7 +90,7 @@ class CWorkPlanControlTypesController extends CBaseController{
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplantypescontrol.php?action=edit&id=".$object->getId());
+                $this->redirect("workplantypescontrol.php?action=index&id=".$object->section_id);
             } else {
                 $this->redirect("workplantypescontrol.php?action=index&id=".$object->section_id);
             }

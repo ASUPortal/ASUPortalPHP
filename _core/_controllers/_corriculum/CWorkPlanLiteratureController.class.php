@@ -93,7 +93,7 @@ class CWorkPlanLiteratureController extends CBaseController{
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplanliterature.php?action=edit&id=".$object->getId());
+                $this->redirect("workplanliterature.php?action=index&plan_id=".$object->plan_id."&type=".$object->type);
             } else {
                 $this->redirect("workplanliterature.php?action=index&plan_id=".$object->plan_id."&type=".$object->type);
             }

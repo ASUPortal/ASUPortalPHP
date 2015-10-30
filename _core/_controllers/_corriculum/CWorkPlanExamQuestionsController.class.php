@@ -156,7 +156,7 @@ class CWorkPlanExamQuestionsController extends CBaseController{
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplanexamquestions.php?action=edit&id=".$object->getId());
+                $this->redirect("workplanexamquestions.php?action=index&plan_id=".$object->plan_id."&type=".$object->type);
             } else {
                 $this->redirect("workplanexamquestions.php?action=index&plan_id=".$object->plan_id."&type=".$object->type);
             }

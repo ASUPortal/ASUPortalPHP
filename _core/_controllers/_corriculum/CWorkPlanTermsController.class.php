@@ -95,7 +95,7 @@ class CWorkPlanTermsController extends CBaseController{
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplanterms.php?action=edit&id=".$object->getId());
+                $this->redirect("workplanterms.php?action=index&plan_id=".$object->plan_id);
             } else {
                 $this->redirect("workplanterms.php?action=index&plan_id=".$object->plan_id);
             }

@@ -116,7 +116,7 @@ class CWorkPlanContentSectionLoadsController extends CBaseController{
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplancontentloads.php?action=edit&id=".$object->getId());
+                $this->redirect("workplancontentloads.php?action=index&section_id=".$object->section_id);
             } else {
                 $this->redirect("workplancontentloads.php?action=index&section_id=".$object->section_id);
             }
