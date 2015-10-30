@@ -19,13 +19,14 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
+    	$fund = CBaseManager::getWorkPlanFundMarkType(CRequest::getInt("id"));
         $set = new CRecordSet();
         $query = new CQuery();
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_FUND_MARK_TYPES." as t")
             ->order("t.id asc")
-            ->condition("plan_id=".CRequest::getInt("plan_id"));
+            ->condition("section_id=".CRequest::getInt("id")." and plan_id=".$fund->section->category->plan_id);
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanFundMarkType($ar);
@@ -38,7 +39,7 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Добавить",
-            "link" => "workplanfundmarktypes.php?action=add&id=".CRequest::getInt("plan_id"),
+            "link" => "workplanfundmarktypes.php?action=add&id=".CRequest::getInt("id"),
             "icon" => "actions/list-add.png"
         ));
         /**
@@ -46,16 +47,46 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
          */
         $this->renderView("_corriculum/_workplan/fundMarkTypes/index.tpl");
     }
+    public function actionView() {
+    	$set = new CRecordSet();
+    	$query = new CQuery();
+    	$set->setQuery($query);
+    	$query->select("t.*")
+	    	->from(TABLE_WORK_PLAN_FUND_MARK_TYPES." as t")
+	    	->order("t.id asc")
+	    	->condition("plan_id=".CRequest::getInt("plan_id"));
+    	$objects = new CArrayList();
+    	foreach ($set->getPaginated()->getItems() as $ar) {
+    		$object = new CWorkPlanFundMarkType($ar);
+    		$objects->add($object->getId(), $object);
+    	}
+    	$this->setData("objects", $objects);
+    	$this->setData("paginator", $set->getPaginator());
+    	/**
+    	 * Генерация меню
+    	 */
+    	$this->addActionsMenuItem(array(
+    		"title" => "Обновить",
+    		"link" => "workplanfundmarktypes.php?action=view&plan_id=".CRequest::getInt("plan_id"),
+    		"icon" => "actions/view-refresh.png"
+    	));
+    	/**
+    	 * Отображение представления
+    	*/
+    	$this->renderView("_corriculum/_workplan/fundMarkTypes/view.tpl");
+    }
     public function actionAdd() {
+    	$fund = CBaseManager::getWorkPlanFundMarkType(CRequest::getInt("id"));
         $object = new CWorkPlanFundMarkType();
-        $object->plan_id = CRequest::getInt("id");
+        $object->section_id = CRequest::getInt("id");
+        $object->plan_id = $fund->section->category->plan_id;
         $this->setData("object", $object);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplanfundmarktypes.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplanfundmarktypes.php?action=index&id=".$object->section_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -71,7 +102,7 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplanfundmarktypes.php?action=index&plan_id=".$object->plan_id,
+            "link" => "workplanfundmarktypes.php?action=index&id=".$object->section_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -81,9 +112,9 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanFundMarkType(CRequest::getInt("id"));
-        $plan = $object->plan_id;
+        $section = $object->section_id;
         $object->remove();
-        $this->redirect("workplanfundmarktypes.php?action=index&plan_id=".$plan);
+        $this->redirect("workplanfundmarktypes.php?action=index&id=".$section);
     }
     public function actionSave() {
         $object = new CWorkPlanFundMarkType();
@@ -93,7 +124,7 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("workplanfundmarktypes.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplanfundmarktypes.php?action=index&plan_id=".$object->plan_id);
+                $this->redirect("workplanfundmarktypes.php?action=index&id=".$object->section_id);
             }
             return true;
         }

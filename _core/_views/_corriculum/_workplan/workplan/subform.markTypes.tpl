@@ -8,7 +8,7 @@
 
 <h3>6.3. Фонд оценочных средств</h3>
 
-{CHtml::activeComponent("workplanfundmarktypes.php?plan_id={$plan->getId()}", $plan)}
+{CHtml::activeComponent("workplanfundmarktypes.php?plan_id={$plan->getId()}", $plan, ["defaultAction" => "view"])}
 
 <h3>6.4. Вопросы к экзамену</h3>
 

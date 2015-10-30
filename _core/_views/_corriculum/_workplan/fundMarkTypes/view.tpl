@@ -10,6 +10,7 @@
                     <th width="16">&nbsp;</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
+                    <th>{CHtml::tableOrder("section_id", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("competentions", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("levels", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("controls", $objects->getFirstItem())}</th>
@@ -22,6 +23,7 @@
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить контролируемый раздел')) { location.href='workplanfundmarktypes.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{counter}</td>
                     <td><a href="workplanfundmarktypes.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
+                    <td>{$object->section->name}</td>
                     <td>
                         {foreach $object->competentions as $competention}
                             <p>{$competention}</p>
