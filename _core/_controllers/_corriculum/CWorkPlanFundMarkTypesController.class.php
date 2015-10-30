@@ -122,7 +122,7 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplanfundmarktypes.php?action=index&id=".$object->section_id);
+                $this->redirect("workplanfundmarktypes.php?action=edit&id=".$object->getId());
             } else {
                 $this->redirect("workplanfundmarktypes.php?action=index&id=".$object->section_id);
             }

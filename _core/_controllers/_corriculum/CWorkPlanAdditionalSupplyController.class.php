@@ -91,7 +91,7 @@ class CWorkPlanAdditionalSupplyController extends CBaseController{
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplansupplies.php?action=index&plan_id=".$object->plan_id);
+                $this->redirect("workplansupplies.php?action=edit&id=".$object->getId());
             } else {
                 $this->redirect("workplansupplies.php?action=index&plan_id=".$object->plan_id);
             }

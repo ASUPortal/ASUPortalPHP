@@ -90,7 +90,7 @@ protected $_isComponent = true;
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplancriteriaofevaluation.php?action=index&plan_id=".$object->plan_id."&type=".$object->type);
+                $this->redirect("workplancriteriaofevaluation.php?action=edit&id=".$object->getId());
             } else {
                 $this->redirect("workplancriteriaofevaluation.php?action=index&plan_id=".$object->plan_id."&type=".$object->type);
             }

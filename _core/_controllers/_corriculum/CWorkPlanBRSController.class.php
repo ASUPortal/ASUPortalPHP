@@ -91,7 +91,7 @@ class CWorkPlanBRSController extends CBaseController{
         if ($object->validate()) {
             $object->save();
             if ($this->continueEdit()) {
-                $this->redirect("workplanbrs.php?action=index&plan_id=".$object->plan_id);
+                $this->redirect("workplanbrs.php?action=edit&id=".$object->getId());
             } else {
                 $this->redirect("workplanbrs.php?action=index&plan_id=".$object->plan_id);
             }
