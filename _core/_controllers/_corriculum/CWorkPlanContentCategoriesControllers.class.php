@@ -146,7 +146,7 @@ class CWorkPlanContentCategoriesControllers extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("workplancontentcategories.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplancontentcategories.php?action=index&plan_id=".$object->plan_id);
+                $this->redirect("workplans.php?action=edit&id=".$object->plan_id);
             }
             return true;
         }

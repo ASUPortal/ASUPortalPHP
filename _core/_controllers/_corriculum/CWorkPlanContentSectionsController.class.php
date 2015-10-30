@@ -71,7 +71,7 @@ class CWorkPlanContentSectionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "workplancontentcategories.php?action=edit&id=".$object->category_id,
+            "link" => "workplans.php?action=edit&id=".$object->category->plan_id,
             "icon" => "actions/edit-undo.png"
         ));
         $this->addActionsMenuItem(array(
@@ -98,7 +98,7 @@ class CWorkPlanContentSectionsController extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("workplancontentsections.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("workplancontentcategories.php?action=edit&id=".$object->category_id);
+                $this->redirect("workplans.php?action=edit&id=".$object->category->plan_id);
             }
             return true;
         }
