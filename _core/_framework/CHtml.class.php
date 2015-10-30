@@ -527,7 +527,7 @@ class CHtml {
             </div>
         <?php
         } else {
-            echo '<input type="submit" class="btn btn-primary" label="'.$value.'" type="submit" value="'.$value.'">';
+            echo '<button type="submit" class="btn btn-primary" type="submit">'.$value.'</button>';
         }
     }
     /**
