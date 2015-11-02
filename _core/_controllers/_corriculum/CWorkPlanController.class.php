@@ -72,7 +72,8 @@ class CWorkPlanController extends CFlowController{
         $query = new CQuery();
         $set->setQuery($query);
         $query->select("wp.*")
-            ->from(TABLE_WORK_PLANS." as wp");
+            ->from(TABLE_WORK_PLANS." as wp")
+            ->condition("wp.is_archive = 0");
         $isArchive = false;
         if (CRequest::getInt("isArchive") == "1") {
             $isArchive = true;
@@ -86,11 +87,34 @@ class CWorkPlanController extends CFlowController{
             $paginated->add($plan->getId(), $plan);
         }
         $this->addActionsMenuItem(array(
-        	"title" => "Удалить выделенные",
-        	"icon" => "actions/edit-delete.png",
-        	"form" => "#MainView",
-        	"link" => "workplans.php",
-        	"action" => "delete"
+        	array(
+				"title" => "Групповые операции",
+				"link" => "#",
+				"icon" => "apps/utilities-terminal.png",
+				"child" => array(
+					array(
+						"title" => "Удалить выделенные",
+						"icon" => "actions/edit-delete.png",
+						"form" => "#MainView",
+						"link" => "workplans.php",
+						"action" => "delete"
+					),
+					array(
+						"title" => "Переместить в архив",
+						"icon" => "devices/media-floppy.png",
+						"form" => "#MainView",
+						"link" => "workplans.php",
+						"action" => "inArchiv"
+					),
+					array(
+						"title" => "Сменить учебный план",
+						"icon" => "actions/edit-redo.png",
+						"form" => "#MainView",
+						"link" => "workplans.php",
+						"action" => "corriculumToChange"
+					)
+				)
+			)
         ));
         $this->setData("isArchive", $isArchive);
         $this->setData("plans", $paginated);
@@ -108,6 +132,15 @@ class CWorkPlanController extends CFlowController{
         	$plan->remove();
         }
         $this->redirect("workplans.php");
+    }
+    public function actionInArchiv() {
+    	$items = CRequest::getArray("selectedInView");
+    	foreach ($items as $id){
+    		$plan = CWorkPlanManager::getWorkplan($id);
+    		$plan->is_archive = 1;
+    		$plan->save();
+    	}
+    	$this->redirect("workplans.php");
     }
     public function actionAdd() {
         /**
@@ -261,6 +294,34 @@ class CWorkPlanController extends CFlowController{
     	$this->setData("items", $items);
     	$this->setData("plan", $plan);
     	$this->renderView("_corriculum/_workplan/workplan/select.tpl");
+    }
+    public function actionCorriculumToChange() {
+    	$items = CRequest::getArray("selectedInView");
+    	$this->redirect("workplans.php?action=selectCorriculumToChange&id=".implode(":", $items));
+    }
+    public function actionSelectCorriculumToChange() {
+    	$plans = CRequest::getArray("id");
+    	$items = array();
+    	foreach (CCorriculumsManager::getAllCorriculums()->getItems() as $corriculum) {
+    		$items[$corriculum->getId()] = $corriculum->title;
+    	}
+    	$this->setData("plans", $plans);
+    	$this->setData("items", $items);
+    	$this->renderView("_corriculum/_workplan/workplan/selectToChange.tpl");
+    }
+    public function actionChangeCorriculum() {
+    	$plans = explode(":", CRequest::getArray("id"));
+    	$corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("corriculum"));
+    	foreach ($plans as $id) {
+    		$plan = CWorkPlanManager::getWorkplan($id);
+    		foreach ($corriculum->getDisciplines() as $discipline) {
+    			if ($plan->corriculumDiscipline->discipline->getValue() == $discipline->discipline->getValue()) {
+    				$plan->corriculum_discipline_id = $discipline->getId();
+    				$plan->save();
+    			}
+    		}
+    	}
+    	$this->redirect("workplans.php?action=index");
     }
     public function actionCopyWorkPlan() {
     	$pl = new CWorkPlan();
