@@ -278,6 +278,10 @@ class CWorkPlanController extends CFlowController{
         }
         echo json_encode($res);
     }
+    /**
+     * Смена учебного плана для списка рабочих программ.
+     * Выбор учебного плана
+     */
     public function actionCorriculumToChange() {
     	$items = new CArrayList();
     	foreach (CCorriculumsManager::getAllCorriculums()->getItems() as $corriculum) {
@@ -286,6 +290,9 @@ class CWorkPlanController extends CFlowController{
     	$this->setData("items", $items);
     	$this->renderView("_flow/pickList.tpl", get_class($this), "ChangeCorriculum");
     }
+    /**
+     * Смена учебного плана для списка рабочих программ
+     */
     public function actionChangeCorriculum() {
     	$bean = self::getStatefullBean();
     	$corriculum = CRequest::getArray("selected");
@@ -302,6 +309,9 @@ class CWorkPlanController extends CFlowController{
     	}
     	$this->redirect("workplans.php");
     }
+    /**
+     * Выбор учебного плана для копирования одной рабочей программы
+     */
     public function actionSelectCorriculum() {
     	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
     	$items = array();
@@ -312,6 +322,10 @@ class CWorkPlanController extends CFlowController{
     	$this->setData("plan", $plan);
     	$this->renderView("_corriculum/_workplan/workplan/select.tpl");
     }
+    /**
+     * Выбор дисциплины из выбранного учебного плана 
+     * для копирования одной рабочей программы
+     */
     public function actionCopyWorkPlan() {
     	$pl = new CWorkPlan();
     	$pl->setAttributes(CRequest::getArray($pl->getClassName()));
@@ -325,6 +339,9 @@ class CWorkPlanController extends CFlowController{
     	$this->setData("plan", $plan);
     	$this->renderView("_corriculum/_workplan/workplan/copy.tpl");
     }
+    /**
+     * Копирование одной выбранной рабочей программы
+     */
     public function actionCopy() {
     	$pl = new CWorkPlan();
     	$pl->setAttributes(CRequest::getArray($pl->getClassName()));
@@ -340,5 +357,37 @@ class CWorkPlanController extends CFlowController{
     	 * Редирект на страницу со списком
     	 */
     	$this->redirect("workplans.php?action=index");
+    }
+    /**
+     * Копирование списка рабочих программ в другой учебный план.
+     * Выбор учебного плана
+     */
+    public function actionCorriculumToCopy() {
+    	$items = new CArrayList();
+    	foreach (CCorriculumsManager::getAllCorriculums()->getItems() as $corriculum) {
+    		$items->add($corriculum->getId(), $corriculum->title);
+    	}
+    	$this->setData("items", $items);
+    	$this->renderView("_flow/pickList.tpl", get_class($this), "CopyInCorriculum");
+    }
+    /**
+     * Копирование списка рабочих программ в другой учебный план
+     */
+    public function actionCopyInCorriculum() {
+    	$bean = self::getStatefullBean();
+    	$corriculum = CRequest::getArray("selected");
+    	$plans = explode(":", $bean->getItem("selected"));
+    	$corriculum = CCorriculumsManager::getCorriculum($corriculum[0]);
+    	foreach ($plans as $id) {
+    		$plan = CWorkPlanManager::getWorkplan($id);
+    		foreach ($corriculum->getDisciplines() as $discipline) {
+    			if ($plan->corriculumDiscipline->discipline->getValue() == $discipline->discipline->getValue()) {
+    				$newPlan = $plan->copy();
+    				$newPlan->corriculum_discipline_id = $discipline->getId();
+    				$newPlan->save();
+    			}
+    		}
+    	}
+    	$this->redirect("workplans.php");
     }
 }
