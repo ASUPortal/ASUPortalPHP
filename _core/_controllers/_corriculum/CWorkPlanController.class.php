@@ -105,13 +105,6 @@ class CWorkPlanController extends CFlowController{
 						"form" => "#MainView",
 						"link" => "workplans.php",
 						"action" => "inArchiv"
-					),
-					array(
-						"title" => "Сменить учебный план",
-						"icon" => "actions/edit-redo.png",
-						"form" => "#MainView",
-						"link" => "workplans.php",
-						"action" => "corriculumToChange"
 					)
 				)
 			)
@@ -126,7 +119,7 @@ class CWorkPlanController extends CFlowController{
         if (!is_null($plan)) {
         	$plan->remove();
         }
-        $items = CRequest::getArray("selectedInView");
+        $items = CRequest::getArray("selectedDoc");
         foreach ($items as $id){
         	$plan = CWorkPlanManager::getWorkplan($id);
         	$plan->remove();
@@ -134,7 +127,7 @@ class CWorkPlanController extends CFlowController{
         $this->redirect("workplans.php");
     }
     public function actionInArchiv() {
-    	$items = CRequest::getArray("selectedInView");
+    	$items = CRequest::getArray("selectedDoc");
     	foreach ($items as $id){
     		$plan = CWorkPlanManager::getWorkplan($id);
     		$plan->is_archive = 1;
@@ -285,33 +278,19 @@ class CWorkPlanController extends CFlowController{
         }
         echo json_encode($res);
     }
-    public function actionSelectCorriculum() {
-    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-    	$items = array();
-    	foreach (CCorriculumsManager::getAllCorriculums()->getItems() as $corriculum) {
-    		$items[$corriculum->getId()] = $corriculum->title;
-    	}
-    	$this->setData("items", $items);
-    	$this->setData("plan", $plan);
-    	$this->renderView("_corriculum/_workplan/workplan/select.tpl");
-    }
     public function actionCorriculumToChange() {
-    	$items = CRequest::getArray("selectedInView");
-    	$this->redirect("workplans.php?action=selectCorriculumToChange&id=".implode(":", $items));
-    }
-    public function actionSelectCorriculumToChange() {
-    	$plans = CRequest::getArray("id");
-    	$items = array();
+    	$items = new CArrayList();
     	foreach (CCorriculumsManager::getAllCorriculums()->getItems() as $corriculum) {
-    		$items[$corriculum->getId()] = $corriculum->title;
+    		$items->add($corriculum->getId(), $corriculum->title);
     	}
-    	$this->setData("plans", $plans);
     	$this->setData("items", $items);
-    	$this->renderView("_corriculum/_workplan/workplan/selectToChange.tpl");
+    	$this->renderView("_flow/pickList.tpl", get_class($this), "ChangeCorriculum");
     }
     public function actionChangeCorriculum() {
-    	$plans = explode(":", CRequest::getArray("id"));
-    	$corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("corriculum"));
+    	$bean = self::getStatefullBean();
+    	$corriculum = CRequest::getArray("selected");
+    	$plans = explode(":", $bean->getItem("selected"));
+    	$corriculum = CCorriculumsManager::getCorriculum($corriculum[0]);
     	foreach ($plans as $id) {
     		$plan = CWorkPlanManager::getWorkplan($id);
     		foreach ($corriculum->getDisciplines() as $discipline) {
@@ -321,7 +300,17 @@ class CWorkPlanController extends CFlowController{
     			}
     		}
     	}
-    	$this->redirect("workplans.php?action=index");
+    	$this->redirect("workplans.php");
+    }
+    public function actionSelectCorriculum() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$items = array();
+    	foreach (CCorriculumsManager::getAllCorriculums()->getItems() as $corriculum) {
+    		$items[$corriculum->getId()] = $corriculum->title;
+    	}
+    	$this->setData("items", $items);
+    	$this->setData("plan", $plan);
+    	$this->renderView("_corriculum/_workplan/workplan/select.tpl");
     }
     public function actionCopyWorkPlan() {
     	$pl = new CWorkPlan();
