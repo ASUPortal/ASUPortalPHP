@@ -1339,7 +1339,7 @@ class CHtml {
         $renderer = new CActionsMenuRenderer();
         $renderer->render($items);
     }
-    public static function activeViewGroupSelect($name, CModel $model, $isHeader = false) {
+    public static function activeViewGroupSelect($name, CModel $model, $isHeader = false, $isDoc = false) {
         if ($isHeader) {
             // это в шапке таблицы, тут нужно показать групповую скрывалку/показывалку
             if (!self::$_viewGroupSelectInit) {
@@ -1366,6 +1366,9 @@ class CHtml {
             }
             self::$_widgetsIndex++;
             echo '<input type="checkbox" value="1" class="_viewGroupSelector" asu-index="'.(self::$_widgetsIndex).'" />';
+        } elseif($isDoc) {
+            $data = $model->$name;
+            echo '<input type="checkbox" name="selectedDoc[]" value="'.$data.'" class="_viewGroupSelectorItem" asu-index="'.(self::$_widgetsIndex).'" />';
         } else {
             $data = $model->$name;
             echo '<input type="checkbox" name="selectedInView[]" value="'.$data.'" class="_viewGroupSelectorItem" asu-index="'.(self::$_widgetsIndex).'" />';
