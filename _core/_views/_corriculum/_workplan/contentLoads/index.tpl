@@ -1,25 +1,23 @@
-{extends file="_core.3col.tpl"}
+{extends file="_core.component.tpl"}
 
 {block name="asu_center"}
-    <h2>Нагрузка по разделу дисциплины</h2>
-
-    {if ($objects->getCount() == 0)}
-        Нет объектов для отображения
-    {else}
-        <table class="table table-striped table-bordered table-hover table-condensed">
-            <thead>
-                <tr>
-                    <th width="16">&nbsp;</th>
-                    <th width="16">#</th>
-                    <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("load_type_id", $objects->getFirstItem())}</th>
-                    <th>{CHtml::tableOrder("term_id", $objects->getFirstItem())}</th>
-                    <th>{CHtml::tableOrder("value", $objects->getFirstItem())}</th>
-                </tr>
-            </thead>
-            <tbody>
-            {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
-            {foreach $objects->getItems() as $object}
+<form action="workplancontentloads.php" method="post">
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="16">&nbsp;</th>
+            <th width="16">#</th>
+            <th width="16">&nbsp;</th>
+            <th>{CHtml::tableOrder("load_type_id", $loads->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("term_id", $loads->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("value", $loads->getFirstItem())}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach $loads->getItems() as $object}
+            {if isset($editSectionLoad) && $editSectionLoad->getId() == $object->getId()}
+                {include file="_corriculum/_workplan/contentLoads/form.tpl"}
+            {else}
                 <tr>
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузка')) { location.href='workplancontentloads.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{counter}</td>
@@ -28,12 +26,20 @@
                     <td>{$object->term->corriculum_discipline_section->title}</td>
                     <td>{$object->value}</td>
                 </tr>
-            {/foreach}
-            </tbody>
-        </table>
-
-        {CHtml::paginator($paginator, "workplancontentloads.php?action=index")}
-    {/if}
+            {/if}
+        {/foreach}
+        {if isset($editSectionLoad) && $editSectionLoad->getId() == null}
+            {include file="_corriculum/_workplan/contentLoads/form.tpl"}
+        {elseif !isset($editSectionLoad)}
+            <tr>
+                <td colspan="6">
+                    <a href="workplancontentloads.php?action=add&id={$section->getId()}" class="btn btn-small btn-success">Добавить нагрузку</a>
+                </td>
+            </tr>
+        {/if}
+        </tbody>
+    </table>
+</form>
 {/block}
 
 {block name="asu_right"}

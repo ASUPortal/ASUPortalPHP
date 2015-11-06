@@ -248,3 +248,7 @@ p.error {
 .component_menu_container .menu_item_container{
     float: left;
 }
+
+.hide-required-star .field_required {
+    display: none;
+}

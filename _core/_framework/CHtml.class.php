@@ -1205,7 +1205,11 @@ class CHtml {
             $fieldRequired = true;
         }
         $inline = "";
-        $class = self::getFielsizeClass();
+        if (!array_key_exists("class", $properties)) {
+            $class = self::getFielsizeClass();
+        } else {
+            $class = $properties['class'];
+        }
         $inline .= ' class="'.$class.'"';
         $data = $model->$name;
         ?>

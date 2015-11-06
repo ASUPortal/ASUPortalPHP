@@ -1,5 +1,7 @@
 <?php
 class CWorkPlanContentSectionLoadsController extends CBaseController{
+    protected $_isComponent = true;
+
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -17,39 +19,16 @@ class CWorkPlanContentSectionLoadsController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
-        $query = new CQuery();
-        $set->setQuery($query);
-        $query->select("t.*")
-            ->from(TABLE_WORK_PLAN_CONTENT_LOADS." as t")
-            ->condition("section_id=".CRequest::getInt("section_id"))
-            ->order("t.id asc");
-        $objects = new CArrayList();
-        foreach ($set->getPaginated()->getItems() as $ar) {
-            $object = new CWorkPlanContentSectionLoad($ar);
-            $objects->add($object->getId(), $object);
-        }
-        $this->setData("objects", $objects);
-        $this->setData("paginator", $set->getPaginator());
+        $section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
+        $this->setData("section", $section);
+        $this->setData("loads", $section->loads);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
-			array(
-				"title" => "Назад",
-				"link" => "workplancontentsections.php?action=edit&id=".$object->section_id,
-				"icon" => "actions/edit-undo.png"
-			),
-			array(
-				"title" => "Обновить",
-				"link" => "workplancontentloads.php?action=index&section_id=".CRequest::getInt("section_id"),
-				"icon" => "actions/view-refresh.png"
-			),
-			array(
-				"title" => "Добавить нагрузку",
-				"link" => "workplancontentloads.php?action=add&id=".CRequest::getInt("section_id"),
-				"icon" => "actions/list-add.png"
-			),
+            "title" => "Обновить",
+            "link" => "workplancontentloads.php?id=".$section->getId(),
+            "icon" => "actions/view-refresh.png"
         ));
         /**
          * Отображение представления
@@ -57,52 +36,44 @@ class CWorkPlanContentSectionLoadsController extends CBaseController{
         $this->renderView("_corriculum/_workplan/contentLoads/index.tpl");
     }
     public function actionAdd() {
-        $object = new CWorkPlanContentSectionLoad();
-        $object->section_id = CRequest::getInt("id");
-        $this->setData("object", $object);
+        $section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
+        $this->setData("section", $section);
+        $this->setData("loads", $section->loads);
+
+        $newLoad = new CWorkPlanContentSectionLoad();
+        $newLoad->section_id = $section->getId();
+        $this->setData("editSectionLoad", $newLoad);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
-            "title" => "Назад",
-            "link" => "workplancontentloads.php?action=index&section_id=".$object->section_id,
-            "icon" => "actions/edit-undo.png"
+            "title" => "Обновить",
+            "link" => "workplancontentloads.php?id=".$section->getId(),
+            "icon" => "actions/view-refresh.png"
         ));
         /**
          * Отображение представления
          */
-        $this->renderView("_corriculum/_workplan/contentLoads/add.tpl");
+        $this->renderView("_corriculum/_workplan/contentLoads/index.tpl");
     }
     public function actionEdit() {
-        $object = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("id"));
-        $this->setData("object", $object);
+        $load = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("id"));
+        $section = $load->section;
+        $this->setData("editSectionLoad", $load);
+        $this->setData("section", $load->section);
+        $this->setData("loads", $section->loads);
         /**
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
-            "title" => "Назад",
-            "link" => "workplancontentsections.php?action=edit&id=".$object->section_id,
-            "icon" => "actions/edit-undo.png"
-        ));
-        $this->addActionsMenuItem(array(
-            "title" => "Добавить тему",
-            "link" => "workplancontenttopics.php?action=add&id=".$object->getId(),
-            "icon" => "actions/list-add.png"
-        ));
-        $this->addActionsMenuItem(array(
-            "title" => "Добавить технологию",
-            "link" => "workplancontenttechnologies.php?action=add&id=".$object->getId(),
-            "icon" => "actions/list-add.png"
-        ));
-        $this->addActionsMenuItem(array(
-            "title" => "Добавить самостоятельную работу",
-            "link" => "workplanselfeducationblocks.php?action=add&id=".$object->getId(),
-            "icon" => "actions/list-add.png"
+            "title" => "Обновить",
+            "link" => "workplancontentloads.php?id=".$section->getId(),
+            "icon" => "actions/view-refresh.png"
         ));
         /**
          * Отображение представления
          */
-        $this->renderView("_corriculum/_workplan/contentLoads/edit.tpl");
+        $this->renderView("_corriculum/_workplan/contentLoads/index.tpl");
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("id"));
@@ -115,14 +86,10 @@ class CWorkPlanContentSectionLoadsController extends CBaseController{
         $object->setAttributes(CRequest::getArray($object::getClassName()));
         if ($object->validate()) {
             $object->save();
-            if ($this->continueEdit()) {
-                $this->redirect("workplancontentloads.php?action=edit&id=".$object->getId());
-            } else {
-                $this->redirect("workplancontentloads.php?action=index&section_id=".$object->section_id);
-            }
+            $this->redirect("workplancontentloads.php?action=index&id=".$object->section_id);
             return true;
         }
         $this->setData("object", $object);
-        $this->renderView("_corriculum/_workplan/contentLoads/edit.tpl");
+        $this->renderView("_corriculum/_workplan/contentLoads/index.tpl");
     }
 }
