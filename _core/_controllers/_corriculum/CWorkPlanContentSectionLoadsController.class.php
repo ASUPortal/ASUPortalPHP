@@ -79,7 +79,7 @@ class CWorkPlanContentSectionLoadsController extends CBaseController{
         $object = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("id"));
         $section = $object->section_id;
         $object->remove();
-        $this->redirect("workplancontentloads.php?action=index&section_id=".$section);
+        $this->redirect("workplancontentloads.php?action=index&id=".$section);
     }
     public function actionSave() {
         $object = new CWorkPlanContentSectionLoad();
@@ -89,7 +89,18 @@ class CWorkPlanContentSectionLoadsController extends CBaseController{
             $this->redirect("workplancontentloads.php?action=index&id=".$object->section_id);
             return true;
         }
-        $this->setData("object", $object);
+        $section = $object->section;
+        $this->setData("editSectionLoad", $object);
+        $this->setData("section", $section);
+        $this->setData("loads", $section->loads);
+        /**
+         * Генерация меню
+         */
+        $this->addActionsMenuItem(array(
+            "title" => "Обновить",
+            "link" => "workplancontentloads.php?id=".$section->getId(),
+            "icon" => "actions/view-refresh.png"
+        ));
         $this->renderView("_corriculum/_workplan/contentLoads/index.tpl");
     }
 }
