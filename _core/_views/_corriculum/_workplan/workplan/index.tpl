@@ -47,7 +47,7 @@
 	        {foreach $plans->getItems() as $plan}
 	        <tr>
 	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить рабочую программу дисциплины {$plan->discipline}')) { location.href='?action=delete&id={$plan->id}'; }; return false;"></a></td>
-	            <td>{CHtml::activeViewGroupSelect("id", $plan)}</td>
+	            <td>{CHtml::activeViewGroupSelect("id", $plan, false, true)}</td>
 	            <td>{counter}</td>
 	            <td><a href="?action=edit&id={$plan->getId()}" class="icon-pencil"></a></td>
 	            <td>{$plan->title_display}</td>
