@@ -99,7 +99,7 @@ class CWorkPlanContentController extends CBaseController{
             ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
             ->condition("category.plan_id = ".$plan->getId())
             ->group("l.load_type_id")
-            ->order("term.name");
+            ->order("l.ordering");
         $objects = $query->execute();
         $this->setData("objects", $objects);
         $this->setData("terms", $plan->terms);
@@ -125,7 +125,8 @@ class CWorkPlanContentController extends CBaseController{
                 ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
                 ->leftJoin(TABLE_WORK_PLAN_SELFEDUCATION." as selfedu", "selfedu.load_id = l.id")
                 ->group("l.section_id")
-                ->condition("l.term_id = ".$term->getId());
+                ->condition("l.term_id = ".$term->getId())
+                ->order("section.sectionIndex");
             $items = $query->execute();
             if ($items->getCount() > 0) {
                 $termSectionsData->add($term->getId(), $items);
@@ -144,7 +145,7 @@ class CWorkPlanContentController extends CBaseController{
 	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
 	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
 	        ->condition("category.plan_id = ".$plan->getId())
-	        ->order("term.name asc");
+	        ->order("section.sectionIndex asc");
         $controlTypes = new CArrayList();
         foreach ($set->getItems() as $ar) {
         	$controlType = new CWorkPlanControlTypes($ar);
@@ -164,7 +165,7 @@ class CWorkPlanContentController extends CBaseController{
 	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "control.section_id = section.id")
 	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
 	        ->condition("category.plan_id = ".$plan->getId())
-	        ->order("activity.mark asc");
+	        ->order("activity.ordering asc");
         $marks = new CArrayList();
         foreach ($setMarks->getItems() as $ar) {
         	$mark = new CWorkPlanControlTypes($ar);

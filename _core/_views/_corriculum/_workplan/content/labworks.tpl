@@ -18,7 +18,7 @@
             <tbody>
                 {foreach $termData as $lab}
                     <tr>
-                        <td>{counter}</td>
+                        <td>{$lab->ordering}</td>
                         <td>{$lab->load->section->sectionIndex}</td>
                         <td>{$lab->title}</td>
                         <td>{$lab->value}</td>

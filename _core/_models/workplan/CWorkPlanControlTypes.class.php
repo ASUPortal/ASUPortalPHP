@@ -44,7 +44,8 @@ class CWorkPlanControlTypes extends CActiveModel{
             "mark" => "Балл за конкретное задание",
             "amount_labors" => "Число заданий",
             "min" => "Минимальный",
-        	"max" => "Максимальный"
+        	"max" => "Максимальный",
+            "ordering" => "Порядковый номер"
         );
     }
 

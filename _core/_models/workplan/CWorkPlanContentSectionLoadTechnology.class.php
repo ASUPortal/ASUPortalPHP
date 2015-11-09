@@ -33,7 +33,8 @@ class CWorkPlanContentSectionLoadTechnology extends CActiveModel{
     public function attributeLabels() {
         return array(
             "technology_id" => "Технология",
-            "value" => "Число часов"
+            "value" => "Число часов",
+            "ordering" => "Порядковый номер"
         );
     }
 

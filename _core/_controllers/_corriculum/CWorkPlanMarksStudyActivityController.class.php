@@ -24,7 +24,7 @@ public function actionIndex() {
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_MARKS_STUDY_ACTIVITY." as t")
-            ->order("t.id asc")
+            ->order("t.ordering asc")
             ->condition("activity_id=".CRequest::getInt("id"));
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
@@ -36,6 +36,11 @@ public function actionIndex() {
         /**
          * Генерация меню
          */
+        $this->addActionsMenuItem(array(
+        	"title" => "Обновить",
+        	"link" => "workplanmarksstudyactivity.php?action=index&id=".CRequest::getInt("id"),
+        	"icon" => "actions/view-refresh.png"
+        ));
         $this->addActionsMenuItem(array(
             "title" => "Добавить",
             "link" => "workplanmarksstudyactivity.php?action=add&id=".CRequest::getInt("id"),
@@ -49,6 +54,16 @@ public function actionIndex() {
     public function actionAdd() {
         $object = new CWorkPlanMarkStudyActivity();
         $object->activity_id = CRequest::getInt("id");
+        $items = array();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_MARKS_STUDY_ACTIVITY, "activity_id=".CRequest::getInt("id"))->getItems() as $ar) {
+        	$item = new CActiveModel($ar);
+        	$items[] = $item->ordering;
+        }
+        if (!empty($items)) {
+        	$object->ordering = max($items)+1;
+        } else {
+        	$object->ordering = 1;
+        }
         $this->setData("object", $object);
         /**
          * Генерация меню

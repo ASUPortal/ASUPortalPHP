@@ -14,7 +14,7 @@
             {foreach $plan->goals->getItems() as $object}
                 <tr>
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить цель рабочей программы')) { location.href='workplangoals.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
-                    <td>{counter}</td>
+                    <td>{$object->ordering}</td>
                     <td><a href="workplangoals.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
                     <td>{$object->goal}</td>
                 </tr>

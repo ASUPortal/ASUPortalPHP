@@ -16,7 +16,7 @@
         {foreach $object->loads->getItems() as $load}
             <tr>
                 <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузка')) { location.href='workplancontentloads.php?action=delete&id={$load->getId()}'; }; return false;"></a></td>
-                <td>{counter}</td>
+                <td>{$load->ordering}</td>
                 <td><a href="workplancontentloads.php?action=edit&id={$load->getId()}" class="icon-pencil"></a></td>
                 <td>{$load->loadType}</td>
                 <td>{$load->term->corriculum_discipline_section->title}</td>

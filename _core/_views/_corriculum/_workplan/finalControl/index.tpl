@@ -19,7 +19,7 @@
             {foreach $objects->getItems() as $object}
                 <tr>
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить вид контроля')) { location.href='workplanfinalcontrol.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
-                    <td>{counter}</td>
+                    <td>{$object->ordering}</td>
                     <td><a href="workplanfinalcontrol.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
                     <td>{$object->term->corriculum_discipline_section->title}</td>
                     <td>{$object->controlType}</td>

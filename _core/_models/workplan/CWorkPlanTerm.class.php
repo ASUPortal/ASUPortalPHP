@@ -30,7 +30,8 @@ class CWorkPlanTerm extends CActiveModel{
 
     public function attributeLabels() {
         return array(
-            "number" => "Номер семестра"
+            "number" => "Номер семестра",
+            "ordering" => "Порядковый номер"
         );
     }
 

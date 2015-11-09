@@ -26,7 +26,8 @@ class CWorkPlanContentSectionLoadTopic extends CActiveModel{
     public function attributeLabels() {
         return array(
             "title" => "Тема",
-            "value" => "Число часов"
+            "value" => "Число часов",
+            "ordering" => "Порядковый номер"
         );
     }
 

@@ -13,7 +13,8 @@ class CWorkPlanTask extends CActiveModel{
 
     public function attributeLabels() {
         return array(
-            "task" => "Задача"
+            "task" => "Задача",
+            "ordering" => "Порядковый номер"
         );
     }
 

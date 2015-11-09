@@ -6,10 +6,12 @@
     {if ($objects->getCount() == 0)}
         Нет объектов для отображения
     {else}
+    	<form action="workplancontentloads.php" method="post" id="mainView">
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
                 <tr>
                     <th width="16">&nbsp;</th>
+                    <th width="16">{CHtml::activeViewGroupSelect("id", $objects->getFirstItem(), true)}</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
                     <th>{CHtml::tableOrder("load_type_id", $objects->getFirstItem())}</th>
@@ -22,7 +24,8 @@
             {foreach $objects->getItems() as $object}
                 <tr>
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузка')) { location.href='workplancontentloads.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
-                    <td>{counter}</td>
+                    <td>{CHtml::activeViewGroupSelect("id", $object)}</td>
+                    <td>{$object->ordering}</td>
                     <td><a href="workplancontentloads.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
                     <td>{$object->loadType}</td>
                     <td>{$object->term->corriculum_discipline_section->title}</td>
@@ -31,6 +34,7 @@
             {/foreach}
             </tbody>
         </table>
+         </form>
 
         {CHtml::paginator($paginator, "workplancontentloads.php?action=index")}
     {/if}

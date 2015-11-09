@@ -9,7 +9,8 @@ class CWorkPlanMarkStudyActivity extends CActiveModel{
 
     public function attributeLabels() {
         return array(
-            "mark" => "Описание и количество баллов за учебную деятельность"
+            "mark" => "Описание и количество баллов за учебную деятельность",
+            "ordering" => "Порядковый номер"
         );
     }
 

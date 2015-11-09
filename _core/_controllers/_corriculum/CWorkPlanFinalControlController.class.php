@@ -25,7 +25,7 @@ class CWorkPlanFinalControlController extends CBaseController{
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_FINAL_CONTROL." as t")
             ->condition("plan_id=".CRequest::getInt("plan_id"))
-            ->order("t.id asc");
+            ->order("t.ordering asc");
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanFinalControl($ar);
@@ -36,6 +36,11 @@ class CWorkPlanFinalControlController extends CBaseController{
         /**
          * Генерация меню
          */
+        $this->addActionsMenuItem(array(
+        	"title" => "Обновить",
+        	"link" => "workplanfinalcontrol.php?action=index&plan_id=".CRequest::getInt("plan_id"),
+        	"icon" => "actions/view-refresh.png"
+        ));
         $this->addActionsMenuItem(array(
             "title" => "Добавить",
             "link" => "workplanfinalcontrol.php?action=add&id=".CRequest::getInt("plan_id"),
@@ -49,6 +54,16 @@ class CWorkPlanFinalControlController extends CBaseController{
     public function actionAdd() {
         $object = new CWorkPlanFinalControl();
         $object->plan_id = CRequest::getInt("id");
+        $items = array();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_FINAL_CONTROL, "plan_id=".CRequest::getInt("id"))->getItems() as $ar) {
+        	$item = new CActiveModel($ar);
+        	$items[] = $item->ordering;
+        }
+        if (!empty($items)) {
+        	$object->ordering = max($items)+1;
+        } else {
+        	$object->ordering = 1;
+        }
         $this->setData("object", $object);
         /** 
          * Генерация меню

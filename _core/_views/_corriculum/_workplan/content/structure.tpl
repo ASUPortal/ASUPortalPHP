@@ -1,6 +1,7 @@
 {extends file="_core.component.tpl"}
 
 {block name="asu_center"}
+	<h4>Трудоемкость дисциплины по семестрам и видам работ</h4>
     {if $objects->getCount() == 0}
         Нет объектов для отображения
     {else}

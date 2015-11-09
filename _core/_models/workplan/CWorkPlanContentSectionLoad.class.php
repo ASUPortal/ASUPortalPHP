@@ -41,19 +41,22 @@ class CWorkPlanContentSectionLoad extends CActiveModel{
                 "relationPower" => RELATION_HAS_MANY,
                 "storageTable" => TABLE_WORK_PLAN_CONTENT_TOPICS,
                 "storageCondition" => "load_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "targetClass" => "CWorkPlanContentSectionLoadTopic"
+                "targetClass" => "CWorkPlanContentSectionLoadTopic",
+                "managerOrder" => "`ordering` asc"
             ),
             "technologies" => array(
                 "relationPower" => RELATION_HAS_MANY,
                 "storageTable" => TABLE_WORK_PLAN_CONTENT_TECHNOLOGIES,
                 "storageCondition" => "load_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "targetClass" => "CWorkPlanContentSectionLoadTechnology"
+                "targetClass" => "CWorkPlanContentSectionLoadTechnology",
+                "managerOrder" => "`ordering` asc"
             ),
             "selfEducations" => array(
                 "relationPower" => RELATION_HAS_MANY,
                 "storageTable" => TABLE_WORK_PLAN_SELFEDUCATION,
                 "storageCondition" => "load_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "targetClass" => "CWorkPlanSelfEducationBlock"
+                "targetClass" => "CWorkPlanSelfEducationBlock",
+                "managerOrder" => "`ordering` asc"
             )
         );
     }
@@ -63,7 +66,8 @@ class CWorkPlanContentSectionLoad extends CActiveModel{
         return array(
             "load_type_id" => "Вид нагрузки",
             "term_id" => "Семестр",
-            "value" => "Число часов"
+            "value" => "Число часов",
+            "ordering" => "Порядковый номер"
         );
     }
 

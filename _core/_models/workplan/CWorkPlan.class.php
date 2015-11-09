@@ -73,14 +73,16 @@ class CWorkPlan extends CActiveModel {
                 "storageProperty" => "_goals",
                 "storageTable" => TABLE_WORK_PLAN_GOALS,
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "targetClass" => "CWorkPlanGoal"
+                "targetClass" => "CWorkPlanGoal",
+                "managerOrder" => "`ordering` asc"
             ),
             "tasks" => array(
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_tasks",
                 "storageTable" => TABLE_WORK_PLAN_TASKS,
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "targetClass" => "CWorkPlanTask"
+                "targetClass" => "CWorkPlanTask",
+                "managerOrder" => "`ordering` asc"
             ),
             "competentions" => array(
                 "relationPower" => RELATION_HAS_MANY,
@@ -122,7 +124,8 @@ class CWorkPlan extends CActiveModel {
                 "storageProperty" => "_terms",
                 "storageTable" => TABLE_WORK_PLAN_TERMS,
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "targetClass" => "CWorkPlanTerm"
+                "targetClass" => "CWorkPlanTerm",
+                "managerOrder" => "`ordering` asc"
             ),
             "projectThemes" => array(
                 "relationPower" => RELATION_HAS_MANY,
@@ -143,7 +146,8 @@ class CWorkPlan extends CActiveModel {
                 "relationPower" => RELATION_HAS_MANY,
                 "storageTable" => TABLE_WORK_PLAN_SELFEDUCATION,
                 "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "targetClass" => "CWorkPlanSelfEducationBlock"
+                "targetClass" => "CWorkPlanSelfEducationBlock",
+                "managerOrder" => "`ordering` asc"
             ),
             "department" => array(
                 "relationPower" => RELATION_HAS_ONE,
@@ -244,7 +248,8 @@ class CWorkPlan extends CActiveModel {
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_FINAL_CONTROL,
         		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-        		"targetClass" => "CWorkPlanFinalControl"
+        		"targetClass" => "CWorkPlanFinalControl",
+                "managerOrder" => "`ordering` asc"
         	),
         	"questions" => array(
         		"relationPower" => RELATION_HAS_MANY,
@@ -531,14 +536,15 @@ class CWorkPlan extends CActiveModel {
     		$newGoal = $goal->copy();
     		$newGoal->plan_id = $newPlan->getId();
     		$newGoal->save();
-    	}
-    	/**
-    	 * Клонируем задачи рабочей программы
-    	 */
-    	foreach ($this->tasks->getItems() as $task) {
-    		$newTask = $task->copy();
-    		$newTask->plan_id = $newPlan->getId();
-    		$newTask->save();
+    		/**
+    		 * Клонируем задачи целей рабочей программы
+    		 */
+    		foreach ($goal->tasks->getItems() as $task) {
+    			$newTask = $task->copy();
+    			$newTask->plan_id = $newPlan->getId();
+    			$newTask->goal_id = $newGoal->getId();
+    			$newTask->save();
+    		}
     	}
     	/**
     	 * Клонируем компетенции рабочей программы

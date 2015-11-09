@@ -24,8 +24,8 @@ class CWorkPlanTermsController extends CBaseController{
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_TERMS." as t")
-            ->order("t.id asc")
-            ->condition("plan_id=".CRequest::getInt("plan_id"));;
+            ->order("t.ordering asc")
+            ->condition("plan_id=".CRequest::getInt("plan_id"));
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanTerm($ar);
@@ -38,8 +38,12 @@ class CWorkPlanTermsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(array(
             "title" => "Обновить",
-            "link" => "workplanterms.php?action=update&plan_id=".CRequest::getInt("plan_id"),
+            "link" => "workplanterms.php?action=index&plan_id=".CRequest::getInt("plan_id"),
             "icon" => "actions/view-refresh.png"
+        ), array(
+            "title" => "Загрузить из дисциплины",
+            "link" => "workplanterms.php?action=update&plan_id=".CRequest::getInt("plan_id"),
+            "icon" => "actions/format-indent-more.png"
         ), array(
             "title" => "Добавить семестр",
             "link" => "workplanterms.php?action=add&id=".CRequest::getInt("plan_id"),
@@ -53,6 +57,16 @@ class CWorkPlanTermsController extends CBaseController{
     public function actionAdd() {
         $object = new CWorkPlanTerm();
         $object->plan_id = CRequest::getInt("id");
+        $items = array();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_TERMS, "plan_id=".CRequest::getInt("id"))->getItems() as $ar) {
+        	$item = new CActiveModel($ar);
+        	$items[] = $item->ordering;
+        }
+        if (!empty($items)) {
+        	$object->ordering = max($items)+1;
+        } else {
+        	$object->ordering = 1;
+        }
         $this->setData("object", $object);
         /**
          * Генерация меню

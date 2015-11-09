@@ -15,7 +15,7 @@
         {foreach $object->topics->getItems() as $topic}
             <tr>
                 <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить тема')) { location.href='workplancontenttopics.php?action=delete&id={$topic->getId()}'; }; return false;"></a></td>
-                <td>{counter}</td>
+                <td>{$topic->ordering}</td>
                 <td><a href="workplancontenttopics.php?action=edit&id={$topic->getId()}" class="icon-pencil"></a></td>
                 <td>{$topic->title}</td>
                 <td>{$topic->value}</td>

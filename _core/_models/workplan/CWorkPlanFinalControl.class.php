@@ -29,7 +29,8 @@ class CWorkPlanFinalControl extends CActiveModel{
     public function attributeLabels() {
         return array(
             "control_type_id" => "Вид итогового контроля",
-            "term_id" => "Семестр"
+            "term_id" => "Семестр",
+            "ordering" => "Порядковый номер"
         );
     }
 

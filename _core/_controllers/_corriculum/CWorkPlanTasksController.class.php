@@ -49,6 +49,16 @@ class CWorkPlanTasksController extends CBaseController{
         $goal = CBaseManager::getWorkPlanGoal(CRequest::getInt("id"));
         $object->goal_id = $goal->getId();
         $object->plan_id = $goal->plan->getId();
+        $items = array();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_TASKS, "goal_id=".CRequest::getInt("id"))->getItems() as $ar) {
+        	$item = new CActiveModel($ar);
+        	$items[] = $item->ordering;
+        }
+        if (!empty($items)) {
+        	$object->ordering = max($items)+1;
+        } else {
+        	$object->ordering = 1;
+        }
         $this->setData("object", $object);
         /**
          * Генерация меню
