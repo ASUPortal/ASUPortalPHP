@@ -137,29 +137,27 @@ class CWorkPlanContentSectionLoadsController extends CBaseController{
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("id"));
         if (!is_null($object)) {
-        	$section = $object->section_id;
-        	$item = CBaseManager::getWorkPlanContentSection($section);
+        	$section = $object->section;
         	$object->remove();
         	$order = 1;
         	foreach ($item->loads as $load) {
         		$load->ordering = $order++;
         		$load->save();
         	}
-        	$this->redirect("workplancontentloads.php?action=index&section_id=".$section);
+        	$this->redirect("workplancontentloads.php?action=index&section_id=".$section->getId());
         }
         $items = CRequest::getArray("selectedInView");
-        $section = CRequest::getInt("section_id");
+        $section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("section_id"));
         foreach ($items as $id){
         	$object = CBaseManager::getWorkPlanContentSectionLoad($id);
         	$object->remove();
         }
-        $item = CBaseManager::getWorkPlanContentSection($section);
         $order = 1;
-        foreach ($item->loads as $load) {
+        foreach ($section->loads as $load) {
         	$load->ordering = $order++;
         	$load->save();
         }
-        $this->redirect("workplancontentloads.php?action=index&section_id=".$section);
+        $this->redirect("workplancontentloads.php?action=index&section_id=".$section->getId());
     }
     public function actionSave() {
         $object = new CWorkPlanContentSectionLoad();

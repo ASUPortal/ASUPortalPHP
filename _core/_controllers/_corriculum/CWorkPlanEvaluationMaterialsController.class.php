@@ -80,15 +80,14 @@ protected $_isComponent = true;
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanEvaluationMaterial(CRequest::getInt("id"));
-        $plan = $object->plan_id;
-        $item = CWorkPlanManager::getWorkplan($plan);
+        $plan = $object->plan;
         $object->remove();
         $order = 1;
-        foreach ($item->materialsOfEvaluation as $materialsOfEvaluation) {
+        foreach ($plan->materialsOfEvaluation as $materialsOfEvaluation) {
         	$materialsOfEvaluation->ordering = $order++;
         	$materialsOfEvaluation->save();
         }
-        $this->redirect("workplanevaluationmaterials.php?action=index&plan_id=".$plan);
+        $this->redirect("workplanevaluationmaterials.php?action=index&plan_id=".$plan->getId());
     }
     public function actionSave() {
         $object = new CWorkPlanEvaluationMaterial();

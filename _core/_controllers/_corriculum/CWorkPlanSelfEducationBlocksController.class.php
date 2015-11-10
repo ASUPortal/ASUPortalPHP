@@ -83,29 +83,27 @@ class CWorkPlanSelfEducationBlocksController extends CBaseController{
     public function actionDelete() {
     	$object = CBaseManager::getWorkPlanSelfEducationBlock(CRequest::getInt("id"));
     	if (!is_null($object)) {
-    		$load = $object->load_id;
-    		$item = CBaseManager::getWorkPlanContentSectionLoad($load);
+    		$load = $object->load;
     		$object->remove();
     		$order = 1;
-    		foreach ($item->selfEducations as $selfEdu) {
+    		foreach ($load->selfEducations as $selfEdu) {
     			$selfEdu->ordering = $order++;
     			$selfEdu->save();
     		}
-    		$this->redirect("workplancontentloads.php?action=edit&id=".$load);
+    		$this->redirect("workplancontentloads.php?action=edit&id=".$load->getId());
     	}
     	$items = CRequest::getArray("selectedInView");
-    	$load = CRequest::getInt("load_id");
+    	$load = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("load_id"));
     	foreach ($items as $id){
     		$object = CBaseManager::getWorkPlanSelfEducationBlock($id);
     		$object->remove();
     	}
-    	$item = CBaseManager::getWorkPlanContentSectionLoad($load);
     	$order = 1;
-    	foreach ($item->selfEducations as $selfEdu) {
+    	foreach ($load->selfEducations as $selfEdu) {
     		$selfEdu->ordering = $order++;
     		$selfEdu->save();
     	}
-    	$this->redirect("workplancontentloads.php?action=edit&id=".$load);
+    	$this->redirect("workplancontentloads.php?action=edit&id=".$load->getId());
     }
     public function actionSave() {
         $object = new CWorkPlanSelfEducationBlock();

@@ -87,28 +87,27 @@ protected $_isComponent = true;
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanCriteriaOfEvaluation(CRequest::getInt("id"));
-        $plan = $object->plan_id;
+        $plan = $object->plan;
         $type = $object->type;
-        $item = CWorkPlanManager::getWorkplan($plan);
         $object->remove();
         $order = 1;
         if ($object->type == 1) {
-        	foreach ($item->criteriaExamOfEvaluation as $criteriaExamOfEvaluation) {
+        	foreach ($plan->criteriaExamOfEvaluation as $criteriaExamOfEvaluation) {
         		$criteriaExamOfEvaluation->ordering = $order++;
         		$criteriaExamOfEvaluation->save();
         	}
         } elseif($object->type == 2) {
-        	foreach ($item->criteriaCreditOfEvaluation as $criteriaCreditOfEvaluation) {
+        	foreach ($plan->criteriaCreditOfEvaluation as $criteriaCreditOfEvaluation) {
         		$criteriaCreditOfEvaluation->ordering = $order++;
         		$criteriaCreditOfEvaluation->save();
         	}
         } elseif($object->type == 3) {
-        	foreach ($item->criteriaMaterialsOfEvaluation as $criteriaMaterialsOfEvaluation) {
+        	foreach ($plan->criteriaMaterialsOfEvaluation as $criteriaMaterialsOfEvaluation) {
         		$criteriaMaterialsOfEvaluation->ordering = $order++;
         		$criteriaMaterialsOfEvaluation->save();
         	}
         }
-        $this->redirect("workplancriteriaofevaluation.php?action=index&plan_id=".$plan."&type=".$type);
+        $this->redirect("workplancriteriaofevaluation.php?action=index&plan_id=".$plan->getId()."&type=".$type);
     }
     public function actionSave() {
         $object = new CWorkPlanCriteriaOfEvaluation();

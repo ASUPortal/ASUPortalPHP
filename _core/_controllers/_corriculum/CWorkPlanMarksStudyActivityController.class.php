@@ -88,15 +88,14 @@ public function actionIndex() {
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanMarkStudyActivity(CRequest::getInt("id"));
-        $activity = $object->activity_id;
-        $item = CBaseManager::getWorkPlanControlTypes($activity);
+        $activity = $object->activity;
         $object->remove();
         $order = 1;
-        foreach ($item->marks as $mark) {
+        foreach ($activity->marks as $mark) {
         	$mark->ordering = $order++;
         	$mark->save();
         }
-        $this->redirect("workplanmarksstudyactivity.php?action=index&id=".$activity);
+        $this->redirect("workplanmarksstudyactivity.php?action=index&id=".$activity->getId());
     }
     public function actionSave() {
         $object = new CWorkPlanMarkStudyActivity();

@@ -118,15 +118,14 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanFundMarkType(CRequest::getInt("id"));
-        $section = $object->section_id;
-        $item = CBaseManager::getWorkPlanContentSection($section);
+        $section = $object->section;
         $object->remove();
         $order = 1;
-        foreach ($item->fundMarkTypes as $fundMarkType) {
+        foreach ($section->fundMarkTypes as $fundMarkType) {
         	$fundMarkType->ordering = $order++;
         	$fundMarkType->save();
         }
-        $this->redirect("workplanfundmarktypes.php?action=index&id=".$section);
+        $this->redirect("workplanfundmarktypes.php?action=index&id=".$section->getId());
     }
     public function actionSave() {
         $object = new CWorkPlanFundMarkType();

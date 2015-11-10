@@ -83,15 +83,14 @@ class CWorkPlanMarkTypesController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanMarkType(CRequest::getInt("id"));
-        $plan = $object->plan_id;
-        $item = CWorkPlanManager::getWorkplan($plan);
+        $plan = $object->plan;
         $object->remove();
         $order = 1;
-        foreach ($item->markTypes as $markType) {
+        foreach ($plan->markTypes as $markType) {
         	$markType->ordering = $order++;
         	$markType->save();
         }
-        $this->redirect("workplanmarktypes.php?action=index&plan_id=".$plan);
+        $this->redirect("workplanmarktypes.php?action=index&plan_id=".$plan->getId());
     }
     public function actionSave() {
         $object = new CWorkPlanMarkType();

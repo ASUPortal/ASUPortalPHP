@@ -88,15 +88,14 @@ class CWorkPlanControlTypesController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanControlTypes(CRequest::getInt("id"));
-        $section = $object->section_id;
-        $item = CBaseManager::getWorkPlanContentSection($section);
+        $section = $object->section;
         $object->remove();
         $order = 1;
-        foreach ($item->controlTypes as $controlType) {
+        foreach ($section->controlTypes as $controlType) {
         	$controlType->ordering = $order++;
         	$controlType->save();
         }
-        $this->redirect("workplantypescontrol.php?action=index&id=".$section);
+        $this->redirect("workplantypescontrol.php?action=index&id=".$section->getId());
     }
     public function actionSave() {
         $object = new CWorkPlanControlTypes();

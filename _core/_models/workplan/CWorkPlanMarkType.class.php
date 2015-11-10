@@ -42,6 +42,11 @@ class CWorkPlanMarkType extends CActiveModel{
                 "leftCondition" => "mark_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
                 "rightKey" => "place_id",
                 "targetClass" => "CTerm"
+            ),
+            "plan" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageField" => "plan_id",
+                "targetClass" => "CWorkPlan"
             )
         );
     }

@@ -93,15 +93,14 @@ class CWorkPlanGoalsController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanGoal(CRequest::getInt("id"));
-        $plan = $object->plan_id;
-        $item = CWorkPlanManager::getWorkplan($plan);
+        $plan = $object->plan;
         $object->remove();
         $order = 1;
-        foreach ($item->goals as $goal) {
+        foreach ($plan->goals as $goal) {
         	$goal->ordering = $order++;
         	$goal->save();
         }
-        $this->redirect("workplans.php?action=edit&id=".$plan);
+        $this->redirect("workplans.php?action=edit&id=".$plan->getId());
     }
     public function actionSave() {
         $object = new CWorkPlanGoal();

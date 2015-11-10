@@ -22,7 +22,12 @@ class CWorkPlanFinalControl extends CActiveModel{
                 "storageProperty" => "_controlType",
                 "storageField" => "control_type_id",
                 "targetClass" => "CTerm"
-            )
+            ),
+        	"plan" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageField" => "plan_id",
+        		"targetClass" => "CWorkPlan"
+        	)
         );
     }
 
