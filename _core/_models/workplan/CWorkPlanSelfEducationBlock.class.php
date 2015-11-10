@@ -27,7 +27,8 @@ class CWorkPlanSelfEducationBlock extends CActiveModel{
     public function attributeLabels() {
         return array(
             "question_title" => "Вопрос",
-            "question_hours" => "Количество часов"
+            "question_hours" => "Количество часов",
+            "ordering" => "Порядковый номер"
         );
     }
 

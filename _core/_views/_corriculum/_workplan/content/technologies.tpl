@@ -7,6 +7,7 @@
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
             <tr>
+            	<th>#</th>
                 <th>Семестр</th>
                 <th>Вид занятия</th>
                 <th>Используемые интерактивные образовательные технологии</th>
@@ -16,6 +17,7 @@
             <tbody>
             {foreach $objects->getItems() as $object}
                 <tr>
+                	<td>{$object->ordering}</td>
                     <td>{$object->load->term->corriculum_discipline_section->title}</td>
                     <td>{$object->load->loadType}</td>
                     <td>{$object->technology}</td>

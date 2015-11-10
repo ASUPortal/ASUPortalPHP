@@ -16,7 +16,7 @@
             <tbody>
             {foreach $objects->getItems() as $object}
                 <tr>
-                    <td>{counter}</td>
+                    <td>{$object->ordering}</td>
                     <td>{$object->load->section->sectionIndex}</td>
                     <td>{$object->title}</td>
                     <td>{$object->value}</td>

@@ -14,7 +14,7 @@
         {foreach $object->tasks->getItems() as $task}
             <tr>
                 <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить задача рабочей программы')) { location.href='workplantasks.php?action=delete&id={$task->getId()}'; }; return false;"></a></td>
-                <td>{counter}</td>
+                <td>{$task->ordering}</td>
                 <td><a href="workplantasks.php?action=edit&id={$task->getId()}" class="icon-pencil"></a></td>
                 <td>{$task->task}</td>
             </tr>

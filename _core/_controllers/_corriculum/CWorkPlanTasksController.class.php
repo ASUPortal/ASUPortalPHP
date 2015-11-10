@@ -49,6 +49,7 @@ class CWorkPlanTasksController extends CBaseController{
         $goal = CBaseManager::getWorkPlanGoal(CRequest::getInt("id"));
         $object->goal_id = $goal->getId();
         $object->plan_id = $goal->plan->getId();
+        $object->ordering = $goal->tasks->getCount() + 1;
         $this->setData("object", $object);
         /**
          * Генерация меню

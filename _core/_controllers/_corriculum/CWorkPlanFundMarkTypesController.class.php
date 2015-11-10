@@ -19,14 +19,14 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-    	$fund = CBaseManager::getWorkPlanFundMarkType(CRequest::getInt("id"));
+    	$section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
         $set = new CRecordSet();
         $query = new CQuery();
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_FUND_MARK_TYPES." as t")
-            ->order("t.id asc")
-            ->condition("section_id=".CRequest::getInt("id")." and plan_id=".$fund->section->category->plan_id);
+            ->order("t.ordering asc")
+            ->condition("section_id=".CRequest::getInt("id")." and plan_id=".$section->category->plan_id);
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanFundMarkType($ar);
@@ -37,6 +37,11 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
         /**
          * Генерация меню
          */
+        $this->addActionsMenuItem(array(
+        	"title" => "Обновить",
+        	"link" => "workplanfundmarktypes.php?action=index&id=".CRequest::getInt("id"),
+        	"icon" => "actions/view-refresh.png"
+        ));
         $this->addActionsMenuItem(array(
             "title" => "Добавить",
             "link" => "workplanfundmarktypes.php?action=add&id=".CRequest::getInt("id"),
@@ -76,10 +81,11 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
     	$this->renderView("_corriculum/_workplan/fundMarkTypes/view.tpl");
     }
     public function actionAdd() {
-    	$fund = CBaseManager::getWorkPlanFundMarkType(CRequest::getInt("id"));
+    	$section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
         $object = new CWorkPlanFundMarkType();
         $object->section_id = CRequest::getInt("id");
-        $object->plan_id = $fund->section->category->plan_id;
+        $object->plan_id = $section->category->plan_id;
+        $object->ordering = $section->fundMarkTypes->getCount() + 1;
         $this->setData("object", $object);
         /**
          * Генерация меню

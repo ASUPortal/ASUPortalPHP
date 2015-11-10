@@ -24,7 +24,7 @@ class CWorkPlanControlTypesController extends CBaseController{
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_TYPES_CONTROL." as t")
-            ->order("t.id asc")
+            ->order("t.ordering asc")
             ->condition("section_id=".CRequest::getInt("id"));
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
@@ -36,6 +36,11 @@ class CWorkPlanControlTypesController extends CBaseController{
         /**
          * Генерация меню
          */
+        $this->addActionsMenuItem(array(
+        	"title" => "Обновить",
+        	"link" => "workplantypescontrol.php?action=index&id=".CRequest::getInt("id"),
+        	"icon" => "actions/view-refresh.png"
+        ));
         $this->addActionsMenuItem(array(
             "title" => "Добавить",
             "link" => "workplantypescontrol.php?action=add&id=".CRequest::getInt("id"),
@@ -49,6 +54,8 @@ class CWorkPlanControlTypesController extends CBaseController{
     public function actionAdd() {
         $object = new CWorkPlanControlTypes();
         $object->section_id = CRequest::getInt("id");
+        $section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
+        $object->ordering = $section->controlTypes->getCount() + 1;
         $this->setData("object", $object);
         /**
          * Генерация меню

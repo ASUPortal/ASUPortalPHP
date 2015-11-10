@@ -22,7 +22,7 @@ class CWorkPlanSelfEducationBlocksController extends CBaseController{
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_SELFEDUCATION." as t")
-            ->order("t.id asc")
+            ->order("t.ordering asc")
             ->condition("plan_id=".CRequest::getInt("plan_id"));
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
@@ -49,6 +49,7 @@ class CWorkPlanSelfEducationBlocksController extends CBaseController{
         $load = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("id"));
         $object->load_id = $load->getId();
         $object->plan_id = $load->section->category->plan_id;
+        $object->ordering = $load->selfEducations->getCount() + 1;
         $this->setData("object", $object);
         /**
          * Генерация меню

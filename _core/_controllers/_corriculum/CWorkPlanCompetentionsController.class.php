@@ -43,6 +43,11 @@ class CWorkPlanCompetentionsController extends CBaseController{
         ));
         $this->addActionsMenuItem(array(
         	"title" => "Обновить",
+        	"link" => "workplancompetentions.php?action=index&plan_id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
+        	"icon" => "actions/view-refresh.png"
+        ));
+        $this->addActionsMenuItem(array(
+        	"title" => "Загрузить из дисциплины",
         	"link" => "workplancompetentions.php?action=update&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
         	"icon" => "actions/format-indent-more.png"
         ));

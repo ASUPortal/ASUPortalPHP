@@ -13,6 +13,14 @@
             {CHtml::error("book_id", $object)}
         </div>
     </div>
+    
+	<div class="control-group">
+		{CHtml::activeLabel("ordering", $object)}
+		<div class="controls">
+			{CHtml::activeTextField("ordering", $object)}
+			{CHtml::error("ordering", $object)}
+		</div>
+	</div>
 
     <div class="control-group">
         <div class="controls">

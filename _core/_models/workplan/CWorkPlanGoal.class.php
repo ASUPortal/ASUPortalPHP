@@ -20,7 +20,8 @@ class CWorkPlanGoal extends CActiveModel{
                 "storageProperty" => "_tasks",
                 "storageTable" => TABLE_WORK_PLAN_TASKS,
                 "storageCondition" => "goal_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "targetClass" => "CWorkPlanTask"
+                "targetClass" => "CWorkPlanTask",
+                "managerOrder" => "`ordering` asc"
             ),
             "plan" => array(
                 "relationPower" => RELATION_HAS_ONE,
@@ -32,7 +33,8 @@ class CWorkPlanGoal extends CActiveModel{
 
     public function attributeLabels() {
         return array(
-            "goal" => "Цель"
+            "goal" => "Цель",
+            "ordering" => "Порядковый номер"
         );
     }
 

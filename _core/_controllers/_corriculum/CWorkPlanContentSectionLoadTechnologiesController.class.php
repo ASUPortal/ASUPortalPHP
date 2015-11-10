@@ -23,7 +23,7 @@ class CWorkPlanContentSectionLoadTechnologiesController extends CBaseController{
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_CONTENT_TECHNOLOGIES." as t")
             ->condition("load_id=".CRequest::getInt("load_id"))
-            ->order("t.id asc");
+            ->order("t.ordering asc");
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanContentSectionLoadTechnology($ar);
@@ -52,6 +52,8 @@ class CWorkPlanContentSectionLoadTechnologiesController extends CBaseController{
     public function actionAdd() {
         $object = new CWorkPlanContentSectionLoadTechnology();
         $object->load_id = CRequest::getInt("id");
+        $load = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("id"));
+        $object->ordering = $load->technologies->getCount() + 1;
         $this->setData("object", $object);
         /**
          * Генерация меню

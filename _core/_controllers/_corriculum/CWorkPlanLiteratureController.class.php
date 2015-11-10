@@ -50,6 +50,14 @@ class CWorkPlanLiteratureController extends CBaseController{
         $object = new CWorkPlanLiterature();
         $object->plan_id = CRequest::getInt("plan_id");
         $object->type = CRequest::getInt("type");
+        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
+        if ($object->type == 1) {
+        	$object->ordering = $plan->baseLiterature->getCount() + 1;
+        } elseif($object->type == 2) {
+        	$object->ordering = $plan->additionalLiterature->getCount() + 1;
+        } elseif($object->type == 3) {
+        	$object->ordering = $plan->internetResources->getCount() + 1;
+        }
         $this->setData("object", $object);
         /**
          * Генерация меню

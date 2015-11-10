@@ -15,7 +15,7 @@
         {foreach $object->technologies->getItems() as $technology}
             <tr>
                 <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить образовательные технологии')) { location.href='workplancontenttechnologies.php?action=delete&id={$technology->getId()}'; }; return false;"></a></td>
-                <td>{counter}</td>
+                <td>{$technology->ordering}</td>
                 <td><a href="workplancontenttechnologies.php?action=edit&id={$technology->getId()}" class="icon-pencil"></a></td>
                 <td>{$technology->technology}</td>
                 <td>{$technology->value}</td>

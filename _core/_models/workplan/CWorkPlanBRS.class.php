@@ -31,7 +31,8 @@ class CWorkPlanBRS extends CActiveModel{
             "range" => "Диапазон",
             "mark_id" => "Оценка",
             "is_ok" => "Мера оценки",
-            "comment" => "Комментарий"
+            "comment" => "Комментарий",
+            "ordering" => "Порядковый номер"
         );
     }
 

@@ -27,7 +27,7 @@
             {foreach $objects->getItems() as $object}
                 <tr>
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить вид учебной деятельности')) { location.href='workplantypescontrol.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
-                    <td>{counter}</td>
+                    <td>{$object->ordering}</td>
                     <td><a href="workplantypescontrol.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
                     <td>{$object->type}</td>
                     <td>{$object->section->name}</td>

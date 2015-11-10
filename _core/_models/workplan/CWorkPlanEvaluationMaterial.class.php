@@ -22,7 +22,8 @@ class CWorkPlanEvaluationMaterial extends CActiveModel {
     public function attributeLabels() {
         return array(
             "type_id" => "Тип оценочного материала",
-            "material" => "Оценочные материалы"
+            "material" => "Оценочные материалы",
+            "ordering" => "Порядковый номер"
         );
     }
     protected function validationRules() {

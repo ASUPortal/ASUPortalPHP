@@ -23,7 +23,8 @@ class CWorkPlanAdditionalSupply extends CActiveModel {
 
     public function attributeLabels() {
         return array(
-            "supply_id" => "Дополнительное обеспечение"
+            "supply_id" => "Дополнительное обеспечение",
+            "ordering" => "Порядковый номер"
         );
     }
 

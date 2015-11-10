@@ -15,7 +15,7 @@
         {foreach $object->selfEducations->getItems() as $se}
             <tr>
                 <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить вопрос для самостоятельного изучения')) { location.href='workplanselfeducationblocks.php?action=delete&id={$se->getId()}'; }; return false;"></a></td>
-                <td>{counter}</td>
+                <td>{$se->ordering}</td>
                 <td><a href="workplanselfeducationblocks.php?action=edit&id={$se->getId()}" class="icon-pencil"></a></td>
                 <td>{$se->question_title}</td>
                 <td>{$se->question_hours}</td>
