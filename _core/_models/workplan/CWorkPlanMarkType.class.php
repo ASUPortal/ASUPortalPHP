@@ -51,7 +51,8 @@ class CWorkPlanMarkType extends CActiveModel{
             "type_id" => "Вид контроля",
             "form_id" => "Форма контроля",
             "funds" => "Фонды оценочных средств",
-            "places" => "Место размещения"
+            "places" => "Место размещения",
+            "ordering" => "Порядковый номер"
         );
     }
 

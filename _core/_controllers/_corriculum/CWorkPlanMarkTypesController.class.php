@@ -49,6 +49,8 @@ class CWorkPlanMarkTypesController extends CBaseController{
     public function actionAdd() {
         $object = new CWorkPlanMarkType();
         $object->plan_id = CRequest::getInt("id");
+        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+        $object->ordering = $plan->markTypes->getCount() + 1;
         $this->setData("object", $object);
         /**
          * Генерация меню

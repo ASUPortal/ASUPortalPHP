@@ -57,16 +57,8 @@ class CWorkPlanTermsController extends CBaseController{
     public function actionAdd() {
         $object = new CWorkPlanTerm();
         $object->plan_id = CRequest::getInt("id");
-        $items = array();
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_TERMS, "plan_id=".CRequest::getInt("id"))->getItems() as $ar) {
-        	$item = new CActiveModel($ar);
-        	$items[] = $item->ordering;
-        }
-        if (!empty($items)) {
-        	$object->ordering = max($items)+1;
-        } else {
-        	$object->ordering = 1;
-        }
+        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+        $object->ordering = $plan->terms->getCount() + 1;
         $this->setData("object", $object);
         /**
          * Генерация меню

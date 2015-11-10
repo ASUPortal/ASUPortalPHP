@@ -27,7 +27,8 @@ class CWorkPlanLiterature extends CActiveModel{
     public function attributeLabels() {
         return array(
             "book_id" => "Книга",
-            "type" => "Тип"
+            "type" => "Тип",
+            "ordering" => "Порядковый номер"
         );
     }
 

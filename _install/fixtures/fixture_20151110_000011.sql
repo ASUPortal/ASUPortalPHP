@@ -20,3 +20,16 @@ ALTER TABLE `pl_corriculum_workplan_content_section_load_technologies` ADD `orde
 
 ALTER TABLE `pl_corriculum_workplan_selfeducation` ADD `ordering` INT NOT NULL ;
 
+ALTER TABLE `pl_corriculum_workplan_marktypes` ADD `ordering` INT NOT NULL ;
+
+ALTER TABLE `pl_corriculum_workplan_brs` ADD `ordering` INT NOT NULL ;
+
+ALTER TABLE `pl_corriculum_workplan_criteria_of_evaluation` ADD `ordering` INT NOT NULL ;
+
+ALTER TABLE `pl_corriculum_workplan_evaluation_materials` ADD `ordering` INT NOT NULL ;
+
+ALTER TABLE `pl_corriculum_workplan_literature` ADD `ordering` INT NOT NULL ;
+
+ALTER TABLE `pl_corriculum_workplan_software` ADD `ordering` INT NOT NULL ;
+
+ALTER TABLE `pl_corriculum_workplan_additional_supply` ADD `ordering` INT NOT NULL ;

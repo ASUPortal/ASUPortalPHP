@@ -54,16 +54,8 @@ public function actionIndex() {
     public function actionAdd() {
         $object = new CWorkPlanMarkStudyActivity();
         $object->activity_id = CRequest::getInt("id");
-        $items = array();
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_MARKS_STUDY_ACTIVITY, "activity_id=".CRequest::getInt("id"))->getItems() as $ar) {
-        	$item = new CActiveModel($ar);
-        	$items[] = $item->ordering;
-        }
-        if (!empty($items)) {
-        	$object->ordering = max($items)+1;
-        } else {
-        	$object->ordering = 1;
-        }
+        $controlType = CBaseManager::getWorkPlanControlTypes(CRequest::getInt("id"));
+        $object->ordering = $controlType->marks->getCount() + 1;
         $this->setData("object", $object);
         /**
          * Генерация меню

@@ -12,7 +12,8 @@ class CWorkPlanCriteriaOfEvaluation extends CActiveModel {
     public function attributeLabels() {
         return array(
             "type" => "Тип",
-            "criteria" => "Критерий оценки"
+            "criteria" => "Критерий оценки",
+            "ordering" => "Порядковый номер"
         );
     }
     protected function validationRules() {

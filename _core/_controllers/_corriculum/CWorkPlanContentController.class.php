@@ -99,7 +99,7 @@ class CWorkPlanContentController extends CBaseController{
             ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
             ->condition("category.plan_id = ".$plan->getId())
             ->group("l.load_type_id")
-            ->order("l.ordering");
+            ->order("l.ordering asc");
         $objects = $query->execute();
         $this->setData("objects", $objects);
         $this->setData("terms", $plan->terms);

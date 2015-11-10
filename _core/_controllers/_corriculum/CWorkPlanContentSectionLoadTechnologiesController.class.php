@@ -52,16 +52,8 @@ class CWorkPlanContentSectionLoadTechnologiesController extends CBaseController{
     public function actionAdd() {
         $object = new CWorkPlanContentSectionLoadTechnology();
         $object->load_id = CRequest::getInt("id");
-        $items = array();
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_CONTENT_TECHNOLOGIES, "load_id=".CRequest::getInt("id"))->getItems() as $ar) {
-        	$item = new CActiveModel($ar);
-        	$items[] = $item->ordering;
-        }
-        if (!empty($items)) {
-        	$object->ordering = max($items)+1;
-        } else {
-        	$object->ordering = 1;
-        }
+        $load = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("id"));
+        $object->ordering = $load->technologies->getCount() + 1;
         $this->setData("object", $object);
         /**
          * Генерация меню

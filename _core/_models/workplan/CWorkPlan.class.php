@@ -188,7 +188,8 @@ class CWorkPlan extends CActiveModel {
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_FUND_MARK_TYPES,
         		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-        		"targetClass" => "CWorkPlanFundMarkType"
+        		"targetClass" => "CWorkPlanFundMarkType",
+                "managerOrder" => "`ordering` asc"
         	),
         	"BRS" => array(
         		"relationPower" => RELATION_HAS_MANY,
@@ -200,7 +201,8 @@ class CWorkPlan extends CActiveModel {
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_MARK_TYPES,
         		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-        		"targetClass" => "CWorkPlanMarkType"
+        		"targetClass" => "CWorkPlanMarkType",
+                "managerOrder" => "`ordering` asc"
         	),
         	"literature" => array(
         		"relationPower" => RELATION_HAS_MANY,
@@ -670,6 +672,36 @@ class CWorkPlan extends CActiveModel {
     					$newMark->save();
     				}
     			}
+    			/**
+    			 * Копируем фонд оценочных средств из разделов
+    			 */
+    			foreach ($section->fundMarkTypes->getItems() as $fundMarkType) {
+    				$newFundMarkType = $fundMarkType->copy();
+    				$newFundMarkType->plan_id = $newPlan->getId();
+    				$newFundMarkType->section_id = $newSection->getId();
+    				/**
+    				 * Копируем компетенции из фонда оценочных средств
+    				 * @var CTerm $competention
+    				*/
+    				foreach ($fundMarkType->competentions->getItems() as $competention) {
+    					$newFundMarkType->competentions->add($competention->getId(), $competention->getId());
+    				}
+    				/**
+    				 * Копируем уровни освоения из фонда оценочных средств
+    				 * @var CTerm $level
+    				 */
+    				foreach ($fundMarkType->levels->getItems() as $level) {
+    					$newFundMarkType->levels->add($level->getId(), $level->getId());
+    				}
+    				/**
+    				 * Копируем оценочные средства из фонда оценочных средств
+    				 * @var CTerm $control
+    				 */
+    				foreach ($fundMarkType->controls->getItems() as $control) {
+    					$newFundMarkType->controls->add($control->getId(), $control->getId());
+    				}
+    				$newFundMarkType->save();
+    			}
     		}
     	}
     	/**
@@ -687,35 +719,6 @@ class CWorkPlan extends CActiveModel {
     		$newSelfEducation = $selfEducation->copy();
     		$newSelfEducation->plan_id = $newPlan->getId();
     		$newSelfEducation->save();
-    	}
-    	/**
-    	 * Клонируем фонд оценочных средств рабочей программы
-    	 */
-    	foreach ($this->fundMarkTypes->getItems() as $fundMarkType) {
-    		$newFundMarkType = $fundMarkType->copy();
-    		$newFundMarkType->plan_id = $newPlan->getId();
-    		/**
-    		 * Копируем компетенции из фонда оценочных средств
-    		 * @var CTerm $competention
-    		*/
-    		foreach ($fundMarkType->competentions->getItems() as $competention) {
-    			$newFundMarkType->competentions->add($competention->getId(), $competention->getId());
-    		}
-    		/**
-    		 * Копируем уровни освоения из фонда оценочных средств
-    		 * @var CTerm $level
-    		 */
-    		foreach ($fundMarkType->levels->getItems() as $level) {
-    			$newFundMarkType->levels->add($level->getId(), $level->getId());
-    		}
-    		/**
-    		 * Копируем оценочные средства из фонда оценочных средств
-    		 * @var CTerm $control
-    		 */
-    		foreach ($fundMarkType->controls->getItems() as $control) {
-    			$newFundMarkType->controls->add($control->getId(), $control->getId());
-    		}
-    		$newFundMarkType->save();
     	}
     	/**
     	 * Клонируем балльно-рейтинговую систему рабочей программы

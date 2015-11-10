@@ -66,16 +66,8 @@ class CWorkPlanContentSectionLoadsController extends CBaseController{
     public function actionAdd() {
         $object = new CWorkPlanContentSectionLoad();
         $object->section_id = CRequest::getInt("id");
-        $items = array();
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_CONTENT_LOADS, "section_id=".CRequest::getInt("id"))->getItems() as $ar) {
-        	$item = new CActiveModel($ar);
-        	$items[] = $item->ordering;
-        }
-        if (!empty($items)) {
-        	$object->ordering = max($items)+1;
-        } else {
-        	$object->ordering = 1;
-        }
+        $section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
+        $object->ordering = $section->loads->getCount() + 1;
         $this->setData("object", $object);
         /**
          * Генерация меню

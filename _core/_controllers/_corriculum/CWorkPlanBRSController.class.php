@@ -49,6 +49,8 @@ class CWorkPlanBRSController extends CBaseController{
     public function actionAdd() {
         $object = new CWorkPlanBRS();
         $object->plan_id = CRequest::getInt("id");
+        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+        $object->ordering = $plan->BRS->getCount() + 1;
         $this->setData("object", $object);
         /**
          * Генерация меню

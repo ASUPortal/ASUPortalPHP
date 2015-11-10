@@ -25,7 +25,8 @@ class CWorkPlanSoftware extends CActiveModel {
 
     public function attributeLabels() {
         return array(
-            "software_id" => "Программное обеспечение"
+            "software_id" => "Программное обеспечение",
+            "ordering" => "Порядковый номер"
         );
     }
 

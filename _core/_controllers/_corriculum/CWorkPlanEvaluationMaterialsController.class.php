@@ -46,6 +46,8 @@ protected $_isComponent = true;
     public function actionAdd() {
         $object = new CWorkPlanEvaluationMaterial();
         $object->plan_id = CRequest::getInt("id");
+        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+        $object->ordering = $plan->materialsOfEvaluation->getCount() + 1;
         $this->setData("object", $object);
         /**
          * Генерация меню

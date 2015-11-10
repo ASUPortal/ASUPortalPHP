@@ -47,6 +47,14 @@ protected $_isComponent = true;
         $object = new CWorkPlanCriteriaOfEvaluation();
         $object->plan_id = CRequest::getInt("id");
         $object->type = CRequest::getInt("type");
+        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+        if ($object->type == 1) {
+        	$object->ordering = $plan->criteriaExamOfEvaluation->getCount() + 1;
+        } elseif($object->type == 2) {
+        	$object->ordering = $plan->criteriaCreditOfEvaluation->getCount() + 1;
+        } elseif($object->type == 3) {
+        	$object->ordering = $plan->criteriaMaterialsOfEvaluation->getCount() + 1;
+        }
         $this->setData("object", $object);
         /**
          * Генерация меню
