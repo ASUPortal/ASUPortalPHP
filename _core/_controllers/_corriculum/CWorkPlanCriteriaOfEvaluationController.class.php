@@ -89,7 +89,25 @@ protected $_isComponent = true;
         $object = CBaseManager::getWorkPlanCriteriaOfEvaluation(CRequest::getInt("id"));
         $plan = $object->plan_id;
         $type = $object->type;
+        $item = CWorkPlanManager::getWorkplan($plan);
         $object->remove();
+        $order = 1;
+        if ($object->type == 1) {
+        	foreach ($item->criteriaExamOfEvaluation as $criteriaExamOfEvaluation) {
+        		$criteriaExamOfEvaluation->ordering = $order++;
+        		$criteriaExamOfEvaluation->save();
+        	}
+        } elseif($object->type == 2) {
+        	foreach ($item->criteriaCreditOfEvaluation as $criteriaCreditOfEvaluation) {
+        		$criteriaCreditOfEvaluation->ordering = $order++;
+        		$criteriaCreditOfEvaluation->save();
+        	}
+        } elseif($object->type == 3) {
+        	foreach ($item->criteriaMaterialsOfEvaluation as $criteriaMaterialsOfEvaluation) {
+        		$criteriaMaterialsOfEvaluation->ordering = $order++;
+        		$criteriaMaterialsOfEvaluation->save();
+        	}
+        }
         $this->redirect("workplancriteriaofevaluation.php?action=index&plan_id=".$plan."&type=".$type);
     }
     public function actionSave() {

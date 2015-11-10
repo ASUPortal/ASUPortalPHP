@@ -108,6 +108,27 @@ class CWorkPlanContentSectionLoadsController extends CBaseController{
             "link" => "workplanselfeducationblocks.php?action=add&id=".$object->getId(),
             "icon" => "actions/list-add.png"
         ));
+        $this->addActionsMenuItem(array(
+        	"title" => "Удалить выделенные темы",
+        	"icon" => "actions/edit-delete.png",
+        	"form" => "#mainViewTopics",
+        	"link" => "workplancontenttopics.php?action=delete&load_id=".CRequest::getInt("id"),
+        	"action" => "delete"
+        ));
+        $this->addActionsMenuItem(array(
+        	"title" => "Удалить выделенные технологии",
+        	"icon" => "actions/edit-delete.png",
+        	"form" => "#mainViewTechnologies",
+        	"link" => "workplancontenttechnologies.php?action=delete&load_id=".CRequest::getInt("id"),
+        	"action" => "delete"
+        ));
+        $this->addActionsMenuItem(array(
+        	"title" => "Удалить выделенные вопросы",
+        	"icon" => "actions/edit-delete.png",
+        	"form" => "#mainViewSelfedu",
+        	"link" => "workplanselfeducationblocks.php?action=delete&load_id=".CRequest::getInt("id"),
+        	"action" => "delete"
+        ));
         /**
          * Отображение представления
          */
@@ -117,7 +138,13 @@ class CWorkPlanContentSectionLoadsController extends CBaseController{
         $object = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("id"));
         if (!is_null($object)) {
         	$section = $object->section_id;
+        	$item = CBaseManager::getWorkPlanContentSection($section);
         	$object->remove();
+        	$order = 1;
+        	foreach ($item->loads as $load) {
+        		$load->ordering = $order++;
+        		$load->save();
+        	}
         	$this->redirect("workplancontentloads.php?action=index&section_id=".$section);
         }
         $items = CRequest::getArray("selectedInView");
@@ -125,6 +152,12 @@ class CWorkPlanContentSectionLoadsController extends CBaseController{
         foreach ($items as $id){
         	$object = CBaseManager::getWorkPlanContentSectionLoad($id);
         	$object->remove();
+        }
+        $item = CBaseManager::getWorkPlanContentSection($section);
+        $order = 1;
+        foreach ($item->loads as $load) {
+        	$load->ordering = $order++;
+        	$load->save();
         }
         $this->redirect("workplancontentloads.php?action=index&section_id=".$section);
     }

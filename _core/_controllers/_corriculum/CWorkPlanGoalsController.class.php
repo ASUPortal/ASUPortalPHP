@@ -79,6 +79,13 @@ class CWorkPlanGoalsController extends CBaseController{
             "link" => "workplantasks.php?action=add&id=".$object->getId(),
             "icon" => "actions/list-add.png"
         ));
+        $this->addActionsMenuItem(array(
+        	"title" => "Удалить выделенные задачи",
+        	"icon" => "actions/edit-delete.png",
+        	"form" => "#mainViewTasks",
+        	"link" => "workplantasks.php?action=delete&goal_id=".CRequest::getInt("id"),
+        	"action" => "delete"
+        ));
         /**
          * Отображение представления
          */
@@ -87,7 +94,13 @@ class CWorkPlanGoalsController extends CBaseController{
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanGoal(CRequest::getInt("id"));
         $plan = $object->plan_id;
+        $item = CWorkPlanManager::getWorkplan($plan);
         $object->remove();
+        $order = 1;
+        foreach ($item->goals as $goal) {
+        	$goal->ordering = $order++;
+        	$goal->save();
+        }
         $this->redirect("workplans.php?action=edit&id=".$plan);
     }
     public function actionSave() {

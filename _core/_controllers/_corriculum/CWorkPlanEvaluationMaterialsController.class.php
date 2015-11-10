@@ -81,7 +81,13 @@ protected $_isComponent = true;
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanEvaluationMaterial(CRequest::getInt("id"));
         $plan = $object->plan_id;
+        $item = CWorkPlanManager::getWorkplan($plan);
         $object->remove();
+        $order = 1;
+        foreach ($item->materialsOfEvaluation as $materialsOfEvaluation) {
+        	$materialsOfEvaluation->ordering = $order++;
+        	$materialsOfEvaluation->save();
+        }
         $this->redirect("workplanevaluationmaterials.php?action=index&plan_id=".$plan);
     }
     public function actionSave() {

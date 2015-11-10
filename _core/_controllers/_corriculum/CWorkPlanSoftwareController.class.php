@@ -84,7 +84,13 @@ class CWorkPlanSoftwareController extends CBaseController{
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanSoftware(CRequest::getInt("id"));
         $plan = $object->plan_id;
+        $item = CWorkPlanManager::getWorkplan($plan);
         $object->remove();
+        $order = 1;
+        foreach ($item->software as $soft) {
+        	$soft->ordering = $order++;
+        	$soft->save();
+        }
         $this->redirect("workplansoftware.php?action=index&plan_id=".$plan);
     }
     public function actionSave() {

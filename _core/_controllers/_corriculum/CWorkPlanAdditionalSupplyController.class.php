@@ -84,7 +84,13 @@ class CWorkPlanAdditionalSupplyController extends CBaseController{
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanAdditionalSupply(CRequest::getInt("id"));
         $plan = $object->plan_id;
+		$item = CWorkPlanManager::getWorkplan($plan);
         $object->remove();
+        $order = 1;
+        foreach ($item->additionalSupply as $add) {
+        	$add->ordering = $order++;
+        	$add->save();
+        }
         $this->redirect("workplansupplies.php?action=index&plan_id=".$plan);
     }
     public function actionSave() {

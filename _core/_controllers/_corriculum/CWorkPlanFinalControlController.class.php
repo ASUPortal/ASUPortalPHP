@@ -89,7 +89,13 @@ class CWorkPlanFinalControlController extends CBaseController{
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanFinalControl(CRequest::getInt("id"));
         $plan = $object->plan_id;
+        $item = CWorkPlanManager::getWorkplan($plan);
         $object->remove();
+        $order = 1;
+        foreach ($item->finalControls as $finalControl) {
+        	$finalControl->ordering = $order++;
+        	$finalControl->save();
+        }
         $this->redirect("workplanfinalcontrol.php?action=index&plan_id=".$plan);
     }
     public function actionSave() {
