@@ -1,10 +1,12 @@
 {if ($object->topics->getCount() == 0)}
     Нет объектов для отображения
 {else}
+	<form action="workplancontenttopics.php" method="post" id="mainViewTopics">
     <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
         <tr>
             <th width="16">&nbsp;</th>
+            <th width="16">{CHtml::activeViewGroupSelect("id", $object->topics->getFirstItem(), true)}</th>
             <th width="16">#</th>
             <th width="16">&nbsp;</th>
             <th>{CHtml::tableOrder("title", $object->topics->getFirstItem())}</th>
@@ -15,6 +17,7 @@
         {foreach $object->topics->getItems() as $topic}
             <tr>
                 <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить тема')) { location.href='workplancontenttopics.php?action=delete&id={$topic->getId()}'; }; return false;"></a></td>
+                <td>{CHtml::activeViewGroupSelect("id", $topic)}</td>
                 <td>{$topic->ordering}</td>
                 <td><a href="workplancontenttopics.php?action=edit&id={$topic->getId()}" class="icon-pencil"></a></td>
                 <td>{$topic->title}</td>
@@ -23,4 +26,5 @@
         {/foreach}
         </tbody>
     </table>
+    </form>
 {/if}

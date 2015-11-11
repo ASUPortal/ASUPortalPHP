@@ -134,9 +134,14 @@ class CWorkPlanContentCategoriesControllers extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanContentCategory(CRequest::getInt("id"));
-        $plan = $object->plan_id;
+        $plan = $object->plan;
         $object->remove();
-        $this->redirect("workplans.php?action=edit&id=".$plan);
+        $order = 1;
+        foreach ($plan->categories as $category) {
+        	$category->order = $order++;
+        	$category->save();
+        }
+        $this->redirect("workplans.php?action=edit&id=".$plan->getId());
     }
     public function actionSave() {
         $object = new CWorkPlanContentCategory();

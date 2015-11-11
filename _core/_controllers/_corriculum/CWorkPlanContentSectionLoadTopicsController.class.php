@@ -85,10 +85,29 @@ class CWorkPlanContentSectionLoadTopicsController extends CBaseController {
         $this->renderView("_corriculum/_workplan/contentTopic/edit.tpl");
     }
     public function actionDelete() {
-        $object = CBaseManager::getWorkPlanContentSectionLoadTopic(CRequest::getInt("id"));
-        $load = $object->load_id;
-        $object->remove();
-        $this->redirect("workplancontentloads.php?action=edit&id=".$load);
+    	$object = CBaseManager::getWorkPlanContentSectionLoadTopic(CRequest::getInt("id"));
+    	if (!is_null($object)) {
+    		$load = $object->load;
+    		$object->remove();
+    		$order = 1;
+    		foreach ($load->topics as $topic) {
+    			$topic->ordering = $order++;
+    			$topic->save();
+    		}
+    		$this->redirect("workplancontentloads.php?action=edit&id=".$load->getId());
+    	}
+    	$items = CRequest::getArray("selectedInView");
+    	$load = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("load_id"));
+    	foreach ($items as $id){
+    		$object = CBaseManager::getWorkPlanContentSectionLoadTopic($id);
+    		$object->remove();
+    	}
+    	$order = 1;
+    	foreach ($load->topics as $topic) {
+    		$topic->ordering = $order++;
+    		$topic->save();
+    	}
+    	$this->redirect("workplancontentloads.php?action=edit&id=".$load->getId());
     }
     public function actionSave() {
         $object = new CWorkPlanContentSectionLoadTopic();

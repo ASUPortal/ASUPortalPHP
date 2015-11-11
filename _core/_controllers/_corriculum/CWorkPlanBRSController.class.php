@@ -83,9 +83,14 @@ class CWorkPlanBRSController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanBRS(CRequest::getInt("id"));
-        $plan = $object->plan_id;
+        $plan = $object->plan;
         $object->remove();
-        $this->redirect("workplanbrs.php?action=index&plan_id=".$plan);
+        $order = 1;
+        foreach ($plan->BRS as $brs) {
+        	$brs->ordering = $order++;
+        	$brs->save();
+        }
+        $this->redirect("workplanbrs.php?action=index&plan_id=".$plan->getId());
     }
     public function actionSave() {
         $object = new CWorkPlanBRS();

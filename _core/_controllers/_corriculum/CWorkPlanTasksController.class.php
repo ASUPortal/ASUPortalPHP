@@ -81,10 +81,29 @@ class CWorkPlanTasksController extends CBaseController{
         $this->renderView("_corriculum/_workplan/task/edit.tpl");
     }
     public function actionDelete() {
-        $object = CBaseManager::getWorkPlanTask(CRequest::getInt("id"));
-        $goal = $object->goal_id;
-        $object->remove();
-        $this->redirect("workplangoals.php?action=edit&id=".$goal);
+    	$object = CBaseManager::getWorkPlanTask(CRequest::getInt("id"));
+    	if (!is_null($object)) {
+    		$goal = $object->goal;
+    		$object->remove();
+    		$order = 1;
+    		foreach ($goal->tasks as $task) {
+    			$task->ordering = $order++;
+    			$task->save();
+    		}
+    		$this->redirect("workplangoals.php?action=edit&id=".$goal->getId());
+    	}
+    	$items = CRequest::getArray("selectedInView");
+    	$goal = CBaseManager::getWorkPlanGoal(CRequest::getInt("goal_id"));
+    	foreach ($items as $id){
+    		$object = CBaseManager::getWorkPlanTask($id);
+    		$object->remove();
+    	}
+    	$order = 1;
+    	foreach ($goal->tasks as $task) {
+    		$task->ordering = $order++;
+    		$task->save();
+    	}
+    	$this->redirect("workplangoals.php?action=edit&id=".$goal->getId());
     }
     public function actionSave() {
         $object = new CWorkPlanTask();

@@ -1,10 +1,12 @@
 {if ($object->technologies->getCount() == 0)}
     Нет объектов для отображения
 {else}
+	<form action="workplancontenttechnologies.php" method="post" id="mainViewTechnologies">
     <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
         <tr>
             <th width="16">&nbsp;</th>
+            <th width="16">{CHtml::activeViewGroupSelect("id", $object->technologies->getFirstItem(), true)}</th>
             <th width="16">#</th>
             <th width="16">&nbsp;</th>
             <th>{CHtml::tableOrder("technology_id", $object->technologies->getFirstItem())}</th>
@@ -15,6 +17,7 @@
         {foreach $object->technologies->getItems() as $technology}
             <tr>
                 <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить образовательные технологии')) { location.href='workplancontenttechnologies.php?action=delete&id={$technology->getId()}'; }; return false;"></a></td>
+                <td>{CHtml::activeViewGroupSelect("id", $technology)}</td>
                 <td>{$technology->ordering}</td>
                 <td><a href="workplancontenttechnologies.php?action=edit&id={$technology->getId()}" class="icon-pencil"></a></td>
                 <td>{$technology->technology}</td>
@@ -23,4 +26,5 @@
         {/foreach}
         </tbody>
     </table>
+    </form>
 {/if}

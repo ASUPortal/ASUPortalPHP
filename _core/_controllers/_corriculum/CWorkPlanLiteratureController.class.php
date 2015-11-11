@@ -90,10 +90,27 @@ class CWorkPlanLiteratureController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanLiterature(CRequest::getInt("id"));
-        $plan = $object->plan_id;
+        $plan = $object->plan;
         $type = $object->type;
         $object->remove();
-        $this->redirect("workplanliterature.php?action=index&plan_id=".$plan."&type=".$type);
+        $order = 1;
+        if ($object->type == 1) {
+        	foreach ($plan->baseLiterature as $baseLiterature) {
+        		$baseLiterature->ordering = $order++;
+        		$baseLiterature->save();
+        	}
+        } elseif($object->type == 2) {
+        	foreach ($plan->additionalLiterature as $additionalLiterature) {
+        		$additionalLiterature->ordering = $order++;
+        		$additionalLiterature->save();
+        	}
+        } elseif($object->type == 3) {
+        	foreach ($plan->internetResources as $internetResources) {
+        		$internetResources->ordering = $order++;
+        		$internetResources->save();
+        	}
+        }
+        $this->redirect("workplanliterature.php?action=index&plan_id=".$plan->getId()."&type=".$type);
     }
     public function actionSave() {
         $object = new CWorkPlanLiterature();

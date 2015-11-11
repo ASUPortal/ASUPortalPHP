@@ -91,9 +91,14 @@ class CWorkPlanTermsController extends CBaseController{
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanTerm(CRequest::getInt("id"));
-        $plan = $object->plan_id;
+        $plan = $object->plan;
         $object->remove();
-        $this->redirect("workplanterms.php?action=index&plan_id=".$plan);
+        $order = 1;
+        foreach ($plan->terms as $term) {
+        	$term->ordering = $order++;
+        	$term->save();
+        }
+        $this->redirect("workplanterms.php?action=index&plan_id=".$plan->getId());
     }
     public function actionSave() {
         $object = new CWorkPlanTerm();

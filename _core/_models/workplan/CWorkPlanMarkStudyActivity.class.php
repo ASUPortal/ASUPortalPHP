@@ -6,6 +6,16 @@
  */
 class CWorkPlanMarkStudyActivity extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_MARKS_STUDY_ACTIVITY;
+    
+    protected function relations() {
+    	return array(
+    		"activity" => array(
+    				"relationPower" => RELATION_HAS_ONE,
+    				"storageField" => "activity_id",
+    				"targetClass" => "CWorkPlanControlTypes"
+    		)
+    	);
+    }
 
     public function attributeLabels() {
         return array(

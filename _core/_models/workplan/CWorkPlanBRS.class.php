@@ -22,7 +22,12 @@ class CWorkPlanBRS extends CActiveModel{
                 "storageField" => "mark_id",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getMark"
-            )
+            ),
+        	"plan" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageField" => "plan_id",
+        		"targetClass" => "CWorkPlan"
+        	)
         );
     }
 

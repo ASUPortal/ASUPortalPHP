@@ -19,7 +19,12 @@ class CWorkPlanSoftware extends CActiveModel {
                 "relationPower" => RELATION_HAS_ONE,
                 "storageField" => "software_id",
                 "targetClass" => "CTerm"
-            )
+            ),
+        	"plan" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageField" => "plan_id",
+        		"targetClass" => "CWorkPlan"
+        	)
         );
     }
 

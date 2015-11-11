@@ -21,7 +21,12 @@ class CWorkPlanContentCategory extends CActiveModel {
                 "storageTable" => TABLE_WORK_PLAN_CONTENT_SECTIONS,
                 "storageCondition" => "category_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanContentSection"
-            )
+            ),
+        	"plan" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageField" => "plan_id",
+        		"targetClass" => "CWorkPlan"
+        	)
         );
     }
 

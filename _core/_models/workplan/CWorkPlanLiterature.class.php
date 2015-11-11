@@ -20,7 +20,12 @@ class CWorkPlanLiterature extends CActiveModel{
                 "relationPower" => RELATION_HAS_ONE,
                 "storageField" => "book_id",
                 "targetClass" => "CTerm"
-            )
+            ),
+        	"plan" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageField" => "plan_id",
+        		"targetClass" => "CWorkPlan"
+        	)
         );
     }
 

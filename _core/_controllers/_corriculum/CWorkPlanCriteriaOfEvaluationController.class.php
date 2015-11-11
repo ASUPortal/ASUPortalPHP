@@ -87,10 +87,27 @@ protected $_isComponent = true;
     }
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanCriteriaOfEvaluation(CRequest::getInt("id"));
-        $plan = $object->plan_id;
+        $plan = $object->plan;
         $type = $object->type;
         $object->remove();
-        $this->redirect("workplancriteriaofevaluation.php?action=index&plan_id=".$plan."&type=".$type);
+        $order = 1;
+        if ($object->type == 1) {
+        	foreach ($plan->criteriaExamOfEvaluation as $criteriaExamOfEvaluation) {
+        		$criteriaExamOfEvaluation->ordering = $order++;
+        		$criteriaExamOfEvaluation->save();
+        	}
+        } elseif($object->type == 2) {
+        	foreach ($plan->criteriaCreditOfEvaluation as $criteriaCreditOfEvaluation) {
+        		$criteriaCreditOfEvaluation->ordering = $order++;
+        		$criteriaCreditOfEvaluation->save();
+        	}
+        } elseif($object->type == 3) {
+        	foreach ($plan->criteriaMaterialsOfEvaluation as $criteriaMaterialsOfEvaluation) {
+        		$criteriaMaterialsOfEvaluation->ordering = $order++;
+        		$criteriaMaterialsOfEvaluation->save();
+        	}
+        }
+        $this->redirect("workplancriteriaofevaluation.php?action=index&plan_id=".$plan->getId()."&type=".$type);
     }
     public function actionSave() {
         $object = new CWorkPlanCriteriaOfEvaluation();

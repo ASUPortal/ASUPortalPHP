@@ -81,10 +81,29 @@ class CWorkPlanSelfEducationBlocksController extends CBaseController{
         $this->renderView("_corriculum/_workplan/selfEducationBlocks/edit.tpl");
     }
     public function actionDelete() {
-        $object = CBaseManager::getWorkPlanSelfEducationBlock(CRequest::getInt("id"));
-        $load = $object->load_id;
-        $object->remove();
-        $this->redirect("workplancontentloads.php?action=edit&id=".$load);
+    	$object = CBaseManager::getWorkPlanSelfEducationBlock(CRequest::getInt("id"));
+    	if (!is_null($object)) {
+    		$load = $object->load;
+    		$object->remove();
+    		$order = 1;
+    		foreach ($load->selfEducations as $selfEdu) {
+    			$selfEdu->ordering = $order++;
+    			$selfEdu->save();
+    		}
+    		$this->redirect("workplancontentloads.php?action=edit&id=".$load->getId());
+    	}
+    	$items = CRequest::getArray("selectedInView");
+    	$load = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("load_id"));
+    	foreach ($items as $id){
+    		$object = CBaseManager::getWorkPlanSelfEducationBlock($id);
+    		$object->remove();
+    	}
+    	$order = 1;
+    	foreach ($load->selfEducations as $selfEdu) {
+    		$selfEdu->ordering = $order++;
+    		$selfEdu->save();
+    	}
+    	$this->redirect("workplancontentloads.php?action=edit&id=".$load->getId());
     }
     public function actionSave() {
         $object = new CWorkPlanSelfEducationBlock();
