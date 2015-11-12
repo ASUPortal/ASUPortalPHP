@@ -907,7 +907,19 @@ class CHtml {
             echo '<h4>'.CHelpManager::getHelpForCurrentPage()->title.'</h4>';
             $printHelpBox = false;
             if (mb_strlen(CHelpManager::getHelpForCurrentPage()->content) > 512) {
-                echo mb_substr(CHelpManager::getHelpForCurrentPage()->content, 0, 512)."...";
+                $symbols = 512; // Количество символов которые надо вывести
+                $text = "";
+                $words = explode(" ", CHelpManager::getHelpForCurrentPage()->content);
+                for ($i=0; $i<count($words); $i++) {
+                	$nv_str=$text.$words[$i]." ";
+                	if(strlen($nv_str)<$symbols){
+                		$text = $nv_str;
+                	}
+                	else {
+                		break;
+                	}
+                }
+                echo $text."...";
                 echo '<p><a href="#help" data-toggle="modal">Читать полностью</a></p>';
                 $printHelpBox = true;
             } else {
