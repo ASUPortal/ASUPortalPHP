@@ -3,12 +3,6 @@
 {block name="localSearchContent"}
     <script>
 	    jQuery(document).ready(function(){
-	        jQuery("#selectAll").change(function(){
-				var items = jQuery("input[name='selectedDoc[]']")
-	            for (var i = 0; i < items.length; i++) {
-	                items[i].checked = this.checked;
-	            }
-	        });
 	        jQuery("#type_selector").change(function(){
 	            window.location.href=web_root + "_modules/_staff/index.php?filter=types.person_type_id:" + jQuery(this).val() + "&type=" + jQuery(this).val();
 	        });
@@ -52,7 +46,7 @@
             <th width="100"><i class="icon-camera"></i></th>
             <th>{CHtml::tableOrder("fio", $persons->getFirstItem())}</th>
             <th>{CHtml::tableOrder("types", $persons->getFirstItem())}</th>
-            <th><input type="checkbox" id="selectAll"></th>
+            <th>{CHtml::activeViewGroupSelect("id", $persons->getFirstItem(), true)}</th>
         </tr>
         {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
         {foreach $persons->getItems() as $person}
@@ -73,9 +67,7 @@
                         {$needSeparation = true}
                     {/foreach}
                 </td>
-                <td>
-                    <input type="checkbox" value="{$person->getId()}" name="selectedDoc[]">
-                </td>
+                <td>{CHtml::activeViewGroupSelect("id", $person, false, true)}</td>
             </tr>
         {/foreach}
     </table>
