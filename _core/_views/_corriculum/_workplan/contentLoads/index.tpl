@@ -44,8 +44,8 @@
         </tbody>
     </table>
 
-    {CLog::dump()}
     {$bean|var_dump}
+    {CLog::dump(true)}
 {/block}
 
 {block name="asu_right"}

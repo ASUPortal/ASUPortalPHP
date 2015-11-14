@@ -80,10 +80,10 @@ class CStatefullFormSmartyPlugin {
         $element = self::getElementId($params);
 
         if ($bean->getElement($element)->isShow()) {
-            $content = '<i class="icon-minus"></i>';
+            $content = '<i class="icon-folder-open"></i>';
             $params['state'] = 'hide';
         } else {
-            $content = '<i class="icon-plus"></i>';
+            $content = '<i class="icon-folder-close"></i>';
             $params['state'] = 'show';
         }
 
