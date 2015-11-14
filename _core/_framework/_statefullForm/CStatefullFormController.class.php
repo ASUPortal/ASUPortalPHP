@@ -6,7 +6,7 @@
  * Date: 14.11.15
  * Time: 11:25
  */
-define("FORM_BEAN", "formBeanId");
+define("FORM_BEAN", "bean");
 
 abstract class CStatefullFormController extends CBaseController{
     private $_statefullBean = null;
@@ -18,7 +18,7 @@ abstract class CStatefullFormController extends CBaseController{
         // регистрируем плагин для smarty, который нам сильно поможет
         CStatefullFormSmartyPlugin::registerPlugins($this->getSmarty());
         // посмотрим, может нам событие прислали
-        if (CRequest::getString("action") != "") {
+        if (CRequest::getString("action") == "sendEvent") {
             $this->processEvent();
         }
 
@@ -62,7 +62,7 @@ abstract class CStatefullFormController extends CBaseController{
     private function handle_changeState() {
         $bean = $this->getStatefullFormBean();
         $element = CRequest::getString("element");
-        $state = CRequest::getString("target");
+        $state = CRequest::getString("state");
         $bean->setElementState($element, $state);
     }
 

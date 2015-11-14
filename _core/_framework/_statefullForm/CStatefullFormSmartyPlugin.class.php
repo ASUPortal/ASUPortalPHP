@@ -13,11 +13,57 @@ class CStatefullFormSmartyPlugin {
      * @param Smarty $smarty
      */
     public static function registerPlugins(Smarty $smarty) {
-        // $smarty->registerPlugin("block", "sf_sendEventLink", array("CStatefullFormSmartyPlugin", "StatefullForm_SendEventLink"));
         $smarty->registerPlugin('block', 'sf_changeState', array('CStatefullFormSmartyPlugin', 'StatefullForm_ChangeState'));
+        $smarty->registerPlugin('block', 'sf_showIfVisible', array('CStatefullFormSmartyPlugin', 'StatefullForm_ShowIfVisible'));
+        $smarty->registerPlugin('function', 'sf_toggleVisible', array('CStatefullFormSmartyPlugin', 'StatefullForm_ToggleVisible'));
     }
 
-    public static function StatefullForm_ChangeState($params, $content) {
+    public static function StatefullForm_ToggleVisible($params = array()) {
+        self::checkParams($params);
+
+        $bean = self::getStatefullFormBean($params);
+        $element = self::getElementId($params);
+
+        $content = WEB_ROOT.'images'.CORE_DS.ICON_THEME.CORE_DS.'22x22'.CORE_DS.'actions'.CORE_DS;
+        if ($bean->getElement($element)->getState() == 'show') {
+            $content .= 'list-remove.png';
+            $params['state'] = 'hide';
+        } else {
+            $content .= 'list-add.png';
+            $params['state'] = 'show';
+        }
+
+        $content = '<img src="'.$content.'" />';
+
+        echo self::StatefullForm_ChangeState($params, $content);
+    }
+
+    public static function StatefullForm_ShowIfVisible($params = array(), $content = '') {
+        self::checkParams($params);
+
+        $bean = self::getStatefullFormBean($params);
+        $element = self::getElementId($params);
+
+        if ($bean->getElement($element)->getState() == 'show') {
+            return $content;
+        }
+        return '';
+    }
+
+    private static function getElementId($params = array()) {
+        if (!array_key_exists('element', $params)) {
+            throw new Exception('Не задан параметр element, к которому отправляется событие');
+        }
+        return $params['element'];
+    }
+
+    /**
+     * Проверить, что все необходимые параметры заданы
+     *
+     * @param $params
+     * @throws Exception
+     */
+    private static function checkParams($params) {
         /**
          * Проверим, все ли параметры заданы
          */
@@ -30,86 +76,59 @@ class CStatefullFormSmartyPlugin {
         if (!array_key_exists('element', $params)) {
             throw new Exception('Не задан параметр element, к которому отправляется событие');
         }
-        if (!array_key_exists('target', $params)) {
-            throw new Exception('Не задан параметр target, не знаю, в какое состояние перевести элемент');
-        }
-        /**
-         * Сформируем длинную ссылку
-         * @var $bean CStatefullFormBean
-         */
-        $id = null;
-        if (array_key_exists('object', $params)) {
-            $object = $params['object'];
-            if (is_a($params['object'], 'CModel')) {
-                $id = $object->getId();
-            } else {
-                $id = $object;
-            }
-        }
-        $bean = $params['bean'];
-        $address = '';
-        if (array_key_exists('address', $params)) {
-            $address = $params['address'];
-        }
-        $ref = $address.'?action=sendEvent'.
-            '&event=changeState'.
-            '&element='.$params['element'].
-            '&formBeanId='.$bean->getBeanId().
-            '&target='.$params['target'];
-        if (!is_null($id)) {
-            $ref .= '&id='.$id;
-        }
-
-        $link = '<a href="'.$ref.'">'.$content.'</a>';
-
-        return $link;
     }
 
-
-
-    public static function StatefullForm_SendEventLink($params, $content) {
-        /**
-         * Проверим, все ли параметры заданы
-         */
+    /**
+     * Получить используемый в форме бин
+     *
+     * @param array $params
+     * @return CStatefullFormBean
+     * @throws Exception
+     */
+    private static function getStatefullFormBean($params = array()) {
         if (!array_key_exists('bean', $params)) {
             throw new Exception('Не задан параметр bean');
         }
         if (!is_a($params['bean'], 'CStatefullFormBean')) {
             throw new Exception('Bean не экземпляр класса CStatefullFormBean');
         }
-        if (!array_key_exists('element', $params)) {
-            throw new Exception('Не задан параметр element, к которому отправляется событие');
+        //
+        return $params['bean'];
+    }
+
+    /**
+     * Создать ссылку из параметров
+     *
+     * @param array $params
+     * @return string
+     */
+    private static function createReference($params = array()) {
+        $reference = WEB_ROOT;
+        if (array_key_exists('address', $params)) {
+            $reference = $params['address'];
+            unset($params['address']);
         }
-        if (!array_key_exists('event', $params)) {
-            throw new Exception('Не задан параметр event, не знаю, какое событие отправлять');
-        }
-        /**
-         * Сформируем длинную ссылку
-         * @var $bean CStatefullFormBean
-         */
-        $id = null;
-        if (array_key_exists('object', $params)) {
-            $object = $params['object'];
-            if (is_a($params['object'], 'CModel')) {
-                $id = $object->getId();
+        $pairs = array();
+        foreach ($params as $key=>$value) {
+            if (is_a($value, 'CModel')) {
+                $pairs[] = 'id=' . $value->getId();
+            } elseif (is_a($value, 'CStatefullBean')) {
+                $pairs[] = $key . '=' . $value->getBeanId();
             } else {
-                $id = $object;
+                $pairs[] = $key.'='.$value;
             }
         }
-        $bean = $params['bean'];
-        $address = '';
-        if (array_key_exists('address', $params)) {
-            $address = $params['address'];
-        }
-        $ref = $address.'?action=sendEvent'.
-                '&event='.$params['event'].
-                '&element='.$params['element'].
-                '&formBeanId='.$bean->getBeanId();
-        if (!is_null($id)) {
-            $ref .= '&id='.$id;
-        }
+        $reference .= '?'.implode("&", $pairs);
+        return $reference;
+    }
 
-        $link = '<a href="'.$ref.'">'.$content.'</a>';
+    public static function StatefullForm_ChangeState($params = array(), $content = '') {
+        self::checkParams($params);
+
+        $params['action'] = 'sendEvent';
+        $params['event'] = 'changeState';
+
+        $link = '<a href="'.self::createReference($params).'">'.$content.'</a>';
 
         return $link;
     }
