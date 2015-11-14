@@ -7,6 +7,7 @@
  * To change this template use File | Settings | File Templates.
  *
  * @property CCache cache
+ * @property CBeanManager beans
  */
 class CApp extends CComponent{
     private static $_inst = null;
