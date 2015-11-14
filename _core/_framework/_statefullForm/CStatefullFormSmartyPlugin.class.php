@@ -21,6 +21,12 @@ class CStatefullFormSmartyPlugin {
         $smarty->registerPlugin('function', 'sf_showByDefault', array('CStatefullFormSmartyPlugin', 'StatefullForm_ShowByDefault'));
     }
 
+    /**
+     * Иконка перехода в режим редактирования
+     *
+     * @param array $params
+     * @throws Exception
+     */
     public static function StatefullForm_ToggleEdit($params = array()) {
         self::checkParams($params);
 
@@ -42,6 +48,13 @@ class CStatefullFormSmartyPlugin {
         }
     }
 
+    /**
+     * Указанный элемент по умолчанию получает статус show
+     * Не всем элементам это надо
+     *
+     * @param array $params
+     * @throws Exception
+     */
     public static function StatefullForm_ShowByDefault($params = array()) {
         self::checkParams($params);
 
@@ -66,16 +79,13 @@ class CStatefullFormSmartyPlugin {
         $bean = self::getStatefullFormBean($params);
         $element = self::getElementId($params);
 
-        $content = WEB_ROOT.'images'.CORE_DS.ICON_THEME.CORE_DS.'22x22'.CORE_DS.'actions'.CORE_DS;
         if ($bean->getElement($element)->isShow()) {
-            $content .= 'list-remove.png';
+            $content = '<i class="icon-minus"></i>';
             $params['state'] = 'hide';
         } else {
-            $content .= 'list-add.png';
+            $content = '<i class="icon-plus"></i>';
             $params['state'] = 'show';
         }
-
-        $content = '<img src="'.$content.'" />';
 
         echo self::StatefullForm_ChangeState($params, $content);
     }
