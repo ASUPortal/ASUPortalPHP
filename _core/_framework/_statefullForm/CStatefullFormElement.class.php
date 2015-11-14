@@ -17,6 +17,26 @@ class CStatefullFormElement {
         return $this->name;
     }
 
+    public function isEdit() {
+        return $this->getState() == 'edit';
+    }
+
+    public function isShow() {
+        return $this->getState() == 'show';
+    }
+
+    public function isHidden() {
+        return $this->getState() == 'hide';
+    }
+
+    public function setShow($value) {
+        if ($value) {
+            $this->setState('show');
+        } else {
+            $this->setState(null);
+        }
+    }
+
     /**
      * @param mixed $name
      */

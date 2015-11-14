@@ -15,9 +15,51 @@ class CStatefullFormSmartyPlugin {
     public static function registerPlugins(Smarty $smarty) {
         $smarty->registerPlugin('block', 'sf_changeState', array('CStatefullFormSmartyPlugin', 'StatefullForm_ChangeState'));
         $smarty->registerPlugin('block', 'sf_showIfVisible', array('CStatefullFormSmartyPlugin', 'StatefullForm_ShowIfVisible'));
+        $smarty->registerPlugin('block', 'sf_showIfEditable', array('CStatefullFormSmartyPlugin', 'StatefullForm_ShowIfEditable'));
         $smarty->registerPlugin('function', 'sf_toggleVisible', array('CStatefullFormSmartyPlugin', 'StatefullForm_ToggleVisible'));
+        $smarty->registerPlugin('function', 'sf_toggleEdit', array('CStatefullFormSmartyPlugin', 'StatefullForm_ToggleEdit'));
+        $smarty->registerPlugin('function', 'sf_showByDefault', array('CStatefullFormSmartyPlugin', 'StatefullForm_ShowByDefault'));
     }
 
+    public static function StatefullForm_ToggleEdit($params = array()) {
+        self::checkParams($params);
+
+        $bean = self::getStatefullFormBean($params);
+        $element = self::getElementId($params);
+
+        if ($bean->getElement($element)->isEdit()) {
+            $content = '<i class="icon-remove">&nbsp;</i>';
+            $params['state'] = 'show';
+            $params['element'] = $element;
+
+            echo self::StatefullForm_ChangeState($params, $content);
+        } else {
+            $content = '<i class="icon-pencil">&nbsp;</i>';
+            $params['state'] = 'edit';
+            $params['element'] = $element;
+
+            echo self::StatefullForm_ChangeState($params, $content);
+        }
+    }
+
+    public static function StatefullForm_ShowByDefault($params = array()) {
+        self::checkParams($params);
+
+        $bean = self::getStatefullFormBean($params);
+        $element = self::getElementId($params);
+
+        if (is_null($bean->getElement($element)->getState())) {
+            $bean->getElement($element)->setShow(true);
+        }
+    }
+
+    /**
+     * Переключить элемень $params['element'] с помощью +/- в состояние
+     * вижу/не вижу
+     *
+     * @param array $params
+     * @throws Exception
+     */
     public static function StatefullForm_ToggleVisible($params = array()) {
         self::checkParams($params);
 
@@ -25,7 +67,7 @@ class CStatefullFormSmartyPlugin {
         $element = self::getElementId($params);
 
         $content = WEB_ROOT.'images'.CORE_DS.ICON_THEME.CORE_DS.'22x22'.CORE_DS.'actions'.CORE_DS;
-        if ($bean->getElement($element)->getState() == 'show') {
+        if ($bean->getElement($element)->isShow()) {
             $content .= 'list-remove.png';
             $params['state'] = 'hide';
         } else {
@@ -44,7 +86,19 @@ class CStatefullFormSmartyPlugin {
         $bean = self::getStatefullFormBean($params);
         $element = self::getElementId($params);
 
-        if ($bean->getElement($element)->getState() == 'show') {
+        if ($bean->getElement($element)->isShow()) {
+            return $content;
+        }
+        return '';
+    }
+
+    public static function StatefullForm_ShowIfEditable($params = array(), $content = '') {
+        self::checkParams($params);
+
+        $bean = self::getStatefullFormBean($params);
+        $element = self::getElementId($params);
+
+        if ($bean->getElement($element)->isEdit()) {
             return $content;
         }
         return '';
