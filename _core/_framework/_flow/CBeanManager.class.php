@@ -20,9 +20,13 @@ class CBeanManager extends CComponent{
      * @return mixed
      */
     public function getStatefullBean($id) {
-        if (file_exists($this->cacheDir.$id)) {
-            $obj = unserialize(file_get_contents($this->cacheDir.$id));
-            return $obj;
+        if (is_a(CApp::getApp()->getApp(), "CCacheDummy")) {
+            if (file_exists($this->cacheDir.$id)) {
+                $obj = unserialize(file_get_contents($this->cacheDir.$id));
+                return $obj;
+            }
+        } else {
+            return CApp::getApp()->cache->get("bean_".$id);
         }
     }
 
@@ -32,9 +36,13 @@ class CBeanManager extends CComponent{
      * @param CStatefullBean $bean
      */
     public function serializeBean(CStatefullBean $bean) {
-        if (file_exists($this->cacheDir.$bean->getBeanId())) {
-            unlink($this->cacheDir.$bean->getBeanId());
+        if (is_a(CApp::getApp()->getApp(), "CCacheDummy")) {
+            if (file_exists($this->cacheDir.$bean->getBeanId())) {
+                unlink($this->cacheDir.$bean->getBeanId());
+            }
+            file_put_contents($this->cacheDir.$bean->getBeanId(), serialize($bean));
+        } else {
+            CApp::getApp()->cache->set("bean_".$bean->getBeanId(), $bean);
         }
-        file_put_contents($this->cacheDir.$bean->getBeanId(), serialize($bean));
     }
 }
