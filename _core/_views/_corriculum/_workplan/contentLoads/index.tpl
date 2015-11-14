@@ -3,6 +3,8 @@
 {block name="asu_center"}
     Пока это просто вывод нагрузки
 
+    {sf_changeState bean=$bean target="show" element="11" object=$section}1{/sf_changeState}
+
     <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
         <tr>
@@ -27,6 +29,8 @@
         {/foreach}
         </tbody>
     </table>
+
+    {$bean|var_dump}
 {/block}
 
 {block name="asu_right"}
