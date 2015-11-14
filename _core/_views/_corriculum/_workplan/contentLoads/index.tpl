@@ -1,43 +1,32 @@
-{extends file="_core.3col.tpl"}
+{extends file="_core.component.tpl"}
 
 {block name="asu_center"}
-    <h2>Нагрузка по разделу дисциплины</h2>
+    Пока это просто вывод нагрузки
 
-    {if ($objects->getCount() == 0)}
-        Нет объектов для отображения
-    {else}
-    	<form action="workplancontentloads.php" method="post" id="mainView">
-        <table class="table table-striped table-bordered table-hover table-condensed">
-            <thead>
-                <tr>
-                    <th width="16">&nbsp;</th>
-                    <th width="16">{CHtml::activeViewGroupSelect("id", $objects->getFirstItem(), true)}</th>
-                    <th width="16">#</th>
-                    <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("load_type_id", $objects->getFirstItem())}</th>
-                    <th>{CHtml::tableOrder("term_id", $objects->getFirstItem())}</th>
-                    <th>{CHtml::tableOrder("value", $objects->getFirstItem())}</th>
-                </tr>
-            </thead>
-            <tbody>
-            {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
-            {foreach $objects->getItems() as $object}
-                <tr>
-                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузка')) { location.href='workplancontentloads.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
-                    <td>{CHtml::activeViewGroupSelect("id", $object)}</td>
-                    <td>{$object->ordering}</td>
-                    <td><a href="workplancontentloads.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>{$object->loadType}</td>
-                    <td>{$object->term->corriculum_discipline_section->title}</td>
-                    <td>{$object->value}</td>
-                </tr>
-            {/foreach}
-            </tbody>
-        </table>
-         </form>
-
-        {CHtml::paginator($paginator, "workplancontentloads.php?action=index")}
-    {/if}
+    <table class="table table-striped table-bordered table-hover table-condensed">
+        <thead>
+        <tr>
+            <th width="16">&nbsp;</th>
+            <th width="16">#</th>
+            <th width="16">&nbsp;</th>
+            <th>{CHtml::tableOrder("load_type_id", $section->loads->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("term_id", $section->loads->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("value", $section->loads->getFirstItem())}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach $section->loads->getItems() as $load}
+            <tr>
+                <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузка')) { location.href='workplancontentloads.php?action=delete&id={$load->getId()}'; }; return false;"></a></td>
+                <td>{$load->ordering}</td>
+                <td><a href="workplancontentloads.php?action=edit&id={$load->getId()}" class="icon-pencil"></a></td>
+                <td>{$load->loadType}</td>
+                <td>{$load->term->corriculum_discipline_section->title}</td>
+                <td>{$load->value}</td>
+            </tr>
+        {/foreach}
+        </tbody>
+    </table>
 {/block}
 
 {block name="asu_right"}
