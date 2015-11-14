@@ -8,7 +8,7 @@ class CWorkPlanContentSectionLoadsController extends CStatefullFormController {
         $section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
         $this->addActionsMenuItem(array(
             "title" => "Обновить",
-            "link" => "workplancontentloads.php?id=".$section->getId(),
+            "link" => "workplancontentloads.php?id=".$section->getId().'&bean='.$this->getStatefullFormBean()->getBeanId(),
             "icon" => "actions/view-refresh.png"
         ));
 
