@@ -62,14 +62,12 @@ abstract class CStatefullFormWidget implements IStatefullFormWidget {
         $attributes['name'] = $elementName . '['. $attribute .']';
         // если в бине есть значение - берем его
         $attributes['value'] = $this->getValue();
-        // классы
-        $classes = array();
         // обязательность поля
         $validators = CCoreObjectsManager::getFieldValidators($model);
         if (array_key_exists($attribute, $validators)) {
             $attributes['required'] = 'required';
         }
-        $attributes['class'] = implode(' ', $classes);
+        $attributes['class'] = array();
         return $attributes;
     }
 
@@ -78,6 +76,9 @@ abstract class CStatefullFormWidget implements IStatefullFormWidget {
         $result = '<' . $type;
         foreach ($attributes as $key=>$value) {
             if ($key != 'content') {
+                if (is_array($value)) {
+                    $value = implode(' ', $value);
+                }
                 $result .= ' ' . $key . '="' . $value . '"';
             }
         }

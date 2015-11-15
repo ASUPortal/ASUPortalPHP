@@ -154,7 +154,8 @@
             setTimeout(function(){
                 jQuery(that).html(data)
                     .find(".catalogLookup").catalogLookup().end()
-                    .find("[asu-type='component']").components().end();
+                    .find("[asu-type='component']").components().end()
+                    .find('select.select2').select2().end();
             }, 500);
         };
 

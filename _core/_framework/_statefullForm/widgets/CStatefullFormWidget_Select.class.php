@@ -43,6 +43,7 @@ class CStatefullFormWidget_Select extends CStatefullFormWidget_Input {
     protected function getAttributes() {
         $attributes = parent::getAttributes();
         unset($attributes['type']);
+        $attributes['class'][] = 'select2';
         $attributes['content'] = $this->getContent();
         return $attributes;
     }
