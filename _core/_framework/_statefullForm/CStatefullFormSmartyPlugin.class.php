@@ -19,6 +19,8 @@ class CStatefullFormSmartyPlugin {
         $smarty->registerPlugin('function', 'sf_toggleVisible', array('CStatefullFormSmartyPlugin', 'StatefullForm_ToggleVisible'));
         $smarty->registerPlugin('function', 'sf_toggleEdit', array('CStatefullFormSmartyPlugin', 'StatefullForm_ToggleEdit'));
         $smarty->registerPlugin('function', 'sf_showByDefault', array('CStatefullFormSmartyPlugin', 'StatefullForm_ShowByDefault'));
+
+        $smarty->registerPlugin('function', 'sf_input', array('CStatefullFormWidgets', 'input'));
     }
 
     /**

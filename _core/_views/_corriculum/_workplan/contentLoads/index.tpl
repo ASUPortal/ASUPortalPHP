@@ -40,7 +40,7 @@
                     <td>{sf_toggleVisible address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}_details" object=$section}</td>
                     <td><input type="text" name="load_{$load->getId()}[load_type_id]" value="{$load->load_type_id}"></td>
                     <td><input type="text" name="load_{$load->getId()}[term_id]" value="{$load->term_id}"></td>
-                    <td><input type="text" name="load_{$load->getId()}[value]" value="{$load->value}"></td>
+                    <td>{sf_input bean=$bean model=$load element="load_{$load->getId()}" attribute='value'}</td>
 
                     <input type="hidden" name="load_{$load->getId()}[section_id]" value="{$load->section_id}" />
                     <input type="hidden" name="load_{$load->getId()}[id]" value="{$load->getId()}" />
