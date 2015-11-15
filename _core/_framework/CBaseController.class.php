@@ -192,6 +192,11 @@ class CBaseController {
          * Компоненты
          */
         $this->addJSInclude("_core/jquery.component.js");
+        /**
+         * Select 2
+         */
+        $this->addJSInclude('_core/select2/select2.js');
+        $this->addCSSInclude('_core/select2/select2.css');
     }
 
     /**
