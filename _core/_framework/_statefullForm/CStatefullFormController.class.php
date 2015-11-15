@@ -20,6 +20,8 @@ abstract class CStatefullFormController extends CBaseController{
         // посмотрим, может нам событие прислали
         if (CRequest::getString("action") == "sendEvent") {
             $this->processEvent();
+        } else if (CRequest::getString("action") == "submitForm") {
+            $this->processFormSubmit();
         }
 
         // последний шаг - запускаем рендеринг
@@ -28,6 +30,48 @@ abstract class CStatefullFormController extends CBaseController{
 
     function __destruct() {
         CApp::getApp()->beans->serializeBean($this->getStatefullFormBean());
+    }
+
+    /**
+     * Обработка события сабмита формы
+     */
+    private function processFormSubmit() {
+        /**
+         * При сабмите приходят данные со всех форм, но сабмитится
+         * за один раз только одна. В связи с этим, сохраняем
+         * данные из всех форм в бин
+         */
+        foreach (CRequest::getGlobalRequestVariables() as $key=>$value) {
+            if (is_array($value)) {
+                self::getStatefullFormBean()->getElement($key)->setFormElementValues($value);
+            }
+        }
+        /**
+         * Обработаем форму, над которой выполняется действие
+         */
+        $element = CRequest::getString("element");
+        $formData = CRequest::getArray($element);
+        /**
+         * Соберем возможные обработчики события
+         */
+        $handlers = array();
+        $handlers[] = 'submitForm_' . $element;
+        if (mb_strpos($element, '_') !== false) {
+            $handlers[] = 'submitForm_' . CUtils::strLeft($element, '_');
+        }
+        $handlers[] = 'submitForm';
+        /**
+         * В элементе формы могут быть старые ошибки валидации. Почистим их
+         */
+        self::getStatefullFormBean()->getElement($element)->setValidationErrors(array());
+        /**
+         * Теперь вызываем их по очереди
+         */
+        foreach ($handlers as $handler) {
+            if (method_exists($this, $handler)) {
+                $this->$handler($formData, $element);
+            }
+        }
     }
 
     /**
@@ -43,7 +87,6 @@ abstract class CStatefullFormController extends CBaseController{
         $handlers = array();
         if (CRequest::getInt("id") > 0) {
             $handlers[] = 'handle_'.$event.'_'.CRequest::getInt("id");
-            $handlers[] = 'handle_'.$event.'_any';
         }
         $handlers[] = 'handle_'.$event;
         /**

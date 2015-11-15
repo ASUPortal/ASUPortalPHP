@@ -1,9 +1,12 @@
 {extends file="_core.component.tpl"}
 
 {block name="asu_center"}
-    Пока это просто вывод нагрузки
+    <form action="workplancontentloads.php" method="post">
+    <input type="hidden" name="id" value="{$section->getId()}" />
+    <input type="hidden" name="action" value="submitForm" />
+    <input type="hidden" name="bean" value="{$bean->getBeanId()}" />
 
-    <table class="table table-striped table-bordered table-hover table-condensed">
+    <table class="table">
         <thead>
         <tr>
             <th width="16">&nbsp;</th>
@@ -31,8 +34,16 @@
             {/sf_showIfVisible}
             {sf_showIfEditable bean=$bean element="load_{$load->getId()}"}
                 <tr>
+                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузка')) { location.href='workplancontentloads.php?action=delete&id={$load->getId()}'; }; return false;"></a></td>
                     <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}" object=$section}</td>
-                    <td colspan="6">Я форма</td>
+                    <td><button type="submit" name="element" value="load_{$load->getId()}" class="btn btn-link"><i class="icon-ok"></i></button></td>
+                    <td>{sf_toggleVisible address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}_details" object=$section}</td>
+                    <td><input type="text" name="load_{$load->getId()}[load_type_id]" value="{$load->load_type_id}"></td>
+                    <td><input type="text" name="load_{$load->getId()}[term_id]" value="{$load->term_id}"></td>
+                    <td><input type="text" name="load_{$load->getId()}[value]" value="{$load->value}"></td>
+
+                    <input type="hidden" name="load_{$load->getId()}[section_id]" value="{$load->section_id}" />
+                    <input type="hidden" name="load_{$load->getId()}[id]" value="{$load->getId()}" />
                 </tr>
             {/sf_showIfEditable}
             {sf_showIfVisible bean=$bean element="load_{$load->getId()}_details"}
@@ -43,6 +54,7 @@
         {/foreach}
         </tbody>
     </table>
+    </form>
 
     {$bean|var_dump}
     {CLog::dump(true)}

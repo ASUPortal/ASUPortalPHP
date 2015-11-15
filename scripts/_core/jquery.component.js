@@ -124,8 +124,11 @@
              * Теперь забиндимся на все формы
              * Тут такой вот хак, так как формы напрямую не находятся
              */
-            var form = jQuery("button", data).closest("form");
-            jQuery(form).on("submit", jQuery.proxy(this._formSubmit, this, form[0]));
+            var buttons = jQuery("button", data);
+            jQuery(buttons).each(function(index, button){
+                var form = jQuery(button).closest('form');
+                jQuery(form).on("submit", jQuery.proxy(that._formSubmit, that, form[0]));
+            });
             jQuery("a#_saveAndContinue", data).on("click", function(){
                 /**
                  * Ставим признак продолжения редактирования формы
@@ -165,6 +168,14 @@
              * Соберем параметры формы
              */
             var paramsArr = jQuery(form).serializeArray();
+            jQuery("button", form).each(function(index, button){
+                if (jQuery(button).attr('name') && jQuery(button).attr('value')) {
+                    paramsArr.push({
+                        name: jQuery(button).attr('name'),
+                        value: jQuery(button).attr('value')
+                    });
+                }
+            });
             var params = {};
             jQuery.each(paramsArr, function(index, obj){
                 params[obj.name] = obj.value;

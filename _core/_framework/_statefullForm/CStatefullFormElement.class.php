@@ -9,6 +9,52 @@
 class CStatefullFormElement {
     private $name;
     private $state;
+    private $validationErrors = array();
+    private $formElementValues = array();
+
+    /**
+     * @return array
+     */
+    public function getFormElementValues() {
+        return $this->formElementValues;
+    }
+
+    /**
+     * @param CActiveModel|array $formElementValues
+     */
+    public function setFormElementValues($formElementValues) {
+        if (is_a($formElementValues, 'CModel')) {
+            /* @var $model CActiveModel */
+            $model = $formElementValues;
+            foreach ($model->getRecord()->getItems() as $key=>$value) {
+                $this->formElementValues[$key] = $value;
+            }
+        } else {
+            $this->formElementValues = $formElementValues;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getValidationErrors() {
+        return $this->validationErrors;
+    }
+
+    /**
+     * @param CArrayList|array $validationErrors
+     */
+    public function setValidationErrors($validationErrors){
+        if (is_a($validationErrors, 'CArrayList')) {
+            $this->validationErrors = array();
+            foreach ($validationErrors as $key=>$value) {
+                $this->validationErrors[$key] = $value;
+            }
+        } else {
+            $this->validationErrors = $validationErrors;
+        }
+    }
+
 
     /**
      * @return mixed
