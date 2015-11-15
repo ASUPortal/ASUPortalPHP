@@ -42,8 +42,8 @@
                     <td><input type="text" name="load_{$load->getId()}[term_id]" value="{$load->term_id}"></td>
                     <td>{sf_input bean=$bean model=$load element="load_{$load->getId()}" attribute='value'}</td>
 
-                    <input type="hidden" name="load_{$load->getId()}[section_id]" value="{$load->section_id}" />
-                    <input type="hidden" name="load_{$load->getId()}[id]" value="{$load->getId()}" />
+                    {sf_hidden bean=$bean model=$load element="load_{$load->getId()}" attribute='section_id'}
+                    {sf_hidden bean=$bean model=$load element="load_{$load->getId()}" attribute='id'}
                 </tr>
             {/sf_showIfEditable}
             {sf_showIfVisible bean=$bean element="load_{$load->getId()}_details"}

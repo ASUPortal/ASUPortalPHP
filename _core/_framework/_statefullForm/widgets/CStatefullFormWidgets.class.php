@@ -18,4 +18,15 @@ class CStatefullFormWidgets {
         $widget = new CStatefullFormWidget_Input($params);
         return $widget->run();
     }
+
+    /**
+     * Виджет "Скрытое поле"
+     *
+     * @param array $params
+     * @return string
+     */
+    public static function hidden($params = array()) {
+        $widget = new CStatefullFormWidget_Hidden($params);
+        return $widget->run();
+    }
 }
