@@ -35,17 +35,13 @@ abstract class CStatefullFormWidget implements IStatefullFormWidget {
         $this->params = $params;
     }
 
-    protected function getAttributes() {
+    protected function getValue() {
+        $bean = $this->params['bean'];
         $elementName = $this->params['element'];
         $attribute = $this->params['attribute'];
-        $bean = $this->params['bean'];
         $element = $bean->getElement($elementName);
         $model = $this->params['model'];
         //
-        $attributes = array();
-        $attributes['type'] = 'text';
-        $attributes['name'] = $elementName . '['. $attribute .']';
-        // если в бине есть значение - берем его
         $value = null;
         if (array_key_exists($attribute, $element->getFormElementValues())) {
             $values = $element->getFormElementValues();
@@ -53,7 +49,19 @@ abstract class CStatefullFormWidget implements IStatefullFormWidget {
         } else {
             $value = $model->$attribute;
         }
-        $attributes['value'] = $value;
+        return $value;
+    }
+
+    protected function getAttributes() {
+        $elementName = $this->params['element'];
+        $attribute = $this->params['attribute'];
+        $model = $this->params['model'];
+        //
+        $attributes = array();
+        $attributes['type'] = 'text';
+        $attributes['name'] = $elementName . '['. $attribute .']';
+        // если в бине есть значение - берем его
+        $attributes['value'] = $this->getValue();
         // классы
         $classes = array();
         // обязательность поля
@@ -66,11 +74,24 @@ abstract class CStatefullFormWidget implements IStatefullFormWidget {
     }
 
     protected function render($type = '', $attributes = array()) {
+        $hasContent = array_key_exists('content', $attributes);
         $result = '<' . $type;
         foreach ($attributes as $key=>$value) {
-            $result .= ' ' . $key . '="' . $value . '"';
+            if ($key != 'content') {
+                $result .= ' ' . $key . '="' . $value . '"';
+            }
         }
-        $result .= ' />';
+        if ($hasContent) {
+            $result .= '>';
+            if (is_array($attributes['content'])) {
+                $result .= implode($attributes['content']);
+            } else {
+                $result .= $attributes['content'];
+            }
+            $result .= '</'. $type .'>';
+        } else {
+            $result .= ' />';
+        }
         return $result;
     }
 

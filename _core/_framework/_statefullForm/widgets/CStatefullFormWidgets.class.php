@@ -29,4 +29,15 @@ class CStatefullFormWidgets {
         $widget = new CStatefullFormWidget_Hidden($params);
         return $widget->run();
     }
+
+    /**
+     * Виджет "Выбор из списка"
+     *
+     * @param array $params
+     * @return string
+     */
+    public static function select($params = array()) {
+        $widget = new CStatefullFormWidget_Select($params);
+        return $widget->run();
+    }
 }
