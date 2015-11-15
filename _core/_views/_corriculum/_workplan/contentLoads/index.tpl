@@ -39,7 +39,7 @@
                     <td><button type="submit" name="element" value="load_{$load->getId()}" class="btn btn-link"><i class="icon-ok"></i></button></td>
                     <td>{sf_toggleVisible address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}_details" object=$section}</td>
                     <td>{sf_select bean=$bean model=$load element="load_{$load->getId()}" attribute='load_type_id' source='corriculum_labor_types'}</td>
-                    <td><input type="text" name="load_{$load->getId()}[term_id]" value="{$load->term_id}"></td>
+                    <td>{sf_select bean=$bean model=$load element="load_{$load->getId()}" attribute='term_id' source='class.CSearchCatalogWorkPlanTerms' params=["plan_id" => $section->category->plan_id]}</td>
                     <td>{sf_input bean=$bean model=$load element="load_{$load->getId()}" attribute='value'}</td>
 
                     {sf_hidden bean=$bean model=$load element="load_{$load->getId()}" attribute='section_id'}

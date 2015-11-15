@@ -18,8 +18,27 @@ class CStatefullFormWidget_Select extends CStatefullFormWidget_Input {
     private function getValues() {
         $values = array();
         if (array_key_exists('source', $this->params)) {
-            $taxonomy = CTaxonomyManager::getTaxonomy($this->params['source']);
-            $values = $taxonomy->getTermsList();
+            $source = $this->params['source'];
+            if (CUtils::strLeft($source, ".") == "class") {
+                $class = CUtils::strRight($source, ".");
+                if (array_key_exists('properties', $this->params)) {
+                    $object = new $class(array(
+                        "properties" => $this->params['properties']
+                    ));
+                } else {
+                    $object = new $class();
+                }
+
+                $sourceParams = $this->params['params'];
+                // для совместимости их надо положить в запрос
+                foreach ($sourceParams as $key=>$value) {
+                    $_POST[$key] = $value;
+                }
+                $values = $object->actionGetViewData();
+            } else {
+                $taxonomy = CTaxonomyManager::getTaxonomy($this->params['source']);
+                $values = $taxonomy->getTermsList();
+            }
         } elseif (array_key_exists('values', $this->params)) {
             $values = $this->params['values'];
         }
