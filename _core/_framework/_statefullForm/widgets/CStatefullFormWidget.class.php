@@ -68,6 +68,9 @@ abstract class CStatefullFormWidget implements IStatefullFormWidget {
             $attributes['required'] = 'required';
         }
         $attributes['class'] = array();
+        if (array_key_exists('class', $this->params)) {
+            $attributes['class'][] = $this->params['class'];
+        }
         return $attributes;
     }
 

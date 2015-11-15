@@ -38,9 +38,9 @@
                     <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}" object=$section}</td>
                     <td><button type="submit" name="element" value="load_{$load->getId()}" class="btn btn-link"><i class="icon-ok"></i></button></td>
                     <td>{sf_toggleVisible address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}_details" object=$section}</td>
-                    <td>{sf_select bean=$bean model=$load element="load_{$load->getId()}" attribute='load_type_id' source='corriculum_labor_types'}</td>
-                    <td>{sf_select bean=$bean model=$load element="load_{$load->getId()}" attribute='term_id' source='class.CSearchCatalogWorkPlanTerms' params=["plan_id" => $section->category->plan_id]}</td>
-                    <td>{sf_input bean=$bean model=$load element="load_{$load->getId()}" attribute='value'}</td>
+                    <td>{sf_select bean=$bean model=$load element="load_{$load->getId()}" attribute='load_type_id' source='corriculum_labor_types' class='span12'}</td>
+                    <td>{sf_select bean=$bean model=$load element="load_{$load->getId()}" attribute='term_id' source='class.CSearchCatalogWorkPlanTerms' class='span12' params=["plan_id" => $section->category->plan_id]}</td>
+                    <td>{sf_input bean=$bean model=$load element="load_{$load->getId()}" attribute='value' class='span12'}</td>
 
                     {sf_hidden bean=$bean model=$load element="load_{$load->getId()}" attribute='section_id'}
                     {sf_hidden bean=$bean model=$load element="load_{$load->getId()}" attribute='id'}
