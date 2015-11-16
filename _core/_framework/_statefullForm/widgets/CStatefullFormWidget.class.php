@@ -22,8 +22,8 @@ abstract class CStatefullFormWidget implements IStatefullFormWidget {
         if (!array_key_exists('element', $params)) {
             throw new Exception('Не задан параметр element, к которому относится элемент формы');
         }
-        if (!array_key_exists('model', $params)) {
-            throw new Exception('Не задан параметр model, не знаю к какой модели данных идет обращение');
+        if (!array_key_exists('model', $params) || is_null($params['model'])) {
+            $params['model'] = new CModel();
         }
         if (!is_a($params['model'], 'CModel')) {
             throw new Exception('Model не экземпляр класса CModel');
