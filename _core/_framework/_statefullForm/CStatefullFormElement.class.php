@@ -55,7 +55,6 @@ class CStatefullFormElement {
         }
     }
 
-
     /**
      * @return mixed
      */
@@ -65,6 +64,10 @@ class CStatefullFormElement {
 
     public function isEdit() {
         return $this->getState() == 'edit';
+    }
+
+    public function isStateNotSet() {
+        return is_null($this->getState());
     }
 
     public function isShow() {

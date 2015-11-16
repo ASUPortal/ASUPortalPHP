@@ -14,6 +14,17 @@ class CWorkPlanContentSectionLoadsController extends CStatefullFormController {
         }
     }
 
+    function before_render() {
+        if ($this->getStatefullFormBean()->getElement('load_new')->isStateNotSet()) {
+            $this->getStatefullFormBean()->getElement('load_new')->setShow(true);
+        }
+    }
+
+    function handle_before_changeState_load_new() {
+        $newLoad = new CWorkPlanContentSectionLoad();
+        $newLoad->section_id = CRequest::getInt('id');
+        $this->setData('newLoad', $newLoad);
+    }
 
     function render() {
         /* @var $section CWorkPlanContentSection */

@@ -25,6 +25,7 @@ abstract class CStatefullFormController extends CBaseController{
         }
 
         // последний шаг - запускаем рендеринг
+        $this->before_render();
         $this->render();
     }
 
@@ -131,4 +132,5 @@ abstract class CStatefullFormController extends CBaseController{
     }
 
     abstract function render();
+    protected function before_render() {}
 }

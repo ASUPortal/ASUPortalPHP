@@ -36,7 +36,7 @@
                 <tr>
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузка')) { location.href='workplancontentloads.php?action=delete&id={$load->getId()}'; }; return false;"></a></td>
                     <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}" object=$section}</td>
-                    <td><button type="submit" name="element" value="load_{$load->getId()}" class="btn btn-link"><i class="icon-ok"></i></button></td>
+                    <td>{sf_submit bean=$bean element="load_{$load->getId()}"}</td>
                     <td>{sf_toggleVisible address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}_details" object=$section}</td>
                     <td>{sf_select bean=$bean model=$load element="load_{$load->getId()}" attribute='load_type_id' source='corriculum_labor_types' class='span12'}</td>
                     <td>{sf_select bean=$bean model=$load element="load_{$load->getId()}" attribute='term_id' source='class.CSearchCatalogWorkPlanTerms' class='span12' params=["plan_id" => $section->category->plan_id]}</td>
@@ -52,6 +52,26 @@
                 {include file="_corriculum/_workplan/contentLoads/subform.selfeducation.tpl"}
             {/sf_showIfVisible}
         {/foreach}
+        {sf_showIfVisible bean=$bean element='load_new'}
+        <tr>
+            <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="load_new" object=$section}</td>
+            <td colspan="6">
+                Добавить вид нагрузки
+            </td>
+        </tr>
+        {/sf_showIfVisible}
+        {sf_showIfEditable bean=$bean element='load_new'}
+        {sf_hidden bean=$bean model=$load element='load_new' attribute='section_id'}
+            <tr>
+                <td>&nbsp;</td>
+                <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="load_new" object=$section}</td>
+                <td>{sf_submit bean=$bean element='load_new'}</td>
+                <td>&nbsp;</td>
+                <td>{sf_select bean=$bean model=$newLoad element='load_new' attribute='load_type_id' source='corriculum_labor_types' class='span12'}</td>
+                <td>{sf_select bean=$bean model=$newLoad element='load_new' attribute='term_id' source='class.CSearchCatalogWorkPlanTerms' class='span12' params=["plan_id" => $section->category->plan_id]}</td>
+                <td>{sf_input bean=$bean model=$newLoad element='load_new' attribute='value' class='span12'}</td>
+            </tr>
+        {/sf_showIfEditable}
         </tbody>
     </table>
     </form>
