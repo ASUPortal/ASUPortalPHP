@@ -38,7 +38,10 @@
 	{CHtml::helpForCurrentPage()}
 
     {include file="_core.search.tpl"}
-
+    
+    {if $persons->getCount() == 0}
+		Нет сотрудников для отображения
+	{else}
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th></th>
@@ -71,8 +74,8 @@
             </tr>
         {/foreach}
     </table>
-
     {CHtml::paginator($paginator, "?action=index")}
+    {/if}
 {/block}
 
 {block name="asu_right"}
