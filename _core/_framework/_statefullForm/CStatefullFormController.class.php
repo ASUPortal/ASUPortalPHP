@@ -33,6 +33,31 @@ abstract class CStatefullFormController extends CBaseController{
     }
 
     /**
+     * Генератор названий обработчиков
+     *
+     * @param string $event
+     * @param string $element
+     * @return array
+     */
+    private function getHandlerNames($event = '', $element = '') {
+        // получим основные названия обработчиков
+        $handlers = array();
+        $handlers[] = $event . '_' . $element;
+        if (mb_strpos($element, '_') !== false) {
+            $handlers[] = $event . '_' . CUtils::strLeft($element, '_');
+        }
+        $handlers[] = $event;
+        // сгенерируем дополнительно полный список
+        $result = array();
+        foreach ($handlers as $handler) {
+            $result[] = 'handle_before_' . $handler;
+            $result[] = 'handle_' . $handler;
+            $result[] = 'handle_after_' . $handler;
+        }
+        return $result;
+    }
+
+    /**
      * Обработка события сабмита формы
      */
     private function processFormSubmit() {
@@ -52,22 +77,13 @@ abstract class CStatefullFormController extends CBaseController{
         $element = CRequest::getString("element");
         $formData = CRequest::getArray($element);
         /**
-         * Соберем возможные обработчики события
-         */
-        $handlers = array();
-        $handlers[] = 'submitForm_' . $element;
-        if (mb_strpos($element, '_') !== false) {
-            $handlers[] = 'submitForm_' . CUtils::strLeft($element, '_');
-        }
-        $handlers[] = 'submitForm';
-        /**
          * В элементе формы могут быть старые ошибки валидации. Почистим их
          */
         self::getStatefullFormBean()->getElement($element)->setValidationErrors(array());
         /**
          * Теперь вызываем их по очереди
          */
-        foreach ($handlers as $handler) {
+        foreach ($this->getHandlerNames('submitForm', $element) as $handler) {
             if (method_exists($this, $handler)) {
                 $this->$handler($formData, $element);
             }
@@ -80,19 +96,10 @@ abstract class CStatefullFormController extends CBaseController{
     private function processEvent() {
         $event = CRequest::getString('event');
         /**
-         * Соберем возможные обработчики события
-         * 1. Если задан id, то попробуем найти handle_event_id
-         * 2. В остальных случаях handle_event
-         */
-        $handlers = array();
-        if (CRequest::getInt("id") > 0) {
-            $handlers[] = 'handle_'.$event.'_'.CRequest::getInt("id");
-        }
-        $handlers[] = 'handle_'.$event;
-        /**
          * Теперь попробуем их вызвать у текущего контроллера
          */
-        foreach ($handlers as $handler) {
+        $element = CRequest::getString('element');
+        foreach ($this->getHandlerNames($event, $element) as $handler) {
             if (method_exists($this, $handler)) {
                 $this->$handler();
             }

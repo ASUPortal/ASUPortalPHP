@@ -3,7 +3,7 @@
 class CWorkPlanContentSectionLoadsController extends CStatefullFormController {
     protected $_isComponent = true;
 
-    function submitForm_load($formData = array(), $element = '') {
+    function handle_submitForm_load($formData = array(), $element = '') {
         $load = new CWorkPlanContentSectionLoad();
         $load->setAttributes($formData);
         if ($load->validate()) {
