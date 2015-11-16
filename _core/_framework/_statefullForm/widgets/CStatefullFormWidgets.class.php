@@ -40,4 +40,15 @@ class CStatefullFormWidgets {
         $widget = new CStatefullFormWidget_Select($params);
         return $widget->run();
     }
+
+    /**
+     * Виджет "Кнопка сохранения"
+     *
+     * @param array $params
+     * @return string
+     */
+    public static function submit($params = array()) {
+        $widget = new CStatefullFormWidget_Submit($params);
+        return $widget->run();
+    }
 }
