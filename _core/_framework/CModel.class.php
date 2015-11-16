@@ -271,4 +271,26 @@ class CModel {
             return $name;
         }
     }
+
+    /**
+     * Отмечена ли эта запись как удаленная
+     *
+     * @return bool
+     */
+    public function isMarkDeleted() {
+        return $this->_deleted == '1';
+    }
+
+    /**
+     * Установить флаг удаленности
+     *
+     * @param $value
+     */
+    public function markDeleted($value) {
+        if ($value) {
+            $this->_deleted = 1;
+        } else {
+            $this->_deleted = 0;
+        }
+    }
 }

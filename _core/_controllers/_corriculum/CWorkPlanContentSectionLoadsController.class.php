@@ -14,6 +14,13 @@ class CWorkPlanContentSectionLoadsController extends CStatefullFormController {
         }
     }
 
+    function handle_toggleDelete_load() {
+        $loadId = CRequest::getInt('model_id');
+        $load = CBaseManager::getWorkPlanContentSectionLoad($loadId);
+        $load->markDeleted(!$load->isMarkDeleted());
+        $load->save();
+    }
+
     function before_render() {
         if ($this->getStatefullFormBean()->getElement('load_new')->isStateNotSet()) {
             $this->getStatefullFormBean()->getElement('load_new')->setShow(true);

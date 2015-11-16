@@ -25,8 +25,9 @@ class CStatefullFormWidget_Text extends CStatefullFormWidget {
     }
 
     private function isDeleted() {
+        /* @var $model CModel */
         $model = $this->params['model'];
-        return $model->_deleted == '1';
+        return $model->isMarkDeleted();
     }
 
     protected function getAttributes() {

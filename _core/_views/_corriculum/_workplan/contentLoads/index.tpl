@@ -23,7 +23,7 @@
             {sf_showIfVisible bean=$bean element="load_{$load->getId()}"}
                 {sf_showByDefault bean=$bean element="load_{$load->getId()}"}
                 <tr>
-                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузка')) { location.href='workplancontentloads.php?action=delete&id={$load->getId()}'; }; return false;"></a></td>
+                    <td>{sf_toggleDelete object=$section bean=$bean model=$load element="load_{$load->getId()}" address='workplancontentloads.php'}</td>
                     <td>{sf_text model=$load attribute='ordering'}</td>
                     <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}" object=$section}</td>
                     <td>{sf_toggleVisible address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}_details" object=$section}</td>

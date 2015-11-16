@@ -18,6 +18,7 @@ class CStatefullFormSmartyPlugin {
         $smarty->registerPlugin('block', 'sf_showIfEditable', array('CStatefullFormSmartyPlugin', 'StatefullForm_ShowIfEditable'));
         $smarty->registerPlugin('function', 'sf_toggleVisible', array('CStatefullFormSmartyPlugin', 'StatefullForm_ToggleVisible'));
         $smarty->registerPlugin('function', 'sf_toggleEdit', array('CStatefullFormSmartyPlugin', 'StatefullForm_ToggleEdit'));
+        $smarty->registerPlugin('function', 'sf_toggleDelete', array('CStatefullFormSmartyPlugin', 'StatefullForm_ToggleDelete'));
         $smarty->registerPlugin('function', 'sf_showByDefault', array('CStatefullFormSmartyPlugin', 'StatefullForm_ShowByDefault'));
 
         $smarty->registerPlugin('function', 'sf_input', array('CStatefullFormWidgets', 'input'));
@@ -52,6 +53,39 @@ class CStatefullFormSmartyPlugin {
 
             echo self::StatefullForm_ChangeState($params, $content);
         }
+    }
+
+    /**
+     * Переключатель удаления
+     *
+     * @param array $params
+     * @throws Exception
+     */
+    public static function StatefullForm_ToggleDelete($params = array()) {
+        if (!array_key_exists('model', $params)) {
+            throw new Exception('Не указан параметр model, не знаю, что удалять');
+        }
+        self::checkParams($params);
+
+        /* @var $model CActiveModel */
+        $model = $params['model'];
+
+        if ($model->isMarkDeleted()) {
+            $content = '<i class="icon-circle-arrow-up"></i>';
+            $params['state'] = 'restore';
+        } else {
+            $content = '<i class="icon-trash"></i>';
+            $params['state'] = 'delete';
+        }
+
+        unset($params['model']);
+        $params['model_id'] = $model->getId();
+        $params['action'] = 'sendEvent';
+        $params['event'] = 'toggleDelete';
+
+        $link = '<a href="'.self::createReference($params).'">'.$content.'</a>';
+
+        return $link;
     }
 
     /**
