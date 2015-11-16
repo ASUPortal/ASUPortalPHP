@@ -24,6 +24,7 @@ class CStatefullFormSmartyPlugin {
         $smarty->registerPlugin('function', 'sf_hidden', array('CStatefullFormWidgets', 'hidden'));
         $smarty->registerPlugin('function', 'sf_select', array('CStatefullFormWidgets', 'select'));
         $smarty->registerPlugin('function', 'sf_submit', array('CStatefullFormWidgets', 'submit'));
+        $smarty->registerPlugin('function', 'sf_text', array('CStatefullFormWidgets', 'text'));
     }
 
     /**

@@ -51,4 +51,15 @@ class CStatefullFormWidgets {
         $widget = new CStatefullFormWidget_Submit($params);
         return $widget->run();
     }
+
+    /**
+     * Виджет для вывода текста с форматированием
+     *
+     * @param array $params
+     * @return string
+     */
+    public static function text($params = array()) {
+        $widget = new CStatefullFormWidget_Text($params);
+        return $widget->run();
+    }
 }

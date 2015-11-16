@@ -24,17 +24,17 @@
                 {sf_showByDefault bean=$bean element="load_{$load->getId()}"}
                 <tr>
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузка')) { location.href='workplancontentloads.php?action=delete&id={$load->getId()}'; }; return false;"></a></td>
-                    <td>{$load->ordering}</td>
+                    <td>{sf_text model=$load attribute='ordering'}</td>
                     <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}" object=$section}</td>
                     <td>{sf_toggleVisible address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}_details" object=$section}</td>
-                    <td>{$load->loadType}</td>
-                    <td>{$load->term->corriculum_discipline_section->title}</td>
-                    <td>{$load->value}</td>
+                    <td>{sf_text model=$load attribute='loadType'}</td>
+                    <td>{sf_text model=$load attribute='term'}</td>
+                    <td>{sf_text model=$load attribute='value'}</td>
                 </tr>
             {/sf_showIfVisible}
             {sf_showIfEditable bean=$bean element="load_{$load->getId()}"}
                 <tr>
-                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузка')) { location.href='workplancontentloads.php?action=delete&id={$load->getId()}'; }; return false;"></a></td>
+                    <td>&nbsp;</td>
                     <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}" object=$section}</td>
                     <td>{sf_submit bean=$bean element="load_{$load->getId()}"}</td>
                     <td>{sf_toggleVisible address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}_details" object=$section}</td>

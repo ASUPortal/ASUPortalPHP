@@ -8,7 +8,6 @@
  * @property int plan_id
  * @property String number
  * @property CWorkPlan plan
- * @property CCorriculumDisciplineSection number
  */
 class CWorkPlanTerm extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_TERMS;
@@ -44,7 +43,7 @@ class CWorkPlanTerm extends CActiveModel{
     }
 
     function __toString() {
-        return $this->number;
+        return (String) $this->corriculum_discipline_section->title;
     }
 
 
