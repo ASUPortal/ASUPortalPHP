@@ -82,13 +82,49 @@
             minLength: 1,
             items: 30
         });
+        jQuery("#main_search_reset").on("click", function(){
+            /**
+             * Сбрасываем фильтр
+             */
+            var url = window.location.origin + window.location.pathname;
+            var params = new Array();
+            if (window.location.search != "") {
+                var qw = window.location.search;
+                qw = qw.substr(1);
+                var parts = qw.split("&");
+                for (var i = 0; i < parts.length; i++) {
+                    var param = parts[i].split("=");
+                    if (param[0] !== "filter" && param[0] !== "filterClass" && param[0] !== "filterLabel") {
+                        params[params.length] = param[0] + "=" + param[1];
+                    }
+                }
+            }
+            /**
+             * Собираем строку запроса обратно
+             */
+            url = url + "?" + params.join("&");
+            /**
+             * Переадресация
+             */
+            window.location.href = url;
+        });
     });
 </script>
 
 <table border="0" width="100%" class="tableBlank">
+	<tr>
+		{block name="localSearchContent"}{/block}
+	</tr>
     <tr>
-        <td valign="top">
-            {block name="localSearchContent"}{/block}
+    	<td valign="top">
+            <table cellspacing="2">
+                {foreach $__search as $label=>$value}
+                    <tr>
+                        <td>{$value}</td>
+                        <td><i class="icon-trash" style="cursor: pointer; " id="main_search_reset"></i></td>
+                    </tr>
+                {/foreach}
+            </table>
         </td>
         <td valign="top" width="300px">
             <p>
