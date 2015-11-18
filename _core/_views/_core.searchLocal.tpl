@@ -82,7 +82,7 @@
             minLength: 1,
             items: 30
         });
-        jQuery(".icon-trash").on("click", function(){
+        jQuery(".icon-trash.main_search_reset").on("click", function(){
             /**
              * Сбрасываем фильтр
              */
@@ -121,7 +121,7 @@
                 {foreach $__search as $label=>$value}
                     <tr>
                         <td>{$value}</td>
-                        <td><i class="icon-trash" style="cursor: pointer; "></i></td>
+                        <td><i class="icon-trash main_search_reset" style="cursor: pointer; "></i></td>
                     </tr>
                 {/foreach}
             </table>
