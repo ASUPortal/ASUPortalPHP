@@ -128,70 +128,21 @@ class CIndPlanPersonsReportTableTotal extends CAbstractPrintClassField {
             }
             $result[$plan->person_id] = $row;
         }
-        $sum5=0;
-        $sum6=0;
-        $sum7=0;
-        $sum8=0;
-        $sum9=0;
-        $sum10=0;
-        $sum11=0;
-        $sum12=0;
-        $sum13=0;
-        $sum14=0;
-        $sum15=0;
-        $sum16=0;
-        $sum17=0;
-        $sum18=0;
-        $sum19=0;
-        $sum20=0;
-        $sum21=0;
-        $sum22=0;
-        foreach($result as $i) {
-        	$sum5+=$i[5];
-        	$sum6+=$i[6];
-        	$sum7+=$i[7];
-        	$sum8+=$i[8];
-        	$sum9+=$i[9];
-        	$sum10+=$i[10];
-        	$sum11+=$i[11];
-        	$sum12+=$i[12];
-        	$sum13+=$i[13];
-        	$sum14+=$i[14];
-        	$sum15+=$i[15];
-        	$sum16+=$i[16];
-        	$sum17+=$i[17];
-        	$sum18+=$i[18];
-        	$sum19+=$i[19];
-        	$sum20+=$i[20];
-        	$sum21+=$i[21];
-        	$sum22+=$i[22];
-        }
-        $total = array();
-        $total[0] = "Итог";
-        $total[1] = "";
-        $total[2] = "";
-        $total[3] = "";
-        $total[4] = "";
-        $total[5] = $sum5;
-        $total[6] = $sum6;
-        $total[7] = $sum7;
-        $total[8] = $sum8;
-        $total[9] = $sum9;
-        $total[10] = $sum10;
-        $total[11] = $sum11;
-        $total[12] = $sum12;
-        $total[13] = $sum13;
-        $total[14] = $sum14;
-        $total[15] = $sum15;
-        $total[16] = $sum16;
-        $total[17] = $sum17;
-        $total[18] = $sum18;
-        $total[19] = $sum19;
-        $total[20] = $sum20;
-        $total[21] = $sum21;
-        $total[22] = $sum22;
-        $res = array($total);
-        return $res;
+        $sum = array();
+    	$sum[0] = "Итог";
+    	for ($i = 1; $i <= 4; $i++) {
+    		$sum[$i] = "";
+    	}
+    	for ($i = 5; $i <= 22; $i++) {
+    		if (!array_key_exists($i, $sum)) {
+    			$sum[$i] = 0;
+    		}
+    		foreach($result as $item) {
+    			$sum[$i] += $item[$i];
+    		}
+    	}
+    	$total = array($sum);
+        return $total;
     }
 
 } 
