@@ -37,7 +37,7 @@
     <h2>Сотрудники кафедры</h2>
 	{CHtml::helpForCurrentPage()}
 
-    {include file="_core.search.tpl"}
+    {include file="_core.searchLocal.tpl"}
     
     {if $persons->getCount() == 0}
 		Нет сотрудников для отображения

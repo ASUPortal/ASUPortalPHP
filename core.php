@@ -169,6 +169,7 @@
     define("TABLE_USERS", "users");
     define("TABLE_BIOGRAPHY", "biography");
     define("TABLE_SCHEDULE", "time");
+    define("TABLE_FAMILY_STATUS", "family_status");
     define("TABLE_EVENT_MEMBERSHIP", "pl_event_membership");
     define("TABLE_EVENTS", "pl_events");
     define("TABLE_POSTS", "dolgnost");

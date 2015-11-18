@@ -9,7 +9,7 @@
                     <tr>
                         <td><b>{$field}:</b></td>
                         <td>{$value}</td>
-                        <td><i class="icon-trash" style="cursor: pointer; " id="main_search_reset"></i></td>
+                        <td><i class="icon-trash main_search_reset" style="cursor: pointer; "></i></td>
                     </tr>
                 {/foreach}
             </table>
@@ -101,7 +101,7 @@
             minLength: 1,
             items: 20
         });
-        jQuery("#main_search_reset").on("click", function(){
+        jQuery(".icon-trash.main_search_reset").on("click", function(){
             /**
              * Сбрасываем фильтр
              */

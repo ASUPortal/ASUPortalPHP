@@ -35,6 +35,13 @@ class CStaffController extends CBaseController{
         $query->select("person.*")
             ->from(TABLE_PERSON." as person")
             ->leftJoin(TABLE_PERSON_BY_TYPES." as types", "types.kadri_id = person.id")
+            ->leftJoin(TABLE_TYPES." as person_types", "types.person_type_id = person_types.id")
+            ->leftJoin(TABLE_GENDERS." as pol", "person.pol = pol.id")
+            ->leftJoin(TABLE_TAXONOMY_TERMS." as term", "person.department_role_id = term.id")
+            ->leftJoin(TABLE_LANGUAGES." as lang", "person.language1 = lang.id")
+            ->leftJoin(TABLE_POSTS." as post", "person.dolgnost = post.id")
+            ->leftJoin(TABLE_TITLES." as zvanie", "person.zvanie = zvanie.id")
+            ->leftJoin(TABLE_DEGREES." as stepen", "person.stepen = stepen.id")
             ->order("person.fio asc");
         
         $isAll = false;
@@ -43,7 +50,7 @@ class CStaffController extends CBaseController{
         }
         if (CRequest::getInt("type") != 0) {
         	$selectedType = CRequest::getInt("type");
-        } elseif (!$isAll) {
+        } elseif (!$isAll and is_null(CRequest::getString("filterClass"))) {
         	$query->condition("(types.person_type_id = 1 or types.person_type_id = 3)");
         }
         $typesQuery = new CQuery();
@@ -219,7 +226,7 @@ class CStaffController extends CBaseController{
     }
     public function actionSearch() {
         $res = array();
-        $term = CRequest::getString("term");
+        $term = CRequest::getString("query");
         /**
          * Поиск по ФИО
          */
@@ -230,26 +237,27 @@ class CStaffController extends CBaseController{
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "label" => $item["name"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
-                "filter" => "person"
+            	"field" => "person.id",
+        		"value" => $item["id"],
+        		"label" => $item["name"],
+        		"class" => "CPerson"
             );
         }
         /**
          * Поиск по типу участия на кафедре
          */
         $query = new CQuery();
-        $query->select("type.id as id, type.name as name")
-            ->from(TABLE_TYPES." as type")
-            ->condition("type.name like '%".$term."%'")
+        $query->select("types.person_type_id as id, person_types.name as name")
+	        ->from(TABLE_PERSON_BY_TYPES." as types")
+	        ->innerJoin(TABLE_TYPES." as person_types", "types.person_type_id = person_types.id")
+            ->condition("person_types.name like '%".$term."%'")
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "label" => $item["name"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
-                "filter" => "type"
+            	"field" => "types.person_type_id",
+            	"value" => $item["id"],
+            	"label" => $item["name"],
+            	"class" => "CTerm"
             );
         }
         /**
@@ -262,10 +270,10 @@ class CStaffController extends CBaseController{
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "label" => $item["name"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
-                "filter" => "gender"
+            	"field" => "pol.id",
+            	"value" => $item["id"],
+            	"label" => $item["name"],
+            	"class" => "CTerm"
             );
         }
         /**
@@ -279,90 +287,90 @@ class CStaffController extends CBaseController{
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "label" => $item["name"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
-                "filter" => "role"
+            	"field" => "term.id",
+            	"value" => $item["id"],
+            	"label" => $item["name"],
+            	"class" => "CTerm"
             );
         }
         /**
          * Поиск по семейному положению
          */
         $query = new CQuery();
-        $query->select("s.id as id, s.name as name")
-            ->from("family_status as s")
-            ->condition("s.name like '%".$term."%'")
+        $query->select("fam_st.id as id, fam_st.name as name")
+            ->from(TABLE_FAMILY_STATUS." as fam_st")
+            ->condition("fam_st.name like '%".$term."%'")
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "label" => $item["name"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
-                "filter" => "family"
+            	"field" => "fam_st.id",
+            	"value" => $item["id"],
+            	"label" => $item["name"],
+            	"class" => "CTerm"
             );
         }
         /**
          * Поиск по иностранному языку
          */
         $query = new CQuery();
-        $query->select("s.id as id, s.name as name")
-            ->from("language as s")
-            ->condition("s.name like '%".$term."%'")
+        $query->select("lang.id as id, lang.name as name")
+            ->from(TABLE_LANGUAGES." as lang")
+            ->condition("lang.name like '%".$term."%'")
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "label" => $item["name"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
-                "filter" => "language"
+            	"field" => "lang.id",
+            	"value" => $item["id"],
+            	"label" => $item["name"],
+            	"class" => "CTerm"
             );
         }
         /**
          * Поиск по должности
          */
         $query = new CQuery();
-        $query->select("s.id as id, s.name as name")
-            ->from(TABLE_POSTS." as s")
-            ->condition("s.name like '%".$term."%'")
+        $query->select("post.id as id, post.name as name")
+            ->from(TABLE_POSTS." as post")
+            ->condition("post.name like '%".$term."%'")
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
-            $res[] = array(
-                "label" => $item["name"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
-                "filter" => "post"
+            $res[] = array(		
+            	"field" => "post.id",
+            	"value" => $item["id"],
+            	"label" => $item["name"],
+            	"class" => "CTerm"
             );
         }
         /**
          * Поиск по званию
          */
         $query = new CQuery();
-        $query->select("s.id as id, s.name as name")
-            ->from("zvanie as s")
-            ->condition("s.name like '%".$term."%'")
+        $query->select("zvanie.id as id, zvanie.name as name")
+            ->from(TABLE_TITLES." as zvanie")
+            ->condition("zvanie.name like '%".$term."%'")
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "label" => $item["name"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
-                "filter" => "title"
+            	"field" => "zvanie.id",
+            	"value" => $item["id"],
+            	"label" => $item["name"],
+            	"class" => "CTerm"
             );
         }
         /**
          * Поиск по ученой степени
          */
         $query = new CQuery();
-        $query->select("s.id as id, s.name as name")
-            ->from("stepen as s")
-            ->condition("s.name like '%".$term."%'")
+        $query->select("stepen.id as id, stepen.name as name")
+            ->from(TABLE_DEGREES." as stepen")
+            ->condition("stepen.name like '%".$term."%'")
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "label" => $item["name"],
-                "value" => $item["name"],
-                "object_id" => $item["id"],
-                "filter" => "degree"
+            	"field" => "stepen.id",
+            	"value" => $item["id"],
+            	"label" => $item["name"],
+            	"class" => "CTerm"
             );
         }
         /**
@@ -407,9 +415,9 @@ class CStaffController extends CBaseController{
                     }
                     $res[] = array(
                         "label" => $person->getName()." (".$label.": ".$person->$field.")",
-                        "value" => $person->getName()." (".$label.": ".$person->$field.")",
-                        "object_id" => $person->getId(),
-                        "filter" => "person"
+                        "value" => $person->getId(),
+                        "field" => "person.id",
+                        "class" => "CPerson"
                     );
                 }
             }
