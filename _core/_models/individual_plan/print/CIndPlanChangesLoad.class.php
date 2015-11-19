@@ -37,6 +37,13 @@ class CIndPlanChangesLoad extends CAbstractPrintClassField{
         	$dataRow[5] = $row->isExecuted();
         	$result[] = $dataRow;
         }
+        for ($i = count($result); $i <= 7; $i++) {
+        	$row = array();
+        	for ($j = 0; $j <= 5; $j++) {
+        		$row[$j] = "";
+        	}
+        	$result[] = $row;
+        }
         return $result;
     }
 }

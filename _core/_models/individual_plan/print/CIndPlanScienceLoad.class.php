@@ -38,6 +38,13 @@ class CIndPlanScienceLoad extends CAbstractPrintClassField{
         	$dataRow[6] = $row->comment;
         	$result[] = $dataRow;
         }
+        for ($i = count($result); $i <= 7; $i++) {
+        	$row = array();
+        	for ($j = 0; $j <= 6; $j++) {
+        		$row[$j] = "";
+        	}
+        	$result[] = $row;
+        }
         return $result;
     }
 }
