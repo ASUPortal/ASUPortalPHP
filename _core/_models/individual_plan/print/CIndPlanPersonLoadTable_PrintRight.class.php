@@ -60,9 +60,10 @@ class CIndPlanPersonLoadTable_PrintRight extends CAbstractPrintClassField{
                 if ($index > 7) {
                     $row[] = $value;
                     // дублируем итого в факт
-                    if ($index == 15) {
+                    // убран факт из шаблона
+                    /*if ($index == 15) {
                         $row[] = $value;
-                    }
+                    }*/
                 }
             }
             $row[] = "";

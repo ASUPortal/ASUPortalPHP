@@ -33,6 +33,13 @@ class CIndPlanMethodsLoad extends CAbstractPrintClassField{
         	$dataRow[1] = $row->paper_pages;
         	$result[] = $dataRow;
         }
+        for ($i = count($result); $i <= 7; $i++) {
+        	$row = array();
+        	for ($j = 0; $j <= 1; $j++) {
+        		$row[$j] = "";
+        	}
+        	$result[] = $row;
+        }
         return $result;
     }
 }
