@@ -394,33 +394,20 @@ class CStaffController extends CBaseController{
             "primech",
             "add_contact"
         );
-        $query = new CQuery();
-        $query->select("person.*")
-            ->from(TABLE_PERSON." as person")
-            ->condition("MATCH (".implode($fields, ", ").") AGAINST ('".$term."')")
-            ->limit(0, 5);
-        $objects = new CArrayList();
-        foreach ($query->execute()->getItems() as $ar) {
-            $person = new CPerson(new CActiveRecord($ar));
-            $objects->add($person->getId(), $person);
-        }
-        foreach ($objects->getItems() as $person) {
-            foreach ($fields as $field) {
-                if (strpos($person->$field, $term) !== false) {
-                    $labels = $person->attributeLabels();
-                    if (array_key_exists($field, $labels)) {
-                        $label = $labels[$field];
-                    } else {
-                        $label = $field;
-                    }
-                    $res[] = array(
-                        "label" => $person->getName()." (".$label.": ".$person->$field.")",
-                        "value" => $person->getId(),
-                        "field" => "person.id",
-                        "class" => "CPerson"
-                    );
-                }
-            }
+        foreach ($fields as $field) {
+        	$query = new CQuery();
+        	$query->select("person.id as id, person.".$field." as name")
+	        	->from(TABLE_PERSON." as person")
+	        	->condition("person.".$field." like '%".$term."%'")
+	        	->limit(0, 5);
+        	foreach ($query->execute()->getItems() as $item) {
+        		$res[] = array(
+        				"field" => "person.id",
+        				"value" => $item["id"],
+        				"label" => $item["name"],
+        				"class" => "CPerson"
+        		);
+        	}
         }
         echo json_encode($res);
     }
