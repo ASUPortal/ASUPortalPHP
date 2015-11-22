@@ -44,10 +44,22 @@ abstract class CStatefullFormController extends CBaseController{
         // получим основные названия обработчиков
         $handlers = array();
         $handlers[] = $event . '_' . $element;
-        if (mb_strpos($element, '_') !== false) {
-            $handlers[] = $event . '_' . CUtils::strLeft($element, '_');
+        $e = $element;
+        while (mb_strpos($e, '_') !== false) {
+            $e = CUtils::strLeftBack($e, '_');
+            $handlers[] = $event . '_' . $e;
         }
         $handlers[] = $event;
+        // для цифровых обработчиков сгенерируем нецифровые аналоги
+        $pattern = '/(_[0-9]+)/';
+        foreach ($handlers as $handler) {
+            if (preg_match($pattern, $handler) > 0) {
+                $h = preg_replace($pattern, '', $handler);
+                if (!in_array($h, $handlers)) {
+                    $handlers[] = $h;
+                }
+            }
+        }
         // сгенерируем дополнительно полный список
         $result = array();
         foreach ($handlers as $handler) {
@@ -55,6 +67,8 @@ abstract class CStatefullFormController extends CBaseController{
             $result[] = 'handle_' . $handler;
             $result[] = 'handle_after_' . $handler;
         }
+        // для отладки пропишем все обработчики в бин
+        $this->getStatefullFormBean()->getElement($element)->setHandlers($result);
         return $result;
     }
 

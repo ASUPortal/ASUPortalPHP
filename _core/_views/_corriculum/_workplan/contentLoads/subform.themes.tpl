@@ -7,22 +7,47 @@
 </tr>
 {sf_showIfVisible bean=$bean element="load_{$load->getId()}_themes"}
 {foreach $load->topics as $topic}
-    {sf_showByDefault bean=$bean element="topic_{$topic->getId()}"}
-    {sf_showIfVisible bean=$bean element="topic_{$topic->getId()}"}
+    {sf_showByDefault bean=$bean element="topic_load_{$topic->getId()}"}
+    {sf_showIfVisible bean=$bean element="topic_load_{$topic->getId()}"}
         <tr>
-            <td widtd="16">&nbsp;</td>
+            <td>{sf_toggleDelete object=$section bean=$bean model=$topic element="topic_load_{$topic->getId()}" address='workplancontentloads.php'}</td>
             <td widtd="16">#</td>
-            <td widtd="16">{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="topic_{$topic->getId()}" object=$section}</td>
+            <td widtd="16">{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="topic_load_{$topic->getId()}" object=$section}</td>
             <td widtd="16">&nbsp;</td>
-            <td colspan="2">{$topic->title}</td>
-            <td colspan="2">{$topic->value}</td>
+            <td colspan="2">{sf_text model=$topic attribute='title'}</td>
+            <td colspan="2">{sf_text model=$topic attribute='value'}</td>
         </tr>
     {/sf_showIfVisible}
-    {sf_showIfEditable bean=$bean element="topic_{$topic->getId()}"}
+    {sf_showIfEditable bean=$bean element="topic_load_{$topic->getId()}"}
+        {sf_hidden bean=$bean model=$topic element="topic_load_{$topic->getId()}" attribute='load_id'}
+        {sf_hidden bean=$bean model=$topic element="topic_load_{$topic->getId()}" attribute='id'}
         <tr>
-            <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="topic_{$topic->getId()}" object=$section}</td>
-            <td colspan="6">Я тоже форма</td>
+            <td>&nbsp;</td>
+            <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="topic_load_{$topic->getId()}" object=$section}</td>
+            <td>{sf_submit bean=$bean element="topic_load_{$topic->getId()}"}</td>
+            <td>&nbsp;</td>
+            <td colspan="2">{sf_input bean=$bean model=$topic element="topic_load_{$topic->getId()}" attribute='title' class='span12'}</td>
+            <td>{sf_input bean=$bean model=$topic element="topic_load_{$topic->getId()}" attribute='value' class='span12'}</td>
         </tr>
     {/sf_showIfEditable}
 {/foreach}
+{sf_showIfVisible bean=$bean element="topic_load_{$load->getId()}_new"}
+    <tr>
+        <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean load_id="{$load->getId()}" element="topic_load_{$load->getId()}_new" object=$section}</td>
+        <td colspan="6">
+            Добавить тему
+        </td>
+    </tr>
+{/sf_showIfVisible}
+{sf_showIfEditable bean=$bean element="topic_load_{$load->getId()}_new"}
+    {sf_hidden bean=$bean model=$newTopic element="topic_load_{$load->getId()}_new" attribute='load_id'}
+    <tr>
+        <td>&nbsp;</td>
+        <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="topic_load_{$load->getId()}_new" object=$section}</td>
+        <td>{sf_submit bean=$bean element="topic_load_{$load->getId()}_new"}</td>
+        <td>&nbsp;</td>
+        <td colspan="2">{sf_input bean=$bean model=$newTopic element="topic_load_{$load->getId()}_new" attribute='title' class='span12'}</td>
+        <td>{sf_input bean=$bean model=$newTopic element="topic_load_{$load->getId()}_new" attribute='value' class='span12'}</td>
+    </tr>
+{/sf_showIfEditable}
 {/sf_showIfVisible}

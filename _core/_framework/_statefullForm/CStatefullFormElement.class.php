@@ -11,6 +11,23 @@ class CStatefullFormElement {
     private $state;
     private $validationErrors = array();
     private $formElementValues = array();
+    private $handlers = array();
+
+    /**
+     * @return array
+     */
+    public function getHandlers()
+    {
+        return $this->handlers;
+    }
+
+    /**
+     * @param array $handlers
+     */
+    public function setHandlers($handlers)
+    {
+        $this->handlers = $handlers;
+    }
 
     /**
      * @return array
