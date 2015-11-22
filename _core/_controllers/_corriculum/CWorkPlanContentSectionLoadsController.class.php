@@ -25,9 +25,26 @@ class CWorkPlanContentSectionLoadsController extends CStatefullFormController {
         }
     }
 
+    function handle_submitForm_technology_load($formData = array(), $element = '') {
+        $technology = new CWorkPlanContentSectionLoadTechnology();
+        $technology->setAttributes($formData);
+        if ($technology->validate()) {
+            $technology->save();
+            self::getStatefullFormBean()->getElement($element)->setShow(false);
+        } else {
+            self::getStatefullFormBean()->getElement($element)->setValidationErrors($technology->getValidationErrors());
+        }
+    }
+
+    function handle_before_changeState_technology_load_new() {
+        $newTechnology = new CWorkPlanContentSectionLoadTechnology();
+        $newTechnology->load_id = CRequest::getInt('load_id');
+        $this->setData('newTechnology', $newTechnology);
+    }
+
     function handle_before_changeState_topic_load_new() {
         $newTopic = new CWorkPlanContentSectionLoadTopic();
-        $newTopic->load_id = CRequest::getInt("load_id");
+        $newTopic->load_id = CRequest::getInt('load_id');
         $this->setData('newTopic', $newTopic);
     }
 
@@ -36,6 +53,13 @@ class CWorkPlanContentSectionLoadsController extends CStatefullFormController {
         $topic = CBaseManager::getWorkPlanContentSectionLoadTopic($topic_id);
         $topic->markDeleted(!$topic->isMarkDeleted());
         $topic->save();
+    }
+
+    function handle_toggleDelete_technology_load() {
+        $technology_id = CRequest::getInt("model_id");
+        $technology = CBaseManager::getWorkPlanContentSectionLoadTechnology($technology_id);
+        $technology->markDeleted(!$technology->isMarkDeleted());
+        $technology->save();
     }
 
     function handle_toggleDelete_load() {
@@ -51,10 +75,13 @@ class CWorkPlanContentSectionLoadsController extends CStatefullFormController {
         }
         /* @var $section CWorkPlanContentSection */
         $section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
-        foreach($section->loads as $load) {
-            $element = 'topic_load_' . $load->getId() . '_new';
-            if ($this->getStatefullFormBean()->getElement($element)->isStateNotSet()) {
-                $this->getStatefullFormBean()->getElement($element)->setShow(true);
+        foreach ($section->loads as $load) {
+            $elements[] = 'topic_load_' . $load->getId() . '_new';
+            $elements[] = 'technology_load_' . $load->getId() . '_new';
+            foreach ($elements as $element) {
+                if ($this->getStatefullFormBean()->getElement($element)->isStateNotSet()) {
+                    $this->getStatefullFormBean()->getElement($element)->setShow(true);
+                }
             }
         }
     }

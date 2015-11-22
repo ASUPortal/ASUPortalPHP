@@ -76,8 +76,7 @@
     </table>
     </form>
 
-    {$bean|var_dump}
-    {CLog::dump(true)}
+    {CLog::dump()}
 {/block}
 
 {block name="asu_right"}

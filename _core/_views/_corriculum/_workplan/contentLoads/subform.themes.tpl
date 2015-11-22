@@ -11,9 +11,9 @@
     {sf_showIfVisible bean=$bean element="topic_load_{$topic->getId()}"}
         <tr>
             <td>{sf_toggleDelete object=$section bean=$bean model=$topic element="topic_load_{$topic->getId()}" address='workplancontentloads.php'}</td>
-            <td widtd="16">#</td>
-            <td widtd="16">{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="topic_load_{$topic->getId()}" object=$section}</td>
-            <td widtd="16">&nbsp;</td>
+            <td width="16">#</td>
+            <td width="16">{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="topic_load_{$topic->getId()}" object=$section}</td>
+            <td width="16">&nbsp;</td>
             <td colspan="2">{sf_text model=$topic attribute='title'}</td>
             <td colspan="2">{sf_text model=$topic attribute='value'}</td>
         </tr>
