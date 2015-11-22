@@ -36,6 +36,17 @@ class CWorkPlanContentSectionLoadsController extends CStatefullFormController {
         }
     }
 
+    function handle_submitForm_education_load($formData = array(), $element = '') {
+        $education = new CWorkPlanSelfEducationBlock();
+        $education->setAttributes($formData);
+        if ($education->validate()) {
+            $education->save();
+            self::getStatefullFormBean()->getElement($element)->setShow(false);
+        } else {
+            self::getStatefullFormBean()->getElement($element)->setValidationErrors($education->getValidationErrors());
+        }
+    }
+
     function handle_before_changeState_technology_load_new() {
         $newTechnology = new CWorkPlanContentSectionLoadTechnology();
         $newTechnology->load_id = CRequest::getInt('load_id');
@@ -46,6 +57,15 @@ class CWorkPlanContentSectionLoadsController extends CStatefullFormController {
         $newTopic = new CWorkPlanContentSectionLoadTopic();
         $newTopic->load_id = CRequest::getInt('load_id');
         $this->setData('newTopic', $newTopic);
+    }
+
+    function handle_before_changeState_education_load_new() {
+        /* @var $section CWorkPlanContentSection */
+        $section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
+        $newEducation = new CWorkPlanSelfEducationBlock();
+        $newEducation->plan_id = $section->category->plan_id;
+        $newEducation->load_id = CRequest::getInt('load_id');
+        $this->setData('newEducation', $newEducation);
     }
 
     function handle_toggleDelete_topic_load() {
@@ -69,6 +89,13 @@ class CWorkPlanContentSectionLoadsController extends CStatefullFormController {
         $load->save();
     }
 
+    function handle_toggleDelete_education_load() {
+        $education_id = CRequest::getInt('model_id');
+        $education = CBaseManager::getWorkPlanSelfEducationBlock($education_id);
+        $education->markDeleted(!$education->isMarkDeleted());
+        $education->save();
+    }
+
     function before_render() {
         if ($this->getStatefullFormBean()->getElement('load_new')->isStateNotSet()) {
             $this->getStatefullFormBean()->getElement('load_new')->setShow(true);
@@ -78,6 +105,7 @@ class CWorkPlanContentSectionLoadsController extends CStatefullFormController {
         foreach ($section->loads as $load) {
             $elements[] = 'topic_load_' . $load->getId() . '_new';
             $elements[] = 'technology_load_' . $load->getId() . '_new';
+            $elements[] = 'education_load_' . $load->getId() . '_new';
             foreach ($elements as $element) {
                 if ($this->getStatefullFormBean()->getElement($element)->isStateNotSet()) {
                     $this->getStatefullFormBean()->getElement($element)->setShow(true);

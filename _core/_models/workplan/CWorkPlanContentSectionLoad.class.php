@@ -56,7 +56,7 @@ class CWorkPlanContentSectionLoad extends CActiveModel{
                 "storageTable" => TABLE_WORK_PLAN_SELFEDUCATION,
                 "storageCondition" => "load_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanSelfEducationBlock",
-                "managerOrder" => "`ordering` asc"
+                "managerOrder" => "_deleted asc, `ordering` asc"
             )
         );
     }
