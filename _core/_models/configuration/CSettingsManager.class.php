@@ -12,29 +12,6 @@ class CSettingsManager {
     private static $_cacheSettings = null;
 
     /**
-     * @return CArrayList|null
-     */
-    private static function getCacheSettings() {
-        if (is_null(self::$_cacheSettings)) {
-            self::$_cacheSettings = new CArrayList();
-            if (CSettingsManager::getSettingValue("preload_settings")) {
-                // будет с поддержкой кеша
-                if (is_null(CApp::getApp()->cache->get(CACHE_APPLICATION_SETTINGS))) {
-                    foreach (CActiveRecordProvider::getAllFromTable(TABLE_SETTINGS)->getItems() as $item) {
-                        $setting = new CSetting($item);
-                        self::getCacheSettings()->add($setting->getId(), $setting);
-                        self::getCacheSettings()->add(strtoupper($setting->alias), $setting);
-                    }
-                    CApp::getApp()->cache->set(CACHE_APPLICATION_SETTINGS, self::$_cacheSettings, 3600);
-                } else {
-                    self::$_cacheSettings = CApp::getApp()->cache->get(CACHE_APPLICATION_SETTINGS);
-                }
-            }
-        }
-        return self::$_cacheSettings;
-    }
-
-    /**
      * Получить настройку по псевдониму или ключевому полю
      *
      * @param $key
@@ -44,23 +21,30 @@ class CSettingsManager {
         if (is_string($key)) {
             $key = strtoupper($key);
         }
-        if (!self::getCacheSettings()->hasElement($key)) {
+        $cacheKey = CACHE_APPLICATION_SETTINGS . '_' . $key;
+        if (!CApp::getApp()->cache->hasCache($cacheKey)) {
+            $found = false;
             if (is_string($key)) {
                 foreach (CActiveRecordProvider::getWithCondition(TABLE_SETTINGS, "UPPER(alias) = '".$key."'")->getItems() as $item) {
+                    $found = true;
                     $setting = new CSetting($item);
-                    self::getCacheSettings()->add($setting->getId(), $setting);
-                    self::getCacheSettings()->add($key, $setting);
+                    CApp::getApp()->cache->set(CACHE_APPLICATION_SETTINGS . '_' .$setting->getId(), $setting);
+                    CApp::getApp()->cache->set($cacheKey, $setting);
                 }
             } elseif (is_numeric($key)) {
                 $item = CActiveRecordProvider::getById(TABLE_SETTINGS, $key);
                 if (!is_null($item)) {
+                    $found = true;
                     $setting = new CSetting($item);
-                    self::getCacheSettings()->add(strtoupper($setting->alias), $setting);
-                    self::getCacheSettings()->add($key, $setting);
+                    CApp::getApp()->cache->set(CACHE_APPLICATION_SETTINGS . '_' .$setting->alias, $setting);
+                    CApp::getApp()->cache->set($cacheKey, $setting);
                 }
             }
+            if (!$found) {
+                CApp::getApp()->cache->set($cacheKey, null);
+            }
         }
-        return self::getCacheSettings()->getItem($key);
+        return CApp::getApp()->cache->get($cacheKey);
     }
 
     /**

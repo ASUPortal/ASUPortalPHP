@@ -248,3 +248,8 @@ p.error {
 .component_menu_container .menu_item_container{
     float: left;
 }
+
+button.btn-link {
+    padding: 0px;
+    cursor: pointer;
+}

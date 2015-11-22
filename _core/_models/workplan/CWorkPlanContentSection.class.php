@@ -42,7 +42,7 @@ class CWorkPlanContentSection extends CActiveModel{
                 "storageTable" => TABLE_WORK_PLAN_CONTENT_LOADS,
                 "storageCondition" => "section_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanContentSectionLoad",
-                "managerOrder" => "`ordering` asc"
+                "managerOrder" => "`_deleted` asc, `ordering` asc"
             ),
         	"controlTypes" => array(
         		"relationPower" => RELATION_HAS_MANY,

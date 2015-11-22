@@ -15,7 +15,7 @@
 
     <div class="tab-content">
         <div class="tab-pane active" id="loads">
-            {include file="_corriculum/_workplan/contentSections/subform.load.tpl"}
+            {CHtml::activeComponent("workplancontentloads.php?id={$object->getId()}", $object)}
         </div>
         <div class="tab-pane" id="controltypes">
             {CHtml::activeComponent("workplantypescontrol.php?id={$object->getId()}", $object)}

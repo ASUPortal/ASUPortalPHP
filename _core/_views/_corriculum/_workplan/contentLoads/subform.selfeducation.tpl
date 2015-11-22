@@ -1,30 +1,55 @@
-{if ($object->selfEducations->getCount() == 0)}
-    Нет объектов для отображения
-{else}
-	<form action="workplanselfeducationblocks.php" method="post" id="mainViewSelfedu">
-    <table class="table table-striped table-bordered table-hover table-condensed">
-        <thead>
+<tr>
+    <th width="16">&nbsp;</th>
+    <th width="16">#</th>
+    <th width="16">&nbsp;</th>
+    <th width="16">{sf_toggleVisible address="workplancontentloads.php" bean=$bean element="load_{$load->getId()}_selfeducation" object=$section}</th>
+    <th colspan="3">Самостоятельное изучение</th>
+</tr>
+{sf_showIfVisible bean=$bean element="load_{$load->getId()}_selfeducation"}
+{foreach $load->selfEducations as $education}
+    {sf_showByDefault bean=$bean element="education_load_{$education->getId()}"}
+    {sf_showIfVisible bean=$bean element="education_load_{$education->getId()}"}
+    <tr>
+        <td widtd="16">{sf_toggleDelete object=$section bean=$bean model=$education element="education_load_{$education->getId()}" address='workplancontentloads.php'}</td>
+        <td widtd="16">#</td>
+        <td widtd="16">{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="education_load_{$education->getId()}" object=$section}</td>
+        <td widtd="16">&nbsp;</td>
+        <td colspan="2">{sf_text model=$education attribute='question_title'}</td>
+        <td colspan="2">{sf_text model=$education attribute='question_hours'}</td>
+    </tr>
+    {/sf_showIfVisible}
+    {sf_showIfEditable bean=$bean element="education_load_{$education->getId()}"}
+    {sf_hidden bean=$bean model=$education element="education_load_{$education->getId()}" attribute='load_id'}
+    {sf_hidden bean=$bean model=$education element="education_load_{$education->getId()}" attribute='plan_id'}
+    {sf_hidden bean=$bean model=$education element="education_load_{$education->getId()}" attribute='id'}
         <tr>
-            <th width="16">&nbsp;</th>
-            <th width="16">{CHtml::activeViewGroupSelect("id", $object->selfEducations->getFirstItem(), true)}</th>
-            <th width="16">#</th>
-            <th width="16">&nbsp;</th>
-            <th>{CHtml::tableOrder("question_title", $object->selfEducations->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("question_hours", $object->selfEducations->getFirstItem())}</th>
+            <td>&nbsp;</td>
+            <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="education_load_{$education->getId()}" object=$section}</td>
+            <td>{sf_submit bean=$bean element="education_load_{$education->getId()}"}</td>
+            <td>&nbsp;</td>
+            <td colspan="2">{sf_input bean=$bean model=$education element="education_load_{$education->getId()}" attribute='question_title' class='span12'}</td>
+            <td>{sf_input bean=$bean model=$education element="education_load_{$education->getId()}" attribute='question_hours' class='span12'}</td>
         </tr>
-        </thead>
-        <tbody>
-        {foreach $object->selfEducations->getItems() as $se}
-            <tr>
-                <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить вопрос для самостоятельного изучения')) { location.href='workplanselfeducationblocks.php?action=delete&id={$se->getId()}'; }; return false;"></a></td>
-                <td>{CHtml::activeViewGroupSelect("id", $se)}</td>
-                <td>{$se->ordering}</td>
-                <td><a href="workplanselfeducationblocks.php?action=edit&id={$se->getId()}" class="icon-pencil"></a></td>
-                <td>{$se->question_title}</td>
-                <td>{$se->question_hours}</td>
-            </tr>
-        {/foreach}
-        </tbody>
-    </table>
-    </form>
-{/if}
+    {/sf_showIfEditable}
+{/foreach}
+{sf_showIfVisible bean=$bean element="education_load_{$load->getId()}_new"}
+    <tr>
+        <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean load_id="{$load->getId()}" element="education_load_{$load->getId()}_new" object=$section}</td>
+        <td colspan="6">
+            Добавить вопрос для самостоятельного изучения
+        </td>
+    </tr>
+{/sf_showIfVisible}
+{sf_showIfEditable bean=$bean element="education_load_{$load->getId()}_new"}
+    {sf_hidden bean=$bean model=$newEducation element="education_load_{$load->getId()}_new" attribute='load_id'}
+    {sf_hidden bean=$bean model=$newEducation element="education_load_{$load->getId()}_new" attribute='plan_id'}
+    <tr>
+        <td>&nbsp;</td>
+        <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="education_load_{$load->getId()}_new" object=$section}</td>
+        <td>{sf_submit bean=$bean element="education_load_{$load->getId()}_new"}</td>
+        <td>&nbsp;</td>
+        <td colspan="2">{sf_input bean=$bean model=$newEducation element="education_load_{$load->getId()}_new" attribute='question_title' class='span12'}</td>
+        <td>{sf_input bean=$bean model=$newEducation element="education_load_{$load->getId()}_new" attribute='question_hours' class='span12'}</td>
+    </tr>
+{/sf_showIfEditable}
+{/sf_showIfVisible}

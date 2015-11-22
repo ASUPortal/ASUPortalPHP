@@ -1,177 +1,136 @@
 <?php
-class CWorkPlanContentSectionLoadsController extends CBaseController{
-    public function __construct() {
-        if (!CSession::isAuth()) {
-            $action = CRequest::getString("action");
-            if ($action == "") {
-                $action = "index";
-            }
-            if (!in_array($action, $this->allowedAnonymous)) {
-                $this->redirectNoAccess();
-            }
-        }
 
-        $this->_smartyEnabled = true;
-        $this->setPageTitle("Нагрузка");
+class CWorkPlanContentSectionLoadsController extends CStatefullFormController {
+    protected $_isComponent = true;
 
-        parent::__construct();
-    }
-    public function actionIndex() {
-        $set = new CRecordSet();
-        $query = new CQuery();
-        $set->setQuery($query);
-        $query->select("t.*")
-            ->from(TABLE_WORK_PLAN_CONTENT_LOADS." as t")
-            ->condition("section_id=".CRequest::getInt("section_id"))
-            ->order("t.ordering asc");
-        $objects = new CArrayList();
-        foreach ($set->getPaginated()->getItems() as $ar) {
-            $object = new CWorkPlanContentSectionLoad($ar);
-            $objects->add($object->getId(), $object);
+    function handle_submitForm_load($formData = array(), $element = '') {
+        $load = new CWorkPlanContentSectionLoad();
+        $load->setAttributes($formData);
+        if ($load->validate()) {
+            $load->save();
+            self::getStatefullFormBean()->getElement($element)->setShow(true);
+        } else {
+            self::getStatefullFormBean()->getElement($element)->setValidationErrors($load->getValidationErrors());
         }
-        $this->setData("objects", $objects);
-        $this->setData("paginator", $set->getPaginator());
-        /**
-         * Генерация меню
-         */
-        $this->addActionsMenuItem(array(
-			array(
-				"title" => "Назад",
-				"link" => "workplancontentsections.php?action=edit&id=".$object->section_id,
-				"icon" => "actions/edit-undo.png"
-			),
-			array(
-				"title" => "Обновить",
-				"link" => "workplancontentloads.php?action=index&section_id=".CRequest::getInt("section_id"),
-				"icon" => "actions/view-refresh.png"
-			),
-			array(
-				"title" => "Добавить нагрузку",
-				"link" => "workplancontentloads.php?action=add&id=".CRequest::getInt("section_id"),
-				"icon" => "actions/list-add.png"
-			),
-        	array(
-        		"title" => "Удалить выделенные",
-        		"icon" => "actions/edit-delete.png",
-        		"form" => "#mainView",
-        		"link" => "workplancontentloads.php?action=delete&section_id=".CRequest::getInt("section_id"),
-        		"action" => "delete"
-        	)
-        ));
-        /**
-         * Отображение представления
-         */
-        $this->renderView("_corriculum/_workplan/contentLoads/index.tpl");
     }
-    public function actionAdd() {
-        $object = new CWorkPlanContentSectionLoad();
-        $object->section_id = CRequest::getInt("id");
+
+    function handle_submitForm_topic_load($formData = array(), $element = '') {
+        $topic = new CWorkPlanContentSectionLoadTopic();
+        $topic->setAttributes($formData);
+        if ($topic->validate()) {
+            $topic->save();
+            self::getStatefullFormBean()->getElement($element)->setShow(false);
+        } else {
+            self::getStatefullFormBean()->getElement($element)->setValidationErrors($topic->getValidationErrors());
+        }
+    }
+
+    function handle_submitForm_technology_load($formData = array(), $element = '') {
+        $technology = new CWorkPlanContentSectionLoadTechnology();
+        $technology->setAttributes($formData);
+        if ($technology->validate()) {
+            $technology->save();
+            self::getStatefullFormBean()->getElement($element)->setShow(false);
+        } else {
+            self::getStatefullFormBean()->getElement($element)->setValidationErrors($technology->getValidationErrors());
+        }
+    }
+
+    function handle_submitForm_education_load($formData = array(), $element = '') {
+        $education = new CWorkPlanSelfEducationBlock();
+        $education->setAttributes($formData);
+        if ($education->validate()) {
+            $education->save();
+            self::getStatefullFormBean()->getElement($element)->setShow(false);
+        } else {
+            self::getStatefullFormBean()->getElement($element)->setValidationErrors($education->getValidationErrors());
+        }
+    }
+
+    function handle_before_changeState_technology_load_new() {
+        $newTechnology = new CWorkPlanContentSectionLoadTechnology();
+        $newTechnology->load_id = CRequest::getInt('load_id');
+        $this->setData('newTechnology', $newTechnology);
+    }
+
+    function handle_before_changeState_topic_load_new() {
+        $newTopic = new CWorkPlanContentSectionLoadTopic();
+        $newTopic->load_id = CRequest::getInt('load_id');
+        $this->setData('newTopic', $newTopic);
+    }
+
+    function handle_before_changeState_education_load_new() {
+        /* @var $section CWorkPlanContentSection */
         $section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
-        $object->ordering = $section->loads->getCount() + 1;
-        $this->setData("object", $object);
-        /**
-         * Генерация меню
-         */
-        $this->addActionsMenuItem(array(
-            "title" => "Назад",
-            "link" => "workplancontentloads.php?action=index&section_id=".$object->section_id,
-            "icon" => "actions/edit-undo.png"
-        ));
-        /**
-         * Отображение представления
-         */
-        $this->renderView("_corriculum/_workplan/contentLoads/add.tpl");
+        $newEducation = new CWorkPlanSelfEducationBlock();
+        $newEducation->plan_id = $section->category->plan_id;
+        $newEducation->load_id = CRequest::getInt('load_id');
+        $this->setData('newEducation', $newEducation);
     }
-    public function actionEdit() {
-        $object = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("id"));
-        $this->setData("object", $object);
-        /**
-         * Генерация меню
-         */
-        $this->addActionsMenuItem(array(
-            "title" => "Назад",
-            "link" => "workplancontentsections.php?action=edit&id=".$object->section_id,
-            "icon" => "actions/edit-undo.png"
-        ));
-        $this->addActionsMenuItem(array(
-            "title" => "Добавить тему",
-            "link" => "workplancontenttopics.php?action=add&id=".$object->getId(),
-            "icon" => "actions/list-add.png"
-        ));
-        $this->addActionsMenuItem(array(
-            "title" => "Добавить технологию",
-            "link" => "workplancontenttechnologies.php?action=add&id=".$object->getId(),
-            "icon" => "actions/list-add.png"
-        ));
-        $this->addActionsMenuItem(array(
-            "title" => "Добавить самостоятельную работу",
-            "link" => "workplanselfeducationblocks.php?action=add&id=".$object->getId(),
-            "icon" => "actions/list-add.png"
-        ));
-        $this->addActionsMenuItem(array(
-        	"title" => "Удалить выделенные темы",
-        	"icon" => "actions/edit-delete.png",
-        	"form" => "#mainViewTopics",
-        	"link" => "workplancontenttopics.php?action=delete&load_id=".CRequest::getInt("id"),
-        	"action" => "delete"
-        ));
-        $this->addActionsMenuItem(array(
-        	"title" => "Удалить выделенные технологии",
-        	"icon" => "actions/edit-delete.png",
-        	"form" => "#mainViewTechnologies",
-        	"link" => "workplancontenttechnologies.php?action=delete&load_id=".CRequest::getInt("id"),
-        	"action" => "delete"
-        ));
-        $this->addActionsMenuItem(array(
-        	"title" => "Удалить выделенные вопросы",
-        	"icon" => "actions/edit-delete.png",
-        	"form" => "#mainViewSelfedu",
-        	"link" => "workplanselfeducationblocks.php?action=delete&load_id=".CRequest::getInt("id"),
-        	"action" => "delete"
-        ));
-        /**
-         * Отображение представления
-         */
-        $this->renderView("_corriculum/_workplan/contentLoads/edit.tpl");
+
+    function handle_toggleDelete_topic_load() {
+        $topic_id = CRequest::getInt("model_id");
+        $topic = CBaseManager::getWorkPlanContentSectionLoadTopic($topic_id);
+        $topic->markDeleted(!$topic->isMarkDeleted());
+        $topic->save();
     }
-    public function actionDelete() {
-        $object = CBaseManager::getWorkPlanContentSectionLoad(CRequest::getInt("id"));
-        if (!is_null($object)) {
-        	$section = $object->section;
-        	$object->remove();
-        	$order = 1;
-        	foreach ($item->loads as $load) {
-        		$load->ordering = $order++;
-        		$load->save();
-        	}
-        	$this->redirect("workplancontentloads.php?action=index&section_id=".$section->getId());
+
+    function handle_toggleDelete_technology_load() {
+        $technology_id = CRequest::getInt("model_id");
+        $technology = CBaseManager::getWorkPlanContentSectionLoadTechnology($technology_id);
+        $technology->markDeleted(!$technology->isMarkDeleted());
+        $technology->save();
+    }
+
+    function handle_toggleDelete_load() {
+        $loadId = CRequest::getInt('model_id');
+        $load = CBaseManager::getWorkPlanContentSectionLoad($loadId);
+        $load->markDeleted(!$load->isMarkDeleted());
+        $load->save();
+    }
+
+    function handle_toggleDelete_education_load() {
+        $education_id = CRequest::getInt('model_id');
+        $education = CBaseManager::getWorkPlanSelfEducationBlock($education_id);
+        $education->markDeleted(!$education->isMarkDeleted());
+        $education->save();
+    }
+
+    function before_render() {
+        if ($this->getStatefullFormBean()->getElement('load_new')->isStateNotSet()) {
+            $this->getStatefullFormBean()->getElement('load_new')->setShow(true);
         }
-        $items = CRequest::getArray("selectedInView");
-        $section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("section_id"));
-        foreach ($items as $id){
-        	$object = CBaseManager::getWorkPlanContentSectionLoad($id);
-        	$object->remove();
-        }
-        $order = 1;
+        /* @var $section CWorkPlanContentSection */
+        $section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
         foreach ($section->loads as $load) {
-        	$load->ordering = $order++;
-        	$load->save();
-        }
-        $this->redirect("workplancontentloads.php?action=index&section_id=".$section->getId());
-    }
-    public function actionSave() {
-        $object = new CWorkPlanContentSectionLoad();
-        $object->setAttributes(CRequest::getArray($object::getClassName()));
-        if ($object->validate()) {
-            $object->save();
-            if ($this->continueEdit()) {
-                $this->redirect("workplancontentloads.php?action=edit&id=".$object->getId());
-            } else {
-                $this->redirect("workplancontentloads.php?action=index&section_id=".$object->section_id);
+            $elements[] = 'topic_load_' . $load->getId() . '_new';
+            $elements[] = 'technology_load_' . $load->getId() . '_new';
+            $elements[] = 'education_load_' . $load->getId() . '_new';
+            foreach ($elements as $element) {
+                if ($this->getStatefullFormBean()->getElement($element)->isStateNotSet()) {
+                    $this->getStatefullFormBean()->getElement($element)->setShow(true);
+                }
             }
-            return true;
         }
-        $this->setData("object", $object);
-        $this->renderView("_corriculum/_workplan/contentLoads/edit.tpl");
+    }
+
+    function handle_before_changeState_load_new() {
+        $newLoad = new CWorkPlanContentSectionLoad();
+        $newLoad->section_id = CRequest::getInt('id');
+        $this->setData('newLoad', $newLoad);
+    }
+
+    function render() {
+        /* @var $section CWorkPlanContentSection */
+        $section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
+        $this->addActionsMenuItem(array(
+            "title" => "Обновить",
+            "link" => "workplancontentloads.php?id=".$section->getId().'&bean='.$this->getStatefullFormBean()->getBeanId(),
+            "icon" => "actions/view-refresh.png"
+        ));
+
+        $this->setData("bean", $this->getStatefullFormBean());
+        $this->setData("section", $section);
+        $this->renderView("_corriculum/_workplan/contentLoads/index.tpl");
     }
 }

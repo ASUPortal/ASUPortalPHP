@@ -1,43 +1,82 @@
-{extends file="_core.3col.tpl"}
+{extends file="_core.component.tpl"}
 
 {block name="asu_center"}
-    <h2>Нагрузка по разделу дисциплины</h2>
+    <form action="workplancontentloads.php" method="post">
+    <input type="hidden" name="id" value="{$section->getId()}" />
+    <input type="hidden" name="action" value="submitForm" />
+    <input type="hidden" name="bean" value="{$bean->getBeanId()}" />
 
-    {if ($objects->getCount() == 0)}
-        Нет объектов для отображения
-    {else}
-    	<form action="workplancontentloads.php" method="post" id="mainView">
-        <table class="table table-striped table-bordered table-hover table-condensed">
-            <thead>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="16">&nbsp;</th>
+            <th width="16">#</th>
+            <th width="16">&nbsp;</th>
+            <th width="16">&nbsp;</th>
+            <th>{CHtml::tableOrder("load_type_id", $section->loads->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("term_id", $section->loads->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("value", $section->loads->getFirstItem())}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach $section->loads->getItems() as $load}
+            {sf_showIfVisible bean=$bean element="load_{$load->getId()}"}
+                {sf_showByDefault bean=$bean element="load_{$load->getId()}"}
                 <tr>
-                    <th width="16">&nbsp;</th>
-                    <th width="16">{CHtml::activeViewGroupSelect("id", $objects->getFirstItem(), true)}</th>
-                    <th width="16">#</th>
-                    <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("load_type_id", $objects->getFirstItem())}</th>
-                    <th>{CHtml::tableOrder("term_id", $objects->getFirstItem())}</th>
-                    <th>{CHtml::tableOrder("value", $objects->getFirstItem())}</th>
+                    <td>{sf_toggleDelete object=$section bean=$bean model=$load element="load_{$load->getId()}" address='workplancontentloads.php'}</td>
+                    <td>{sf_text model=$load attribute='ordering'}</td>
+                    <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}" object=$section}</td>
+                    <td>{sf_toggleVisible address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}_details" object=$section}</td>
+                    <td>{sf_text model=$load attribute='loadType'}</td>
+                    <td>{sf_text model=$load attribute='term'}</td>
+                    <td>{sf_text model=$load attribute='value'}</td>
                 </tr>
-            </thead>
-            <tbody>
-            {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
-            {foreach $objects->getItems() as $object}
+            {/sf_showIfVisible}
+            {sf_showIfEditable bean=$bean element="load_{$load->getId()}"}
                 <tr>
-                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузка')) { location.href='workplancontentloads.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
-                    <td>{CHtml::activeViewGroupSelect("id", $object)}</td>
-                    <td>{$object->ordering}</td>
-                    <td><a href="workplancontentloads.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>{$object->loadType}</td>
-                    <td>{$object->term->corriculum_discipline_section->title}</td>
-                    <td>{$object->value}</td>
-                </tr>
-            {/foreach}
-            </tbody>
-        </table>
-         </form>
+                    <td>&nbsp;</td>
+                    <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}" object=$section}</td>
+                    <td>{sf_submit bean=$bean element="load_{$load->getId()}"}</td>
+                    <td>{sf_toggleVisible address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}_details" object=$section}</td>
+                    <td>{sf_select bean=$bean model=$load element="load_{$load->getId()}" attribute='load_type_id' source='corriculum_labor_types' class='span12'}</td>
+                    <td>{sf_select bean=$bean model=$load element="load_{$load->getId()}" attribute='term_id' source='class.CSearchCatalogWorkPlanTerms' class='span12' params=["plan_id" => $section->category->plan_id]}</td>
+                    <td>{sf_input bean=$bean model=$load element="load_{$load->getId()}" attribute='value' class='span12'}</td>
 
-        {CHtml::paginator($paginator, "workplancontentloads.php?action=index")}
-    {/if}
+                    {sf_hidden bean=$bean model=$load element="load_{$load->getId()}" attribute='section_id'}
+                    {sf_hidden bean=$bean model=$load element="load_{$load->getId()}" attribute='id'}
+                </tr>
+            {/sf_showIfEditable}
+            {sf_showIfVisible bean=$bean element="load_{$load->getId()}_details"}
+                {include file="_corriculum/_workplan/contentLoads/subform.themes.tpl"}
+                {include file="_corriculum/_workplan/contentLoads/subform.technologies.tpl"}
+                {include file="_corriculum/_workplan/contentLoads/subform.selfeducation.tpl"}
+            {/sf_showIfVisible}
+        {/foreach}
+        {sf_showIfVisible bean=$bean element='load_new'}
+        <tr>
+            <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="load_new" object=$section}</td>
+            <td colspan="6">
+                Добавить вид нагрузки
+            </td>
+        </tr>
+        {/sf_showIfVisible}
+        {sf_showIfEditable bean=$bean element='load_new'}
+        {sf_hidden bean=$bean model=$load element='load_new' attribute='section_id'}
+            <tr>
+                <td>&nbsp;</td>
+                <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="load_new" object=$section}</td>
+                <td>{sf_submit bean=$bean element='load_new'}</td>
+                <td>&nbsp;</td>
+                <td>{sf_select bean=$bean model=$newLoad element='load_new' attribute='load_type_id' source='corriculum_labor_types' class='span12'}</td>
+                <td>{sf_select bean=$bean model=$newLoad element='load_new' attribute='term_id' source='class.CSearchCatalogWorkPlanTerms' class='span12' params=["plan_id" => $section->category->plan_id]}</td>
+                <td>{sf_input bean=$bean model=$newLoad element='load_new' attribute='value' class='span12'}</td>
+            </tr>
+        {/sf_showIfEditable}
+        </tbody>
+    </table>
+    </form>
+
+    {CLog::dump()}
 {/block}
 
 {block name="asu_right"}

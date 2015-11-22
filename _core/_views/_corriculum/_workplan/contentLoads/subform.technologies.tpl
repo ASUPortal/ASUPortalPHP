@@ -1,30 +1,53 @@
-{if ($object->technologies->getCount() == 0)}
-    Нет объектов для отображения
-{else}
-	<form action="workplancontenttechnologies.php" method="post" id="mainViewTechnologies">
-    <table class="table table-striped table-bordered table-hover table-condensed">
-        <thead>
+<tr>
+    <th width="16">&nbsp;</th>
+    <th width="16">#</th>
+    <th width="16">&nbsp;</th>
+    <th width="16">{sf_toggleVisible address="workplancontentloads.php" bean=$bean element="load_{$load->getId()}_technologies" object=$section}</th>
+    <th colspan="3">Образовательные технологии</th>
+</tr>
+{sf_showIfVisible bean=$bean element="load_{$load->getId()}_technologies"}
+{foreach $load->technologies as $technology}
+    {sf_showByDefault bean=$bean element="technology_load_{$technology->getId()}"}
+    {sf_showIfVisible bean=$bean element="technology_load_{$technology->getId()}"}
+    <tr>
+        <td widtd="16">{sf_toggleDelete object=$section bean=$bean model=$technology element="technology_load_{$technology->getId()}" address='workplancontentloads.php'}</td>
+        <td widtd="16">#</td>
+        <td widtd="16">{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="technology_load_{$technology->getId()}" object=$section}</td>
+        <td widtd="16">&nbsp;</td>
+        <td colspan="2">{sf_text model=$technology attribute='technology'}</td>
+        <td colspan="2">{sf_text model=$technology attribute='value'}</td>
+    </tr>
+    {/sf_showIfVisible}
+    {sf_showIfEditable bean=$bean element="technology_load_{$technology->getId()}"}
+    {sf_hidden bean=$bean model=$technology element="technology_load_{$technology->getId()}" attribute='load_id'}
+    {sf_hidden bean=$bean model=$technology element="technology_load_{$technology->getId()}" attribute='id'}
         <tr>
-            <th width="16">&nbsp;</th>
-            <th width="16">{CHtml::activeViewGroupSelect("id", $object->technologies->getFirstItem(), true)}</th>
-            <th width="16">#</th>
-            <th width="16">&nbsp;</th>
-            <th>{CHtml::tableOrder("technology_id", $object->technologies->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("value", $object->technologies->getFirstItem())}</th>
+            <td>&nbsp;</td>
+            <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="technology_load_{$technology->getId()}" object=$section}</td>
+            <td>{sf_submit bean=$bean element="technology_load_{$technology->getId()}"}</td>
+            <td>&nbsp;</td>
+            <td colspan="2">{sf_select bean=$bean model=$technology element="technology_load_{$technology->getId()}" attribute='technology_id' source='corriculum_education_technologies' class='span12'}</td>
+            <td>{sf_input bean=$bean model=$technology element="technology_load_{$technology->getId()}" attribute='value' class='span12'}</td>
         </tr>
-        </thead>
-        <tbody>
-        {foreach $object->technologies->getItems() as $technology}
-            <tr>
-                <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить образовательные технологии')) { location.href='workplancontenttechnologies.php?action=delete&id={$technology->getId()}'; }; return false;"></a></td>
-                <td>{CHtml::activeViewGroupSelect("id", $technology)}</td>
-                <td>{$technology->ordering}</td>
-                <td><a href="workplancontenttechnologies.php?action=edit&id={$technology->getId()}" class="icon-pencil"></a></td>
-                <td>{$technology->technology}</td>
-                <td>{$technology->value}</td>
-            </tr>
-        {/foreach}
-        </tbody>
-    </table>
-    </form>
-{/if}
+    {/sf_showIfEditable}
+{/foreach}
+{sf_showIfVisible bean=$bean element="technology_load_{$load->getId()}_new"}
+    <tr>
+        <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean load_id="{$load->getId()}" element="technology_load_{$load->getId()}_new" object=$section}</td>
+        <td colspan="6">
+            Добавить технологию
+        </td>
+    </tr>
+{/sf_showIfVisible}
+{sf_showIfEditable bean=$bean element="technology_load_{$load->getId()}_new"}
+{sf_hidden bean=$bean model=$newTechnology element="technology_load_{$load->getId()}_new" attribute='load_id'}
+    <tr>
+        <td>&nbsp;</td>
+        <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="technology_load_{$load->getId()}_new" object=$section}</td>
+        <td>{sf_submit bean=$bean element="technology_load_{$load->getId()}_new"}</td>
+        <td>&nbsp;</td>
+        <td colspan="2">{sf_select bean=$bean model=$newTechnology element="technology_load_{$load->getId()}_new" attribute='technology_id' source='corriculum_education_technologies' class='span12'}</td>
+        <td>{sf_input bean=$bean model=$newTechnology element="technology_load_{$load->getId()}_new" attribute='value' class='span12'}</td>
+    </tr>
+{/sf_showIfEditable}
+{/sf_showIfVisible}
