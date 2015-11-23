@@ -43,6 +43,9 @@ class CPublicNewsController extends CBaseController {
             $newsItem = new CNewsItem($ar);
             $news->add($newsItem->getId(), $newsItem);
         }
+        $check_url = @get_headers('http://vk.com/js/api/openapi.js');
+        $vk_access = strpos($check_url[0],'200');
+        $this->setData("vk_access", $vk_access);
         $this->setData("news", $news);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_news/public.index.tpl");
