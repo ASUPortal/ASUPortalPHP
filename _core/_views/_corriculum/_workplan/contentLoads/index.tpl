@@ -61,7 +61,7 @@
         </tr>
         {/sf_showIfVisible}
         {sf_showIfEditable bean=$bean element='load_new'}
-        {sf_hidden bean=$bean model=$load element='load_new' attribute='section_id'}
+        {sf_hidden bean=$bean model=$newLoad element='load_new' attribute='section_id'}
             <tr>
                 <td>&nbsp;</td>
                 <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="load_new" object=$section}</td>
