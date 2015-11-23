@@ -50,32 +50,23 @@
 						        <INPUT TYPE="hidden" NAME="r3" VALUE="on">
 						        <INPUT TYPE="hidden" NAME="r4" VALUE="on">
 					        </FORM>
-                        	{include file="_public.vkwidget.tpl"}
+							{if ($vk_access)}
+                        		{include file="_public.vkwidget.tpl"}
+                        	{/if}
                         <br>
                         <div align=center class=middle><b>Дружественные сайты:</b></div>
 						<table width=160 align=center valign="top" border=0>
 							<tr height=50 class=round_table><td colspan=3 align=center><a href=http://www.ugatu.ac.ru title="Официальный сайт УГАТУ" target="_blank">
-								<img src="{$web_root}images/design/baners/baner4.gif" alt="Cайт УГАТУ" border=1></a></td></tr><br>
+								<img src="{$web_root}images/design/blocks/block4.gif" alt="Cайт УГАТУ" border=1></a></td></tr><br>
 							<tr height=50 class=round_table><td colspan=3 align=center><a href=http://www.businessstudio.ru title="Управление бизнесом, бизнес-моделирование, бизнес-процесс, описание бизнес-процессов, оптимизация бизнес-процессов&nbsp;&mdash;&nbsp;Business Studio" target="_blank">
-								<img src="{$web_root}images/design/baners/baner8.gif" alt="Cайт Business Studio" border=0 style="background-color:White;"></a></td></tr>
+								<img src="{$web_root}images/design/blocks/block8.gif" alt="Cайт Business Studio" border=0 style="background-color:White;"></a></td></tr>
 							<tr height=70 class=round_table><td colspan=3 align=center><a href=http://erp4students.ru title="Программа дистанционного обучения решениям SAP для студентов России и стран СНГ, организуемую университетом Дуйсбург-Эссена (Германия)   erp4students" target="_blank">
-								<img src="{$web_root}images/design/baners/baner9.gif" alt="erp4students" border=0 style="background-color:White;"></a></td></tr>
+								<img src="{$web_root}images/design/blocks/block9.gif" alt="erp4students" border=0 style="background-color:White;"></a></td></tr>
 			        		<tr height=50 class=round_table><td colspan=3 align=center><a href=http://www.library.ugatu.ac.ru/index.html title="Библиотека,электронный каталог УГАТУ" target="_blank">
-								<img src="{$web_root}images/design/baners/baner6.gif" alt="Библиотека УГАТУ" border=1></a></td></tr>
+								<img src="{$web_root}images/design/blocks/block6.gif" alt="Библиотека УГАТУ" border=1></a></td></tr>
 			   			</table>
 			   			<br><br>
-                    	<div class="iv-embed" style="margin:0 auto;padding:0;border:0;width:202px;">
-                    		<div class="iv-v" style="display:block;margin:0;padding:1px;border:0;background:#000;">
-                    			<iframe class="iv-i" style="display:block;margin:0;padding:0;border:0;" src="//open.ivideon.com/embed/v2/?server=865afea6585a2e2e1007d995d5722f27&amp;camera=262144&amp;width=&amp;height=&amp;lang=ru" width="200" height="164" frameborder="0" allowfullscreen></iframe>
-                    		</div>
-                    		<div class="iv-b" style="display:block;margin:0;padding:0;border:0;">
-                    			<div style="float:right;text-align:right;padding:0 0 10px;line-height:10px;">
-                    				<a class="iv-a" style="font:10px Verdana,sans-serif;color:inherit;opacity:.6;" href="http://www.ivideon.com/" target="_blank">powered by Ivideon</a>
-                    			</div>
-                    			<div style="clear:both;height:0;overflow:hidden;">&nbsp;</div>
-                    			<script src="http://open.ivideon.com/embed/v2/embedded.js"></script>
-                    		</div>
-                    	</div>
+                        {include file="_public.ivideon.tpl"}
                     	{/block}
                     </div>
                 </div>
