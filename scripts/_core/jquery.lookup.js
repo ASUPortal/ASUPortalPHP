@@ -287,9 +287,10 @@
 
         // ок в диалоге
         this._onDialogOkClick = function(event){
-            var dialog = jQuery(this).parents(".modal");
+	    var dialog = jQuery(this).parents(".modal");
+            container = jQuery(".modal-body", dialog);
             // получаем выбранные элементы
-            var items = jQuery("input:checked", dialog);
+            var items = jQuery("input:checked", container);
             // добавляем их в выбиратор
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
