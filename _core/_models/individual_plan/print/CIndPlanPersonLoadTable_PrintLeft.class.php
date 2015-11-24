@@ -54,6 +54,7 @@ class CIndPlanPersonLoadTable_PrintLeft extends CAbstractPrintClassField{
         // удобно в замыкании это сделать
         foreach ($preparedData as $preparedRow) {
             $row = array();
+            $row[0] = count($result) + 1;
             // убран факт из шаблона
             //$fact = 0;
             foreach ($preparedRow as $index=>$value) {
