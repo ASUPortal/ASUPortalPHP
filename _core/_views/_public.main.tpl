@@ -50,9 +50,9 @@
 						        <INPUT TYPE="hidden" NAME="r3" VALUE="on">
 						        <INPUT TYPE="hidden" NAME="r4" VALUE="on">
 					        </FORM>
-							{*if ($vk_access)*}
+							{if ($vk_access)}
                         		{include file="_public.vkwidget.tpl"}
-                        	{*/if*}
+                        	{/if}
                         <br>
                         <div align=center class=middle><b>Дружественные сайты:</b></div>
 						<table width=160 align=center valign="top" border=0>
