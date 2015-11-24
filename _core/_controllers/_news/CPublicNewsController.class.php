@@ -44,9 +44,14 @@ class CPublicNewsController extends CBaseController {
             $news->add($newsItem->getId(), $newsItem);
         }
         //проверка доступности виджета вконтакте
-        /*$check_url = @get_headers('http://vk.com/js/api/openapi.js');
-        $vk_access = strpos($check_url[0],'200');
-        $this->setData("vk_access", $vk_access);*/
+        $check_url = @get_headers('http://vk.com/js/api/openapi.js');
+        $cache_vk_id = "vk_access";
+        if (is_null(CApp::getApp()->cache->get($cache_vk_id))) {
+        	$vk = strpos($check_url[0],'200');
+        	CApp::getApp()->cache->set($cache_vk_id, $vk);
+        }
+        $vk_access = CApp::getApp()->cache->get($cache_vk_id);
+        $this->setData("vk_access", $vk_access);
         $this->setData("news", $news);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_news/public.index.tpl");
