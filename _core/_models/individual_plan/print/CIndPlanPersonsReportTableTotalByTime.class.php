@@ -58,9 +58,6 @@ class CIndPlanPersonsReportTableTotalByTime extends CAbstractPrintClassField {
          */
         foreach ($targetPlans->getItems() as $plan) {
             $row = array();
-            if (array_key_exists($plan->person_id, $result)) {
-                $row = $result[$plan->person_id];
-            }
             $row[0] = "АСУ";
             $row[1] = count($result) + 1;
             $row[2] = "";
@@ -206,7 +203,7 @@ class CIndPlanPersonsReportTableTotalByTime extends CAbstractPrintClassField {
             		$row[22] += $row[$i];
             	}
             }
-            $result[$plan->person_id] = $row;
+            $result[] = $row;
         }
         $sum = array();
     	$sum[0] = "Итог";
