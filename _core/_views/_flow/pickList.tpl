@@ -11,7 +11,7 @@
         {foreach $items->getItems() as $key=>$value}
             {if $multiple}
                 <label class="checkbox">
-                    <input type="checkbox" value="{$key}" name="selected[]"/>
+                    <input type="checkbox" value="{$key}" name="selected[{$key}]"/>
                     {$value}
                 </label>
             {else}
