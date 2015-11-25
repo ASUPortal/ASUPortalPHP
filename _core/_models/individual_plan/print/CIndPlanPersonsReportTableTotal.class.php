@@ -126,7 +126,7 @@ class CIndPlanPersonsReportTableTotal extends CAbstractPrintClassField {
             for ($i = 6; $i <= 21; $i++) {
                 $row[22] += $row[$i];
             }
-            $result[$plan->person_id] = $row;
+            $result[] = $row;
         }
         $sum = array();
     	$sum[0] = "Итог";

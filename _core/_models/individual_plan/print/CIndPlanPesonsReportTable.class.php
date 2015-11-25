@@ -68,7 +68,7 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
                 $row = $result[$plan->person_id];
             }
             $row[0] = "АСУ";
-            $row[1] = count($result) + 1;
+            $row[1] = count($result);
             $row[2] = "";
             if (!is_null($plan->person)) {
                 if (!is_null($plan->person->getPost())) {
@@ -135,19 +135,17 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
                 21 => 16 //КСР
             );
             foreach ($rows as $target=>$source) {
-                if (!array_key_exists($target, $row)) {
-                    $row[$target] = 0;
-                }
-                if ($source != -1) {
-                    $row[$target] += $preparedData[$source][$month];
-                }
-            }
-            if (!array_key_exists(22, $row)) {
-                $row[22] = 0;
-            }
-            for ($i = 6; $i <= 21; $i++) {
-                $row[22] += $row[$i];
-            }
+            	if (!array_key_exists($target, $row)) {
+    				$row[$target] = 0;
+    			}
+    			if (!array_key_exists(22, $row)) {
+    				$row[22] = 0;
+    			}
+    			if ($source != -1) {
+    				$row[$target] += $preparedData[$source][$month];
+    				$row[22] += $preparedData[$source][$month];
+    			}
+    		}
             $result[$plan->person_id] = $row;
         }
         return $result;
