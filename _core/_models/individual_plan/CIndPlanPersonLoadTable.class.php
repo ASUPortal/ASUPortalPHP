@@ -350,7 +350,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
     }
     public function save() {
         // удаляем старые данные
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_WORKS, "load_id=".$this->getLoad()->getId())->getItems() as $ar) {
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_WORKS, "load_id=".$this->getLoad()->getId()." and work_type=1")->getItems() as $ar) {
             $ar->remove();
         }
         // добавляем новые
