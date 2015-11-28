@@ -53,15 +53,20 @@ class CUploadController extends CBaseController {
             "isImage" => false,
             "previewUrl" => "",
             "fullUrl" => "",
+            "url" => "",
             "name" => $file,
             "index" => $index
         );
 
         if (file_exists($storage.$file)) {
-            $result["fullUrl"] = WEB_ROOT.CUtils::strRight($storage, CORE_CWD).$file;
+            // заменяем обратный слэш в адресе на прямой
+            $linkWithBackSlash = CUtils::strRight($storage, CORE_CWD).$file;
+            $link = str_replace('\\', '/', $linkWithBackSlash);
+            $result["fullUrl"] = WEB_ROOT.$link;
+            $result["url"] = $link;
             $result["isImage"] = CUtils::isImage($storage.$file);
             if (CUtils::isImage($storage.$file)) {
-                $result["previewUrl"] = WEB_ROOT."_modules/_thumbnails/?src=".$result["fullUrl"]."&w=".$size;
+                $result["previewUrl"] = WEB_ROOT."_modules/_thumbnails/?src=".$result["url"]."&w=".$size;
             } else {
                 $filetype = CUtils::getMimetype($storage.$file);
                 if (file_exists(CORE_CWD.CORE_DS."images".CORE_DS.ICON_THEME.CORE_DS."64x64".CORE_DS."mimetypes".CORE_DS.$filetype.".png")) {
