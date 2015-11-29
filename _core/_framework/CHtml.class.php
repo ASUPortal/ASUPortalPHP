@@ -1295,7 +1295,9 @@ class CHtml {
             }
         }
         if ($display) {
-            $link = CUtils::strRight($storage, CORE_CWD).$file;
+            // заменяем обратный слэш в адресе на прямой
+            $linkWithBackSlash = CUtils::strRight($storage, CORE_CWD).$file;
+            $link = str_replace('\\', '/', $linkWithBackSlash);
             $icon = "";
             if (CUtils::isImage($storage.$file)) {
                 // показываем превью изображения
