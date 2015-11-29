@@ -147,6 +147,39 @@
                 that._formSubmit(form);
                 return false;
             });
+            jQuery("._viewGroupSelector", data).on("change", function(){
+                var index = jQuery(this).attr("asu-index");
+                var items = jQuery("._viewGroupSelectorItem,[asu-index=" + index + "]");
+                if (jQuery(this).is(":checked")) {
+                    for (var i = 0; i < items.length; i++) {
+                        jQuery(items[i]).attr("checked", true);
+                    }
+                } else {
+                    for (var i = 0; i < items.length; i++) {
+                        jQuery(items[i]).attr("checked", false);
+                    }
+                }
+                that._formSubmit(form);
+                return false;
+            });
+            jQuery("._deleteGroupSelector", data).on("click", function(){
+                var param = {};
+                var properties = jQuery("[asu-type=selected-property]", this._link);
+                jQuery.each(properties, function(key, value){
+                    if (jQuery(value).attr("value") == "selectedInView") {
+                        var selectedItems = new Array();
+                        jQuery.each(jQuery("input[name='selectedDoc[]']:checked"), function(key, value){
+                            selectedItems.push(jQuery(value).val());
+                        });
+                        param[jQuery(value).attr("name")] = selectedItems.join(":");
+                    } else {
+                    	param[jQuery(value).attr("name")] = jQuery(value).attr("value");
+                    }
+                });
+                jQuery.get(web_root + "_modules/_corriculum/workplancompetentions.php", {selected: "param"})
+                that._formSubmit(form);
+                return false;
+            });
             /**
              * Покажем содержимое контейнера.
              * Чтобы не было мерцания сделаем задержку

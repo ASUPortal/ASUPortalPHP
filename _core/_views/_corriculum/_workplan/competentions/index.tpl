@@ -32,7 +32,7 @@
                             <a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить компетенцию')) { location.href='workplancompetentions.php?action=delete&id={$object->getId()}'; }; return false;"></a>
                         {/if}
                     </td>
-                    <td>{CHtml::activeViewGroupSelect("id", $object)}</td>
+                    <td>{CHtml::activeViewGroupSelect("id", $object, false, true)}</td>
                     <td>{counter}</td>
                     <td><a href="workplancompetentions.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
                     <td>
