@@ -883,7 +883,7 @@ class CHtml {
         echo '<span>Отображать: ';
         $sizes = $paginator->getPageSizes();
         echo '<div class="btn-group">';
-        echo '<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">';
+        echo '<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="'.$_SERVER['SCRIPT_NAME'].'">';
         echo $sizes[$paginator->getCurrentPageSize()];
         echo '<span class="caret"></span>';
         echo '</a>';
@@ -1157,7 +1157,7 @@ class CHtml {
     		$actions[] = "direction=desc";
     	}
         if ($showLink) {
-            $label = '<a href="?'.implode($actions, "&").'">'.$label.'</a>';
+            $label = '<a href="'.$_SERVER['SCRIPT_NAME'].'?'.implode($actions, "&").'">'.$label.'</a>';
         }
     	echo $label;
     }
