@@ -147,6 +147,29 @@
                 that._formSubmit(form);
                 return false;
             });
+            jQuery("._viewGroupSelector", data).on("change", function(){
+                var index = jQuery(this).attr("asu-index");
+                var items = jQuery("._viewGroupSelectorItem,[asu-index=" + index + "]");
+                if (jQuery(this).is(":checked")) {
+                    for (var i = 0; i < items.length; i++) {
+                        jQuery(items[i]).attr("checked", true);
+                    }
+                } else {
+                    for (var i = 0; i < items.length; i++) {
+                        jQuery(items[i]).attr("checked", false);
+                    }
+                }
+            });
+            jQuery("._deleteGroupSelector", data).on("click", function(){
+                jQuery(document).ready(function(){
+                	var selected = [];
+                	jQuery.each(jQuery("input[name='selectedDoc[]']:checked"), function(key, value){
+                		selected.push(jQuery(value).val());
+                	});
+                	items = selected.join(":");
+                });
+                document.cookie = "selectedItems=" + items;
+            });
             /**
              * Покажем содержимое контейнера.
              * Чтобы не было мерцания сделаем задержку

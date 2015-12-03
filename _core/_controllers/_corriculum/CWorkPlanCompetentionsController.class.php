@@ -58,13 +58,6 @@ class CWorkPlanCompetentionsController extends CBaseController{
         		"icon" => "actions/format-indent-less.png"
         	));
         }
-        $this->addActionsMenuItem(array(
-        		"title" => "Удалить выделенные",
-        		"icon" => "actions/edit-delete.png",
-        		"form" => "#MainView",
-        		"link" => "workplans.php",
-        		"action" => "delete"
-        ));
         /**
          * Отображение представления
          */
@@ -111,12 +104,22 @@ class CWorkPlanCompetentionsController extends CBaseController{
         if (!is_null($object)) {
         	$object->remove();
         }
-        $items = CRequest::getArray("selectedInView");
-        foreach ($items as $id){
-        	$object = CBaseManager::getWorkPlanCompetention($id);
-        	$object->remove();
-        }
         $this->redirect("workplancompetentions.php?action=index&plan_id=".$plan."&type=".$type);
+    }
+    public function actionDeleteSelected() {
+    	if (array_key_exists("selectedItems", $_COOKIE)) {
+    		$items = explode(":", $_COOKIE["selectedItems"]);
+    		$object = CBaseManager::getWorkPlanCompetention($items[0]);
+    		if (!is_null($object)) {
+    			$plan = $object->plan_id;
+    			$type = $object->type;
+    			foreach ($items as $id){
+    				$object = CBaseManager::getWorkPlanCompetention($id);
+    				$object->remove();
+    			}
+    		}
+    	}
+    	$this->redirect("workplancompetentions.php?action=index&plan_id=".$plan."&type=".$type);
     }
     public function actionSave() {
         $object = new CWorkPlanCompetention();
