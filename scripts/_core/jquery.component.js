@@ -168,8 +168,7 @@
                 	});
                 	items = selected.join(":");
                 });
-                jQuery.get(web_root + "_modules/_corriculum/workplancompetentions.php", {selected: items})
-                //window.location.href=web_root + "_modules/_corriculum/workplancompetentions.php?action=deleteSelected&selected=" + items;
+                document.cookie = "selectedItems=" + items;
             });
             /**
              * Покажем содержимое контейнера.
