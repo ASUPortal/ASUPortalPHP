@@ -55,8 +55,8 @@
          *
          * @private
          */
-        this._onDataLoaded = function(data){
-            data = jQuery.parseHTML(data);
+        this._onDataLoaded = function(loadedHtml){
+            var data = jQuery.parseHTML(loadedHtml);
             var that = this;
             /**
              * Удалим со все ссылок удаления их родные события
@@ -147,16 +147,18 @@
                 that._formSubmit(form);
                 return false;
             });
-            /**
-             * Покажем содержимое контейнера.
-             * Чтобы не было мерцания сделаем задержку
-             */
-            setTimeout(function(){
-                jQuery(that).html(data)
-                    .find(".catalogLookup").catalogLookup().end()
-                    .find("[asu-type='component']").components().end()
-                    .find('select.select2').select2().end();
-            }, 500);
+            jQuery(that).html(data)
+                .find(".catalogLookup").catalogLookup().end()
+                .find("[asu-type='component']").components().end()
+                .find('select.select2').select2().end();
+
+            var regexp = /<script>([\s\S]*?)<\/script>/gmi;
+
+            var match;
+            while (match = regexp.exec(loadedHtml)) {
+                var script = match[1];
+                jQuery.globalEval(script);
+            }
         };
 
         /**

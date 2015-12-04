@@ -102,6 +102,7 @@ class CActionsMenuRenderer {
         <script>
             jQuery(document).ready(function(){
                 jQuery("#ajaxMenuAction_<?php echo self::$childContainers; ?>").on("click", function(){
+                    debugger;
                     var form = jQuery("<?php echo $item["form"]; ?>");
                     jQuery(form).attr("action", "<?php echo $item['link']; ?>");
                     var action = jQuery("[name=action]", form);

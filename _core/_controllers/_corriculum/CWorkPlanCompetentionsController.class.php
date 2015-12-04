@@ -61,8 +61,8 @@ class CWorkPlanCompetentionsController extends CBaseController{
         $this->addActionsMenuItem(array(
         		"title" => "Удалить выделенные",
         		"icon" => "actions/edit-delete.png",
-        		"form" => "#MainView",
-        		"link" => "workplans.php",
+        		"form" => "#competentionsForm",
+        		"link" => "workplancompetentions.php",
         		"action" => "delete"
         ));
         /**
