@@ -105,6 +105,19 @@ class CModel {
     protected function validationRules() {
         return array();
     }
+
+    /**
+     * Названия классов валидаторов модели
+     *
+     * @return array
+     */
+    protected function modelValidators() {
+        return array();
+    }
+
+    public function getModelValidators() {
+        return $this->modelValidators();
+    }
     /**
      * Правила валидации для работы с CHtml
      * @return arrray

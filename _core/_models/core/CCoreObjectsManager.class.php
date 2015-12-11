@@ -186,10 +186,11 @@ class CCoreObjectsManager {
     }
 
     /**
-     * Получаем валидаторы из модели
+     * Все доступные для модели валидаторы
      *
      * @param CModel $model
      * @return CArrayList
+     * @throws Exception
      */
     public static function getModelValidators(CModel $model) {
         $validators = new CArrayList();
@@ -202,6 +203,20 @@ class CCoreObjectsManager {
                     $obj = new $class_name();
                     $validators->add($validators->getCount(), $obj);
                 }
+            }
+        }
+        foreach ($model->getModelValidators() as $validatorItem) {
+            if (is_string($validatorItem)) {
+                $validator = new $validatorItem();
+                if (!is_a($validator, "IModelValidator")) {
+                    throw new Exception($validatorItem." не является наследником IModelValidator");
+                }
+                $validators->add($validators->getCount(), $validator);
+            } else if (is_object($validatorItem)) {
+                if (!is_a($validatorItem, "IModelValidator")) {
+                    throw new Exception($validatorItem." не является экземпляром IModelValidator");
+                }
+                $validators->add($validators->getCount(), $validatorItem);
             }
         }
         return $validators;
