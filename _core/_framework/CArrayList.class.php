@@ -23,6 +23,12 @@ class CArrayList implements Iterator{
     public function add($key, $val) {
         $this->_items[$key] = $val;
     }
+
+    public function addAll($array = array()) {
+        foreach ($array as $key=>$value) {
+            $this->add($key, $value);
+        }
+    }
     /**
      * @return int
      */

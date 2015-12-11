@@ -340,6 +340,13 @@ class CWorkPlan extends CActiveModel {
         );
     }
 
+    protected function modelValidators() {
+        return array(
+            new CWorkPlanApproverModelOptionalValidator()
+        );
+    }
+
+
     protected function validationRules() {
         return array(
             "required" => array(

@@ -88,18 +88,14 @@ class CActiveRecordProvider {
      * @return CRecordSet
      */
     public static function getWithCondition($table, $condition, $order = null) {
-        $key = $table."_".$condition."_".$order;
-        if (!self::getCache()->hasElement($key)) {
-            $set = new CRecordSet();
-            $query = new CQuery();
-            $query->select("*")->from($table)->condition($condition);
-            if (!is_null($order)) {
-                $query->order($order);
-            }
-            $set->setQuery($query);
-            self::getCache()->add($key, $set);
+        $set = new CRecordSet();
+        $query = new CQuery();
+        $query->select("*")->from($table)->condition($condition);
+        if (!is_null($order)) {
+            $query->order($order);
         }
-        return self::getCache()->getItem($key);
+        $set->setQuery($query);
+        return $set;
     }
 
     /**

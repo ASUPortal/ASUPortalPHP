@@ -14,3 +14,10 @@
             Добавить валидатор
         </center></a>
 </p>
+
+<p>
+    <a href="?action=import"><center>
+            <img src="{$web_root}images/{$icon_theme}/32x32/actions/go-jump.png">
+            Импортировать все
+        </center></a>
+</p>

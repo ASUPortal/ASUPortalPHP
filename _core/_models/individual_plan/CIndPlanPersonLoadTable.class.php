@@ -18,8 +18,10 @@ class CIndPlanPersonLoadTable extends CFormModel{
      * @param CIndPlanPersonLoad $load
      */
     function __construct(CIndPlanPersonLoad $load) {
-        $this->_load = $load;
-        $this->load_id = $load->getId();
+        if (!is_null($load)) {
+            $this->_load = $load;
+            $this->load_id = $load->getId();
+        }
     }
 
     /**
