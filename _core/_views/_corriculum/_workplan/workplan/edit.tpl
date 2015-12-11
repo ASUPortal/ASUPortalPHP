@@ -11,6 +11,7 @@
         {CHtml::activeHiddenField("id", $plan)}
 
         {CHtml::errorSummary($plan)}
+        {CHtml::warningSummary($plan)}
 
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#common">Общая информация</a></li>

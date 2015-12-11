@@ -6,13 +6,13 @@
  * Time: 23:23
  */
 
-class CWorkPlanApproverModelOptionalValidator implements IModelValidatorOptional{
-    public function run($value) {
-        // TODO: Implement run() method.
+class CWorkPlanApproverModelOptionalValidator extends  IModelValidatorOptional{
+    public function getError() {
+        return "Скоро здесь будут информационные сообщения";
     }
 
-    public function getError() {
-        // TODO: Implement getError() method.
+    function onRead(CModel $model) {
+        return false;
     }
 
 }

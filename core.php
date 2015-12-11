@@ -393,6 +393,7 @@
     define("ERROR_INSUFFICIENT_ACCESS_LEVEL", "У Вас недостаточно прав для доступа к данной задаче");
 
     // события валидации
+    define("VALIDATION_EVENT_READ", "onRead");
     define("VALIDATION_EVENT_UPDATE", "onUpdate");
     define("VALIDATION_EVENT_CREATE", "onCreate");
     define("VALIDATION_EVENT_REMOVE", "onDelete");
