@@ -295,9 +295,12 @@ class CCoreObjectsManager {
     /**
      * @return array
      */
-    public static function getCoreValidatorsList($type) {
+    public static function getCoreValidatorsList($type = array()) {
         $res = array();
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_CORE_VALIDATORS, "type_id = ".$type)->getItems() as $ar) {
+        if (!is_array($type)) {
+            $type = array($type);
+        }
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_CORE_VALIDATORS, "type_id in (".implode(", ", $type).")")->getItems() as $ar) {
             $validator = new CCoreValidator($ar);
             self::getCacheValidators()->add($validator->getId(), $validator);
             $res[$validator->getId()] = $validator->title;
