@@ -470,6 +470,16 @@
                 echo "Неизвестная ошибка: [$errno] $errstr<br />\n";
                 break;
         }
+
+        echo '<table border="1" cellpadding="0" cellspacing="0" style="font-size: 12px; font-family: verdana; ">';
+        foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $arr) {
+            echo '<tr>';
+            foreach ($arr as $value) {
+                echo '<td>'.$value.'</td>';
+            }
+            echo '<tr>';
+        }
+        echo '</table>';
     }
     function customExceptionHandler($exception) {
         echo "Неперехватываемое исключение: " , $exception->getMessage(), "\n";

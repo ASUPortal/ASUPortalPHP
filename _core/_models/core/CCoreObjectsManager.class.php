@@ -259,9 +259,16 @@ class CCoreObjectsManager {
             if (is_numeric($key)) {
                 $ar = CActiveRecordProvider::getById(TABLE_CORE_VALIDATORS, $key);
             }
+            if (is_string($key)) {
+                $ar = null;
+                foreach (CActiveRecordProvider::getWithCondition(TABLE_CORE_VALIDATORS, "class_name='".$key."'")->getItems() as $record) {
+                    $ar = $record;
+                }
+            }
             if (!is_null($ar)) {
                 $validator = new CCoreValidator($ar);
                 self::getCacheValidators()->add($validator->getId(), $validator);
+                self::getCacheValidators()->add($validator->class_name, $validator);
             }
         }
         return self::getCacheValidators()->getItem($key);

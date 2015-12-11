@@ -63,10 +63,50 @@ class CCoreValidatorsController extends CBaseController {
         $validator->remove();
         $this->redirect("?action=index");
     }
+    public function actionImport() {
+        // валидаторы моделей
+        $modelValidators = CUtils::getAllClassesWithInterface("IModelValidator");
+        foreach ($modelValidators as $class=>$object) {
+            $validator = CCoreObjectsManager::getCoreValidator($class);
+            if (is_null($validator)) {
+                $validator = new CCoreValidator();
+                $validator->title = $class;
+                $validator->class_name = $class;
+                $validator->type_id = 2;
+                $validator->save();
+            }
+        }
+        // опциональные проверялки
+        $optionalValidators = CUtils::getAllClassesWithInterface("IValidatorOptional");
+        foreach ($optionalValidators as $class=>$object) {
+            $validator = CCoreObjectsManager::getCoreValidator($class);
+            if (is_null($validator)) {
+                $validator = new CCoreValidator();
+                $validator->title = $class;
+                $validator->class_name = $class;
+                $validator->type_id = 3;
+                $validator->save();
+            }
+        }
+        // валидаторы полей
+        $fieldValidators = CUtils::getAllClassesWithInterface("IValidatorOptional");
+        foreach ($fieldValidators as $class=>$object) {
+            $validator = CCoreObjectsManager::getCoreValidator($class);
+            if (is_null($validator)) {
+                $validator = new CCoreValidator();
+                $validator->title = $class;
+                $validator->class_name = $class;
+                $validator->type_id = 1;
+                $validator->save();
+            }
+        }
+        $this->redirect("?action=index");
+    }
     public static function getTypesList() {
         return array(
             1 => "Валидатор поля",
-            2 => "Валидатор модели"
+            2 => "Валидатор модели",
+            3 => "Валидатор опциональный"
         );
     }
 }
