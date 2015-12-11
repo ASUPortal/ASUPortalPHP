@@ -258,8 +258,7 @@ class CCoreObjectsManager {
             $ar = null;
             if (is_numeric($key)) {
                 $ar = CActiveRecordProvider::getById(TABLE_CORE_VALIDATORS, $key);
-            }
-            if (is_string($key)) {
+            } elseif (is_string($key)) {
                 $ar = null;
                 foreach (CActiveRecordProvider::getWithCondition(TABLE_CORE_VALIDATORS, "class_name='".$key."'")->getItems() as $record) {
                     $ar = $record;

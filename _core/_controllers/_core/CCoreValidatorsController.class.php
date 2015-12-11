@@ -77,7 +77,7 @@ class CCoreValidatorsController extends CBaseController {
             }
         }
         // опциональные проверялки
-        $optionalValidators = CUtils::getAllClassesWithInterface("IValidatorOptional");
+        $optionalValidators = CUtils::getAllClassesWithInterface("IModelValidatorOptional");
         foreach ($optionalValidators as $class=>$object) {
             $validator = CCoreObjectsManager::getCoreValidator($class);
             if (is_null($validator)) {
@@ -89,7 +89,7 @@ class CCoreValidatorsController extends CBaseController {
             }
         }
         // валидаторы полей
-        $fieldValidators = CUtils::getAllClassesWithInterface("IValidatorOptional");
+        $fieldValidators = CUtils::getAllClassesWithInterface("IValidator");
         foreach ($fieldValidators as $class=>$object) {
             $validator = CCoreObjectsManager::getCoreValidator($class);
             if (is_null($validator)) {
