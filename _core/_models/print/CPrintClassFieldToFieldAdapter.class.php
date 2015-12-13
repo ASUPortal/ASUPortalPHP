@@ -18,10 +18,12 @@ class CPrintClassFieldToFieldAdapter extends CPrintField{
          * В CPrintField эти члены публичные, их значения надо заполнить уже в конструкторе
          */
         $this->children = new CArrayList();
-        if ($this->getClassField()->getFieldType() == IPrintClassField::FIELD_TABLE) {
-            $this->type_id = "2";
-        } else {
-            $this->type_id = "1";
+        if (!is_null($classField)) {
+            if ($this->getClassField()->getFieldType() == IPrintClassField::FIELD_TABLE) {
+                $this->type_id = "2";
+            } else {
+                $this->type_id = "1";
+            }
         }
     }
 

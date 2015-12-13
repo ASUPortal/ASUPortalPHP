@@ -920,4 +920,44 @@ class CUtils {
 			}
 		}
 	}
+
+    /**
+     * Вернуть список классов, реализующих выбранный интерфейс
+     *
+     * @param $interfaceName
+     * @param string $folder
+     * @return CArrayList
+     */
+    public static function getAllClassesWithInterface($interfaceName, $folder = "") {
+        if ($folder == "") {
+            $folder = CORE_CWD.CORE_DS."_core".CORE_DS."_models";
+        }
+        $result = new CArrayList();
+        $folderHandle = opendir($folder);
+        while (false !== ($file = readdir($folderHandle))) {
+            if ($file != "." && $file != "..") {
+                if (is_dir($folder.CORE_DS.$file)) {
+                    $part = self::getAllClassesWithInterface($interfaceName, $folder.CORE_DS.$file);
+                    $result->addAll($part);
+                } else {
+                    if (mb_strpos($file, ".class.php") !== false) {
+                        if (!class_exists($file, false)) {
+                            require_once($folder.CORE_DS.$file);
+                        }
+                        $model = substr($file, 0, strpos($file, "."));
+                        if (is_a($model, $interfaceName, true)) {
+                            if (!interface_exists($model, false)) {
+                                $reflection = new ReflectionClass($model);
+                                if ($reflection->isInstantiable()) {
+                                    $object = new $model();
+                                    $result->add(get_class($object), $object);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $result;
+    }
 }

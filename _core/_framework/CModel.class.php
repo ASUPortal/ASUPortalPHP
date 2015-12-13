@@ -8,6 +8,7 @@
  */
 class CModel {
     private $_errors = null;
+    private $_warnings = null;
     private static $_thisObject = null;
     private $_customItems = array();
     /**
@@ -104,6 +105,19 @@ class CModel {
     protected function validationRules() {
         return array();
     }
+
+    /**
+     * Названия классов валидаторов модели
+     *
+     * @return array
+     */
+    protected function modelValidators() {
+        return array();
+    }
+
+    public function getModelValidators() {
+        return $this->modelValidators();
+    }
     /**
      * Правила валидации для работы с CHtml
      * @return arrray
@@ -188,7 +202,7 @@ class CModel {
      * @param $event
      * @return bool
      */
-    protected function validateModel($event) {
+    public function validateModel($event) {
         $isValid = true;
         /**
          * Валидация самой модели
@@ -215,10 +229,19 @@ class CModel {
         }
         foreach ($modelsToValidate as $model) {
             foreach (CCoreObjectsManager::getModelValidators($model)->getItems() as $validator) {
-                if (!$validator->$event($model)) {
-                    $error = $validator->getError();
-                    $this->getValidationErrors()->add($this->getValidationErrors()->getCount(), $error);
-                    $isValid = false;
+                if (is_a($validator, "IModelValidatorOptional")) {
+                    /* @var $validator IModelValidatorOptional */
+                    if (!$validator->$event($model)) {
+                        $message = $validator->getError();
+                        $this->getValidationWarnings()->add($this->getValidationWarnings()->getCount(), $message);
+                    }
+                } else if (is_a($validator, "IModelValidator")) {
+                    /* @var $validator IModelValidator */
+                    if (!$validator->$event($model)) {
+                        $error = $validator->getError();
+                        $this->getValidationErrors()->add($this->getValidationErrors()->getCount(), $error);
+                        $isValid = false;
+                    }
                 }
             }
         }
@@ -246,6 +269,19 @@ class CModel {
 
         );
     }
+
+    /**
+     * Лист предупреждений валидации
+     *
+     * @return CArrayList|null
+     */
+    public function getValidationWarnings() {
+        if (is_null($this->_warnings)) {
+            $this->_warnings = new CArrayList();
+        }
+        return $this->_warnings;
+    }
+
     /**
      * Лист ошибок валидации модели
      *

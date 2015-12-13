@@ -64,58 +64,35 @@ class CCoreModelsController extends CBaseController {
         $this->redirect("?action=index");
     }
     public function actionImport() {
-        /**
-         * Берем папку моделей и ищем все подпапки
-         */
-        $models = array();
-        $modelsDir = opendir(CORE_CWD.CORE_DS."_core".CORE_DS."_models");
-        while (false !== ($dir = readdir($modelsDir))) {
-            if ($dir != "." && $dir != "..") {
-                if (is_dir(CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS.$dir)) {
-                    /**
-                     * Ищем файлы
-                     */
-                    $modelDir = opendir(CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS.$dir);
-                    while (($file = readdir($modelDir)) !== false) {
-                        if ($file != "." && $file != "..") {
-                            $models[] = $file;
-                        }
-                    }
-                }
-            }
-        }
+        $models = CUtils::getAllClassesWithInterface("CModel");
         /**
          * Последовательно создаем классы и смотрим, являются ли они наследниками
          * CModel или CActiveModel
          */
-        foreach ($models as $model) {
-            $model = substr($model, 0, strpos($model, "."));
-            $obj = new $model();
-            if (is_a($obj, "CModel")) {
+        foreach ($models as $model=>$obj) {
+            /**
+             * Это модельный класс, отсюда берем названия полей
+             */
+            $persistedObj = CCoreObjectsManager::getCoreModel(get_class($obj));
+            if (is_null($persistedObj)) {
                 /**
-                 * Это модельный класс, отсюда берем названия полей
+                 * Создаем сам класс
                  */
-                $persistedObj = CCoreObjectsManager::getCoreModel(get_class($obj));
-                if (is_null($persistedObj)) {
-                    /**
-                     * Создаем сам класс
-                     */
-                    $persistedObj = new CCoreModel();
-                    $persistedObj->title = get_class($obj);
-                    $persistedObj->class_name = get_class($obj);
-                    $persistedObj->save();
-                    $fields = $obj->attributeLabels();
-                    foreach ($fields as $key=>$value) {
-                        $field = new CCoreModelField();
-                        $field->model_id = $persistedObj->getId();
-                        $field->field_name = $key;
-                        $field->save();
-                        $t = new CCoreModelFieldTranslation();
-                        $t->field_id = $field->getId();
-                        $t->language_id = CSettingsManager::getSettingValue("system_language_default");
-                        $t->value = $value;
-                        $t->save();
-                    }
+                $persistedObj = new CCoreModel();
+                $persistedObj->title = get_class($obj);
+                $persistedObj->class_name = get_class($obj);
+                $persistedObj->save();
+                $fields = $obj->attributeLabels();
+                foreach ($fields as $key=>$value) {
+                    $field = new CCoreModelField();
+                    $field->model_id = $persistedObj->getId();
+                    $field->field_name = $key;
+                    $field->save();
+                    $t = new CCoreModelFieldTranslation();
+                    $t->field_id = $field->getId();
+                    $t->language_id = CSettingsManager::getSettingValue("system_language_default");
+                    $t->value = $value;
+                    $t->save();
                 }
             }
         }

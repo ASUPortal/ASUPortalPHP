@@ -186,10 +186,11 @@ class CCoreObjectsManager {
     }
 
     /**
-     * Получаем валидаторы из модели
+     * Все доступные для модели валидаторы
      *
      * @param CModel $model
      * @return CArrayList
+     * @throws Exception
      */
     public static function getModelValidators(CModel $model) {
         $validators = new CArrayList();
@@ -202,6 +203,20 @@ class CCoreObjectsManager {
                     $obj = new $class_name();
                     $validators->add($validators->getCount(), $obj);
                 }
+            }
+        }
+        foreach ($model->getModelValidators() as $validatorItem) {
+            if (is_string($validatorItem)) {
+                $validator = new $validatorItem();
+                if (!is_a($validator, "IModelValidator")) {
+                    throw new Exception($validatorItem." не является наследником IModelValidator");
+                }
+                $validators->add($validators->getCount(), $validator);
+            } else if (is_object($validatorItem)) {
+                if (!is_a($validatorItem, "IModelValidator")) {
+                    throw new Exception($validatorItem." не является экземпляром IModelValidator");
+                }
+                $validators->add($validators->getCount(), $validatorItem);
             }
         }
         return $validators;
@@ -258,10 +273,16 @@ class CCoreObjectsManager {
             $ar = null;
             if (is_numeric($key)) {
                 $ar = CActiveRecordProvider::getById(TABLE_CORE_VALIDATORS, $key);
+            } elseif (is_string($key)) {
+                $ar = null;
+                foreach (CActiveRecordProvider::getWithCondition(TABLE_CORE_VALIDATORS, "class_name='".$key."'")->getItems() as $record) {
+                    $ar = $record;
+                }
             }
             if (!is_null($ar)) {
                 $validator = new CCoreValidator($ar);
                 self::getCacheValidators()->add($validator->getId(), $validator);
+                self::getCacheValidators()->add($validator->class_name, $validator);
             }
         }
         return self::getCacheValidators()->getItem($key);
@@ -288,9 +309,12 @@ class CCoreObjectsManager {
     /**
      * @return array
      */
-    public static function getCoreValidatorsList($type) {
+    public static function getCoreValidatorsList($type = array()) {
         $res = array();
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_CORE_VALIDATORS, "type_id = ".$type)->getItems() as $ar) {
+        if (!is_array($type)) {
+            $type = array($type);
+        }
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_CORE_VALIDATORS, "type_id in (".implode(", ", $type).")")->getItems() as $ar) {
             $validator = new CCoreValidator($ar);
             self::getCacheValidators()->add($validator->getId(), $validator);
             $res[$validator->getId()] = $validator->title;

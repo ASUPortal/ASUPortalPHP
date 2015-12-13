@@ -958,6 +958,16 @@ class CHtml {
             echo '</div>';
         }
     }
+    public static function warningSummary(CModel $model) {
+        $model->validateModel(VALIDATION_EVENT_READ);
+        if ($model->getValidationWarnings()->getCount() > 0) {
+            echo '<div class="alert">';
+            foreach ($model->getValidationWarnings()->getItems() as $warning) {
+                echo "<p>".$warning."</p>";
+            }
+            echo '</div>';
+        }
+    }
     public static function errorSummary(CModel $model) {
         if ($model->getValidationErrors()->getCount() > 0) {
             echo '<div class="alert alert-error">';

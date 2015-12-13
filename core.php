@@ -393,6 +393,7 @@
     define("ERROR_INSUFFICIENT_ACCESS_LEVEL", "У Вас недостаточно прав для доступа к данной задаче");
 
     // события валидации
+    define("VALIDATION_EVENT_READ", "onRead");
     define("VALIDATION_EVENT_UPDATE", "onUpdate");
     define("VALIDATION_EVENT_CREATE", "onCreate");
     define("VALIDATION_EVENT_REMOVE", "onDelete");
@@ -470,6 +471,16 @@
                 echo "Неизвестная ошибка: [$errno] $errstr<br />\n";
                 break;
         }
+
+        echo '<table border="1" cellpadding="0" cellspacing="0" style="font-size: 12px; font-family: verdana; ">';
+        foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $arr) {
+            echo '<tr>';
+            foreach ($arr as $value) {
+                echo '<td>'.$value.'</td>';
+            }
+            echo '<tr>';
+        }
+        echo '</table>';
     }
     function customExceptionHandler($exception) {
         echo "Неперехватываемое исключение: " , $exception->getMessage(), "\n";

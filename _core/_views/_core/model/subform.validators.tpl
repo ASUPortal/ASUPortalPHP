@@ -6,6 +6,7 @@
             <th></th>
             <th>#</th>
             <th>{CHtml::tableOrder("validator_id", $model->validators->getFirstItem())}</th>
+            <th>&nbsp;</th>
         </tr>
         {foreach $model->validators->getItems() as $t}
             <tr>
@@ -17,6 +18,11 @@
                             {$t->validator->title}
                         {/if}
                     </a>
+                </td>
+                <td>
+                    {if $t->validator->type_id == 3}
+                        Опционально
+                    {/if}
                 </td>
             </tr>
         {/foreach}
