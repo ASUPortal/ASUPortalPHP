@@ -1,52 +1,48 @@
 <?php
 
-class CWorkPlanContentLoadModelOptionalValidator extends IModelValidatorOptional{
-    public function getError() {
-        return "Не совпадают значения нагрузки";
-    }
-
-    function onRead(CModel $model) {
-    	$result = true;
-    	foreach ($model->loads->getItems() as $load) {
-    		$sum = 0;
-    		foreach ($load->topics as $topic) {
-    			$sum += $topic->value;
-    		}
-    		foreach ($load->technologies as $technology) {
-    			$sum += $technology->value;
-    		}
-    		foreach ($load->selfEducations as $selfEdu) {
-    			$sum += $selfEdu->question_hours;
-    		}
-    		if ($load->value != $sum) {
-    			$result = false;
-    		} else {
-    			$result = true;
-    		}
-    	}
-    	return $result;
-    	
-    	foreach ($model->loads->getItems() as $load) {
-    		$sum = 0;
-    		foreach ($load->topics as $topic) {
-    			$sum += $topic->value;
-    		}
-    		foreach ($load->technologies as $technology) {
-    			$sum += $technology->value;
-    		}
-    		foreach ($load->selfEducations as $selfEdu) {
-    			$sum += $selfEdu->question_hours;
-    		}
-    		echo " ".$load->loadType->getValue()." ";
-    		echo " ".$load->value." ";
-    		echo $sum;
-    		if ($load->value != $sum) {
-    			echo " не верно";
-    		} else {
-    			echo " верно";
-    		}
-    	}
-    	
-    }
-
+class CWorkPlanContentLoadModelOptionalValidator extends IModelValidatorOptional {
+	private $model;
+	
+	function getError() {
+		return implode($this->validate(), "; <br>");
+	}
+	
+	function onRead(CModel $model) {
+		$this->model = $model;
+		if (count($this->validate()) > 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	function validate() {
+		// тут валидация, она возвращает массив ошибок
+		$errors = array();
+		foreach ($this->model->loads->getItems() as $load) {
+			$sum = 0;
+			$topicValue = 0;
+			foreach ($load->topics as $topic) {
+				$topicValue += $topic->value;
+				$sum += $topic->value;
+			}
+			$technologyValue = 0;
+			foreach ($load->technologies as $technology) {
+				$technologyValue += $technology->value;
+				$sum += $technology->value;
+			}
+			$selfEduValue = 0;
+			foreach ($load->selfEducations as $selfEdu) {
+				$selfEduValue += $selfEdu->question_hours;
+				$sum += $selfEdu->question_hours;
+			}
+			if ($load->value != $sum) {
+				$errors[] = "Число часов нагрузки ".$load->loadType->getValue().": ".$load->value." не совпадает с суммой ".
+						$sum.": темы (".$topicValue."), технологии (".$technologyValue."), вопросы (".$selfEduValue.")";
+			}
+			
+		}
+		return $errors;
+	}
+	
 }

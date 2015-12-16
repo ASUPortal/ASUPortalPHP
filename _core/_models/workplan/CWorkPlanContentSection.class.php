@@ -71,6 +71,13 @@ class CWorkPlanContentSection extends CActiveModel{
             )
         );
     }
+    
+    protected function modelValidators() {
+    	return array(
+    		new CWorkPlanContentLoadModelOptionalValidator()
+    	);
+    	 
+    }
 
     public function attributeLabels() {
         return array(
