@@ -4,6 +4,7 @@
     {if ($objects->getCount() == 0)}
         Нет объектов для отображения
     {else}
+    	<form id="competentionsForm">
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
                 <tr>
@@ -32,7 +33,7 @@
                             <a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить компетенцию')) { location.href='workplancompetentions.php?action=delete&id={$object->getId()}'; }; return false;"></a>
                         {/if}
                     </td>
-                    <td>{CHtml::activeViewGroupSelect("id", $object, false, true)}</td>
+                    <td>{CHtml::activeViewGroupSelect("id", $object)}</td>
                     <td>{counter}</td>
                     <td><a href="workplancompetentions.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
                     <td>
@@ -77,6 +78,7 @@
             {/foreach}
             </tbody>
         </table>
+        </form>
 
         {CHtml::paginator($paginator, "workplancompetentions.php?action=index")}
     {/if}

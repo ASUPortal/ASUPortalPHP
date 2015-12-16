@@ -2,7 +2,7 @@
  * Created by abarmin on 30.05.15.
  */
 (function($){
-    $.fn.componentWidget = function(){
+    $.fn.widget = function(){
         var _controllerUrl = "";
         var _controllerAction = "";
         var _componentId = "";
@@ -55,8 +55,8 @@
          *
          * @private
          */
-        this._onDataLoaded = function(data){
-            data = jQuery.parseHTML(data);
+        this._onDataLoaded = function(loadedHtml){
+        	var data = jQuery.parseHTML(loadedHtml);
             var that = this;
             /**
              * Удалим со все ссылок удаления их родные события
@@ -147,39 +147,18 @@
                 that._formSubmit(form);
                 return false;
             });
-            jQuery("._viewGroupSelector", data).on("change", function(){
-                var index = jQuery(this).attr("asu-index");
-                var items = jQuery("._viewGroupSelectorItem,[asu-index=" + index + "]");
-                if (jQuery(this).is(":checked")) {
-                    for (var i = 0; i < items.length; i++) {
-                        jQuery(items[i]).attr("checked", true);
-                    }
-                } else {
-                    for (var i = 0; i < items.length; i++) {
-                        jQuery(items[i]).attr("checked", false);
-                    }
-                }
-            });
-            jQuery("._deleteGroupSelector", data).on("click", function(){
-                jQuery(document).ready(function(){
-                	var selected = [];
-                	jQuery.each(jQuery("input[name='selectedDoc[]']:checked"), function(key, value){
-                		selected.push(jQuery(value).val());
-                	});
-                	items = selected.join(":");
-                });
-                document.cookie = "selectedItems=" + items;
-            });
-            /**
-             * Покажем содержимое контейнера.
-             * Чтобы не было мерцания сделаем задержку
-             */
-            setTimeout(function(){
-                jQuery(that).html(data)
-                    .find(".catalogLookup").catalogLookup().end()
-                    .find("[asu-type='component']").components().end()
-                    .find('select.select2').select2().end();
-            }, 500);
+            jQuery(that).html(data)
+	            .find(".catalogLookup").catalogLookup().end()
+	            .find("[asu-type='component']").components().end()
+	            .find('select.select2').select2().end();
+
+	        var regexp = /<script>([\s\S]*?)<\/script>/gmi;
+	
+	        var match;
+	        while (match = regexp.exec(loadedHtml)) {
+	            var script = match[1];
+	            jQuery.globalEval(script);
+	        }
         };
 
         /**
@@ -229,7 +208,7 @@
 (function($){
     $.fn.components = function(){
         return this.each(function(){
-            jQuery(this).componentWidget();
+            jQuery(this).widget();
         });
     };
 }(jQuery));
