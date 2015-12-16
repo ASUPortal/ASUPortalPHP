@@ -8,6 +8,7 @@
  * @property int plan_id
  * @property int type
  * @property int book_id
+ * @property text book_name
  *
  * @property CTerm book
  */
@@ -32,6 +33,7 @@ class CWorkPlanLiterature extends CActiveModel{
     public function attributeLabels() {
         return array(
             "book_id" => "Книга",
+            "book_name" => "Книга",
             "type" => "Тип",
             "ordering" => "Порядковый номер"
         );
@@ -40,7 +42,6 @@ class CWorkPlanLiterature extends CActiveModel{
     protected function validationRules() {
         return array(
             "selected" => array(
-                "book_id",
                 "type"
             )
         );

@@ -34,6 +34,14 @@
             {CHtml::error("ordering", $discipline)}
         </div>
     </div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("code", $discipline)}
+        <div class="controls">
+            {CHtml::activeTextField("code", $discipline)}
+            {CHtml::error("code", $discipline)}
+        </div>
+    </div>
 
     <div class="control-group">
         <div class="controls">

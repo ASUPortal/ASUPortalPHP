@@ -390,4 +390,114 @@ class CWorkPlanController extends CFlowController{
     	}
     	$this->redirect("workplans.php");
     }
+    /**
+     * Добавление литературы с сайта библиотеки.
+     * Сначала надо выбрать тип литературы
+     */
+    public function actionAddFromUrl() {
+    	$bean = self::getStatefullBean();
+    	$bean->add("planId", CRequest::getInt("plan_id"));
+    	$items = new CArrayList();
+    	$result = array(1=>"Основная литература", 2=>"Дополнительная литература", 3=>"Интернет-ресурсы");
+    	foreach ($result as $key=>$value) {
+    		$items->add($key, $value);
+    	}
+    	$this->setData("items", $items);
+    	$this->renderView("_flow/pickList.tpl", get_class($this), "AddFromUrl_SelectLiterature"); 
+    }
+    /**
+     * Добавление литературы с сайта библиотеки.
+     * Выбор литературы
+     */
+    public function actionAddFromUrl_SelectLiterature() {
+    	$selected = CRequest::getArray("selected");
+    	$bean = self::getStatefullBean();
+    	$bean->add("type", $selected[0]);
+    	
+    	// подключаем PHP Simple HTML DOM Parser
+    	require_once("../../simple_html_dom.php");
+    
+    	// подключаем библиотеку curl с указанием proxy
+    	$proxy = CSettingsManager::getSettingValue("proxy_address");
+    	$curl = curl_init();
+    	curl_setopt($curl, CURLOPT_PROXY, $proxy);
+    	
+    	// текущий учебный год
+    	$year = str_replace("20", "", CUtils::getCurrentYear()->name);
+    	
+    	// код дисциплины
+    	$plan = CWorkPlanManager::getWorkplan($bean->getItem("planId"));
+    	$code = $plan->corriculumDiscipline->code;
+
+    	curl_setopt($curl, CURLOPT_URL, "http://10.70.3.212/SkoWeb/view.aspx?db=Sko_".$year."&report=SKO_DISCIPLINE&Discipline=1,".$code);
+    	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    	curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 120);
+    	$str = curl_exec($curl);
+    	curl_close($curl);
+    
+    	// create DOM from URL or file
+    	$html = str_get_html($str);
+    	
+    	if(!empty($html)) {
+    		$result = array();
+    		
+    		// массив всех элементов
+    		$result1 = array();
+    		$arr1 = array();
+    		foreach($html->find('tr[class^="group_5"]') as $k=>$tr) {
+    			foreach ($tr->find('td.groupnameint_5') as $kk=>$td) {
+    				$arr1[$k][$kk] = $td->plaintext;
+    			}
+    			$result1[] = $arr1[$k][1];
+    		}
+    		
+    		// массив элементов с низким, либо нулевым ККО
+    		$result2 = array();
+    		$arr2 = array();
+    		foreach($html->find('tr[class="group_5 h_extraLow"]') as $k=>$tr) {
+    			foreach ($tr->find('td.groupnameint_5') as $kk=>$td) {
+    				$arr2[$k][$kk] = $td->plaintext;
+    			}
+    			$result2[] = $arr2[$k][1];
+    		}
+    		
+    		// исключаем из первого массива элементы второго
+    		$result = array_unique(array_diff($result1, $result2));
+    		
+    		$items = new CArrayList();
+    		foreach ($result as $key=>$value) {
+    			$items->add($key, $value);
+    		}
+    		$this->setData("items", $items);
+    		$this->setData("multiple", true);
+    		$this->renderView("_flow/pickListValues.tpl", get_class($this), "SaveFromUrl");
+    		
+    		// очищаем память
+    		$html->clear();
+    		unset($html);
+    	} else {
+    		$this->setData("message", "url не доступен, проверьте адрес прокси в настройках портала");
+    		$this->renderView("_flow/dialog.ok.tpl", "", "");
+    	}
+    }
+    public function actionSaveFromUrl() {
+    	$bean = self::getStatefullBean();
+    	$selected = CRequest::getArray("selected");
+    	foreach ($selected as $literature) {
+    		$object = new CWorkPlanLiterature();
+    		$object->plan_id = $bean->getItem("planId");
+    		$object->type = $bean->getItem("type");
+    		$plan = CWorkPlanManager::getWorkplan($bean->getItem("planId"));
+    		if ($object->type == 1) {
+    			$object->ordering = $plan->baseLiterature->getCount() + 1;
+    		} elseif($object->type == 2) {
+    			$object->ordering = $plan->additionalLiterature->getCount() + 1;
+    		} elseif($object->type == 3) {
+    			$object->ordering = $plan->internetResources->getCount() + 1;
+    		}
+    		$object->book_name = urldecode($literature);
+    		$object->save();
+    	}
+    	$this->redirect("workplans.php?action=edit&id=".$bean->getItem("planId"));
+    }
 }

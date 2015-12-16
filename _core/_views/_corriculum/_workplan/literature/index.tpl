@@ -11,6 +11,7 @@
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
                     <th>{CHtml::tableOrder("book_id", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("book_name", $objects->getFirstItem())}</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,6 +22,7 @@
                     <td>{$object->ordering}</td>
                     <td><a href="workplanliterature.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
                     <td>{$object->book}</td>
+                    <td>{$object->book_name}</td>
                 </tr>
             {/foreach}
             </tbody>
