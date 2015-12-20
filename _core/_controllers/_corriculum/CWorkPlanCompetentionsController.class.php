@@ -58,13 +58,13 @@ class CWorkPlanCompetentionsController extends CBaseController{
         		"icon" => "actions/format-indent-less.png"
         	));
         }
-        $this->addActionsMenuItem(array(
+        /*$this->addActionsMenuItem(array(
         		"title" => "Удалить выделенные",
         		"icon" => "actions/edit-delete.png",
         		"form" => "#competentionsForm",
         		"link" => "workplancompetentions.php",
         		"action" => "delete"
-        ));
+        ));*/
         /**
          * Отображение представления
          */

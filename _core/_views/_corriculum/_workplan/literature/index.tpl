@@ -10,19 +10,21 @@
                     <th width="16">&nbsp;</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("book_id", $objects->getFirstItem())}</th>
-                    <th>{CHtml::tableOrder("book_name", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("books", $objects->getFirstItem())}</th>
                 </tr>
             </thead>
             <tbody>
             {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $objects->getItems() as $object}
                 <tr>
-                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить литература')) { location.href='workplanliterature.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
+                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить литературу')) { location.href='workplanliterature.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{$object->ordering}</td>
                     <td><a href="workplanliterature.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>{$object->book}</td>
-                    <td>{$object->book_name}</td>
+                    <td>
+                    {foreach $object->books->getItems() as $book}
+                    	<li>{$book->book_name}</li>
+                    {/foreach}
+                    </td>
                 </tr>
             {/foreach}
             </tbody>

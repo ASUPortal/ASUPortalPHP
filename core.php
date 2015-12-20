@@ -220,6 +220,7 @@
     define("TABLE_CORRICULUM_DISCIPLINE_SKILLS", "pl_corriculum_discipline_skills");
     define("TABLE_CORRICULUM_DISCIPLINE_EXPERIENCES", "pl_corriculum_discipline_experiences");
     define("TABLE_CORRICULUM_ATTESTATIONS", "pl_corriculum_attestations");
+    define("TABLE_CORRICULUM_LIBRARY", "pl_corriculum_library");
     define("TABLE_TAXONOMY", "taxonomy");
     define("TABLE_TAXONOMY_TERMS", "taxonomy_terms");
     define("TABLE_TAXONOMY_CHILD_TERMS", "taxonomy_term_hierarchy");
@@ -325,6 +326,7 @@
     define("TABLE_WORK_PLAN_FUND_MARK_TYPES_CONTROLS", "pl_corriculum_workplan_fund_marktypes_control");
     define("TABLE_WORK_PLAN_BRS", "pl_corriculum_workplan_brs");
     define("TABLE_WORK_PLAN_LITERATURE", "pl_corriculum_workplan_literature");
+    define("TABLE_WORK_PLAN_BOOKS", "pl_corriculum_workplan_books");
     define("TABLE_WORK_PLAN_SOFTWARE", "pl_corriculum_workplan_software");
     define("TABLE_WORK_PLAN_AUTHORS", "pl_corriculum_workplan_authors");
     define("TABLE_WORK_PLAN_CONTENT_CATEGORIES", "pl_corriculum_workplan_content_categories");

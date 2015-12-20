@@ -115,7 +115,8 @@ class CCorriculumDiscipline extends CActiveModel {
             "discipline_id" => "Дисциплина",
             "ordering" => "Порядок в списке",
             "parent_id" => "Родительская дисциплина",
-			"component_type_id" => "Вид компонента"
+			"component_type_id" => "Вид компонента",
+			"codeFromLibrary" => "Код дисциплины (с сайта библиотеки)"
         );
     }
     /**

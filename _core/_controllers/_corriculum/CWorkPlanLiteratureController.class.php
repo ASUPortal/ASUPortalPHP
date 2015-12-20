@@ -37,6 +37,11 @@ class CWorkPlanLiteratureController extends CBaseController{
          * Генерация меню
          */
         $this->addActionsMenuItem(array(
+        	"title" => "Обновить",
+        	"link" => "workplanliterature.php?action=index&plan_id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
+        	"icon" => "actions/view-refresh.png"
+        ));
+        $this->addActionsMenuItem(array(
             "title" => "Добавить",
             "link" => "workplanliterature.php?action=add&plan_id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
             "icon" => "actions/list-add.png"

@@ -391,51 +391,32 @@ class CWorkPlanController extends CFlowController{
     	$this->redirect("workplans.php");
     }
     /**
-     * Добавление литературы с сайта библиотеки.
-     * Сначала надо выбрать тип литературы
+     * Добавление литературы с сайта библиотеки
      */
     public function actionAddFromUrl() {
-    	$bean = self::getStatefullBean();
-    	$bean->add("planId", CRequest::getInt("plan_id"));
-    	$items = new CArrayList();
-    	$result = array(1=>"Основная литература", 2=>"Дополнительная литература", 3=>"Интернет-ресурсы");
-    	foreach ($result as $key=>$value) {
-    		$items->add($key, $value);
-    	}
-    	$this->setData("items", $items);
-    	$this->renderView("_flow/pickList.tpl", get_class($this), "AddFromUrl_SelectLiterature"); 
-    }
-    /**
-     * Добавление литературы с сайта библиотеки.
-     * Выбор литературы
-     */
-    public function actionAddFromUrl_SelectLiterature() {
-    	$selected = CRequest::getArray("selected");
-    	$bean = self::getStatefullBean();
-    	$bean->add("type", $selected[0]);
-    	
     	// подключаем PHP Simple HTML DOM Parser
-    	require_once("../../simple_html_dom.php");
+    	require_once(CORE_CWD."/_core/_external/smarty/vendor/simple_html_dom.php");
     
     	// подключаем библиотеку curl с указанием proxy
     	$proxy = CSettingsManager::getSettingValue("proxy_address");
     	$curl = curl_init();
     	curl_setopt($curl, CURLOPT_PROXY, $proxy);
     	
-    	// текущий учебный год
-    	$year = str_replace("20", "", CUtils::getCurrentYear()->name);
+    	// ссылка для загрузки изданий из библиотеки
+    	$link = CSettingsManager::getSettingValue("link_library");
     	
     	// код дисциплины
-    	$plan = CWorkPlanManager::getWorkplan($bean->getItem("planId"));
-    	$code = $plan->corriculumDiscipline->code;
-
-    	curl_setopt($curl, CURLOPT_URL, "http://10.70.3.212/SkoWeb/view.aspx?db=Sko_".$year."&report=SKO_DISCIPLINE&Discipline=1,".$code);
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
+    	$codeDiscipl = $plan->corriculumDiscipline->codeFromLibrary;
+    	
+    	curl_setopt($curl, CURLOPT_URL, $link.$codeDiscipl);
     	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    	curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 120);
+    	curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+    	sleep(5); // ожидаем, когда сформируется отчёт
     	$str = curl_exec($curl);
     	curl_close($curl);
     
-    	// create DOM from URL or file
+    	// создаём DOM объект из строки
     	$html = str_get_html($str);
     	
     	if(!empty($html)) {
@@ -444,8 +425,8 @@ class CWorkPlanController extends CFlowController{
     		// массив всех элементов
     		$result1 = array();
     		$arr1 = array();
-    		foreach($html->find('tr[class^="group_5"]') as $k=>$tr) {
-    			foreach ($tr->find('td.groupnameint_5') as $kk=>$td) {
+    		foreach($html->find(CSettingsManager::getSettingValue("index_kko_all")) as $k=>$tr) {
+    			foreach ($tr->find(CSettingsManager::getSettingValue("izdan_names")) as $kk=>$td) {
     				$arr1[$k][$kk] = $td->plaintext;
     			}
     			$result1[] = $arr1[$k][1];
@@ -454,8 +435,8 @@ class CWorkPlanController extends CFlowController{
     		// массив элементов с низким, либо нулевым ККО
     		$result2 = array();
     		$arr2 = array();
-    		foreach($html->find('tr[class="group_5 h_extraLow"]') as $k=>$tr) {
-    			foreach ($tr->find('td.groupnameint_5') as $kk=>$td) {
+    		foreach($html->find(CSettingsManager::getSettingValue("index_kko_extraLow")) as $k=>$tr) {
+    			foreach ($tr->find(CSettingsManager::getSettingValue("izdan_names")) as $kk=>$td) {
     				$arr2[$k][$kk] = $td->plaintext;
     			}
     			$result2[] = $arr2[$k][1];
@@ -464,40 +445,28 @@ class CWorkPlanController extends CFlowController{
     		// исключаем из первого массива элементы второго
     		$result = array_unique(array_diff($result1, $result2));
     		
-    		$items = new CArrayList();
-    		foreach ($result as $key=>$value) {
-    			$items->add($key, $value);
-    		}
-    		$this->setData("items", $items);
-    		$this->setData("multiple", true);
-    		$this->renderView("_flow/pickListValues.tpl", get_class($this), "SaveFromUrl");
+    		$query = new CQuery();
+    		$query->select("library.*")
+    			->from(TABLE_CORRICULUM_LIBRARY." as library");
+    		//foreach ($query->execute()->getItems() as $item) {
+    			foreach ($result as $literature) {
+    				//if ($literature != $item[book_name]) {
+    					$object = new CCorriculumLibrary();
+    					$object->book_name = $literature;
+    					$object->discipline_code_id = $codeDiscipl;
+    					$object->save();
+    				//}
+    			}
+    		//}
+    		$this->setData("message", "Данные добавлены успешно");
+    		$this->renderView("_flow/dialog.ok.tpl", "", "");
     		
     		// очищаем память
     		$html->clear();
     		unset($html);
     	} else {
-    		$this->setData("message", "url не доступен, проверьте адрес прокси в настройках портала");
+    		$this->setData("message", "URL ".$link.$codeDiscipl." не доступен, проверьте адрес прокси в настройках портала");
     		$this->renderView("_flow/dialog.ok.tpl", "", "");
     	}
-    }
-    public function actionSaveFromUrl() {
-    	$bean = self::getStatefullBean();
-    	$selected = CRequest::getArray("selected");
-    	foreach ($selected as $literature) {
-    		$object = new CWorkPlanLiterature();
-    		$object->plan_id = $bean->getItem("planId");
-    		$object->type = $bean->getItem("type");
-    		$plan = CWorkPlanManager::getWorkplan($bean->getItem("planId"));
-    		if ($object->type == 1) {
-    			$object->ordering = $plan->baseLiterature->getCount() + 1;
-    		} elseif($object->type == 2) {
-    			$object->ordering = $plan->additionalLiterature->getCount() + 1;
-    		} elseif($object->type == 3) {
-    			$object->ordering = $plan->internetResources->getCount() + 1;
-    		}
-    		$object->book_name = urldecode($literature);
-    		$object->save();
-    	}
-    	$this->redirect("workplans.php?action=edit&id=".$bean->getItem("planId"));
     }
 }
