@@ -8,7 +8,6 @@
  * @property int plan_id
  * @property int type
  * @property int book_id
- * @property text book_name
  * @property CArrayList books
  *
  */

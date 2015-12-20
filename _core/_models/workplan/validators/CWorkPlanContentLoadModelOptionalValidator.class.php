@@ -9,11 +9,7 @@ class CWorkPlanContentLoadModelOptionalValidator extends IModelValidatorOptional
 	
 	function onRead(CModel $model) {
 		$this->model = $model;
-		if (count($this->validate()) > 0) {
-			return false;
-		} else {
-			return true;
-		}
+		return count($this->validate()) == 0;
 	}
 	
 	function validate() {
