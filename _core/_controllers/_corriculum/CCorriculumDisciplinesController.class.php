@@ -164,7 +164,7 @@ class CCorriculumDisciplinesController extends CFlowController {
     		// подключаем библиотеку curl с указанием proxy
     		$proxy = CSettingsManager::getSettingValue("proxy_address");
     		$curl = curl_init();
-    		//curl_setopt($curl, CURLOPT_PROXY, $proxy);
+    		curl_setopt($curl, CURLOPT_PROXY, $proxy);
     		 
     		// ссылка для загрузки изданий из библиотеки
     		$link = CSettingsManager::getSettingValue("link_library");
@@ -173,7 +173,7 @@ class CCorriculumDisciplinesController extends CFlowController {
     		$discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("discipline_id"));
     		$codeDiscipl = $discipline->codeFromLibrary;
     
-    		curl_setopt($curl, CURLOPT_URL, $link);
+    		curl_setopt($curl, CURLOPT_URL, $link.$codeDiscipl);
     		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
     		$str = curl_exec($curl);
