@@ -9,7 +9,8 @@ class CSearchCatalogCorriculumLibrary extends CAbstractSearchCatalog {
         $query = new CQuery();
         $query->select("library.id as id, library.book_name as name")
             ->from(TABLE_CORRICULUM_LIBRARY." as library")
-            ->condition("library.discipline_code_id = ".$codeDiscipl);
+            ->innerJoin(TABLE_CORRICULUM_DISCIPLINE_LIBRARY." as disc_library", "library.id = disc_library.book_id")
+            ->condition("disc_library.discipline_id = ".$codeDiscipl);
         foreach ($query->execute()->getItems() as $item) {
             $result[$item["id"]] = $item["name"];
         }
@@ -32,7 +33,8 @@ class CSearchCatalogCorriculumLibrary extends CAbstractSearchCatalog {
         $query = new CQuery();
         $query->select("library.id as id, library.book_name as name")
             ->from(TABLE_CORRICULUM_LIBRARY." as library")
-            ->condition("library.discipline_code_id = ".$codeDiscipl);
+            ->innerJoin(TABLE_CORRICULUM_DISCIPLINE_LIBRARY." as disc_library", "library.id = disc_library.book_id")
+            ->condition("disc_library.discipline_id = ".$codeDiscipl);
         foreach ($query->execute()->getItems() as $item) {
             $result[$item["id"]] = $item["name"];
         }

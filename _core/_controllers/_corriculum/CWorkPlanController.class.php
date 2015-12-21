@@ -451,10 +451,13 @@ class CWorkPlanController extends CFlowController{
     		//foreach ($query->execute()->getItems() as $item) {
     			foreach ($result as $literature) {
     				//if ($literature != $item[book_name]) {
-    					$object = new CCorriculumLibrary();
-    					$object->book_name = $literature;
-    					$object->discipline_code_id = $codeDiscipl;
-    					$object->save();
+    					$library = new CCorriculumLibrary();
+    					$library->book_name = $literature;
+    					$library->save();
+    					$disciplineLibrary = new CCorriculumDisciplineLibrary();
+    					$disciplineLibrary->book_id = $library->getId();
+    					$disciplineLibrary->discipline_id = $codeDiscipl;
+    					$disciplineLibrary->save();
     				//}
     			}
     		//}
