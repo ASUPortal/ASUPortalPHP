@@ -396,28 +396,37 @@ class CWorkPlanController extends CFlowController{
     public function actionAddFromUrl() {
     	// подключаем PHP Simple HTML DOM Parser
     	require_once(CORE_CWD."/_core/_external/smarty/vendor/simple_html_dom.php");
-    
-    	// подключаем библиотеку curl с указанием proxy
-    	$proxy = CSettingsManager::getSettingValue("proxy_address");
-    	$curl = curl_init();
-    	curl_setopt($curl, CURLOPT_PROXY, $proxy);
     	
-    	// ссылка для загрузки изданий из библиотеки
-    	$link = CSettingsManager::getSettingValue("link_library");
+    	$num = 1;
+    	do {
+    		// подключаем библиотеку curl с указанием proxy
+    		$proxy = CSettingsManager::getSettingValue("proxy_address");
+    		$curl = curl_init();
+    		curl_setopt($curl, CURLOPT_PROXY, $proxy);
     	
-    	// код дисциплины
-    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
-    	$codeDiscipl = $plan->corriculumDiscipline->codeFromLibrary;
+    		// ссылка для загрузки изданий из библиотеки
+    		$link = CSettingsManager::getSettingValue("link_library");
     	
-    	curl_setopt($curl, CURLOPT_URL, $link.$codeDiscipl);
-    	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    	curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
-    	sleep(10); // ожидаем, когда сформируется отчёт
-    	$str = curl_exec($curl);
-    	curl_close($curl);
-    
-    	// создаём DOM объект из строки
-    	$html = str_get_html($str);
+    		// код дисциплины
+    		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
+    		$codeDiscipl = $plan->corriculumDiscipline->codeFromLibrary;
+    		
+    		curl_setopt($curl, CURLOPT_URL, $link.$codeDiscipl);
+    		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+    		$str = curl_exec($curl);
+    		curl_close($curl);
+    	
+    		// создаём DOM объект из строки
+    		$html = str_get_html($str);
+    		 
+    		$num++;
+    		sleep(2);
+    		if(empty($html)) {
+    			$this->setData("message", "URL ".$link.$codeDiscipl." не доступен, проверьте адрес прокси в настройках портала");
+    			$this->renderView("_flow/dialog.ok.tpl", "", "");
+    		}
+    	} while (count($html->find('#PanelWait')) != 0 and $num <= 5);
     	
     	if(!empty($html)) {
     		$result = array();
@@ -450,11 +459,18 @@ class CWorkPlanController extends CFlowController{
     		$result = array_unique(array_diff($result1, $result2));
     		
     		foreach ($result as $literature) {
+    			$set = new CRecordSet();
     			$queryLibrary = new CQuery();
+    			$set->setQuery($queryLibrary);
     			$queryLibrary->select("library.*")
 	    			->from(TABLE_CORRICULUM_LIBRARY." as library")
 	    			->condition("library.book_name = '".$literature."'");
-    			if ($queryLibrary->execute()->getCount() == 0) {
+    			$corriculumBooks = new CArrayList();
+    			foreach ($set->getItems() as $ar) {
+    				$item = new CCorriculumBook($ar);
+    				$corriculumBooks->add($item->getId(), $item);
+    			}
+    			if ($corriculumBooks->getCount() == 0) {
     				$library = new CCorriculumBook();
     				$library->book_name = $literature;
     				$library->save();
@@ -463,19 +479,14 @@ class CWorkPlanController extends CFlowController{
     				$disciplineLibrary->discipline_id = $codeDiscipl;
     				$disciplineLibrary->save();
     			} else {
-    				$queryLib = new CQuery();
-    				$queryLib->select("library.*")
-	    				->from(TABLE_CORRICULUM_LIBRARY." as library")
-	    				->condition("library.book_name = '".$literature."'");
-    				foreach ($queryLib->execute()->getItems() as $ar) {
-    					$item = new CCorriculumBook(new CActiveRecord($ar));
+    				foreach ($corriculumBooks->getItems() as $ar) {
     					$query = new CQuery();
     					$query->select("disc_library.*")
 	    					->from(TABLE_CORRICULUM_DISCIPLINE_LIBRARY." as disc_library")
-	    					->condition("disc_library.book_id = '.$item->id.' and discipline_id != ".$codeDiscipl);
+	    					->condition("disc_library.book_id = '.$ar->id.' and discipline_id != ".$codeDiscipl);
     					if ($query->execute()->getCount() > 0) {
     						$disciplineLibrary = new CCorriculumDisciplineBook();
-    						$disciplineLibrary->book_id = $item->id;
+    						$disciplineLibrary->book_id = $ar->id;
     						$disciplineLibrary->discipline_id = $codeDiscipl;
     						$disciplineLibrary->save();
     					}
