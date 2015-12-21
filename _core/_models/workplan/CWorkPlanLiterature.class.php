@@ -33,7 +33,7 @@ class CWorkPlanLiterature extends CActiveModel{
         		"leftCondition" => "literature_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
         		"rightKey" => "book_id",
         		"managerClass" => "CBaseManager",
-        		"managerGetObject" => "getCorriculumLibrary"
+        		"managerGetObject" => "getCorriculumBook"
         	)
         );
     }

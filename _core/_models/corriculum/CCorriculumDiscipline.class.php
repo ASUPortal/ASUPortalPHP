@@ -12,6 +12,7 @@
  * @property CArrayList sections
  * @property CArrayList labors
  * @property CArrayList competentions
+ * @property CArrayList books
  */
 class CCorriculumDiscipline extends CActiveModel {
     protected $_table = TABLE_CORRICULUM_DISCIPLINES;
@@ -24,6 +25,7 @@ class CCorriculumDiscipline extends CActiveModel {
     protected $_parent = null;
     protected $_competentions = null;
     protected $_plans = null;
+    protected $_books = null;
 
     /**
      * Разнообразные публичные свойства
@@ -107,7 +109,16 @@ class CCorriculumDiscipline extends CActiveModel {
                 "storageTable" => TABLE_CORRICULUM_DISCIPLINE_SECTIONS,
                 "storageCondition" => "discipline_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => 'CCorriculumDisciplineSection'
-            )
+            ),
+        	"books" => array(
+        		"relationPower" => RELATION_MANY_TO_MANY,
+        		"storageProperty" => "_books",
+        		"joinTable" => TABLE_CORRICULUM_DISCIPLINE_BOOKS,
+        		"leftCondition" => "discipline_id = ". (is_null($this->codeFromLibrary) ? 0 : $this->codeFromLibrary),
+        		"rightKey" => "book_id",
+        		"managerClass" => "CBaseManager",
+        		"managerGetObject" => "getCorriculumBook"
+        	)
         );
     }
     public function attributeLabels() {

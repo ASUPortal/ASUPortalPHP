@@ -7,6 +7,7 @@
             <th>&nbsp;</th>
             <th>Дисциплина</th>
         </tr>
+        {counter start=0 print=false}
         {foreach $discipline->plans->getItems() as $plan}
             <tr>
                 <td>{counter}</td>

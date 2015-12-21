@@ -1,16 +1,16 @@
 <?php
 
-class CSearchCatalogCorriculumLibrary extends CAbstractSearchCatalog {
+class CSearchCatalogCorriculumBooks extends CAbstractSearchCatalog {
 
     public function actionTypeAhead($lookup) {
     	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
     	$codeDiscipl = $plan->corriculumDiscipline->codeFromLibrary;
         $result = array();
         $query = new CQuery();
-        $query->select("library.id as id, library.book_name as name")
-            ->from(TABLE_CORRICULUM_LIBRARY." as library")
-            ->innerJoin(TABLE_CORRICULUM_DISCIPLINE_LIBRARY." as disc_library", "library.id = disc_library.book_id")
-            ->condition("disc_library.discipline_id = ".$codeDiscipl);
+        $query->select("books.id as id, books.book_name as name")
+            ->from(TABLE_CORRICULUM_BOOKS." as books")
+            ->innerJoin(TABLE_CORRICULUM_DISCIPLINE_BOOKS." as disc_books", "books.id = disc_books.book_id")
+            ->condition("disc_books.discipline_id = ".$codeDiscipl);
         foreach ($query->execute()->getItems() as $item) {
             $result[$item["id"]] = $item["name"];
         }
@@ -31,10 +31,10 @@ class CSearchCatalogCorriculumLibrary extends CAbstractSearchCatalog {
     	$codeDiscipl = $plan->corriculumDiscipline->codeFromLibrary;
         $result = array();
         $query = new CQuery();
-        $query->select("library.id as id, library.book_name as name")
-            ->from(TABLE_CORRICULUM_LIBRARY." as library")
-            ->innerJoin(TABLE_CORRICULUM_DISCIPLINE_LIBRARY." as disc_library", "library.id = disc_library.book_id")
-            ->condition("disc_library.discipline_id = ".$codeDiscipl);
+        $query->select("books.id as id, books.book_name as name")
+            ->from(TABLE_CORRICULUM_BOOKS." as books")
+            ->innerJoin(TABLE_CORRICULUM_DISCIPLINE_BOOKS." as disc_books", "books.id = disc_books.book_id")
+            ->condition("disc_books.discipline_id = ".$codeDiscipl);
         foreach ($query->execute()->getItems() as $item) {
             $result[$item["id"]] = $item["name"];
         }
@@ -46,6 +46,6 @@ class CSearchCatalogCorriculumLibrary extends CAbstractSearchCatalog {
     }
 
     public function actionGetObject($id) {
-        return CBaseManager::getCorriculumLibrary($id);
+        return CBaseManager::getCorriculumBook($id);
     }
 }

@@ -56,6 +56,10 @@ class CCorriculumDisciplineCompetentionsController extends CBaseController{
         	$object->remove();
         }
         $items = CRequest::getArray("selectedInView");
+        if (!empty($items)) {
+        	$object = CCorriculumsManager::getCompetention($items[0]);
+        	$discipline_id = $object->discipline_id;
+        }
         foreach ($items as $id){
         	$object = CCorriculumsManager::getCompetention($id);
         	$object->remove();

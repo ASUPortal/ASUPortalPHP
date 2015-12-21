@@ -9,6 +9,7 @@
         <li class="active"><a href="#labor" data-toggle="tab">Распределение нагрузки по видам занятий</a></li>
         <li><a href="#competentions" data-toggle="tab">Компетенции</a></li>
         <li><a href="#programs" data-toggle="tab">Рабочие программы</a></li>
+        <li><a href="#books" data-toggle="tab">Учебники</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="labor">
@@ -19,6 +20,9 @@
         </div>
         <div class="tab-pane" id="programs">
             {include file="_corriculum/_disciplines/subform.programs.tpl"}
+        </div>
+        <div class="tab-pane" id="books">
+            {include file="_corriculum/_disciplines/subform.books.tpl"}
         </div>
     </div>
 {/block}

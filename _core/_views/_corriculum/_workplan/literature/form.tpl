@@ -17,7 +17,7 @@
 	<div class="control-group">
 	    {CHtml::activeLabel("books", $object)}
 	    <div class="controls">
-	        {CHtml::activeLookup("books", $object, "class.CSearchCatalogCorriculumLibrary", true, ["plan_id" => $object->plan_id])}
+	        {CHtml::activeLookup("books", $object, "class.CSearchCatalogCorriculumBooks", true, ["plan_id" => $object->plan_id])}
 	        {CHtml::error("books", $object)}
 	    </div>
 	</div>

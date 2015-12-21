@@ -7,6 +7,7 @@
         <th>Вид нагрузки</th>
         <th>Величина</th>
     </tr>
+    {counter start=0 print=false}
     {foreach $discipline->labors->getItems() as $labor}
     <tr>
         <td>{counter}</td>
@@ -43,6 +44,7 @@
             <th>Вид нагрузки</th>
             <th>Величина</th>
         </tr>
+        {counter start=0 print=false}
         {foreach $section->labors->getItems() as $labor}
             <tr>
                 <td>{counter}</td>
