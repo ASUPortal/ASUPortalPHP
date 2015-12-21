@@ -449,9 +449,9 @@ class CWorkPlanController extends CFlowController{
     			$queryLibrary = new CQuery();
     			$queryLibrary->select("library.*")
 	    			->from(TABLE_CORRICULUM_LIBRARY." as library")
-	    			->condition("library.book_name like '%".$literature."%'");
+	    			->condition("library.book_name = '".$literature."'");
     			if ($queryLibrary->execute()->getCount() == 0) {
-    				$library = new CCorriculumLibrary();
+    				$library = new CCorriculumBook();
     				$library->book_name = $literature;
     				$library->save();
     				$disciplineLibrary = new CCorriculumDisciplineLibrary();
@@ -462,9 +462,9 @@ class CWorkPlanController extends CFlowController{
     				$queryLib = new CQuery();
     				$queryLib->select("library.*")
 	    				->from(TABLE_CORRICULUM_LIBRARY." as library")
-	    				->condition("library.book_name like '%".$literature."%'");
+	    				->condition("library.book_name = '".$literature."'");
     				foreach ($queryLib->execute()->getItems() as $ar) {
-    					$item = new CCorriculumLibrary(new CActiveRecord($ar));
+    					$item = new CCorriculumBook(new CActiveRecord($ar));
     					$query = new CQuery();
     					$query->select("disc_library.*")
 	    					->from(TABLE_CORRICULUM_DISCIPLINE_LIBRARY." as disc_library")

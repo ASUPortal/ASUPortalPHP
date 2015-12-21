@@ -1,6 +1,6 @@
 <?php
 
-class CCorriculumLibrary extends CActiveModel{
+class CCorriculumBook extends CActiveModel{
     protected $_table = TABLE_CORRICULUM_LIBRARY;
     
 }
