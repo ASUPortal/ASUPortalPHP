@@ -412,7 +412,7 @@ class CWorkPlanController extends CFlowController{
     	curl_setopt($curl, CURLOPT_URL, $link.$codeDiscipl);
     	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     	curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
-    	sleep(5); // ожидаем, когда сформируется отчёт
+    	sleep(10); // ожидаем, когда сформируется отчёт
     	$str = curl_exec($curl);
     	curl_close($curl);
     
@@ -425,21 +425,25 @@ class CWorkPlanController extends CFlowController{
     		// массив всех элементов
     		$result1 = array();
     		$arr1 = array();
-    		foreach($html->find(CSettingsManager::getSettingValue("index_kko_all")) as $k=>$tr) {
-    			foreach ($tr->find(CSettingsManager::getSettingValue("izdan_names")) as $kk=>$td) {
-    				$arr1[$k][$kk] = $td->plaintext;
+    		if(count($html->find(CSettingsManager::getSettingValue("index_kko_all")))) {
+    			foreach($html->find(CSettingsManager::getSettingValue("index_kko_all")) as $k=>$tr) {
+    				foreach ($tr->find(CSettingsManager::getSettingValue("izdan_names")) as $kk=>$td) {
+    					$arr1[$k][$kk] = $td->plaintext;
+    				}
+    				$result1[] = $arr1[$k][1];
     			}
-    			$result1[] = $arr1[$k][1];
     		}
     		
     		// массив элементов с низким, либо нулевым ККО
     		$result2 = array();
     		$arr2 = array();
-    		foreach($html->find(CSettingsManager::getSettingValue("index_kko_extraLow")) as $k=>$tr) {
-    			foreach ($tr->find(CSettingsManager::getSettingValue("izdan_names")) as $kk=>$td) {
-    				$arr2[$k][$kk] = $td->plaintext;
+    		if(count($html->find(CSettingsManager::getSettingValue("index_kko_extraLow")))) {
+    			foreach($html->find(CSettingsManager::getSettingValue("index_kko_extraLow")) as $k=>$tr) {
+    				foreach ($tr->find(CSettingsManager::getSettingValue("izdan_names")) as $kk=>$td) {
+    					$arr2[$k][$kk] = $td->plaintext;
+    				}
+    				$result2[] = $arr2[$k][1];
     			}
-    			$result2[] = $arr2[$k][1];
     		}
     		
     		// исключаем из первого массива элементы второго
@@ -454,7 +458,7 @@ class CWorkPlanController extends CFlowController{
     				$library = new CCorriculumBook();
     				$library->book_name = $literature;
     				$library->save();
-    				$disciplineLibrary = new CCorriculumDisciplineLibrary();
+    				$disciplineLibrary = new CCorriculumDisciplineBook();
     				$disciplineLibrary->book_id = $library->getId();
     				$disciplineLibrary->discipline_id = $codeDiscipl;
     				$disciplineLibrary->save();
@@ -470,7 +474,7 @@ class CWorkPlanController extends CFlowController{
 	    					->from(TABLE_CORRICULUM_DISCIPLINE_LIBRARY." as disc_library")
 	    					->condition("disc_library.book_id = '.$item->id.' and discipline_id != ".$codeDiscipl);
     					if ($query->execute()->getCount() > 0) {
-    						$disciplineLibrary = new CCorriculumDisciplineLibrary();
+    						$disciplineLibrary = new CCorriculumDisciplineBook();
     						$disciplineLibrary->book_id = $item->id;
     						$disciplineLibrary->discipline_id = $codeDiscipl;
     						$disciplineLibrary->save();
