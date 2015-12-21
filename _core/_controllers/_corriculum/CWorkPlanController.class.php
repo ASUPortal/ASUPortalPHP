@@ -445,22 +445,40 @@ class CWorkPlanController extends CFlowController{
     		// исключаем из первого массива элементы второго
     		$result = array_unique(array_diff($result1, $result2));
     		
-    		$query = new CQuery();
-    		$query->select("library.*")
-    			->from(TABLE_CORRICULUM_LIBRARY." as library");
-    		//foreach ($query->execute()->getItems() as $item) {
-    			foreach ($result as $literature) {
-    				//if ($literature != $item[book_name]) {
-    					$library = new CCorriculumLibrary();
-    					$library->book_name = $literature;
-    					$library->save();
-    					$disciplineLibrary = new CCorriculumDisciplineLibrary();
-    					$disciplineLibrary->book_id = $library->getId();
-    					$disciplineLibrary->discipline_id = $codeDiscipl;
-    					$disciplineLibrary->save();
-    				//}
+    		foreach ($result as $literature) {
+    			$queryLibrary = new CQuery();
+    			$queryLibrary->select("library.*")
+	    			->from(TABLE_CORRICULUM_LIBRARY." as library")
+	    			->condition("library.book_name like '%".$literature."%'");
+    			if ($queryLibrary->execute()->getCount() == 0) {
+    				$library = new CCorriculumLibrary();
+    				$library->book_name = $literature;
+    				$library->save();
+    				$disciplineLibrary = new CCorriculumDisciplineLibrary();
+    				$disciplineLibrary->book_id = $library->getId();
+    				$disciplineLibrary->discipline_id = $codeDiscipl;
+    				$disciplineLibrary->save();
+    			} else {
+    				$queryLib = new CQuery();
+    				$queryLib->select("library.*")
+	    				->from(TABLE_CORRICULUM_LIBRARY." as library")
+	    				->condition("library.book_name like '%".$literature."%'");
+    				foreach ($queryLib->execute()->getItems() as $ar) {
+    					$item = new CCorriculumLibrary(new CActiveRecord($ar));
+    					$query = new CQuery();
+    					$query->select("disc_library.*")
+	    					->from(TABLE_CORRICULUM_DISCIPLINE_LIBRARY." as disc_library")
+	    					->condition("disc_library.book_id = '.$item->id.' and discipline_id != ".$codeDiscipl);
+    					if ($query->execute()->getCount() > 0) {
+    						$disciplineLibrary = new CCorriculumDisciplineLibrary();
+    						$disciplineLibrary->book_id = $item->id;
+    						$disciplineLibrary->discipline_id = $codeDiscipl;
+    						$disciplineLibrary->save();
+    					}
+    				}
     			}
-    		//}
+    		}
+    		
     		$this->setData("message", "Данные добавлены успешно");
     		$this->renderView("_flow/dialog.ok.tpl", "", "");
     		

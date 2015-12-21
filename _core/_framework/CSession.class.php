@@ -155,13 +155,4 @@ class CSession {
         return $task;
     }
     
-    /**
-     * Путь к текущему исполняемому скрипту
-     *
-     * @static
-     * @return mixed
-     */
-    public static function getScriptName() {
-    	return $_SERVER["SCRIPT_NAME"];
-    }
 }

@@ -1167,7 +1167,7 @@ class CHtml {
     		$actions[] = "direction=desc";
     	}
         if ($showLink) {
-            $label = '<a href="'.CSession::getScriptName().'?'.implode($actions, "&").'">'.$label.'</a>';
+            $label = '<a href="'.CUtils::getScriptName().'?'.implode($actions, "&").'">'.$label.'</a>';
         }
     	echo $label;
     }
