@@ -190,12 +190,7 @@ class CCorriculumDisciplinesController extends CFlowController {
     		}
     	} while (count($html->find('#PanelWait')) != 0 and $num <= 5);
     	 
-    	if(count($html->find('#PanelWait'))) {
-    		$this->setData("message", "Превышено время ожидания формирования отчёта");
-    		$this->renderView("_flow/dialog.ok.tpl", "", "");
-    	}
-    	 
-    	if(!empty($html)) {
+    	if(!empty($html) and count($html->find('#PanelWait')) == 0) {
     		$result = array();
     
     		// массив всех элементов
@@ -241,21 +236,21 @@ class CCorriculumDisciplinesController extends CFlowController {
     				$library = new CCorriculumBook();
     				$library->book_name = $literature;
     				$library->save();
-    				$disciplineLibrary = new CCorriculumDisciplineBook();
-    				$disciplineLibrary->book_id = $library->getId();
-    				$disciplineLibrary->discipline_id = $codeDiscipl;
-    				$disciplineLibrary->save();
+    				$disciplineBook = new CCorriculumDisciplineBook();
+    				$disciplineBook->book_id = $library->getId();
+    				$disciplineBook->discipline_code_from_library = $codeDiscipl;
+    				$disciplineBook->save();
     			} else {
     				foreach ($corriculumBooks->getItems() as $ar) {
     					$query = new CQuery();
     					$query->select("disc_books.*")
 	    					->from(TABLE_CORRICULUM_DISCIPLINE_BOOKS." as disc_books")
-	    					->condition("disc_books.book_id = '.$ar->id.' and discipline_id != ".$codeDiscipl);
+	    					->condition("disc_books.book_id = '.$ar->id.' and disc_books.discipline_code_from_library != ".$codeDiscipl);
     					if ($query->execute()->getCount() > 0) {
-    						$disciplineLibrary = new CCorriculumDisciplineBook();
-    						$disciplineLibrary->book_id = $ar->id;
-    						$disciplineLibrary->discipline_id = $codeDiscipl;
-    						$disciplineLibrary->save();
+    						$disciplineBook = new CCorriculumDisciplineBook();
+    						$disciplineBook->book_id = $ar->id;
+    						$disciplineBook->discipline_code_from_library = $codeDiscipl;
+    						$disciplineBook->save();
     					}
     				}
     			}
@@ -267,7 +262,11 @@ class CCorriculumDisciplinesController extends CFlowController {
     		// очищаем память
     		$html->clear();
     		unset($html);
-    	} else {
+    	} elseif(count($html->find('#PanelWait'))) {
+    		$this->setData("message", "Превышено время ожидания формирования отчёта");
+    		$this->renderView("_flow/dialog.ok.tpl", "", "");
+    	}
+    	else {
     		$this->setData("message", "URL ".$link.$codeDiscipl." не доступен, проверьте адрес прокси в настройках портала");
     		$this->renderView("_flow/dialog.ok.tpl", "", "");
     	}

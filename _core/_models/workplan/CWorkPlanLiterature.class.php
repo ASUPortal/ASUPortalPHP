@@ -7,7 +7,6 @@
  *
  * @property int plan_id
  * @property int type
- * @property int book_id
  * @property CArrayList books
  *
  */
@@ -16,11 +15,6 @@ class CWorkPlanLiterature extends CActiveModel{
 
     protected function relations() {
         return array(
-        	"book" => array(
-        		"relationPower" => RELATION_HAS_ONE,
-        		"storageField" => "book_id",
-        		"targetClass" => "CTerm"
-        	),
         	"plan" => array(
         		"relationPower" => RELATION_HAS_ONE,
         		"storageField" => "plan_id",
@@ -40,7 +34,6 @@ class CWorkPlanLiterature extends CActiveModel{
 
     public function attributeLabels() {
         return array(
-            "book_id" => "Книга",
             "type" => "Тип",
             "ordering" => "Порядковый номер",
         	"books" => "Книги"

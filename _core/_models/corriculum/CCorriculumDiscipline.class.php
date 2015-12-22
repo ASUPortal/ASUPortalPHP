@@ -114,7 +114,7 @@ class CCorriculumDiscipline extends CActiveModel {
         		"relationPower" => RELATION_MANY_TO_MANY,
         		"storageProperty" => "_books",
         		"joinTable" => TABLE_CORRICULUM_DISCIPLINE_BOOKS,
-        		"leftCondition" => "discipline_id = ". (is_null($this->codeFromLibrary) ? 0 : $this->codeFromLibrary),
+        		"leftCondition" => "discipline_code_from_library = ". (is_null($this->codeFromLibrary) ? 0 : $this->codeFromLibrary),
         		"rightKey" => "book_id",
         		"managerClass" => "CBaseManager",
         		"managerGetObject" => "getCorriculumBook"
