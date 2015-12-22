@@ -63,7 +63,11 @@ class CConfigurationController extends CBaseController {
     public function actionSave() {
         $setting = new CSetting();
         $setting->setAttributes(CRequest::getArray($setting::getClassName()));
+        $cacheKeyString = CACHE_APPLICATION_SETTINGS . '_' . strtoupper($setting->alias);
+        $cacheKeyNumeric = CACHE_APPLICATION_SETTINGS . '_' . $setting->id;
         if ($setting->validate()) {
+            CApp::getApp()->cache->set($cacheKeyString, $setting);
+            CApp::getApp()->cache->set($cacheKeyNumeric, $setting);
             $setting->save();
             if ($this->continueEdit()) {
                 $this->redirect("?action=edit&id=".$setting->getId());
