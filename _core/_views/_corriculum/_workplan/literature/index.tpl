@@ -10,7 +10,7 @@
                     <th width="16">&nbsp;</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("books", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("book_id", $objects->getFirstItem())}</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,11 +20,7 @@
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить литературу')) { location.href='workplanliterature.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{$object->ordering}</td>
                     <td><a href="workplanliterature.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>
-                    {foreach $object->books->getItems() as $book}
-                    	<li>{$book->book_name}</li>
-                    {/foreach}
-                    </td>
+                    <td>{$object->book->book_name}</td>
                 </tr>
             {/foreach}
             </tbody>

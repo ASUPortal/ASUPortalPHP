@@ -180,6 +180,7 @@
     define("TABLE_SEB_QUESTIONS", "seb_question");
     define("TABLE_SEB_TICKETS", "seb_ticket");
     define("TABLE_DISCIPLINES", "subjects");
+    define("TABLE_DISCIPLINES_BOOKS", "subject_books");
     define("TABLE_SPECIALITIES", "specialities");
     define("TABLE_SCIENCE_SPECIALITIES", "specialities_science");
     define("TABLE_DEPARTMENT_PROTOCOLS", "protocols");
@@ -221,7 +222,6 @@
     define("TABLE_CORRICULUM_DISCIPLINE_EXPERIENCES", "pl_corriculum_discipline_experiences");
     define("TABLE_CORRICULUM_ATTESTATIONS", "pl_corriculum_attestations");
     define("TABLE_CORRICULUM_BOOKS", "pl_corriculum_books");
-    define("TABLE_CORRICULUM_DISCIPLINE_BOOKS", "pl_corriculum_discipline_books");
     define("TABLE_TAXONOMY", "taxonomy");
     define("TABLE_TAXONOMY_TERMS", "taxonomy_terms");
     define("TABLE_TAXONOMY_CHILD_TERMS", "taxonomy_term_hierarchy");

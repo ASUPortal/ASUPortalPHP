@@ -23,7 +23,7 @@ class CCorriculumDisciplineBooksController extends CBaseController{
         // для передачи необходимых параметров
         $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("discipline_id"));
         $param = new CCorriculumDisciplineBook();
-        $param->discipline_code_from_library = $discipline->codeFromLibrary;
+        $param->subject_id = $discipline->discipline->getId();
         $param->book_id = $discipline->getId();
         $this->setData("param", $param);
         /**
@@ -46,7 +46,7 @@ class CCorriculumDisciplineBooksController extends CBaseController{
         // для передачи необходимых параметров
         $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("discipline_id"));
         $param = new CCorriculumDisciplineBook();
-        $param->discipline_code_from_library = $discipline->codeFromLibrary;
+        $param->subject_id = $discipline->discipline->getId();
         $param->book_id = $discipline->getId();
         $this->setData("param", $param);
         /**
@@ -80,13 +80,13 @@ class CCorriculumDisciplineBooksController extends CBaseController{
         $object->setAttributes(CRequest::getArray($object::getClassName()));
         $param = new CCorriculumDisciplineBook();
         $param->setAttributes(CRequest::getArray($param::getClassName()));
-        $codeDiscipl = $param->discipline_code_from_library;
+        $subject_id = $param->subject_id;
         $discipline_id = $param->book_id;
         if ($object->validate()) {
             $object->save();
             $disciplineBook = new CCorriculumDisciplineBook();
             $disciplineBook->book_id = $object->getId();
-            $disciplineBook->discipline_code_from_library = $codeDiscipl;
+            $disciplineBook->subject_id = $subject_id;
             $disciplineBook->save();
             if ($this->continueEdit()) {
                 $this->redirect("books.php?action=edit&id=".$object->getId()."&discipline_id=".$discipline_id);

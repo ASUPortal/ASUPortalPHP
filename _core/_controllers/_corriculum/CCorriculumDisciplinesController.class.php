@@ -169,9 +169,11 @@ class CCorriculumDisciplinesController extends CFlowController {
     		// ссылка для загрузки изданий из библиотеки
     		$link = CSettingsManager::getSettingValue("link_library");
     		 
-    		// код дисциплины
     		$discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("discipline_id"));
-    		$codeDiscipl = $discipline->codeFromLibrary;
+    		// код дисциплины из библиотеки
+    		$codeDiscipl = $discipline->discipline->library_code;
+    		// id дисциплины из справочника
+    		$subject_id = $discipline->discipline->getId();
     
     		curl_setopt($curl, CURLOPT_URL, $link.$codeDiscipl);
     		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -238,18 +240,18 @@ class CCorriculumDisciplinesController extends CFlowController {
     				$library->save();
     				$disciplineBook = new CCorriculumDisciplineBook();
     				$disciplineBook->book_id = $library->getId();
-    				$disciplineBook->discipline_code_from_library = $codeDiscipl;
+    				$disciplineBook->subject_id = $subject_id;
     				$disciplineBook->save();
     			} else {
     				foreach ($corriculumBooks->getItems() as $ar) {
     					$query = new CQuery();
     					$query->select("disc_books.*")
-	    					->from(TABLE_CORRICULUM_DISCIPLINE_BOOKS." as disc_books")
-	    					->condition("disc_books.book_id = '.$ar->id.' and disc_books.discipline_code_from_library != ".$codeDiscipl);
+	    					->from(TABLE_DISCIPLINES_BOOKS." as disc_books")
+	    					->condition("disc_books.book_id = '.$ar->id.' and disc_books.subject_id != ".$subject_id);
     					if ($query->execute()->getCount() > 0) {
     						$disciplineBook = new CCorriculumDisciplineBook();
     						$disciplineBook->book_id = $ar->id;
-    						$disciplineBook->discipline_code_from_library = $codeDiscipl;
+    						$disciplineBook->subject_id = $subject_id;
     						$disciplineBook->save();
     					}
     				}
@@ -265,8 +267,7 @@ class CCorriculumDisciplinesController extends CFlowController {
     	} elseif(count($html->find('#PanelWait'))) {
     		$this->setData("message", "Превышено время ожидания формирования отчёта");
     		$this->renderView("_flow/dialog.ok.tpl", "", "");
-    	}
-    	else {
+    	} else {
     		$this->setData("message", "URL ".$link.$codeDiscipl." не доступен, проверьте адрес прокси в настройках портала");
     		$this->renderView("_flow/dialog.ok.tpl", "", "");
     	}

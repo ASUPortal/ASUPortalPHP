@@ -111,13 +111,9 @@ class CCorriculumDiscipline extends CActiveModel {
                 "targetClass" => 'CCorriculumDisciplineSection'
             ),
         	"books" => array(
-        		"relationPower" => RELATION_MANY_TO_MANY,
+        		"relationPower" => RELATION_COMPUTED,
         		"storageProperty" => "_books",
-        		"joinTable" => TABLE_CORRICULUM_DISCIPLINE_BOOKS,
-        		"leftCondition" => "discipline_code_from_library = ". (is_null($this->codeFromLibrary) ? 0 : $this->codeFromLibrary),
-        		"rightKey" => "book_id",
-        		"managerClass" => "CBaseManager",
-        		"managerGetObject" => "getCorriculumBook"
+        		"relationFunction" => "getBooks"
         	)
         );
     }
@@ -126,8 +122,7 @@ class CCorriculumDiscipline extends CActiveModel {
             "discipline_id" => "Дисциплина",
             "ordering" => "Порядок в списке",
             "parent_id" => "Родительская дисциплина",
-			"component_type_id" => "Вид компонента",
-			"codeFromLibrary" => "Код дисциплины (с сайта библиотеки)"
+			"component_type_id" => "Вид компонента"
         );
     }
     /**
@@ -196,5 +191,23 @@ class CCorriculumDiscipline extends CActiveModel {
                 "discipline_id"
             )
         );
+    }
+    /**
+     * Книги, привязанные к дисциплине
+     *
+     * @return CArrayList
+     */
+    public function getBooks() {
+        if (is_null($this->_books)) {
+            $this->_books = new CArrayList();
+            if (!is_null($this->getId())) {
+                $books = CActiveRecordProvider::getWithCondition(TABLE_DISCIPLINES_BOOKS, "subject_id=".$this->discipline_id);
+                foreach ($books->getItems() as $item) {
+                	$book = CBaseManager::getCorriculumBook($item->getItemValue("book_id"));
+                    $this->_books->add($book->getId(), $book);
+                }
+            }
+        }
+        return $this->_books;
     }
 }
