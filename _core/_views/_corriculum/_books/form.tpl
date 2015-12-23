@@ -1,7 +1,7 @@
 <form action="books.php" method="post" enctype="multipart/form-data" class="form-horizontal">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $object)}
-    {CHtml::activeHiddenField("discipline_id", $param)}
+    {CHtml::activeHiddenField("subject_id", $param)}
     {CHtml::activeHiddenField("book_id", $param)}
 
     {CHtml::errorSummary($object)}

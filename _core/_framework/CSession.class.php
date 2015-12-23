@@ -154,5 +154,4 @@ class CSession {
         }
         return $task;
     }
-    
 }
