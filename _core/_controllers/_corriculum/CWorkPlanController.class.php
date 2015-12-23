@@ -390,4 +390,66 @@ class CWorkPlanController extends CFlowController{
     	}
     	$this->redirect("workplans.php");
     }
+    /**
+     * Добавление литературы.
+     * Сначала надо выбрать тип литературы
+     */
+    public function actionAddLiterature() {
+    	$bean = self::getStatefullBean();
+    	$bean->add("planId", CRequest::getInt("plan_id"));
+    	$items = new CArrayList();
+    	$result = array(1=>"Основная литература", 2=>"Дополнительная литература", 3=>"Интернет-ресурсы");
+    	foreach ($result as $key=>$value) {
+    		$items->add($key, $value);
+    	}
+    	$this->setData("items", $items);
+    	$this->renderView("_flow/pickList.tpl", get_class($this), "AddLiterature_Select");
+    }
+    /**
+     * Добавление литературы.
+     * Выбор литературы
+     */
+    public function actionAddLiterature_Select() {
+    	$selected = CRequest::getArray("selected");
+    	$bean = self::getStatefullBean();
+    	$bean->add("type", $selected[0]);
+    	$plan = CWorkPlanManager::getWorkplan($bean->getItem("planId"));
+    	$codeDiscipl = $plan->corriculumDiscipline->discipline->getId();
+    	$result = array();
+    	$query = new CQuery();
+    	$query->select("books.id as id, books.book_name as name")
+	    	->from(TABLE_CORRICULUM_BOOKS." as books")
+	    	->innerJoin(TABLE_DISCIPLINES_BOOKS." as disc_books", "books.id = disc_books.book_id")
+	    	->condition("disc_books.subject_id = ".$codeDiscipl);
+    	foreach ($query->execute()->getItems() as $item) {
+    		$result[$item["id"]] = $item["name"];
+    	}
+    	$items = new CArrayList();
+    	foreach ($result as $key=>$value) {
+    		$items->add($key, $value);
+    	}
+    	$this->setData("items", $items);
+    	$this->setData("multiple", true);
+    	$this->renderView("_flow/pickList.tpl", get_class($this), "SaveLiterature");
+    }
+    public function actionSaveLiterature() {
+    	$bean = self::getStatefullBean();
+    	$selected = CRequest::getArray("selected");
+    	foreach ($selected as $literature) {
+    		$object = new CWorkPlanLiterature();
+    		$object->plan_id = $bean->getItem("planId");
+    		$object->type = $bean->getItem("type");
+    		$plan = CWorkPlanManager::getWorkplan($bean->getItem("planId"));
+    		if ($object->type == 1) {
+    			$object->ordering = $plan->baseLiterature->getCount() + 1;
+    		} elseif($object->type == 2) {
+    			$object->ordering = $plan->additionalLiterature->getCount() + 1;
+    		} elseif($object->type == 3) {
+    			$object->ordering = $plan->internetResources->getCount() + 1;
+    		}
+    		$object->book_id = $literature;
+    		$object->save();
+    	}
+    	$this->redirect("workplans.php?action=edit&id=".$bean->getItem("planId"));
+    }
 }

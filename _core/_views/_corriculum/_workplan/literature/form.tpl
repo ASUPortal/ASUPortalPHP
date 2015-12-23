@@ -6,20 +6,20 @@
 
     {CHtml::errorSummary($object)}
     
+    <div class="control-group">
+        {CHtml::activeLabel("book_id", $object)}
+        <div class="controls">
+            {CHtml::activeLookup("book_id", $object, "class.CSearchCatalogCorriculumBooks", false, ["plan_id" => $object->plan_id])}
+            {CHtml::error("book_id", $object)}
+        </div>
+    </div>
+    
 	<div class="control-group">
 		{CHtml::activeLabel("ordering", $object)}
 		<div class="controls">
 			{CHtml::activeTextField("ordering", $object)}
 			{CHtml::error("ordering", $object)}
 		</div>
-	</div>
-	
-	<div class="control-group">
-	    {CHtml::activeLabel("books", $object)}
-	    <div class="controls">
-	        {CHtml::activeLookup("books", $object, "class.CSearchCatalogCorriculumBooks", true, ["plan_id" => $object->plan_id])}
-	        {CHtml::error("books", $object)}
-	    </div>
 	</div>
 
     <div class="control-group">
