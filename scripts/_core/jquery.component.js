@@ -147,10 +147,7 @@
                 that._formSubmit(form);
                 return false;
             });
-            jQuery(that).html(data)
-	            .find(".catalogLookup").catalogLookup().end()
-	            .find("[asu-type='component']").components().end()
-	            .find('select.select2').select2().end();
+            jQuery(that).html(data);
 
 	        var regexp = /<script>([\s\S]*?)<\/script>/gmi;
 	
