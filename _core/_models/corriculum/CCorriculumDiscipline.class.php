@@ -12,6 +12,7 @@
  * @property CArrayList sections
  * @property CArrayList labors
  * @property CArrayList competentions
+ * @property CArrayList books
  */
 class CCorriculumDiscipline extends CActiveModel {
     protected $_table = TABLE_CORRICULUM_DISCIPLINES;
@@ -24,6 +25,7 @@ class CCorriculumDiscipline extends CActiveModel {
     protected $_parent = null;
     protected $_competentions = null;
     protected $_plans = null;
+    protected $_books = null;
 
     /**
      * Разнообразные публичные свойства
@@ -107,7 +109,12 @@ class CCorriculumDiscipline extends CActiveModel {
                 "storageTable" => TABLE_CORRICULUM_DISCIPLINE_SECTIONS,
                 "storageCondition" => "discipline_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => 'CCorriculumDisciplineSection'
-            )
+            ),
+        	"books" => array(
+        		"relationPower" => RELATION_COMPUTED,
+        		"storageProperty" => "_books",
+        		"relationFunction" => "getBooks"
+        	)
         );
     }
     public function attributeLabels() {
@@ -184,5 +191,23 @@ class CCorriculumDiscipline extends CActiveModel {
                 "discipline_id"
             )
         );
+    }
+    /**
+     * Книги, привязанные к дисциплине
+     *
+     * @return CArrayList
+     */
+    public function getBooks() {
+        if (is_null($this->_books)) {
+            $this->_books = new CArrayList();
+            if (!is_null($this->getId())) {
+                $books = CActiveRecordProvider::getWithCondition(TABLE_DISCIPLINES_BOOKS, "subject_id=".$this->discipline_id);
+                foreach ($books->getItems() as $item) {
+                	$book = CBaseManager::getCorriculumBook($item->getItemValue("book_id"));
+                    $this->_books->add($book->getId(), $book);
+                }
+            }
+        }
+        return $this->_books;
     }
 }

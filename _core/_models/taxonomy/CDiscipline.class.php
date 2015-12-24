@@ -9,6 +9,14 @@
 class CDiscipline extends CActiveModel {
 	protected $_table = TABLE_DISCIPLINES;
     private $_questions = null;
+    
+    public function attributeLabels() {
+    	return array(
+    		"name" => "Название",
+    		"library_code" => "Код из библиотеки"
+    	);
+    }
+    
     /**
      * Вопросы, которые по данной дисциплине есть
      *

@@ -48,9 +48,10 @@ class CStaffController extends CBaseController{
         if (CRequest::getInt("isAll") == "1") {
         	$isAll = true;
         }
+        $filter = CRequest::getString("filterClass");
         if (CRequest::getInt("type") != 0) {
         	$selectedType = CRequest::getInt("type");
-        } elseif (!$isAll and is_null(CRequest::getString("filterClass"))) {
+        } elseif (!$isAll and $filter == "") {
         	$query->condition("(types.person_type_id = 1 or types.person_type_id = 3)");
         }
         $typesQuery = new CQuery();

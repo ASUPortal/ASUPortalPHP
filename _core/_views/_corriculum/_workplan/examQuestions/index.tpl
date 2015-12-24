@@ -19,6 +19,7 @@
 		        </tr>
 	        {/foreach}
     	</table>
+    		{CHtml::paginator($paginator, "workplanexamquestions.php?action=index")}
     {/if}
 {/block}
 

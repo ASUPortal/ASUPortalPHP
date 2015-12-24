@@ -7,20 +7,19 @@
  *
  * @property int plan_id
  * @property int type
- * @property int book_id
+ * @property CArrayList books
  *
- * @property CTerm book
  */
 class CWorkPlanLiterature extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_LITERATURE;
 
     protected function relations() {
         return array(
-            "book" => array(
-                "relationPower" => RELATION_HAS_ONE,
-                "storageField" => "book_id",
-                "targetClass" => "CTerm"
-            ),
+        	"book" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageField" => "book_id",
+        		"targetClass" => "CCorriculumBook"
+        	),
         	"plan" => array(
         		"relationPower" => RELATION_HAS_ONE,
         		"storageField" => "plan_id",

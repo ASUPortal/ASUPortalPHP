@@ -58,13 +58,13 @@ class CWorkPlanCompetentionsController extends CBaseController{
         		"icon" => "actions/format-indent-less.png"
         	));
         }
-        $this->addActionsMenuItem(array(
+        /*$this->addActionsMenuItem(array(
         		"title" => "Удалить выделенные",
         		"icon" => "actions/edit-delete.png",
-        		"form" => "#MainView",
-        		"link" => "workplans.php",
+        		"form" => "#competentionsForm",
+        		"link" => "workplancompetentions.php",
         		"action" => "delete"
-        ));
+        ));*/
         /**
          * Отображение представления
          */
@@ -105,18 +105,26 @@ class CWorkPlanCompetentionsController extends CBaseController{
         $this->renderView("_corriculum/_workplan/competentions/edit.tpl");
     }
     public function actionDelete() {
-        $object = CBaseManager::getWorkPlanCompetention(CRequest::getInt("id"));
-        $plan = $object->plan_id;
-        $type = $object->type;
-        if (!is_null($object)) {
-        	$object->remove();
-        }
-        $items = CRequest::getArray("selectedInView");
-        foreach ($items as $id){
-        	$object = CBaseManager::getWorkPlanCompetention($id);
-        	$object->remove();
-        }
-        $this->redirect("workplancompetentions.php?action=index&plan_id=".$plan."&type=".$type);
+    	$object = CBaseManager::getWorkPlanCompetention(CRequest::getInt("id"));
+    	if (!is_null($object)) {
+    		$plan = $object->plan_id;
+    		$type = $object->type;
+    		$object->remove();
+    	}
+    	$items = CRequest::getArray("selectedInView");
+    	if (!empty($items)) {
+    		$object = CBaseManager::getWorkPlanCompetention($items[0]);
+    		$items = CRequest::getArray("selectedInView");
+    		if (!is_null($object)) {
+    			$plan = $object->plan_id;
+    			$type = $object->type;
+    			foreach ($items as $id){
+    				$object = CBaseManager::getWorkPlanCompetention($id);
+    				$object->remove();
+    			}
+    		}
+    	}
+    	$this->redirect("workplancompetentions.php?action=index&plan_id=".$plan."&type=".$type);
     }
     public function actionSave() {
         $object = new CWorkPlanCompetention();

@@ -5,7 +5,7 @@
     <input type="hidden" name="id" value="{$section->getId()}" />
     <input type="hidden" name="action" value="submitForm" />
     <input type="hidden" name="bean" value="{$bean->getBeanId()}" />
-
+	{CHtml::warningSummary($section)}
     <table class="table">
         <thead>
         <tr>

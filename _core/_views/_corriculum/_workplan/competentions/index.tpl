@@ -4,6 +4,7 @@
     {if ($objects->getCount() == 0)}
         Нет объектов для отображения
     {else}
+    	<form id="competentionsForm">
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
                 <tr>
@@ -77,6 +78,7 @@
             {/foreach}
             </tbody>
         </table>
+        </form>
 
         {CHtml::paginator($paginator, "workplancompetentions.php?action=index")}
     {/if}
