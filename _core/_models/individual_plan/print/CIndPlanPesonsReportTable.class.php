@@ -67,27 +67,26 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
             if (array_key_exists($plan->person_id, $result)) {
                 $row = $result[$plan->person_id];
             }
-            $row[0] = "АСУ";
-            $row[1] = count($result);
-            $row[2] = "";
+            $row[0] = count($result) + 1;
+            $row[1] = "";
             if (!is_null($plan->person)) {
                 if (!is_null($plan->person->getPost())) {
-                    $row[2] = $plan->person->getPost()->name_short;
+                    $row[1] = $plan->person->getPost()->name_short;
+                }
+            }
+            $row[2] = "";
+            if (!is_null($plan->person)) {
+                if (!is_null($plan->person->degree)) {
+                    $row[2] = $plan->person->degree->comment;
                 }
             }
             $row[3] = "";
             if (!is_null($plan->person)) {
-                if (!is_null($plan->person->degree)) {
-                    $row[3] = $plan->person->degree->comment;
-                }
-            }
-            $row[4] = "";
-            if (!is_null($plan->person)) {
-                $row[4] = $plan->person->fio_short;
+                $row[3] = $plan->person->fio_short;
             }
             // план на семестр
-            if (!array_key_exists(5, $row)) {
-                $row[5] = 0;
+            if (!array_key_exists(4, $row)) {
+                $row[4] = 0;
             }
             $preparedData = array();
             $table = $plan->getStudyLoadTable()->getTable();
@@ -109,30 +108,31 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
                 2, 3, 4, 5, 6
             ))) {
                 foreach ($preparedData as $preparedRow) {
-                    $row[5] += $preparedRow[1];
+                    $row[4] += $preparedRow[1];
                 }
             } else {
                 foreach ($preparedData as $preparedRow) {
-                    $row[5] += $preparedRow[8];
+                    $row[4] += $preparedRow[8];
                 }
             }
             $rows = array(
-                6 => 0, //лекц
-                7 => 1, //прак
-                8 => 2, //лаб
-                9 => -1, 
-                10 => 4, //кп
-                11 => -1,
-                12 => 14, //ргр
-                13 => 3, //конс
-                14 => 5, //зач
-                15 => 6, //экз
-                16 => 7, //произв. прак.
-                17 => 8, //рец
-                18 => 9, //дип. проект.
-                19 => 10, //ГЭК
-                20 => 15, //уч. прак.
-                21 => 16 //КСР
+                5 => 0, //лекц
+                6 => 1, //прак
+                7 => 2, //лаб
+                8 => -1, 
+                9 => 4, //кп
+                10 => -1,
+                11 => 14, //ргр
+                12 => 3, //конс
+                13 => 15, //уч. прак.
+                14 => 7, //произв. прак.
+                15 => 5, //зач
+                16 => 6, //экз
+                17 => 9, //дип. проект.
+                18 => 10, //ГЭК
+                19 => 16, //КСР
+                20 => -1,
+            	21 => 12 //асп
             );
             foreach ($rows as $target=>$source) {
             	if (!array_key_exists($target, $row)) {
@@ -144,6 +144,9 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
     			if ($source != -1) {
     				$row[$target] += $preparedData[$source][$month];
     				$row[22] += $preparedData[$source][$month];
+    			}
+    			if ($row[$target] == 0) {
+    				$row[$target] = "";
     			}
     		}
             $result[$plan->person_id] = $row;
