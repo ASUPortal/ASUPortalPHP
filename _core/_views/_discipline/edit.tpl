@@ -4,7 +4,15 @@
     <h2>Редактирование дисциплины</h2>
 	{CHtml::helpForCurrentPage()}
 	
-    {include file="_discipline/form.tpl"}
+	{include file="_discipline/form.tpl"}
+	<ul class="nav nav-tabs">
+		<li class="active"><a data-toggle="tab" href="#books">Учебники</a></li>
+	</ul>
+	<div class="tab-content">
+		<div id="books" class="tab-pane active">
+			{include file="_discipline/subform.books.tpl"}
+		</div>
+	</div>
 {/block}
 
 {block name="asu_right"}
