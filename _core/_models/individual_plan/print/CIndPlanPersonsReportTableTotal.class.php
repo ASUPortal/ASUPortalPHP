@@ -59,13 +59,9 @@ class CIndPlanPersonsReportTableTotal extends CAbstractPrintClassField {
         foreach ($targetPlans->getItems() as $plan) {
             $row = array();
             $row[0] = "";
-            $row[1] = "";
-            $row[2] = "";
-            $row[3] = "";
-            $row[4] = "";
             // план на семестр
-            if (!array_key_exists(5, $row)) {
-                $row[5] = 0;
+            if (!array_key_exists(1, $row)) {
+                $row[1] = 0;
             }
             $preparedData = array();
             $table = $plan->getStudyLoadTable()->getTable();
@@ -87,30 +83,31 @@ class CIndPlanPersonsReportTableTotal extends CAbstractPrintClassField {
                 2, 3, 4, 5, 6
             ))) {
                 foreach ($preparedData as $preparedRow) {
-                    $row[5] += $preparedRow[1];
+                    $row[1] += $preparedRow[1];
                 }
             } else {
                 foreach ($preparedData as $preparedRow) {
-                    $row[5] += $preparedRow[8];
+                    $row[1] += $preparedRow[8];
                 }
             }
             $rows = array(
-                6 => 0, //лекц
-                7 => 1, //прак
-                8 => 2, //лаб
-                9 => -1, 
-                10 => 4, //кп
-                11 => -1,
-                12 => 14, //ргр
-                13 => 3, //конс
-                14 => 5, //зач
-                15 => 6, //экз
-                16 => 7, //произв. прак.
-                17 => 8, //рец
-                18 => 9, //дип. проект.
-                19 => 10, //ГЭК
-                20 => 15, //уч. прак.
-                21 => 16 //КСР
+                2 => 0, //лекц
+                3 => 1, //прак
+                4 => 2, //лаб
+                5 => -1, 
+                6 => 4, //кп
+                7 => -1,
+                8 => 14, //ргр
+                9 => 3, //конс
+                10 => 15, //уч. прак.
+                11 => 7, //произв. прак.
+                12 => 5, //зач
+                13 => 6, //экз
+                14 => 9, //дип. проект.
+                15 => 10, //ГЭК
+                16 => 16, //КСР
+                17 => -1,
+            	18 => 12 //асп
             );
             foreach ($rows as $target=>$source) {
                 if (!array_key_exists($target, $row)) {
@@ -119,21 +116,21 @@ class CIndPlanPersonsReportTableTotal extends CAbstractPrintClassField {
                 if ($source != -1) {
                     $row[$target] += $preparedData[$source][$month];
                 }
+                if ($row[$target] == 0) {
+                	$row[$target] = "";
+                }
             }
-            if (!array_key_exists(22, $row)) {
-                $row[22] = 0;
+            if (!array_key_exists(19, $row)) {
+                $row[19] = 0;
             }
-            for ($i = 6; $i <= 21; $i++) {
-                $row[22] += $row[$i];
+            for ($i = 2; $i <= 18; $i++) {
+                $row[19] += $row[$i];
             }
             $result[] = $row;
         }
         $sum = array();
-    	$sum[0] = "Итог";
-    	for ($i = 1; $i <= 4; $i++) {
-    		$sum[$i] = "";
-    	}
-    	for ($i = 5; $i <= 22; $i++) {
+    	$sum[0] = "Итого";
+    	for ($i = 1; $i <= 19; $i++) {
     		if (!array_key_exists($i, $sum)) {
     			$sum[$i] = 0;
     		}
