@@ -61,31 +61,30 @@ class CIndPlanPersonsReportTableByTime extends CAbstractPrintClassField {
             if (array_key_exists($plan->person_id, $result)) {
                 $row = $result[$plan->person_id];
             }
-            $row[0] = "АСУ";
-            $row[1] = count($result);
-            $row[2] = "";
+            $row[0] = count($result) + 1;
+            $row[1] = "";
             if (!is_null($plan->person)) {
                 if (!is_null($plan->person->getPost())) {
-                    $row[2] = $plan->person->getPost()->name_short;
+                    $row[1] = $plan->person->getPost()->name_short;
+                }
+            }
+            $row[2] = "";
+            if (!is_null($plan->person)) {
+                if (!is_null($plan->person->degree)) {
+                    $row[2] = $plan->person->degree->comment;
                 }
             }
             $row[3] = "";
             if (!is_null($plan->person)) {
-                if (!is_null($plan->person->degree)) {
-                    $row[3] = $plan->person->degree->comment;
-                }
-            }
-            $row[4] = "";
-            if (!is_null($plan->person)) {
-                $row[4] = $plan->person->fio_short;
+                $row[3] = $plan->person->fio_short;
             }
             // план на семестр бюджет
-            if (!array_key_exists(5, $row)) {
-                $row[5] = 0;
+            if (!array_key_exists(4, $row)) {
+                $row[4] = 0;
             }
             // план на семестр контракт
-            if (!array_key_exists(6, $row)) {
-            	$row[6] = 0;
+            if (!array_key_exists(5, $row)) {
+            	$row[5] = 0;
             }
             // итого бюджет
             if (!array_key_exists(23, $row)) {
@@ -128,47 +127,17 @@ class CIndPlanPersonsReportTableByTime extends CAbstractPrintClassField {
             			2, 3, 4, 5, 6
             	))) {
             		foreach ($preparedData as $preparedRow) {
-            			$row[5] += $preparedRow[18];
-            			$row[6] += $preparedRow[19];
+            			$row[4] += $preparedRow[18];
+            			$row[5] += $preparedRow[19];
             			$row[23] += $preparedRow[20];
             			$row[24] += $preparedRow[21];
             		}
             	} else {
             		foreach ($preparedData as $preparedRow) {
-            			$row[5] += $preparedRow[20];
-            			$row[6] += $preparedRow[21];
+            			$row[4] += $preparedRow[20];
+            			$row[5] += $preparedRow[21];
             			$row[23] += $preparedRow[22];
             			$row[24] += $preparedRow[23];
-            		}
-            	}
-            	$rows = array(
-            			7 => 0, //лекц
-            			8 => 1, //прак
-            			9 => 2, //лаб
-            			10 => -1,
-            			11 => 4, //кп
-            			12 => -1,
-            			13 => 14, //ргр
-            			14 => 3, //конс
-            			15 => 5, //зач
-            			16 => 6, //экз
-            			17 => 7, //произв. прак.
-            			18 => 8, //рец
-            			19 => 9, //дип. проект.
-            			20 => 10, //ГЭК
-            			21 => 15, //уч. прак.
-            			22 => 16 //КСР
-            	);
-            } else {
-            	if (in_array($month, array(
-            			2, 3, 4, 5, 6
-            	))) {
-            		foreach ($preparedData as $preparedRow) {
-            			$row[5] += $preparedRow[1];
-            		}
-            	} else {
-            		foreach ($preparedData as $preparedRow) {
-            			$row[5] += $preparedRow[8];
             		}
             	}
             	$rows = array(
@@ -180,33 +149,61 @@ class CIndPlanPersonsReportTableByTime extends CAbstractPrintClassField {
             			11 => -1,
             			12 => 14, //ргр
             			13 => 3, //конс
-            			14 => 5, //зач
-            			15 => 6, //экз
-            			16 => 7, //произв. прак.
-            			17 => 8, //рец
+            			14 => 15, //уч. прак.
+            			15 => 7, //произв. прак.
+            			16 => 5, //зач
+            			17 => 6, //экз
             			18 => 9, //дип. проект.
             			19 => 10, //ГЭК
-            			20 => 15, //уч. прак.
-            			21 => 16 //КСР
+            			20 => 16, //КСР
+            			21 => -1,
+            			22 => 12 //асп
+            	);
+            } else {
+            	if (in_array($month, array(
+            			2, 3, 4, 5, 6
+            	))) {
+            		foreach ($preparedData as $preparedRow) {
+            			$row[4] += $preparedRow[1];
+            		}
+            	} else {
+            		foreach ($preparedData as $preparedRow) {
+            			$row[4] += $preparedRow[8];
+            		}
+            	}
+            	$rows = array(
+            			5 => 0, //лекц
+            			6 => 1, //прак
+            			7 => 2, //лаб
+            			8 => -1,
+            			9 => 4, //кп
+            			10 => -1,
+            			11 => 14, //ргр
+            			12 => 3, //конс
+            			13 => 15, //уч. прак.
+            			14 => 7, //произв. прак.
+            			15 => 5, //зач
+            			16 => 6, //экз
+            			17 => 9, //дип. проект.
+            			18 => 10, //ГЭК
+            			19 => 16, //КСР
+            			20 => -1,
+            			21 => 12 //асп
             	);
             }
             foreach ($rows as $target=>$source) {
             	if (!array_key_exists($target, $row)) {
     				$row[$target] = 0;
     			}
-    			if (!array_key_exists(22, $row)) {
-    				$row[22] = 0;
-    			}
     			if ($source != -1) {
     				$row[$target] += $preparedData[$source][$month];
-    				$row[22] += $preparedData[$source][$month];
     			}
             }
             if (!$plan->isSeparateContract()) {
             	if (!array_key_exists(22, $row)) {
             		$row[22] = 0;
             	}
-            	for ($i = 6; $i <= 21; $i++) {
+            	for ($i = 5; $i <= 21; $i++) {
             		$row[22] += $row[$i];
             	}
             }

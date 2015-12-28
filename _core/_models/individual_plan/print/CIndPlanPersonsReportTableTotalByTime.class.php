@@ -58,39 +58,22 @@ class CIndPlanPersonsReportTableTotalByTime extends CAbstractPrintClassField {
          */
         foreach ($targetPlans->getItems() as $plan) {
             $row = array();
-            $row[0] = "АСУ";
-            $row[1] = count($result) + 1;
-            $row[2] = "";
-            if (!is_null($plan->person)) {
-                if (!is_null($plan->person->getPost())) {
-                    $row[2] = $plan->person->getPost()->name_short;
-                }
-            }
-            $row[3] = "";
-            if (!is_null($plan->person)) {
-                if (!is_null($plan->person->degree)) {
-                    $row[3] = $plan->person->degree->comment;
-                }
-            }
-            $row[4] = "";
-            if (!is_null($plan->person)) {
-                $row[4] = $plan->person->fio_short;
-            }
+            $row[0] = "";
             // план на семестр бюджет
-            if (!array_key_exists(5, $row)) {
-                $row[5] = 0;
+            if (!array_key_exists(1, $row)) {
+                $row[1] = 0;
             }
             // план на семестр контракт
-            if (!array_key_exists(6, $row)) {
-            	$row[6] = 0;
+            if (!array_key_exists(2, $row)) {
+            	$row[2] = 0;
             }
             // итого бюджет
-            if (!array_key_exists(23, $row)) {
-            	$row[23] = 0;
+            if (!array_key_exists(20, $row)) {
+            	$row[20] = 0;
             }
             // итого контракт
-            if (!array_key_exists(24, $row)) {
-            	$row[24] = 0;
+            if (!array_key_exists(21, $row)) {
+            	$row[21] = 0;
             }
             $preparedData = array();
             $table = $plan->getStudyLoadTable()->getTable();
@@ -125,66 +108,68 @@ class CIndPlanPersonsReportTableTotalByTime extends CAbstractPrintClassField {
             			2, 3, 4, 5, 6
             	))) {
             		foreach ($preparedData as $preparedRow) {
-            			$row[5] += $preparedRow[18];
-            			$row[6] += $preparedRow[19];
-            			$row[23] += $preparedRow[20];
-            			$row[24] += $preparedRow[21];
+            			$row[1] += $preparedRow[18];
+            			$row[2] += $preparedRow[19];
+            			$row[20] += $preparedRow[20];
+            			$row[21] += $preparedRow[21];
             		}
             	} else {
             		foreach ($preparedData as $preparedRow) {
-            			$row[5] += $preparedRow[20];
-            			$row[6] += $preparedRow[21];
-            			$row[23] += $preparedRow[22];
-            			$row[24] += $preparedRow[23];
+            			$row[1] += $preparedRow[20];
+            			$row[2] += $preparedRow[21];
+            			$row[20] += $preparedRow[22];
+            			$row[21] += $preparedRow[23];
             		}
             	}
             	$rows = array(
-            			7 => 0, //лекц
-            			8 => 1, //прак
-            			9 => 2, //лаб
-            			10 => -1,
-            			11 => 4, //кп
-            			12 => -1,
-            			13 => 14, //ргр
-            			14 => 3, //конс
-            			15 => 5, //зач
-            			16 => 6, //экз
-            			17 => 7, //произв. прак.
-            			18 => 8, //рец
-            			19 => 9, //дип. проект.
-            			20 => 10, //ГЭК
-            			21 => 15, //уч. прак.
-            			22 => 16 //КСР
+            			3 => 0, //лекц
+            			4 => 1, //прак
+            			5 => 2, //лаб
+            			6 => -1,
+            			7 => 4, //кп
+            			8 => -1,
+            			9 => 14, //ргр
+            			10 => 3, //конс
+            			11 => 15, //уч. прак.
+            			12 => 7, //произв. прак.
+            			13 => 5, //зач
+            			14 => 6, //экз
+            			15 => 9, //дип. проект.
+            			16 => 10, //ГЭК
+            			17 => 16, //КСР
+            			18 => -1,
+            			19 => 12 //асп
             	);
             } else {
             	if (in_array($month, array(
             			2, 3, 4, 5, 6
             	))) {
             		foreach ($preparedData as $preparedRow) {
-            			$row[5] += $preparedRow[1];
+            			$row[1] += $preparedRow[1];
             		}
             	} else {
             		foreach ($preparedData as $preparedRow) {
-            			$row[5] += $preparedRow[8];
+            			$row[1] += $preparedRow[8];
             		}
             	}
             	$rows = array(
-            			6 => 0, //лекц
-            			7 => 1, //прак
-            			8 => 2, //лаб
-            			9 => -1,
-            			10 => 4, //кп
-            			11 => -1,
-            			12 => 14, //ргр
-            			13 => 3, //конс
-            			14 => 5, //зач
-            			15 => 6, //экз
-            			16 => 7, //произв. прак.
-            			17 => 8, //рец
-            			18 => 9, //дип. проект.
-            			19 => 10, //ГЭК
-            			20 => 15, //уч. прак.
-            			21 => 16 //КСР
+            			2 => 0, //лекц
+            			3 => 1, //прак
+            			4 => 2, //лаб
+            			5 => -1,
+            			6 => 4, //кп
+            			7 => -1,
+            			8 => 14, //ргр
+            			9 => 3, //конс
+            			10 => 15, //уч. прак.
+            			11 => 7, //произв. прак.
+            			12 => 5, //зач
+            			13 => 6, //экз
+            			14 => 9, //дип. проект.
+            			15 => 10, //ГЭК
+            			16 => 16, //КСР
+            			17 => -1,
+            			18 => 12 //асп
             	);
             }
             foreach ($rows as $target=>$source) {
@@ -199,18 +184,15 @@ class CIndPlanPersonsReportTableTotalByTime extends CAbstractPrintClassField {
             	if (!array_key_exists(22, $row)) {
             		$row[22] = 0;
             	}
-            	for ($i = 6; $i <= 21; $i++) {
+            	for ($i = 2; $i <= 18; $i++) {
             		$row[22] += $row[$i];
             	}
             }
             $result[] = $row;
         }
         $sum = array();
-    	$sum[0] = "Итог";
-    	for ($i = 1; $i <= 4; $i++) {
-    		$sum[$i] = "";
-    	}
-    	for ($i = 5; $i <= 24; $i++) {
+    	$sum[0] = "Итого";
+    	for ($i = 3; $i <= 19; $i++) {
     		if (!array_key_exists($i, $sum)) {
     			$sum[$i] = 0;
     		}
