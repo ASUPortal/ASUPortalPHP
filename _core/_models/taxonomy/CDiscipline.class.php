@@ -8,7 +8,22 @@
  */
 class CDiscipline extends CActiveModel {
 	protected $_table = TABLE_DISCIPLINES;
+	protected $_books = null;
     private $_questions = null;
+    
+    protected function relations() {
+    	return array(
+    		"books" => array(
+    			"relationPower" => RELATION_MANY_TO_MANY,
+    			"storageProperty" => "_books",
+    			"joinTable" => TABLE_DISCIPLINES_BOOKS,
+    			"leftCondition" => "subject_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+    			"rightKey" => "book_id",
+    			"managerClass" => "CBaseManager",
+    			"managerGetObject" => "getCorriculumBook"
+    		)
+    	);
+    }
     
     public function attributeLabels() {
     	return array(

@@ -10,7 +10,7 @@ class CSearchCatalogCorriculumBooks extends CAbstractSearchCatalog {
         $query->select("books.id as id, books.book_name as name")
             ->from(TABLE_CORRICULUM_BOOKS." as books")
             ->innerJoin(TABLE_DISCIPLINES_BOOKS." as disc_books", "books.id = disc_books.book_id")
-            ->condition("disc_books.subject_id = ".$codeDiscipl);
+            ->condition("disc_books.subject_id = ".$codeDiscipl." or disc_books.subject_id=".CDisciplinesManager::getGeneralDisciplineId("Общая дисциплина"));
         foreach ($query->execute()->getItems() as $item) {
             $result[$item["id"]] = $item["name"];
         }
@@ -34,7 +34,7 @@ class CSearchCatalogCorriculumBooks extends CAbstractSearchCatalog {
         $query->select("books.id as id, books.book_name as name")
             ->from(TABLE_CORRICULUM_BOOKS." as books")
             ->innerJoin(TABLE_DISCIPLINES_BOOKS." as disc_books", "books.id = disc_books.book_id")
-            ->condition("disc_books.subject_id = ".$codeDiscipl);
+            ->condition("disc_books.subject_id = ".$codeDiscipl." or disc_books.subject_id=".CDisciplinesManager::getGeneralDisciplineId("Общая дисциплина"));
         foreach ($query->execute()->getItems() as $item) {
             $result[$item["id"]] = $item["name"];
         }

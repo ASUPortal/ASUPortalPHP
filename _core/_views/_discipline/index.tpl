@@ -16,6 +16,7 @@
 	            <th>#</th>
 	            <th>{CHtml::tableOrder("name", $disciplines->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("library_code", $disciplines->getFirstItem())}</th>
+	            <th>Кол-во книг</th>
         	</tr>
         	{counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $disciplines->getItems() as $discipline}
@@ -25,6 +26,7 @@
 					<td>{counter}</td>
 					<td>{$discipline->name}</td>
 					<td>{$discipline->library_code}</td>
+					<td>{$discipline->books->getCount()}</td>
                 </tr>
             {/foreach}
         </table>
