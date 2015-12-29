@@ -37,4 +37,18 @@ class CDisciplinesManager{
         }
         return self::getCacheDisciplines()->getItem($key);
     }
+    /**
+     * Получить id общей дисциплины
+     *
+     * @param $name
+     * @return string
+     */
+    public static function getGeneralDisciplineId($name) {
+    	$value = 0;
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_DISCIPLINES, "name = '".$name."'")->getItems() as $item) {
+    		$discipline = new CDiscipline($item);
+    		$value = $discipline->getId();
+    	}
+    	return $value;
+    }
 }
