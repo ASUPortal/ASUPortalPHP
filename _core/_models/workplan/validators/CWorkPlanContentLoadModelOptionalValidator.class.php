@@ -18,17 +18,17 @@ class CWorkPlanContentLoadModelOptionalValidator extends IModelValidatorOptional
 		foreach ($this->model->loads->getItems() as $load) {
 			$sum = 0;
 			$topicValue = 0;
-			foreach ($load->topics as $topic) {
+			foreach ($load->topicsDisplay as $topic) {
 				$topicValue += $topic->value;
 				$sum += $topic->value;
 			}
 			$technologyValue = 0;
-			foreach ($load->technologies as $technology) {
+			foreach ($load->technologiesDisplay as $technology) {
 				$technologyValue += $technology->value;
 				$sum += $technology->value;
 			}
 			$selfEduValue = 0;
-			foreach ($load->selfEducations as $selfEdu) {
+			foreach ($load->selfEducationsDisplay as $selfEdu) {
 				$selfEduValue += $selfEdu->question_hours;
 				$sum += $selfEdu->question_hours;
 			}
