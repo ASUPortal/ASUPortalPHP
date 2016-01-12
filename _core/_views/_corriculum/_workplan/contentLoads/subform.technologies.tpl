@@ -3,7 +3,7 @@
     <th width="16">#</th>
     <th width="16">&nbsp;</th>
     <th width="16">{sf_toggleVisible address="workplancontentloads.php" bean=$bean element="load_{$load->getId()}_technologies" object=$section}</th>
-    <th colspan="3">Образовательные технологии</th>
+    <th colspan="3" bgcolor="lightblue">Образовательные технологии</th>
 </tr>
 {sf_showIfVisible bean=$bean element="load_{$load->getId()}_technologies"}
 {foreach $load->technologies as $technology}
@@ -14,8 +14,8 @@
         <td widtd="16">#</td>
         <td widtd="16">{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="technology_load_{$technology->getId()}" object=$section}</td>
         <td widtd="16">&nbsp;</td>
-        <td colspan="2">{sf_text model=$technology attribute='technology'}</td>
-        <td colspan="2">{sf_text model=$technology attribute='value'}</td>
+        <td colspan="2" bgcolor="whitesmoke">{sf_text model=$technology attribute='technology'}</td>
+        <td colspan="2" bgcolor="wheat">{sf_text model=$technology attribute='value'}</td>
     </tr>
     {/sf_showIfVisible}
     {sf_showIfEditable bean=$bean element="technology_load_{$technology->getId()}"}

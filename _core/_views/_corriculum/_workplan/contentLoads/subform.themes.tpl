@@ -3,7 +3,7 @@
     <th width="16">#</th>
     <th width="16">&nbsp;</th>
     <th width="16">{sf_toggleVisible address="workplancontentloads.php" bean=$bean element="load_{$load->getId()}_themes" object=$section}</th>
-    <th colspan="3">Темы</th>
+    <th colspan="3" bgcolor="lightblue">Темы</th>
 </tr>
 {sf_showIfVisible bean=$bean element="load_{$load->getId()}_themes"}
 {foreach $load->topics as $topic}
@@ -14,8 +14,8 @@
             <td width="16">#</td>
             <td width="16">{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="topic_load_{$topic->getId()}" object=$section}</td>
             <td width="16">&nbsp;</td>
-            <td colspan="2">{sf_text model=$topic attribute='title'}</td>
-            <td colspan="2">{sf_text model=$topic attribute='value'}</td>
+            <td colspan="2" bgcolor="whitesmoke">{sf_text model=$topic attribute='title'}</td>
+            <td colspan="2" bgcolor="wheat">{sf_text model=$topic attribute='value'}</td>
         </tr>
     {/sf_showIfVisible}
     {sf_showIfEditable bean=$bean element="topic_load_{$topic->getId()}"}
