@@ -57,7 +57,28 @@ class CWorkPlanContentSectionLoad extends CActiveModel{
                 "storageCondition" => "load_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CWorkPlanSelfEducationBlock",
                 "managerOrder" => "_deleted asc, `ordering` asc"
-            )
+            ),
+        	"topicsDisplay" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_CONTENT_TOPICS,
+        		"storageCondition" => "load_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
+        		"targetClass" => "CWorkPlanContentSectionLoadTopic",
+        		"managerOrder" => "_deleted asc, `ordering` asc"
+        	),
+        	"technologiesDisplay" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_CONTENT_TECHNOLOGIES,
+        		"storageCondition" => "load_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
+        		"targetClass" => "CWorkPlanContentSectionLoadTechnology",
+        		"managerOrder" => "_deleted asc, `ordering` asc"
+        	),
+        	"selfEducationsDisplay" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_SELFEDUCATION,
+        		"storageCondition" => "load_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
+        		"targetClass" => "CWorkPlanSelfEducationBlock",
+        		"managerOrder" => "_deleted asc, `ordering` asc"
+        	)
         );
     }
 

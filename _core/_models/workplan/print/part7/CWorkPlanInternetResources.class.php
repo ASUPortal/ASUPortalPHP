@@ -28,7 +28,7 @@ class CWorkPlanInternetResources extends CAbstractPrintClassField {
         	foreach ($contextObject->internetResources->getItems() as $row) {
         		$dataRow = array();
         		$dataRow[0] = (count($result) + 1).".";
-        		$dataRow[1] = $row->book;
+        		$dataRow[1] = $row->book->book_name;
         		$result[] = $dataRow;
         	}
         }

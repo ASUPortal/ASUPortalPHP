@@ -28,7 +28,7 @@ class CWorkPlanBaseLiterature extends CAbstractPrintClassField {
         	foreach ($contextObject->baseLiterature->getItems() as $row) {
         		$dataRow = array();
         		$dataRow[0] = (count($result) + 1).".";
-        		$dataRow[1] = $row->book;
+        		$dataRow[1] = $row->book->book_name;
         		$result[] = $dataRow;
         	}
         }
