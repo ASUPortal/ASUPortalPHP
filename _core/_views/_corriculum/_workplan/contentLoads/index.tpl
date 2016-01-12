@@ -26,10 +26,10 @@
                     <td>{sf_toggleDelete object=$section bean=$bean model=$load element="load_{$load->getId()}" address='workplancontentloads.php'}</td>
                     <td>{sf_text model=$load attribute='ordering'}</td>
                     <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}" object=$section}</td>
-                    <td>{sf_toggleVisible address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}_details" object=$section}</td>
-                    <td>{sf_text model=$load attribute='loadType'}</td>
-                    <td>{sf_text model=$load attribute='term'}</td>
-                    <td>{sf_text model=$load attribute='value'}</td>
+                    <td bgcolor="lightgreen">{sf_toggleVisible address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}_details" object=$section}</td>
+                    <td bgcolor="lightcyan">{sf_text model=$load attribute='loadType'}</td>
+                    <td bgcolor="whitesmoke">{sf_text model=$load attribute='term'}</td>
+                    <td bgcolor="wheat">{sf_text model=$load attribute='value'}</td>
                 </tr>
             {/sf_showIfVisible}
             {sf_showIfEditable bean=$bean element="load_{$load->getId()}"}
