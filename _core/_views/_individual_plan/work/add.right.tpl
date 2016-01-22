@@ -9,14 +9,14 @@
         </a>
     </p>
 
-    <p>
+    {*<p>
         <a href="#" onClick="autoPropogate(); return false; ">
             <center>
                 <img src="{$web_root}images/{$icon_theme}/32x32/categories/applications-system.png"><br>
                 Распределить нагрузку
             </center>
         </a>
-    </p>
+    </p>*}
 
     <div class="modal hide fade" id="autofill">
         <div class="modal-header">

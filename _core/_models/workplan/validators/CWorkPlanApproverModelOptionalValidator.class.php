@@ -91,80 +91,99 @@ class CWorkPlanApproverModelOptionalValidator extends IModelValidatorOptional {
 							}
 						}
 					}
+					$auditorZan = $sumLecture+$sumPractice+$sumLabWork;
+					$teorObuch = $sumAuditor+$sumSelfWork;
 					foreach ($sect->labors->getItems() as $labor) {
 						if ($term->number == $sect->id and $labor->type->getAlias() == "auditor") {
-							if ($labor->value != $sumAuditor) {
-								$errors[] = "Число часов аудиторной работы за ".$sect->title." семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumAuditor.")";
+							if ($labor->value != $auditorZan) {
+								$errors[] = "<b>Число часов аудиторных занятий за ".$sect->title.
+									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов (".$auditorZan.") из нагрузки: 
+											лекции (".$sumLecture."), практики (".$sumPractice."), лабораторные работы (".$sumLabWork.")</b>";
 							}
 						}
 						if ($term->number == $sect->id and $labor->type->getAlias() == "hours") {
-							if ($labor->value != $sumHours) {
-								$errors[] .= "Всего теоретическое обучение за ".$sect->title." семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumHours.")";
+							if ($labor->value != $teorObuch) {
+								$errors[] = "<b>Всего теоретическое обучение за ".$sect->title.
+									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов (".$teorObuch.") из нагрузки: 
+										аудиторные занятия (".$sumAuditor."), самостоятельная работа (".$sumSelfWork.")</b>";
 							}
 						}
 						if ($term->number == $sect->id and $labor->type->getAlias() == "exam_unit") {
 							if ($labor->value != $sumExamUnit) {
-								$errors[] .= "Число часов зачётных единиц за ".$sect->title." семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumExamUnit.")";
+								$errors[] = "Число часов зачётных единиц за ".$sect->title.
+									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumExamUnit.")";
 							}
 						}
 						if ($term->number == $sect->id and $labor->type->getAlias() == "ksr") {
 							if ($labor->value != $sumKSR) {
-								$errors[] .= "Число часов КСР за ".$sect->title." семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumKSR.")";
+								$errors[] = "Число часов КСР за ".$sect->title.
+									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumKSR.")";
 							}
 						}
 						if ($term->number == $sect->id and $labor->type->getAlias() == "course_work") {
 							if ($labor->value != $sumCourseWork) {
-								$errors[] .= "Число часов курсовых работ за ".$sect->title." семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumCourseWork.")";
+								$errors[] = "Число часов курсовых работ за ".$sect->title.
+									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumCourseWork.")";
 							}
 						}
 						if ($term->number == $sect->id and $labor->type->getAlias() == "course_project") {
 							if ($labor->value != $sumCourseProject) {
-								$errors[] .= "Число часов курсовых проектов за ".$sect->title." семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumCourseProject.")";
+								$errors[] = "Число часов курсовых проектов за ".$sect->title.
+									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumCourseProject.")";
 							}
 						}
 						if ($term->number == $sect->id and $labor->type->getAlias() == "labwork") {
 							if ($labor->value != $sumLabWork) {
-								$errors[] .= "Число часов лабораторных работ за ".$sect->title." семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumLabWork.")";
+								$errors[] = "Число часов лабораторных работ за ".$sect->title.
+									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumLabWork.")";
 							}
 						}
 						if ($term->number == $sect->id and $labor->type->getAlias() == "lecture") {
 							if ($labor->value != $sumLecture) {
-								$errors[] .= "Число часов лекций за ".$sect->title." семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumLecture.")";
+								$errors[] = "Число часов лекций за ".$sect->title.
+									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumLecture.")";
 							}
 						}
 						if ($term->number == $sect->id and $labor->type->getAlias() == "total") {
 							if ($labor->value != $sumTotal) {
-								$errors[] .= "Общее количество часов за ".$sect->title." семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumTotal.")";
+								$errors[] = "Трудоёмкость общая за ".$sect->title.
+									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumTotal.")";
 							}
 						}
 						if ($term->number == $sect->id and $labor->type->getAlias() == "practice") {
 							if ($labor->value != $sumPractice) {
-								$errors[] .= "Число часов практик за ".$sect->title." семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumPractice.")";
+								$errors[] = "Число часов практик за ".$sect->title.
+									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumPractice.")";
 							}
 						}
 						if ($term->number == $sect->id and $labor->type->getAlias() == "self_work") {
 							if ($labor->value != $sumSelfWork) {
-								$errors[] .= "Число часов самостоятельных работ за ".$sect->title." семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumSelfWork.")";
+								$errors[] = "Число часов самостоятельных работ за ".$sect->title.
+									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumSelfWork.")";
 							}
 						}
 						if ($term->number == $sect->id and $labor->type->getAlias() == "rgr") {
 							if ($labor->value != $sumRGR) {
-								$errors[] .= "Число часов РГР за ".$sect->title." семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumRGR.")";
+								$errors[] = "Число часов РГР за ".$sect->title.
+									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumRGR.")";
 							}
 						}
 						if ($term->number == $sect->id and $labor->type->getAlias() == "examen") {
 							if ($labor->value != $sumExamen) {
-								$errors[] .= "Число часов на экзамен за ".$sect->title." семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumExamen.")";
+								$errors[] = "Число часов на экзамен за ".$sect->title.
+									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumExamen.")";
 							}
 						}
 						if ($term->number == $sect->id and $labor->type->getAlias() == "credit") {
 							if ($labor->value != $sumCredit) {
-								$errors[] .= "Число часов на зачёт за ".$sect->title." семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumCredit.")";
+								$errors[] = "Число часов на зачёт за ".$sect->title.
+									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumCredit.")";
 							}
 						}
 						if ($term->number == $sect->id and $labor->type->getAlias() == "creditWithMark") {
 							if ($labor->value != $sumCreditWithMark) {
-								$errors[] .= "Число часов на зачёт с оценкой за ".$sect->title." семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumCreditWithMark.")";
+								$errors[] = "Число часов на зачёт с оценкой за ".$sect->title.
+									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов из нагрузки (".$sumCreditWithMark.")";
 							}
 						}
 					}
