@@ -66,7 +66,7 @@
 
 <h4>4.8. Самостоятельное изучение разделов дисциплины</h4>
 
-{include file="_corriculum/_workplan/selfEducationBlocks/subform.index.tpl"}
+{CHtml::activeComponent("workplanselfeducationblocks.php?plan_id={$plan->getId()}", $plan)}
 
 <script>
     jQuery(document).ready(function(){

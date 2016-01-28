@@ -105,7 +105,7 @@ class CWorkPlanApproverModelOptionalValidator extends IModelValidatorOptional {
 							if ($labor->value != $teorObuch) {
 								$errors[] = "<b>Всего теоретическое обучение за ".$sect->title.
 									" семестр из дисциплины (".$labor->value.") не совпадает с суммой часов (".$teorObuch.") из нагрузки: 
-										аудиторные занятия (".$sumAuditor."), самостоятельная работа (".$sumSelfWork.")</b>";
+										аудиторные занятия (".$auditorZan."), самостоятельная работа (".$sumSelfWork.")</b>";
 							}
 						}
 						if ($term->number == $sect->id and $labor->type->getAlias() == "exam_unit") {
