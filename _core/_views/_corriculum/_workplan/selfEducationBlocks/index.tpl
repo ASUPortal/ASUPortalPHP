@@ -10,6 +10,7 @@
                     <th width="16">&nbsp;</th>
                     <th width="16">#</th>
                     <th width="16">&nbsp;</th>
+                    <th width="90">№ раздела</th>
                     <th>{CHtml::tableOrder("question_title", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("question_hours", $objects->getFirstItem())}</th>
                 </tr>
@@ -21,6 +22,7 @@
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить вопрос для самостоятельного изучения')) { location.href='workplanselfeducationblocks.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{$object->ordering}</td>
                     <td><a href="workplanselfeducationblocks.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
+                    <td>{$object->load->section->sectionIndex}</td>
                     <td>{$object->question_title}</td>
                     <td>{$object->question_hours}</td>
                 </tr>
