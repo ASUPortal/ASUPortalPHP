@@ -145,7 +145,7 @@ class CWorkPlan extends CActiveModel {
             "selfEducations" => array(
                 "relationPower" => RELATION_HAS_MANY,
                 "storageTable" => TABLE_WORK_PLAN_SELFEDUCATION,
-                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
                 "targetClass" => "CWorkPlanSelfEducationBlock",
                 "managerOrder" => "`ordering` asc"
             ),
