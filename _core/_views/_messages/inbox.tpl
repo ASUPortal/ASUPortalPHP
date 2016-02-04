@@ -6,7 +6,7 @@
 
     {CHtml::helpForCurrentPage()}
 
-    {include file="_core.search.tpl"}
+    {include file="_core.searchLocal.tpl"}
     {include file="_messages/subform.subscription.tpl"}
 
 
