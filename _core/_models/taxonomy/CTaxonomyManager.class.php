@@ -37,6 +37,9 @@ class CTaxonomyManager {
     private static $_cacheTowns = null;
     private static $_cacheHoursRate = null;
     private static $_cacheTimeIntervals = null;
+    private static $_cacheFilials = null;
+    private static $_cacheFilialActs = null;
+    private static $_cacheTransports = null;
     /**
      * Кэш должностей
      *
@@ -936,5 +939,86 @@ class CTaxonomyManager {
             }
         }
         return self::getCacheLegacyTerms()->getItem($termId."_".$taxonomyId);
+    }
+    
+    /**
+     * Кэш филиалов
+     *
+     * @static
+     * @return CArrayList
+     */
+    public static function getCacheFilials() {
+    	if (is_null(self::$_cacheFilials)) {
+    		self::$_cacheFilials = new CArrayList();
+    		foreach (CActiveRecordProvider::getAllFromTable(TABLE_FILIALS)->getItems() as $item) {
+    			$term = new CTerm($item);
+    			self::$_cacheFilials->add($term->getId(), $term);
+    		}
+    	}
+    	return self::$_cacheFilials;
+    }
+    /**
+     * Филиал
+     *
+     * @static
+     * @param $key
+     * @return CTerm
+     */
+    public static function getFilial($key) {
+    	return self::getCacheFilials()->getItem($key);
+    }
+    
+    /**
+     * Кэш действий в командировке
+     *
+     * @static
+     * @return CArrayList
+     */
+    public static function getCacheFilialActs() {
+    	if (is_null(self::$_cacheFilialActs)) {
+    		self::$_cacheFilialActs = new CArrayList();
+    		foreach (CActiveRecordProvider::getAllFromTable(TABLE_FILIAL_ACTIONS)->getItems() as $item) {
+    			$term = new CTerm($item);
+    			self::$_cacheFilialActs->add($term->getId(), $term);
+    		}
+    	}
+    	return self::$_cacheFilialActs;
+    }
+    /**
+     * Действие в командировке
+     *
+     * @static
+     * @param $key
+     * @return CTerm
+     */
+    public static function getFilialAct($key) {
+    	return self::getCacheFilialActs()->getItem($key);
+    }
+    
+    /**
+     * Кэш транспорта
+     *
+     * @static
+     * @return CArrayList
+     */
+    public static function getCacheTranports() {
+    	if (is_null(self::$_cacheTransports)) {
+    		self::$_cacheTransports = new CArrayList();
+    		foreach (CActiveRecordProvider::getAllFromTable(TABLE_TRANSPORT)->getItems() as $item) {
+    			$term = new CTerm($item);
+    			self::$_cacheTransports->add($term->getId(), $term);
+    		}
+    	}
+    	return self::$_cacheTransports;
+    }
+    /**
+     * Транспорт
+     *
+     * @static
+     * @param $key
+     * @return CTerm
+     */
+    public static function getTrasport($key) {
+    	return self::getCacheTranports()->getItem($key);
     }
 }
