@@ -21,7 +21,8 @@ class CFilialGoingController extends CBaseController{
         $set = new CRecordSet();
         $query = new CQuery();
         $query->select("filial_going.*")
-            ->from(TABLE_FILIAL_GOING." as filial_going");
+            ->from(TABLE_FILIAL_GOING." as filial_going")
+            ->order("filial_going.day_start desc");
         if (CRequest::getString("order") == "person.fio") {
         	$direction = "asc";
         	if (CRequest::getString("direction") != "") {
