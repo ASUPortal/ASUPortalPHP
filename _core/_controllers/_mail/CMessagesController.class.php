@@ -196,6 +196,7 @@ class CMessagesController extends CBaseController {
         $mail->mail_title = "В ответ на: ".$mail->mail_title;
         $mail->mail_text = "<p>&nbsp;</p><hr>".$mail->mail_text;
         $mail->to_user_id = $mail->from_user_id;
+        $mail->from_user_id = CSession::getCurrentUser()->getId();
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->addCSSInclude("_modules/_redactor/redactor.css");
@@ -215,5 +216,59 @@ class CMessagesController extends CBaseController {
         $this->addJSInclude("_modules/_redactor/redactor.min.js");
         $this->setData("message", $mail);
         $this->renderView("_messages/edit.tpl");
+    }
+    public function actionSearch() {
+    	$res = array();
+    	$term = CRequest::getString("query");
+    	/**
+    	 * Поиск по теме сообщения
+    	*/
+    	$query = new CQuery();
+    	$query->select("mail.id as id, mail.mail_title as name")
+	    	->from(TABLE_MESSAGES." as mail")
+	    	->condition("mail.mail_title like '%".$term."%' and mail.to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'")
+	    	->limit(0, 5);
+    	foreach ($query->execute()->getItems() as $item) {
+    		$res[] = array(
+    			"field" => "mail.id",
+    			"value" => $item["id"],
+    			"label" => $item["name"],
+    			"class" => "CMessage"
+    		);
+    	}
+    	/**
+    	 * Поиск по тексту сообщения
+    	 */
+    	$query = new CQuery();
+    	$query->select("mail.id as id, mail.mail_text as name")
+	    	->from(TABLE_MESSAGES." as mail")
+	    	->condition("mail.mail_text like '%".$term."%' and mail.to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'")
+	    	->limit(0, 5);
+    	foreach ($query->execute()->getItems() as $item) {
+    		$res[] = array(
+    			"field" => "mail.id",
+    			"value" => $item["id"],
+    			"label" => $item["name"],
+    			"class" => "CMessage"
+    		);
+    	}
+    	/**
+    	 * Поиск по полю От кого
+    	 */
+    	$query = new CQuery();
+    	$query->select("mail.id as id, users.FIO as name")
+	    	->from(TABLE_MESSAGES." as mail")
+	    	->innerJoin(TABLE_USERS." as users", "mail.from_user_id = users.id")
+	    	->condition("users.FIO like '%".$term."%' and mail.to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'")
+	    	->limit(0, 5);
+    	foreach ($query->execute()->getItems() as $item) {
+    		$res[] = array(
+    			"field" => "mail.id",
+    			"value" => $item["id"],
+    			"label" => $item["name"],
+    			"class" => "CUser"
+    		);
+    	}
+    	echo json_encode($res);
     }
 }

@@ -198,6 +198,10 @@
     define("TABLE_DIPLOM_PREVIEW_MEMBERS", "diplom_preview_kadri");
     define("TABLE_PRACTICE_PLACES", "pract_places");
     define("TABLE_TOWNS", "towns");
+    define("TABLE_FILIAL_GOING", "filial_going");
+    define("TABLE_FILIAL_ACTIONS", "filial_actions");
+    define("TABLE_FILIALS", "filials");
+    define("TABLE_TRANSPORT", "transport");
     define("TABLE_LANGUAGES", "language");
     define("TABLE_MARKS", "study_marks");
     define("TABLE_SEB_PROTOCOLS", "seb_protocol");
