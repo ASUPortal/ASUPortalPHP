@@ -1,22 +1,3 @@
-<script>
-	jQuery(document).ready(function(){
-		jQuery("#day_start").datepicker({
-			dateFormat: "dd.mm.yy",
-			showOn: "button",
-            buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
-            buttonImageOnly: true,
-            changeYear: true
-		});
-		jQuery("#day_end").datepicker({
-			dateFormat: "dd.mm.yy",
-			showOn: "button",
-            buttonImage: "{$web_root}css/_core/jUI/images/calendar.gif",
-            buttonImageOnly: true,
-            changeYear: true
-		});
-	});
-</script>
-
 <form action="index.php" class="form-horizontal" method="post" enctype="multipart/form-data">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $filialGoing)}
@@ -54,13 +35,18 @@
     </div>
     
     <div class="control-group">
-        {CHtml::activeLabel("going_period", $filialGoing)}
+        {CHtml::activeLabel("day_start", $filialGoing)}
         <div class="controls">
-        с {CHtml::activeTextField("day_start", $filialGoing, "day_start", "", 'style="width: 100px;"')}
-        {CHtml::error("day_start", $filialGoing)}
-
-        по {CHtml::activeTextField("day_end", $filialGoing, "day_end", "", 'style="width: 100px;"')}
-        {CHtml::error("day_end", $filialGoing)}
+	        {CHtml::activeDateField("day_start", $filialGoing)}
+	        {CHtml::error("day_start", $filialGoing)}
+        </div>
+    </div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("day_end", $filialGoing)}
+        <div class="controls">
+	        {CHtml::activeDateField("day_end", $filialGoing)}
+	        {CHtml::error("day_end", $filialGoing)}
         </div>
     </div>
     

@@ -43,7 +43,6 @@ class CFilialGoing extends CActiveModel{
         	"filial_id" => "Место",
         	"filial.name" => "Место",
             "day_cnt" => "Суток",
-        	"going_period" => "Период командировки",
         	"day_start" => "Дата начала",
         	"day_end" => "Дата окончания",
         	"filial_act_id" => "Цель",

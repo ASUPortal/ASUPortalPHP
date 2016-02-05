@@ -76,8 +76,6 @@ class CFilialGoingController extends CBaseController{
     		"link" => "index.php?action=index",
     		"icon" => "actions/edit-undo.png"
     	));
-    	$this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-    	$this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
     	$this->setData("filialGoing", $filialGoing);
     	$this->renderView("_filial_going/add.tpl");
     }
@@ -88,8 +86,6 @@ class CFilialGoingController extends CBaseController{
     		"link" => "index.php?action=index",
     		"icon" => "actions/edit-undo.png"
     	));
-    	$this->addJSInclude("_core/jquery-ui-1.8.20.custom.min.js");
-    	$this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
         $this->setData("filialGoing", $filialGoing);
         $this->renderView("_filial_going/edit.tpl");
     }
