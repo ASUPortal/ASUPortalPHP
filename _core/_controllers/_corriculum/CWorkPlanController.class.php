@@ -327,10 +327,8 @@ class CWorkPlanController extends CFlowController{
      * для копирования одной рабочей программы
      */
     public function actionCopyWorkPlan() {
-    	$pl = new CWorkPlan();
-    	$pl->setAttributes(CRequest::getArray($pl->getClassName()));
-    	$plan = CWorkPlanManager::getWorkplan($pl->getId());
-    	$corriculum = CCorriculumsManager::getCorriculum($pl->corriculum_discipline_id);
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("corriculum_discipline_id"));
     	$items = array();
     	foreach ($corriculum->getDisciplines() as $discipline) {
     		$items[$discipline->getId()] = $discipline->discipline->getValue();
