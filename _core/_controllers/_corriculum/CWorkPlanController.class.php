@@ -327,10 +327,8 @@ class CWorkPlanController extends CFlowController{
      * для копирования одной рабочей программы
      */
     public function actionCopyWorkPlan() {
-    	$pl = new CWorkPlan();
-    	$pl->setAttributes(CRequest::getArray($pl->getClassName()));
-    	$plan = CWorkPlanManager::getWorkplan($pl->getId());
-    	$corriculum = CCorriculumsManager::getCorriculum($pl->corriculum_discipline_id);
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("corriculum_id"));
     	$items = array();
     	foreach ($corriculum->getDisciplines() as $discipline) {
     		$items[$discipline->getId()] = $discipline->discipline->getValue();
@@ -343,12 +341,10 @@ class CWorkPlanController extends CFlowController{
      * Копирование одной выбранной рабочей программы
      */
     public function actionCopy() {
-    	$pl = new CWorkPlan();
-    	$pl->setAttributes(CRequest::getArray($pl->getClassName()));
-    	$plan = CWorkPlanManager::getWorkplan($pl->getId());
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
     	$newPlan = $plan->copy();
-    	$newPlan->corriculum_discipline_id = $pl->corriculum_discipline_id;
-    	$discipline = CCorriculumsManager::getDiscipline($pl->corriculum_discipline_id);
+    	$newPlan->corriculum_discipline_id = CRequest::getInt("corriculum_discipline_id");
+    	$discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("corriculum_discipline_id"));
     	if (!is_null($discipline->discipline)) {
     		$newPlan->discipline_id = $discipline->discipline->getId();
     	}
