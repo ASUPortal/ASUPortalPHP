@@ -6,13 +6,12 @@
     
     <form action="workplans.php" method="post" enctype="multipart/form-data" class="form-horizontal">
         {CHtml::hiddenField("action", "copy")}
-        {CHtml::activeHiddenField("id", $plan)}
+        {CHtml::hiddenField("id", $plan->getId())}
         
 		<div class="control-group">
-	        {CHtml::activeLabel("corriculum_discipline_id", $plan)}
+			{CHtml::label("Выберите название дисциплины из учебного плана", "corriculum_discipline_id")}
 	        <div class="controls">
-	            {CHtml::activeDropDownList("corriculum_discipline_id", $plan, $items)}
-	            {CHtml::error("corriculum_discipline_id", $plan)}
+	        	{CHtml::dropDownList("corriculum_discipline_id", $items, $plan->corriculumDiscipline->getId(), null, "span12")}
 	        </div>
 	    </div>
         

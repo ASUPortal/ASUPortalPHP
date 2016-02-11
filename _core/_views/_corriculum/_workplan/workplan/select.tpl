@@ -9,10 +9,9 @@
         {CHtml::hiddenField("id", $plan->getId())}
         
 		<div class="control-group">
-	        {CHtml::label("Выберите учебный план", "corriculum_discipline_id")}
+	        {CHtml::label("Выберите учебный план", "corriculum_id")}
 	        <div class="controls">
-	            {CHtml::dropDownList("corriculum_discipline_id", $items, $plan->corriculumDiscipline->cycle->corriculum->getId(), null, "span12")}
-	            {CHtml::error("corriculum_discipline_id", $plan)}
+	            {CHtml::dropDownList("corriculum_id", $items, $plan->corriculumDiscipline->cycle->corriculum->getId(), null, "span12")}
 	        </div>
 	    </div>
         
