@@ -62,7 +62,7 @@ jQuery(document).ready(function(){
      * @param placeholder
      */
     function postParamsRendered(placeholder) {
-        var sendButton = jQuery("input[type=submit]", placeholder).on("click", function(){
+        var sendButton = jQuery("[type=submit]", placeholder).on("click", function(){
             onReportSendToExecution(placeholder);
             return false;
         });
