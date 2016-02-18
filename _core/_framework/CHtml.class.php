@@ -1105,7 +1105,7 @@ class CHtml {
      *
      * @param $template
      */
-    public static function printGroupOnTemplate($template) {
+    public static function printGroupOnTemplate($template, $selectedDoc = false, $url = null, $action = null, $id = null) {
         $formset = CPrintManager::getFormset($template);
         if (!is_null($formset)) {
             $forms = $formset->activeForms;
@@ -1116,7 +1116,97 @@ class CHtml {
                 echo "'".$variables['manager']."'";
                 echo ", '".$variables['method']."'";
                 echo ", '".$form->getId()."'";
+                echo ", '".$url."'";
+                echo ", '".$action."'";
+                echo ", '".$id."'";
                 echo '); return false;">'.$form->title.'</a></li>';
+                ?>
+                <script>
+                function printWithTemplate(manager, method, template_id, url, action, id) {
+                	/**
+                	 * Закрываем диалог чтобы не мешался
+                	 */
+                	jQuery("#printDialog").modal("hide");
+                	/**
+                	 * Открываем свой диалог групповой печати
+                	*/
+                	jQuery("#groupPrintDialog").modal("show");
+                	/**
+                	 * Получаем список значений
+                	*/
+                	var items = new Array();
+                	<?php
+                	if ($selectedDoc) {?>
+	                	jQuery.each(jQuery("input[name='selectedDoc[]']:checked"), function(key, value){
+	                		items.push(jQuery(value).val());
+	                	});<?php
+                	} else {?>
+	                	jQuery.ajax({
+	                        async: false,
+	                        url: url,
+	                        dataType: "json",
+	                        data: {
+	                            action: action,
+	                            id: id
+	                        }
+	                    }).done(function(data) {
+	                        jQuery.each(data, function(key, value){
+	                        	items[items.length] = key;
+	                        });
+	                    });<?php
+                	}?>
+                	/**
+                	 * Адаптируем прогресс-бар
+                		*/
+                		jQuery("#progressbar").attr("items", (items.length - 1));
+                		jQuery("#progressbar").css("width", "0%");
+                		/**
+                		 * Для каждого значения генерим шаблон
+                		*/
+                		var attachments = new Array();
+                		jQuery.each(items, function(key, value) {
+                			jQuery.ajax({
+                				dataType: "json",
+                				url: web_root + "_modules/_print/",
+                				data: {
+                					action: "print",
+                					manager: manager,
+                					method: method,
+                					id: value,
+                					template: template_id,
+                					noredirect: "1"
+                				}
+                			}).done(function(data) {
+                				attachments[attachments.length] = data.filename;
+                				var width = (attachments.length) * 100 / jQuery("#progressbar").attr("items");
+                				jQuery("#progressbar").css("width", width + "%");
+                				/**
+                				 * Если все отработаны, то сгенерим
+                				 * архив и отдадим его пользователю
+                				*/
+                				if (attachments.length == items.length) {
+                					generateZip(attachments);
+                				}
+                			});
+                		});
+                }
+                function generateZip(attachments) {
+                	jQuery.ajax({
+                		type: "POST",
+                		url: web_root + "_modules/_zip/",
+                		data: {
+                			action: "archive",
+                			files: attachments,
+                			noredirect: "1"
+                		},
+                		dataType: "json"
+                	}).done(function(data){
+                		jQuery("#groupPrintDialog").modal("hide");
+                		window.location.href = data.url;
+                	});
+                }
+                </script>
+                <?php
             }
             echo "</ul>";
         }
