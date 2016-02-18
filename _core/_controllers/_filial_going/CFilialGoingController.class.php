@@ -60,6 +60,15 @@ class CFilialGoingController extends CBaseController{
         	"link" => "index.php?action=add",
         	"icon" => "actions/list-add.png"
         ));
+        /**
+         * Параметры для групповой печати по шаблону
+         */
+        $this->setData("template", "formset_filial_goings");
+        $this->setData("selectedDoc", true);
+        $this->setData("url", null);
+        $this->setData("action", null);
+        $this->setData("id", null);
+        
         $this->setData("paginator", $set->getPaginator());
         $this->setData("filialGoings", $filialGoings);
         $this->renderView("_filial_going/index.tpl");
