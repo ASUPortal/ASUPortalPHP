@@ -1105,7 +1105,7 @@ class CHtml {
      *
      * @param $template
      */
-    public static function printGroupOnTemplate($template) {
+    public static function printGroupOnTemplate($template, $selectedDoc = false, $url = null, $action = null, $id = null) {
         $formset = CPrintManager::getFormset($template);
         if (!is_null($formset)) {
             $forms = $formset->activeForms;
@@ -1116,6 +1116,10 @@ class CHtml {
                 echo "'".$variables['manager']."'";
                 echo ", '".$variables['method']."'";
                 echo ", '".$form->getId()."'";
+                echo ", '".$selectedDoc."'";
+                echo ", '".$url."'";
+                echo ", '".$action."'";
+                echo ", '".$id."'";
                 echo '); return false;">'.$form->title.'</a></li>';
             }
             echo "</ul>";

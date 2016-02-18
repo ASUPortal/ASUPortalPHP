@@ -77,6 +77,15 @@ class CCorriculumsController extends CBaseController {
             }
         }
         /**
+         * Параметры для групповой печати по шаблону
+         */
+        $this->setData("template", "formset_corriculum_disciplines");
+        $this->setData("selectedDoc", false);
+        $this->setData("url", WEB_ROOT."_modules/_corriculum/index.php");
+        $this->setData("action", "JSONGetDisciplines");
+        $this->setData("id", CRequest::getInt("id"));
+        
+        /**
          * Передаем данные представлению
          */
         $this->addJSInclude(JQUERY_UI_JS_PATH);

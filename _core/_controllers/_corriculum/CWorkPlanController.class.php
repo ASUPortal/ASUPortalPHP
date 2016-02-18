@@ -109,6 +109,15 @@ class CWorkPlanController extends CFlowController{
 				)
 			)
         ));
+        /**
+         * Параметры для групповой печати по шаблону
+         */
+        $this->setData("template", "formset_workplans");
+        $this->setData("selectedDoc", true);
+        $this->setData("url", null);
+        $this->setData("action", null);
+        $this->setData("id", null);
+        
         $this->setData("isArchive", $isArchive);
         $this->setData("plans", $paginated);
         $this->setData("paginator", $set->getPaginator());

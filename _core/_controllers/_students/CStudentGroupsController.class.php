@@ -45,6 +45,15 @@ class CStudentGroupsController extends CBaseController {
         foreach ($group->getStudents()->getItems() as $student) {
             $students[$student->getId()] = $student->getName();
         }
+        /**
+         * Параметры для групповой печати по шаблону
+         */
+        $this->setData("template", "formset_students");
+        $this->setData("selectedDoc", false);
+        $this->setData("url", WEB_ROOT."_modules/_student_groups/index.php");
+        $this->setData("action", "JSONGetStudents");
+        $this->setData("id", CRequest::getInt("id"));
+        
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("group", $group);
