@@ -1,7 +1,7 @@
 {function name=print_discipline_row level=0}
     <tr>
         <td>{$cycle->title_abbreviated}</td>
-        <td>&nbsp;</td>
+        <td>{CHtml::activeViewGroupSelect("id", $discipline, false, true)}</td>
         <td>
             {if !is_null($discipline->cycle)}
     			{if ($discipline->cycle->number != "")}
@@ -44,6 +44,7 @@
         <td>&nbsp;</td>
     </tr>
 {/function}
+<form action="index.php" method="post" id="MainView">
 <table class="table table-striped table-bordered table-hover table-condensed">
     <thead>
     <tr>
@@ -53,7 +54,7 @@
         <td>Форма итогового контроля</td>
     </tr>
     <tr>
-        <td>Тип</td>
+        <td>{CHtml::activeViewGroupSelect("id", $corriculum->cycles->getFirstItem(), true)}</td>
         <td>№</td>
         <td>Наименование дисциплины</td>
         <td>Всего</td>
@@ -81,3 +82,4 @@
         {/foreach}
     {/foreach}
 </table>
+</form>

@@ -22,11 +22,46 @@ class CCorriculumsController extends CBaseController {
             ->from(TABLE_CORRICULUMS." as corr")
             ->order("corr.id desc");
         $set->setQuery($query);
+        if (CRequest::getString("order") == "direction.name") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->innerJoin(TABLE_SPECIALITIES." as direction", "corr.direction_id=direction.id");
+        		$query->order("direction.name ".$direction);
+        } elseif (CRequest::getString("order") == "term.name") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->innerJoin(TABLE_TAXONOMY_TERMS." as term", "corr.profile_id=term.id");
+        		$query->order("term.name ".$direction);
+        } elseif (CRequest::getString("order") == "educ_form.name") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->innerJoin(TABLE_EDUCATION_FORMS." as educ_form", "corr.form_id=educ_form.id");
+        		$query->order("educ_form.name ".$direction);
+        }
         $corriculums = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $item) {
             $corriculum = new CCorriculum($item);
             $corriculums->add($corriculum->getId(), $corriculum);
         }
+        $this->addActionsMenuItem(array(
+        	array(
+        		"title" => "Групповые операции",
+        		"link" => "#",
+        		"icon" => "apps/utilities-terminal.png",
+        		"child" => array(
+        			array(
+        				"title" => "Удалить выделенные",
+        				"icon" => "actions/edit-delete.png",
+        				"form" => "#MainView",
+        				"link" => "index.php",
+        				"action" => "delete"
+        			)
+        		)
+        	)
+        ));
         /**
          * Передаем данные
          */
@@ -76,6 +111,22 @@ class CCorriculumsController extends CBaseController {
                 }
             }
         }
+        $this->addActionsMenuItem(array(
+        	array(
+        		"title" => "Групповые операции",
+        		"link" => "#",
+        		"icon" => "apps/utilities-terminal.png",
+        		"child" => array(
+        			array(
+        				"title" => "Удалить выделенные дисциплины",
+        				"icon" => "actions/edit-delete.png",
+        				"form" => "#MainView",
+        				"link" => "index.php",
+        				"action" => "deleteDisciplines"
+        			)
+        		)
+        	)
+        ));
         /**
          * Параметры для групповой печати по шаблону
          */
@@ -298,38 +349,94 @@ class CCorriculumsController extends CBaseController {
     }
     public function actionDelete() {
         $corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("id"));
-        /**
-         * Удаляем практики из плана
-         */
-        foreach ($corriculum->practices->getItems() as $practice) {
-            $practice->remove();
+        if (!is_null($corriculum)) {
+        	/**
+        	 * Удаляем практики из плана
+        	 */
+        	foreach ($corriculum->practices->getItems() as $practice) {
+        		$practice->remove();
+        	}
+        	/**
+        	 * Удаляем циклы
+        	 */
+        	foreach ($corriculum->cycles->getItems() as $cycle) {
+        		/**
+        		 * Удаляем дисциплины из циклов
+        		 */
+        		foreach ($cycle->disciplines->getItems() as $discipline) {
+        			/**
+        			 * Удаляем нагрузку из дисциплин
+        			 */
+        			foreach ($discipline->labors->getItems() as $labor) {
+        				$labor->remove();
+        			}
+        			$discipline->remove();
+        		}
+        		$cycle->remove();
+        	}
+        	/**
+        	 * Удаляем сам учебный план
+        	 */
+        	$corriculum->remove();
         }
-        /**
-         * Удаляем циклы
-         */
-        foreach ($corriculum->cycles->getItems() as $cycle) {
-            /**
-             * Удаляем дисциплины из циклов
-             */
-            foreach ($cycle->disciplines->getItems() as $discipline) {
-                /**
-                 * Удаляем нагрузку из дисциплин
-                 */
-                foreach ($discipline->labors->getItems() as $labor) {
-                    $labor->remove();
-                }
-                $discipline->remove();
-            }
-            $cycle->remove();
+        $items = CRequest::getArray("selectedDoc");
+        if (!empty($items)) {
+        	foreach ($items as $id){
+        		$corriculum = CCorriculumsManager::getCorriculum($id);
+        		/**
+        		 * Удаляем практики из плана
+        		*/
+        		foreach ($corriculum->practices->getItems() as $practice) {
+        			$practice->remove();
+        		}
+        		/**
+        		 * Удаляем циклы
+        		 */
+        		foreach ($corriculum->cycles->getItems() as $cycle) {
+        			/**
+        			 * Удаляем дисциплины из циклов
+        			 */
+        			foreach ($cycle->disciplines->getItems() as $discipline) {
+        				/**
+        				 * Удаляем нагрузку из дисциплин
+        				 */
+        				foreach ($discipline->labors->getItems() as $labor) {
+        					$labor->remove();
+        				}
+        				$discipline->remove();
+        			}
+        			$cycle->remove();
+        		}
+        		/**
+        		 * Удаляем сам учебный план
+        		 */
+        		$corriculum->remove();
+        	}
         }
-        /**
-         * Удаляем сам учебный план
-         */
-        $corriculum->remove();
         /**
          * Все, редирект на страницу со списком
          */
         $this->redirect("index.php?action=index");
+    }
+    public function actionDeleteDisciplines() {
+    	$discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("id"));
+    	if (!is_null($object)) {
+    		$corriculum = $discipline->cycle->corriculum_id;
+    		$discipline->remove();
+    	}
+    	$items = CRequest::getArray("selectedDoc");
+    	if (!empty($items)) {
+    		$discipline = CCorriculumsManager::getDiscipline($items[0]);
+    		$items = CRequest::getArray("selectedDoc");
+    		if (!is_null($discipline)) {
+    			$corriculum = $discipline->cycle->corriculum_id;
+    			foreach ($items as $id){
+    				$discipline = CCorriculumsManager::getDiscipline($id);
+    				$discipline->remove();
+    			}
+    		}
+    	}
+    	$this->redirect("index.php?action=view&id=".$corriculum);
     }
     /*
 

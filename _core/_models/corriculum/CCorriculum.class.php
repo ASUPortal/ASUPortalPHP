@@ -107,7 +107,10 @@ class CCorriculum extends CActiveModel{
             "form_id" => "Форма обучения",
 			"load_as_fullday" => "Срок обучения по очной форме",
 			"speciality_direction_id" => "Специальность/направление по уч. плану",
-        	"nis_chairman_id" => "Председатель НМС"
+        	"nis_chairman_id" => "Председатель НМС",
+        	"direction.name" => "Направление",
+        	"term.name" => "Профиль",
+        	"educ_form.name" => "Форма обучения"
         );
     }
     public function validationRules() {
