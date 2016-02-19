@@ -90,6 +90,12 @@ class CFilialGoingController extends CBaseController{
     		"link" => "index.php?action=index",
     		"icon" => "actions/edit-undo.png"
     	));
+    	$this->addActionsMenuItem(array(
+    		"title" => "Печать по шаблону",
+    		"link" => "#",
+    		"icon" => "devices/printer.png",
+    		"template" => "formset_filial_goings"
+    	));
         $this->setData("filialGoing", $filialGoing);
         $this->renderView("_filial_going/edit.tpl");
     }
