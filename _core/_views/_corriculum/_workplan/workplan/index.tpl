@@ -36,11 +36,11 @@
 	            <th>№</th>
 				<th></th>
 	            <th>{CHtml::tableOrder("title_display", $plans->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("discipline_id", $plans->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("corriculum", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("discipline.name", $plans->getFirstItem(), true)}</th>
+	            <th>{CHtml::tableOrder("corriculum.title", $plans->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("year", $plans->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("profiles", $plans->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("authors", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("term.name", $plans->getFirstItem(), true)}</th>
+	            <th>{CHtml::tableOrder("person.fio", $plans->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("title", $plans->getFirstItem())}</th>
 	        </tr>
 	        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}

@@ -81,6 +81,35 @@ class CWorkPlanController extends CFlowController{
         if ($isArchive) {
             $query->condition("wp.is_archive = 1");
         }
+        if (CRequest::getString("order") == "discipline.name") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->innerJoin(TABLE_DISCIPLINES." as discipline", "wp.discipline_id=discipline.id");
+        		$query->order("discipline.name ".$direction);
+        } elseif (CRequest::getString("order") == "corriculum.title") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->innerJoin(TABLE_CORRICULUM_DISCIPLINES." as corr_discipline", "wp.corriculum_discipline_id=corr_discipline.id");
+        		$query->innerJoin(TABLE_CORRICULUM_CYCLES." as corr_cycle", "corr_discipline.cycle_id=corr_cycle.id");
+        		$query->innerJoin(TABLE_CORRICULUMS." as corriculum", "corr_cycle.corriculum_id=corriculum.id");
+        		$query->order("corriculum.title ".$direction);
+        } elseif (CRequest::getString("order") == "term.name") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->innerJoin(TABLE_WORK_PLAN_PROFILES." as profile", "wp.id=profile.plan_id");
+        		$query->innerJoin(TABLE_TAXONOMY_TERMS." as term", "profile.profile_id=term.id");
+        		$query->order("term.name ".$direction);
+        } elseif (CRequest::getString("order") == "person.fio") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        		$query->innerJoin(TABLE_WORK_PLAN_AUTHORS." as author", "wp.id=author.plan_id");
+        		$query->innerJoin(TABLE_PERSON." as person", "author.person_id=person.id");
+        		$query->order("person.fio ".$direction);
+        }
         $paginated = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $plan = new CWorkPlan($ar);

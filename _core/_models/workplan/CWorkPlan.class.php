@@ -335,7 +335,11 @@ class CWorkPlan extends CActiveModel {
         	"director_of_library" => "Директор библиотеки",
         	"chief_umr" => "Начальник УМР",
         	"rgr_description" => "Расчётно-графическая работа",
-        	"corriculum" => "Учебный план"
+        	"corriculum" => "Учебный план",
+        	"discipline.name" => "Дисциплина",
+        	"corriculum.title" => "Учебный план",
+        	"term.name" => "Профили",
+        	"person.fio" => "Авторы"
         );
     }
 
