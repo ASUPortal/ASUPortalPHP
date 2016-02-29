@@ -31,26 +31,21 @@ class CMessagesController extends CBaseController {
         $set->setQuery($query);
         $query->select("mail.*")
             ->from(TABLE_MESSAGES." as mail")
+            ->innerJoin(TABLE_USERS." as users", "mail.from_user_id = users.id")
             ->condition("mail.to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'")
             ->order("mail.date_send desc");
         $term = CRequest::getString("search");
-        if (!is_null($term)) {
-        	//поиск по теме сообщения
-        	$query->select("mail.*")
-	        	->from(TABLE_MESSAGES." as mail")
-	        	->condition("mail.mail_title like '%".$term."%' and mail.to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'")
-	        	->order("mail.date_send desc");
-        	//поиск по тексту сообщения
-        	$query->select("mail.*")
-	        	->from(TABLE_MESSAGES." as mail")
-	        	->condition("mail.mail_text like '%".$term."%' and mail.to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'")
-	        	->order("mail.date_send desc");
-        	//поиск по полю От кого
-        	$query->select("mail.*")
-	        	->from(TABLE_MESSAGES." as mail")
-	        	->innerJoin(TABLE_USERS." as users", "mail.from_user_id = users.id")
-	        	->condition("users.FIO like '%".$term."%' and mail.to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'")
-	        	->order("mail.date_send desc");
+        //поиск по теме сообщения
+        if (!is_null($term) and CRequest::getString("mailTitle") == 1) {
+        	$query->condition("mail.mail_title like '%".$term."%' and mail.to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'");
+        }
+        //поиск по тексту сообщения
+        if (!is_null($term) and CRequest::getString("mailText") == 1) {
+        	$query->condition("mail.mail_text like '%".$term."%' and mail.to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'");
+        }
+        //поиск по полю От кого
+        if (!is_null($term) and CRequest::getString("mailFio") == 1) {
+        	$query->condition("users.FIO like '%".$term."%' and mail.to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'");
         }
         $messages = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {

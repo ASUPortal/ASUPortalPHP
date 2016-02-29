@@ -6,6 +6,26 @@
 
     {CHtml::helpForCurrentPage()}
     <form action="index.php" method="post" enctype="multipart/form-data" class="form-horizontal">
+    	<table class="table table-striped table-bordered table-hover table-condensed">
+    		<tr>
+    			<th>Поиск по:</th>
+    			<th>Теме сообщения</th>
+    			<th>Тексту сообщения</th>
+    			<th>От кого</th>
+    		</tr>
+    		<tr>
+    			<td></td>
+    			<td>
+    				<input type="checkbox" name="mailTitle" value="1">
+    			</td>
+    			<td>
+    				<input type="checkbox" name="mailText" value="1">
+    			</td>
+    			<td>
+    				<input type="checkbox" name="mailFio" value="1">
+    			</td>
+    		</tr>
+    	</table>
     	{CHtml::textField("search", "")}
     	{CHtml::submit("Найти", false)}
     </form>
