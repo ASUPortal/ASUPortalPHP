@@ -33,6 +33,25 @@ class CMessagesController extends CBaseController {
             ->from(TABLE_MESSAGES." as mail")
             ->condition("mail.to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'")
             ->order("mail.date_send desc");
+        $term = CRequest::getString("search");
+        if (!is_null($term)) {
+        	//поиск по теме сообщения
+        	$query->select("mail.*")
+	        	->from(TABLE_MESSAGES." as mail")
+	        	->condition("mail.mail_title like '%".$term."%' and mail.to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'")
+	        	->order("mail.date_send desc");
+        	//поиск по тексту сообщения
+        	$query->select("mail.*")
+	        	->from(TABLE_MESSAGES." as mail")
+	        	->condition("mail.mail_text like '%".$term."%' and mail.to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'")
+	        	->order("mail.date_send desc");
+        	//поиск по полю От кого
+        	$query->select("mail.*")
+	        	->from(TABLE_MESSAGES." as mail")
+	        	->innerJoin(TABLE_USERS." as users", "mail.from_user_id = users.id")
+	        	->condition("users.FIO like '%".$term."%' and mail.to_user_id = ".CSession::getCurrentUser()->getId()." AND mail_type = 'in'")
+	        	->order("mail.date_send desc");
+        }
         $messages = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $mail = new CMessage($ar);
