@@ -5,10 +5,12 @@
     <h2>Мои входящие сообщения</h2>
 
     {CHtml::helpForCurrentPage()}
-
-    {include file="_core.searchLocal.tpl"}
+    <form action="index.php" method="post" enctype="multipart/form-data" class="form-horizontal">
+    	{CHtml::textField("search", "")}
+    	{CHtml::submit("Найти", false)}
+    </form>
+    
     {include file="_messages/subform.subscription.tpl"}
-
 
         <ul class="nav nav-tabs">
             <li class="active"><a href="#tab-inbox" data-toggle="tab">Входящие</a></li>
