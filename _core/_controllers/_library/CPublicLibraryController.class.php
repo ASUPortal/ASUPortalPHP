@@ -155,7 +155,7 @@ class CPublicLibraryController extends CBaseController{
     	$this->renderView("_library/view.tpl");
     }
     public function actionPublicView() {
-    	$files = CLibraryManager::getFilesByFolder(CRequest::getInt("id"));
+    	$files = CLibraryManager::getFilesByFolder(CRequest::getString("id"));
     	$this->addActionsMenuItem(array(
     		array(
     			"title" => "Назад",
@@ -272,7 +272,7 @@ class CPublicLibraryController extends CBaseController{
     	$this->renderView("_library/editDocument.tpl");
     }
     public function actionViewFiles() {
-    	$files = CLibraryManager::getFilesByFolder(CRequest::getInt("id"));
+    	$files = CLibraryManager::getFilesByFolder(CRequest::getString("id"));
     	if (!is_null(CRequest::getFilter("author"))) {
     		$author = CRequest::getFilter("author");
     	} else {
@@ -313,7 +313,7 @@ class CPublicLibraryController extends CBaseController{
 		$this->addActionsMenuItem(array(
 			array(
 				"title" => "Назад",
-				"link" => WEB_ROOT."_modules/_library/index.php?action=viewFiles&id=".CRequest::getInt("id")."&filter=author:".$author,
+				"link" => WEB_ROOT."_modules/_library/index.php?action=viewFiles&id=".CRequest::getString("id")."&filter=author:".$author,
 				"icon" => "actions/edit-undo.png"
 			)
     	));
@@ -327,7 +327,7 @@ class CPublicLibraryController extends CBaseController{
 			unlink($directory);
     		$file->remove();
     	}
-    	$this->redirect("?action=viewFiles&id=".CRequest::getInt("id"));
+    	$this->redirect("?action=viewFiles&id=".CRequest::getString("id")."&filter=author:".CRequest::getString("user_id"));
     }
     public function actionEditFile() {
     	$file = CLibraryManager::getFile(CRequest::getInt("id_file"));

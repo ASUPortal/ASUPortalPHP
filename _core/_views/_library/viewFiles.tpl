@@ -21,7 +21,7 @@
             </tr>
 		{foreach $files->getItems() as $file}
             <tr>
-                <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить файл {$file->browserFile}')) { location.href='?action=deleteFile&id_file={$file->getId()}&id={$file->nameFolder}'; }; return false;"></a></td>
+                <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить файл {$file->browserFile}')) { location.href='?action=deleteFile&id_file={$file->getId()}&id={$file->nameFolder}&user_id={$file->user_id}'; }; return false;"></a></td>
 		        <td><a class="icon-edit" href="#" onclick="{ location.href='?action=editFile&id={$file->nameFolder}&id_file={$file->getId()}&filter=author:{$file->user_id}'; };" title="изменить"></a></td>
 				<td>{counter}</td>
                 <td valign="top" width="32">
