@@ -54,7 +54,7 @@ class CLibraryManager {
         $query = new CQuery();
         $query->select("*")
             ->from(TABLE_LIBRARY_FILES)
-            ->condition("nameFolder = ".$key)
+            ->condition('nameFolder = "'.$key.'"')
         	->order("browserFile asc");
         foreach ($query->execute()->getItems() as $data) {
             $file = new CLibraryFile(new CActiveRecord($data));
