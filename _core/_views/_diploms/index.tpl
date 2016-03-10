@@ -148,6 +148,7 @@
         });
     });
 	</script>
+	<form action="index.php" method="post" enctype="multipart/form-data" class="form-horizontal">
 	<table border="0" width="100%" class="tableBlank">
 		<tr>
 			<td valign="top">
@@ -164,13 +165,11 @@
     			</div>
 			</td>
       		<td valign="top">
-				<p>
-					<input type="text" id="search" style="width: 96%; " placeholder="Поиск">
-				</p>
+      			{CHtml::hiddenField("action", "index")}
+      			{CHtml::textField("textSearch", "", "", "span12", "placeholder=Поиск")}
 			</td>
 		</tr>
 	</table>
-	<form action="index.php">
 	<table border="0" width="100%" class="tableBlank">
 		<tr>
 			<td>			
