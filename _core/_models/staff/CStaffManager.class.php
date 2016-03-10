@@ -782,9 +782,11 @@ class CStaffManager{
     /**
      * @static
      * @param $key
+     * @param CPerson $person
      * @return CPublication
      */
-    public static function getPublication($key) {
+    public static function getPublication($key, CPerson $person = null) {
+    	$publications = new CArrayList();
         if (!self::getCachePublications()->hasElement($key)) {
             if (is_numeric($key)) {
                 $item = CActiveRecordProvider::getById(TABLE_PUBLICATIONS, $key);
@@ -792,11 +794,23 @@ class CStaffManager{
                     $obj = new CPublication($item);
                     self::getCachePublications()->add($obj->getId(), $obj);
                 }
+            } elseif ($key == "") {
+            	foreach (CStaffManager::getWorksByPerson($person)->getItems() as $work) {
+            		$item = CActiveRecordProvider::getById(TABLE_PUBLICATIONS, $work->izdan_id);
+            		if (!is_null($item)) {
+            			$publication = new CPublication($item);
+            			$publications->add($publication->getId(), $publication);
+            		}
+            	}
             } else {
                 trigger_error("Не реализовано");
             }
         }
-        return self::getCachePublications()->getItem($key);
+        if ($key == "") {
+        	return $publications;
+        } else {
+        	return self::getCachePublications()->getItem($key);
+        }
     }
     
     /**
