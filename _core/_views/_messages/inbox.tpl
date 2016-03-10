@@ -6,8 +6,8 @@
 
     {CHtml::helpForCurrentPage()}
     <form action="index.php" method="post" enctype="multipart/form-data" class="form-horizontal">
-    	{CHtml::textField("search", "")}
-    	{CHtml::submit("Найти", false)}
+    	{CHtml::hiddenField("action", "inbox")}
+    	{CHtml::textField("textSearch", "", "", "", "placeholder=Поиск")}
     </form>
     
     {include file="_messages/subform.subscription.tpl"}

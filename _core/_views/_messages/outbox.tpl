@@ -4,8 +4,12 @@
     <h2>Мои исходящие сообщения</h2>
     {CHtml::helpForCurrentPage()}
 
+    <form action="index.php" method="post" enctype="multipart/form-data" class="form-horizontal">
+    	{CHtml::hiddenField("action", "outbox")}
+    	{CHtml::textField("textSearch", "", "", "", "placeholder=Поиск")}
+    </form>
+    
     {include file="_messages/subform.subscription.tpl"}
-
 
     <ul class="nav nav-tabs">
         <li><a href="?action=inbox">Входящие</a></li>
