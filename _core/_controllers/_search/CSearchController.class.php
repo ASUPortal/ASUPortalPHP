@@ -87,12 +87,7 @@ class CSearchController extends CBaseController{
                 "title" => "Обновить индекс",
                 "icon" => "actions/document-print-preview.png",
                 "link" => "index.php?action=updateIndex&redirect=index"
-            ),
-        	array(
-        		"title" => "Обновление индекса файлов",
-        		"icon" => "actions/document-print-preview.png",
-        		"link" => "index.php?action=indexFiles"
-        	)
+            )
         ));
         $this->renderView("_search/settings.tpl");
     }
@@ -208,81 +203,6 @@ class CSearchController extends CBaseController{
         if (CRequest::getString("redirect") != "") {
             $this->redirect("?action=".CRequest::getString("redirect"));
         }
-    }
-    public function actionIndexFiles() {
-        $this->addActionsMenuItem(array(
-        	array(
-        		"title" => "Назад",
-        		"link" => "index.php?action=index",
-        		"icon" => "actions/edit-undo.png"
-        	)
-        ));
-        $this->renderView("_search/indexFiles.tpl");
-    }
-    public function actionUpdateIndexFiles() {
-    	/*$cwd = CRequest::getString("path");
-    	
-    	$filepath = $cwd;
-    	$files = scandir($filepath);
-    	$filelist = array();
-    	foreach ($files as $file) {
-    		if ((strpos($file, ".pdf") !== false) or strpos($file, ".doc") !== false or strpos($file, ".docx") !== false or strpos($file, ".odt") !== false) {
-    			$filelist[] = $file;
-    		}
-    	}
-    	unset($filelist[count($filelist) - 1]);*/
-    	
-    	$cwd = getcwd();
-    	
-    	$filepath = $cwd;
-    	$filelist = `ls *.pdf`;
-    	$filelist = explode("\n", $filelist);
-    	unset($filelist[count($filelist) - 1]);
-    	
-    	foreach($filelist as $key => $file ){
-    		// renaming it if neccessary
-    		$newname = str_replace(",", " " , $file);
-    		$newname = str_replace(";", " " , $newname);
-    		if($newname != $file) {
-    			echo "[BAD NAME, RENAMING]" . $newname;
-    			rename($file, $newname);
-    		}
-    		$filelist[$key] = $newname;
-    	}
-    	
-    	$indexedtext = file_get_contents(WEB_ROOT.'indexed.txt');
-    	$indexed = explode("\n", $indexedtext );
-    	unset($indexed [count($indexed ) - 1]);
-    	
-    	foreach($filelist as $file){
-    		/*if(ValueExist($indexed, $file)) {
-    			echo "[DONE]:".$file . 'file already indexed , continue ' . "\n";
-    			continue;
-    		}*/
-    		echo "//=======================START index\n";
-    		echo "File: ". $file . "\n";
-    	
-    		$cmdstr = 'curl "http://'.CSettingsManager::getSettingValue("solr_server").':'.CSettingsManager::getSettingValue("solr_port").'/solr/update/extract?literal.id='.md5($file).'&literal.filename='.urlencode($file).'&literal.filepath='.urlencode($filepath).'&commit=true" -F "myfile=@'.$file.'"';
-    		echo "curl Command: " . $cmdstr . "\n";
-    		$response =  `$cmdstr` ;
-    		echo "curl response is " . $response;
-    		echo "\n";
-    		if(strstr($response, "<int name=\"status\">0<")) {
-    			echo "[SUCCESS]:".$file. "successfully indexed. \n";
-    			$f = fopen(WEB_ROOT.'indexed.txt', "w");
-    			$indexedtext .= $file . "\n";
-    			fwrite($f, $indexedtext);
-    			fclose($f);
-    		} else {
-    			echo "[FAILED]:". $file. "failed to index\n";
-    		}
-    		echo "//=======================END index\n";
-    		ECHO "\n\n\n";
-    	
-    	}
-    	
-    	echo count($filelist). "files\n";
-    	exit;
     }
     protected function onActionBeforeExecute() {
         if ($this->getAction() == "updateIndex") {
