@@ -26,15 +26,15 @@ class CDiplomsController extends CBaseController {
         $currentGroup = null;
         $query->select("diplom.*")
             ->from(TABLE_DIPLOMS." as diplom")
-            ->leftJoin(TABLE_STUDENTS." as student", "diplom.student_id=student.id")
-            ->leftJoin(TABLE_STUDENT_GROUPS." as st_group", "student.group_id = st_group.id")
-            ->leftJoin(TABLE_DIPLOM_CONFIRMATIONS." as confirm", "diplom.diplom_confirm = confirm.id")
-            ->leftJoin(TABLE_PRACTICE_PLACES." as pract", "diplom.pract_place_id = pract.id")
-            ->leftJoin(TABLE_PERSON." as person", "diplom.kadri_id = person.id")
-            ->leftJoin(TABLE_LANGUAGES." as lang", "diplom.foreign_lang=lang.id")
+            ->leftJoin(TABLE_STUDENTS." as students", "diplom.student_id=students.id")
+            ->leftJoin(TABLE_STUDENT_GROUPS." as st_groups", "students.group_id = st_groups.id")
+            ->leftJoin(TABLE_DIPLOM_CONFIRMATIONS." as confirms", "diplom.diplom_confirm = confirms.id")
+            ->leftJoin(TABLE_PRACTICE_PLACES." as practs", "diplom.pract_place_id = practs.id")
+            ->leftJoin(TABLE_PERSON." as persons", "diplom.kadri_id = persons.id")
+            ->leftJoin(TABLE_LANGUAGES." as langs", "diplom.foreign_lang=langs.id")
             ->leftJoin(TABLE_PERSON." as prepod", "diplom.recenz_id = prepod.id")
-            ->leftJoin(TABLE_MARKS." as mark", "diplom.study_mark = mark.id")
-            ->leftJoin(TABLE_DIPLOM_PREVIEWS." as dipl_prew", "student.id = dipl_prew.student_id")
+            ->leftJoin(TABLE_MARKS." as marks", "diplom.study_mark = marks.id")
+            ->leftJoin(TABLE_DIPLOM_PREVIEWS." as dipl_prews", "students.id = dipl_prews.student_id")
 			->order("diplom.date_act desc");
         $managersQuery = new CQuery();
         $managersQuery->select("person.*")
@@ -227,17 +227,17 @@ class CDiplomsController extends CBaseController {
         if ($term != "") {
         	//поиск по теме, ФИО студента, степени утверждения, месту практики, месту практики по id, руководителю, группе, по ин.яз., рецензенту, оценке, комментарию, дате предзащиты, дате защиты
         	$query->condition("diplom.dipl_name like '%".$term."%' or
-        			student.fio like '%".$term."%' or
-        			confirm.name like '%".$term."%' or
+        			students.fio like '%".$term."%' or
+        			confirms.name like '%".$term."%' or
         			diplom.pract_place like '%".$term."%' or
-        			pract.name like '%".$term."%' or
-        			person.fio like '%".$term."%' or
-        			st_group.name like '%".$term."%' or
-        			lang.name like '%".$term."%' or
+        			practs.name like '%".$term."%' or
+        			persons.fio like '%".$term."%' or
+        			st_groups.name like '%".$term."%' or
+        			langs.name like '%".$term."%' or
         			prepod.fio like '%".$term."%' or 
-        			mark.name like '%".$term."%' or
+        			marks.name like '%".$term."%' or
         			diplom.comment like '%".$term."%' or
-        			DATE_FORMAT(dipl_prew.date_preview,'%d.%m.%Y') like '%".$term."%' or
+        			DATE_FORMAT(dipl_prews.date_preview,'%d.%m.%Y') like '%".$term."%' or
         			DATE_FORMAT(diplom.date_act,'%d.%m.%Y') like '%".$term."%'");
         }
         foreach ($set->getPaginated()->getItems() as $item) {
