@@ -29,7 +29,6 @@ class CStaffPublicationsController extends CBaseController{
         $typesQuery = new CQuery();
         $typesQuery->select("type.*")
         	->from(TABLE_PUBLICATIONS_TYPES." as type")
-        	->innerJoin(TABLE_PUBLICATIONS." as t", "t.type_book = type.id")
         	->order("type.name asc");
         if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY or
             CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
@@ -53,8 +52,6 @@ class CStaffPublicationsController extends CBaseController{
                 $currentPerson = CRequest::getInt("kadri_id");
                 $query->innerJoin(TABLE_PUBLICATION_BY_PERSONS." as p", "p.izdan_id = t.id");
                 $query->condition("p.kadri_id=".$currentPerson);
-                // фильтруем еще по видам публикаций
-                $typesQuery->innerJoin(TABLE_PUBLICATION_BY_PERSONS." as p", "p.izdan_id = t.id and p.kadri_id = ".CRequest::getInt("kadri_id"));
             }
         }
         if (CRequest::getString("order") == "year") {
