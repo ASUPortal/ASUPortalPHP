@@ -17,14 +17,20 @@ class CStaffPublicationsController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
+        $set = new CRecordSet(false);
         $query = new CQuery();
         $set->setQuery($query);
         $personList = array();
         $currentPerson = null;
+        $currentType = null;
         $query->select("t.*")
             ->from(TABLE_PUBLICATIONS." as t")
             ->order("t.id asc");
+        $typesQuery = new CQuery();
+        $typesQuery->select("type.*")
+        	->from(TABLE_PUBLICATIONS_TYPES." as type")
+        	->innerJoin(TABLE_PUBLICATIONS." as t", "t.type_book = type.id")
+        	->order("type.name asc");
         if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY or
             CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
 
@@ -42,10 +48,13 @@ class CStaffPublicationsController extends CBaseController{
             foreach ($personQuery->execute()->getItems() as $arr) {
                 $personList[$arr["id"]] = $arr["fio"];
             }
-            if (CRequest::getInt("person") != 0) {
-                $currentPerson = CRequest::getInt("person");
+            // фильтр по сотруднику
+            if (CRequest::getInt("kadri_id") != 0) {
+                $currentPerson = CRequest::getInt("kadri_id");
                 $query->innerJoin(TABLE_PUBLICATION_BY_PERSONS." as p", "p.izdan_id = t.id");
                 $query->condition("p.kadri_id=".$currentPerson);
+                // фильтруем еще по видам публикаций
+                $typesQuery->innerJoin(TABLE_PUBLICATION_BY_PERSONS." as p", "p.izdan_id = t.id and p.kadri_id = ".CRequest::getInt("kadri_id"));
             }
         }
         if (CRequest::getString("order") == "year") {
@@ -55,13 +64,33 @@ class CStaffPublicationsController extends CBaseController{
         	}
         	$query->order('STR_TO_DATE(year, "%Y") '.$direction);
         }
+        // фильтр по виду издания
+        if (!is_null(CRequest::getFilter("type.id"))) {
+        	$arr = explode(",", CRequest::getFilter("type.id"));
+        	foreach ($arr as $key=>$value) {
+        		$arrs[] = "type.id = ".$value;
+        	}
+        	$currentType = CRequest::getFilter("type.id");
+        	$query->innerJoin(TABLE_PUBLICATIONS_TYPES." as type", "t.type_book = type.id and (".implode(" or ", $arrs).")");
+        }
+        // фильтр по названию
+        if (!is_null(CRequest::getFilter("title"))) {
+        	$query->condition("t.id = ".CRequest::getFilter("title"));
+        }
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CPublication($ar);
             $objects->add($object->getId(), $object);
         }
+        $izdanTypes = array();
+        foreach ($typesQuery->execute()->getItems() as $ar) {
+        	$type = new CPublicationByTypes(new CActiveRecord($ar));
+        	$izdanTypes[$type->getId()] = $type->name;
+        }
         $this->setData("currentPerson", $currentPerson);
+        $this->setData("currentType", $currentType);
         $this->setData("personList", $personList);
+        $this->setData("izdanTypes", $izdanTypes);
         $this->setData("objects", $objects);
         $this->setData("paginator", $set->getPaginator());
         /**
@@ -156,10 +185,10 @@ class CStaffPublicationsController extends CBaseController{
         }
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "field" => "t.id",
-                "value" => $item["id"],
-                "label" => $item["title"],
-                "class" => "CPublication"
+            	"label" => $item["title"],
+            	"value" => $item["title"],
+            	"object_id" => $item["id"],
+            	"type" => 1
             );
         }
         echo json_encode($res);
