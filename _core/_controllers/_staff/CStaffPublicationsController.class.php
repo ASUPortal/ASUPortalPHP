@@ -26,10 +26,6 @@ class CStaffPublicationsController extends CBaseController{
         $query->select("t.*")
             ->from(TABLE_PUBLICATIONS." as t")
             ->order("t.id asc");
-        $typesQuery = new CQuery();
-        $typesQuery->select("type.*")
-        	->from(TABLE_PUBLICATIONS_TYPES." as type")
-        	->order("type.name asc");
         if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY or
             CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
 
@@ -63,12 +59,8 @@ class CStaffPublicationsController extends CBaseController{
         }
         // фильтр по виду издания
         if (!is_null(CRequest::getFilter("type.id"))) {
-        	$arr = explode(",", CRequest::getFilter("type.id"));
-        	foreach ($arr as $key=>$value) {
-        		$arrs[] = "type.id = ".$value;
-        	}
         	$currentType = CRequest::getFilter("type.id");
-        	$query->innerJoin(TABLE_PUBLICATIONS_TYPES." as type", "t.type_book = type.id and (".implode(" or ", $arrs).")");
+        	$query->innerJoin(TABLE_PUBLICATIONS_TYPES." as type", "t.type_book = type.id and type.id IN (".CRequest::getFilter("type.id").")");
         }
         // фильтр по названию
         if (!is_null(CRequest::getFilter("title"))) {
@@ -79,10 +71,15 @@ class CStaffPublicationsController extends CBaseController{
             $object = new CPublication($ar);
             $objects->add($object->getId(), $object);
         }
+        $taxonomy = CTaxonomyManager::getLegacyTaxonomy(20);
+        $sort = new CArrayList();
+        foreach ($taxonomy->getTerms()->getItems() as $i) {
+        	$sort->add($i->getValue(), $i->getId());
+        }
         $izdanTypes = array();
-        foreach ($typesQuery->execute()->getItems() as $ar) {
-        	$type = new CPublicationByTypes(new CActiveRecord($ar));
-        	$izdanTypes[$type->getId()] = $type->name;
+        foreach ($sort->getSortedByKey(true)->getItems() as $i) {
+        	$item = $taxonomy->getTerms()->getItem($i);
+        	$izdanTypes[$item->getId()] = $item->getValue();
         }
         $this->setData("currentPerson", $currentPerson);
         $this->setData("currentType", $currentType);
