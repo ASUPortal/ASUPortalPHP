@@ -17,11 +17,12 @@ class CStaffPublicationsController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
+        $set = new CRecordSet(false);
         $query = new CQuery();
         $set->setQuery($query);
         $personList = array();
         $currentPerson = null;
+        $currentType = null;
         $query->select("t.*")
             ->from(TABLE_PUBLICATIONS." as t")
             ->order("t.id asc");
@@ -42,8 +43,9 @@ class CStaffPublicationsController extends CBaseController{
             foreach ($personQuery->execute()->getItems() as $arr) {
                 $personList[$arr["id"]] = $arr["fio"];
             }
-            if (CRequest::getInt("person") != 0) {
-                $currentPerson = CRequest::getInt("person");
+            // фильтр по сотруднику
+            if (CRequest::getInt("kadri_id") != 0) {
+                $currentPerson = CRequest::getInt("kadri_id");
                 $query->innerJoin(TABLE_PUBLICATION_BY_PERSONS." as p", "p.izdan_id = t.id");
                 $query->condition("p.kadri_id=".$currentPerson);
             }
@@ -55,13 +57,34 @@ class CStaffPublicationsController extends CBaseController{
         	}
         	$query->order('STR_TO_DATE(year, "%Y") '.$direction);
         }
+        // фильтр по виду издания
+        if (!is_null(CRequest::getFilter("type.id"))) {
+        	$currentType = CRequest::getFilter("type.id");
+        	$query->innerJoin(TABLE_PUBLICATIONS_TYPES." as type", "t.type_book = type.id and type.id IN (".CRequest::getFilter("type.id").")");
+        }
+        // фильтр по названию
+        if (!is_null(CRequest::getFilter("title"))) {
+        	$query->condition("t.id = ".CRequest::getFilter("title"));
+        }
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CPublication($ar);
             $objects->add($object->getId(), $object);
         }
+        $taxonomy = CTaxonomyManager::getLegacyTaxonomy("izdan_type");
+        $sort = new CArrayList();
+        foreach ($taxonomy->getTerms()->getItems() as $i) {
+        	$sort->add($i->getValue(), $i->getId());
+        }
+        $izdanTypes = array();
+        foreach ($sort->getSortedByKey(true)->getItems() as $i) {
+        	$item = $taxonomy->getTerms()->getItem($i);
+        	$izdanTypes[$item->getId()] = $item->getValue();
+        }
         $this->setData("currentPerson", $currentPerson);
+        $this->setData("currentType", $currentType);
         $this->setData("personList", $personList);
+        $this->setData("izdanTypes", $izdanTypes);
         $this->setData("objects", $objects);
         $this->setData("paginator", $set->getPaginator());
         /**
@@ -156,10 +179,10 @@ class CStaffPublicationsController extends CBaseController{
         }
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "field" => "t.id",
-                "value" => $item["id"],
-                "label" => $item["title"],
-                "class" => "CPublication"
+            	"label" => $item["title"],
+            	"value" => $item["title"],
+            	"object_id" => $item["id"],
+            	"type" => 1
             );
         }
         echo json_encode($res);
