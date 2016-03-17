@@ -71,7 +71,7 @@ class CStaffPublicationsController extends CBaseController{
             $object = new CPublication($ar);
             $objects->add($object->getId(), $object);
         }
-        $taxonomy = CTaxonomyManager::getLegacyTaxonomy(20);
+        $taxonomy = CTaxonomyManager::getLegacyTaxonomy("izdan_type");
         $sort = new CArrayList();
         foreach ($taxonomy->getTerms()->getItems() as $i) {
         	$sort->add($i->getValue(), $i->getId());
