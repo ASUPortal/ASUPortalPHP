@@ -174,7 +174,8 @@ class CUtils {
             "/.*\.jpg$|.*\.jpeg$|.*\.tif$|.*\.bmp$|.*\.png$/i",
             "/.*\.ppt.?|.*\.pps/i",
             "/.*\.chm|.*\.hlp/i",
-            "/.*\.msi|.*\.msp/i"
+            "/.*\.msi|.*\.msp/i",
+            "/.*\.odt/i"
         );
 
         $replacements=array(
@@ -188,7 +189,8 @@ class CUtils {
             "img_file.gif",
             "ppt_file.gif",
             "help_file.gif",
-            "install_file.gif"
+            "install_file.gif",
+            "odt_file.gif"
         );
 
         $str=preg_replace($patterns, $replacements, $fileName);
@@ -969,5 +971,24 @@ class CUtils {
      */
     public static function getScriptName() {
     	return $_SERVER["SCRIPT_NAME"];
+    }
+    
+    /**
+     * Список файлов в папке и подпапках
+     *
+     * @param $folder
+     * @param $all_files
+     * @return array
+     */
+    public static function getListFiles($folder, &$all_files){
+    	$fp=opendir($folder);
+    	while ($cv_file=readdir($fp)) {
+    		if (is_file($folder."/".$cv_file)) {
+    			$all_files[] = $folder."/".$cv_file;
+    		} elseif ($cv_file!="." && $cv_file!=".." && is_dir($folder."/".$cv_file)) {
+    			CUtils::getListFiles($folder."/".$cv_file, $all_files);
+    		}
+    	}
+    	closedir($fp);
     }
 }

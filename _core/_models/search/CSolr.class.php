@@ -122,6 +122,17 @@ class CSolr {
         $url .= $options["path"]."/update?softCommit=true";
         $responseTxt = file_get_contents($url);
     }
+    /**
+     * url для отправки файлов
+     * 
+     * @return string
+     */
+    public static function commitFiles() {
+    	$options = self::getOptions();
+    	$url = "http://".$options["hostname"]."/";
+    	$url .= $options["path"]."/update/extract?commit=true";
+    	return $url;
+    }
 
     /**
      * Выполнить поиск

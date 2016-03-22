@@ -33,6 +33,11 @@ class CSearchController extends CBaseController{
                 "title" => "Настройки",
                 "link" => "index.php?action=settings",
                 "icon" => "places/network-workgroup.png"
+            ),
+            array(
+                "title" => "Поиск по файлам",
+                "icon" => "actions/document-print-preview.png",
+                "link" => "index.php?action=searchFiles"
             )
         ));
         $this->renderView("_search/index.tpl");
@@ -87,7 +92,12 @@ class CSearchController extends CBaseController{
                 "title" => "Обновить индекс",
                 "icon" => "actions/document-print-preview.png",
                 "link" => "index.php?action=updateIndex&redirect=index"
-            )
+            ),
+        	array(
+        		"title" => "Обновление файлового индекса",
+        		"icon" => "actions/document-print-preview.png",
+        		"link" => "index.php?action=indexFiles"
+        	)
         ));
         $this->renderView("_search/settings.tpl");
     }
@@ -203,6 +213,100 @@ class CSearchController extends CBaseController{
         if (CRequest::getString("redirect") != "") {
             $this->redirect("?action=".CRequest::getString("redirect"));
         }
+    }
+    public function actionIndexFiles() {
+        $this->addActionsMenuItem(array(
+        	array(
+        		"title" => "Назад",
+        		"link" => "index.php?action=index",
+        		"icon" => "actions/edit-undo.png"
+        	)
+        ));
+        $this->renderView("_search/indexFiles.tpl");
+    }
+    public function actionUpdateIndexFiles() {
+    	$cwd = CRequest::getString("path");
+    	$all_files = array();
+    	CUtils::getListFiles($cwd, $all_files);
+    	$filelist = array();
+    	foreach ($all_files as $file) {
+    		if ((strpos($file, ".pdf") !== false) or strpos($file, ".doc") !== false or strpos($file, ".docx") !== false or strpos($file, ".odt") !== false) {
+    			$filelist[] = $file;
+    		}
+    	}
+    	$messages = array();    	 
+    	foreach($filelist as $file) {
+    		$messages[] = "START index";
+    		$messages[] = "File: ".$file;
+    		
+    		$ch = curl_init();
+    		$data = array("myfile"=>"@".$file); //полный путь до файла
+    		
+    		curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles()."&literal.id=".md5($file)."&literal._is_file_=1&literal.filename=".substr(strrchr($file, "/"), 1)."&literal.filepath=".urlencode(substr(strrchr($file, "\\"), 1)));
+    		curl_setopt($ch, CURLOPT_POST, 1);
+    		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    		
+    		$result = curl_exec($ch);
+    		if ($result === FALSE) {
+    			$messages[] = "cURL Error: ".curl_error($ch);
+    			break;
+    		}
+    		$error_no = curl_errno($ch);
+    		curl_close($ch);
+    		if ($error_no == 0) {
+    			$messages[] = "Файл ".$file." успешно загружен";
+    		} else {
+    			$messages[] = "Ошибка загрузки файла ".$file;
+    		}
+    		$messages[] = "END index";
+    		$messages[] = "";
+    	}
+    	$messages[] = "Обработано ".count($filelist). " файла";
+    	$this->setData("messages", $messages);
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => "index.php?action=indexFiles",
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
+    	$this->renderView("_search/updateIndexFiles.tpl");
+    }
+    public function actionSearchFiles() {
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => "index.php?action=index",
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
+    	$this->renderView("_search/searchFiles.tpl");
+    }
+    public function actionSearchByFiles() {
+    	$userQuery = CRequest::getString("stringSearch");
+    	$params = array(
+    		"_is_file_" => 1,
+            "_highlight_" => "content"
+    	);
+    	$resultObj = CSolr::search($userQuery, $params);
+    	$result = array();
+    	foreach ($resultObj->getDocuments() as $doc) {
+    		$hl = $resultObj->getHighlighingByDocument($doc);
+    		$res = array();
+    		$res["hl"] = implode(", ", $hl);
+    		$res["filepath"] = $doc->filepath;
+    		$res["filename"] = $doc->filename;
+    		$result[] = $res;
+    	}
+    	$this->setData("result", $result);
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => "index.php?action=searchFiles",
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
+    	$this->renderView("_search/searchByFiles.tpl");
     }
     protected function onActionBeforeExecute() {
         if ($this->getAction() == "updateIndex") {
