@@ -980,13 +980,13 @@ class CUtils {
      * @param $all_files
      * @return array
      */
-    public static function getListFiles($folder, &$all_files){
+    public static function getListFiles($folder, &$all_files) {
     	$fp=opendir($folder);
     	while ($cv_file=readdir($fp)) {
-    		if (is_file($folder."/".$cv_file)) {
-    			$all_files[] = $folder."/".$cv_file;
-    		} elseif ($cv_file!="." && $cv_file!=".." && is_dir($folder."/".$cv_file)) {
-    			CUtils::getListFiles($folder."/".$cv_file, $all_files);
+    		if (is_file($folder.CORE_DS.$cv_file)) {
+    			$all_files[] = $folder.CORE_DS.$cv_file;
+    		} elseif ($cv_file!="." && $cv_file!=".." && is_dir($folder.CORE_DS.$cv_file)) {
+    			CUtils::getListFiles($folder.CORE_DS.$cv_file, $all_files);
     		}
     	}
     	closedir($fp);

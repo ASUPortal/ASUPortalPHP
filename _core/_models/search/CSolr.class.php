@@ -127,10 +127,10 @@ class CSolr {
      * 
      * @return string
      */
-    public static function commitFiles() {
+    public static function commitFiles($id, $filename, $filepath) {
     	$options = self::getOptions();
     	$url = "http://".$options["hostname"]."/";
-    	$url .= $options["path"]."/update/extract?commit=true";
+    	$url .= $options["path"]."/update/extract?commit=true&literal.id=".$id."&literal._is_file_=1&literal.filename=".$filename."&literal.filepath=".$filepath;
     	return $url;
     }
 

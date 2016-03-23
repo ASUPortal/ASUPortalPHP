@@ -94,9 +94,9 @@ class CSearchController extends CBaseController{
                 "link" => "index.php?action=updateIndex&redirect=index"
             ),
         	array(
-        		"title" => "Обновление файлового индекса",
+        		"title" => "Обновить файловый индекс",
         		"icon" => "actions/document-print-preview.png",
-        		"link" => "index.php?action=indexFiles"
+        		"link" => "index.php?action=updateIndexFiles"
         	)
         ));
         $this->renderView("_search/settings.tpl");
@@ -214,23 +214,18 @@ class CSearchController extends CBaseController{
             $this->redirect("?action=".CRequest::getString("redirect"));
         }
     }
-    public function actionIndexFiles() {
-        $this->addActionsMenuItem(array(
-        	array(
-        		"title" => "Назад",
-        		"link" => "index.php?action=index",
-        		"icon" => "actions/edit-undo.png"
-        	)
-        ));
-        $this->renderView("_search/indexFiles.tpl");
-    }
     public function actionUpdateIndexFiles() {
-    	$cwd = CRequest::getString("path");
+    	$cwd = CSettingsManager::getSettingValue("path_for_indexing_files");
+    	$pathRoot = $_SERVER['DOCUMENT_ROOT'].ROOT_FOLDER;
     	$all_files = array();
     	CUtils::getListFiles($cwd, $all_files);
     	$filelist = array();
     	foreach ($all_files as $file) {
-    		if ((strpos($file, ".pdf") !== false) or strpos($file, ".doc") !== false or strpos($file, ".docx") !== false or strpos($file, ".odt") !== false) {
+    		$arr = explode(";", CSettingsManager::getSettingValue("formats_files_for_indexing"));
+    		foreach ($arr as $key=>$value) {
+    			$arrs[] = (strpos($file, $value) !== false);
+    		}
+    		if (implode(" or ", $arrs)) {
     			$filelist[] = $file;
     		}
     	}
@@ -242,7 +237,7 @@ class CSearchController extends CBaseController{
     		$ch = curl_init();
     		$data = array("myfile"=>"@".$file); //полный путь до файла
     		
-    		curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles()."&literal.id=".md5($file)."&literal._is_file_=1&literal.filename=".substr(strrchr($file, "/"), 1)."&literal.filepath=".urlencode(substr(strrchr($file, "\\"), 1)));
+    		curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles(md5($file), substr(strrchr($file, "/"), 1), urlencode(str_replace(mb_strtolower($pathRoot), "", mb_strtolower($file)))));
     		curl_setopt($ch, CURLOPT_POST, 1);
     		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     		
@@ -266,7 +261,7 @@ class CSearchController extends CBaseController{
     	$this->addActionsMenuItem(array(
     		array(
     			"title" => "Назад",
-    			"link" => "index.php?action=indexFiles",
+    			"link" => "index.php?action=settings",
     			"icon" => "actions/edit-undo.png"
     		)
     	));
