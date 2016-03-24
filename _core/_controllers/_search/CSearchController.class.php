@@ -215,10 +215,8 @@ class CSearchController extends CBaseController{
         }
     }
     public function actionUpdateIndexFiles() {
-    	$cwd = CSettingsManager::getSettingValue("path_for_indexing_files");
-    	$pathRoot = $_SERVER['DOCUMENT_ROOT'].ROOT_FOLDER;
-    	$all_files = array();
-    	CUtils::getListFiles($cwd, $all_files);
+    	$folder = CSettingsManager::getSettingValue("path_for_indexing_files");
+    	$all_files = CUtils::getListFiles($folder);
     	$filelist = array();
     	foreach ($all_files as $file) {
     		$arr = explode(";", CSettingsManager::getSettingValue("formats_files_for_indexing"));
@@ -237,7 +235,7 @@ class CSearchController extends CBaseController{
     		$ch = curl_init();
     		$data = array("myfile"=>"@".$file); //полный путь до файла
     		
-    		curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles(md5($file), substr(strrchr($file, "/"), 1), urlencode(str_replace(mb_strtolower($pathRoot), "", mb_strtolower($file)))));
+    		curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles(md5($file), substr(strrchr($file, "/"), 1), urlencode($file)));
     		curl_setopt($ch, CURLOPT_POST, 1);
     		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     		
@@ -256,7 +254,7 @@ class CSearchController extends CBaseController{
     		$messages[] = "END index";
     		$messages[] = "";
     	}
-    	$messages[] = "Обработано ".count($filelist). " файла";
+    	$messages[] = "Обработано ".count($filelist). " файлов";
     	$this->setData("messages", $messages);
     	$this->addActionsMenuItem(array(
     		array(
@@ -278,6 +276,8 @@ class CSearchController extends CBaseController{
     	$this->renderView("_search/searchFiles.tpl");
     }
     public function actionSearchByFiles() {
+    	$pathRoot = $_SERVER["DOCUMENT_ROOT"];
+    	$host = $_SERVER["DB_HOST"];
     	$userQuery = CRequest::getString("stringSearch");
     	$params = array(
     		"_is_file_" => 1,
@@ -289,10 +289,15 @@ class CSearchController extends CBaseController{
     		$hl = $resultObj->getHighlighingByDocument($doc);
     		$res = array();
     		$res["hl"] = implode(", ", $hl);
-    		$res["filepath"] = $doc->filepath;
+    		// убираем из пути к файлу корневую директорию сервера
+    		$res["path"] = str_replace(mb_strtolower($pathRoot), "", mb_strtolower($doc->filepath));
+    		// если в пути к файлу есть папка с порталом, отрезаем её; иначе оставляем полный путь
+    		$res["filepath"] = str_replace(mb_strtolower(CORE_CWD.CORE_DS), "", mb_strtolower($doc->filepath));
+    		$res["files"] = $doc->filepath;
     		$res["filename"] = $doc->filename;
     		$result[] = $res;
     	}
+    	$this->setData("host", $host);
     	$this->setData("result", $result);
     	$this->addActionsMenuItem(array(
     		array(

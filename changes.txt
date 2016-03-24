@@ -1,0 +1,4 @@
+﻿2016.03.24 DShamidanow
+Добавить в настройки поля:
+• path_for_indexing_files - Путь к папке с файлами для индексирования
+• formats_files_for_indexing - Форматы файлов для индексирования (.pdf;.doc;.docx;.odt)

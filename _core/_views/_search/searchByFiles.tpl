@@ -20,11 +20,11 @@
                 	<td>{counter}</td>
                 	<td>{$res["hl"]}</td>
                 	<td>
-                		<a href="{$web_root}{$res['filepath']}" ">
+                		<a href="http://{$host}/{$res['path']}" ">
 	                        {$res['filename']}
 	                    </a>
-	                    {if (CUtils::getFileSize("{$res["filepath"]}")) !=0 }
-		                    <font size=-2 style="font-family:Arial;"> размер файла: <b>{CUtils::getFileSize("{$res["filepath"]}")}</b> МБ</font>
+	                    {if (CUtils::getFileSize("{$res['filepath']}")) !=0 }
+		                    <font size=-2 style="font-family:Arial;"> размер файла: <b>{CUtils::getFileSize("{$res['filepath']}")}</b> МБ</font>
 	                    {else}
 	                    	<span><font size=-2 color="#FF0000" style="font-family:Arial;"> файл не найден.</font></span>
 	                    {/if}

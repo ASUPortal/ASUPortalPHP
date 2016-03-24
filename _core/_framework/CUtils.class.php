@@ -917,6 +917,8 @@ class CUtils {
 		if ($fileName!='') {
 			if (file_exists(CORE_CWD.CORE_DS.$fileName)) {
 				return round(filesize(CORE_CWD.CORE_DS.$fileName)/1024/1024,3);
+			} elseif (file_exists($fileName)) {
+				return round(filesize($fileName)/1024/1024,3);
 			} else {
 				return 0;
 			}
@@ -976,11 +978,12 @@ class CUtils {
     /**
      * Список файлов в папке и подпапках
      *
-     * @param $folder
-     * @param $all_files
+     * @param string $folder
+     * @param null $all_files
      * @return array
      */
-    public static function getListFiles($folder, &$all_files) {
+    public static function getListFiles($folder, &$all_files = null) {
+    	$all_files = array();
     	$fp=opendir($folder);
     	while ($cv_file=readdir($fp)) {
     		if (is_file($folder.CORE_DS.$cv_file)) {
@@ -990,5 +993,6 @@ class CUtils {
     		}
     	}
     	closedir($fp);
+    	return $all_files;
     }
 }

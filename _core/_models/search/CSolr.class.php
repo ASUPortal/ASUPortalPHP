@@ -125,6 +125,9 @@ class CSolr {
     /**
      * url для отправки файлов
      * 
+     * @param string $id
+     * @param string $filename
+     * @param string $filepath
      * @return string
      */
     public static function commitFiles($id, $filename, $filepath) {
