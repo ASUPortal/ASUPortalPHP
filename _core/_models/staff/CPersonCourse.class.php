@@ -24,10 +24,10 @@ class CPersonCourse extends CActiveModel {
      */
     public function getPeriod() {
         $res = "";
-        if ($this->date_start !== "") {
+        if ($this->date_start !== "" and $this->date_start !== "0000-00-00") {
             $res .= "с ".date("d.m.Y", strtotime($this->date_start));
         }
-        if ($this->date_end !== "") {
+        if ($this->date_end !== "" and $this->date_end !== "0000-00-00") {
             $res .= " по ".date("d.m.Y", strtotime($this->date_end));
         }
         return $res;

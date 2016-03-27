@@ -37,6 +37,9 @@ class CStaffCoursesController extends CBaseController{
         $object = new CPersonCourse();
         $object->setAttributes(CRequest::getArray($object::getClassName()));
         if ($object->validate()) {
+        	// дату нужно сконвертить в MySQL date
+        	$object->date_start = date("Y-m-d", strtotime($object->date_start));
+        	$object->date_end = date("Y-m-d", strtotime($object->date_end));
             $object->save();
             if ($this->continueEdit()) {
                 $this->redirect("courses.php?action=edit&id=".$object->getId());
