@@ -21,6 +21,9 @@
                     <th>{CHtml::tableOrder("skills", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("experiences", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("canUse", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("type_task", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("procedure_eval", $objects->getFirstItem())}</th>
+                    <th>{CHtml::tableOrder("criteria_eval", $objects->getFirstItem())}</th>
                 {/if}
                 </tr>
             </thead>
@@ -73,6 +76,9 @@
                             <p>{$o}</p>
                         {/foreach}
                     </td>
+                    <td>{$object->type_task}</td>
+                    <td>{$object->procedure_eval}</td>
+                    <td>{$object->criteria_eval}</td>
                 {/if}                   
                 </tr>
             {/foreach}

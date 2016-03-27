@@ -1,9 +1,9 @@
 <?php
 
-class CWorkPlanTerms extends CAbstractPrintClassField {
+class CWorkPlanMethodProjectInstructs extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Семестры дисциплины";
+        return "Методические указания к курсовому проектированию";
     }
 
     public function getFieldDescription()
@@ -18,19 +18,12 @@ class CWorkPlanTerms extends CAbstractPrintClassField {
 
     public function getFieldType()
     {
-        return self::FIELD_TABLE;
+        return self::FIELD_TEXT;
     }
 
     public function execute($contextObject)
     {
-        $result = array();
-        if (!is_null($contextObject->terms)) {
-        	$arr = array(1);
-        	foreach ($contextObject->terms->getItems() as $term) {
-        		$arr[] = $term->corriculum_discipline_section->title." семестр";
-        	}
-        	$result[] = $arr;
-        }
+		$result = $contextObject->method_project_instructs;
         return $result;
     }
 }
