@@ -323,7 +323,6 @@ class CWorkPlan extends CActiveModel {
             "disciplinesAfter" => "Последующие дисциплины",
             "project_description" => "Курсовой проект",
             "education_technologies" => "Образовательные технологии",
-            "hardware" => "Скобяные изделия",
             "is_archive" => "В архиве",
             "discipline_id" => "Дисциплина",
             "module_id" => "Модуль",
@@ -339,7 +338,10 @@ class CWorkPlan extends CActiveModel {
         	"discipline.name" => "Дисциплина",
         	"corriculum.title" => "Учебный план",
         	"term.name" => "Профили",
-        	"person.fio" => "Авторы"
+        	"person.fio" => "Авторы",
+        	"method_practic_instructs" => "Методические указания к практическим занятиям",
+        	"method_labor_instructs" => "Методические указания к лабораторным занятиям",
+        	"method_project_instructs" => "Методические указания к курсовому проектированию"
         );
     }
 
