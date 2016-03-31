@@ -20,14 +20,9 @@
                 	<td>{counter}</td>
                 	<td>{$res["hl"]}</td>
                 	<td>
-                		<a href="http://{$host}/{$res['path']}" ">
+                		<a href="{$res['filepath']}" ">
 	                        {$res['filename']}
 	                    </a>
-	                    {if (CUtils::getFileSize("{$res['filepath']}")) !=0 }
-		                    <font size=-2 style="font-family:Arial;"> размер файла: <b>{CUtils::getFileSize("{$res['filepath']}")}</b> МБ</font>
-	                    {else}
-	                    	<span><font size=-2 color="#FF0000" style="font-family:Arial;"> файл не найден.</font></span>
-	                    {/if}
                 		<img src="{CUtils::getFileMimeIcon($res['filename'])}">
                 	</td>
                 </tr>

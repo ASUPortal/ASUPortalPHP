@@ -215,46 +215,117 @@ class CSearchController extends CBaseController{
         }
     }
     public function actionUpdateIndexFiles() {
+    	//устанавливаем соединение с FTP-сервером
+    	require_once(CORE_CWD.CORE_DS."config_ftp.php");
+    	
+    	//получаем все файлы корневого каталога
+    	$filesFtp = ftp_nlist($link, "/");
+    	//получаем все файлы указанного каталога
+    	$filesFtp = ftp_nlist($link, CSettingsManager::getSettingValue("path_for_indexing_files_from_ftp"));
+    	
+    	if (!empty($filesFtp)) {
+    		$messages = array();
+    		$arr = explode(";", CSettingsManager::getSettingValue("formats_files_for_indexing"));
+    		foreach ($filesFtp as $server_file) {
+    			foreach ($arr as $key=>$value) {
+    				if (strpos($server_file, $value) !== false) {
+    					$messages[] = "START index from FTP";
+    					$messages[] = "File: ".$server_file;
+    		
+    					$asciiArray = array("txt", "csv");
+    					$extension = end(explode(".", $server_file));
+    					if (in_array($extension, $asciiArray)) {
+    						$mode = FTP_ASCII;
+    					} else {
+    						$mode = FTP_BINARY;
+    					}
+    		
+    					//попытка скачать $server_file и сохранить в $local_file
+    					$fileName = substr(strrchr($server_file, "/"), 1);
+    					$local_file = CORE_CWD.CORE_DS."tmp".CORE_DS."files_for_indexing".CORE_DS.$fileName;
+    					if (ftp_get($link, $local_file, $server_file, $mode)) {
+    						$messages[] = "Произведена запись в локальный файл ".$local_file;
+    							
+    						$ch = curl_init();
+    						$data = array("myfile"=>"@".$local_file); //полный путь до файла
+    							
+    						curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles(md5($server_file), $fileName,
+    								urlencode("ftp://".CSettingsManager::getSettingValue("ftp_server_user").":".CSettingsManager::getSettingValue("ftp_server_password")."@".CSettingsManager::getSettingValue("ftp_server")."/".$server_file)));
+    						curl_setopt($ch, CURLOPT_POST, 1);
+    						curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    							
+    						$result = curl_exec($ch);
+    						if ($result === FALSE) {
+    							$messages[] = "cURL Error: ".curl_error($ch);
+    							break;
+    						}
+    						$error_no = curl_errno($ch);
+    						curl_close($ch);
+    						if ($error_no == 0) {
+    							$messages[] = "Файл ".$local_file." успешно загружен в индекс Solr";
+    						} else {
+    							$messages[] = "Ошибка загрузки файла ".$local_file." в индекс Solr";
+    						}
+    					} else {
+    						$messages[] = "Не удалось завершить операцию";
+    					}
+    					$messages[] = "END index from FTP";
+    					$messages[] = "";
+    		
+    					//удаляем локальный файл
+    					unlink($local_file);
+    				}
+    			}
+    		}
+    	}
+    	
+    	// закрытие соединения ftp
+    	ftp_close($link);
+    	
+    	//индексация из папки localhost
     	$folder = CSettingsManager::getSettingValue("path_for_indexing_files");
     	$all_files = CUtils::getListFiles($folder);
     	$filelist = array();
+    	$arr = explode(";", CSettingsManager::getSettingValue("formats_files_for_indexing"));
     	foreach ($all_files as $file) {
-    		$arr = explode(";", CSettingsManager::getSettingValue("formats_files_for_indexing"));
     		foreach ($arr as $key=>$value) {
-    			$arrs[] = (strpos($file, $value) !== false);
-    		}
-    		if (implode(" or ", $arrs)) {
-    			$filelist[] = $file;
+    			if (strpos($file, $value) !== false) {
+    				$filelist[] = $file;
+    			}
     		}
     	}
-    	$messages = array();    	 
-    	foreach($filelist as $file) {
-    		$messages[] = "START index";
-    		$messages[] = "File: ".$file;
+    	if (!empty($filelist)) {
+    		foreach($filelist as $file) {
+    			$messages[] = "START index from localhost";
+    			$messages[] = "File: ".$file;
     		
-    		$ch = curl_init();
-    		$data = array("myfile"=>"@".$file); //полный путь до файла
+    			$ch = curl_init();
+    			$data = array("myfile"=>"@".$file); //полный путь до файла
+    			
+    			curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles(md5($file), substr(strrchr($file, CORE_DS), 1), urlencode($file)));
+    			curl_setopt($ch, CURLOPT_POST, 1);
+    			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     		
-    		curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles(md5($file), substr(strrchr($file, "/"), 1), urlencode($file)));
-    		curl_setopt($ch, CURLOPT_POST, 1);
-    		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    		
-    		$result = curl_exec($ch);
-    		if ($result === FALSE) {
-    			$messages[] = "cURL Error: ".curl_error($ch);
-    			break;
+    			$result = curl_exec($ch);
+    			if ($result === FALSE) {
+    				$messages[] = "cURL Error: ".curl_error($ch);
+    				break;
+    			}
+    			$error_no = curl_errno($ch);
+    			curl_close($ch);
+    			if ($error_no == 0) {
+    				$messages[] = "Файл ".$file." успешно загружен в индекс Solr";
+    			} else {
+    				$messages[] = "Ошибка загрузки файла ".$file." в индекс Solr";
+    			}
+    			$messages[] = "END index from localhost";
+    			$messages[] = "";
     		}
-    		$error_no = curl_errno($ch);
-    		curl_close($ch);
-    		if ($error_no == 0) {
-    			$messages[] = "Файл ".$file." успешно загружен";
-    		} else {
-    			$messages[] = "Ошибка загрузки файла ".$file;
-    		}
-    		$messages[] = "END index";
-    		$messages[] = "";
     	}
-    	$messages[] = "Обработано ".count($filelist). " файлов";
+    	$countFilesFtp = count($filesFtp);
+    	$countFilelist = count($filelist);
+    	$countFiles = $countFilesFtp + $countFilelist;
+    	$messages[] = "Обработано ".$countFiles. " файлов";
     	$this->setData("messages", $messages);
     	$this->addActionsMenuItem(array(
     		array(
@@ -289,11 +360,12 @@ class CSearchController extends CBaseController{
     		$hl = $resultObj->getHighlighingByDocument($doc);
     		$res = array();
     		$res["hl"] = implode(", ", $hl);
-    		// убираем из пути к файлу корневую директорию сервера
-    		$res["path"] = str_replace(mb_strtolower($pathRoot), "", mb_strtolower($doc->filepath));
-    		// если в пути к файлу есть папка с порталом, отрезаем её; иначе оставляем полный путь
-    		$res["filepath"] = str_replace(mb_strtolower(CORE_CWD.CORE_DS), "", mb_strtolower($doc->filepath));
-    		$res["files"] = $doc->filepath;
+    		if (strpos($doc->filepath, "ftp://") === false) {
+    			//убираем из пути к файлу корневую директорию сервера
+    			$res["filepath"] = "http://".$host.CORE_DS.str_replace(mb_strtolower($pathRoot), "", mb_strtolower($doc->filepath));
+    		} else {
+    			$res["filepath"] = $doc->filepath;
+    		}
     		$res["filename"] = $doc->filename;
     		$result[] = $res;
     	}
