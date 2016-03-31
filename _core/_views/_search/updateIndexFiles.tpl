@@ -9,7 +9,7 @@
             <thead>
                 <tr>
                 	<th width="16">#</th>
-                    <th>Результат</th>
+                    <th>Результат индексации</th>
                 </tr>
             </thead>
             <tbody>

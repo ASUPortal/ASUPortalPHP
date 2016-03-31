@@ -20,7 +20,7 @@
                 	<td>{counter}</td>
                 	<td>{$res["hl"]}</td>
                 	<td>
-                		<a href="{$res['filepath']}" ">
+                		<a href="{$res['filepath']}">
 	                        {$res['filename']}
 	                    </a>
                 		<img src="{CUtils::getFileMimeIcon($res['filename'])}">
