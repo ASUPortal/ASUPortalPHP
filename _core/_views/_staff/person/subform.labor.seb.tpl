@@ -6,6 +6,7 @@
         <th>Год</th>
         <th>Тип</th>
     </tr>
+    {counter start=0 print=false}
     {foreach $form->person->ordersSAB->getItems() as $order}
         <tr>
             <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить приказ {if !is_null($order->order)}{$order->order->getName()}{/if}?')) { location.href='orderssab.php?action=delete&id={$order->getId()}'; }; return false;"></a></td>

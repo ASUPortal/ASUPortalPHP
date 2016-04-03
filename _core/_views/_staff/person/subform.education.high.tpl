@@ -8,6 +8,7 @@
         <th>Доп. информация</th>
         <th width="32"><i class="icon-camera"></i></th>
     </tr>
+    {counter start=0 print=false}
     {foreach $form->person->diploms->getItems() as $diplom}
         <tr>
             <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить диплом?')) { location.href='diploms.php?action=delete&id={$diplom->getId()}'; }; return false;"></a></td>

@@ -10,14 +10,14 @@
     </tr>
     {foreach $form->person->degrees->getItems() as $degree}
         <tr>
-            <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить звание?')) { location.href='degrees.php?action=delete&id={$degree->getId()}'; }; return false;"></a></td>
-            <td><a href="degrees.php?action=edit&id={$degree->getId()}">{counter}</a></td>
+            <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить звание?')) { location.href='papers.php?action=delete&id={$degree->getId()}'; }; return false;"></a></td>
+            <td><a href="papers.php?action=edit&id={$degree->getId()}">{counter}</a></td>
             <td>
                 {if !is_null($degree->degree)}
                     {$degree->degree->getValue()}
                 {/if}
             </td>
-            <td>{$degree->year}</td>
+            <td>{$degree->god_zach}</td>
             <td>номер {$degree->doc_num}, серия {$degree->doc_series}</td>
             <td>{$degree->comment}</td>
             <td>{CHtml::activeAttachPreview("file_attach", $degree, true)}</td>

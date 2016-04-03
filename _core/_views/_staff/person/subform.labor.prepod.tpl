@@ -14,6 +14,7 @@
                 <th>Приказ</th>
                 <th>Срок действия</th>
             </tr>
+            {counter start=0 print=false}
             {foreach $form->person->getActiveOrdersByType(2, 2)->getItems() as $order}
                 <tr>
                     <td>{counter}</td>
@@ -30,6 +31,7 @@
                 <th>Приказ</th>
                 <th>Срок действия</th>
             </tr>
+            {counter start=0 print=false}
             {foreach $form->person->getActiveOrdersByType(3, 2)->getItems() as $order}
                 <tr>
                     <td>{counter}</td>
@@ -47,6 +49,7 @@
                 <th>Приказ</th>
                 <th>Срок действия</th>
             </tr>
+            {counter start=0 print=false}
             {foreach $form->person->getActiveOrdersByType(2, 3)->getItems() as $order}
                 <tr>
                     <td>{counter}</td>
@@ -63,6 +66,7 @@
                 <th>Приказ</th>
                 <th>Срок действия</th>
             </tr>
+            {counter start=0 print=false}
             {foreach $form->person->getActiveOrdersByType(3, 3)->getItems() as $order}
                 <tr>
                     <td>{counter}</td>
@@ -80,6 +84,7 @@
                 <th>Приказ</th>
                 <th>Срок действия</th>
             </tr>
+            {counter start=0 print=false}
             {foreach $form->person->getActiveOrdersByType(2, 4)->getItems() as $order}
                 <tr>
                     <td>{counter}</td>
@@ -96,6 +101,7 @@
                 <th>Приказ</th>
                 <th>Срок действия</th>
             </tr>
+            {counter start=0 print=false}
             {foreach $form->person->getActiveOrdersByType(3, 4)->getItems() as $order}
                 <tr>
                     <td>{counter}</td>

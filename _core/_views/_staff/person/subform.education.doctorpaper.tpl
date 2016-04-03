@@ -8,6 +8,7 @@
         <th>Доп. информация</th>
         <th width="32"><i class="icon-camera"></i></th>
     </tr>
+    {counter start=0 print=false}
     {foreach $form->person->doctorpapers->getItems() as $paper}
         <tr>
             <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить курсы?')) { location.href='papers.php?action=delete&id={$paper->getId()}'; }; return false;"></a></td>
