@@ -50,7 +50,14 @@
     </div>
 </div>
 
-<h3>9. Материальное обеспечение</h3>
+<h3>9. Материально-техническое обеспечение</h3>
+<div class="control-group">
+    {CHtml::activeLabel("material_technical_supply", $plan)}
+    <div class="controls">
+        {CHtml::activeTextBox("material_technical_supply", $plan, "material_technical_supply")}
+        {CHtml::error("material_technical_supply", $plan)}
+    </div>
+</div>
 
 {CHtml::activeComponent("workplansupplies.php?&plan_id={$plan->getId()}", $plan)}
 
