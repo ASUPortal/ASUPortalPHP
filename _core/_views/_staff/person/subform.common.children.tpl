@@ -6,6 +6,7 @@
         <th>Дата рождения</th>
         <th>Полных лет</th>
     </tr>
+    {counter start=0 print=false}
     {foreach $form->person->children->getItems() as $child}
         <tr>
             <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить ребенка?')) { location.href='children.php?action=delete&id={$child->getId()}'; }; return false;"></a></td>

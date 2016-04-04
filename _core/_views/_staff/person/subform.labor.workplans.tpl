@@ -6,6 +6,7 @@
         <th>Дисциплина</th>
         <th>Форма обучения</th>
     </tr>
+    {counter start=0 print=false}
     {foreach $form->person->workplans->getItems() as $workplan}
         <tr>
             <td>{counter}</td>

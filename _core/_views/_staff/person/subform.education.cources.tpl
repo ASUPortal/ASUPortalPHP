@@ -9,6 +9,7 @@
         <th>Доп. информация</th>
         <th width="32"><i class="icon-camera"></i></th>
     </tr>
+    {counter start=0 print=false}
     {foreach $form->person->cources->getItems() as $course}
         <tr>
             <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить курсы?')) { location.href='courses.php?action=delete&id={$course->getId()}'; }; return false;"></a></td>

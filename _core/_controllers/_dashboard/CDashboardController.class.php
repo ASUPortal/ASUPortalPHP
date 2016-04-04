@@ -58,19 +58,19 @@ class CDashboardController extends CBaseController {
                     $child = new CDashboardItem();
                     $child->id = "inbox";
                     $child->title = "Входящие (".CSession::getCurrentUser()->getUnreadMessages()->getCount().")";
-                    $child->link = "mail.php?folder=in";
+                    $child->link = "_modules/_mail";
                     $item->addChild($child);
                 } else {
                     $child = new CDashboardItem();
                     $child->id = "inbox";
                     $child->title = "Нет непрочитанных сообщений";
-                    $child->link = "mail.php?folder=in";
+                    $child->link = "_modules/_mail";
                     $item->addChild($child);
                 }
                 $child = new CDashboardItem();
                 $child->id = "new";
                 $child->title = "Написать сообщение";
-                $child->link = "mail.php?compose=1";
+                $child->link = "_modules/_mail";
                 $item->addChild($child);
                 $items->add("_".$items->getCount(), $item);
             }

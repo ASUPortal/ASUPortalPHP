@@ -26,6 +26,10 @@
  * @property string adapt_for_ovz
  * @property string director_of_library
  * @property string chief_umr
+ * @property string method_practic_instructs
+ * @property string method_labor_instructs
+ * @property string method_project_instructs
+ * @property string material_technical_supply
  *
  * @property CTerm discipline
  * @property CCorriculumDiscipline corriculumDiscipline
@@ -341,7 +345,8 @@ class CWorkPlan extends CActiveModel {
         	"person.fio" => "Авторы",
         	"method_practic_instructs" => "Методические указания к практическим занятиям",
         	"method_labor_instructs" => "Методические указания к лабораторным занятиям",
-        	"method_project_instructs" => "Методические указания к курсовому проектированию"
+        	"method_project_instructs" => "Методические указания к курсовому проектированию",
+        	"material_technical_supply" => "Материально-техническое обеспечение"
         );
     }
 

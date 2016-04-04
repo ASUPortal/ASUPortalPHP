@@ -12,7 +12,7 @@ class CPersonDegree extends CPersonPaper {
             "degree" => array(
                 "relationPower" => RELATION_HAS_ONE,
                 "storageProperty" => "_degree",
-                "storageField" => "degree_id",
+                "storageField" => "study_form_id",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTitle"
             ),
