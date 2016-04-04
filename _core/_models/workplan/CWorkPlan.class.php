@@ -420,7 +420,7 @@ class CWorkPlan extends CActiveModel {
             foreach ($category->sections->getItems() as $section) {
                 foreach ($section->loads->getItems() as $load) {
                     if ($load->loadType->getAlias() == "labwork") {
-                        if ($load->topics->getCount() > 0) {
+                        if ($load->topicsDisplay->getCount() > 0) {
                             $loads->add($load->getId(), $load);
                         }
                     }
@@ -433,7 +433,7 @@ class CWorkPlan extends CActiveModel {
             if ($labs->hasElement($term_id)) {
                 $termData = $labs->getItem($term_id);
             }
-            foreach ($load->topics->getItems() as $topic) {
+            foreach ($load->topicsDisplay->getItems() as $topic) {
                 $termData->add($topic->getId(), $topic);
             }
             $labs->add($term_id, $termData);
@@ -458,7 +458,7 @@ class CWorkPlan extends CActiveModel {
     		foreach ($category->sections->getItems() as $section) {
     			foreach ($section->loads->getItems() as $load) {
     				if ($load->loadType->getAlias() == "lecture") {
-    					foreach ($load->topics as $topic) {
+    					foreach ($load->topicsDisplay as $topic) {
     						$lectures->add($topic->getId(), $topic);
     					}
     
@@ -486,7 +486,7 @@ class CWorkPlan extends CActiveModel {
         foreach ($this->categories->getItems() as $category) {
             foreach ($category->sections->getItems() as $section) {
                 foreach ($section->loads->getItems() as $load) {
-                    foreach ($load->technologies->getItems() as $technology) {
+                    foreach ($load->technologiesDisplay->getItems() as $technology) {
                         $technologies->add($technology->getId(), $technology);
                     }
                 }

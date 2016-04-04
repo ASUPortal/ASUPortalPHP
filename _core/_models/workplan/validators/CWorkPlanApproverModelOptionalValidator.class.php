@@ -22,6 +22,27 @@ class CWorkPlanApproverModelOptionalValidator extends IModelValidatorOptional {
 		// тут валидация, она возвращает массив ошибок
 		$errors = array();
 		$discipline = CCorriculumsManager::getDiscipline($this->model->corriculum_discipline_id);
+		$termIds = array();
+		foreach ($this->model->terms->getItems() as $term) {
+			$termIds[] = $term->getId();
+		}
+		$query = new CQuery();
+		$query->select("sum(if(l.term_id in (".join(", ", $termIds)."), l.value, 0)) as t_sum")
+			->from(TABLE_WORK_PLAN_CONTENT_LOADS." as l")
+			->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
+			->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
+			->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
+			->condition("category.plan_id = ".$this->model->getId()." and l._deleted = 0");
+		$objects = $query->execute();
+		$result = 0;
+		foreach ($objects->getItems() as $key=>$value) {
+			$result += $value["t_sum"];
+		}
+		$totalHours = $result;
+		$totalCredits = round($result/36, 2);
+		if(intval($totalCredits) != $totalCredits) {
+			$errors[] = "<b>Число зачётных единиц дисциплины (".$totalCredits.") должно быть целым (cумма часов: ".$totalHours.")</b>";
+		}
 		foreach ($this->model->terms as $term) {
 			foreach ($discipline->sections->getItems() as $sect) {
 				if ($term->number == $sect->id) {

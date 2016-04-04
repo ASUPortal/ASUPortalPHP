@@ -38,7 +38,7 @@ class CWorkPlanTermSectionsSecondPractice extends CAbstractPrintClassField {
                 ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
                 ->leftJoin(TABLE_WORK_PLAN_SELFEDUCATION." as selfedu", "selfedu.load_id = l.id")
                 ->group("l.section_id")
-                ->condition("l.term_id = ".$term->getId());
+                ->condition("l.term_id = ".$term->getId()." and l._deleted = 0");
             $items = $query->execute();
             if ($items->getCount() > 0) {
                 $termSectionsData->add($term->getId(), $items);
