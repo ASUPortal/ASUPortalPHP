@@ -108,6 +108,9 @@
             "cache" => array(
                 "class" => "CCacheMemcache"
             ),
+        	"solr" => array(
+        		"class" => "CIndexLocalHost"
+        	),
             "beans" => array(
                 "class" => "CBeanManager",
                 "cacheDir" => CORE_CWD.CORE_DS.'tmp'.CORE_DS.'beans'.CORE_DS
