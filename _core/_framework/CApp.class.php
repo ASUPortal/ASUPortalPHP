@@ -7,12 +7,14 @@
  * To change this template use File | Settings | File Templates.
  *
  * @property CCache cache
+ * @property CAbstractSearchSolr solr
  * @property CBeanManager beans
  */
 class CApp extends CComponent{
     private static $_inst = null;
     private $_config = null;
     private $_cache = null;
+    private $_solr = null;
     private static $_log = array();
     private $_dbLogConnection = null;
 
