@@ -80,30 +80,40 @@ class CWorkPlanCompetentionsInputs extends CAbstractPrintClassField {
     		$items[] = $key;
     	}
     	$result = array();
-    	foreach ($items as $value) {
-    		$discipl = CCorriculumsManager::getDiscipline($value);
-    		foreach ($discipl->competentions->getItems() as $comp) {
-    			$dataRow = array();
-    			$dataRow[0] = count($result) + 1;
-    			if (!is_null($comp->competention)) {
-    				$str = $comp->competention->getValue();
-    				//удаляем текст в скобках - код компетенции
-    				$text = preg_replace("|\(.*?\)|is", "", $str);
-    				//удаляем последний символ пробела из строки
-    				$rest = substr($text, 0, -1);
-    				$dataRow[1] = $rest;
-    				//берем код компетенции - текст из скобок
-    				preg_match('/\((.+)\)/', $str, $m);
-    				$dataRow[2] = $m[1];
+    	if (!empty($items)) {
+    		foreach ($items as $value) {
+    			$discipl = CCorriculumsManager::getDiscipline($value);
+    			foreach ($discipl->competentions->getItems() as $comp) {
+    				$dataRow = array();
+    				$dataRow[0] = count($result) + 1;
+    				if (!is_null($comp->competention)) {
+    					$str = $comp->competention->getValue();
+    					//удаляем текст в скобках - код компетенции
+    					$text = preg_replace("|\(.*?\)|is", "", $str);
+    					//удаляем последний символ пробела из строки
+    					$rest = substr($text, 0, -1);
+    					$dataRow[1] = $rest;
+    					//берем код компетенции - текст из скобок
+    					preg_match('/\((.+)\)/', $str, $m);
+    					$dataRow[2] = $m[1];
+    				}
+    				if (!is_null($comp->level)) {
+    					$dataRow[3] = $comp->level->getValue();
+    				}
+    				if (!is_null($comp->discipline)) {
+    					$dataRow[4] = $comp->discipline->discipline->getValue();
+    				}
+    				$result[] = $dataRow;
     			}
-    			if (!is_null($comp->level)) {
-    				$dataRow[3] = $comp->level->getValue();
-    			}
-    			if (!is_null($comp->discipline)) {
-    				$dataRow[4] = $comp->discipline->discipline->getValue();
-    			}
-    			$result[] = $dataRow;
     		}
+    	} else {
+    		$dataRow = array();
+    		$dataRow[0] = "–";
+    		$dataRow[1] = "–";
+    		$dataRow[2] = "–";
+    		$dataRow[3] = "–";
+    		$dataRow[4] = "нет";
+    		$result[] = $dataRow;
     	}
     	return $result;
     }

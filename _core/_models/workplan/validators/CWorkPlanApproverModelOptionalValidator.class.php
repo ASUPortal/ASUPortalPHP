@@ -22,12 +22,18 @@ class CWorkPlanApproverModelOptionalValidator extends IModelValidatorOptional {
 		// тут валидация, она возвращает массив ошибок
 		$errors = array();
 		$discipline = CCorriculumsManager::getDiscipline($this->model->corriculum_discipline_id);
+		$terms = array();
+		$terms[] = "term.name";
 		$termIds = array();
 		foreach ($this->model->terms->getItems() as $term) {
 			$termIds[] = $term->getId();
+			$terms[] = "sum(if(l.term_id = ".$term->getId().", l.value, 0)) as t_".$term->getId();
+		}
+		if (count($termIds) > 0) {
+			$terms[] = "sum(if(l.term_id in (".join(", ", $termIds)."), l.value, 0)) as t_sum";
 		}
 		$query = new CQuery();
-		$query->select("sum(if(l.term_id in (".join(", ", $termIds)."), l.value, 0)) as t_sum")
+		$query->select(join(", ", $terms))
 			->from(TABLE_WORK_PLAN_CONTENT_LOADS." as l")
 			->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
 			->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
@@ -37,6 +43,16 @@ class CWorkPlanApproverModelOptionalValidator extends IModelValidatorOptional {
 		$result = 0;
 		foreach ($objects->getItems() as $key=>$value) {
 			$result += $value["t_sum"];
+		}
+		if (!is_null($this->model->finalControls)) {
+			foreach ($this->model->finalControls->getItems() as $control) {
+				$item = $control->controlType;
+			}
+		}
+		if ($item == "Зачет") {
+			$result += 9;
+		} else {
+			$result += 36;
 		}
 		$totalHours = $result;
 		$totalCredits = round($result/36, 2);
@@ -113,7 +129,7 @@ class CWorkPlanApproverModelOptionalValidator extends IModelValidatorOptional {
 						}
 					}
 					$auditorZan = $sumLecture+$sumPractice+$sumLabWork;
-					$teorObuch = $sumAuditor+$sumSelfWork;
+					$teorObuch = $auditorZan+$sumSelfWork;
 					foreach ($sect->labors->getItems() as $labor) {
 						if ($term->number == $sect->id and $labor->type->getAlias() == "auditor") {
 							if ($labor->value != $auditorZan) {

@@ -40,6 +40,16 @@ class CWorkPlanTotalHours extends CAbstractPrintClassField {
         foreach ($objects->getItems() as $key=>$value) {
         	$result += $value["t_sum"];
         }
+        if (!is_null($contextObject->finalControls)) {
+        	foreach ($contextObject->finalControls->getItems() as $control) {
+        		$item = $control->controlType;
+        	}
+        }
+        if ($item == "Зачет") {
+        	$result += 9;
+        } else {
+        	$result += 36;
+        }
         return $result;
     }
 }

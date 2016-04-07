@@ -33,7 +33,11 @@ class CWorkPlanCompetentionsProceduresEvaluation extends CAbstractPrintClassFiel
 	        			$str = $item->competention->getValue();
 	        			//берем код компетенции - текст из скобок
 	        			preg_match('/\((.+)\)/', $str, $m);
-	        			$dataRow[0] = $m[1].", ".$item->level->getValue();;
+	        			if (!is_null($item->level)) {
+	        				$dataRow[0] = $m[1].", ".$item->level->getValue();
+	        			} else {
+	        				$dataRow[0] = $m[1];
+	        			}
 	        		}
 	        		if (!is_null($item->knowledges)) {
 	        			$dataRow[1] = "Знать: ".implode("; ", $item->knowledges->getItems())."; ";
