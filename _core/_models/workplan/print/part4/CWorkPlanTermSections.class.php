@@ -53,16 +53,35 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         	}
         	foreach ($termSectionsData->getItems() as $termId=>$termData) {
         		foreach ($termData as $row) {
-        			$query = new CQuery();
-        			$query->select("tech.technology_id")
+        			$queryTech = new CQuery();
+        			$queryTech->select("tech.technology_id")
 	        			->from(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section")
 	        			->innerJoin(TABLE_WORK_PLAN_CONTENT_LOADS." as l", "l.section_id = section.id")
 	        			->innerJoin(TABLE_WORK_PLAN_CONTENT_TECHNOLOGIES." as tech", "tech.load_id = l.id")
 	        			->condition("l.section_id = ".$row["id"]);
         			$technologies = array();
-        			foreach ($query->execute()->getItems() as $items) {
+        			foreach ($queryTech->execute()->getItems() as $items) {
         				foreach ($items as $tech) {
         					$technologies[] = CTaxonomyManager::getTerm($tech)->getValue();
+        				}
+        			}
+        			$queryLiter = new CQuery();
+        			$queryLiter->select("lit.literature_id")
+	        			->from(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section")
+	        			->innerJoin(TABLE_WORK_PLAN_RECOMMENDED_LITERATURE." as lit", "lit.section_id = section.id")
+	        			->condition("lit.section_id = ".$row["id"]);
+        			$literature = array();
+        			foreach ($queryLiter->execute()->getItems() as $items) {
+        				foreach ($items as $lit) {
+        					if (CBaseManager::getWorkPlanLiterature($lit)->type == "1") {
+        						$literature[] = "Разд. 6.1 [".CBaseManager::getWorkPlanLiterature($lit)->ordering."]";
+        					}
+        					if (CBaseManager::getWorkPlanLiterature($lit)->type == "2") {
+        						$literature[] = "Разд. 6.2 [".CBaseManager::getWorkPlanLiterature($lit)->ordering."]";
+        					}
+        					if (CBaseManager::getWorkPlanLiterature($lit)->type == "3") {
+        						$literature[] = "Разд. 6.3 [".CBaseManager::getWorkPlanLiterature($lit)->ordering."]";
+        					}
         				}
         			}
         			$dataRow = array();
@@ -74,7 +93,7 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         			$dataRow[5] = $row["ksr"];
         			$dataRow[6] = $row["selfedu"];
         			$dataRow[7] = $row["total"];
-        			$dataRow[8] = "";
+        			$dataRow[8] = implode(", ", $literature);
         			$dataRow[9] = implode(", ", $technologies);
         			$result[] = $dataRow;
         		}

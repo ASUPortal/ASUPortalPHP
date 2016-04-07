@@ -13,11 +13,12 @@
  * @property CWorkPlanContentCategory category
  * @property CArrayList loads
  * @property CArrayList controlTypes
+ * @property CArrayList recommendedLiterature
  */
 class CWorkPlanContentSection extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_CONTENT_SECTIONS;
-    protected $_lectures;
     protected $_controls;
+    protected $_recommendedLiterature;
 
     protected function relations() {
         return array(
@@ -64,7 +65,16 @@ class CWorkPlanContentSection extends CActiveModel{
         		"storageCondition" => "section_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
         		"targetClass" => "CWorkPlanFundMarkType",
                 "managerOrder" => "`ordering` asc"
-        	)
+        	),
+            "recommendedLiterature" => array(
+            	"relationPower" => RELATION_MANY_TO_MANY,
+            	"storageProperty" => "_recommendedLiterature",
+            	"joinTable" => TABLE_WORK_PLAN_RECOMMENDED_LITERATURE,
+            	"leftCondition" => "section_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+            	"rightKey" => "literature_id",
+            	"managerClass" => "CBaseManager",
+            	"managerGetObject" => "getWorkPlanLiterature"
+            )
         );
     }
 
@@ -92,7 +102,8 @@ class CWorkPlanContentSection extends CActiveModel{
             "sectionIndex" => "Номер раздела",
             "category_id" => "Категория",
             "controls" => "Формы текущего контроля",
-            "content" => "Содержание раздела"
+            "content" => "Содержание раздела",
+            "recommendedLiterature" => "Литература, рекомендуемая студентам"
         );
     }
 

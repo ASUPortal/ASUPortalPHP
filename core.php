@@ -331,7 +331,6 @@
     define("TABLE_WORK_PLAN_FUND_MARK_TYPES_CONTROLS", "pl_corriculum_workplan_fund_marktypes_control");
     define("TABLE_WORK_PLAN_BRS", "pl_corriculum_workplan_brs");
     define("TABLE_WORK_PLAN_LITERATURE", "pl_corriculum_workplan_literature");
-    define("TABLE_WORK_PLAN_BOOKS", "pl_corriculum_workplan_books");
     define("TABLE_WORK_PLAN_SOFTWARE", "pl_corriculum_workplan_software");
     define("TABLE_WORK_PLAN_AUTHORS", "pl_corriculum_workplan_authors");
     define("TABLE_WORK_PLAN_CONTENT_CATEGORIES", "pl_corriculum_workplan_content_categories");
@@ -346,6 +345,7 @@
     define("TABLE_WORK_PLAN_CRITERIA_OF_EVALUATION", "pl_corriculum_workplan_criteria_of_evaluation");
     define("TABLE_WORK_PLAN_EVALUATION_MATERIALS", "pl_corriculum_workplan_evaluation_materials");
     define("TABLE_WORK_PLAN_MARKS_STUDY_ACTIVITY", "pl_corriculum_workplan_marks_study_activity");
+    define("TABLE_WORK_PLAN_RECOMMENDED_LITERATURE", "pl_corriculum_workplan_recommended_literature");
     /**
      * Константы пагинатора
      */
