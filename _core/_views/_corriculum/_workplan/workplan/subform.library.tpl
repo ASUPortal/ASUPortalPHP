@@ -71,7 +71,7 @@
 </div>
 
 <script>
-    jQuery(document).ready(function(){
+    /*jQuery(document).ready(function(){
         jQuery("#method_instructs").redactor({
             imageUpload: '{$web_root}_modules/_redactor/image_upload.php'
         });
@@ -84,5 +84,5 @@
         jQuery("#method_project_instructs").redactor({
             imageUpload: '{$web_root}_modules/_redactor/image_upload.php'
         });
-    });
+    });*/
 </script>

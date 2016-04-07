@@ -44,6 +44,16 @@ class CWorkPlanApproverModelOptionalValidator extends IModelValidatorOptional {
 		foreach ($objects->getItems() as $key=>$value) {
 			$result += $value["t_sum"];
 		}
+		if (!is_null($this->model->finalControls)) {
+			foreach ($this->model->finalControls->getItems() as $control) {
+				$item = $control->controlType;
+			}
+		}
+		if ($item == "Зачет") {
+			$result += 9;
+		} else {
+			$result += 36;
+		}
 		$totalHours = $result;
 		$totalCredits = round($result/36, 2);
 		if(intval($totalCredits) != $totalCredits) {
@@ -119,7 +129,7 @@ class CWorkPlanApproverModelOptionalValidator extends IModelValidatorOptional {
 						}
 					}
 					$auditorZan = $sumLecture+$sumPractice+$sumLabWork;
-					$teorObuch = $sumAuditor+$sumSelfWork;
+					$teorObuch = $auditorZan+$sumSelfWork;
 					foreach ($sect->labors->getItems() as $labor) {
 						if ($term->number == $sect->id and $labor->type->getAlias() == "auditor") {
 							if ($labor->value != $auditorZan) {
