@@ -43,6 +43,14 @@
             {CHtml::error("controls", $object)}
         </div>
     </div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("recommendedLiterature", $object)}
+        <div class="controls">
+            {CHtml::activeLookup("recommendedLiterature", $object, "class.CSearchCatalogWorkPlanLiterature", true, ["plan_id" => $object->category->plan_id])}
+            {CHtml::error("recommendedLiterature", $object)}
+        </div>
+    </div>
 
     <div class="control-group">
         <div class="controls">
