@@ -19,7 +19,7 @@ class CWorkPlanGoal extends CActiveModel{
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_tasks",
                 "storageTable" => TABLE_WORK_PLAN_TASKS,
-                "storageCondition" => "goal_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "storageCondition" => "goal_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
                 "targetClass" => "CWorkPlanTask",
                 "managerOrder" => "`ordering` asc"
             ),

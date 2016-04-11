@@ -24,8 +24,8 @@ class CWorkPlanAdditionalSupplyController extends CBaseController{
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_ADDITIONAL_SUPPLY." as t")
-            ->order("t.id asc")
-            ->condition("plan_id=".CRequest::getInt("plan_id"));
+            ->order("t.ordering asc")
+            ->condition("plan_id=".CRequest::getInt("plan_id")." and _deleted=0");
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanAdditionalSupply($ar);
@@ -84,7 +84,8 @@ class CWorkPlanAdditionalSupplyController extends CBaseController{
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanAdditionalSupply(CRequest::getInt("id"));
         $plan = $object->plan;
-        $object->remove();
+        $object->markDeleted(true);
+        $object->save();
         $order = 1;
         foreach ($plan->additionalSupply as $add) {
         	$add->ordering = $order++;

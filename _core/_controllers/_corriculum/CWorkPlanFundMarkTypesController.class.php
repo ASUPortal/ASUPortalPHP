@@ -26,7 +26,7 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_FUND_MARK_TYPES." as t")
             ->order("t.ordering asc")
-            ->condition("section_id=".CRequest::getInt("id")." and plan_id=".$section->category->plan_id);
+            ->condition("section_id=".CRequest::getInt("id")." and plan_id=".$section->category->plan_id." and _deleted=0");
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanFundMarkType($ar);
@@ -58,8 +58,8 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
     	$set->setQuery($query);
     	$query->select("t.*")
 	    	->from(TABLE_WORK_PLAN_FUND_MARK_TYPES." as t")
-	    	->order("t.id asc")
-	    	->condition("plan_id=".CRequest::getInt("plan_id"));
+	    	->order("t.ordering asc")
+	    	->condition("plan_id=".CRequest::getInt("plan_id")." and _deleted=0");
     	$objects = new CArrayList();
     	foreach ($set->getPaginated()->getItems() as $ar) {
     		$object = new CWorkPlanFundMarkType($ar);
@@ -82,10 +82,11 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
     }
     public function actionAdd() {
     	$section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt($section->category->plan_id));
         $object = new CWorkPlanFundMarkType();
         $object->section_id = CRequest::getInt("id");
         $object->plan_id = $section->category->plan_id;
-        $object->ordering = $section->fundMarkTypes->getCount() + 1;
+        $object->ordering = $plan->fundMarkTypes->getCount() + 1;
         $this->setData("object", $object);
         /**
          * Генерация меню
@@ -117,15 +118,31 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
         $this->renderView("_corriculum/_workplan/fundMarkTypes/edit.tpl");
     }
     public function actionDelete() {
-        $object = CBaseManager::getWorkPlanFundMarkType(CRequest::getInt("id"));
-        $section = $object->section;
-        $object->remove();
-        $order = 1;
-        foreach ($section->fundMarkTypes as $fundMarkType) {
-        	$fundMarkType->ordering = $order++;
-        	$fundMarkType->save();
+        if (CRequest::getInt("amp;view") == 1) {
+        	$object = CBaseManager::getWorkPlanFundMarkType(CRequest::getInt("id"));
+        	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("amp;plan_id"));
+        	$object->markDeleted(true);
+        	$object->save();
+        	$order = 1;
+        	foreach ($plan->fundMarkTypes as $fundMarkType) {
+        		$fundMarkType->ordering = $order++;
+        		$fundMarkType->save();
+        	}
+        	$this->redirect("workplanfundmarktypes.php?action=view&plan_id=".$plan->getId());
+        } else {
+        	$object = CBaseManager::getWorkPlanFundMarkType(CRequest::getInt("id"));
+        	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("amp;plan_id"));
+        	$section = $object->section;
+        	$object->markDeleted(true);
+        	$object->save();
+        	$order = 1;
+        	foreach ($plan->fundMarkTypes as $fundMarkType) {
+        		$fundMarkType->ordering = $order++;
+        		$fundMarkType->save();
+        	}
+        	$this->redirect("workplanfundmarktypes.php?action=index&id=".$section->getId());
         }
-        $this->redirect("workplanfundmarktypes.php?action=index&id=".$section->getId());
+        
     }
     public function actionSave() {
         $object = new CWorkPlanFundMarkType();

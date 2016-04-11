@@ -25,7 +25,7 @@ class CWorkPlanControlTypesController extends CBaseController{
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_TYPES_CONTROL." as t")
             ->order("t.ordering asc")
-            ->condition("section_id=".CRequest::getInt("id"));
+            ->condition("section_id=".CRequest::getInt("id")." and _deleted=0");
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanControlTypes($ar);
@@ -89,7 +89,8 @@ class CWorkPlanControlTypesController extends CBaseController{
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanControlTypes(CRequest::getInt("id"));
         $section = $object->section;
-        $object->remove();
+        $object->markDeleted(true);
+        $object->save();
         $order = 1;
         foreach ($section->controlTypes as $controlType) {
         	$controlType->ordering = $order++;
