@@ -38,7 +38,7 @@ class CWorkPlanApproverModelOptionalValidator extends IModelValidatorOptional {
 			->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
 			->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
 			->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
-			->condition("category.plan_id = ".$this->model->getId()." and l._deleted = 0");
+			->condition("category.plan_id = ".$this->model->getId()." and l._deleted = 0 and category._deleted = 0");
 		$objects = $query->execute();
 		$result = 0;
 		foreach ($objects->getItems() as $key=>$value) {

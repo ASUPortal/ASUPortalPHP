@@ -22,8 +22,8 @@ class CWorkPlanTasksController extends CBaseController{
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_TASKS." as t")
-            ->order("t.id asc")
-            ->condition("plan_id=".CRequest::getInt("plan_id"));;
+            ->order("t.ordering asc")
+            ->condition("plan_id=".CRequest::getInt("plan_id")." and _deleted=0");;
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanTask($ar);
@@ -84,7 +84,8 @@ class CWorkPlanTasksController extends CBaseController{
     	$object = CBaseManager::getWorkPlanTask(CRequest::getInt("id"));
     	if (!is_null($object)) {
     		$goal = $object->goal;
-    		$object->remove();
+    		$object->markDeleted(true);
+    		$object->save();
     		$order = 1;
     		foreach ($goal->tasks as $task) {
     			$task->ordering = $order++;
@@ -96,7 +97,8 @@ class CWorkPlanTasksController extends CBaseController{
     	$goal = CBaseManager::getWorkPlanGoal(CRequest::getInt("goal_id"));
     	foreach ($items as $id){
     		$object = CBaseManager::getWorkPlanTask($id);
-    		$object->remove();
+    		$object->markDeleted(true);
+    		$object->save();
     	}
     	$order = 1;
     	foreach ($goal->tasks as $task) {

@@ -34,7 +34,7 @@ class CWorkPlanTermSectionsTotal extends CAbstractPrintClassField {
     	->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
     	->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
     	->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
-    	->condition("category.plan_id = ".$contextObject->getId()." and l._deleted = 0")
+    	->condition("category.plan_id = ".$contextObject->getId()." and l._deleted = 0 and category._deleted = 0")
     	->group("l.load_type_id")
     	->order("term.name");
     	$objects = $query->execute();

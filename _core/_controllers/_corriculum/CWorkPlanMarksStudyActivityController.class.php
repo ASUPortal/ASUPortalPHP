@@ -25,7 +25,7 @@ public function actionIndex() {
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_MARKS_STUDY_ACTIVITY." as t")
             ->order("t.ordering asc")
-            ->condition("activity_id=".CRequest::getInt("id"));
+            ->condition("activity_id=".CRequest::getInt("id")." and _deleted=0");
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanMarkStudyActivity($ar);
@@ -89,7 +89,8 @@ public function actionIndex() {
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanMarkStudyActivity(CRequest::getInt("id"));
         $activity = $object->activity;
-        $object->remove();
+        $object->markDeleted(true);
+        $object->save();
         $order = 1;
         foreach ($activity->marks as $mark) {
         	$mark->ordering = $order++;

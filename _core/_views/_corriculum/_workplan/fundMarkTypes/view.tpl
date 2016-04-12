@@ -7,6 +7,7 @@
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
                 <tr>
+                	<th width="16">&nbsp;</th>
                     <th width="16">#</th>
                     <th>{CHtml::tableOrder("section_id", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("competentions", $objects->getFirstItem())}</th>
@@ -18,7 +19,8 @@
             {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $objects->getItems() as $object}
                 <tr>
-                    <td>{counter}</td>
+                	<td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить контролируемый раздел')) { location.href='workplanfundmarktypes.php?action=delete&id={$object->getId()}&plan_id={$object->plan_id}&view=1'; }; return false;"></a></td>
+                    <td>{$object->ordering}</td>
                     <td>{$object->section->name}</td>
                     <td>
                         {foreach $object->competentions as $competention}

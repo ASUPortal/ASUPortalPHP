@@ -76,7 +76,7 @@ class CWorkPlan extends CActiveModel {
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_goals",
                 "storageTable" => TABLE_WORK_PLAN_GOALS,
-                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
                 "targetClass" => "CWorkPlanGoal",
                 "managerOrder" => "`ordering` asc"
             ),
@@ -84,7 +84,7 @@ class CWorkPlan extends CActiveModel {
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_tasks",
                 "storageTable" => TABLE_WORK_PLAN_TASKS,
-                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
                 "targetClass" => "CWorkPlanTask",
                 "managerOrder" => "`ordering` asc"
             ),
@@ -120,14 +120,14 @@ class CWorkPlan extends CActiveModel {
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_categories",
                 "storageTable" => TABLE_WORK_PLAN_CONTENT_CATEGORIES,
-                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
                 "targetClass" => "CWorkPlanContentCategory"
             ),
             "terms" => array(
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_terms",
                 "storageTable" => TABLE_WORK_PLAN_TERMS,
-                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
                 "targetClass" => "CWorkPlanTerm",
                 "managerOrder" => "`ordering` asc"
             ),
@@ -191,57 +191,57 @@ class CWorkPlan extends CActiveModel {
         	"fundMarkTypes" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_FUND_MARK_TYPES,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
         		"targetClass" => "CWorkPlanFundMarkType",
                 "managerOrder" => "`ordering` asc"
         	),
         	"BRS" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_BRS,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
         		"targetClass" => "CWorkPlanBRS"
         	),
         	"markTypes" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_MARK_TYPES,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
         		"targetClass" => "CWorkPlanMarkType",
                 "managerOrder" => "`ordering` asc"
         	),
         	"literature" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_LITERATURE,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
         		"targetClass" => "CWorkPlanLiterature"
         	),
         	"baseLiterature" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_LITERATURE,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=1",
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=1 and _deleted=0",
         		"targetClass" => "CWorkPlanLiterature"
         	),
         	"additionalLiterature" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_LITERATURE,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=2",
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=2 and _deleted=0",
         		"targetClass" => "CWorkPlanLiterature"
         	),
         	"internetResources" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_LITERATURE,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=3",
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=3 and _deleted=0",
         		"targetClass" => "CWorkPlanLiterature"
         	),
         	"software" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_SOFTWARE,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
         		"targetClass" => "CWorkPlanSoftware"
         	),
         	"additionalSupply" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_ADDITIONAL_SUPPLY,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
         		"targetClass" => "CWorkPlanAdditionalSupply"
         	),
         	"rgrThemes" => array(
@@ -253,7 +253,7 @@ class CWorkPlan extends CActiveModel {
         	"finalControls" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_FINAL_CONTROL,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
         		"targetClass" => "CWorkPlanFinalControl",
                 "managerOrder" => "`ordering` asc"
         	),
@@ -278,31 +278,31 @@ class CWorkPlan extends CActiveModel {
         	"materialsOfEvaluation" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_EVALUATION_MATERIALS,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
         		"targetClass" => "CWorkPlanEvaluationMaterial"
         	),
         	"criteria" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_CRITERIA_OF_EVALUATION,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
         		"targetClass" => "CWorkPlanCriteriaOfEvaluation"
         	),
         	"criteriaExamOfEvaluation" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_CRITERIA_OF_EVALUATION,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=1",
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=1 and _deleted=0",
         		"targetClass" => "CWorkPlanCriteriaOfEvaluation"
         	),
         	"criteriaCreditOfEvaluation" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_CRITERIA_OF_EVALUATION,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=2",
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=2 and _deleted=0",
         		"targetClass" => "CWorkPlanCriteriaOfEvaluation"
         	),
         	"criteriaMaterialsOfEvaluation" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_CRITERIA_OF_EVALUATION,
-        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=3",
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=3 and _deleted=0",
         		"targetClass" => "CWorkPlanCriteriaOfEvaluation"
         	)
         );

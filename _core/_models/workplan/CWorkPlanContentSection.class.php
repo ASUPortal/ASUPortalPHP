@@ -55,14 +55,14 @@ class CWorkPlanContentSection extends CActiveModel{
         	"controlTypes" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_TYPES_CONTROL,
-        		"storageCondition" => "section_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"storageCondition" => "section_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
         		"targetClass" => "CWorkPlanControlTypes",
                 "managerOrder" => "`ordering` asc"
         	),
         	"fundMarkTypes" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_WORK_PLAN_FUND_MARK_TYPES,
-        		"storageCondition" => "section_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"storageCondition" => "section_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
         		"targetClass" => "CWorkPlanFundMarkType",
                 "managerOrder" => "`ordering` asc"
         	),

@@ -97,7 +97,7 @@ class CWorkPlanContentController extends CBaseController{
             ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
             ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
             ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
-            ->condition("category.plan_id = ".$plan->getId()." and l._deleted = 0")
+            ->condition("category.plan_id = ".$plan->getId()." and l._deleted = 0 and category._deleted = 0")
             ->group("l.load_type_id")
             ->order("l.ordering asc");
         $objects = $query->execute();
@@ -123,9 +123,10 @@ class CWorkPlanContentController extends CBaseController{
                 ->from(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section")
                 ->innerJoin(TABLE_WORK_PLAN_CONTENT_LOADS." as l", "l.section_id = section.id")
                 ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
+                ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
                 ->leftJoin(TABLE_WORK_PLAN_SELFEDUCATION." as selfedu", "selfedu.load_id = l.id")
                 ->group("l.section_id")
-                ->condition("l.term_id = ".$term->getId()." and l._deleted = 0")
+                ->condition("l.term_id = ".$term->getId()." and l._deleted = 0 and category._deleted = 0")
                 ->order("section.sectionIndex");
             $items = $query->execute();
             if ($items->getCount() > 0) {
@@ -144,7 +145,7 @@ class CWorkPlanContentController extends CBaseController{
 	        ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.control_id")
 	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
 	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
-	        ->condition("category.plan_id = ".$plan->getId())
+	        ->condition("category.plan_id = ".$plan->getId()." and category._deleted = 0")
 	        ->order("section.sectionIndex asc");
         $controlTypes = new CArrayList();
         foreach ($set->getItems() as $ar) {
@@ -164,7 +165,7 @@ class CWorkPlanContentController extends CBaseController{
 	        ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = control.type_study_activity_id")
 	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "control.section_id = section.id")
 	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
-	        ->condition("category.plan_id = ".$plan->getId())
+	        ->condition("category.plan_id = ".$plan->getId()." and category._deleted = 0")
 	        ->order("activity.ordering asc");
         $marks = new CArrayList();
         foreach ($setMarks->getItems() as $ar) {

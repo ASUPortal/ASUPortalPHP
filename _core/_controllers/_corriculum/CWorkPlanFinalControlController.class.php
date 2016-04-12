@@ -24,7 +24,7 @@ class CWorkPlanFinalControlController extends CBaseController{
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_FINAL_CONTROL." as t")
-            ->condition("plan_id=".CRequest::getInt("plan_id"))
+            ->condition("plan_id=".CRequest::getInt("plan_id")." and _deleted=0")
             ->order("t.ordering asc");
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
@@ -89,7 +89,8 @@ class CWorkPlanFinalControlController extends CBaseController{
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanFinalControl(CRequest::getInt("id"));
         $plan = $object->plan;
-        $object->remove();
+        $object->markDeleted(true);
+        $object->save();
         $order = 1;
         foreach ($plan->finalControls as $finalControl) {
         	$finalControl->ordering = $order++;

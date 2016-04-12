@@ -25,7 +25,7 @@ class CWorkPlanTermsController extends CBaseController{
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_TERMS." as t")
             ->order("t.ordering asc")
-            ->condition("plan_id=".CRequest::getInt("plan_id"));
+            ->condition("plan_id=".CRequest::getInt("plan_id")." and _deleted=0");
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanTerm($ar);
@@ -92,7 +92,8 @@ class CWorkPlanTermsController extends CBaseController{
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanTerm(CRequest::getInt("id"));
         $plan = $object->plan;
-        $object->remove();
+        $object->markDeleted(true);
+        $object->save();
         $order = 1;
         foreach ($plan->terms as $term) {
         	$term->ordering = $order++;

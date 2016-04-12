@@ -24,8 +24,8 @@ class CWorkPlanLiteratureController extends CBaseController{
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_LITERATURE." as t")
-            ->order("t.id asc")
-            ->condition("plan_id=".CRequest::getInt("plan_id")." AND type=".CRequest::getInt("type"));
+            ->order("t.ordering asc")
+            ->condition("plan_id=".CRequest::getInt("plan_id")." AND type=".CRequest::getInt("type")." and _deleted=0");
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanLiterature($ar);
@@ -92,7 +92,8 @@ class CWorkPlanLiteratureController extends CBaseController{
         $object = CBaseManager::getWorkPlanLiterature(CRequest::getInt("id"));
         $plan = $object->plan;
         $type = $object->type;
-        $object->remove();
+        $object->markDeleted(true);
+        $object->save();
         $order = 1;
         if ($object->type == 1) {
         	foreach ($plan->baseLiterature as $baseLiterature) {

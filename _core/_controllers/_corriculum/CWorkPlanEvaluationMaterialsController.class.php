@@ -21,8 +21,8 @@ protected $_isComponent = true;
         $set->setQuery($query);
         $query->select("t.*")
             ->from(TABLE_WORK_PLAN_EVALUATION_MATERIALS." as t")
-            ->order("t.id asc")
-            ->condition("plan_id=".CRequest::getInt("plan_id"));
+            ->order("t.ordering asc")
+            ->condition("plan_id=".CRequest::getInt("plan_id")." and _deleted=0");
         $objects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $object = new CWorkPlanEvaluationMaterial($ar);
@@ -81,7 +81,8 @@ protected $_isComponent = true;
     public function actionDelete() {
         $object = CBaseManager::getWorkPlanEvaluationMaterial(CRequest::getInt("id"));
         $plan = $object->plan;
-        $object->remove();
+        $object->markDeleted(true);
+        $object->save();
         $order = 1;
         foreach ($plan->materialsOfEvaluation as $materialsOfEvaluation) {
         	$materialsOfEvaluation->ordering = $order++;
