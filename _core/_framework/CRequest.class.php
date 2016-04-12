@@ -17,14 +17,28 @@ class CRequest {
      * @return int
      */
     public static function getInt($key, $model = null) {
-        if (array_key_exists($key, $_GET)) {
-           return (int) $_GET[$key];
-        } elseif (array_key_exists($key, $_POST)) {
-            return (int) $_POST[$key];
-        } elseif (array_key_exists("amp;".$key, $_GET)) {
-            return (int) $_GET["amp;".$key];
-        } elseif (array_key_exists("amp;".$key, $_POST)) {
-            return (int) $_POST["amp;".$key];
+    	$getArray = array();
+    	foreach ($_GET as $k=>$v) {
+    		if (strpos($k, "amp;") === false) {
+    			$k = $k;
+    		} else {
+    			$k = str_replace("amp;", "", $k);
+    		}
+    		$getArray[$k] = $v;
+    	}
+    	$postArray = array();
+    	foreach ($_POST as $k=>$v) {
+    		if (strpos($k, "amp;") === false) {
+    			$k = $k;
+    		} else {
+    			$k = str_replace("amp;", "", $k);
+    		}
+    		$postArray[$k] = $value;
+    	}
+        if (array_key_exists($key, $getArray)) {
+           return (int) $getArray[$key];
+        } elseif (array_key_exists($key, $postArray)) {
+            return (int) $postArray[$key];
         } else {
             return 0;
         }
