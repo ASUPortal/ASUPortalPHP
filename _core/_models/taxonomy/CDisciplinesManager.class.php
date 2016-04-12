@@ -90,34 +90,47 @@ class CDisciplinesManager{
     
     	if(!empty($html) and count($html->find('#PanelWait')) == 0) {
     		$result = array();
-    
-    		// массив всех элементов
-    		$result1 = array();
-    		$arr1 = array();
-    		if(count($html->find(CSettingsManager::getSettingValue("index_kko_all")))) {
-    			foreach($html->find(CSettingsManager::getSettingValue("index_kko_all")) as $k=>$tr) {
-    				foreach ($tr->find(CSettingsManager::getSettingValue("izdan_names")) as $kk=>$td) {
-    					$arr1[$k][$kk] = $td->plaintext;
+    		
+    		if (CSettingsManager::getSettingValue("index_kko_only_high")) {
+    			// массив элементов с высоким ККО
+    			$arr = array();
+    			if(count($html->find(CSettingsManager::getSettingValue("index_kko_high")))) {
+    				foreach($html->find(CSettingsManager::getSettingValue("index_kko_high")) as $k=>$tr) {
+    					foreach ($tr->find(CSettingsManager::getSettingValue("izdan_names")) as $kk=>$td) {
+    						$arr[$k][$kk] = $td->plaintext;
+    					}
+    					$result[] = $arr[$k][1];
     				}
-    				$result1[] = $arr1[$k][1];
     			}
-    		}
-    
-    		// массив элементов с низким, либо нулевым ККО
-    		$result2 = array();
-    		$arr2 = array();
-    		if(count($html->find(CSettingsManager::getSettingValue("index_kko_extraLow")))) {
-    			foreach($html->find(CSettingsManager::getSettingValue("index_kko_extraLow")) as $k=>$tr) {
-    				foreach ($tr->find(CSettingsManager::getSettingValue("izdan_names")) as $kk=>$td) {
-    					$arr2[$k][$kk] = $td->plaintext;
+    		} else {
+    			// массив всех элементов
+    			$result1 = array();
+    			$arr1 = array();
+    			if(count($html->find(CSettingsManager::getSettingValue("index_kko_all")))) {
+    				foreach($html->find(CSettingsManager::getSettingValue("index_kko_all")) as $k=>$tr) {
+    					foreach ($tr->find(CSettingsManager::getSettingValue("izdan_names")) as $kk=>$td) {
+    						$arr1[$k][$kk] = $td->plaintext;
+    					}
+    					$result1[] = $arr1[$k][1];
     				}
-    				$result2[] = $arr2[$k][1];
     			}
-    		}
-    
-    		// исключаем из первого массива элементы второго
-    		$result = array_unique(array_diff($result1, $result2));
-    
+    			
+    			// массив элементов с низким, либо нулевым ККО
+    			$result2 = array();
+    			$arr2 = array();
+    			if(count($html->find(CSettingsManager::getSettingValue("index_kko_extraLow")))) {
+    				foreach($html->find(CSettingsManager::getSettingValue("index_kko_extraLow")) as $k=>$tr) {
+    					foreach ($tr->find(CSettingsManager::getSettingValue("izdan_names")) as $kk=>$td) {
+    						$arr2[$k][$kk] = $td->plaintext;
+    					}
+    					$result2[] = $arr2[$k][1];
+    				}
+    			}
+    			
+    			// исключаем из первого массива элементы второго
+    			$result = array_unique(array_diff($result1, $result2));
+    		}   
+    		
     		foreach ($result as $literature) {
     			$set = new CRecordSet();
     			$queryLibrary = new CQuery();
