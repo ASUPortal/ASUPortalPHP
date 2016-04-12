@@ -33,7 +33,7 @@ class CRequest {
     		} else {
     			$k = str_replace("amp;", "", $k);
     		}
-    		$postArray[$k] = $value;
+    		$postArray[$k] = $v;
     	}
         if (array_key_exists($key, $getArray)) {
            return (int) $getArray[$key];
