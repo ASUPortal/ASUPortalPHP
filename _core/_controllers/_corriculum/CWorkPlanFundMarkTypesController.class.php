@@ -118,9 +118,9 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
         $this->renderView("_corriculum/_workplan/fundMarkTypes/edit.tpl");
     }
     public function actionDelete() {
-        if (CRequest::getInt("amp;view") == 1) {
+        if (CRequest::getInt("view") == 1) {
         	$object = CBaseManager::getWorkPlanFundMarkType(CRequest::getInt("id"));
-        	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("amp;plan_id"));
+        	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
         	$object->markDeleted(true);
         	$object->save();
         	$order = 1;
@@ -131,7 +131,7 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
         	$this->redirect("workplanfundmarktypes.php?action=view&plan_id=".$plan->getId());
         } else {
         	$object = CBaseManager::getWorkPlanFundMarkType(CRequest::getInt("id"));
-        	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("amp;plan_id"));
+        	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
         	$section = $object->section;
         	$object->markDeleted(true);
         	$object->save();
@@ -142,7 +142,6 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
         	}
         	$this->redirect("workplanfundmarktypes.php?action=index&id=".$section->getId());
         }
-        
     }
     public function actionSave() {
         $object = new CWorkPlanFundMarkType();

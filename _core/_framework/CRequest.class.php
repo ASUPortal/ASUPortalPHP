@@ -21,6 +21,10 @@ class CRequest {
            return (int) $_GET[$key];
         } elseif (array_key_exists($key, $_POST)) {
             return (int) $_POST[$key];
+        } elseif (array_key_exists("amp;".$key, $_GET)) {
+            return (int) $_GET["amp;".$key];
+        } elseif (array_key_exists("amp;".$key, $_POST)) {
+            return (int) $_POST["amp;".$key];
         } else {
             return 0;
         }
