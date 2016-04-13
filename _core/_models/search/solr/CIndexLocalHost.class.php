@@ -1,27 +1,35 @@
 <?php
 //индексация из папки LocalHost
 class CIndexLocalHost extends CAbstractIndexSolr {
+	public function __construct() {
+		//форматы файлов для индексирования
+		$this->suffix = CSettingsManager::getSettingValue("formats_files_for_indexing");
+		//путь к папке с файлами для индексирования
+		$this->folder = CSettingsManager::getSettingValue("path_for_indexing_files");
+		//список файлов в папке и подпапках
+		$this->files = CUtils::getListFiles($this->folder);
+	
+		parent::__construct();
+	}
     public function getListIndexingFiles() {
     	//выводимые сообщения о результатах обработки файлов
     	$messages = array();
-    	$folder = CSettingsManager::getSettingValue("path_for_indexing_files");
-    	$all_files = CUtils::getListFiles($folder);
+    	$folder = $this->folder;
+    	$all_files = $this->files;
     	//массив с файлами
     	$filelist = array();
-    	$arr = explode(";", CSettingsManager::getSettingValue("formats_files_for_indexing"));
+    	$suffixes = explode(";", $this->suffix);
     	foreach ($all_files as $file) {
-    		foreach ($arr as $key=>$value) {
-    			if (strpos($file, $value) !== false) {
-    				$filelist[] = $file;
-    			}
+    		$extension = end(explode(".", $file));
+    		if (in_array($extension, $suffixes)) {
+    			$filelist[] = $file;
     		}
     	}
     	if (!empty($filelist)) {
     		foreach($filelist as $file) {
     			$messages[] = "START index from localhost";
     			$ch = curl_init();
-    			//$file - полный путь до файла
-    			$data = array("myfile"=>"@".$file);
+    			$data = array("myfile"=>"@".$file); //$file - полный путь до файла
     			//информация о пути к файлу
     			$path_parts = pathinfo($file);
     			$fileName = $path_parts["basename"];
@@ -50,23 +58,21 @@ class CIndexLocalHost extends CAbstractIndexSolr {
     }
 
     public function indexingFiles() {
-    	$folder = CSettingsManager::getSettingValue("path_for_indexing_files");
-    	$all_files = CUtils::getListFiles($folder);
+    	$folder = $this->folder;
+    	$all_files = $this->files;
+    	$suffixes = explode(";", $this->suffix);
     	//массив с файлами
     	$filelist = array();
-    	$arr = explode(";", CSettingsManager::getSettingValue("formats_files_for_indexing"));
     	foreach ($all_files as $file) {
-    		foreach ($arr as $key=>$value) {
-    			if (strpos($file, $value) !== false) {
-    				$filelist[] = $file;
-    			}
+    		$extension = end(explode(".", $file));
+    		if (in_array($extension, $suffixes)) {
+    			$filelist[] = $file;
     		}
     	}
     	if (!empty($filelist)) {
     		foreach($filelist as $file) {
     			$ch = curl_init();
-    			//$file - полный путь до файла
-    			$data = array("myfile"=>"@".$file);
+    			$data = array("myfile"=>"@".$file); //$file - полный путь до файла
     			//информация о пути к файлу
     			$path_parts = pathinfo($file);
     			$fileName = $path_parts["basename"];
