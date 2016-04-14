@@ -977,11 +977,10 @@ class CUtils {
      * Список файлов в папке и подпапках
      *
      * @param string $folder
-     * @param null $all_files
+     * @param array $all_files
      * @return array
      */
-    public static function getListFiles($folder, &$all_files = null) {
-    	$all_files = array();
+    public static function getListFiles($folder, &$all_files = array()) {
     	$fp=opendir($folder);
     	while ($cv_file=readdir($fp)) {
     		if (is_file($folder.CORE_DS.$cv_file)) {

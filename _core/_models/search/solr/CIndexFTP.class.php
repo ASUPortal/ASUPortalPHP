@@ -62,8 +62,7 @@ class CIndexFTP extends CAbstractIndexSolr {
     						$messages[] = "Произведена запись в локальный файл ".$local_file;
     						$ch = curl_init();
     						$data = array("myfile"=>"@".$local_file); //$local_file - полный путь до файла
-    						curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles(md5($server_file), $fileName,
-    								urlencode("ftp://".$ftp_user.":".$ftp_password."@".$ftp_server."/".$server_file)));
+    						curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles(md5($server_file), urlencode($fileName), urlencode("ftp://".$server_file)));
     						curl_setopt($ch, CURLOPT_POST, 1);
     						curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     						$result = curl_exec($ch);
@@ -74,7 +73,7 @@ class CIndexFTP extends CAbstractIndexSolr {
     						$error_no = curl_errno($ch);
     						curl_close($ch);
     						if ($error_no == 0) {
-    							$messages[] = "<font color='#00CC00'>Файл ftp://".$ftp_server."/".$server_file." успешно загружен в индекс</font>";
+    							$messages[] = "<font color='#00CC00'>Файл ".$ftp_server."/".$server_file." успешно загружен в индекс</font>";
     						} else {
     							$messages[] = "<font color='#FF0000'>Ошибка загрузки файла ".$local_file." в индекс</font>";
     						}
@@ -134,8 +133,7 @@ class CIndexFTP extends CAbstractIndexSolr {
     						$ch = curl_init();
     						//$local_file - полный путь до файла
     						$data = array("myfile"=>"@".$local_file);
-    						curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles(md5($server_file), $fileName,
-    								urlencode("ftp://".$ftp_user.":".$ftp_password."@".$ftp_server."/".$server_file)));
+    						curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles(md5($server_file), urlencode($fileName), urlencode("ftp://".$server_file)));
     						curl_setopt($ch, CURLOPT_POST, 1);
     						curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     						$result = curl_exec($ch);

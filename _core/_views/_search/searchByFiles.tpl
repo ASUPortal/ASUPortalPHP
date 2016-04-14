@@ -11,6 +11,7 @@
                 	<th width="16">#</th>
                     <th width=50%>Результат поиска</th>
                     <th>Файл</th>
+                    <th>Расположение</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,6 +26,7 @@
 	                    </a>
                 		<img src="{CUtils::getFileMimeIcon($res['filename'])}">
                 	</td>
+                	<td>{$res["location"]}</td>
                 </tr>
             {/foreach}
             </tbody>

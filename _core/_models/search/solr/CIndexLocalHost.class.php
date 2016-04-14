@@ -12,6 +12,7 @@ class CIndexLocalHost extends CAbstractIndexSolr {
 		parent::__construct();
 	}
     public function getListIndexingFiles() {
+    	$pathRoot = $_SERVER["DOCUMENT_ROOT"];
     	//выводимые сообщения о результатах обработки файлов
     	$messages = array();
     	$folder = $this->folder;
@@ -33,7 +34,9 @@ class CIndexLocalHost extends CAbstractIndexSolr {
     			//информация о пути к файлу
     			$path_parts = pathinfo($file);
     			$fileName = $path_parts["basename"];
-    			curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles(md5($file), $fileName, urlencode($file)));
+    			//убираем из пути к файлу корневую директорию сервера
+    			$filePath = str_replace(mb_strtolower($pathRoot), "", mb_strtolower($file));
+    			curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles(md5($file), urlencode($fileName), urlencode($filePath)));
     			curl_setopt($ch, CURLOPT_POST, 1);
     			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     			$result = curl_exec($ch);
@@ -76,7 +79,9 @@ class CIndexLocalHost extends CAbstractIndexSolr {
     			//информация о пути к файлу
     			$path_parts = pathinfo($file);
     			$fileName = $path_parts["basename"];
-    			curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles(md5($file), $fileName, urlencode($file)));
+    			//убираем из пути к файлу корневую директорию сервера
+    			$filePath = str_replace(mb_strtolower($pathRoot), "", mb_strtolower($file));
+    			curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles(md5($file), urlencode($fileName), urlencode($filePath)));
     			curl_setopt($ch, CURLOPT_POST, 1);
     			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     			$result = curl_exec($ch);

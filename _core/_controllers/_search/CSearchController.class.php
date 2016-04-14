@@ -236,7 +236,6 @@ class CSearchController extends CBaseController{
     	$this->renderView("_search/searchFiles.tpl");
     }
     public function actionSearchByFiles() {
-    	$pathRoot = $_SERVER["DOCUMENT_ROOT"];
     	$host = $_SERVER["DB_HOST"];
     	$userQuery = CRequest::getString("stringSearch");
     	$params = array(
@@ -250,10 +249,11 @@ class CSearchController extends CBaseController{
     		$res = array();
     		$res["hl"] = implode(", ", $hl);
     		if (strpos($doc->filepath, "ftp://") === false) {
-    			//убираем из пути к файлу корневую директорию сервера
-    			$res["filepath"] = "http://".$host.CORE_DS.str_replace(mb_strtolower($pathRoot), "", mb_strtolower($doc->filepath));
+    			$res["filepath"] = "http://".$host.CORE_DS.$doc->filepath;
+    			$res["location"] = $res["filepath"];
     		} else {
-    			$res["filepath"] = $doc->filepath;
+    			$res["filepath"] = "ftp://".CSettingsManager::getSettingValue("ftp_server_user").":".CSettingsManager::getSettingValue("ftp_server_password")."@".CSettingsManager::getSettingValue("ftp_server")."/".str_replace("ftp://", "", $doc->filepath);
+    			$res["location"] = "ftp://".CSettingsManager::getSettingValue("ftp_server")."/".str_replace("ftp://", "", $doc->filepath);
     		}
     		$res["filename"] = $doc->filename;
     		$result[] = $res;
