@@ -108,8 +108,26 @@
             "cache" => array(
                 "class" => "CCacheMemcache"
             ),
-        	"solr" => array(
-        		"class" => "CIndexLocalHost"
+        	"search" => array(
+        		"class" => "CSolrManager",
+                "sources" => array(
+                    array(
+                        "class" => "CSearchSourceFTP",
+                        "id" => "ftp_portal",
+                        "server" => "ftp_portal_server",
+                        "login" => "ftp_portal_user",
+                        "password" => "ftp_portal_password"
+                    ),
+                    array(
+                        "class" => "CSearchSourceLocal",
+                        "id" => "local_files",
+                        "path" => "/Users/abarmin/Documents/WebRoot/asuportal.local/ASUPortalPHP/err/"
+                    ),
+                    array(
+                        "class" => "CSearchSourceSamba",
+                        "id" => "samba_na_235"
+                    )
+                )
         	),
             "beans" => array(
                 "class" => "CBeanManager",

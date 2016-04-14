@@ -215,6 +215,14 @@ class CSearchController extends CBaseController{
         }
     }
     public function actionUpdateIndexFiles() {
+        CApp::getApp()->search->updateIndex();
+
+        $fileId = CApp::getApp()->cache->get("tempFile")->getFileId();
+
+        $realFilepath = CApp::getApp()->search->getFile($fileId);
+        var_dump($realFilepath);
+
+        /*
     	$this->setData("messages", CApp::getApp()->solr->getListIndexingFiles());
     	$this->addActionsMenuItem(array(
     		array(
@@ -224,6 +232,7 @@ class CSearchController extends CBaseController{
     		)
     	));
     	$this->renderView("_search/updateIndexFiles.tpl");
+        */
     }
     public function actionSearchFiles() {
     	$this->addActionsMenuItem(array(

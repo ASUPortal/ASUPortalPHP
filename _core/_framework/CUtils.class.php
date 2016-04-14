@@ -977,19 +977,26 @@ class CUtils {
      * Список файлов в папке и подпапках
      *
      * @param string $folder
-     * @param array $all_files
      * @return array
      */
-    public static function getListFiles($folder, &$all_files = array()) {
-    	$fp=opendir($folder);
-    	while ($cv_file=readdir($fp)) {
-    		if (is_file($folder.CORE_DS.$cv_file)) {
-    			$all_files[] = $folder.CORE_DS.$cv_file;
-    		} elseif ($cv_file!="." && $cv_file!=".." && is_dir($folder.CORE_DS.$cv_file)) {
-    			CUtils::getListFiles($folder.CORE_DS.$cv_file, $all_files);
-    		}
-    	}
-    	closedir($fp);
-    	return $all_files;
+    public static function getListFiles($folder) {
+        $files = array();
+
+        $handler = opendir($folder);
+        while ($file = readdir($handler)) {
+            $filename = $folder . $file;
+            if (is_file($filename)) {
+                $files[] = $filename;
+            } elseif ($file != "." && $file != "..") {
+                $filename .= CORE_DS;
+                $childFiles = CUtils::getListFiles($filename);
+                foreach ($childFiles as $childFile) {
+                    $files[] = $childFile;
+                }
+            }
+        }
+        closedir($handler);
+
+        return $files;
     }
 }
