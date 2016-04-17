@@ -28,7 +28,8 @@ class CDiscipline extends CActiveModel {
     public function attributeLabels() {
     	return array(
     		"name" => "Название",
-    		"library_code" => "Код из библиотеки"
+    		"library_code" => "Код из библиотеки",
+    		"name_from_library" => "Название из библиотеки"
     	);
     }
     

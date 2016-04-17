@@ -1,0 +1,1 @@
+ALTER TABLE `subjects` ADD `name_from_library` TEXT NOT NULL AFTER `name_short`;
