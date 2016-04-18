@@ -19,6 +19,7 @@ class CCorriculumDisciplinesController extends CFlowController {
     }
     public function actionEdit() {
         $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("id"));
+        $disciplineTaxonomy = CDisciplinesManager::getDiscipline($discipline->discipline->getId());
         $corriculum = CCorriculumsManager::getCorriculum($discipline->cycle->corriculum->getId());
         $this->addActionsMenuItem(array(
         	"title" => "Удалить выделенные компетенции",
@@ -45,6 +46,10 @@ class CCorriculumDisciplinesController extends CFlowController {
          */
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
+        // ссылка для загрузки изданий из библиотеки
+        $link = CSettingsManager::getSettingValue("link_library");
+        $this->setData("link", $link);
+        $this->setData("disciplineTaxonomy", $disciplineTaxonomy);
         $this->setData("cycle", $discipline->cycle);
         $this->setData("discipline", $discipline);
         $this->renderView("_corriculum/_disciplines/edit.tpl");

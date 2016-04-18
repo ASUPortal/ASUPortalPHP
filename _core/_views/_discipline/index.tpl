@@ -4,6 +4,7 @@
     <h2>Справочник дисциплин</h2>
 
     {CHtml::helpForCurrentPage()}
+    <a href="{$link}" target="_blank">Страница со списком дисциплин в библиотеке</a>
 	{include file="_core.searchLocal.tpl"}
 	
     {if ($disciplines->getCount() == 0)}

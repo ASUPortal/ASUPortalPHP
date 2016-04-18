@@ -11,6 +11,14 @@
     </div>
     
     <div class="control-group">
+        {CHtml::activeLabel("name_from_library", $discipline)}
+        <div class="controls">
+            {CHtml::activeTextBox("name_from_library", $discipline)}
+            {CHtml::error("name_from_library", $discipline)}
+        </div>
+    </div>
+    
+    <div class="control-group">
         {CHtml::activeLabel("library_code", $discipline)}
         <div class="controls">
             {CHtml::activeTextField("library_code", $discipline)}

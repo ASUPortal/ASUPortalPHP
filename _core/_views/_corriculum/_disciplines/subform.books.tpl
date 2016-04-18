@@ -1,3 +1,5 @@
+<a href="{$link}{$disciplineTaxonomy->library_code}" target="_blank">Страница дисциплины в библиотеке</a><br><br>
+
 <a href="books.php?action=add&discipline_id={CRequest::getInt("id")}">
 	<i class="icon-plus">&nbsp;</i>
 </a>

@@ -38,8 +38,11 @@ class CDisciplinesController extends CFlowController{
         	"link" => "index.php?action=addGeneralBook",
         	"icon" => "actions/list-add.png"
         ));
+        // ссылка для загрузки дисциплин из библиотеки
+        $link = CSettingsManager::getSettingValue("link_library_disciplines");
         $this->setData("paginator", $set->getPaginator());
         $this->setData("disciplines", $disciplines);
+        $this->setData("link", $link);
         $this->renderView("_discipline/index.tpl");
     }
     public function actionAdd() {
@@ -66,7 +69,10 @@ class CDisciplinesController extends CFlowController{
         	"link" => "index.php?discipline_id=".CRequest::getInt("id"),
         	"action" => "deleteBooks"
         ));
+        // ссылка для загрузки изданий из библиотеки
+        $link = CSettingsManager::getSettingValue("link_library");
         $this->setData("discipline", $discipline);
+        $this->setData("link", $link);
         $this->renderView("_discipline/edit.tpl");
     }
     public function actionDelete() {
@@ -251,7 +257,7 @@ class CDisciplinesController extends CFlowController{
     		foreach ($result as $ar) {
     			foreach (CActiveRecordProvider::getAllFromTable(TABLE_DISCIPLINES)->getItems() as $item) {
     				$discipline = new CDiscipline($item);
-    				if ($discipline->name == $ar[1]) {
+    				if ($discipline->name == $ar[1] or $discipline->name_from_library == $ar[1]) {
     					$discipline->library_code = $ar[2];
     					$discipline->save();
     				}

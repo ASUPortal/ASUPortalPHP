@@ -29,8 +29,8 @@ class CWorkPlanCreditQuestionsTitle extends CAbstractPrintClassField {
     			$item = $control->controlType;
     		}
     	}
-    	if ($item == "Зачет") {
-    		$result = "Вопросы к зачёту";
+    	if (isset($item) && $item == "Зачет") {
+    		$result "Вопросы к зачёту";
     	}
         return $result;
     }
