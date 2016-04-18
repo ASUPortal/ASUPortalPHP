@@ -49,7 +49,7 @@ class CWorkPlanApproverModelOptionalValidator extends IModelValidatorOptional {
 				$item = $control->controlType;
 			}
 		}
-		if (isset($item) and $item == "Зачет") {
+		if (isset($item) && $item == "Зачет") {
 			$result += 9;
 		} elseif(isset($item)) {
 			$result += 36;
