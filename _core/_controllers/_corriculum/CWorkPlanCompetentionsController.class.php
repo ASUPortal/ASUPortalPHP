@@ -160,23 +160,20 @@ class CWorkPlanCompetentionsController extends CBaseController{
     	$type = CRequest::getInt("type");
     	if ($type == 0) {
     		if (!is_null($plan->corriculumDiscipline)) {
-    			foreach (CActiveRecordProvider::getWithCondition(TABLE_CORRICULUM_DISCIPLINE_COMPETENTIONS, "discipline_id=".$plan->corriculumDiscipline->getId())->getItems() as $ar) {
-    				$newCompetention = new CActiveModel($ar);
+    			foreach ($plan->corriculumDiscipline->competentions->getItems() as $competention) {
     				$object = new CWorkPlanCompetention();
     				$object->plan_id = $plan->getId();
     				$object->type = $type;
-    				$object->competention_id = $newCompetention->competention_id;
-    				$object->level_id = $newCompetention->level_id;
-    				foreach ($plan->corriculumDiscipline->competentions->getItems() as $competention) {
-    					foreach ($competention->knowledges->getItems() as $knowledge) {
-    						$object->knowledges->add($knowledge->getId(), $knowledge->getId());
-    					}
-    					foreach ($competention->skills->getItems() as $skill) {
-    						$object->skills->add($skill->getId(), $skill->getId());
-    					}
-    					foreach ($competention->experiences->getItems() as $experience) {
-    						$object->experiences->add($experience->getId(), $experience->getId());
-    					}
+    				$object->competention_id = $competention->competention_id;
+    				$object->level_id = $competention->level_id;
+    				foreach ($competention->knowledges->getItems() as $knowledge) {
+    					$object->knowledges->add($knowledge->getId(), $knowledge->getId());
+    				}
+    				foreach ($competention->skills->getItems() as $skill) {
+    					$object->skills->add($skill->getId(), $skill->getId());
+    				}
+    				foreach ($competention->experiences->getItems() as $experience) {
+    					$object->experiences->add($experience->getId(), $experience->getId());
     				}
     				$object->save();
     			}
