@@ -45,9 +45,9 @@ class CWorkPlanTotalHours extends CAbstractPrintClassField {
         		$item = $control->controlType;
         	}
         }
-        if ($item == "Зачет") {
+        if (isset($item) and $item == "Зачет") {
         	$result += 9;
-        } else {
+        } elseif(isset($item)) {
         	$result += 36;
         }
         return $result;
