@@ -28,11 +28,13 @@
                         {/foreach}
                     </td>
                     <td>
-                        {foreach $object->levels as $level}
-                            <p>{$level}</p>
+                        {foreach $object->competentions as $competention}
+                            {foreach CWorkPlanManager::getWorkplanCompetentionFormed(CWorkPlanManager::getWorkplan($object->plan_id), $competention) as $items}
+                            	<p>{CTaxonomyManager::getTerm($items->level_id)}</p>
+                            {/foreach}
                         {/foreach}
                     </td>
-                    <td>{", "|join:$object->controls->getItems()}</td>
+                    <td>{", "|join:CBaseManager::getWorkPlanContentSection($object->section_id)->controls->getItems()}</td>
                 </tr>
             {/foreach}
             </tbody>

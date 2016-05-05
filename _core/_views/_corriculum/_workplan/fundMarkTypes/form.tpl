@@ -13,7 +13,7 @@
             {CHtml::error("competentions", $object)}
         </div>
     </div>
-    
+{*    
     <div class="control-group">
         {CHtml::activeLabel("levels", $object)}
         <div class="controls">
@@ -29,7 +29,7 @@
             {CHtml::error("controls", $object)}
         </div>
     </div>
-    
+*}    
 	<div class="control-group">
 		{CHtml::activeLabel("ordering", $object)}
 		<div class="controls">
