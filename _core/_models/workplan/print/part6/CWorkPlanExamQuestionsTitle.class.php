@@ -29,7 +29,7 @@ class CWorkPlanExamQuestionsTitle extends CAbstractPrintClassField {
     			$item = $control->controlType;
     		}
     	}
-    	if ($item == "Экзамен") {
+    	if (isset($item) && $item == "Экзамен") {
     		$result = "Вопросы к экзамену";
     	}
         return $result;

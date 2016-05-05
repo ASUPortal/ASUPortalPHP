@@ -30,7 +30,7 @@ class CWorkPlanCreditQuestionsTitleCriteria extends CAbstractPrintClassField {
     		}
     	}
     	if (isset($item) && $item == "Зачет") {
-    		$result "Критерии оценки";
+    		$result = "Критерии оценки";
     	}
         return $result;
     }

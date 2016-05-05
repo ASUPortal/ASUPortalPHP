@@ -30,7 +30,7 @@ class CWorkPlanCreditQuestionsTitle extends CAbstractPrintClassField {
     		}
     	}
     	if (isset($item) && $item == "Зачет") {
-    		$result "Вопросы к зачёту";
+    		$result = "Вопросы к зачёту";
     	}
         return $result;
     }
