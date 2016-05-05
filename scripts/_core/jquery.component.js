@@ -55,8 +55,8 @@
          *
          * @private
          */
-        this._onDataLoaded = function(loadedHtml){
-        	var data = jQuery.parseHTML(loadedHtml);
+        this._onDataLoaded = function(data){
+        	var data = jQuery.parseHTML(data);
             var that = this;
             /**
              * Удалим со все ссылок удаления их родные события
@@ -147,12 +147,15 @@
                 that._formSubmit(form);
                 return false;
             });
-            jQuery(that).html(data);
+            jQuery(that).html(data)
+            	.find(".catalogLookup").catalogLookup().end()
+                .find("[asu-type='component']").components().end()
+                .find('select.select2').select2().end();
 
 	        var regexp = /<script>([\s\S]*?)<\/script>/gmi;
 	
 	        var match;
-	        while (match = regexp.exec(loadedHtml)) {
+	        while (match = regexp.exec(data)) {
 	            var script = match[1];
 	            jQuery.globalEval(script);
 	        }
