@@ -32,4 +32,20 @@ class CWorkPlanManager {
         }
         return $competention;
     }
+    
+    /**
+     * Формируемые компетенции рабочей программы по id программы и id компетенции
+     *
+     * @param CWorkPlan $plan
+     * @param CTerm $competention
+     * @return CArrayList
+     */
+    public static function getWorkplanCompetentionFormed(CWorkPlan $plan, CTerm $competention) {
+    	$competentions = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORK_PLAN_COMPETENTIONS, "plan_id = ".$plan->getId()." AND competention_id = ".$competention->id." AND type = 0")->getItems() as $item) {
+    		$competention = new CWorkPlanCompetention($item);
+    		$competentions->add($competention->getId(), $competention);
+    	}
+    	return $competentions;
+    }
 }

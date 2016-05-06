@@ -82,7 +82,7 @@ class CWorkPlanFundMarkTypesController extends CBaseController{
     }
     public function actionAdd() {
     	$section = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
-    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt($section->category->plan_id));
+    	$plan = CWorkPlanManager::getWorkplan($section->category->plan_id);
         $object = new CWorkPlanFundMarkType();
         $object->section_id = CRequest::getInt("id");
         $object->plan_id = $section->category->plan_id;
