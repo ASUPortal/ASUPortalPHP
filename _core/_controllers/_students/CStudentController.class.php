@@ -319,7 +319,9 @@ class CStudentController extends CBaseController {
     					->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
     					->order("act.id asc");
     					if ($query->execute()->getCount() > 0) {
-    						$hours += $disc->getLaborByType("total")->value;
+    						if (!is_null($disc->getLaborByType("total"))) {
+    							$hours += $disc->getLaborByType("total")->value;
+    						}
     					}
                         /**
                          * А дочерние дисциплины куда?)
@@ -333,7 +335,9 @@ class CStudentController extends CBaseController {
                                 ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
                                 ->order("act.id asc");
                             if ($query->execute()->getCount() > 0) {
-                                $hours += $child->getLaborByType("total")->value;
+                            	if (!is_null($child->getLaborByType("total"))) {
+                            		$hours += $child->getLaborByType("total")->value;
+                            	}
                             }
                         }
     				}
@@ -363,7 +367,9 @@ class CStudentController extends CBaseController {
                             ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
                             ->order("act.id asc");
                         if ($query->execute()->getCount() > 0) {
-                            $hours += $disc->getLaborByType("total")->value;
+                        	if (!is_null($disc->getLaborByType("total"))) {
+                        		$hours += $disc->getLaborByType("total")->value;
+                        	}
                         }
                         foreach ($disc->children->getItems() as $child) {
                             // здесь нужно проверить, что у студента по этой дисциплине есть оценка
@@ -374,7 +380,9 @@ class CStudentController extends CBaseController {
                                 ->leftJoin(TABLE_MARKS." as mark", "mark.id = act.study_mark")
                                 ->order("act.id asc");
                             if ($query->execute()->getCount() > 0) {
-                                $hours += $child->getLaborByType("total")->value;
+                            	if (!is_null($child->getLaborByType("total"))) {
+                            		$hours += $child->getLaborByType("total")->value;
+                            	}
                             }
                         }
                     }
