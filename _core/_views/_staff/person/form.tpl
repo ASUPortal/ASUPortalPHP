@@ -9,6 +9,7 @@
         <li><a data-toggle="tab" href="#tab-education">Образование, диссертации</a></li>
         <li><a data-toggle="tab" href="#tab-labor">Трудовая и научная деятельность</a></li>
         <li><a data-toggle="tab" href="#tab-orders">Приказы</a></li>
+        <li><a data-toggle="tab" href="#tab-info">Информация о сотруднике</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab-common">
@@ -22,6 +23,9 @@
         </div>
         <div class="tab-pane" id="tab-orders">
             {include file="_staff/person/subform.orders.tpl"}
+        </div>
+        <div class="tab-pane" id="tab-info">
+            {include file="_staff/person/staffInfo/index.tpl"}
         </div>
     </div>
 
