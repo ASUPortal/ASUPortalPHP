@@ -471,7 +471,11 @@ class CBaseController {
             $notification->url = $url;
 
             $this->setData("notification", $notification);
-            $this->renderView("_core/notification/noaccess.tpl");
+            if (!$this->_isComponent) {
+            	$this->renderView("_core/notification/noaccess.tpl");
+            } else {
+            	$this->renderView("_core/notification/noaccessInComponent.tpl");
+            }
         }
         exit;
     }
