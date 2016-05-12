@@ -17,6 +17,7 @@ class CLecturerOuter extends CPerson {
     private $_aspirantsCurrent = null;
     private $_aspirantsOld = null;
     private $_supervisedGroups = null;
+    private $_infoPages = null;
     
     public function attributeLabels() {
     	return array(
@@ -86,6 +87,14 @@ class CLecturerOuter extends CPerson {
     					"storageCondition" => "curator_id = -1",
     					"managerClass" => "CStaffManager",
     					"managerGetObject" => "getStudentGroup"
+    			),
+    			"infoPages" => array(
+    					"relationPower" => RELATION_HAS_MANY,
+    					"storageProperty" => "_infoPages",
+    					"storageTable" => TABLE_PAGES,
+    					"storageCondition" => "user_id_insert = ".$this->id." and pg_cat=1",
+    					"managerClass" => "CPageManager",
+    					"managerGetObject" => "getPage"
     			)
     	);
     }

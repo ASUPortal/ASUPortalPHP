@@ -32,7 +32,11 @@ class CCoreModelFieldTranslationsController extends CBaseController {
     public function actionSave() {
         $t = new CCoreModelFieldTranslation();
         $t->setAttributes(CRequest::getArray($t::getClassName()));
+        $cacheKey = "core_model_field_translation_".$t->getId();
+        $cacheKeyField = "core_model_field_translation_".$t->field_id;
         if ($t->validate()) {
+        	CApp::getApp()->cache->set($cacheKey, $t);
+        	CApp::getApp()->cache->set($cacheKeyField, $t);
             $t->save();
             if ($this->continueEdit()) {
                 $this->redirect("translations.php?action=edit&id=".$t->getId());
@@ -44,6 +48,9 @@ class CCoreModelFieldTranslationsController extends CBaseController {
         $this->renderView("_core/translation/edit.tpl");
     }
     public function actionDelete() {
-
+    	$t = CCoreObjectsManager::getCoreModelFieldTranslation(CRequest::getInt("id"));
+    	$field = $t->field_id;
+    	$t->remove();
+    	$this->redirect("fields.php?action=edit&id=".$field);
     }
 }

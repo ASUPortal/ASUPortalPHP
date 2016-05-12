@@ -125,6 +125,7 @@ class CStaffController extends CBaseController{
          * Подключаем красивые элементы
          */
         $this->setData("form", $form);
+        $this->setData("person", $person);
         /**
          * Собираем меню
          */
@@ -198,6 +199,11 @@ class CStaffController extends CBaseController{
                 "link" => "#",
                 "icon" => "devices/printer.png",
                 "template" => "formset_person"
+            ),
+            array(
+                "title" => "Импортировать информацию о сотруднике",
+                "link" => "staffInfo.php?action=add&id=".CRequest::getInt("id"),
+                "icon" => "actions/document-save.png"
             )
         ));
         /**

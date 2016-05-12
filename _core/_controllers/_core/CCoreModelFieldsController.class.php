@@ -32,7 +32,9 @@ class CCoreModelFieldsController extends CBaseController {
     public function actionSave() {
         $field = new CCoreModelField();
         $field->setAttributes(CRequest::getArray($field::getClassName()));
+        $cacheKey = "core_model_field_".$field->getId();
         if ($field->validate()) {
+        	CApp::getApp()->cache->set($cacheKey, $field);
             $field->save();
             if ($this->continueEdit()) {
                 $this->redirect("fields.php?action=edit&id=".$field->getId());

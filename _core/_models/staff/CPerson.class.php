@@ -45,6 +45,7 @@ class CPerson extends CActiveModel{
     private $_aspirantsOld = null;
     private $_questions = null;
     private $_supervisedGroups = null;
+    private $_infoPages = null;
     public $to_tabel = 0;
     public $is_slave = 0;
 
@@ -226,7 +227,15 @@ class CPerson extends CActiveModel{
                 "rightKey" => "plan_id",
                 "managerClass" => "CBaseManager",
                 "managerGetObject" => "getWorkPlan"
-            )
+            ),
+        	"infoPages" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageProperty" => "_infoPages",
+        		"storageTable" => TABLE_PAGES,
+        		"storageCondition" => "user_id_insert = ".(is_null($this->getId()) ? 0 : $this->getUserId())." and pg_cat=1",
+        		"managerClass" => "CPageManager",
+        		"managerGetObject" => "getPage"
+        	)
         );
     }
     public function attributeLabels() {
@@ -1045,6 +1054,19 @@ class CPerson extends CActiveModel{
     	$result = new CArrayList();
     	foreach ($this->supervisedGroups->getItems() as $group) {
     		$result->add($group->getId(), $group);
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Cтраницы с информацией о сотруднике
+     *
+     * @return CArrayList
+     */
+    public function getInfoPages() {
+    	$result = new CArrayList();
+    	foreach ($this->infoPages->getItems() as $page) {
+    		$result->add($page->getId(), $page);
     	}
     	return $result;
     }
