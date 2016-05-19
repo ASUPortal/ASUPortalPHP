@@ -42,6 +42,7 @@
     {if $persons->getCount() == 0}
 		Нет сотрудников для отображения
 	{else}
+	<form action="index.php" method="post" id="MainView">
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
             <th></th>
@@ -74,6 +75,7 @@
             </tr>
         {/foreach}
     </table>
+    </form>
     {CHtml::paginator($paginator, "?action=index")}
     {/if}
 {/block}
