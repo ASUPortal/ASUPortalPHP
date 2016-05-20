@@ -60,37 +60,8 @@ class CStaffInfoController extends CBaseController{
     	$pageContent = array();
     	foreach (CRequest::getArray("selectedDoc") as $id) {
     		$person = CStaffManager::getPerson($id);
-    		$attributes = $person->fieldsProperty();
-    		$display = false;
-    		if (array_key_exists("photo", $attributes)) {
-    			$field = $attributes["photo"];
-    			if ($field["type"] == FIELD_UPLOADABLE) {
-    				$storage = $field["upload_dir"];
-    				$file = $person->photo;
-    				if ($file !== "") {
-    					if (file_exists($storage.$file)) {
-    						$display = true;
-    					}
-    				}
-    			}
-    		}
-    		if ($person->work_place != "") {
-    			$pageContent[] = "<b>".$person->getName()."</b><br><br>";
-    			if ($display) {
-    				$pageContent[] = '<a href="../../images/lects/'.$person->photo.'" target="_blank" class="image_clearboxy cboxElement">
-    									<img src="../../_modules/_thumbnails/?src=/images/lects/'.$person->photo.'&amp;w=200"></a><br>';
-    			}
-    			if ($person->getPost() != "") {
-    				$pageContent[] = "Должность на кафедре: ".$person->getPost()."<br>";
-    			}
-    			$pageContent[] = "Основное место работы: ".$person->work_place."<br>";
-    			if ($person->getManuals()->getCount() != 0) {
-    				$pageContent[] = "Дисциплины:<br>";
-    				foreach ($person->getManuals()->getItems() as $manual) {
-    					$pageContent[] = '<li><a href="../../_modules/_library/index.php?action=publicView&id='.$manual->nameFolder.'">'.$manual->name.' ('.$manual->f_cnt.')</a></li>';
-    				}
-    			}
-    			$pageContent[] = "<hr>";
+    		if (CStaffInfo::infoStaff($person) != "") {
+    			$pageContent[] = CStaffInfo::infoStaff($person);
     		}
     	}
     	$page = new CPage();
