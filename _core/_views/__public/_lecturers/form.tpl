@@ -4,7 +4,9 @@
         <li><a data-toggle="tab" href="#tab-education">Дипломники и аспиранты</a></li>
         <li><a data-toggle="tab" href="#tab-questions">Вопросы и ответы</a></li>
         <li><a data-toggle="tab" href="#tab-groups">Кураторство учебных групп</a></li>
+        {*
         <li><a data-toggle="tab" href="#tab-info">Информация о сотруднике</a></li>
+        *}
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab-news">
@@ -19,8 +21,10 @@
         <div class="tab-pane" id="tab-groups">
             {include file="__public/_lecturers/subform.groups.tpl"}
         </div>
+        {*
         <div class="tab-pane" id="tab-info">
             {include file="__public/_lecturers/subform.info.tpl"}
         </div>
+        *}
     </div>
 </form>

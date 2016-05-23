@@ -979,7 +979,7 @@ class CPerson extends CActiveModel{
     		$query->select("subj.*, doc.nameFolder as nameFolder, (select count(*) from files f where f.nameFolder = doc.nameFolder) as f_cnt")
 	    		->from(TABLE_DISCIPLINES." as subj")
 	    		->leftJoin(TABLE_LIBRARY_DOCUMENTS." as doc", "subj.id = doc.subj_id")
-	    		->condition("doc.user_id=".$this->getUser()->id);
+	    		->condition("doc.user_id=".$this->getUserId());
     		foreach ($query->execute()->getItems() as $item) {
     			$subject = new CDiscipline(new CActiveRecord($item));
     			$this->_manuals->add($subject->getId(), $subject);

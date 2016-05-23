@@ -91,6 +91,13 @@ class CStaffController extends CBaseController{
                     "link" => "#",
                     "icon" => "devices/printer.png",
                     "template" => "formset_person"
+                ),
+                array(
+                    "title" => "Импортировать информацию о совместителях",
+                    "icon" => "actions/document-save.png",
+                    "form" => "#MainView",
+                    "link" => "staffInfo.php",
+                    "action" => "addGroup"
                 )
             )
         );

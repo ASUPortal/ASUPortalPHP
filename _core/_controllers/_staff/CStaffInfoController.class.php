@@ -56,14 +56,47 @@ class CStaffInfoController extends CBaseController{
     	$this->setData("page", $page);
     	$this->renderView("_staff/person/staffInfo/add.tpl");
     }
+    public function actionAddGroup() {
+    	$pageContent = array();
+    	foreach (CRequest::getArray("selectedDoc") as $id) {
+    		$person = CStaffManager::getPerson($id);
+    		if (CStaffInfo::infoStaff($person) != "") {
+    			$pageContent[] = CStaffInfo::infoStaff($person);
+    		}
+    	}
+    	$page = new CPage();
+    	$page->title = "Наши работодатели";
+    	$page->user_id_insert = CSession::getCurrentUser()->getId();
+    	$page->pg_cat = "2";
+    	$page->page_content = implode("", $pageContent);
+    	$this->addActionsMenuItem(array(
+    		"title" => "Назад",
+    		"link" => "index.php?action=index",
+    		"icon" => "actions/edit-undo.png"
+    	));
+    	$this->addJSInclude(JQUERY_UI_JS_PATH);
+    	$this->addCSSInclude(JQUERY_UI_CSS_PATH);
+    	$this->addCSSInclude("_modules/_redactor/redactor.css");
+    	$this->addJSInclude("_modules/_redactor/redactor.min.js");
+    	$this->setData("page", $page);
+    	$this->renderView("_staff/person/staffInfo/add.tpl");
+    }
     public function actionEdit() {
     	$page = CPageManager::getPage(CRequest::getInt("id"));
     	$personId = CStaffManager::getUserById($page->user_id_insert)->getPerson()->getId();
-    	$this->addActionsMenuItem(array(
-    		"title" => "Назад",
-    		"link" => "index.php?action=edit&id=".$personId,
-    		"icon" => "actions/edit-undo.png"
-    	));
+    	if ($page->pg_cat = "2") {
+    		$this->addActionsMenuItem(array(
+    			"title" => "Назад",
+    			"link" => "index.php?action=index",
+    			"icon" => "actions/edit-undo.png"
+    		));
+    	} else {
+    		$this->addActionsMenuItem(array(
+    			"title" => "Назад",
+    			"link" => "index.php?action=edit&id=".$personId,
+    			"icon" => "actions/edit-undo.png"
+    		));
+    	}
     	$this->addJSInclude(JQUERY_UI_JS_PATH);
     	$this->addCSSInclude(JQUERY_UI_CSS_PATH);
     	$this->addCSSInclude("_modules/_redactor/redactor.css");
