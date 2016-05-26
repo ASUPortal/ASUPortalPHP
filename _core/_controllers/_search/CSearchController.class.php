@@ -215,15 +215,7 @@ class CSearchController extends CBaseController{
         }
     }
     public function actionUpdateIndexFiles() {
-        CApp::getApp()->search->updateIndex();
-
-        $fileId = CApp::getApp()->cache->get("tempFile")->getFileId();
-
-        $realFilepath = CApp::getApp()->search->getFile($fileId);
-        var_dump($realFilepath);
-
-        /*
-    	$this->setData("messages", CApp::getApp()->solr->getListIndexingFiles());
+    	$this->setData("messages", CApp::getApp()->search->updateIndex());
     	$this->addActionsMenuItem(array(
     		array(
     			"title" => "Назад",
@@ -232,7 +224,6 @@ class CSearchController extends CBaseController{
     		)
     	));
     	$this->renderView("_search/updateIndexFiles.tpl");
-        */
     }
     public function actionSearchFiles() {
     	$this->addActionsMenuItem(array(
@@ -246,6 +237,7 @@ class CSearchController extends CBaseController{
     }
     public function actionSearchByFiles() {
     	$host = $_SERVER["DB_HOST"];
+    	$pathRoot = $_SERVER["DOCUMENT_ROOT"];
     	$userQuery = CRequest::getString("stringSearch");
     	$params = array(
     		"_is_file_" => 1,
@@ -255,16 +247,21 @@ class CSearchController extends CBaseController{
     	$result = array();
     	foreach ($resultObj->getDocuments() as $doc) {
     		$hl = $resultObj->getHighlighingByDocument($doc);
+    		$file = CApp::getApp()->search->getFile($doc->id);
+    		$path_parts = pathinfo($file);
+    		$fileName = $path_parts["basename"];
     		$res = array();
     		$res["hl"] = implode(", ", $hl);
-    		if (strpos($doc->filepath, "ftp://") === false) {
-    			$res["filepath"] = "http://".$host.CORE_DS.$doc->filepath;
-    			$res["location"] = $res["filepath"];
-    		} else {
-    			$res["filepath"] = "ftp://".CSettingsManager::getSettingValue("ftp_server_user").":".CSettingsManager::getSettingValue("ftp_server_password")."@".CSettingsManager::getSettingValue("ftp_server")."/".str_replace("ftp://", "", $doc->filepath);
-    			$res["location"] = "ftp://".CSettingsManager::getSettingValue("ftp_server")."/".str_replace("ftp://", "", $doc->filepath);
+    		if (CUtils::strLeft($doc->id, "||") == "local_files") {
+    			//убираем из пути к файлу корневую директорию сервера
+    			$filePath = str_replace(mb_strtolower($pathRoot), "", mb_strtolower($file));
+    			$res["filepath"] = "http://".$host.CORE_DS.$filePath;
+    			$res["location"] = $filePath;
+    		} elseif (CUtils::strLeft($doc->id, "||") == "ftp_portal") {
+    			$res["filepath"] = "ftp://".CSettingsManager::getSettingValue("ftp_server_user").":".CSettingsManager::getSettingValue("ftp_server_password")."@".CSettingsManager::getSettingValue("ftp_server")."/".str_replace("ftp://", "", $file);
+    			$res["location"] = "ftp://".CSettingsManager::getSettingValue("ftp_server")."/".str_replace("ftp://", "", $file);
     		}
-    		$res["filename"] = $doc->filename;
+    		$res["filename"] = $fileName;
     		$result[] = $res;
     	}
     	$this->setData("result", $result);

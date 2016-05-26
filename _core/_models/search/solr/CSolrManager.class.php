@@ -19,23 +19,44 @@ class CSolrManager extends CComponent {
     }
 
     public function updateIndex() {
+    	$messages = array();
         foreach ($this->sources as $source) {
             try {
                 foreach ($source->getFilesToIndex() as $file) {
-                    $this->addToIndex($file);
+                    $messages[] = $this->addToIndex($file);
                 }
             } catch (Exception $e) {
                 // тут будет исключение
-                var_dump($e);
+                var_dump($e->getMessage());
             }
         }
+        return $messages;
     }
 
     private function addToIndex(CSearchFile $file) {
+        CApp::getApp()->cache->set($file->getFileId(), $file);
+        // сообщение о результате обработки файла
+        $message = "";
         // добавление в солр
-        var_dump($file->getFileId());
-
-        CApp::getApp()->cache->set("tempFile", $file);
+        $ch = curl_init();
+        $data = array("myfile"=>"@".$file->getRealFilePath());
+        curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles($file->getFileId()));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        $result = curl_exec($ch);
+        if ($result === FALSE) {
+        	$message .= "<font color='#FF0000'>cURL Error: ".curl_error($ch)."</font>";
+        	throw new Exception("Не удалось добавить файл в индекс Solr!");
+        	break;
+        }
+        $error_no = curl_errno($ch);
+        curl_close($ch);
+        if ($error_no == 0) {
+        	$message .= "<font color='#00CC00'>Файл ".$file->getFileSource()." успешно загружен в индекс</font>";
+        } else {
+        	$message .= "<font color='#FF0000'>Ошибка загрузки файла ".$file->getFileSource()." в индекс</font>";
+        }
+        return $message;
 
         /*
          * $solrObject.id = $file->getId()
@@ -50,8 +71,7 @@ class CSolrManager extends CComponent {
         foreach ($this->sources as $source) {
             if ($source->getId() == $sourceId) {
                 // попросить у солра документ по id
-                // $searchFile = new CSearchFile();
-                $searchFile = CApp::getApp()->cache->get("tempFile");
+                $searchFile = CApp::getApp()->cache->get($fileId);
                 return $source->getFile($searchFile);
             }
         }

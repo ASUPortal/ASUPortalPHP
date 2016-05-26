@@ -16,7 +16,14 @@ class CSearchSourceLocal extends CComponent implements ISearchSource {
 
     public function getFilesToIndex() {
         $files = $this->scanDirectory();
-        return new CSearchSourceLocalIterator($files, $this);
+        $suffixes = explode(";", CSettingsManager::getSettingValue("formats_files_for_indexing"));
+        foreach ($files as $file) {
+        	$extension = end(explode(".", $file));
+        	if (in_array($extension, $suffixes)) {
+        		$filelist[] = $file;
+        	}
+        }
+        return new CSearchSourceLocalIterator($filelist, $this);
     }
 
     /**
