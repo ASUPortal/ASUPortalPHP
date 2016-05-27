@@ -533,7 +533,7 @@ $query="select protocol_details.protocol_id,protocol_details.section_id,kadri.fi
 	  }
 echo '</table><p>&nbsp;</p>';
 	 
-echo '<table border=0 width=800><tr><td width="50%">Зав.кафедрой АСУ</td><td>В.В. Антонов</td></tr>
+echo '<table border=0 width=800><tr><td width="50%">Зав.кафедрой АСУ</td><td>'.CStaffManager::getPersonByPostId("2")->getNameShort().'</td></tr>
 		<tr><td colspan=2>&nbsp;</td></tr>
 		<tr><td>Секретарь</td><td width="50%">Г.И. Маврина</td></tr></table><p>&nbsp;</p>';	 
 	 
