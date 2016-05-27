@@ -378,6 +378,7 @@
     define("TYPE_REVIEWER", "рецензент");
     define("TYPE_REVIEWER_ARCHIVE", "архив рецензент");
     define("USER_TYPE_ADMIN", "администратор");
+    define("HEAD_OF_DEPARTMENT", "2");
 
     // типы связей
     define("RELATION_HAS_ONE", "1");

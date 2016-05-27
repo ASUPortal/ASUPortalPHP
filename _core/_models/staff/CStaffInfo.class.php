@@ -2,21 +2,21 @@
 
 class CStaffInfo {
     /**
-     * Отображение информации о сотруднике с помощью html
+     * Получение информации о сотруднике-совместителе в виде html
      *
      * @param $name
      * @param CModel $model
      * @param int $size
      */
-    public static function infoStaff(CModel $model, $size = 200) {
+    public static function infoStaff(CPerson $person, $size = 200) {
     	$pageContent = "";
-    	$attributes = $model->fieldsProperty();
+    	$attributes = $person->fieldsProperty();
     	$display = false;
     	if (array_key_exists("photo", $attributes)) {
     		$field = $attributes["photo"];
     		if ($field["type"] == FIELD_UPLOADABLE) {
     			$storage = $field["upload_dir"];
-    			$file = $model->photo;
+    			$file = $person->photo;
     			if ($file !== "") {
     				if (file_exists($storage.$file)) {
     					$display = true;
@@ -24,19 +24,19 @@ class CStaffInfo {
     			}
     		}
     	}
-    	if ($model->work_place != "") {
-    		$pageContent .= "<b>".$model->getName()."</b><br><br>";
+    	if ($person->work_place != "" and $person->is_slave == 1) {
+    		$pageContent .= "<b>".$person->getName()."</b><br><br>";
     		if ($display) {
-    			$pageContent .= '<a href="../../images/lects/'.$model->photo.'" target="_blank" class="image_clearboxy cboxElement">
-    									<img src="../../_modules/_thumbnails/?src=/images/lects/'.$model->photo.'&amp;w='.$size.'"></a><br>';
+    			$pageContent .= '<a href="../../images/lects/'.$person->photo.'" target="_blank" class="image_clearboxy cboxElement">
+    									<img src="../../_modules/_thumbnails/?src=/images/lects/'.$person->photo.'&amp;w='.$size.'"></a><br>';
     		}
-    		if ($model->getPost() != "") {
-    			$pageContent .= "Должность на кафедре: ".$model->getPost()."<br>";
+    		if ($person->getPost() != "") {
+    			$pageContent .= "Должность на кафедре: ".$person->getPost()."<br>";
     		}
-    		$pageContent .= "Основное место работы: ".$model->work_place."<br>";
-    		if ($model->getManuals()->getCount() != 0) {
+    		$pageContent .= "Основное место работы: ".$person->work_place."<br>";
+    		if ($person->getManuals()->getCount() != 0) {
     			$pageContent .= "Дисциплины:<br>";
-    			foreach ($model->getManuals()->getItems() as $manual) {
+    			foreach ($person->getManuals()->getItems() as $manual) {
     				$pageContent .= '<li><a href="../../_modules/_library/index.php?action=publicView&id='.$manual->nameFolder.'">'.$manual->name.' ('.$manual->f_cnt.')</a></li>';
     			}
     		}

@@ -58,8 +58,8 @@ class CStaffInfoController extends CBaseController{
     }
     public function actionAddGroup() {
     	$pageContent = array();
-    	foreach (CRequest::getArray("selectedDoc") as $id) {
-    		$person = CStaffManager::getPerson($id);
+    	$persons = CStaffManager::getAllPersons();
+    	foreach ($persons as $person) {
     		if (CStaffInfo::infoStaff($person) != "") {
     			$pageContent[] = CStaffInfo::infoStaff($person);
     		}
