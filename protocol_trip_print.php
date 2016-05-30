@@ -118,7 +118,7 @@ $query='SELECT k.fio_short AS fio,
     
     <p>Итого:  <?php echo $sum;?></p>
     <table border=0 cellpadding=10>
-        <tr><td width=400>Зав.каф. АСУ</td><td>Г.Г.Куликов</td></tr>
+        <tr><td width=400>Зав.каф. АСУ</td><td><?php echo CStaffManager::getPersonByPostId(HEAD_OF_DEPARTMENT)->getNameShort(); ?></td></tr>
         <tr><td>Зам.зав.каф.</td><td>Р.Р.Еникеев</td></tr>
         <tr><td>Профорг кафедры</td><td>Е.Е.Попкова</td></tr>
     </table>
