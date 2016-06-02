@@ -169,8 +169,9 @@ $filial_flag=0;
 if (isset($_POST['filial_flag']) && $_POST['filial_flag']=='on') {$filial_flag=1;};
 
 //выбираем найстройки по умолчанию (год, семестр)
-$query_all='SELECT year_id, part_id FROM settings where 1 limit 0,1';
-if ( $res_all=mysql_query($query_all) and mysql_numrows($res_all)>0) {$def_settings=mysql_fetch_array($res_all);}
+$def_settings = array();
+$def_settings['year_id'] = CUtils::getCurrentYear()->getId();
+$def_settings['part_id'] = CUtils::getCurrentYearPart()->getId();
 
 $year_id_all=$def_settings['year_id'];$i=1;
 if (isset($_GET['year']) && intval($_GET['year']>0 )) { $year_id_all=intval($_GET['year']);}
@@ -342,7 +343,7 @@ if (array_key_exists("type_kind", $_POST)) {
 //----------------Нагрузка----------------------------------------------------------------------
 ?>
 
-    <p><a href="lect_anketa.php?kadri_id=<?php echo $_GET['kadri_id']; ?>&action=update">Вернуться к анкете...</a><p>
+    <p><a href="_modules/_staff/index.php?action=edit&id=<?php echo $_GET['kadri_id']; ?>">Вернуться к анкете...</a><p>
 
     <table border="0" bordercolor="#F0F0F0" cellpadding="0" cellspacing="0" width="100%">
         <tr bgcolor="#E6E6FF">
@@ -780,6 +781,7 @@ order by k.fio_short';
     $query_orders_null='SELECT round(sum(rate),2) as rate_sum,count(id) as ord_cnt FROM `orders`
 WHERE concat(substring(date_end,7,4),".",substring(date_end,4,2),".",substring(date_end,1,2))>="'.$date_from.'" ';
     // сводная таблица по нагрузке
+    $i = 1;
     while ($a=mysql_fetch_array($res)) 	{
         // <abarmin date="12.07.2012">
         // bug 0000102
@@ -983,6 +985,17 @@ WHERE concat(substring(date_end,7,4),".",substring(date_end,4,2),".",substring(d
     //kadri_id
     $res=mysql_query($query);
     //echo $query_orders;
+    
+    $groupsCntTotal = 0;
+    $studCntTotal = 0;
+    $lectsTotal = 0;
+    $diplTotal = 0;
+    $mainTotal = 0;
+    $additionalTotal = 0;
+    $premiumTotal = 0;
+    $byTimeTotal = 0;
+    $sumTotal = 0;
+    
     while ($a=mysql_fetch_array($res))
     {$mark='';
 
@@ -1029,8 +1042,32 @@ WHERE concat(substring(date_end,7,4),".",substring(date_end,4,2),".",substring(d
 	<td class=numb>&nbsp;'.numLocal(number_format($a['hours_sum3_'],1,',','')).'</td>
 	<td class=numb>&nbsp;'.numLocal(number_format($a['hours_sum4_'],1,',','')).'</td>
 	<td class=numb>&nbsp;'.numLocal(number_format($a['hours_sum'],1,',','')).'</td></tr>';
+        $groupsCntTotal += $a['groups_cnt_sum_'];
+        $studCntTotal += $a['stud_cnt_sum_'];
+        $lectsTotal += $a['lects_sum_'];
+        $diplTotal += $a['dipl_sum_'];
+        $mainTotal += $a['hours_sum1_'];
+        $additionalTotal += $a['hours_sum2_'];
+        $premiumTotal += $a['hours_sum3_'];
+        $byTimeTotal += $a['hours_sum4_'];
+        $sumTotal += $a['hours_sum'];
         $i++;
     }
+    echo'<td>&nbsp;</td>
+    <td>&nbsp;</td>
+	<td><b>Итого</b></td>
+	<td>&nbsp;</td>
+    <td>&nbsp;</td>
+	<td class=numb>&nbsp;</td>
+	<td class=numb>&nbsp;<b>'.$groupsCntTotal.'</b></td>
+	<td class=numb>&nbsp;<b>'.$studCntTotal.'</b></td>
+	<td class=numb>&nbsp;<b>'.$lectsTotal.'</b></td>
+	<td class=numb>&nbsp;<b>'.$diplTotal.'</b></td>
+	<td class=numb>&nbsp;<b>'.numLocal(number_format($mainTotal,1,',','')).'</b></td>
+	<td class=numb>&nbsp;<b>'.numLocal(number_format($additionalTotal,1,',','')).'</b></td>
+	<td class=numb>&nbsp;<b>'.numLocal(number_format($premiumTotal,1,',','')).'</b></td>
+	<td class=numb>&nbsp;<b>'.numLocal(number_format($byTimeTotal,1,',','')).'</b></td>
+	<td class=numb>&nbsp;<b>'.numLocal(number_format($sumTotal,1,',','')).'</b></td></tr>';
     ?>
     </table>
     </form>
@@ -1043,7 +1080,7 @@ WHERE concat(substring(date_end,7,4),".",substring(date_end,4,2),".",substring(d
     </div>
     </div>
 
-    <p><a href="lect_anketa.php?kadri_id=<?php echo $_GET['kadri_id']; ?>&action=update">Вернуться к анкете...</a><p>
+    <p><a href="_modules/_staff/index.php?action=edit&id=<?php echo $_GET['kadri_id']; ?>">Вернуться к анкете...</a><p>
     <p><a href="p_administration.php">К списку задач.</a></p>
 
 

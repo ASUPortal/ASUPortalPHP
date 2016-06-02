@@ -138,15 +138,15 @@ $head='
     $friends = '
     <div align=center class=middle> Дружественные сайты:</div>'.$tab_begin.'
         <tr class=round_table><td colspan=3 align=center class=baner_img><a href=http://www.ugatu.ac.ru title="Официальный сайт УГАТУ"  target="_blank">
-                           <img src='.$web_root.'images/design/baners/baner4.gif alt="Cайт УГАТУ" border=1></a></td></tr>
+                           <img src='.$web_root.'images/design/blocks/block4.gif alt="Cайт УГАТУ" border=1></a></td></tr>
         <tr class=round_table><td colspan=3 align=center class=baner_img><a href=http://www.businessstudio.ru title="Управление бизнесом, бизнес-моделирование, бизнес-процесс, описание бизнес-процессов, оптимизация бизнес-процессов&nbsp;&mdash;&nbsp;Business Studio"  target="_blank">
-                           <img src='.$web_root.'images/design/baners/baner8.gif alt="Cайт Business Studio" border=0 style="background-color:White;"></a></td></tr>
+                           <img src='.$web_root.'images/design/blocks/block8.gif alt="Cайт Business Studio" border=0 style="background-color:White;"></a></td></tr>
         <tr class=round_table><td colspan=3 align=center class=baner_img><a href=http://erp4students.ru title="Программа дистанционного обучения решениям SAP для студентов России и стран СНГ, организуемую университетом Дуйсбург-Эссена (Германия)   erp4students"  target="_blank">
-                           <img src='.$web_root.'images/design/baners/baner9.gif alt="erp4students" border=0 style="background-color:White;"></a></td></tr>
+                           <img src='.$web_root.'images/design/blocks/block9.gif alt="erp4students" border=0 style="background-color:White;"></a></td></tr>
         <tr class=round_table><td colspan=3 align=center class=baner_img><a href=http://www.ugatu.net title="Портал студгородка УГАТУ"  target="_blank">
-                           <img src='.$web_root.'images/design/baners/baner5.gif alt="Cтудгородок УГАТУ" border=1></a></td></tr>
+                           <img src='.$web_root.'images/design/blocks/block5.gif alt="Cтудгородок УГАТУ" border=1></a></td></tr>
         <tr class=round_table><td colspan=3 align=center class=baner_img><a href=http://www.library.ugatu.ac.ru/index.html title="Библиотека,электронный каталог УГАТУ" target="_blank">
-                           <img src='.$web_root.'images/design/baners/baner6.gif alt="Библиотека УГАТУ" border=1></a></td></tr>'.$tab_end;
+                           <img src='.$web_root.'images/design/blocks/block6.gif alt="Библиотека УГАТУ" border=1></a></td></tr>'.$tab_end;
     /**
      * Статистика за неделю
      */

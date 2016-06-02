@@ -717,7 +717,7 @@ else {
   	  <td width="30"></td>
 	  <td>&quot;___&quot; ___________ 200__ г. </td>
       <td width="30"></td>
-	  <td>				Зав. кафедрой_____________Куликов Г.Г. </td>
+	  <td>				Зав. кафедрой_____________<?php echo CStaffManager::getPersonByPostId(HEAD_OF_DEPARTMENT)->getNameShort(); ?> </td>
       <td width="30"></td>
       <td>	Декан факультета_____________Юсупова Н.И.</td>
       <td width="30"></td>
