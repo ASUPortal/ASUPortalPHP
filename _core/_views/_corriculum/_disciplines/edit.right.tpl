@@ -35,7 +35,7 @@
 {CHtml::displayActionsMenu($_actions_menu)}
 
 <p>
-    <a href="disciplines.php?action=addFromUrl&discipline_id={CRequest::getInt("id")}" asu-action="flow">
+    <a href="disciplines.php?action=addFromUrl&discipline_id={CRequest::getInt("id")}">
         <center>
             <img src="{$web_root}images/{$icon_theme}/32x32/actions/document-save.png"><br>
             Добавить литературу из библиотеки
