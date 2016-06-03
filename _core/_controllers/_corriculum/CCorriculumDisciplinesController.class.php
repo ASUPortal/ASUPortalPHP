@@ -169,6 +169,7 @@ class CCorriculumDisciplinesController extends CFlowController {
     	$subject_id = $discipline->discipline->getId();
     	
     	$this->setData("message", CDisciplinesManager::addBooksFromUrl($codeDiscipl, $subject_id));
-    	$this->renderView("_flow/dialog.ok.tpl", "", "");
+    	$this->renderView("_corriculum/_disciplines/addBooks.tpl");
+    	//$this->renderView("_flow/dialog.ok.tpl", "", "");
     }
 }
