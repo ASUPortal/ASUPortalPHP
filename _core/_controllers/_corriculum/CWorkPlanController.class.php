@@ -185,6 +185,10 @@ class CWorkPlanController extends CFlowController{
         $plan = new CWorkPlan();
         $plan->title = "Наименование не указано";
         $plan->title_display = $plan->title;
+        // название кафедры - кафедра АСУ
+        $plan->department_id = "1854";
+        // уровень подготовки - бакалавриат
+        $plan->level_id = "1893";
         // дисциплина из учебного плана
         $plan->corriculum_discipline_id = $discipline->getId();
         // дисциплина из справочника

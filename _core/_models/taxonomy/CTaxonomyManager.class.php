@@ -509,21 +509,17 @@ class CTaxonomyManager {
      * @return CTerm
      */
     public static function getTerm($id) {
-    	if ($id != "") {
-    		if (!self::getCacheTerms()->hasElement($id)) {
-    			$rec = CActiveRecordProvider::getById(TABLE_TAXONOMY_TERMS, $id);
-    			if (!is_null($rec)) {
-    				$term = new CTerm($rec);
-    				self::getCacheTerms()->add($term->getId(), $term);
-    			}
+    	if (!self::getCacheTerms()->hasElement($id)) {
+    		$rec = CActiveRecordProvider::getById(TABLE_TAXONOMY_TERMS, $id);
+    		if (!is_null($rec)) {
+    			$term = new CTerm($rec);
+    			self::getCacheTerms()->add($term->getId(), $term);
     		}
-    		if (!self::getCacheTerms()->hasElement($id)) {
-    			self::getCacheTerms()->add($id, null);
-    		}
-    		return self::getCacheTerms()->getItem($id);
-    	} else {
-    		return array();
     	}
+    	if (!self::getCacheTerms()->hasElement($id)) {
+    		self::getCacheTerms()->add($id, null);
+    	}
+    	return self::getCacheTerms()->getItem($id);
     }
     /**
      * Оценка

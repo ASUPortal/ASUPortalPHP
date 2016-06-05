@@ -1367,7 +1367,7 @@ class CHtml {
         $renderer = new CActionsMenuRenderer();
         $renderer->render($items);
     }
-    public static function activeViewGroupSelect($name, CModel $model = null, $isHeader = false, $isDoc = false) {
+    public static function activeViewGroupSelect($name, CModel $model, $isHeader = false, $isDoc = false) {
         if ($isHeader) {
             // это в шапке таблицы, тут нужно показать групповую скрывалку/показывалку
             if (!self::$_viewGroupSelectInit) {

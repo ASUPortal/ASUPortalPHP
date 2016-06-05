@@ -6,6 +6,10 @@
     {CHtml::helpForCurrentPage()}
 
     {include file="_core.searchLocal.tpl"}
+    
+    {if $students->getCount() == 0}
+		Нет студентов для отображения
+	{else}
 
     <form action="index.php" method="post" id="MainView">
     <table class="table table-striped table-bordered table-hover table-condensed">
@@ -46,6 +50,8 @@
         {/foreach}
     </table>
     </form>
+    
+    {/if}
 
     {CHtml::paginator($paginator, "?action=index")}
 {/block}
