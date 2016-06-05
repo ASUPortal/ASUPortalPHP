@@ -23,33 +23,37 @@ class CWorkPlanTotalCredits extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
+    	$result = "";
         $terms = array();
         $termIds = array();
         foreach ($contextObject->terms->getItems() as $term) {
         	$termIds[] = $term->getId();
         }
-        $query = new CQuery();
-        $query->select("sum(if(l.term_id in (".join(", ", $termIds)."), l.value, 0)) as t_sum")
-	        ->from(TABLE_WORK_PLAN_CONTENT_LOADS." as l")
-	        ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
-	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
-	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
-	        ->condition("category.plan_id = ".$contextObject->getId()." and l._deleted = 0 and category._deleted = 0");
-        $objects = $query->execute();
-        $result = 0;
-        foreach ($objects->getItems() as $key=>$value) {
-        	$result += $value["t_sum"];
-        }
-        if (!is_null($contextObject->finalControls)) {
-        	foreach ($contextObject->finalControls->getItems() as $control) {
-        		$item = $control->controlType;
+        if (count($termIds) > 0) {
+        	$query = new CQuery();
+        	$query->select("sum(if(l.term_id in (".join(", ", $termIds)."), l.value, 0)) as t_sum")
+	        	->from(TABLE_WORK_PLAN_CONTENT_LOADS." as l")
+	        	->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
+	        	->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
+	        	->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
+	        	->condition("category.plan_id = ".$contextObject->getId()." and l._deleted = 0 and category._deleted = 0");
+        	$objects = $query->execute();
+        	$result = 0;
+        	foreach ($objects->getItems() as $key=>$value) {
+        		$result += $value["t_sum"];
         	}
+        	if (!is_null($contextObject->finalControls)) {
+        		foreach ($contextObject->finalControls->getItems() as $control) {
+        			$item = $control->controlType;
+        		}
+        	}
+        	if (isset($item) && $item == "Зачет") {
+        		$result += 9;
+        	} elseif(isset($item)) {
+        		$result += 36;
+        	}
+        	return round($result/36, 2);
         }
-        if (isset($item) && $item == "Зачет") {
-        	$result += 9;
-        } elseif(isset($item)) {
-        	$result += 36;
-        }
-        return round($result/36, 2);
+        return $result;
     }
 }

@@ -23,6 +23,7 @@ class CWorkPlanDepartment extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
+    	$result = "";
 		if (!is_null($contextObject->department)) {
 			$result = $contextObject->department->getValue();
 		}

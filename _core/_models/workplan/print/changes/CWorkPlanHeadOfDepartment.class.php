@@ -23,7 +23,7 @@ class CWorkPlanHeadOfDepartment extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$result = CStaffManager::getPersonByPostId("2")->getNameShort();
+		$result = CStaffManager::getPersonByPostId(HEAD_OF_DEPARTMENT)->getNameShort();
         return $result;
     }
 }

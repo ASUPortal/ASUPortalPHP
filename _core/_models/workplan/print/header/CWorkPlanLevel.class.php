@@ -23,6 +23,7 @@ class CWorkPlanLevel extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
+    	$result = "";
 		if (!is_null($contextObject->level)) {
 			$result = $contextObject->level->getValue();
 		}
