@@ -44,6 +44,9 @@
         <td>&nbsp;</td>
     </tr>
 {/function}
+{if $corriculum->cycles->getCount() == 0}
+	Нет дисциплин для отображения
+{else}
 <form action="index.php" method="post" id="MainView">
 <table class="table table-striped table-bordered table-hover table-condensed">
     <thead>
@@ -83,3 +86,4 @@
     {/foreach}
 </table>
 </form>
+{/if}
