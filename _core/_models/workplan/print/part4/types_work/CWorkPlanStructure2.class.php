@@ -24,6 +24,7 @@ class CWorkPlanStructure2 extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = array();
+        $discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
         $terms = array();
         $terms[] = "term.name";
         $termIds = array();
@@ -48,6 +49,31 @@ class CWorkPlanStructure2 extends CAbstractPrintClassField {
         		$dataRow[$i] = $arr[$i];
         	}
         	$result[] = $dataRow;
+        }
+        if (empty($result)) {
+        	$terms = array();
+        	$terms[] = "term.name";
+        	foreach ($discipline->sections->getItems() as $section) {
+        		$terms[] = "sum(if(l.section_id = ".$section->getId().", l.value, 0)) as t_".$section->getId();
+        	}
+        	$query = new CQuery();
+        	$query->select(join(", ", $terms))
+	        	->from(TABLE_CORRICULUM_DISCIPLINE_LABORS." as l")
+	        	->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.type_id")
+	        	->innerJoin(TABLE_CORRICULUM_DISCIPLINE_SECTIONS." as section", "l.section_id = section.id")
+	        	->innerJoin(TABLE_CORRICULUM_DISCIPLINES." as discipline", "section.discipline_id = discipline.id")
+	        	->condition("discipline.id = ".$discipline->getId())
+	        	->group("l.type_id")
+	        	->order("term.name");
+        	$objects = $query->execute();
+        	foreach ($objects->getItems() as $key=>$value) {
+        		$arr = array_values($value);
+        		$dataRow = array();
+        		for ($i = 0; $i <= count($value)-1; $i++) {
+        			$dataRow[$i] = $arr[$i];
+        		}
+        		$result[] = $dataRow;
+        	}
         }
         return $result;
     }

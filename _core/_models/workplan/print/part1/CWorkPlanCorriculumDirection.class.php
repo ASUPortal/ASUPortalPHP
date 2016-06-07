@@ -1,9 +1,9 @@
 <?php
 
-class CWorkPlanYear extends CAbstractPrintClassField {
+class CWorkPlanCorriculumDirection extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Год";
+        return "Направление подготовки из учебного плана";
     }
 
     public function getFieldDescription()
@@ -23,8 +23,11 @@ class CWorkPlanYear extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
-		$result = $discipline->cycle->corriculum->year_start;
+    	$result = "";
+    	$discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
+		if (!is_null($discipline->cycle->corriculum->speciality_direction)) {
+			$result = $discipline->cycle->corriculum->speciality_direction->getValue();
+		}
         return $result;
     }
 }

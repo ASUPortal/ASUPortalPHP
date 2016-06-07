@@ -346,6 +346,8 @@
     define("TABLE_WORK_PLAN_EVALUATION_MATERIALS", "pl_corriculum_workplan_evaluation_materials");
     define("TABLE_WORK_PLAN_MARKS_STUDY_ACTIVITY", "pl_corriculum_workplan_marks_study_activity");
     define("TABLE_WORK_PLAN_RECOMMENDED_LITERATURE", "pl_corriculum_workplan_recommended_literature");
+    define("TABLE_WORK_PLAN_PROTOCOLS_DEP", "pl_corriculum_workplan_protocols_dep");
+    define("TABLE_WORK_PLAN_PROTOCOLS_NMS", "pl_corriculum_workplan_protocols_nms");
     /**
      * Константы пагинатора
      */

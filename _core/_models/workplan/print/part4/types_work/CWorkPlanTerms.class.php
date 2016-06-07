@@ -24,12 +24,21 @@ class CWorkPlanTerms extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = array();
-        if (!is_null($contextObject->terms)) {
-        	$arr = array(1);
+        $discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
+        if (!empty($contextObject->terms->getItems())) {
+        	$arr = array("");
         	foreach ($contextObject->terms->getItems() as $term) {
         		$arr[] = $term->corriculum_discipline_section->title." семестр";
         	}
         	$result[] = $arr;
+        } else {
+        	if (!empty($discipline->sections->getItems())) {
+        		$arr = array("");
+        		foreach ($discipline->sections->getItems() as $section) {
+        			$arr[] = $section->title." семестр";
+        		}
+        		$result[] = $arr;
+        	}
         }
         return $result;
     }

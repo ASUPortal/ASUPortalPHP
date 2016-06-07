@@ -24,6 +24,7 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = array();
+        $discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
         if (!is_null($contextObject->terms)) {
         	$termSectionsData = new CArrayList();
         	foreach ($contextObject->terms->getItems() as $term) {
@@ -53,6 +54,12 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         		}
         	}
         	foreach ($termSectionsData->getItems() as $termId=>$termData) {
+        		$lectureSum = 0;
+        		$practiceSum = 0;
+        		$labworkSum = 0;
+        		$ksrSum = 0;
+        		$selfeduSum = 0;
+        		$totalSum = 0;
         		foreach ($termData as $row) {
         			$queryTech = new CQuery();
         			$queryTech->select("tech.technology_id")
@@ -97,8 +104,69 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         			$dataRow[8] = implode(", ", $literature);
         			$dataRow[9] = implode(", ", $technologies);
         			$result[] = $dataRow;
+        			
+        			$lectureSum += $row["lecture"];
+        			$practiceSum += $row["practice"];
+        			$labworkSum += $row["labwork"];
+        			$ksrSum += $row["ksr"];
+        			$selfeduSum += $row["selfedu"];
+        			$totalSum += $row["total"];
+        		}
+        		$total = array();
+        		$total[0] = "";
+        		$total[1] = "Итого";
+        		$total[2] = $lectureSum;
+        		$total[3] = $practiceSum;
+        		$total[4] = $labworkSum;
+        		$total[5] = $ksrSum;
+        		$total[6] = $selfeduSum;
+        		$total[7] = $totalSum;
+        		$total[8] = "";
+        		$total[9] = "";
+        		$result[] = $total;
+        	}
+        }
+        if (empty($result)) {
+        	$lectureSum = 0;
+        	$practiceSum = 0;
+        	$labworkSum = 0;
+        	$ksrSum = 0;
+        	$selfeduSum = 0;
+        	$totalSum = 0;
+        	foreach ($discipline->sections->getItems() as $section) {
+        		foreach ($section->labors->getItems() as $labor) {
+        			if ($labor->type->getAlias() == "lecture") {
+        				$lectureSum += $labor->value;
+        			}
+        			if ($labor->type->getAlias() == "practice") {
+        				$practiceSum += $labor->value;
+        			}
+        			if ($labor->type->getAlias() == "labwork") {
+        				$labworkSum += $labor->value;
+        			}
+        			if ($labor->type->getAlias() == "ksr") {
+        				$ksrSum += $labor->value;
+        			}
+        			if ($labor->type->getAlias() == "self_work") {
+        				$selfeduSum += $labor->value;
+        			}
+        			if ($labor->type->getAlias() == "total") {
+        				$totalSum += $labor->value;
+        			}
         		}
         	}
+        	$total = array();
+        	$total[0] = "";
+        	$total[1] = "Итого";
+        	$total[2] = $lectureSum;
+        	$total[3] = $practiceSum;
+        	$total[4] = $labworkSum;
+        	$total[5] = $ksrSum;
+        	$total[6] = $selfeduSum;
+        	$total[7] = $totalSum;
+        	$total[8] = "";
+        	$total[9] = "";
+        	$result[] = $total;
         }
         return $result;
     }

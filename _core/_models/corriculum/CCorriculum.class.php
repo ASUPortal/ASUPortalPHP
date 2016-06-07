@@ -110,7 +110,10 @@ class CCorriculum extends CActiveModel{
         	"nis_chairman_id" => "Председатель НМС",
         	"direction.name" => "Направление",
         	"term.name" => "Профиль",
-        	"educ_form.name" => "Форма обучения"
+        	"educ_form.name" => "Форма обучения",
+        	"year_start" => "Год начала подготовки",
+        	"order_number" => "Номер приказа",
+        	"order_date" => "Дата утверждения приказа"
         );
     }
     public function validationRules() {

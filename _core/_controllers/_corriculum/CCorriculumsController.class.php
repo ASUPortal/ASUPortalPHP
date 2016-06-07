@@ -76,11 +76,15 @@ class CCorriculumsController extends CBaseController {
     }
     public function actionEdit() {
         $corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("id"));
+        if ($corriculum->order_date == "0000-00-00") {
+        	$corriculum->order_date = date("Y-m-d");
+        }
+        $corriculum->order_date = date("d.m.Y", strtotime($corriculum->order_date));
         /**
          * Подключаем скрипты
          */
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        //$this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->setData("corriculum", $corriculum);
         $this->renderView("_corriculum/_plan/edit.tpl");
     }
@@ -88,8 +92,13 @@ class CCorriculumsController extends CBaseController {
         $corriculum = new CCorriculum();
         $corriculum->setAttributes(CRequest::getArray($corriculum::getClassName()));
         if ($corriculum->validate()) {
+        	$corriculum->order_date = date("Y-m-d", strtotime($corriculum->order_date));
             $corriculum->save();
-            $this->redirect("?action=view&id=".$corriculum->getId());
+            if ($this->continueEdit()) {
+            	$this->redirect("?action=edit&id=".$corriculum->getId());
+            } else {
+            	$this->redirect("?action=view&id=".$corriculum->getId());
+            }
             return true;
         }
         $this->setData("corriculum", $corriculum);
