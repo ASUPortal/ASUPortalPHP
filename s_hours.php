@@ -736,12 +736,86 @@ if (array_key_exists("type_kind", $_POST)) {
 		<label><input type=checkbox id=add_cat onclick="setCat(this);" <?php echo ($add_cat?"checked":"") ?> >коммерция&nbsp;</label>
 
 	<span style="padding-left:20; font-weight:bold;"> итого:&nbsp;<?php
-        $sumFields=($main_cat?'sum+ ':'').($add_cat?'sum_add+ ':'');
+	
+	$gArr=array();	// выражения запроса с учетом категории средств (основные, доп.)
+	if ($main_cat) {
+		$gArr['sum'][] = "ifnull(hours.practs, 0)";
+		$gArr['sum'][] = "ifnull(hours.lects, 0)";
+		$gArr['sum'][] = "ifnull(hours.labor, 0)";
+		$gArr['sum'][] = "ifnull(hours.rgr, 0)";
+		$gArr['sum'][] = "ifnull(hours.ksr, 0)";
+		$gArr['sum'][] = "ifnull(hours.recenz, 0)";
+		$gArr['sum'][] = "ifnull(hours.kurs_proj, 0)";
+		$gArr['sum'][] = "ifnull(hours.consult, 0)";
+		$gArr['sum'][] = "ifnull(hours.test, 0)";
+		$gArr['sum'][] = "ifnull(hours.exams, 0)";
+		$gArr['sum'][] = "ifnull(hours.study_pract, 0)";
+		$gArr['sum'][] = "ifnull(hours.work_pract, 0)";
+		$gArr['sum'][] = "ifnull(hours.consult_dipl, 0)";
+		$gArr['sum'][] = "ifnull(hours.gek, 0)";
+		$gArr['sum'][] = "ifnull(hours.aspirants, 0)";
+		$gArr['sum'][] = "ifnull(hours.aspir_manage, 0)";
+		$gArr['sum'][] = "ifnull(hours.duty, 0)";
+	}
+	if ($add_cat) {
+		$gArr['sum'][] = "ifnull(hours.practs_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.lects_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.labor_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.rgr_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.ksr_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.recenz_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.kurs_proj_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.consult_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.test_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.exams_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.study_pract_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.work_pract_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.consult_dipl_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.gek_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.aspirants_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.aspir_manage_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.duty_add, 0)";
+	}
+	
+	$query = "
+select
+	sum(".implode("+", $gArr["sum"]).") as hours_sum
+		from
+		kadri as kadri
+	
+		left join
+		hours_kind as hours
+		on
+		hours.kadri_id = kadri.id
+	
+		left join
+		dolgnost
+		on
+		dolgnost.id = kadri.dolgnost
+	
+		left join
+		hours_rate as hr
+		on
+		hr.dolgnost_id=kadri.dolgnost
+	
+		where
+		hours.year_id = $year_id_all
+		";
+
+			$res=mysql_query($query);
+			
+			$sumTotal = 0;
+	
+			while ($a=mysql_fetch_array($res)) {
+				$sumTotal += $a['hours_sum'];
+			}
+
+        /*$sumFields=($main_cat?'sum+ ':'').($add_cat?'sum_add+ ':'');
         $sumFields=preg_replace("/\+ $/",'',$sumFields);
 
-        $query='select sum('.$sumFields.') FROM hours_kind WHERE year_id = "'.$year_id_all.'"';
+        $query='select sum('.$sumFields.') FROM hours_kind WHERE year_id = "'.$year_id_all.'"';*/
 
-        echo numLocal(getScalarVal($query)); ?></span>
+        echo numLocal(number_format($sumTotal,1,',','')); ?></span>
 	</span>
         </td></tr>
     <tr class=title height="30" align=center>
@@ -986,8 +1060,6 @@ WHERE concat(substring(date_end,7,4),".",substring(date_end,4,2),".",substring(d
     $res=mysql_query($query);
     //echo $query_orders;
     
-    $groupsCntTotal = 0;
-    $studCntTotal = 0;
     $lectsTotal = 0;
     $diplTotal = 0;
     $mainTotal = 0;
@@ -1042,8 +1114,6 @@ WHERE concat(substring(date_end,7,4),".",substring(date_end,4,2),".",substring(d
 	<td class=numb>&nbsp;'.numLocal(number_format($a['hours_sum3_'],1,',','')).'</td>
 	<td class=numb>&nbsp;'.numLocal(number_format($a['hours_sum4_'],1,',','')).'</td>
 	<td class=numb>&nbsp;'.numLocal(number_format($a['hours_sum'],1,',','')).'</td></tr>';
-        $groupsCntTotal += $a['groups_cnt_sum_'];
-        $studCntTotal += $a['stud_cnt_sum_'];
         $lectsTotal += $a['lects_sum_'];
         $diplTotal += $a['dipl_sum_'];
         $mainTotal += $a['hours_sum1_'];
@@ -1053,14 +1123,18 @@ WHERE concat(substring(date_end,7,4),".",substring(date_end,4,2),".",substring(d
         $sumTotal += $a['hours_sum'];
         $i++;
     }
-    echo'<td>&nbsp;</td>
-    <td>&nbsp;</td>
-	<td><b>Итого</b></td>
+    if (!isset($_GET['save']) && !isset($_GET['print'])) {
+    	echo '<tr bgcolor="#ff9966"><td>&nbsp;</td>
+        <td>&nbsp;</td>';
+    } else {
+    	echo '<tr bgcolor="#ff9966"><td>&nbsp;</td>';
+    }
+    echo '<td><b>Итого</b></td>
 	<td>&nbsp;</td>
     <td>&nbsp;</td>
-	<td class=numb>&nbsp;</td>
-	<td class=numb>&nbsp;<b>'.$groupsCntTotal.'</b></td>
-	<td class=numb>&nbsp;<b>'.$studCntTotal.'</b></td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
 	<td class=numb>&nbsp;<b>'.$lectsTotal.'</b></td>
 	<td class=numb>&nbsp;<b>'.$diplTotal.'</b></td>
 	<td class=numb>&nbsp;<b>'.numLocal(number_format($mainTotal,1,',','')).'</b></td>
