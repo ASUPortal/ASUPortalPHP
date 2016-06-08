@@ -26,24 +26,24 @@ class CWorkPlanLabWorks extends CAbstractPrintClassField {
         $result = array();
         $discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
         $sum = 0;
-        foreach ($contextObject->getLabWorks()->getItems() as $termData) {
-        	foreach ($termData as $row) {
-        		$dataRow = array();
-        		$dataRow[0] = count($result) + 1;
-        		$dataRow[1] = $row->load->section->sectionIndex;
-        		$dataRow[2] = $row->title;
-        		$dataRow[3] = $row->value;
-        		$result[] = $dataRow;
-        		$sum += $row->value;
+        if (!empty($contextObject->getLabWorks()->getItems())) {
+        	foreach ($contextObject->getLabWorks()->getItems() as $termData) {
+        		foreach ($termData as $row) {
+        			$dataRow = array();
+        			$dataRow[0] = count($result) + 1;
+        			$dataRow[1] = $row->load->section->sectionIndex;
+        			$dataRow[2] = $row->title;
+        			$dataRow[3] = $row->value;
+        			$result[] = $dataRow;
+        			$sum += $row->value;
+        		}
         	}
-        }
-        $total = array();
-        $total[0] = "";
-        $total[1] = "";
-        $total[2] = "Итого";
-        $total[3] = $sum;
-        $result[] = $total;
-        if (empty($contextObject->getLabWorks()->getItems())) {
+        	$total = array();
+        	$total[0] = "";
+        	$total[1] = "";
+        	$total[2] = "Итого";
+        	$total[3] = $sum;
+        } else {
         	$sum = 0;
         	foreach ($discipline->sections->getItems() as $section) {
         		foreach ($section->labors->getItems() as $labor) {
@@ -58,6 +58,7 @@ class CWorkPlanLabWorks extends CAbstractPrintClassField {
         	$total[2] = "Итого";
         	$total[3] = $sum;
         }
+        $result[] = $total;
         return $result;
     }
 }

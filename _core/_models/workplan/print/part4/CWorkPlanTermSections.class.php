@@ -150,9 +150,7 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         			if ($labor->type->getAlias() == "self_work") {
         				$selfeduSum += $labor->value;
         			}
-        			if ($labor->type->getAlias() == "total") {
-        				$totalSum += $labor->value;
-        			}
+        			$totalSum = $lectureSum+$practiceSum+$labworkSum+$ksrSum+$selfeduSum;
         		}
         	}
         	$total = array();
