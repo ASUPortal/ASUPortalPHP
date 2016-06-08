@@ -23,14 +23,20 @@ class CWorkPlanTotalCredits extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$result = "";
+    	$result = 0;
     	$discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
         $terms = array();
         $termIds = array();
         foreach ($contextObject->terms->getItems() as $term) {
         	$termIds[] = $term->getId();
         }
-        if (count($termIds) > 0) {
+        $sections = array();
+        foreach ($contextObject->categories->getItems() as $category) {
+        	foreach ($category->sections->getItems() as $section) {
+        		$sections[] = $section->getId();
+        	}
+        }
+        if (count($termIds) > 0 and !empty($sections)) {
         	$query = new CQuery();
         	$query->select("sum(if(l.term_id in (".join(", ", $termIds)."), l.value, 0)) as t_sum")
 	        	->from(TABLE_WORK_PLAN_CONTENT_LOADS." as l")
