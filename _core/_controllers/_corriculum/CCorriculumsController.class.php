@@ -127,6 +127,13 @@ class CCorriculumsController extends CBaseController {
         				"form" => "#MainView",
         				"link" => "index.php",
         				"action" => "deleteDisciplines"
+        			),
+        			array(
+        				"title" => "Изменить цикл выбранных дисциплин",
+        				"icon" => "actions/edit-copy.png",
+        				"form" => "#MainView",
+        				"link" => "index.php?id=".$corriculum->getId(),
+        				"action" => "selectCycle"
         			)
         		)
         	)
@@ -437,6 +444,46 @@ class CCorriculumsController extends CBaseController {
     			foreach ($items as $id){
     				$discipline = CCorriculumsManager::getDiscipline($id);
     				$discipline->remove();
+    			}
+    		}
+    	}
+    	$this->redirect("index.php?action=view&id=".$corriculum);
+    }
+    /**
+     * Выбор цикла для изменения в дисциплинах
+     */
+    public function actionSelectCycle() {
+    	$corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("id"));
+    	$disciplines = implode(";", CRequest::getArray("selectedDoc"));
+    	$items = array();
+    	foreach ($corriculum->cycles->getItems() as $cycle) {
+    		$items[$cycle->getId()] = $cycle->title;
+    	}
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => "index.php?action=view&id=".CRequest::getInt("id"),
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
+    	$this->setData("corriculum", $corriculum);
+    	$this->setData("disciplines", $disciplines);
+    	$this->setData("items", $items);
+    	$this->renderView("_corriculum/_plan/selectCycle.tpl");
+    }
+    /**
+     * Смена цикла для выбранных дициплин
+     */
+    public function actionChangeCycle() {
+    	$items = explode(";", CRequest::getString("disciplines"));
+    	if (!empty($items)) {
+    		$discipline = CCorriculumsManager::getDiscipline($items[0]);
+    		if (!is_null($discipline)) {
+    			$corriculum = $discipline->cycle->corriculum_id;
+    			foreach ($items as $id){
+    				$discipline = CCorriculumsManager::getDiscipline($id);
+    				$discipline->cycle_id = CRequest::getInt("cycle_id");
+    				$discipline->save();
     			}
     		}
     	}
