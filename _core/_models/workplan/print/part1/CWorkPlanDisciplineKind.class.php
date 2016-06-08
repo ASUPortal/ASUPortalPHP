@@ -25,8 +25,10 @@ class CWorkPlanDisciplineKind extends CAbstractPrintClassField {
     {
 		$result = "";
 		$discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
-		if ($discipline->discipline_kind_id != 0) {
-			$result = CTaxonomyManager::getTerm($discipline->discipline_kind_id)->getValue();
+		if ($discipline->cycle->title == "Базовая часть") {
+			$result = "базовой";
+		} elseif ($discipline->cycle->title == "Вариативная часть") {
+			$result = "вариативной";
 		} else {
 			$result = "(базовой, вариативной)";
 		}

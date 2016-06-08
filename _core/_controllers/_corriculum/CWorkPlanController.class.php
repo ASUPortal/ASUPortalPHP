@@ -271,6 +271,11 @@ class CWorkPlanController extends CFlowController{
         		"title" => "Копировать рабочую программу",
         		"link" => "workplans.php?action=selectCorriculum&id=".$plan->getId(),
         		"icon" => "actions/edit-copy.png"
+        	),
+        	array(
+        		"title" => "Добавить литературу",
+        		"link" => "workplans.php?action=addLiterature&plan_id=".$plan->getId(),
+        		"icon" => "actions/list-add.png"
         	)
         ));
         $this->setData("plan", $plan);
@@ -360,6 +365,13 @@ class CWorkPlanController extends CFlowController{
     	foreach (CCorriculumsManager::getAllCorriculums()->getItems() as $corriculum) {
     		$items[$corriculum->getId()] = $corriculum->title;
     	}
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => "workplans.php?action=edit&id=".CRequest::getInt("id"),
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
     	$this->setData("items", $items);
     	$this->setData("plan", $plan);
     	$this->renderView("_corriculum/_workplan/workplan/select.tpl");
@@ -375,6 +387,13 @@ class CWorkPlanController extends CFlowController{
     	foreach ($corriculum->getDisciplines() as $discipline) {
     		$items[$discipline->getId()] = $discipline->discipline->getValue();
     	}
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => "workplans.php?action=selectCorriculum&id=".CRequest::getInt("id"),
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
     	$this->setData("items", $items);
     	$this->setData("plan", $plan);
     	$this->renderView("_corriculum/_workplan/workplan/copy.tpl");
