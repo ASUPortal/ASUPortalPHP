@@ -24,6 +24,11 @@ class CNMSProtocol extends CActiveModel{
             ),
         );
     }
+    public function attributeLabels() {
+    	return array(
+    			"corriculum_speciality_direction_id" => "Направление подготовки"
+    	);
+    }
     public function fieldsProperty() {
         return array(
             'original' => array(

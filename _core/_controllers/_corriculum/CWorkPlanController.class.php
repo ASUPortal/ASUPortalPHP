@@ -433,15 +433,22 @@ class CWorkPlanController extends CFlowController{
      * Сначала надо выбрать тип литературы
      */
     public function actionAddLiterature() {
-    	$bean = self::getStatefullBean();
-    	$bean->add("planId", CRequest::getInt("plan_id"));
     	$items = new CArrayList();
     	$result = array(1=>"Основная литература", 2=>"Дополнительная литература", 3=>"Интернет-ресурсы");
     	foreach ($result as $key=>$value) {
     		$items->add($key, $value);
     	}
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => "workplans.php?action=edit&id=".CRequest::getInt("plan_id"),
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
     	$this->setData("items", $items);
-    	$this->renderView("_flow/pickList.tpl", get_class($this), "AddLiterature_Select");
+    	$this->setData("plan_id", CRequest::getInt("plan_id"));
+    	$this->renderView("_corriculum/_workplan/workplan/addLiterature.tpl");
+    	//$this->renderView("_flow/pickList.tpl", get_class($this), "AddLiterature_Select");
     }
     /**
      * Добавление литературы.
@@ -449,9 +456,8 @@ class CWorkPlanController extends CFlowController{
      */
     public function actionAddLiterature_Select() {
     	$selected = CRequest::getArray("selected");
-    	$bean = self::getStatefullBean();
-    	$bean->add("type", $selected[0]);
-    	$plan = CWorkPlanManager::getWorkplan($bean->getItem("planId"));
+    	$type = $selected[0];
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan"));
     	$codeDiscipl = $plan->corriculumDiscipline->discipline->getId();
     	$result = array();
     	$query = new CQuery();
@@ -466,18 +472,26 @@ class CWorkPlanController extends CFlowController{
     	foreach ($result as $key=>$value) {
     		$items->add($key, $value);
     	}
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => "workplans.php?action=addLiterature&plan_id=".CRequest::getInt("plan"),
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
+    	$this->setData("plan", CRequest::getInt("plan"));
+    	$this->setData("type", $type);
     	$this->setData("items", $items);
-    	$this->setData("multiple", true);
-    	$this->renderView("_flow/pickList.tpl", get_class($this), "SaveLiterature");
+    	$this->renderView("_corriculum/_workplan/workplan/addLiteratureSelect.tpl");
+    	//$this->renderView("_flow/pickList.tpl", get_class($this), "SaveLiterature");
     }
     public function actionSaveLiterature() {
-    	$bean = self::getStatefullBean();
     	$selected = CRequest::getArray("selected");
     	foreach ($selected as $literature) {
     		$object = new CWorkPlanLiterature();
-    		$object->plan_id = $bean->getItem("planId");
-    		$object->type = $bean->getItem("type");
-    		$plan = CWorkPlanManager::getWorkplan($bean->getItem("planId"));
+    		$object->plan_id = CRequest::getInt("plan");
+    		$object->type = CRequest::getInt("type");
+    		$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan"));
     		if ($object->type == 1) {
     			$object->ordering = $plan->baseLiterature->getCount() + 1;
     		} elseif($object->type == 2) {
@@ -488,6 +502,6 @@ class CWorkPlanController extends CFlowController{
     		$object->book_id = $literature;
     		$object->save();
     	}
-    	$this->redirect("workplans.php?action=edit&id=".$bean->getItem("planId"));
+    	$this->redirect("workplans.php?action=edit&id=".CRequest::getInt("plan"));
     }
 }

@@ -25,6 +25,14 @@
             {CHtml::activeLookup("component_type_id", $discipline, "corriculum_discipline_type")}
             {CHtml::error("component_type_id", $discipline)}
         </div>
+    </div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("discipline_kind_id", $discipline)}
+        <div class="controls">
+            {CHtml::activeLookup("discipline_kind_id", $discipline, "corriculum_discipline_kind")}
+            {CHtml::error("discipline_kind_id", $discipline)}
+        </div>
     </div>	
 
     <div class="control-group">

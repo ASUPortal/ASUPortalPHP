@@ -24,6 +24,7 @@ class CWorkPlanTotalHours extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
     	$result = "";
+    	$discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
         $terms = array();
         $termIds = array();
         foreach ($contextObject->terms->getItems() as $term) {
@@ -52,6 +53,8 @@ class CWorkPlanTotalHours extends CAbstractPrintClassField {
         	} elseif(isset($item)) {
         		$result += 36;
         	}
+        } else {
+        	$result = $discipline->getLaborValue();
         }
         return $result;
     }

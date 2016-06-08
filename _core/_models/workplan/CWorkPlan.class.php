@@ -42,6 +42,8 @@
  * @property CArrayList authors
  * @property CArrayList categories
  * @property CArrayList selfEducations
+ * @property CArrayList protocolsDep
+ * @property CArrayList protocolsNMS
  */
 class CWorkPlan extends CActiveModel {
     protected $_table = TABLE_WORK_PLANS;
@@ -304,7 +306,25 @@ class CWorkPlan extends CActiveModel {
         		"storageTable" => TABLE_WORK_PLAN_CRITERIA_OF_EVALUATION,
         		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=3 and _deleted=0",
         		"targetClass" => "CWorkPlanCriteriaOfEvaluation"
-        	)
+        	),
+            "protocolsDep" => array(
+                "relationPower" => RELATION_MANY_TO_MANY,
+                "storageProperty" => "_protocolsDep",
+                "joinTable" => TABLE_WORK_PLAN_PROTOCOLS_DEP,
+                "leftCondition" => "plan_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "rightKey" => "protocol_id",
+                "managerClass" => "CProtocolManager",
+                "managerGetObject" => "getDepProtocol"
+            ),
+            "protocolsNMS" => array(
+                "relationPower" => RELATION_MANY_TO_MANY,
+                "storageProperty" => "_protocolsNMS",
+                "joinTable" => TABLE_WORK_PLAN_PROTOCOLS_NMS,
+                "leftCondition" => "plan_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "rightKey" => "protocol_id",
+                "managerClass" => "CProtocolManager",
+                "managerGetObject" => "getNMSProtocol"
+            )
         );
     }
 
@@ -346,7 +366,9 @@ class CWorkPlan extends CActiveModel {
         	"method_practic_instructs" => "Методические указания к практическим занятиям",
         	"method_labor_instructs" => "Методические указания к лабораторным занятиям",
         	"method_project_instructs" => "Методические указания к курсовому проектированию",
-        	"material_technical_supply" => "Материально-техническое обеспечение"
+        	"material_technical_supply" => "Материально-техническое обеспечение",
+            "protocolsDep" => "Протоколы кафедры",
+            "protocolsNMS" => "Протоколы НМС"
         );
     }
 

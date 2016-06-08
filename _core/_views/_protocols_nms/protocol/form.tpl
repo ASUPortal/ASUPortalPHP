@@ -27,6 +27,14 @@
             {CHtml::error("program_content", $object)}
         </div>
     </div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("corriculum_speciality_direction_id", $object)}
+        <div class="controls">
+            {CHtml::activeLookup("corriculum_speciality_direction_id", $object, "corriculum_speciality_directions")}
+            {CHtml::error("corriculum_speciality_direction_id", $object)}
+        </div>
+    </div>
 
     <div class="control-group">
         {CHtml::activeLabel("original", $object)}

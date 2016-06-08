@@ -24,6 +24,7 @@ class CWorkPlanTotalCredits extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
     	$result = "";
+    	$discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
         $terms = array();
         $termIds = array();
         foreach ($contextObject->terms->getItems() as $term) {
@@ -38,9 +39,9 @@ class CWorkPlanTotalCredits extends CAbstractPrintClassField {
 	        	->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
 	        	->condition("category.plan_id = ".$contextObject->getId()." and l._deleted = 0 and category._deleted = 0");
         	$objects = $query->execute();
-        	$result = 0;
+        	$res = 0;
         	foreach ($objects->getItems() as $key=>$value) {
-        		$result += $value["t_sum"];
+        		$res += $value["t_sum"];
         	}
         	if (!is_null($contextObject->finalControls)) {
         		foreach ($contextObject->finalControls->getItems() as $control) {
@@ -48,11 +49,13 @@ class CWorkPlanTotalCredits extends CAbstractPrintClassField {
         		}
         	}
         	if (isset($item) && $item == "Зачет") {
-        		$result += 9;
+        		$res += 9;
         	} elseif(isset($item)) {
-        		$result += 36;
+        		$res += 36;
         	}
-        	return round($result/36, 2);
+        	$result = round($res/36, 2);
+        } else {
+        	$result = round($discipline->getLaborValue()/36, 2);
         }
         return $result;
     }

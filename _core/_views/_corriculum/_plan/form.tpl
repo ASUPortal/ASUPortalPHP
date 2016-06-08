@@ -112,6 +112,30 @@
             {CHtml::activeTextField("load_as_fullday", $corriculum)}
             {CHtml::error("load_as_fullday", $corriculum)}
         </div>
+    </div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("year_start", $corriculum)}
+        <div class="controls">
+            {CHtml::activeTextField("year_start", $corriculum)}
+            {CHtml::error("year_start", $corriculum)}
+        </div>
+    </div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("order_number", $corriculum)}
+        <div class="controls">
+            {CHtml::activeTextField("order_number", $corriculum)}
+            {CHtml::error("order_number", $corriculum)}
+        </div>
+    </div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("order_date", $corriculum)}
+        <div class="controls">
+            {CHtml::activeDateField("order_date", $corriculum)}
+            {CHtml::error("order_date", $corriculum)}
+        </div>
     </div>	
 
     <div class="control-group">

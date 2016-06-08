@@ -80,7 +80,7 @@ class CCorriculumsController extends CBaseController {
          * Подключаем скрипты
          */
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
+        //$this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->setData("corriculum", $corriculum);
         $this->renderView("_corriculum/_plan/edit.tpl");
     }
@@ -89,7 +89,11 @@ class CCorriculumsController extends CBaseController {
         $corriculum->setAttributes(CRequest::getArray($corriculum::getClassName()));
         if ($corriculum->validate()) {
             $corriculum->save();
-            $this->redirect("?action=view&id=".$corriculum->getId());
+            if ($this->continueEdit()) {
+            	$this->redirect("?action=edit&id=".$corriculum->getId());
+            } else {
+            	$this->redirect("?action=view&id=".$corriculum->getId());
+            }
             return true;
         }
         $this->setData("corriculum", $corriculum);
