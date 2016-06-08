@@ -131,6 +131,14 @@ class CCorriculum extends CActiveModel{
             )
         );
     }
+    public function fieldsProperty() {
+    	return array(
+    			'order_date' => array(
+    					'type' => FIELD_MYSQL_DATE,
+    					'format' => "d.m.Y"
+    			)
+    	);
+    }
     public static function getClassName() {
         return __CLASS__;
     }

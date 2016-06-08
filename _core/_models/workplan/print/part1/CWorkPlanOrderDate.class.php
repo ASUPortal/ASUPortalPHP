@@ -25,7 +25,7 @@ class CWorkPlanOrderDate extends CAbstractPrintClassField {
     {
     	$result = "";
     	$discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
-    	if ($discipline->cycle->corriculum->order_date != "0000-00-00") {
+    	if ($discipline->cycle->corriculum->order_date != "") {
     		$day = date("d", strtotime($discipline->cycle->corriculum->order_date));
     		$month = CUtils::getMonthAsWord(date("m", strtotime($discipline->cycle->corriculum->order_date)));
     		$year = date("Y", strtotime($discipline->cycle->corriculum->order_date));

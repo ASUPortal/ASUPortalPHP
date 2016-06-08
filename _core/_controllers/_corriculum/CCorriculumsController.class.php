@@ -76,10 +76,6 @@ class CCorriculumsController extends CBaseController {
     }
     public function actionEdit() {
         $corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("id"));
-        if ($corriculum->order_date == "0000-00-00") {
-        	$corriculum->order_date = date("Y-m-d");
-        }
-        $corriculum->order_date = date("d.m.Y", strtotime($corriculum->order_date));
         /**
          * Подключаем скрипты
          */
@@ -92,7 +88,6 @@ class CCorriculumsController extends CBaseController {
         $corriculum = new CCorriculum();
         $corriculum->setAttributes(CRequest::getArray($corriculum::getClassName()));
         if ($corriculum->validate()) {
-        	$corriculum->order_date = date("Y-m-d", strtotime($corriculum->order_date));
             $corriculum->save();
             if ($this->continueEdit()) {
             	$this->redirect("?action=edit&id=".$corriculum->getId());
