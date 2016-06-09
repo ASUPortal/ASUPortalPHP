@@ -54,7 +54,7 @@ class CDisciplinesManager{
     /**
      * Добавление литературы с сайта библиотеки
      */
-    public static function addBooksFromUrl($codeDiscipl, $subject_id, $multiple = false) {
+    public static function addBooksFromUrl($codeDiscipl, $subject_id, $multiple = false, $link) {
     	// подключаем PHP Simple HTML DOM Parser
     	require_once(CORE_CWD."/_core/_external/smarty/vendor/simple_html_dom.php");
     
@@ -64,10 +64,7 @@ class CDisciplinesManager{
     		$proxy = CSettingsManager::getSettingValue("proxy_address");
     		$curl = curl_init();
     		curl_setopt($curl, CURLOPT_PROXY, $proxy);
-    		 
-    		// ссылка для загрузки изданий из библиотеки
-    		$link = CSettingsManager::getSettingValue("link_library");
-    
+    		
     		curl_setopt($curl, CURLOPT_URL, $link.$codeDiscipl);
     		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
