@@ -153,6 +153,26 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         			$totalSum = $lectureSum+$practiceSum+$labworkSum+$ksrSum+$selfeduSum;
         		}
         	}
+        	$countSections = $lectureSum/2;
+        	$taxonomy = CTaxonomyManager::getTaxonomy("corriculum_education_technologies");
+        	$technologies = array();
+        	foreach ($taxonomy->getTerms()->getItems() as $item) {
+        		$technologies[] = $item->getValue();
+        	}
+        	for ($i = 1; $i <= $countSections; $i++) {
+        		$dataRow = array();
+        		$dataRow[0] = $i;
+        		$dataRow[1] = "Раздел №".$i;
+        		$dataRow[2] = round($lectureSum/$countSections, 0);
+        		$dataRow[3] = round($practiceSum/$countSections, 0);
+        		$dataRow[4] = round($labworkSum/$countSections, 0);
+        		$dataRow[5] = round($ksrSum/$countSections, 0);
+        		$dataRow[6] = round($selfeduSum/$countSections, 0);
+        		$dataRow[7] = round($totalSum/$countSections, 0);
+        		$dataRow[8] = "Разд. 6.1 [".$i."]";
+        		$dataRow[9] = $technologies[array_rand($technologies, 1)];
+        		$result[] = $dataRow;
+        	}
         	$total = array();
         	$total[0] = "";
         	$total[1] = "Итого";

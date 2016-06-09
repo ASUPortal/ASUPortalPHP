@@ -122,35 +122,34 @@ class CCorriculumDiscipline extends CActiveModel {
             "discipline_id" => "Дисциплина",
             "ordering" => "Порядок в списке",
             "parent_id" => "Родительская дисциплина",
-			"component_type_id" => "Вид компонента",
-			"discipline_kind_id" => "Дисциплина относится к части"
+			"component_type_id" => "Вид компонента"
         );
     }
     /**
      * Трудоемкость по типу
      *
      * @param $key
-     * @return CCorriculumDisciplineLabor
+     * @return int
      */
     public function getLaborByType($key) {
-        $res = null;
+        $res = 0;
         foreach ($this->labors->getItems() as $labor) {
             if ($labor->type_id == $key) {
-                $res = $labor;
+                $res += $labor->value;
             } elseif (!is_null($labor->type)) {
 				if ($labor->type->getAlias() == $key) {
-		        	$res = $labor;
+		        	$res += $labor->value;
 				}
             }
         }
-        if (is_null($res)) {
+        if ($res == 0) {
         	foreach ($this->sections->getItems() as $section) {
         		foreach ($section->labors->getItems() as $labor) {
         			if ($labor->type_id == $key) {
-        				$res = $labor;
+        				$res += $labor->value;
         			} elseif (!is_null($labor->type)) {
         				if ($labor->type->getAlias() == $key) {
-        					$res = $labor;
+        					$res += $labor->value;
         				}
         			}		
         		}

@@ -32,8 +32,8 @@
         </td>
         {foreach $labors->getItems() as $key=>$value}
         <td>
-            {if !is_null($discipline->getLaborByType($key))}
-                {$discipline->getLaborByType($key)->value}
+            {if $discipline->getLaborByType($key) != 0}
+                {$discipline->getLaborByType($key)}
             {else}
                 &nbsp;
             {/if}

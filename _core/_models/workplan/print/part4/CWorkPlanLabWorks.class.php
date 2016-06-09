@@ -52,6 +52,16 @@ class CWorkPlanLabWorks extends CAbstractPrintClassField {
         			}
         		}
         	}
+        	$countItems = $sum/4;
+        	for ($i = 1; $i <= $countItems; $i++) {
+        		$dataRow = array();
+        		$dataRow[0] = $i;
+        		$dataRow[1] = $i;
+        		$dataRow[2] = "Лабораторная работа №".$i;
+        		$dataRow[3] = "4";
+        		$result[] = $dataRow;
+        		 
+        	}
         	$total = array();
         	$total[0] = "";
         	$total[1] = "";

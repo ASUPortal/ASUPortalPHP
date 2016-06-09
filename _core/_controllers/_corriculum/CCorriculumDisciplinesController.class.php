@@ -47,7 +47,11 @@ class CCorriculumDisciplinesController extends CFlowController {
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         // ссылка для загрузки изданий из библиотеки
-        $link = CSettingsManager::getSettingValue("link_library");
+        if ($corriculum->link_library != "") {
+        	$link = $corriculum->link_library;
+        } else {
+        	$link = CSettingsManager::getSettingValue("link_library");
+        }
         $this->setData("link", $link);
         $this->setData("disciplineTaxonomy", $disciplineTaxonomy);
         $this->setData("cycle", $discipline->cycle);
@@ -167,8 +171,16 @@ class CCorriculumDisciplinesController extends CFlowController {
     	$codeDiscipl = $discipline->discipline->library_code;
     	// id дисциплины из справочника
     	$subject_id = $discipline->discipline->getId();
+
+    	// ссылка для загрузки изданий из библиотеки
+    	$corriculum = CCorriculumsManager::getCorriculum($discipline->cycle->corriculum->getId());
+    	if ($corriculum->link_library != "") {
+    		$link = $corriculum->link_library;
+    	} else {
+    		$link = CSettingsManager::getSettingValue("link_library");
+    	}
     	
-    	$this->setData("message", CDisciplinesManager::addBooksFromUrl($codeDiscipl, $subject_id));
+    	$this->setData("message", CDisciplinesManager::addBooksFromUrl($codeDiscipl, $subject_id, false, $link));
     	$this->renderView("_corriculum/_disciplines/addBooks.tpl");
     	//$this->renderView("_flow/dialog.ok.tpl", "", "");
     }

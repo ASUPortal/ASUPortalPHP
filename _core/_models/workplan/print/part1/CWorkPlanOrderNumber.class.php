@@ -3,7 +3,7 @@
 class CWorkPlanOrderNumber extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Номер приказа из учебного плана";
+        return "Номер приказа утверждения стандарта из учебного плана";
     }
 
     public function getFieldDescription()
@@ -24,7 +24,7 @@ class CWorkPlanOrderNumber extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
     	$discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
-    	$result = $discipline->cycle->corriculum->order_number;
+    	$result = $discipline->cycle->corriculum->order_number_standart;
         return $result;
     }
 }

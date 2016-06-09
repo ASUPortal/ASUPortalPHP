@@ -286,8 +286,9 @@ class CDisciplinesController extends CFlowController{
     			$codeDiscipl = $discipline->library_code;
     			// id дисциплины из справочника
     			$subject_id = $discipline->getId();
+    			$link = CSettingsManager::getSettingValue("link_library");
     			// добавляем литературу с сайта библиотеки
-    			$availability = CDisciplinesManager::addBooksFromUrl($codeDiscipl, $subject_id, true);
+    			$availability = CDisciplinesManager::addBooksFromUrl($codeDiscipl, $subject_id, true, $link);
     			if (!$availability) {
     				// прерываем цикл foreach
     				break 1;
@@ -315,7 +316,8 @@ class CDisciplinesController extends CFlowController{
     	// id дисциплины из справочника
     	$subject_id = $discipline->getId();
     	
-    	$this->setData("message", CDisciplinesManager::addBooksFromUrl($codeDiscipl, $subject_id));
+    	$link = CSettingsManager::getSettingValue("link_library");
+    	$this->setData("message", CDisciplinesManager::addBooksFromUrl($codeDiscipl, $subject_id, false, $link));
     	$this->renderView("_flow/dialog.ok.tpl", "", "");
     }
 }

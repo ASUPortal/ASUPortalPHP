@@ -50,6 +50,16 @@ class CWorkPlanPractices extends CAbstractPrintClassField {
         			}
         		}
         	}
+        	$countItems = $sum/2;
+        	for ($i = 1; $i <= $countItems; $i++) {
+        		$dataRow = array();
+        		$dataRow[0] = $i;
+        		$dataRow[1] = $i;
+        		$dataRow[2] = "Практическое занятие №".$i;
+        		$dataRow[3] = "2";
+        		$result[] = $dataRow;
+        		 
+        	}
         	$total = array();
         	$total[0] = "";
         	$total[1] = "";

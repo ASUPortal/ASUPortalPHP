@@ -112,8 +112,10 @@ class CCorriculum extends CActiveModel{
         	"term.name" => "Профиль",
         	"educ_form.name" => "Форма обучения",
         	"year_start" => "Год начала подготовки",
-        	"order_number" => "Номер приказа",
-        	"order_date" => "Дата утверждения приказа"
+        	"order_date" => "Дата утверждения учебного плана",
+        	"order_number_standart" => "Номер приказа утверждения стандарта",
+        	"order_date_standart" => "Дата приказа утверждения стандарта",
+        	"link_library" => "Ссылка для загрузки книг из библиотеки"
         );
     }
     public function validationRules() {
@@ -134,6 +136,10 @@ class CCorriculum extends CActiveModel{
     public function fieldsProperty() {
     	return array(
     			'order_date' => array(
+    					'type' => FIELD_MYSQL_DATE,
+    					'format' => "d.m.Y"
+    			),
+    			'order_date_standart' => array(
     					'type' => FIELD_MYSQL_DATE,
     					'format' => "d.m.Y"
     			)

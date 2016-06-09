@@ -3,7 +3,7 @@
 class CWorkPlanOrderDate extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Дата утверждения приказа из учебного плана";
+        return "Дата приказа утверждения стандарта из учебного плана";
     }
 
     public function getFieldDescription()
@@ -25,10 +25,10 @@ class CWorkPlanOrderDate extends CAbstractPrintClassField {
     {
     	$result = "";
     	$discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
-    	if ($discipline->cycle->corriculum->order_date != "") {
-    		$day = date("d", strtotime($discipline->cycle->corriculum->order_date));
-    		$month = CUtils::getMonthAsWord(date("m", strtotime($discipline->cycle->corriculum->order_date)));
-    		$year = date("Y", strtotime($discipline->cycle->corriculum->order_date));
+    	if ($discipline->cycle->corriculum->order_date_standart != "") {
+    		$day = date("d", strtotime($discipline->cycle->corriculum->order_date_standart));
+    		$month = CUtils::getMonthAsWord(date("m", strtotime($discipline->cycle->corriculum->order_date_standart)));
+    		$year = date("Y", strtotime($discipline->cycle->corriculum->order_date_standart));
     		$result = "\"".$day."\" ".$month." ".$year;
     	}
         return $result;
