@@ -123,18 +123,34 @@
     </div>
     
     <div class="control-group">
-        {CHtml::activeLabel("order_number", $corriculum)}
-        <div class="controls">
-            {CHtml::activeTextField("order_number", $corriculum)}
-            {CHtml::error("order_number", $corriculum)}
-        </div>
-    </div>
-    
-    <div class="control-group">
         {CHtml::activeLabel("order_date", $corriculum)}
         <div class="controls">
             {CHtml::activeDateField("order_date", $corriculum)}
             {CHtml::error("order_date", $corriculum)}
+        </div>
+    </div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("order_number_standart", $corriculum)}
+        <div class="controls">
+            {CHtml::activeTextField("order_number_standart", $corriculum)}
+            {CHtml::error("order_number_standart", $corriculum)}
+        </div>
+    </div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("order_date_standart", $corriculum)}
+        <div class="controls">
+            {CHtml::activeDateField("order_date_standart", $corriculum)}
+            {CHtml::error("order_date_standart", $corriculum)}
+        </div>
+    </div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("link_library", $corriculum)}
+        <div class="controls">
+            {CHtml::activeTextField("link_library", $corriculum)}
+            {CHtml::error("link_library", $corriculum)}
         </div>
     </div>	
 
