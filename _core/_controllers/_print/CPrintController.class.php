@@ -153,7 +153,23 @@ class CPrintController extends CFlowController {
         /**
          * Сохраняем документ
          */
-        $filename = date("dmY_Hns")."_".$form->template_file;
+        if ($managerClass == "CWorkPlanManager") {
+        	$plan = CWorkPlanManager::getWorkplan($objectId);
+        	$discipline = "";
+        	if (!is_null($plan->discipline)) {
+        		$discipline = CUtils::toTranslit($plan->discipline->getValue());
+        	}
+        	$authors = array();
+        	if (!is_null($plan->authors)) {
+        		foreach ($plan->authors->getItems() as $author) {
+        			$authors[] = $author->getNameShort();
+        		}
+        	}
+        	$author = CUtils::toTranslit(implode(", ", $authors));
+        	$filename = $discipline." - ".$author.".odt";
+        } else {
+        	$filename = date("dmY_Hns")."_".$form->template_file;
+        }
         $i = 0;
         while (file_exists(PRINT_DOCUMENTS_DIR.$filename)) {
             $filename = date("dmY_Hns")."_".$i."_".$form->template_file;
