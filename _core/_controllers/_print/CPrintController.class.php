@@ -157,7 +157,8 @@ class CPrintController extends CFlowController {
         	$plan = CWorkPlanManager::getWorkplan($objectId);
         	$discipline = "";
         	if (!is_null($plan->discipline)) {
-        		$discipline = CUtils::toTranslit($plan->discipline->getValue());
+        		//$discipline = CUtils::toTranslit($plan->discipline->getValue());
+        		$discipline = $plan->discipline->getValue();
         	}
         	$authors = array();
         	if (!is_null($plan->authors)) {
@@ -165,8 +166,9 @@ class CPrintController extends CFlowController {
         			$authors[] = $author->getNameShort();
         		}
         	}
-        	$author = CUtils::toTranslit(implode(", ", $authors));
-        	$filename = $discipline." - ".$author.".odt";
+        	//$author = CUtils::toTranslit(implode(", ", $authors));
+        	$author = implode(", ", $authors);
+        	$filename = $author." - ".$discipline.".odt";
         } else {
         	$filename = date("dmY_Hns")."_".$form->template_file;
         }
