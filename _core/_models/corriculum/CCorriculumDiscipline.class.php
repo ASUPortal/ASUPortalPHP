@@ -185,6 +185,63 @@ class CCorriculumDiscipline extends CActiveModel {
         }
         return $res;
     }
+    /**
+     * Аудиторные занятия
+     *
+     * @return int
+     */
+    public function getLaborAuditor() {
+    	$res = 0;
+    	foreach ($this->labors->getItems() as $labor) {
+    		if (!is_null($labor->type)) {
+    			if ($labor->type->getAlias() == "lecture" or $labor->type->getAlias() == "practice" or $labor->type->getAlias() == "labwork" or $labor->type->getAlias() == "ksr") {
+    				$res += $labor->value;
+    			}
+    		}
+    	}
+    	return $res;
+    }
+    /**
+     * Всего теоретическое обучение
+     *
+     * @return int
+     */
+    public function getLaborTheoryEducation() {
+    	$res = $this->getLaborAuditor();
+    	foreach ($this->labors->getItems() as $labor) {
+    		if (!is_null($labor->type)) {
+    			if ($labor->type->getAlias() == "self_work" or $labor->type->getAlias() == "course_work" or $labor->type->getAlias() == "course_project" or $labor->type->getAlias() == "rgr" or $labor->type->getAlias() == "kollokvium") {
+    				$res += $labor->value;
+    			}
+    		}
+    	}
+    	return $res;
+    }
+    /**
+     * Трудоемкость общая
+     *
+     * @return int
+     */
+    public function getLaborTotal() {
+    	$res = $this->getLaborTheoryEducation();
+    	foreach ($this->labors->getItems() as $labor) {
+    		if (!is_null($labor->type)) {
+    			if ($labor->type->getAlias() == "examen" or $labor->type->getAlias() == "credit" or $labor->type->getAlias() == "creditWithMark") {
+    				$res += $labor->value;
+    			}
+    		}
+    	}
+    	return $res;
+    }
+    /**
+     * Зачетные единицы
+     *
+     * @return int
+     */
+    public function getCreditUnits() {
+    	$res = round($this->getLaborTotal()/36, 2);
+    	return $res;
+    }
     public function validationRules() {
         return array(
             "selected" => array(
