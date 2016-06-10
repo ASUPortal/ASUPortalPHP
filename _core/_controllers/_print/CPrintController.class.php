@@ -169,13 +169,18 @@ class CPrintController extends CFlowController {
         	//$author = CUtils::toTranslit(implode(", ", $authors));
         	$author = implode(", ", $authors);
         	$filename = $author." - ".$discipline.".odt";
+        	$i = 0;
+        	while (file_exists(PRINT_DOCUMENTS_DIR.$filename)) {
+        		$filename = $filename."_".$i.".odt";
+        		$i++;
+        	}
         } else {
         	$filename = date("dmY_Hns")."_".$form->template_file;
-        }
-        $i = 0;
-        while (file_exists(PRINT_DOCUMENTS_DIR.$filename)) {
-            $filename = date("dmY_Hns")."_".$i."_".$form->template_file;
-            $i++;
+        	$i = 0;
+        	while (file_exists(PRINT_DOCUMENTS_DIR.$filename)) {
+        		$filename = date("dmY_Hns")."_".$i."_".$form->template_file;
+        		$i++;
+        	}
         }
         $wordTemplate->save(PRINT_DOCUMENTS_DIR.$filename);
         /**
