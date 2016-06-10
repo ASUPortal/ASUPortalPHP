@@ -33,6 +33,26 @@
                 {$discipline->getLaborValue()}
             {/if}
         </td>
+        <td>
+            {if $discipline->children->getCount() == 0}
+                {$discipline->getLaborAuditor()}
+            {/if}
+        </td>
+        <td>
+            {if $discipline->children->getCount() == 0}
+                {$discipline->getLaborTheoryEducation()}
+            {/if}
+        </td>
+        <td>
+            {if $discipline->children->getCount() == 0}
+                {$discipline->getLaborTotal()}
+            {/if}
+        </td>
+        <td>
+            {if $discipline->children->getCount() == 0}
+                {$discipline->getCreditUnits()}
+            {/if}
+        </td>
         {foreach $labors->getItems() as $key=>$value}
             <td>
                 {if $discipline->getLaborByType($key) != 0}
@@ -53,14 +73,18 @@
     <tr>
         <td rowspan="2">Цикл</td>
         <td colspan="3">Дисциплины</td>
-        <td colspan="{$labors->getCount() + 1}">Распределение нагрузки по видям занятий</td>
+        <td colspan="{$labors->getCount() + 5}">Распределение нагрузки по видям занятий</td>
         <td>Форма итогового контроля</td>
     </tr>
     <tr>
         <td>{CHtml::activeViewGroupSelect("id", $corriculum->cycles->getFirstItem(), true)}</td>
         <td>№</td>
         <td>Наименование дисциплины</td>
-        <td>Всего</td>
+        <td><b>Всего</b></td>
+        <td><b>Аудиторные занятия</b></td>
+        <td><b>Всего теор. обуч.</b></td>
+        <td><b>Трудоемкость общая</b></td>
+        <td><b>Зачетные единицы</b></td>
         {foreach $labors->getItems() as $labor}
             <td>
                 {if !is_null($labor->type)}
@@ -73,7 +97,7 @@
     </thead>
     {foreach $corriculum->cycles->getItems() as $cycle}
         <tr>
-            <td colspan="{(8 + $labors->getCount())}">
+            <td colspan="{(10 + $labors->getCount())}">
                 <a href="cycles.php?action=edit&id={$cycle->getId()}">{$cycle->title}</a>
             </td>
         </tr>
