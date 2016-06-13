@@ -109,6 +109,11 @@ class CWorkPlanController extends CFlowController{
         		$query->innerJoin(TABLE_WORK_PLAN_AUTHORS." as author", "wp.id=author.plan_id");
         		$query->innerJoin(TABLE_PERSON." as person", "author.person_id=person.id");
         		$query->order("person.fio ".$direction);
+        } elseif (CRequest::getString("order") == "year") {
+        	$direction = "asc";
+        	if (CRequest::getString("direction") != "") {
+        		$direction = CRequest::getString("direction");}
+        	$query->order('STR_TO_DATE(wp.year, "%Y") '.$direction);
         }
         $paginated = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
