@@ -73,6 +73,14 @@ class CWorkPlanController extends CFlowController{
         $set->setQuery($query);
         $query->select("wp.*")
             ->from(TABLE_WORK_PLANS." as wp")
+            ->leftJoin(TABLE_DISCIPLINES." as discipline", "wp.discipline_id=discipline.id")
+            ->leftJoin(TABLE_CORRICULUM_DISCIPLINES." as corr_discipline", "wp.corriculum_discipline_id=corr_discipline.id")
+            ->leftJoin(TABLE_CORRICULUM_CYCLES." as corr_cycle", "corr_discipline.cycle_id=corr_cycle.id")
+            ->leftJoin(TABLE_CORRICULUMS." as corriculum", "corr_cycle.corriculum_id=corriculum.id")
+            ->leftJoin(TABLE_WORK_PLAN_PROFILES." as profile", "wp.id=profile.plan_id")
+            ->leftJoin(TABLE_TAXONOMY_TERMS." as term", "profile.profile_id=term.id")
+            ->leftJoin(TABLE_WORK_PLAN_AUTHORS." as author", "wp.id=author.plan_id")
+            ->leftJoin(TABLE_PERSON." as person", "author.person_id=person.id")
             ->condition("wp.is_archive = 0")
             ->order("wp.id desc");
         $isArchive = false;
@@ -86,35 +94,38 @@ class CWorkPlanController extends CFlowController{
         	$direction = "asc";
         	if (CRequest::getString("direction") != "") {
         		$direction = CRequest::getString("direction");}
-        		$query->innerJoin(TABLE_DISCIPLINES." as discipline", "wp.discipline_id=discipline.id");
         		$query->order("discipline.name ".$direction);
         } elseif (CRequest::getString("order") == "corriculum.title") {
         	$direction = "asc";
         	if (CRequest::getString("direction") != "") {
         		$direction = CRequest::getString("direction");}
-        		$query->innerJoin(TABLE_CORRICULUM_DISCIPLINES." as corr_discipline", "wp.corriculum_discipline_id=corr_discipline.id");
-        		$query->innerJoin(TABLE_CORRICULUM_CYCLES." as corr_cycle", "corr_discipline.cycle_id=corr_cycle.id");
-        		$query->innerJoin(TABLE_CORRICULUMS." as corriculum", "corr_cycle.corriculum_id=corriculum.id");
         		$query->order("corriculum.title ".$direction);
         } elseif (CRequest::getString("order") == "term.name") {
         	$direction = "asc";
         	if (CRequest::getString("direction") != "") {
         		$direction = CRequest::getString("direction");}
-        		$query->innerJoin(TABLE_WORK_PLAN_PROFILES." as profile", "wp.id=profile.plan_id");
-        		$query->innerJoin(TABLE_TAXONOMY_TERMS." as term", "profile.profile_id=term.id");
         		$query->order("term.name ".$direction);
         } elseif (CRequest::getString("order") == "person.fio") {
         	$direction = "asc";
         	if (CRequest::getString("direction") != "") {
         		$direction = CRequest::getString("direction");}
-        		$query->innerJoin(TABLE_WORK_PLAN_AUTHORS." as author", "wp.id=author.plan_id");
-        		$query->innerJoin(TABLE_PERSON." as person", "author.person_id=person.id");
         		$query->order("person.fio ".$direction);
         } elseif (CRequest::getString("order") == "year") {
         	$direction = "asc";
         	if (CRequest::getString("direction") != "") {
         		$direction = CRequest::getString("direction");}
         	$query->order('STR_TO_DATE(wp.year, "%Y") '.$direction);
+        }
+        $term = CRequest::getString("textSearch");
+        if ($term != "") {
+        	//поиск по отображаемому наименованию, дисциплине, учебному плану, году, профилю, автору и наименованию
+        	$query->condition("wp.title_display like '%".$term."%' or
+        			discipline.name like '%".$term."%' or
+        			corriculum.title like '%".$term."%' or
+        			wp.year like '%".$term."%' or
+        			term.name like '%".$term."%' or
+        			person.fio like '%".$term."%' or
+        			wp.title like '%".$term."%'");
         }
         $paginated = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
