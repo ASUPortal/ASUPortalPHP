@@ -73,7 +73,8 @@ class CWorkPlanController extends CFlowController{
         $set->setQuery($query);
         $query->select("wp.*")
             ->from(TABLE_WORK_PLANS." as wp")
-            ->condition("wp.is_archive = 0");
+            ->condition("wp.is_archive = 0")
+            ->order("wp.id desc");
         $isArchive = false;
         if (CRequest::getInt("isArchive") == "1") {
             $isArchive = true;
