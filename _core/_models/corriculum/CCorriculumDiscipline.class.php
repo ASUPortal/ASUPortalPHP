@@ -104,6 +104,12 @@ class CCorriculumDiscipline extends CActiveModel {
                 "managerClass" => "CWorkPlanManager",
                 "managerGetObject" => "getWorkplan"
             ),
+            "plansInArchive" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageTable" => TABLE_WORK_PLANS,
+                "storageCondition" => "corriculum_discipline_id=".$this->id." and _version_of = 0 and is_archive = 1",
+                "targetClass" => "CWorkPlan"
+            ),
             'sections' => array(
                 "relationPower" => RELATION_HAS_MANY,
                 "storageTable" => TABLE_CORRICULUM_DISCIPLINE_SECTIONS,

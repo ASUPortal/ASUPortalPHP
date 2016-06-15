@@ -1112,7 +1112,11 @@ class CHtml {
             $variables = $formset->computeTemplateVariables();
             echo "<ul>";
             foreach ($forms->getItems() as $form) {
-                echo '<li><a href="#" onclick="printWithTemplate(';
+            	if ($variables['manager'] == "CWorkPlanManager") {
+            		echo '<li><a href="#" onclick="printWithTemplateWorkplans(';
+            	} else {
+            		echo '<li><a href="#" onclick="printWithTemplate(';
+            	}
                 echo "'".$variables['manager']."'";
                 echo ", '".$variables['method']."'";
                 echo ", '".$form->getId()."'";

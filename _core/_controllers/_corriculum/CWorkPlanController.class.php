@@ -127,6 +127,9 @@ class CWorkPlanController extends CFlowController{
         			person.fio like '%".$term."%' or
         			wp.title like '%".$term."%'");
         }
+        if (CRequest::getInt("corriculumId") != 0) {
+        	$query->condition("corr_cycle.corriculum_id = ".CRequest::getString("corriculumId"));
+        }
         $paginated = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
             $plan = new CWorkPlan($ar);
