@@ -22,13 +22,15 @@
 {block name="asu_center"}
 	<h2>Рабочие программы</h2>
     {CHtml::helpForCurrentPage()}
-    {include file="_core.searchLocal.tpl"}
     
+    <form action="workplans.php" method="post" id="MainView">
+    {CHtml::hiddenField("action", "index")}
+    {CHtml::textField("textSearch", "", "", "", "placeholder=Поиск")}
+    <br>
     {if $plans->getCount() == 0}
 		Нет планов для отображения
 	{else}
 
-		<form action="workplans.php" method="post" id="MainView">
 	    <table class="table table-striped table-bordered table-hover table-condensed">
 	        <tr>
 	            <th></th>
@@ -38,7 +40,7 @@
 	            <th>{CHtml::tableOrder("title_display", $plans->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("discipline.name", $plans->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("corriculum.title", $plans->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("year", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("year", $plans->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("term.name", $plans->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("person.fio", $plans->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("title", $plans->getFirstItem())}</th>
@@ -52,7 +54,15 @@
 	            <td><a href="?action=edit&id={$plan->getId()}" class="icon-pencil"></a></td>
 	            <td>{$plan->title_display}</td>
 	            <td>{$plan->discipline}</td>
-	            <td><a href="{$web_root}_modules/_corriculum/?action=view&id={$plan->corriculumDiscipline->cycle->corriculum->getId()}">{$plan->corriculumDiscipline->cycle->corriculum->title}</a></td>
+	            <td>
+	            	{if !is_null($plan->corriculumDiscipline)}
+		            	{if !is_null($plan->corriculumDiscipline->cycle)}
+			            	{if !is_null($plan->corriculumDiscipline->cycle->corriculum)}
+			            		<a href="{$web_root}_modules/_corriculum/?action=view&id={$plan->corriculumDiscipline->cycle->corriculum->getId()}">{$plan->corriculumDiscipline->cycle->corriculum->title}</a>
+			            	{/if}
+		            	{/if}
+	            	{/if}
+	            </td>
 	            <td>{$plan->year}</td>
 	            <td>{", "|join:$plan->profiles->getItems()}</td>
 				<td>{", "|join:$plan->authors->getItems()}</td>

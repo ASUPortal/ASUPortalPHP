@@ -141,10 +141,12 @@ class CCorriculumsController extends CBaseController {
         /**
          * Параметры для групповой печати по шаблону
          */
-        $this->setData("template", "formset_corriculum_disciplines");
+        $this->setData("templateCorriculumDisciplines", "formset_corriculum_disciplines");
+        $this->setData("templateWorkplans", "formset_workplans");
         $this->setData("selectedDoc", false);
         $this->setData("url", WEB_ROOT."_modules/_corriculum/index.php");
-        $this->setData("action", "JSONGetDisciplines");
+        $this->setData("actionGetDisciplines", "JSONGetDisciplines");
+        $this->setData("actionGetWorkplans", "JSONGetWorkplans");
         $this->setData("id", CRequest::getInt("id"));
         
         /**
@@ -173,6 +175,21 @@ class CCorriculumsController extends CBaseController {
         		}
         	}
         }
+    	echo json_encode($arr);
+    }
+    /**
+     * Получаем список рабочих программ JSON-ом
+     */
+    public function actionJSONGetWorkplans() {
+    	$corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("id"));
+    	$arr = array();
+    	foreach ($corriculum->getDisciplines()->getItems() as $discipline) {
+    		if (!is_null($discipline->plans)) {
+    			foreach ($discipline->plans->getItems() as $workplan) {
+    				$arr[$workplan->getId()] = $workplan->title;
+    			}
+    		}
+    	}
     	echo json_encode($arr);
     }
     public function actionCopy() {
