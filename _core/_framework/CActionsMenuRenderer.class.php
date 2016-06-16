@@ -92,6 +92,12 @@ class CActionsMenuRenderer {
         echo $item['title'];
         echo '</a>';
     }
+    private function renderMenuItemJS(array $item) {
+    	echo '<a href="'.$item["link"].'" onclick="'.$item["onclick"].'">';
+    	echo '<div><img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'"></div>';
+    	echo $item['title'];
+    	echo '</a>';
+    }
     private function renderMenuItemAjaxAction(array $item) {
         echo '<a href="#" id="ajaxMenuAction_'.self::$childContainers.'">';
         echo '<img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'">';
@@ -126,6 +132,8 @@ class CActionsMenuRenderer {
             $this->renderMenuItemPrint($item);
         } elseif (array_key_exists("form", $item)) {
             $this->renderMenuItemAjaxAction($item);
+        } elseif (array_key_exists("onclick", $item)) {
+            $this->renderMenuItemJS($item);
         } else {
             $this->renderMenuItemDefault($item);
         }

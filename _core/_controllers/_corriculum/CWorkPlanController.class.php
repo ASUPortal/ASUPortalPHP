@@ -154,6 +154,18 @@ class CWorkPlanController extends CFlowController{
 						"form" => "#MainView",
 						"link" => "workplans.php",
 						"action" => "inArchiv"
+					),
+					array(
+						"title" => "Сменить учебный план",
+						"icon" => "actions/edit-redo.png",
+						"link" => "#",
+						"onclick" => "selectedForCorriculumChange()"
+					),
+					array(
+						"title" => "Копировать в другой учебный план",
+						"icon" => "actions/edit-copy.png",
+						"link" => "#",
+						"onclick" => "selectedForCorriculumCopy()"
 					)
 				)
 			)
@@ -161,10 +173,10 @@ class CWorkPlanController extends CFlowController{
         /**
          * Параметры для групповой печати по шаблону
          */
-        $this->setData("template", "formset_workplans");
+        $this->setData("templateWorkplans", "formset_workplans");
         $this->setData("selectedDoc", true);
         $this->setData("url", null);
-        $this->setData("action", null);
+        $this->setData("actionGetWorkplans", null);
         $this->setData("id", null);
         
         $this->setData("isArchive", $isArchive);
@@ -350,21 +362,27 @@ class CWorkPlanController extends CFlowController{
      * Выбор учебного плана
      */
     public function actionCorriculumToChange() {
-    	$items = new CArrayList();
+    	$items = array();
     	foreach (CCorriculumsManager::getAllCorriculums()->getItems() as $corriculum) {
-    		$items->add($corriculum->getId(), $corriculum->title);
+    		$items[$corriculum->getId()] = $corriculum->title;
     	}
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => "workplans.php?action=index",
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
     	$this->setData("items", $items);
-    	$this->renderView("_flow/pickList.tpl", get_class($this), "ChangeCorriculum");
+    	$this->setData("plans", CRequest::getString("selected"));
+    	$this->renderView("_corriculum/_workplan/workplan/changeCorriculum.tpl");
     }
     /**
      * Смена учебного плана для списка рабочих программ
      */
     public function actionChangeCorriculum() {
-    	$bean = self::getStatefullBean();
-    	$corriculum = CRequest::getArray("selected");
-    	$plans = explode(":", $bean->getItem("selected"));
-    	$corriculum = CCorriculumsManager::getCorriculum($corriculum[0]);
+    	$plans = explode(":", CRequest::getString("plans"));
+    	$corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("corriculum_id"));
     	foreach ($plans as $id) {
     		$plan = CWorkPlanManager::getWorkplan($id);
     		foreach ($corriculum->getDisciplines() as $discipline) {
@@ -440,21 +458,27 @@ class CWorkPlanController extends CFlowController{
      * Выбор учебного плана
      */
     public function actionCorriculumToCopy() {
-    	$items = new CArrayList();
+    	$items = array();
     	foreach (CCorriculumsManager::getAllCorriculums()->getItems() as $corriculum) {
-    		$items->add($corriculum->getId(), $corriculum->title);
+    		$items[$corriculum->getId()] = $corriculum->title;
     	}
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => "workplans.php?action=index",
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
     	$this->setData("items", $items);
-    	$this->renderView("_flow/pickList.tpl", get_class($this), "CopyInCorriculum");
+    	$this->setData("plans", CRequest::getString("selected"));
+    	$this->renderView("_corriculum/_workplan/workplan/copyCorriculum.tpl");
     }
     /**
      * Копирование списка рабочих программ в другой учебный план
      */
     public function actionCopyInCorriculum() {
-    	$bean = self::getStatefullBean();
-    	$corriculum = CRequest::getArray("selected");
-    	$plans = explode(":", $bean->getItem("selected"));
-    	$corriculum = CCorriculumsManager::getCorriculum($corriculum[0]);
+    	$plans = explode(":", CRequest::getString("plans"));
+    	$corriculum = CCorriculumsManager::getCorriculum(CRequest::getInt("corriculum_id"));
     	foreach ($plans as $id) {
     		$plan = CWorkPlanManager::getWorkplan($id);
     		foreach ($corriculum->getDisciplines() as $discipline) {
