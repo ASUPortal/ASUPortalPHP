@@ -1,34 +1,75 @@
 {extends file="_core.3col.tpl"}
 
-{block name="localSearchContent"}
-	<script>
-	jQuery(document).ready(function(){
-		jQuery("#isArchive").change(function(){
-			window.location.href=web_root + "_modules/_corriculum/workplans.php?isArchive=" + (jQuery(this).is(":checked") ? "1":"0");
-		});
-	});
-	</script>
-
-	<div class="form-horizontal">
-		<div class="control-group">
-			<label class="control-label" for="person">В архиве</label>
-			<div class="controls">
-				{CHtml::checkBox("isArchive", "1", $isArchive, "isArchive")}
-			</div>
-		</div>
-	</div>
-{/block}
-
 {block name="asu_center"}
 	<h2>Рабочие программы</h2>
     {CHtml::helpForCurrentPage()}
     
+	<script>
+	    function removeFilter() {
+	        var action = "?action=index";
+	        window.location.href = action;
+	    }
+		jQuery(document).ready(function(){
+			jQuery("#isArchive").change(function(){
+				window.location.href=web_root + "_modules/_corriculum/workplans.php?isArchive=" + (jQuery(this).is(":checked") ? "1":"0");
+			});
+			jQuery("#person_selector").change(function(){
+                window.location.href=web_root + "_modules/_corriculum/workplans.php?filter=person.id:" + jQuery(this).val();
+            });
+		});
+	</script>
+	<form action="workplans.php" method="post" enctype="multipart/form-data" class="form-horizontal">
+		<table border="0" width="100%" class="tableBlank">
+			{if (CSession::getCurrentUser()->getLevelForCurrentTask() == 2 or CSession::getCurrentUser()->getLevelForCurrentTask() == 4)}
+				<tr>
+					<td valign="top">
+						<div class="form-horizontal">
+		        			<div class="control-group">
+		            			<label class="control-label" for="person.id">Автор</label>
+		            			<div class="controls">
+		                			{CHtml::dropDownList("person.id", $workplanAuthors, $currentPerson, "person_selector", "span12")}
+		            			</div>
+		        			</div>
+		    			</div>
+					</td>
+		      		<td valign="top">
+		      			{CHtml::hiddenField("action", "index")}
+		      			{CHtml::textField("textSearch", "", "", "span12", "placeholder=Поиск")}
+					</td>
+				</tr>
+			{else}
+				<tr>
+		      		<td valign="top">
+		      			{CHtml::hiddenField("action", "index")}
+		      			{CHtml::textField("textSearch", "", "", "span12", "placeholder=Поиск")}
+					</td>
+				</tr>
+			{/if}
+			<tr>
+				<td>			
+					<div class="form-horizontal">
+						<div class="control-group">
+							<label class="control-label" for="isArchive">В архиве</label>
+							<div class="controls">
+								{CHtml::checkBox("isArchive", "1", $isArchive, "isArchive")}
+							</div>
+						</div>
+					</div>
+	    		</td>
+	    		<td valign="top">
+					<p align="center">
+						<span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter(); return false; " title="очистить фильтры"/></span>
+					</p>
+				</td>
+			</tr>
+	    </table>
+	</form>
+    
     <form action="workplans.php" method="post" id="MainView">
-    {CHtml::hiddenField("action", "index")}
-    {CHtml::textField("textSearch", "", "", "", "placeholder=Поиск")}
-    <br>
     {if $plans->getCount() == 0}
-		Нет планов для отображения
+        <div class="alert">
+            Нет планов для отображения
+        </div>
 	{else}
 
 	    <table class="table table-striped table-bordered table-hover table-condensed">

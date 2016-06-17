@@ -68,6 +68,7 @@ class CWorkPlanController extends CFlowController{
         $this->redirect("workplans.php?action=add&id=".$selected[0]);
     }
     public function actionIndex() {
+        $currentPerson = null;
         $set = new CRecordSet();
         $query = new CQuery();
         $set->setQuery($query);
@@ -83,9 +84,24 @@ class CWorkPlanController extends CFlowController{
             ->leftJoin(TABLE_PERSON." as person", "author.person_id=person.id")
             ->condition("wp.is_archive = 0")
             ->order("wp.id desc");
+        $authorsQuery = new CQuery();
+        $authorsQuery->select("person.*")
+	        ->from(TABLE_PERSON." as person")
+	        ->order("person.fio asc")
+	        ->innerJoin(TABLE_WORK_PLAN_AUTHORS." as author", "person.id = author.person_id");
+        $authors = array();
+        foreach ($authorsQuery->execute()->getItems() as $ar) {
+        	$author = new CPerson(new CActiveRecord($ar));
+        	$authors[$author->getId()] = $author->getName();
+        }
         $isArchive = false;
         if (CRequest::getInt("isArchive") == "1") {
             $isArchive = true;
+            $titleArchive = "Убрать из архива";
+            $actionArchive = "outArchiv";
+        } else {
+            $titleArchive = "Переместить в архив";
+            $actionArchive = "inArchiv";
         }
         if ($isArchive) {
             $query->condition("wp.is_archive = 1");
@@ -116,6 +132,11 @@ class CWorkPlanController extends CFlowController{
         		$direction = CRequest::getString("direction");}
         	$query->order('STR_TO_DATE(wp.year, "%Y") '.$direction);
         }
+        // фильтр по автору
+        if (!is_null(CRequest::getFilter("person.id"))) {
+        	$query->condition("person.id = ".CRequest::getFilter("person.id"));
+        	$currentPerson = CRequest::getFilter("person.id");
+        }
         $term = CRequest::getString("textSearch");
         if ($term != "") {
         	//поиск по отображаемому наименованию, дисциплине, учебному плану, году, профилю, автору и наименованию
@@ -129,6 +150,11 @@ class CWorkPlanController extends CFlowController{
         }
         if (CRequest::getInt("corriculumId") != 0) {
         	$query->condition("corr_cycle.corriculum_id = ".CRequest::getString("corriculumId"));
+        }
+        if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY or
+        	CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
+        		$query->innerJoin(TABLE_WORK_PLAN_AUTHORS." as authors", "wp.id=authors.plan_id");
+        		$query->innerJoin(TABLE_PERSON." as kadri", "authors.person_id=kadri.id and kadri.id = ".CSession::getCurrentPerson()->getId());
         }
         $paginated = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
@@ -149,11 +175,11 @@ class CWorkPlanController extends CFlowController{
 						"action" => "delete"
 					),
 					array(
-						"title" => "Переместить в архив",
+						"title" => $titleArchive,
 						"icon" => "devices/media-floppy.png",
 						"form" => "#MainView",
 						"link" => "workplans.php",
-						"action" => "inArchiv"
+						"action" => $actionArchive
 					),
 					array(
 						"title" => "Сменить учебный план",
@@ -181,6 +207,8 @@ class CWorkPlanController extends CFlowController{
         
         $this->setData("isArchive", $isArchive);
         $this->setData("plans", $paginated);
+        $this->setData("workplanAuthors", $authors);
+        $this->setData("currentPerson", $currentPerson);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_corriculum/_workplan/workplan/index.tpl");
     }
@@ -201,6 +229,15 @@ class CWorkPlanController extends CFlowController{
     	foreach ($items as $id){
     		$plan = CWorkPlanManager::getWorkplan($id);
     		$plan->is_archive = 1;
+    		$plan->save();
+    	}
+    	$this->redirect("workplans.php");
+    }
+    public function actionOutArchiv() {
+    	$items = CRequest::getArray("selectedDoc");
+    	foreach ($items as $id){
+    		$plan = CWorkPlanManager::getWorkplan($id);
+    		$plan->is_archive = 0;
     		$plan->save();
     	}
     	$this->redirect("workplans.php");
