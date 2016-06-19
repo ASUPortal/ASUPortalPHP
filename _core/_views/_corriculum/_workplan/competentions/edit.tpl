@@ -6,6 +6,16 @@
     {CHtml::helpForCurrentPage()}
 
     {include file="_corriculum/_workplan/competentions/form.tpl"}
+    
+    <h4>Знания</h4>
+    {CHtml::activeComponent("workplancompetentionknowledges.php?id={$object->getId()}", $object)}
+    
+    <h4>Умения</h4>
+    {CHtml::activeComponent("workplancompetentionskills.php?id={$object->getId()}", $object)}
+    
+    <h4>Владения</h4>
+    {CHtml::activeComponent("workplancompetentionexperiences.php?id={$object->getId()}", $object)}
+    
 {/block}
 
 {block name="asu_right"}

@@ -29,33 +29,24 @@ class CWorkPlanCompetention extends CActiveModel{
                 "storageField" => "competention_id",
                 "targetClass" => "CTerm"
             ),
-            "knowledges" => array(
-                "relationPower" => RELATION_MANY_TO_MANY,
-                "storageProperty" => "_knowledges",
-                "joinTable" => TABLE_WORK_PLAN_KNOWLEDGES,
-                "leftCondition" => "competention_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
-                "rightKey" => "knowledge_id",
-                "managerClass" => "CTaxonomyManager",
-                "managerGetObject" => "getTerm"
-            ),
-            "skills" => array(
-                "relationPower" => RELATION_MANY_TO_MANY,
-                "storageProperty" => "_skills",
-                "joinTable" => TABLE_WORK_PLAN_SKILLS,
-                "leftCondition" => "competention_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
-                "rightKey" => "skill_id",
-                "managerClass" => "CTaxonomyManager",
-                "managerGetObject" => "getTerm"
-            ),
-            "experiences" => array(
-                "relationPower" => RELATION_MANY_TO_MANY,
-                "storageProperty" => "_experiences",
-                "joinTable" => TABLE_WORK_PLAN_EXPERIENCES,
-                "leftCondition" => "competention_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
-                "rightKey" => "experience_id",
-                "managerClass" => "CTaxonomyManager",
-                "managerGetObject" => "getTerm"
-            ),
+        	"knowledges" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_KNOWLEDGES,
+        		"storageCondition" => "competention_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanCompetentionKnowledge"
+        	),
+        	"skills" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_SKILLS,
+        		"storageCondition" => "competention_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanCompetentionSkill"
+        	),
+        	"experiences" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_EXPERIENCES,
+        		"storageCondition" => "competention_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanCompetentionExperience"
+        	),
             "canUse" => array(
                 "relationPower" => RELATION_MANY_TO_MANY,
                 "storageProperty" => "_canUse",

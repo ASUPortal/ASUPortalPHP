@@ -32,7 +32,11 @@ class CWorkPlanSkills extends CAbstractPrintClassField {
     					foreach ($item->skills->getItems() as $item) {
     						$dataRow = array();
     						$dataRow[0] = "•";
-    						$dataRow[1] = $item->getValue();
+    						$skills = array();
+    						if (!is_null($item->skill)) {
+    							$skills[] = $item->skill->getValue();
+    						}
+    						$dataRow[1] = implode("; ", $skills);
     						$result[] = $dataRow;
     					}
     				}

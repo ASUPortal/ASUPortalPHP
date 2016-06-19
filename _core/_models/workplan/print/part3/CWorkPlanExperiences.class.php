@@ -32,7 +32,11 @@ class CWorkPlanExperiences extends CAbstractPrintClassField {
     					foreach ($item->experiences->getItems() as $item) {
     						$dataRow = array();
     						$dataRow[0] = "•";
-    						$dataRow[1] = $item->getValue();
+    						$experiences = array();
+    						if (!is_null($item->experience)) {
+    							$experiences[] = $item->experience->getValue();
+    						}
+    						$dataRow[1] = implode("; ", $experiences);
     						$result[] = $dataRow;
     					}
     				}
