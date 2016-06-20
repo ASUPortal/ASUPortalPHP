@@ -68,7 +68,7 @@
     <form action="workplans.php" method="post" id="MainView">
     {if $plans->getCount() == 0}
         <div class="alert">
-            Нет планов для отображения
+            Нет рабочих программ для отображения
         </div>
 	{else}
 

@@ -21,9 +21,6 @@
                     <th>{CHtml::tableOrder("skills", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("experiences", $objects->getFirstItem())}</th>
                     <th>{CHtml::tableOrder("canUse", $objects->getFirstItem())}</th>
-                    <th>{CHtml::tableOrder("type_task", $objects->getFirstItem())}</th>
-                    <th>{CHtml::tableOrder("procedure_eval", $objects->getFirstItem())}</th>
-                    <th>{CHtml::tableOrder("criteria_eval", $objects->getFirstItem())}</th>
                 {/if}
                 </tr>
             </thead>
@@ -58,17 +55,23 @@
                 {else}
                 	<td>
                         {foreach $object->knowledges->getItems() as $o}
-                            <p>{$o}</p>
+                        	{if (!is_null($o->knowledge))}
+                            	<p>{$o->knowledge->getValue()}</p>
+                            {/if}
                         {/foreach}
                     </td>
                     <td>
                         {foreach $object->skills->getItems() as $o}
-                            <p>{$o}</p>
+                        	{if (!is_null($o->skill))}
+                            	<p>{$o->skill->getValue()}</p>
+                            {/if}
                         {/foreach}
                     </td>
                     <td>
                         {foreach $object->experiences->getItems() as $o}
-                            <p>{$o}</p>
+                        	{if (!is_null($o->experience))}
+                            	<p>{$o->experience->getValue()}</p>
+                            {/if}
                         {/foreach}
                     </td>
                     <td>
@@ -76,9 +79,6 @@
                             <p>{$o}</p>
                         {/foreach}
                     </td>
-                    <td>{$object->type_task}</td>
-                    <td>{$object->procedure_eval}</td>
-                    <td>{$object->criteria_eval}</td>
                 {/if}                   
                 </tr>
             {/foreach}

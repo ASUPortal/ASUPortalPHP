@@ -41,14 +41,32 @@ class CWorkPlanCompetentions extends CAbstractPrintClassField {
 	        			preg_match('/\((.+)\)/', $str, $m);
 	        			$dataRow[2] = $m[1];
 	        		}
+	        		$knowledges = array();
 	        		if (!is_null($item->knowledges)) {
-	        			$dataRow[3] = implode("; ", $item->knowledges->getItems());
+	        			foreach ($item->knowledges->getItems() as $o) {
+	        				if (!is_null($o->knowledge)) {
+	        					$knowledges[] = $o->knowledge->getValue();
+	        				}
+	        			}
+	        			$dataRow[3] = implode("; ", $knowledges);
 	        		}
+	        		$skills = array();
 	        		if (!is_null($item->skills)) {
-	        			$dataRow[4] = implode("; ", $item->skills->getItems());
+	        			foreach ($item->skills->getItems() as $o) {
+	        				if (!is_null($o->skill)) {
+	        					$skills[] = $o->skill->getValue();
+	        				}
+	        			}
+	        			$dataRow[4] = implode("; ", $skills);
 	        		}
+	        		$experiences = array();
 	        		if (!is_null($item->experiences)) {
-	        			$dataRow[5] = implode("; ", $item->experiences->getItems());
+	        			foreach ($item->experiences->getItems() as $o) {
+	        				if (!is_null($o->experience)) {
+	        					$experiences[] = $o->experience->getValue();
+	        				}
+	        			}
+	        			$dataRow[5] = implode("; ", $experiences);
 	        		}
         			$result[] = $dataRow;
         		}
