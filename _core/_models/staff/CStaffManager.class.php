@@ -505,8 +505,10 @@ class CStaffManager{
     public static function getStudent($key) {
         if (is_numeric($key)) {
             $keySeek = $key;
-        }else if (is_string($key)) {
+        } else if (is_string($key)) {
             $keySeek = mb_strtoupper($key);
+        } else {
+            $keySeek = 0;
         }
         if (!self::getCacheStudents()->hasElement($keySeek)) {
             if (is_numeric($keySeek)) {
