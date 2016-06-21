@@ -40,30 +40,6 @@
             {CHtml::error("canUse", $object)}
         </div>
     </div>
-    
-    <div class="control-group">
-        {CHtml::activeLabel("type_task", $object)}
-        <div class="controls">
-            {CHtml::activeTextBox("type_task", $object)}
-            {CHtml::error("type_task", $object)}
-        </div>
-    </div>
-    
-    <div class="control-group">
-        {CHtml::activeLabel("procedure_eval", $object)}
-        <div class="controls">
-            {CHtml::activeTextBox("procedure_eval", $object)}
-            {CHtml::error("procedure_eval", $object)}
-        </div>
-    </div>
-        
-    <div class="control-group">
-        {CHtml::activeLabel("criteria_eval", $object)}
-        <div class="controls">
-            {CHtml::activeTextBox("criteria_eval", $object)}
-            {CHtml::error("criteria_eval", $object)}
-        </div>
-    </div>
 {/if}
 
     <div class="control-group">

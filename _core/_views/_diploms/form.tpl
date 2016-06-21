@@ -9,6 +9,7 @@
         <li><a data-toggle="tab" href="#preview">Предзащита</a></li>
         <li><a data-toggle="tab" href="#after">После защиты</a></li>
         <li><a data-toggle="tab" href="#attach">Вкладыш</a></li>
+        <li><a data-toggle="tab" href="#info">Информация по студенту</a></li>
     </ul>
     <div class="tab-content">
         <div id="before" class="tab-pane active">
@@ -22,6 +23,9 @@
         </div>
         <div id="attach" class="tab-pane">
             {include file="_diploms/subform.attach.tpl"}
+        </div>
+        <div id="info" class="tab-pane">
+            {include file="_diploms/subform.info.tpl"}
         </div>
     </div>
 
