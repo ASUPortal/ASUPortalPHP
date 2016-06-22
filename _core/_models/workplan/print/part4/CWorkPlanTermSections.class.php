@@ -34,18 +34,19 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         		$select[] = "section.sectionIndex";
         		$select[] = "section.name";
         		$select[] = "section.content";
-        		$select[] = "sum(if(term.alias in ('lecture', 'practice', 'labwork', 'ksr'), l.value, 0)) + sum(ifnull(selfedu.question_hours, 0)) as total";
+        		$select[] = "sum(if(term.alias in ('lecture', 'practice', 'labwork', 'ksr', 'self_work'), l.value, 0)) as total";
         		$select[] = "sum(if(term.alias = 'lecture', l.value, 0)) as lecture";
         		$select[] = "sum(if(term.alias = 'practice', l.value, 0)) as practice";
         		$select[] = "sum(if(term.alias = 'labwork', l.value, 0)) as labwork";
         		$select[] = "sum(if(term.alias = 'ksr', l.value, 0)) as ksr";
-        		$select[] = "sum(ifnull(selfedu.question_hours, 0)) as selfedu";
+        		$select[] = "sum(if(term.alias = 'self_work', l.value, 0)) as self_work";
+        		//$select[] = "sum(ifnull(selfedu.question_hours, 0)) as selfedu";
         		$query->select(join(", ", $select))
 	        		->from(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section")
 	        		->innerJoin(TABLE_WORK_PLAN_CONTENT_LOADS." as l", "l.section_id = section.id")
 	        		->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
 	        		->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
-	        		->leftJoin(TABLE_WORK_PLAN_SELFEDUCATION." as selfedu", "selfedu.load_id = l.id")
+	        		//->leftJoin(TABLE_WORK_PLAN_SELFEDUCATION." as selfedu", "selfedu.load_id = l.id")
 	        		->group("l.section_id")
 	        		->condition("l.term_id = ".$term->getId()." and l._deleted = 0 and category._deleted = 0");
         		$items = $query->execute();
@@ -99,7 +100,7 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         			$dataRow[3] = $row["practice"];
         			$dataRow[4] = $row["labwork"];
         			$dataRow[5] = $row["ksr"];
-        			$dataRow[6] = $row["selfedu"];
+        			$dataRow[6] = $row["self_work"];
         			$dataRow[7] = $row["total"];
         			$dataRow[8] = implode(", ", $literature);
         			$dataRow[9] = implode(", ", $technologies);
@@ -109,7 +110,7 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         			$practiceSum += $row["practice"];
         			$labworkSum += $row["labwork"];
         			$ksrSum += $row["ksr"];
-        			$selfeduSum += $row["selfedu"];
+        			$selfeduSum += $row["self_work"];
         			$totalSum += $row["total"];
         		}
         		$total = array();
