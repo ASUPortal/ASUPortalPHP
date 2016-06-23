@@ -128,9 +128,25 @@ class CWorkPlanContentSectionLoadsController extends CStatefullFormController {
             "link" => "workplancontentloads.php?id=".$section->getId().'&bean='.$this->getStatefullFormBean()->getBeanId(),
             "icon" => "actions/view-refresh.png"
         ));
+        if (CRequest::getInt("showDeleted") == 1) {
+        	$sectionLoads = $section->loads;
+        	$this->addActionsMenuItem(array(
+        		"title" => "Скрыть удалённые",
+        		"link" => "workplancontentloads.php?id=".$section->getId().'&bean='.$this->getStatefullFormBean()->getBeanId(),
+        		"icon" => "actions/format-text-bold.png"
+        	));
+        } else {
+        	$sectionLoads = $section->loadsDisplay;
+        	$this->addActionsMenuItem(array(
+        		"title" => "Показать удалённые",
+        		"link" => "workplancontentloads.php?id=".$section->getId().'&bean='.$this->getStatefullFormBean()->getBeanId()."&showDeleted=1",
+        		"icon" => "actions/format-text-strikethrough.png"
+        	));
+        }
 
         $this->setData("bean", $this->getStatefullFormBean());
         $this->setData("section", $section);
+        $this->setData("sectionLoads", $sectionLoads);
         $this->renderView("_corriculum/_workplan/contentLoads/index.tpl");
     }
 }

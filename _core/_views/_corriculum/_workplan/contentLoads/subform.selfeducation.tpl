@@ -1,3 +1,8 @@
+{if (CRequest::getInt("showDeleted") == 1)}
+	{$loadSelfEducations = $load->selfEducations}
+{else}
+	{$loadSelfEducations = $load->selfEducationsDisplay}
+{/if}
 <tr>
     <th width="16">&nbsp;</th>
     <th width="16">#</th>
@@ -6,7 +11,7 @@
     <th colspan="3" bgcolor="lightblue">Самостоятельное изучение</th>
 </tr>
 {sf_showIfVisible bean=$bean element="load_{$load->getId()}_selfeducation"}
-{foreach $load->selfEducations as $education}
+{foreach $loadSelfEducations as $education}
     {sf_showByDefault bean=$bean element="education_load_{$education->getId()}"}
     {sf_showIfVisible bean=$bean element="education_load_{$education->getId()}"}
     <tr>

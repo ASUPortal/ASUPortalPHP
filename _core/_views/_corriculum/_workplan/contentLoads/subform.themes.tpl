@@ -1,3 +1,8 @@
+{if (CRequest::getInt("showDeleted") == 1)}
+	{$loadTopics = $load->topics}
+{else}
+	{$loadTopics = $load->topicsDisplay}
+{/if}
 <tr>
     <th width="16">&nbsp;</th>
     <th width="16">#</th>
@@ -6,7 +11,7 @@
     <th colspan="3" bgcolor="lightblue">Темы</th>
 </tr>
 {sf_showIfVisible bean=$bean element="load_{$load->getId()}_themes"}
-{foreach $load->topics as $topic}
+{foreach $loadTopics as $topic}
     {sf_showByDefault bean=$bean element="topic_load_{$topic->getId()}"}
     {sf_showIfVisible bean=$bean element="topic_load_{$topic->getId()}"}
         <tr>
