@@ -54,7 +54,7 @@
 
     <div class="control-group">
         <div class="controls">
-            {CHtml::submit("Сохранить", false)}
+            {CHtml::submit("Сохранить")}
         </div>
     </div>
 </form>
