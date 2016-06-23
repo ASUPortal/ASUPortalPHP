@@ -14,9 +14,9 @@
         {CHtml::warningSummary($plan)}
 
         <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#common">Общая информация</a></li>
+            <li><a data-toggle="tab" href="#common">Общая информация</a></li>
             <li><a data-toggle="tab" href="#competentions">Компетенции</a></li>
-            <li><a data-toggle="tab" href="#content">Содержание</a></li>
+            <li class="active"><a data-toggle="tab" href="#content">Содержание</a></li>
             <li><a data-toggle="tab" href="#eduTechnologies">Образовательные технологии</a></li>
             <li><a data-toggle="tab" href="#markTypes">Оценочные средства</a></li>
             <li><a data-toggle="tab" href="#library">Обеспечение</a></li>
@@ -24,13 +24,13 @@
             <li><a data-toggle="tab" href="#protocols">Протоколы</a></li>
         </ul>
         <div class="tab-content">
-            <div id="common" class="tab-pane active">
+            <div id="common" class="tab-pane">
                 {include file="_corriculum/_workplan/workplan/subform.common.tpl"}
             </div>
             <div id="competentions" class="tab-pane">
                 {include file="_corriculum/_workplan/workplan/subform.competentions.tpl"}
             </div>
-            <div id="content" class="tab-pane">
+            <div id="content" class="tab-pane active">
                 {include file="_corriculum/_workplan/workplan/subform.content.tpl"}
             </div>
             <div id="eduTechnologies" class="tab-pane">

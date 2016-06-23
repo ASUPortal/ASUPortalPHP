@@ -1,3 +1,8 @@
+{if (CRequest::getInt("showDeleted") == 1)}
+	{$loadTechnologies = $load->technologies}
+{else}
+	{$loadTechnologies = $load->technologiesDisplay}
+{/if}
 <tr>
     <th width="16">&nbsp;</th>
     <th width="16">#</th>
@@ -6,7 +11,7 @@
     <th colspan="3" bgcolor="lightblue">Образовательные технологии</th>
 </tr>
 {sf_showIfVisible bean=$bean element="load_{$load->getId()}_technologies"}
-{foreach $load->technologies as $technology}
+{foreach $loadTechnologies as $technology}
     {sf_showByDefault bean=$bean element="technology_load_{$technology->getId()}"}
     {sf_showIfVisible bean=$bean element="technology_load_{$technology->getId()}"}
     <tr>

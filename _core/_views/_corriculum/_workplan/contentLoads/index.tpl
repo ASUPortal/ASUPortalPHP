@@ -13,13 +13,13 @@
             <th width="16">#</th>
             <th width="16">&nbsp;</th>
             <th width="16">&nbsp;</th>
-            <th>{CHtml::tableOrder("load_type_id", $section->loads->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("term_id", $section->loads->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("value", $section->loads->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("load_type_id", $sectionLoads->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("term_id", $sectionLoads->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("value", $sectionLoads->getFirstItem())}</th>
         </tr>
         </thead>
         <tbody>
-        {foreach $section->loads->getItems() as $load}
+        {foreach $sectionLoads->getItems() as $load}
             {sf_showIfVisible bean=$bean element="load_{$load->getId()}"}
                 {sf_showByDefault bean=$bean element="load_{$load->getId()}"}
                 <tr>
