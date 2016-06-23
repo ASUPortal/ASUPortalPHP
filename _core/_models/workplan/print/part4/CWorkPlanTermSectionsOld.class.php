@@ -25,6 +25,16 @@ class CWorkPlanTermSectionsOld extends CAbstractPrintClassField {
     {
         $result = array();
         $discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
+        $selfWork = false;
+        foreach ($contextObject->categories->getItems() as $category) {
+        	foreach ($category->sections->getItems() as $section) {
+        		foreach ($section->loadsDisplay->getItems() as $load) {
+        			if ($load->loadType->getAlias() == "self_work") {
+        				$selfWork = true;
+        			}
+        		}
+        	}
+        }
         if (!is_null($contextObject->terms)) {
         	$termSectionsData = new CArrayList();
         	foreach ($contextObject->terms->getItems() as $term) {
@@ -34,19 +44,27 @@ class CWorkPlanTermSectionsOld extends CAbstractPrintClassField {
         		$select[] = "section.sectionIndex";
         		$select[] = "section.name";
         		$select[] = "section.content";
-        		$select[] = "sum(if(term.alias in ('lecture', 'practice', 'labwork', 'ksr', 'self_work'), l.value, 0)) as total";
+        		if ($selfWork) {
+        			$select[] = "sum(if(term.alias in ('lecture', 'practice', 'labwork', 'ksr', 'self_work'), l.value, 0)) as total";
+        		} else {
+        			$select[] = "sum(if(term.alias in ('lecture', 'practice', 'labwork', 'ksr'), l.value, 0)) + sum(ifnull(selfedu.question_hours, 0)) as total";
+        		}
         		$select[] = "sum(if(term.alias = 'lecture', l.value, 0)) as lecture";
         		$select[] = "sum(if(term.alias = 'practice', l.value, 0)) as practice";
         		$select[] = "sum(if(term.alias = 'labwork', l.value, 0)) as labwork";
         		$select[] = "sum(if(term.alias = 'ksr', l.value, 0)) as ksr";
         		$select[] = "sum(if(term.alias = 'self_work', l.value, 0)) as self_work";
-        		//$select[] = "sum(ifnull(selfedu.question_hours, 0)) as selfedu";
+        		if ($selfWork) {
+        			$select[] = "sum(if(term.alias = 'self_work', l.value, 0)) as self_work";
+        		} else {
+        			$select[] = "sum(ifnull(selfedu.question_hours, 0)) as selfedu";
+        		}
         		$query->select(join(", ", $select))
 	        		->from(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section")
 	        		->innerJoin(TABLE_WORK_PLAN_CONTENT_LOADS." as l", "l.section_id = section.id")
 	        		->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
 	        		->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
-	        		//->leftJoin(TABLE_WORK_PLAN_SELFEDUCATION." as selfedu", "selfedu.load_id = l.id")
+	        		->leftJoin(TABLE_WORK_PLAN_SELFEDUCATION." as selfedu", "selfedu.load_id = l.id")
 	        		->group("l.section_id")
 	        		->condition("l.term_id = ".$term->getId()." and l._deleted = 0 and category._deleted = 0");
         		$items = $query->execute();
@@ -69,13 +87,22 @@ class CWorkPlanTermSectionsOld extends CAbstractPrintClassField {
         			$dataRow[3] = $row["lecture"];
         			$dataRow[4] = $row["practice"];
         			$dataRow[5] = $row["labwork"];
-        			$dataRow[6] = $row["self_work"];
+        			if ($selfWork) {
+        				$dataRow[6] = $row["self_work"];
+        			} else {
+        				$dataRow[6] = $row["selfedu"];
+        			}
         			$result[] = $dataRow;
         			
         			$lectureSum += $row["lecture"];
         			$practiceSum += $row["practice"];
         			$labworkSum += $row["labwork"];
-        			$selfeduSum += $row["self_work"];
+        			$ksrSum += $row["ksr"];
+        			if ($selfWork) {
+        				$selfeduSum += $row["self_work"];
+        			} else {
+        				$selfeduSum += $row["selfedu"];
+        			}
         			$totalSum += $row["total"];
         		}
         		$total = array();
