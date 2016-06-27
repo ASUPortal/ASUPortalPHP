@@ -345,6 +345,11 @@ class CWorkPlanController extends CFlowController{
         		"title" => "Добавить литературу",
         		"link" => "workplans.php?action=addLiterature&plan_id=".$plan->getId(),
         		"icon" => "actions/list-add.png"
+        	),
+        	array(
+        		"title" => "Шаблон в виде HTML",
+        		"link" => "workplans.php?action=html&id=".$plan->getId(),
+        		"icon" => "mimetypes/text-html.png"
         	)
         ));
         $this->setData("plan", $plan);
@@ -603,5 +608,10 @@ class CWorkPlanController extends CFlowController{
     		$object->save();
     	}
     	$this->redirect("workplans.php?action=edit&id=".CRequest::getInt("plan"));
+    }
+    public function actionHtml() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$this->setData("plan", $plan);
+    	$this->renderView("_corriculum/_workplan/workplan/html.tpl");
     }
 }

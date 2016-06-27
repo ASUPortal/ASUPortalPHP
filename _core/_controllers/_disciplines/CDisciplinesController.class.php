@@ -29,14 +29,26 @@ class CDisciplinesController extends CFlowController{
     		$disciplines->add($discipline->getId(), $discipline);
         }
         $this->addActionsMenuItem(array(
-        	"title" => "Добавить",
-        	"link" => "index.php?action=add",
-        	"icon" => "actions/list-add.png"
-        ));
-        $this->addActionsMenuItem(array(
-        	"title" => "Добавить общий для всех дисциплин учебник",
-        	"link" => "index.php?action=addGeneralBook",
-        	"icon" => "actions/list-add.png"
+        	array(
+        		"title" => "Добавить дисциплину",
+        		"link" => "index.php?action=add",
+        		"icon" => "actions/list-add.png"
+        	),
+        	array(
+        		"title" => "Добавить общий для всех дисциплин учебник",
+        		"link" => "index.php?action=addGeneralBook",
+        		"icon" => "actions/list-add.png"
+        	),
+        	array(
+        		"title" => "Обновить коды дисциплин из библиотеки",
+        		"link" => "index.php?action=updateLibraryCodes",
+        		"icon" => "actions/view-refresh.png"
+        	),
+        	array(
+        		"title" => "Добавить литературу из библиотеки",
+        		"link" => "index.php?action=addFromUrl",
+        		"icon" => "actions/document-save.png"
+        	)
         ));
         // ссылка для загрузки дисциплин из библиотеки
         $link = CSettingsManager::getSettingValue("link_library_disciplines");
@@ -220,6 +232,11 @@ class CDisciplinesController extends CFlowController{
      * Обновление кодов дисциплин с сайта библиотеки
      */
     public function actionUpdateLibraryCodes() {
+    	$this->addActionsMenuItem(array(
+    		"title" => "Назад",
+    		"link" => "index.php?action=index",
+    		"icon" => "actions/edit-undo.png"
+    	));
     	// подключаем PHP Simple HTML DOM Parser
     	require_once(CORE_CWD."/_core/_external/smarty/vendor/simple_html_dom.php");
 
@@ -263,22 +280,25 @@ class CDisciplinesController extends CFlowController{
     				}
     			}
     		}
+    		// очищаем память
+    		$html->clear();
+    		unset($html);
+    		$this->setData("message", "Данные добавлены успешно");
+    		$this->renderView("_discipline/result.tpl");
     	} else {
     		$this->setData("message", "URL ".$link." не доступен, проверьте адрес прокси в настройках портала");
-    		$this->renderView("_flow/dialog.ok.tpl", "", "");
+    		$this->renderView("_discipline/result.tpl");
     	}
-    	
-    	// очищаем память
-    	$html->clear();
-    	unset($html);
-    	
-    	$this->setData("message", "Данные добавлены успешно");
-    	$this->renderView("_flow/dialog.ok.tpl", "", "");
     }
     /**
      * Добавление литературы с сайта библиотеки
      */
     public function actionAddFromUrl() {
+    	$this->addActionsMenuItem(array(
+    		"title" => "Назад",
+    		"link" => "index.php?action=index",
+    		"icon" => "actions/edit-undo.png"
+    	));
     	foreach (CActiveRecordProvider::getAllFromTable(TABLE_DISCIPLINES)->getItems() as $item) {
     		$discipline = new CDiscipline($item);
     		if ($discipline->library_code != 0) {
@@ -293,16 +313,16 @@ class CDisciplinesController extends CFlowController{
     				// прерываем цикл foreach
     				break 1;
     				$this->setData("message", "URL не доступен");
-    				$this->renderView("_flow/dialog.ok.tpl", "", "");
+    				$this->renderView("_discipline/result.tpl");
     			}
     		}
     	}
     	if ($availability) {
     		$this->setData("message", "Данные добавлены успешно");
-    		$this->renderView("_flow/dialog.ok.tpl", "", "");
+    		$this->renderView("_discipline/result.tpl");
     	} else {
     		$this->setData("message", "URL не доступен");
-    		$this->renderView("_flow/dialog.ok.tpl", "", "");
+    		$this->renderView("_discipline/result.tpl");
     	}
     }
     /**
