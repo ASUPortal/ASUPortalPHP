@@ -347,7 +347,7 @@ class CWorkPlanController extends CFlowController{
         		"icon" => "actions/list-add.png"
         	),
         	array(
-        		"title" => "HTML",
+        		"title" => "Шаблон в виде HTML",
         		"link" => "workplans.php?action=html&id=".$plan->getId(),
         		"icon" => "mimetypes/text-html.png"
         	)

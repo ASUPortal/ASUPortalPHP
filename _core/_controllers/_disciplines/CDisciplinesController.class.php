@@ -30,7 +30,7 @@ class CDisciplinesController extends CFlowController{
         }
         $this->addActionsMenuItem(array(
         	array(
-        		"title" => "Добавить",
+        		"title" => "Добавить дисциплину",
         		"link" => "index.php?action=add",
         		"icon" => "actions/list-add.png"
         	),
