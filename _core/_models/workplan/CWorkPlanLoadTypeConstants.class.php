@@ -1,8 +1,8 @@
 <?php
 /**
- * Константы рабочей программы
+ * Константы типов работ рабочей программы
  */
-class CWorkPlanFieldConstants {
+class CWorkPlanLoadTypeConstants {
 	const CURRICULUM_LABOR_AUDITOR = "auditor";
 	const CURRICULUM_LABOR_TOTAL_THEORETIC_EDUCATION = "hours";
 	const CURRICULUM_LABOR_CREDIT = "credit";
