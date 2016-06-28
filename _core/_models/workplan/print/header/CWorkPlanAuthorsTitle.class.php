@@ -26,8 +26,8 @@ class CWorkPlanAuthorsTitle extends CAbstractPrintClassField {
 		$authors = array();
 		if (!is_null($contextObject->authors)) {
 			foreach ($contextObject->authors->getItems() as $author) {
-				if (!is_null($author->title)) {
-					$persons = $author->title->getValue()."_____________";
+				if (!is_null($author->getPost())) {
+					$persons = $author->getPost()."_____________";
 				} else {
 					$persons = "_____________";
 				}

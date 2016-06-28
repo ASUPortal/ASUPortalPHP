@@ -148,6 +148,13 @@ class CCorriculumsController extends CBaseController {
         $this->setData("actionGetDisciplines", "JSONGetDisciplines");
         $this->setData("actionGetWorkplans", "JSONGetWorkplans");
         $this->setData("id", CRequest::getInt("id"));
+        /**
+         * Параметры для печати по шаблону учебных планов
+         */
+        $template = "formset_corriculums";
+        $formset = CPrintManager::getFormset($template);
+        $this->setData("formset", $formset);
+        $this->setData("template", $template);
         
         /**
          * Передаем данные представлению

@@ -48,7 +48,11 @@ class CWorkPlanCompetentions extends CAbstractPrintClassField {
 	        					$knowledges[] = $o->knowledge->getValue();
 	        				}
 	        			}
-	        			$dataRow[3] = implode("; ", $knowledges);
+	        			if (!empty($knowledges)) {
+	        				$dataRow[3] = implode("; ", $knowledges);
+	        			} else {
+	        				$dataRow[3] = "—";
+	        			}
 	        		}
 	        		$skills = array();
 	        		if (!is_null($item->skills)) {
@@ -57,7 +61,11 @@ class CWorkPlanCompetentions extends CAbstractPrintClassField {
 	        					$skills[] = $o->skill->getValue();
 	        				}
 	        			}
-	        			$dataRow[4] = implode("; ", $skills);
+	        			if (!empty($skills)) {
+	        				$dataRow[4] = implode("; ", $skills);
+	        			} else {
+	        				$dataRow[4] = "—";
+	        			}
 	        		}
 	        		$experiences = array();
 	        		if (!is_null($item->experiences)) {
@@ -66,7 +74,11 @@ class CWorkPlanCompetentions extends CAbstractPrintClassField {
 	        					$experiences[] = $o->experience->getValue();
 	        				}
 	        			}
-	        			$dataRow[5] = implode("; ", $experiences);
+	        			if (!empty($experiences)) {
+	        				$dataRow[5] = implode("; ", $experiences);
+	        			} else {
+	        				$dataRow[5] = "—";
+	        			}
 	        		}
         			$result[] = $dataRow;
         		}
