@@ -18,7 +18,11 @@
             {foreach $objects->getItems() as $object}
                 <tr>
                 	<td>{$object->ordering}</td>
-                    <td>{$object->load->term->corriculum_discipline_section->title}</td>
+                    {if !is_null($object->load->term->corriculum_discipline_section)}
+                    	<td>{$object->load->term->corriculum_discipline_section->title}</td>
+                    {else}
+                    	<td><font color="#FF0000">Обновите значение семестра из дисциплины!</font></td>
+                    {/if}
                     <td>{$object->load->loadType}</td>
                     <td>{$object->technology}</td>
                     <td>{$object->value}</td>

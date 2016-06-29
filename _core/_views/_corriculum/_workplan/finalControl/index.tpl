@@ -21,7 +21,11 @@
                     <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить вид контроля')) { location.href='workplanfinalcontrol.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
                     <td>{$object->ordering}</td>
                     <td><a href="workplanfinalcontrol.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>{$object->term->corriculum_discipline_section->title}</td>
+                    {if !is_null($object->term->corriculum_discipline_section)}
+                    	<td>{$object->term->corriculum_discipline_section->title}</td>
+                    {else}
+                    	<td><font color="#FF0000">Обновите значение семестра из дисциплины!</font></td>
+                    {/if}
                     <td>{$object->controlType}</td>
                 </tr>
             {/foreach}
