@@ -30,7 +30,11 @@ class CWorkPlanContentSections extends CAbstractPrintClassField {
         			foreach ($category->sections->getItems() as $row) {
         				$dataRow = array();
         				$dataRow[0] = $row->sectionIndex;
-        				$dataRow[1] = $row->name.": ".$row->content;
+        				if ($row->content != "") {
+        					$dataRow[1] = $row->name.": ".$row->content;
+        				} else {
+        					$dataRow[1] = $row->name;
+        				}
         				$result[] = $dataRow;
         			}
         		}

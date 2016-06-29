@@ -36,8 +36,24 @@
         <td width="200">
             {include file="_corriculum/_plan/_printGroupOnTemplateCorriculumDisciplines.tpl"}
         </td>
-        <td width="180">
+        <td width="150">
             {include file="_corriculum/_plan/_printGroupOnTemplateWorkplans.tpl"}
+        </td>
+        <td width="70">
+        	<div class="menu_item_container">
+	        	<a href="{$web_root}_modules/_print/?action=ShowForms&template={$template}" asu-action="flow">
+	        		{if !is_null($formset)}
+	        			{$var = $formset->computeTemplateVariables()}
+		        		{foreach $var as $key=>$value}
+		        			<div asu-type="flow-property" name="{$key}" value="{$value}"></div>
+		        		{/foreach}
+		        	{/if}
+			        <center>
+				        <img src="{$web_root}images/{$icon_theme}/32x32/devices/printer.png"><br>
+				        Печать по шаблону
+				    </center>
+			    </a>
+		    </div>
         </td>
     </tr>
 </table>
