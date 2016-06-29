@@ -96,7 +96,7 @@ class CWorkPlanCompetention extends CActiveModel{
             "competention_id" => "Компетенция",
             "knowledges" => "Знания",
             "skills" => "Умения",
-            "experiences" => "Навыки",
+            "experiences" => "Владения",
             "canUse" => "Умеет использовать",
             "level_id" => "Уровень освоения",
             "discipline_id" => "Дисциплина, сформировавшая компетенцию",
