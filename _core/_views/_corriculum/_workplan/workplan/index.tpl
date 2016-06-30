@@ -34,7 +34,7 @@
 		});
 	</script>
 	<form action="workplans.php" method="post" enctype="multipart/form-data" class="form-horizontal">
-		{if (CSession::getCurrentUser()->getLevelForCurrentTask() == 2 or CSession::getCurrentUser()->getLevelForCurrentTask() == 4)}	
+		{if (CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_READ_ALL} or CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_WRITE_ALL})}	
 			<table border="0" width="100%" class="tableBlank">
 				<tr>
 					<td valign="top" width="100%">
