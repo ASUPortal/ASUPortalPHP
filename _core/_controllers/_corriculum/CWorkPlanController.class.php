@@ -645,4 +645,73 @@ class CWorkPlanController extends CFlowController{
     	$this->setData("plan", $plan);
     	$this->renderView("_corriculum/_workplan/workplan/html.tpl");
     }
+    public function actionUpdateCommentFile() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$result = array(
+    		"title" => "Нет комментария"
+    	);
+    	$termsList = array();
+    	foreach (CTaxonomyManager::getTaxonomy("comment_file_workplan")->getTerms() as $term) {
+    		$termsList[] = $term->getId();
+    	}
+    	$current = array_search($plan->comment_file, $termsList);
+    	// меняем на следующий статус
+    	if ($current === false) {
+    		$plan->comment_file = $termsList[0];
+    		$result["title"] = $plan->commentFile->getValue();
+    	} elseif ($current == (count($termsList) - 1)) {
+    		$plan->comment_file = 0;
+    	} else {
+    		$plan->comment_file = $termsList[$current + 1];
+    		$result["title"] = $plan->commentFile->getValue();
+    	}
+    	$plan->save();
+    	echo json_encode($result);
+    }
+    public function actionUpdateStatusWorkPlan() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$result = array(
+    		"title" => "Нет комментария"
+    	);
+    	$termsList = array();
+    	foreach (CTaxonomyManager::getTaxonomy("status_workplan")->getTerms() as $term) {
+    		$termsList[] = $term->getId();
+    	}
+    	$current = array_search($plan->status_workplan, $termsList);
+    	// меняем на следующий статус
+    	if ($current === false) {
+    		$plan->status_workplan = $termsList[0];
+    		$result["title"] = $plan->statusWorkplan->getValue();
+    	} elseif ($current == (count($termsList) - 1)) {
+    		$plan->status_workplan = 0;
+    	} else {
+    		$plan->status_workplan = $termsList[$current + 1];
+    		$result["title"] = $plan->statusWorkplan->getValue();
+    	}
+    	$plan->save();
+    	echo json_encode($result);
+    }
+    public function actionUpdateStatusOnPortal() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$result = array(
+    		"title" => "Нет комментария"
+    	);
+    	$termsList = array();
+    	foreach (CTaxonomyManager::getTaxonomy("status_workplan_on_portal")->getTerms() as $term) {
+    		$termsList[] = $term->getId();
+    	}
+    	$current = array_search($plan->status_on_portal, $termsList);
+    	// меняем на следующий статус
+    	if ($current === false) {
+    		$plan->status_on_portal = $termsList[0];
+    		$result["title"] = $plan->statusOnPortal->getValue();
+    	} elseif ($current == (count($termsList) - 1)) {
+    		$plan->status_on_portal = 0;
+    	} else {
+    		$plan->status_on_portal = $termsList[$current + 1];
+    		$result["title"] = $plan->statusOnPortal->getValue();
+    	}
+    	$plan->save();
+    	echo json_encode($result);
+    }
 }
