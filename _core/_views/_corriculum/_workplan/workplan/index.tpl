@@ -254,7 +254,7 @@
 				<td>
                     <span>
                         <span class="changeStatusComment" asu-id="{$plan->getId()}">
-                            {if $plan->comment_file == 0}
+                            {if $plan->comment_file == 0 or is_null($plan->commentFile)}
                                 Нет комментария
                             {else}
                                 {$plan->commentFile->getValue()}
@@ -265,7 +265,7 @@
 	            <td>
                     <span>
                         <span class="changeStatusWorkPlan" asu-id="{$plan->getId()}">
-                            {if $plan->status_workplan == 0}
+                            {if $plan->status_workplan == 0 or is_null($plan->statusWorkplan)}
                                 Нет комментария
                             {else}
                                 {$plan->statusWorkplan->getValue()}
@@ -276,7 +276,7 @@
 	            <td>
                     <span>
                         <span class="changeStatusOnPortal" asu-id="{$plan->getId()}">
-                            {if $plan->status_on_portal == 0}
+                            {if $plan->status_on_portal == 0 or is_null($plan->statusOnPortal)}
                                 Нет комментария
                             {else}
                                 {$plan->statusOnPortal->getValue()}
