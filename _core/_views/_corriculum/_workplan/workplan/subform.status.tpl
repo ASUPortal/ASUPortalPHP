@@ -21,3 +21,6 @@
     {CHtml::error("status_on_portal", $plan)}
     </div>
 </div>
+
+<h4>Статус заполненности полей рабочей программы по шаблонам</h4>
+{CHtml::activeComponent("workplanstatus.php?id={$plan->getId()}", $plan)}
