@@ -197,6 +197,14 @@ class CBaseController {
          */
         $this->addJSInclude('_core/select2/select2.js');
         $this->addCSSInclude('_core/select2/select2.css');
+        /**
+         * Уровни доступа
+         */
+        $this->setData("ACCESS_LEVEL_NO_ACCESS", ACCESS_LEVEL_NO_ACCESS);
+        $this->setData("ACCESS_LEVEL_READ_OWN_ONLY", ACCESS_LEVEL_READ_OWN_ONLY);
+        $this->setData("ACCESS_LEVEL_READ_ALL", ACCESS_LEVEL_READ_ALL);
+        $this->setData("ACCESS_LEVEL_WRITE_OWN_ONLY", ACCESS_LEVEL_WRITE_OWN_ONLY);
+        $this->setData("ACCESS_LEVEL_WRITE_ALL", ACCESS_LEVEL_WRITE_ALL);
     }
 
     /**

@@ -69,6 +69,7 @@ class CWorkPlanController extends CFlowController{
     }
     public function actionIndex() {
         $currentPerson = null;
+        $currentCorriculum = null;
         $set = new CRecordSet();
         $query = new CQuery();
         $set->setQuery($query);
@@ -89,11 +90,13 @@ class CWorkPlanController extends CFlowController{
 	        ->from(TABLE_PERSON." as person")
 	        ->order("person.fio asc")
 	        ->innerJoin(TABLE_WORK_PLAN_AUTHORS." as author", "person.id = author.person_id");
-        $authors = array();
-        foreach ($authorsQuery->execute()->getItems() as $ar) {
-        	$author = new CPerson(new CActiveRecord($ar));
-        	$authors[$author->getId()] = $author->getName();
-        }
+        $corriculumsQuery = new CQuery();
+        $corriculumsQuery->select("corriculum.*")
+	        ->from(TABLE_CORRICULUMS." as corriculum")
+	        ->order("corriculum.title asc")
+	        ->innerJoin(TABLE_CORRICULUM_CYCLES." as corr_cycle", "corr_cycle.corriculum_id=corriculum.id")
+	        ->innerJoin(TABLE_CORRICULUM_DISCIPLINES." as corr_discipline", "corr_discipline.cycle_id=corr_cycle.id")
+	        ->innerJoin(TABLE_WORK_PLANS." as wp", "wp.corriculum_discipline_id=corr_discipline.id");
         $isArchive = false;
         if (CRequest::getInt("isArchive") == "1") {
             $isArchive = true;
@@ -134,8 +137,24 @@ class CWorkPlanController extends CFlowController{
         }
         // фильтр по автору
         if (!is_null(CRequest::getFilter("person.id"))) {
-        	$query->condition("person.id = ".CRequest::getFilter("person.id"));
         	$currentPerson = CRequest::getFilter("person.id");
+        	$query->innerJoin(TABLE_WORK_PLAN_AUTHORS." as authors", "wp.id=authors.plan_id");
+        	$query->innerJoin(TABLE_PERSON." as persons", "authors.person_id=persons.id and persons.id = ".$currentPerson);
+        	// фильтруем еще и учебные планы
+        	$corriculumsQuery->innerJoin(TABLE_WORK_PLAN_AUTHORS." as author", "wp.id=author.plan_id");
+        	$corriculumsQuery->innerJoin(TABLE_PERSON." as person", "author.person_id=person.id and person.id = ".$currentPerson);
+        }
+        // фильтр по учебному плану
+        if (!is_null(CRequest::getFilter("corriculum.id"))) {
+        	$currentCorriculum = CRequest::getFilter("corriculum.id");
+        	$query->innerJoin(TABLE_CORRICULUM_DISCIPLINES." as corr_disciplines", "wp.corriculum_discipline_id=corr_disciplines.id");
+        	$query->innerJoin(TABLE_CORRICULUM_CYCLES." as corr_cycles", "corr_disciplines.cycle_id=corr_cycles.id");
+        	$query->innerJoin(TABLE_CORRICULUMS." as corriculums", "corr_cycles.corriculum_id=corriculums.id and corriculums.id = ".$currentCorriculum);
+        	// фильтруем еще и авторов
+        	$authorsQuery->innerJoin(TABLE_WORK_PLANS." as wp", "wp.id=author.plan_id");
+        	$authorsQuery->innerJoin(TABLE_CORRICULUM_DISCIPLINES." as corr_disciplines", "wp.corriculum_discipline_id=corr_disciplines.id");
+        	$authorsQuery->innerJoin(TABLE_CORRICULUM_CYCLES." as corr_cycles", "corr_disciplines.cycle_id=corr_cycles.id");
+        	$authorsQuery->innerJoin(TABLE_CORRICULUMS." as corriculums", "corr_cycles.corriculum_id=corriculums.id and corriculums.id = ".$currentCorriculum);
         }
         $term = CRequest::getString("textSearch");
         if ($term != "") {
@@ -155,6 +174,16 @@ class CWorkPlanController extends CFlowController{
         	CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
         		$query->innerJoin(TABLE_WORK_PLAN_AUTHORS." as authors", "wp.id=authors.plan_id");
         		$query->innerJoin(TABLE_PERSON." as kadri", "authors.person_id=kadri.id and kadri.id = ".CSession::getCurrentPerson()->getId());
+        }
+        $authors = array();
+        foreach ($authorsQuery->execute()->getItems() as $ar) {
+        	$author = new CPerson(new CActiveRecord($ar));
+        	$authors[$author->getId()] = $author->getName();
+        }
+        $corriculums = array();
+        foreach ($corriculumsQuery->execute()->getItems() as $ar) {
+        	$corriculum = new CCorriculum(new CActiveRecord($ar));
+        	$corriculums[$corriculum->getId()] = $corriculum->title;
         }
         $paginated = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
@@ -209,6 +238,8 @@ class CWorkPlanController extends CFlowController{
         $this->setData("plans", $paginated);
         $this->setData("workplanAuthors", $authors);
         $this->setData("currentPerson", $currentPerson);
+        $this->setData("workplanCorriculums", $corriculums);
+        $this->setData("currentCorriculum", $currentCorriculum);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_corriculum/_workplan/workplan/index.tpl");
     }

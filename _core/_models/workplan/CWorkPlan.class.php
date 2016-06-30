@@ -136,9 +136,15 @@ class CWorkPlan extends CActiveModel {
             "projectThemes" => array(
                 "relationPower" => RELATION_HAS_MANY,
                 "storageTable" => TABLE_WORK_PLAN_PROJECT_THEMES,
-                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND type=0",
                 "targetClass" => "CWorkPlanProjectTheme"
             ),
+        	"projects" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_PROJECT_THEMES,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CWorkPlanProjectTheme"
+        	),
             "authors" => array(
                 "relationPower" => RELATION_MANY_TO_MANY,
                 "storageProperty" => "_authors",
@@ -569,6 +575,18 @@ class CWorkPlan extends CActiveModel {
     	foreach ($this->authors->getItems() as $author) {
     		$newPlan->authors->add($author->getId(), $author->getId());
     	}
+    	/**
+    	 * Клонируем протоколы кафедры рабочей программы
+    	 */
+    	foreach ($this->protocolsDep->getItems() as $protocolsDep) {
+    		$newPlan->protocolsDep->add($protocolsDep->getId(), $protocolsDep->getId());
+    	}
+    	/**
+    	 * Клонируем протоколы НМС рабочей программы
+    	 */
+    	foreach ($this->protocolsNMS->getItems() as $protocolsNMS) {
+    		$newPlan->protocolsNMS->add($protocolsNMS->getId(), $protocolsNMS->getId());
+    	}
     	$newPlan->save();
     	/**
     	 * Клонируем цели рабочей программы
@@ -594,27 +612,6 @@ class CWorkPlan extends CActiveModel {
     		$newCompetention = $competention->copy();
     		$newCompetention->plan_id = $newPlan->getId();
     		/**
-    		 * Копируем знания из компетенций
-    		 * @var CTerm $knowledge
-    		*/
-    		foreach ($competention->knowledges->getItems() as $knowledge) {
-    			$newCompetention->knowledges->add($knowledge->getId(), $knowledge->getId());
-    		}
-    		/**
-    		 * Копируем умения из компетенций
-    		 * @var CTerm $skill
-    		 */
-    		foreach ($competention->skills->getItems() as $skill) {
-    			$newCompetention->skills->add($skill->getId(), $skill->getId());
-    		}
-    		/**
-    		 * Копируем навыки из компетенций
-    		 * @var CTerm $experience
-    		 */
-    		foreach ($competention->experiences->getItems() as $experience) {
-    			$newCompetention->experiences->add($experience->getId(), $experience->getId());
-    		}
-    		/**
     		 * Копируем умеет использовать из компетенций
     		 * @var CTerm $canUse
     		 */
@@ -622,6 +619,33 @@ class CWorkPlan extends CActiveModel {
     			$newCompetention->canUse->add($canUse->getId(), $canUse->getId());
     		}
     		$newCompetention->save();
+    		/**
+    		 * Копируем знания из компетенций
+    		 * @var CTerm $knowledge
+    		 */
+    		foreach ($competention->knowledges->getItems() as $knowledge) {
+    			$newKnowledge = $knowledge->copy();
+    			$newKnowledge->competention_id = $newCompetention->getId();
+    			$newKnowledge->save();
+    		}
+    		/**
+    		 * Копируем умения из компетенций
+    		 * @var CTerm $skill
+    		 */
+    		foreach ($competention->skills->getItems() as $skill) {
+    			$newSkill = $skill->copy();
+    			$newSkill->competention_id = $newCompetention->getId();
+    			$newSkill->save();
+    		}
+    		/**
+    		 * Копируем владения из компетенций
+    		 * @var CTerm $experience
+    		 */
+    		foreach ($competention->experiences->getItems() as $experience) {
+    			$newExperience = $experience->copy();
+    			$newExperience->competention_id = $newCompetention->getId();
+    			$newExperience->save();
+    		}
     	}
     	/**
     	 * Клонируем семестры рабочей программы
@@ -746,7 +770,7 @@ class CWorkPlan extends CActiveModel {
     	/**
     	 * Клонируем темы курсовых и РГР рабочей программы
     	 */
-    	foreach ($this->projectThemes->getItems() as $projectTheme) {
+    	foreach ($this->projects->getItems() as $projectTheme) {
     		$newProjectTheme = $projectTheme->copy();
     		$newProjectTheme->plan_id = $newPlan->getId();
     		$newProjectTheme->save();

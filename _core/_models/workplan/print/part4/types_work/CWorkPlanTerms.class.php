@@ -28,7 +28,9 @@ class CWorkPlanTerms extends CAbstractPrintClassField {
         if (!empty($contextObject->terms->getItems())) {
         	$arr = array("");
         	foreach ($contextObject->terms->getItems() as $term) {
-        		$arr[] = $term->corriculum_discipline_section->title." семестр";
+        		if (!is_null($term->corriculum_discipline_section)) {
+        			$arr[] = $term->corriculum_discipline_section->title." семестр";
+        		}
         	}
         	$result[] = $arr;
         } else {

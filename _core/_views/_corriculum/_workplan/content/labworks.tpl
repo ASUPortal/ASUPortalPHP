@@ -5,7 +5,13 @@
         Нет объектов для отображения
     {else}
     	{foreach $objects->getItems() as $term_id=>$termData}
-    	<h4>{CBaseManager::getWorkPlanTerm($term_id)->corriculum_discipline_section->title} семестр</h4>
+    	<h4>
+	    	{if !is_null(CBaseManager::getWorkPlanTerm($term_id)->corriculum_discipline_section)}
+	        	{CBaseManager::getWorkPlanTerm($term_id)->corriculum_discipline_section->title} семестр
+	        {else}
+	        	<td><font color="#FF0000">Обновите значение семестра из дисциплины!</font></td>
+	        {/if}
+    	</h4>
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
             <tr>

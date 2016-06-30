@@ -13,16 +13,45 @@
 			jQuery("#isArchive").change(function(){
 				window.location.href=web_root + "_modules/_corriculum/workplans.php?isArchive=" + (jQuery(this).is(":checked") ? "1":"0");
 			});
-			jQuery("#person_selector").change(function(){
-                window.location.href=web_root + "_modules/_corriculum/workplans.php?filter=person.id:" + jQuery(this).val();
-            });
+			{if !is_null($currentPerson)}
+				jQuery("#corriculum_selector").change(function(){
+	                window.location.href=web_root + "_modules/_corriculum/workplans.php?filter=corriculum.id:" + jQuery(this).val() + "_person.id:{$currentPerson}";
+	            });
+			{else}
+				jQuery("#corriculum_selector").change(function(){
+	                window.location.href=web_root + "_modules/_corriculum/workplans.php?filter=corriculum.id:" + jQuery(this).val();
+	            });
+	    	{/if}
+	    	{if !is_null($currentCorriculum)}
+		    	jQuery("#person_selector").change(function(){
+	                window.location.href=web_root + "_modules/_corriculum/workplans.php?filter=person.id:" + jQuery(this).val() + "_corriculum.id:{$currentCorriculum}";
+	            });
+		    {else}
+			    jQuery("#person_selector").change(function(){
+	                window.location.href=web_root + "_modules/_corriculum/workplans.php?filter=person.id:" + jQuery(this).val();
+	            });
+	    	{/if}
 		});
 	</script>
 	<form action="workplans.php" method="post" enctype="multipart/form-data" class="form-horizontal">
-		<table border="0" width="100%" class="tableBlank">
-			{if (CSession::getCurrentUser()->getLevelForCurrentTask() == 2 or CSession::getCurrentUser()->getLevelForCurrentTask() == 4)}
+		{if (CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_READ_ALL} or CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_WRITE_ALL})}	
+			<table border="0" width="100%" class="tableBlank">
 				<tr>
-					<td valign="top">
+					<td valign="top" width="100%">
+						<div class="form-horizontal">
+		        			<div class="control-group">
+		            			<label class="control-label" for="corriculum.id">Учебный план</label>
+		            			<div class="controls">
+		                			{CHtml::dropDownList("corriculum.id", $workplanCorriculums, $currentCorriculum, "corriculum_selector", "span12")}
+		            			</div>
+		        			</div>
+		    			</div>
+					</td>
+				</tr>
+			</table>
+			<table border="0" width="100%" class="tableBlank">
+				<tr>
+					<td valign="top" width="60%">
 						<div class="form-horizontal">
 		        			<div class="control-group">
 		            			<label class="control-label" for="person.id">Автор</label>
@@ -37,32 +66,46 @@
 		      			{CHtml::textField("textSearch", "", "", "span12", "placeholder=Поиск")}
 					</td>
 				</tr>
-			{else}
+			</table>
+		{else}
+			<table border="0" width="100%" class="tableBlank">
 				<tr>
+					<td valign="top" width="60%">
+						<div class="form-horizontal">
+		        			<div class="control-group">
+		            			<label class="control-label" for="corriculum.id">Учебный план</label>
+		            			<div class="controls">
+		                			{CHtml::dropDownList("corriculum.id", $workplanCorriculums, $currentCorriculum, "corriculum_selector", "span12")}
+		            			</div>
+		        			</div>
+		    			</div>
+					</td>
 		      		<td valign="top">
 		      			{CHtml::hiddenField("action", "index")}
 		      			{CHtml::textField("textSearch", "", "", "span12", "placeholder=Поиск")}
 					</td>
 				</tr>
-			{/if}
-			<tr>
-				<td>			
-					<div class="form-horizontal">
-						<div class="control-group">
-							<label class="control-label" for="isArchive">В архиве</label>
-							<div class="controls">
-								{CHtml::checkBox("isArchive", "1", $isArchive, "isArchive")}
+			</table>
+		{/if}
+			<table border="0" width="100%" class="tableBlank">
+				<tr>
+					<td>			
+						<div class="form-horizontal">
+							<div class="control-group">
+								<label class="control-label" for="isArchive">В архиве</label>
+								<div class="controls">
+									{CHtml::checkBox("isArchive", "1", $isArchive, "isArchive")}
+								</div>
 							</div>
 						</div>
-					</div>
-	    		</td>
-	    		<td valign="top">
-					<p align="center">
-						<span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter(); return false; " title="очистить фильтры"/></span>
-					</p>
-				</td>
-			</tr>
-	    </table>
+		    		</td>
+		    		<td valign="top">
+						<p align="center">
+							<span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter(); return false; " title="очистить фильтры"/></span>
+						</p>
+					</td>
+				</tr>
+	    	</table>
 	</form>
     
     <form action="workplans.php" method="post" id="MainView">

@@ -13,7 +13,11 @@
             </tr>
             <tr>
                 {foreach $terms as $term}
-                    <td>{$term->corriculum_discipline_section->title} семестр</td>
+                	{if !is_null($term->corriculum_discipline_section)}
+                    	<td>{$term->corriculum_discipline_section->title} семестр</td>
+                    {else}
+                    	<td><font color="#FF0000">Обновите значение из дисциплины!</font></td>
+                    {/if}
                 {/foreach}
                 <td>Всего</td>
             </tr>
@@ -98,7 +102,13 @@
     {/if}
 
     {foreach $termSectionsData as $termId=>$termData}
-        <h4>Разделы дисциплины, изучаемые в {CBaseManager::getWorkPlanTerm($termId)->corriculum_discipline_section->title}-м семестре</h4>
+        <h4>Разделы дисциплины, изучаемые в 
+	        {if !is_null(CBaseManager::getWorkPlanTerm($termId)->corriculum_discipline_section)}
+	        	{CBaseManager::getWorkPlanTerm($termId)->corriculum_discipline_section->title}-м семестре
+	        {else}
+	        	<td><font color="#FF0000">Обновите значение семестра из дисциплины!</font></td>
+	        {/if}
+        </h4>
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
                 <tr>

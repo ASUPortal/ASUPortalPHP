@@ -43,7 +43,11 @@ class CWorkPlanTerm extends CActiveModel{
     }
 
     function __toString() {
-        return (String) $this->corriculum_discipline_section->title;
+    	if (!is_null($this->corriculum_discipline_section)) {
+    		return (String) $this->corriculum_discipline_section->title;
+    	} else {
+    		return (String) $this->number;
+    	}
     }
 
 
