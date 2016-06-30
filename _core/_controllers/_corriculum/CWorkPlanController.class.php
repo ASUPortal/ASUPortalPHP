@@ -319,16 +319,26 @@ class CWorkPlanController extends CFlowController{
             $planCompetention->plan_id = $plan->getId();
             $planCompetention->allow_delete = 0;
             $planCompetention->competention_id = $competention->competention_id;
-            if ($competention->knowledge_id != 0) {
-                $planCompetention->knowledges->add($competention->knowledge_id, $competention->knowledge_id);
-            }
-            if ($competention->skill_id != 0) {
-                $planCompetention->skills->add($competention->skill_id, $competention->skill_id);
-            }
-            if ($competention->experience_id != 0) {
-                $planCompetention->experiences->add($competention->experience_id, $competention->experience_id);
-            }
+            $planCompetention->level_id = $competention->level_id;
             $planCompetention->save();
+            foreach ($competention->knowledges->getItems() as $knowledge) {
+            	$planCompetentionKnowledge = new CWorkPlanCompetentionKnowledge();
+            	$planCompetentionKnowledge->competention_id = $planCompetention->getId();
+            	$planCompetentionKnowledge->knowledge_id = $knowledge->getId();
+            	$planCompetentionKnowledge->save();
+            }
+            foreach ($competention->skills->getItems() as $skill) {
+            	$planCompetentionSkill = new CWorkPlanCompetentionSkill();
+            	$planCompetentionSkill->competention_id = $planCompetention->getId();
+            	$planCompetentionSkill->skill_id = $skill->getId();
+            	$planCompetentionSkill->save();
+            }
+            foreach ($competention->experiences->getItems() as $experience) {
+            	$planCompetentionExperience = new CWorkPlanCompetentionExperience();
+            	$planCompetentionExperience->competention_id = $planCompetention->getId();
+            	$planCompetentionExperience->experience_id = $experience->getId();
+            	$planCompetentionExperience->save();
+            }
         }
         $category = new CWorkPlanContentCategory();
         $category->plan_id = $plan->getId();

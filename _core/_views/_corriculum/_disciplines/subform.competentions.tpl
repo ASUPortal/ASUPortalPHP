@@ -11,7 +11,7 @@
         <th>Уровень освоения</th>
         <th>Знания</th>
         <th>Умения</th>
-        <th>Навыки</th>
+        <th>Владения</th>
     </tr>
     {counter start=0 print=false}
     {foreach $discipline->competentions->getItems() as $comp}

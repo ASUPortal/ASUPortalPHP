@@ -161,21 +161,30 @@ class CWorkPlanCompetentionsController extends CBaseController{
     	if ($type == 0) {
     		if (!is_null($plan->corriculumDiscipline)) {
     			foreach ($plan->corriculumDiscipline->competentions->getItems() as $competention) {
-    				$object = new CWorkPlanCompetention();
-    				$object->plan_id = $plan->getId();
-    				$object->type = $type;
-    				$object->competention_id = $competention->competention_id;
-    				$object->level_id = $competention->level_id;
+    				$planCompetention = new CWorkPlanCompetention();
+    				$planCompetention->plan_id = $plan->getId();
+    				$planCompetention->allow_delete = 0;
+    				$planCompetention->competention_id = $competention->competention_id;
+    				$planCompetention->level_id = $competention->level_id;
+    				$planCompetention->save();
     				foreach ($competention->knowledges->getItems() as $knowledge) {
-    					$object->knowledges->add($knowledge->getId(), $knowledge->getId());
+    					$planCompetentionKnowledge = new CWorkPlanCompetentionKnowledge();
+    					$planCompetentionKnowledge->competention_id = $planCompetention->getId();
+    					$planCompetentionKnowledge->knowledge_id = $knowledge->getId();
+    					$planCompetentionKnowledge->save();
     				}
     				foreach ($competention->skills->getItems() as $skill) {
-    					$object->skills->add($skill->getId(), $skill->getId());
+    					$planCompetentionSkill = new CWorkPlanCompetentionSkill();
+    					$planCompetentionSkill->competention_id = $planCompetention->getId();
+    					$planCompetentionSkill->skill_id = $skill->getId();
+    					$planCompetentionSkill->save();
     				}
     				foreach ($competention->experiences->getItems() as $experience) {
-    					$object->experiences->add($experience->getId(), $experience->getId());
+    					$planCompetentionExperience = new CWorkPlanCompetentionExperience();
+    					$planCompetentionExperience->competention_id = $planCompetention->getId();
+    					$planCompetentionExperience->experience_id = $experience->getId();
+    					$planCompetentionExperience->save();
     				}
-    				$object->save();
     			}
     		}
     	}
@@ -223,13 +232,13 @@ class CWorkPlanCompetentionsController extends CBaseController{
     		$newItem->competention_id = $competentionFormed->competention_id;
     		$newItem->level_id = $competentionFormed->level_id;
     		foreach ($competentionFormed->knowledges->getItems() as $knowledge) {
-    			$newItem->knowledges->add($knowledge->getId(), $knowledge->getId());
+    			$newItem->knowledges->add($knowledge->knowledge->getId(), $knowledge->knowledge->getId());
     		}
     		foreach ($competentionFormed->skills->getItems() as $skill) {
-    			$newItem->skills->add($skill->getId(), $skill->getId());
+    			$newItem->skills->add($skill->skill->getId(), $skill->skill->getId());
     		}
     		foreach ($competentionFormed->experiences->getItems() as $experience) {
-    			$newItem->experiences->add($experience->getId(), $experience->getId());
+    			$newItem->experiences->add($experience->experience->getId(), $experience->experience->getId());
     		}	
     		$newItem->save();
     	}
