@@ -25,9 +25,25 @@ class CWorkPlanApproverModelOptionalValidator extends IModelValidatorOptional {
 		$terms = array();
 		$terms[] = "term.name";
 		$termIds = array();
+		$errorTerm = false;
+		$sectionsDisciplines = array();
+		if (!empty($discipline->sections->getItems())) {
+			foreach ($discipline->sections->getItems() as $section) {
+				$sectionsDisciplines[] = $section->id;
+			}
+		}
 		foreach ($this->model->terms->getItems() as $term) {
+			if (!in_array($term->number, $sectionsDisciplines)) {
+				$errorTerm = true;
+			}
+			if (is_null($term->corriculum_discipline_section)) {
+				$errorTerm = true;
+			}
 			$termIds[] = $term->getId();
 			$terms[] = "sum(if(l.term_id = ".$term->getId().", l.value, 0)) as t_".$term->getId();
+		}
+		if ($errorTerm) {
+			$errors[] = "<b><font color='#FF0000'>Обновите названия семестров из дисциплины!</font></b>";
 		}
 		if (count($termIds) > 0) {
 			$terms[] = "sum(if(l.term_id in (".join(", ", $termIds)."), l.value, 0)) as t_sum";
