@@ -22,6 +22,7 @@
             <li><a data-toggle="tab" href="#library">Обеспечение</a></li>
             <li><a data-toggle="tab" href="#changes">Изменения</a></li>
             <li><a data-toggle="tab" href="#protocols">Протоколы</a></li>
+            <li><a data-toggle="tab" href="#status">Статус</a></li>
         </ul>
         <div class="tab-content">
             <div id="common" class="tab-pane">
@@ -47,6 +48,9 @@
             </div>
             <div id="protocols" class="tab-pane">
                 {include file="_corriculum/_workplan/workplan/subform.protocols.tpl"}
+            </div>
+            <div id="status" class="tab-pane">
+                {include file="_corriculum/_workplan/workplan/subform.status.tpl"}
             </div>
         </div>
         <div class="control-group">

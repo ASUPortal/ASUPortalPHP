@@ -15,6 +15,9 @@
  * @property int direction_id
  * @property int qualification_id
  * @property int education_form_id
+ * @property int comment_file
+ * @property int status_on_portal
+ * @property int status_workplan
  * @property string year
  * @property string intended_for // предназначена для
  * @property string position
@@ -330,7 +333,28 @@ class CWorkPlan extends CActiveModel {
                 "rightKey" => "protocol_id",
                 "managerClass" => "CProtocolManager",
                 "managerGetObject" => "getNMSProtocol"
-            )
+            ),
+        	"commentFile" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_comment_file",
+        		"storageField" => "comment_file",
+        		"managerClass" => "CTaxonomyManager",
+        		"managerGetObject" => "getTerm"
+        	),
+        	"statusOnPortal" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_status_on_portal",
+        		"storageField" => "status_on_portal",
+        		"managerClass" => "CTaxonomyManager",
+        		"managerGetObject" => "getTerm"
+        	),
+        	"statusWorkplan" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_status_workplan",
+        		"storageField" => "status_workplan",
+        		"managerClass" => "CTaxonomyManager",
+        		"managerGetObject" => "getTerm"
+        	)
         );
     }
 
@@ -374,7 +398,10 @@ class CWorkPlan extends CActiveModel {
         	"method_project_instructs" => "Методические указания к курсовому проектированию",
         	"material_technical_supply" => "Материально-техническое обеспечение",
             "protocolsDep" => "Протоколы кафедры",
-            "protocolsNMS" => "Протоколы НМС"
+            "protocolsNMS" => "Протоколы НМС",
+            "comment_file" => "Комментарий к файлу",
+            "status_on_portal" => "Статус на портале",
+            "status_workplan" => "Статус рабочей программы"
         );
     }
 

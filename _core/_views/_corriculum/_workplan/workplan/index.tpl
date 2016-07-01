@@ -107,7 +107,104 @@
 				</tr>
 	    	</table>
 	</form>
-    
+	
+    	<script>
+            jQuery(document).ready(function(){
+                /**
+                 * Обрабатываем смену статуса комментария к файлу
+                 */
+                jQuery(".changeStatusComment").on("click", function(item){
+                    var container = item.target || item.srcElement;
+                    var id = jQuery(container).attr("asu-id");
+                    jQuery.ajax({
+                        url: web_root + "_modules/_corriculum/workplans.php",
+                        beforeSend: function(){
+                            jQuery(container).html('<i class="icon-signal"></i>');
+                        },
+                        cache: false,
+                        context: item,
+                        data: {
+                            action: "updateCommentFile",
+                            id: id
+                        },
+                        dataType: "json",
+                        method: "GET",
+                        success: function(data){
+                            jQuery(container).html(data.title);
+                        }
+                    });
+                });
+                /**
+                 * Обрабатываем смену статуса рабочей программы
+                 */
+                jQuery(".changeStatusWorkPlan").on("click", function(item){
+                    var container = item.target || item.srcElement;
+                    var id = jQuery(container).attr("asu-id");
+                    jQuery.ajax({
+                        url: web_root + "_modules/_corriculum/workplans.php",
+                        beforeSend: function(){
+                            jQuery(container).html('<i class="icon-signal"></i>');
+                        },
+                        cache: false,
+                        context: item,
+                        data: {
+                            action: "updateStatusWorkPlan",
+                            id: id
+                        },
+                        dataType: "json",
+                        method: "GET",
+                        success: function(data){
+                            jQuery(container).html(data.title);
+                        }
+                    });
+                });
+                /**
+                 * Обрабатываем смену статуса на портале
+                 */
+                jQuery(".changeStatusOnPortal").on("click", function(item){
+                    var container = item.target || item.srcElement;
+                    var id = jQuery(container).attr("asu-id");
+                    jQuery.ajax({
+                        url: web_root + "_modules/_corriculum/workplans.php",
+                        beforeSend: function(){
+                            jQuery(container).html('<i class="icon-signal"></i>');
+                        },
+                        cache: false,
+                        context: item,
+                        data: {
+                            action: "updateStatusOnPortal",
+                            id: id
+                        },
+                        dataType: "json",
+                        method: "GET",
+                        success: function(data){
+                            jQuery(container).html(data.title);
+                        }
+                    });
+                });
+            });
+        </script>
+        <style>
+            .changeStatusComment {
+                cursor: pointer;
+            }
+            .changeStatusComment:hover {
+                text-decoration: underline;
+            }
+            .changeStatusWorkPlan {
+                cursor: pointer;
+            }
+            .changeStatusWorkPlan:hover {
+                text-decoration: underline;
+            }
+            .changeStatusOnPortal {
+                cursor: pointer;
+            }
+            .changeStatusOnPortal:hover {
+                text-decoration: underline;
+            }
+        </style>
+        
     <form action="workplans.php" method="post" id="MainView">
     {if $plans->getCount() == 0}
         <div class="alert">
@@ -128,6 +225,9 @@
 	            <th>{CHtml::tableOrder("term.name", $plans->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("person.fio", $plans->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("title", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("comment_file", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("status_workplan", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("status_on_portal", $plans->getFirstItem())}</th>
 	        </tr>
 	        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
 	        {foreach $plans->getItems() as $plan}
@@ -151,6 +251,39 @@
 	            <td>{", "|join:$plan->profiles->getItems()}</td>
 				<td>{", "|join:$plan->authors->getItems()}</td>
 				<td>{$plan->title}</td>
+				<td>
+                    <span>
+                        <span class="changeStatusComment" asu-id="{$plan->getId()}">
+                            {if $plan->comment_file == 0 or is_null($plan->commentFile)}
+                                Нет комментария
+                            {else}
+                                {$plan->commentFile->getValue()}
+                            {/if}
+                        </span>
+                    </span>
+	            </td>
+	            <td>
+                    <span>
+                        <span class="changeStatusWorkPlan" asu-id="{$plan->getId()}">
+                            {if $plan->status_workplan == 0 or is_null($plan->statusWorkplan)}
+                                Нет комментария
+                            {else}
+                                {$plan->statusWorkplan->getValue()}
+                            {/if}
+                        </span>
+                    </span>
+	            </td>
+	            <td>
+                    <span>
+                        <span class="changeStatusOnPortal" asu-id="{$plan->getId()}">
+                            {if $plan->status_on_portal == 0 or is_null($plan->statusOnPortal)}
+                                Нет комментария
+                            {else}
+                                {$plan->statusOnPortal->getValue()}
+                            {/if}
+                        </span>
+                    </span>
+	            </td>
 	        </tr>
 	        {/foreach}
 	    </table>
