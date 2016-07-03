@@ -98,6 +98,7 @@ class CWorkPlanController extends CFlowController{
 	        ->innerJoin(TABLE_CORRICULUM_DISCIPLINES." as corr_discipline", "corr_discipline.cycle_id=corr_cycle.id")
 	        ->innerJoin(TABLE_WORK_PLANS." as wp", "wp.corriculum_discipline_id=corr_discipline.id");
         $isArchive = false;
+        $isApprove = (CRequest::getString("isApprove") == "1");
         if (CRequest::getInt("isArchive") == "1") {
             $isArchive = true;
             $titleArchive = "Убрать из архива";
@@ -235,13 +236,43 @@ class CWorkPlanController extends CFlowController{
         $this->setData("id", null);
         
         $this->setData("isArchive", $isArchive);
+        $this->setData("isApprove", $isApprove);
         $this->setData("plans", $paginated);
         $this->setData("workplanAuthors", $authors);
         $this->setData("currentPerson", $currentPerson);
         $this->setData("workplanCorriculums", $corriculums);
         $this->setData("currentCorriculum", $currentCorriculum);
         $this->setData("paginator", $set->getPaginator());
-        $this->renderView("_corriculum/_workplan/workplan/index.tpl");
+        if (!$isApprove) {
+        	$requestParams = array();
+        	foreach (CRequest::getGlobalRequestVariables()->getItems() as $key=>$value) {
+        		$requestParams[] = $key."=".$value;
+        	}
+        	$requestParams[] = "isApprove=1";
+        	$this->addActionsMenuItem(array(
+        		array(
+        			"title" => "Утверждение статусов рабочих программ",
+        			"link" => "?".implode("&", $requestParams),
+        			"icon" => "actions/bookmark-new.png"
+        		),
+        	));
+        	$this->renderView("_corriculum/_workplan/workplan/index.tpl");
+        } else {
+        	$requestParams = array();
+        	foreach (CRequest::getGlobalRequestVariables()->getItems() as $key=>$value) {
+        		if ($key != "isApprove") {
+        			$requestParams[] = $key."=".$value;
+        		}
+        	}
+        	$this->addActionsMenuItem(array(
+        		array(
+        			"title" => "Список рабочих программ",
+        			"link" => "?".implode("&", $requestParams),
+        			"icon" => "actions/format-justify-center.png"
+        		),
+        	));
+        	$this->renderView("_corriculum/_workplan/workplan/approve.tpl");
+        }
     }
     public function actionDelete() {
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
@@ -658,7 +689,8 @@ class CWorkPlanController extends CFlowController{
     public function actionUpdateCommentFile() {
     	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
     	$result = array(
-    		"title" => "Нет комментария"
+    		"title" => "Нет комментария",
+    		"color" => "white"
     	);
     	$termsList = array();
     	foreach (CTaxonomyManager::getTaxonomy("comment_file_workplan")->getTerms() as $term) {
@@ -669,11 +701,13 @@ class CWorkPlanController extends CFlowController{
     	if ($current === false) {
     		$plan->comment_file = $termsList[0];
     		$result["title"] = $plan->commentFile->getValue();
+    		$result["color"] = $plan->commentFile->getAlias();
     	} elseif ($current == (count($termsList) - 1)) {
     		$plan->comment_file = 0;
     	} else {
     		$plan->comment_file = $termsList[$current + 1];
     		$result["title"] = $plan->commentFile->getValue();
+    		$result["color"] = $plan->commentFile->getAlias();
     	}
     	$plan->save();
     	echo json_encode($result);
@@ -681,7 +715,8 @@ class CWorkPlanController extends CFlowController{
     public function actionUpdateStatusWorkPlan() {
     	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
     	$result = array(
-    		"title" => "Нет комментария"
+    		"title" => "Нет комментария",
+    		"color" => "white"
     	);
     	$termsList = array();
     	foreach (CTaxonomyManager::getTaxonomy("status_workplan")->getTerms() as $term) {
@@ -692,11 +727,13 @@ class CWorkPlanController extends CFlowController{
     	if ($current === false) {
     		$plan->status_workplan = $termsList[0];
     		$result["title"] = $plan->statusWorkplan->getValue();
+    		$result["color"] = $plan->statusWorkplan->getAlias();
     	} elseif ($current == (count($termsList) - 1)) {
     		$plan->status_workplan = 0;
     	} else {
     		$plan->status_workplan = $termsList[$current + 1];
     		$result["title"] = $plan->statusWorkplan->getValue();
+    		$result["color"] = $plan->statusWorkplan->getAlias();
     	}
     	$plan->save();
     	echo json_encode($result);
@@ -704,7 +741,8 @@ class CWorkPlanController extends CFlowController{
     public function actionUpdateStatusOnPortal() {
     	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
     	$result = array(
-    		"title" => "Нет комментария"
+    		"title" => "Нет комментария",
+    		"color" => "white"
     	);
     	$termsList = array();
     	foreach (CTaxonomyManager::getTaxonomy("status_workplan_on_portal")->getTerms() as $term) {
@@ -715,11 +753,13 @@ class CWorkPlanController extends CFlowController{
     	if ($current === false) {
     		$plan->status_on_portal = $termsList[0];
     		$result["title"] = $plan->statusOnPortal->getValue();
+    		$result["color"] = $plan->statusOnPortal->getAlias();
     	} elseif ($current == (count($termsList) - 1)) {
     		$plan->status_on_portal = 0;
     	} else {
     		$plan->status_on_portal = $termsList[$current + 1];
     		$result["title"] = $plan->statusOnPortal->getValue();
+    		$result["color"] = $plan->statusOnPortal->getAlias();
     	}
     	$plan->save();
     	echo json_encode($result);
