@@ -234,6 +234,13 @@ class CWorkPlanController extends CFlowController{
         $this->setData("url", null);
         $this->setData("actionGetWorkplans", null);
         $this->setData("id", null);
+        /**
+         * Параметры для печати по шаблону списка рабочих программ
+         */
+        $template = "formset_workplans_list";
+        $formset = CPrintManager::getFormset($template);
+        $this->setData("formset", $formset);
+        $this->setData("template", $template);
         
         $this->setData("isArchive", $isArchive);
         $this->setData("isApprove", $isApprove);
