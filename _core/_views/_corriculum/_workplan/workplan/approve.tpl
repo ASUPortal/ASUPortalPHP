@@ -18,13 +18,9 @@
 	            <th>{CHtml::activeViewGroupSelect("id", $plans->getFirstItem(), true)}</th>
 	            <th>№</th>
 				<th></th>
-	            <th>{CHtml::tableOrder("title_display", $plans->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("discipline.name", $plans->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("corriculum.title", $plans->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("year", $plans->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("term.name", $plans->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("person.fio", $plans->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("title", $plans->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("comment_file", $plans->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("status_workplan", $plans->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("status_on_portal", $plans->getFirstItem())}</th>
@@ -36,7 +32,6 @@
 	            <td>{CHtml::activeViewGroupSelect("id", $plan, false, true)}</td>
 	            <td>{counter}</td>
 	            <td><a href="?action=edit&id={$plan->getId()}" class="icon-pencil"></a></td>
-	            <td>{$plan->title_display}</td>
 	            <td>{$plan->discipline}</td>
 	            <td>
 	            	{if !is_null($plan->corriculumDiscipline)}
@@ -47,10 +42,7 @@
 		            	{/if}
 	            	{/if}
 	            </td>
-	            <td>{$plan->year}</td>
-	            <td>{", "|join:$plan->profiles->getItems()}</td>
 				<td>{", "|join:$plan->authors->getItems()}</td>
-				<td>{$plan->title}</td>
 				<td>
                     <span>
                         <span class="changeStatusComment" asu-id="{$plan->getId()}" asu-color="{if is_null($plan->commentFile)}white{else}{$plan->commentFile->getAlias()}{/if}">
