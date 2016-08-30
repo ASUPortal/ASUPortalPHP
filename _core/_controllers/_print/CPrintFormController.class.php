@@ -36,7 +36,8 @@ class CPrintFormController extends CBaseController {
         }
         $types = array(
             "docx" => "Microsoft Word (docx)",
-            "odt" => "OpenOffice Writer (odt)"
+            "odt" => "OpenOffice Writer (odt)",
+            "html" => "HTML Document (html)"
         );
         $this->setData("types", $types);
         $this->setData("form", $form);
@@ -72,7 +73,8 @@ class CPrintFormController extends CBaseController {
         }
         $types = array(
             "docx" => "Microsoft Word (docx)",
-            "odt" => "OpenOffice Writer (odt)"
+            "odt" => "OpenOffice Writer (odt)",
+            "html" => "HTML Document (html)"
         );
         $this->setData("types", $types);
         $this->setData("form", $form);
