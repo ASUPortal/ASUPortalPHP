@@ -39,17 +39,17 @@ class CCorriculumWorkPlansStatus extends CAbstractPrintClassField {
 									}
 								}
 								$dataRow[1] = implode(", ", $authors);
-								if ($plan->comment_file == 0 or is_null($plan->commentFile)) {
+								if ($plan->comment_file == "0" or is_null($plan->commentFile)) {
 									$dataRow[2] = "Нет комментария";
 								} else {
 									$dataRow[2] = $plan->commentFile->getValue();
 								}
-								if ($plan->statusWorkplan == 0 or is_null($plan->statusWorkplan)) {
+								if ($plan->statusWorkplan == "0" or is_null($plan->statusWorkplan)) {
 									$dataRow[3] = "Нет комментария";
 								} else {
 									$dataRow[3] = $plan->statusWorkplan->getValue();
 								}
-								if ($plan->statusOnPortal == 0 or is_null($plan->statusOnPortal)) {
+								if ($plan->statusOnPortal == "0" or is_null($plan->statusOnPortal)) {
 									$dataRow[4] = "Нет комментария";
 								} else {
 									$dataRow[4] = $plan->statusOnPortal->getValue();
