@@ -47,15 +47,40 @@ class CWorkPlanStatus extends CAbstractPrintClassField {
 			} else {
 				$dataRow[2] = $plan->commentFile->getValue();
 			}
-			if ($plan->statusWorkplan == "0" or is_null($plan->statusWorkplan)) {
+			if ($plan->status_on_portal == "0" or is_null($plan->statusOnPortal)) {
 				$dataRow[3] = "Нет комментария";
 			} else {
-				$dataRow[3] = $plan->statusWorkplan->getValue();
+				$dataRow[3] = $plan->statusOnPortal->getValue();
 			}
-			if ($plan->statusOnPortal == "0" or is_null($plan->statusOnPortal)) {
-				$dataRow[4] = "Нет комментария";
+			if ($plan->status_workplan_bibl == "0" or is_null($plan->statusWorkplanBibl)) {
+				$dataRow[4] = "–";
 			} else {
-				$dataRow[4] = $plan->statusOnPortal->getValue();
+				$dataRow[4] = $plan->statusWorkplanBibl->getValue();
+			}
+			if ($plan->status_workplan_prepod == "0" or is_null($plan->statusWorkplanPrepod)) {
+				$dataRow[5] = "–";
+			} else {
+				$dataRow[5] = $plan->statusWorkplanPrepod->getValue();
+			}
+			if ($plan->status_workplan_zav_kaf == "0" or is_null($plan->statusWorkplanZavKaf)) {
+				$dataRow[6] = "–";
+			} else {
+				$dataRow[6] = $plan->statusWorkplanZavKaf->getValue();
+			}
+			if ($plan->status_workplan_nms == "0" or is_null($plan->statusWorkplanNMS)) {
+				$dataRow[7] = "–";
+			} else {
+				$dataRow[7] = $plan->statusWorkplanNMS->getValue();
+			}
+			if ($plan->status_workplan_dekan == "0" or is_null($plan->statusWorkplanDekan)) {
+				$dataRow[8] = "–";
+			} else {
+				$dataRow[8] = $plan->statusWorkplanDekan->getValue();
+			}
+			if ($plan->status_workplan_prorektor == "0" or is_null($plan->statusWorkplanProrektor)) {
+				$dataRow[9] = "–";
+			} else {
+				$dataRow[9] = $plan->statusWorkplanProrektor->getValue();
 			}
 			$result[] = $dataRow;
 		}

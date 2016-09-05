@@ -424,11 +424,6 @@ class CWorkPlanController extends CFlowController{
         		"title" => "Добавить литературу",
         		"link" => "workplans.php?action=addLiterature&plan_id=".$plan->getId(),
         		"icon" => "actions/list-add.png"
-        	),
-        	array(
-        		"title" => "Шаблон в виде HTML",
-        		"link" => "workplans.php?action=html&id=".$plan->getId(),
-        		"icon" => "mimetypes/text-html.png"
         	)
         ));
         $this->setData("plan", $plan);
@@ -688,11 +683,6 @@ class CWorkPlanController extends CFlowController{
     	}
     	$this->redirect("workplans.php?action=edit&id=".CRequest::getInt("plan"));
     }
-    public function actionHtml() {
-    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-    	$this->setData("plan", $plan);
-    	$this->renderView("_corriculum/_workplan/workplan/html.tpl");
-    }
     public function actionUpdateCommentFile() {
     	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
     	$result = array(
@@ -704,7 +694,7 @@ class CWorkPlanController extends CFlowController{
     		$termsList[] = $term->getId();
     	}
     	$current = array_search($plan->comment_file, $termsList);
-    	// меняем на следующий статус
+    	// меняем на следующий статус комментарий к файлу рабочей программы
     	if ($current === false) {
     		$plan->comment_file = $termsList[0];
     		$result["title"] = $plan->commentFile->getValue();
@@ -715,32 +705,6 @@ class CWorkPlanController extends CFlowController{
     		$plan->comment_file = $termsList[$current + 1];
     		$result["title"] = $plan->commentFile->getValue();
     		$result["color"] = $plan->commentFile->getAlias();
-    	}
-    	$plan->save();
-    	echo json_encode($result);
-    }
-    public function actionUpdateStatusWorkPlan() {
-    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
-    	$result = array(
-    		"title" => "Нет комментария",
-    		"color" => "white"
-    	);
-    	$termsList = array();
-    	foreach (CTaxonomyManager::getTaxonomy("status_workplan")->getTerms() as $term) {
-    		$termsList[] = $term->getId();
-    	}
-    	$current = array_search($plan->status_workplan, $termsList);
-    	// меняем на следующий статус
-    	if ($current === false) {
-    		$plan->status_workplan = $termsList[0];
-    		$result["title"] = $plan->statusWorkplan->getValue();
-    		$result["color"] = $plan->statusWorkplan->getAlias();
-    	} elseif ($current == (count($termsList) - 1)) {
-    		$plan->status_workplan = 0;
-    	} else {
-    		$plan->status_workplan = $termsList[$current + 1];
-    		$result["title"] = $plan->statusWorkplan->getValue();
-    		$result["color"] = $plan->statusWorkplan->getAlias();
     	}
     	$plan->save();
     	echo json_encode($result);
@@ -756,7 +720,7 @@ class CWorkPlanController extends CFlowController{
     		$termsList[] = $term->getId();
     	}
     	$current = array_search($plan->status_on_portal, $termsList);
-    	// меняем на следующий статус
+    	// меняем на следующий статус на портале рабочей программы
     	if ($current === false) {
     		$plan->status_on_portal = $termsList[0];
     		$result["title"] = $plan->statusOnPortal->getValue();
@@ -767,6 +731,162 @@ class CWorkPlanController extends CFlowController{
     		$plan->status_on_portal = $termsList[$current + 1];
     		$result["title"] = $plan->statusOnPortal->getValue();
     		$result["color"] = $plan->statusOnPortal->getAlias();
+    	}
+    	$plan->save();
+    	echo json_encode($result);
+    }
+    public function actionUpdateStatusWorkPlanBibl() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$result = array(
+    		"title" => "–",
+    		"color" => "white"
+    	);
+    	$termsList = array();
+    	foreach (CTaxonomyManager::getTaxonomy("status_workplan_bibl")->getTerms() as $term) {
+    		$termsList[] = $term->getId();
+    	}
+    	$current = array_search($plan->status_workplan_bibl, $termsList);
+    	// меняем на следующий статус библиотеки рабочей программы
+    	if ($current === false) {
+    		$plan->status_workplan_bibl = $termsList[0];
+    		$result["title"] = $plan->statusWorkplanBibl->getValue();
+    		$result["color"] = $plan->statusWorkplanBibl->getAlias();
+    	} elseif ($current == (count($termsList) - 1)) {
+    		$plan->status_workplan_bibl = 0;
+    	} else {
+    		$plan->status_workplan_bibl = $termsList[$current + 1];
+    		$result["title"] = $plan->statusWorkplanBibl->getValue();
+    		$result["color"] = $plan->statusWorkplanBibl->getAlias();
+    	}
+    	$plan->save();
+    	echo json_encode($result);
+    }
+    public function actionUpdateStatusWorkPlanPrepod() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$result = array(
+    		"title" => "–",
+    		"color" => "white"
+    	);
+    	$termsList = array();
+    	foreach (CTaxonomyManager::getTaxonomy("status_workplan")->getTerms() as $term) {
+    		$termsList[] = $term->getId();
+    	}
+    	$current = array_search($plan->status_workplan_prepod, $termsList);
+    	// меняем на следующий статус преподавателя рабочей программы
+    	if ($current === false) {
+    		$plan->status_workplan_prepod = $termsList[0];
+    		$result["title"] = $plan->statusWorkplanPrepod->getValue();
+    		$result["color"] = $plan->statusWorkplanPrepod->getAlias();
+    	} elseif ($current == (count($termsList) - 1)) {
+    		$plan->status_workplan_prepod = 0;
+    	} else {
+    		$plan->status_workplan_prepod = $termsList[$current + 1];
+    		$result["title"] = $plan->statusWorkplanPrepod->getValue();
+    		$result["color"] = $plan->statusWorkplanPrepod->getAlias();
+    	}
+    	$plan->save();
+    	echo json_encode($result);
+    }
+    public function actionUpdateStatusWorkPlanZavKaf() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$result = array(
+    		"title" => "–",
+    		"color" => "white"
+    	);
+    	$termsList = array();
+    	foreach (CTaxonomyManager::getTaxonomy("status_workplan")->getTerms() as $term) {
+    		$termsList[] = $term->getId();
+    	}
+    	$current = array_search($plan->status_workplan_zav_kaf, $termsList);
+    	// меняем на следующий статус зав. каф. рабочей программы
+    	if ($current === false) {
+    		$plan->status_workplan_zav_kaf = $termsList[0];
+    		$result["title"] = $plan->statusWorkplanZavKaf->getValue();
+    		$result["color"] = $plan->statusWorkplanZavKaf->getAlias();
+    	} elseif ($current == (count($termsList) - 1)) {
+    		$plan->status_workplan_zav_kaf = 0;
+    	} else {
+    		$plan->status_workplan_zav_kaf = $termsList[$current + 1];
+    		$result["title"] = $plan->statusWorkplanZavKaf->getValue();
+    		$result["color"] = $plan->statusWorkplanZavKaf->getAlias();
+    	}
+    	$plan->save();
+    	echo json_encode($result);
+    }
+    public function actionUpdateStatusWorkPlanNMS() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$result = array(
+    		"title" => "–",
+    		"color" => "white"
+    	);
+    	$termsList = array();
+    	foreach (CTaxonomyManager::getTaxonomy("status_workplan")->getTerms() as $term) {
+    		$termsList[] = $term->getId();
+    	}
+    	$current = array_search($plan->status_workplan_nms, $termsList);
+    	// меняем на следующий статус НМС рабочей программы
+    	if ($current === false) {
+    		$plan->status_workplan_nms = $termsList[0];
+    		$result["title"] = $plan->statusWorkplanNMS->getValue();
+    		$result["color"] = $plan->statusWorkplanNMS->getAlias();
+    	} elseif ($current == (count($termsList) - 1)) {
+    		$plan->status_workplan_nms = 0;
+    	} else {
+    		$plan->status_workplan_nms = $termsList[$current + 1];
+    		$result["title"] = $plan->statusWorkplanNMS->getValue();
+    		$result["color"] = $plan->statusWorkplanNMS->getAlias();
+    	}
+    	$plan->save();
+    	echo json_encode($result);
+    }
+    public function actionUpdateStatusWorkPlanDekan() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$result = array(
+    		"title" => "–",
+    		"color" => "white"
+    	);
+    	$termsList = array();
+    	foreach (CTaxonomyManager::getTaxonomy("status_workplan")->getTerms() as $term) {
+    		$termsList[] = $term->getId();
+    	}
+    	$current = array_search($plan->status_workplan_dekan, $termsList);
+    	// меняем на следующий статус декана рабочей программы
+    	if ($current === false) {
+    		$plan->status_workplan_dekan = $termsList[0];
+    		$result["title"] = $plan->statusWorkplanDekan->getValue();
+    		$result["color"] = $plan->statusWorkplanDekan->getAlias();
+    	} elseif ($current == (count($termsList) - 1)) {
+    		$plan->status_workplan_dekan = 0;
+    	} else {
+    		$plan->status_workplan_dekan = $termsList[$current + 1];
+    		$result["title"] = $plan->statusWorkplanDekan->getValue();
+    		$result["color"] = $plan->statusWorkplanDekan->getAlias();
+    	}
+    	$plan->save();
+    	echo json_encode($result);
+    }
+    public function actionUpdateStatusWorkPlanProrektor() {
+    	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("id"));
+    	$result = array(
+    		"title" => "–",
+    		"color" => "white"
+    	);
+    	$termsList = array();
+    	foreach (CTaxonomyManager::getTaxonomy("status_workplan")->getTerms() as $term) {
+    		$termsList[] = $term->getId();
+    	}
+    	$current = array_search($plan->status_workplan_prorektor, $termsList);
+    	// меняем на следующий статус проректора рабочей программы
+    	if ($current === false) {
+    		$plan->status_workplan_prorektor = $termsList[0];
+    		$result["title"] = $plan->statusWorkplanProrektor->getValue();
+    		$result["color"] = $plan->statusWorkplanProrektor->getAlias();
+    	} elseif ($current == (count($termsList) - 1)) {
+    		$plan->status_workplan_prorektor = 0;
+    	} else {
+    		$plan->status_workplan_prorektor = $termsList[$current + 1];
+    		$result["title"] = $plan->statusWorkplanProrektor->getValue();
+    		$result["color"] = $plan->statusWorkplanProrektor->getAlias();
     	}
     	$plan->save();
     	echo json_encode($result);
