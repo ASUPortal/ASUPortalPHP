@@ -46,8 +46,15 @@ class CPrintController extends CFlowController {
         $writer = null;
         if ($form->form_format == "docx") {
             $writer = new PHPWord();
-        } elseif ($form->form_format = "odt") {
+        } elseif ($form->form_format == "odt") {
             $writer = new CPHPOdt();
+        } elseif ($form->form_format == "html") {
+        	$this->setData("plan", $object);
+        	$this->renderView(PRINT_TEMPLATES_DIR.$form->template_file);
+            /**
+             * Для html шаблонов останавливаем действие скрипта
+             */
+            exit;
         }
         /**
          * Проверка на отладку. Если в шаблоне включена отладка, то
