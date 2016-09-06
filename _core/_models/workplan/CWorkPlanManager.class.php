@@ -51,10 +51,10 @@ class CWorkPlanManager {
     /**
      * Смена статуса рабочей программы, значение берётся из указанного словаря $taxonomy
      * 
-     * @param $id
-     * @param $taxonomy
-     * @param $status
-     * @param $statusItem
+     * @param $id рабочей программы
+     * @param $taxonomy - название справочника
+     * @param $status - поле в базе
+     * @param $statusItem - отношение CWorkPlan
      * @return json_encode
      */
     public static function updateStatusWorkplan($id, $taxonomy, $status, $statusItem) {
