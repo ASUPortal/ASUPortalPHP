@@ -49,6 +49,8 @@ class CWorkPlanManager {
     	return $competentions;
     }
     /**
+     * Смена статуса рабочей программы, значение берётся из указанного словаря $taxonomy
+     * 
      * @param $id
      * @param $taxonomy
      * @param $status

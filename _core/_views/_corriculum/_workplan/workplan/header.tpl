@@ -164,102 +164,27 @@
                 });
 	        }
             jQuery(document).ready(function(){
+                var classes = new Array(".changeStatusComment", 
+                        ".changeStatusOnPortal", 
+                        ".changeStatusWorkPlanLibrary", 
+                        ".changeStatusWorkPlanLecturer", 
+                        ".changeStatusWorkPlanHeadOfDepartment", 
+                        ".changeStatusWorkPlanNMS",
+                        ".changeStatusWorkPlanDean",
+                        ".changeStatusWorkPlanProrektor");
                 /**
-                 * Обрабатываем смену статуса комментария к файлу
+                 * Обрабатываем смену статуса
                  */
-                jQuery.each(jQuery(".changeStatusComment"), function(key, value){
-                    // раскрашиваем ячейку статуса комментария к файлу
-                    colorizeCell(value);
+                classes.forEach(function(elem, i, arr) {
+                	jQuery.each(jQuery(elem), function(key, value){
+                        // раскрашиваем ячейку статуса
+                        colorizeCell(value);
+                    });
+                    jQuery(elem).on("click", function(item){
+                    	// изменяем статус
+                        changeStatus(item);
+                    });
                 });
-                jQuery(".changeStatusComment").on("click", function(item){
-                	// изменяем статус комментария к файлу
-                    changeStatus(item);
-                });
-                
-                /**
-                 * Обрабатываем смену статуса на портале
-                 */
-                jQuery.each(jQuery(".changeStatusOnPortal"), function(key, value){
-                    // раскрашиваем ячейку статуса на портале
-                    colorizeCell(value);
-                });
-                jQuery(".changeStatusOnPortal").on("click", function(item){
-                	// изменяем статус на портале
-                    changeStatus(item);
-                });
-
-                /**
-                 * Обрабатываем смену статуса рабочей программы (библиотека)
-                 */
-                jQuery.each(jQuery(".changeStatusWorkPlanLibrary"), function(key, value){
-                    // раскрашиваем ячейку библиотеки
-                    colorizeCell(value);
-                });
-                jQuery(".changeStatusWorkPlanLibrary").on("click", function(item){
-                	// изменяем статус библиотеки
-                    changeStatus(item);
-                });
-
-                /**
-                 * Обрабатываем смену статуса рабочей программы (преподаватель)
-                 */
-                jQuery.each(jQuery(".changeStatusWorkPlanLecturer"), function(key, value){
-                    // раскрашиваем ячейку преподавателя
-                    colorizeCell(value);
-                });
-                jQuery(".changeStatusWorkPlanLecturer").on("click", function(item){
-                	// изменяем статус преподавателя
-                    changeStatus(item);
-                });
-
-                /**
-                 * Обрабатываем смену статуса рабочей программы (зав. каф.)
-                 */
-                jQuery.each(jQuery(".changeStatusWorkPlanHeadOfDepartment"), function(key, value){
-                    // раскрашиваем ячейку зав. каф.
-                    colorizeCell(value);
-                });
-                jQuery(".changeStatusWorkPlanHeadOfDepartment").on("click", function(item){
-                	// изменяем статус заведующего кафедрой
-                    changeStatus(item);
-                });
-
-                /**
-                 * Обрабатываем смену статуса рабочей программы (НМС)
-                 */
-                jQuery.each(jQuery(".changeStatusWorkPlanNMS"), function(key, value){
-                    // раскрашиваем ячейку НМС
-                    colorizeCell(value);
-                });
-                jQuery(".changeStatusWorkPlanNMS").on("click", function(item){
-                	// изменяем статус НМС
-                    changeStatus(item);
-                });
-
-                /**
-                 * Обрабатываем смену статуса рабочей программы (декан)
-                 */
-                jQuery.each(jQuery(".changeStatusWorkPlanDean"), function(key, value){
-                    // раскрашиваем ячейку декана
-                    colorizeCell(value);
-                });
-                jQuery(".changeStatusWorkPlanDean").on("click", function(item){
-                	// изменяем статус декана
-                    changeStatus(item);
-                });
-
-                /**
-                 * Обрабатываем смену статуса рабочей программы (проректор)
-                 */
-                jQuery.each(jQuery(".changeStatusWorkPlanProrektor"), function(key, value){
-                    // раскрашиваем ячейку проректора
-                    colorizeCell(value);
-                });
-                jQuery(".changeStatusWorkPlanProrektor").on("click", function(item){
-                	// изменяем статус проректора
-                    changeStatus(item);
-                });
-                
             });
         </script>
         <style>
