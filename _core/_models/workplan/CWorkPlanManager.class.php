@@ -51,7 +51,7 @@ class CWorkPlanManager {
     /**
      * Смена статуса рабочей программы, значение берётся из указанного словаря $taxonomy
      * 
-     * @param $id рабочей программы
+     * @param $id - id рабочей программы
      * @param $taxonomy - название справочника
      * @param $status - поле в базе
      * @param $statusItem - отношение CWorkPlan
@@ -63,9 +63,15 @@ class CWorkPlanManager {
     		"title" => "–",
     		"color" => "white"
     	);
-    	$termsList = array();
+    	$terms = array();
     	foreach (CTaxonomyManager::getTaxonomy($taxonomy)->getTerms() as $term) {
-    		$termsList[] = $term->getId();
+    		$terms[$term->getId()] = $term->getId();
+    	}
+    	// сортируем массив по ключам
+    	ksort($terms);
+    	$termsList = array();
+    	foreach ($terms as $term) {
+    		$termsList[] = $term;
     	}
     	$current = array_search($plan->$status, $termsList);
     	// меняем на следующий статус
