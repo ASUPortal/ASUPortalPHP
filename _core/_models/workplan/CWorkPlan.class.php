@@ -348,10 +348,45 @@ class CWorkPlan extends CActiveModel {
         		"managerClass" => "CTaxonomyManager",
         		"managerGetObject" => "getTerm"
         	),
-        	"statusWorkplan" => array(
+        	"statusWorkplanLibrary" => array(
         		"relationPower" => RELATION_HAS_ONE,
-        		"storageProperty" => "_status_workplan",
-        		"storageField" => "status_workplan",
+        		"storageProperty" => "_status_workplan_library",
+        		"storageField" => "status_workplan_library",
+        		"managerClass" => "CTaxonomyManager",
+        		"managerGetObject" => "getTerm"
+        	),
+        	"statusWorkplanLecturer" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_status_workplan_lecturer",
+        		"storageField" => "status_workplan_lecturer",
+        		"managerClass" => "CTaxonomyManager",
+        		"managerGetObject" => "getTerm"
+        	),
+        	"statusWorkplanHeadOfDepartment" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_status_workplan_head_of_department",
+        		"storageField" => "status_workplan_head_of_department",
+        		"managerClass" => "CTaxonomyManager",
+        		"managerGetObject" => "getTerm"
+        	),
+        	"statusWorkplanNMS" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_status_workplan_nms",
+        		"storageField" => "status_workplan_nms",
+        		"managerClass" => "CTaxonomyManager",
+        		"managerGetObject" => "getTerm"
+        	),
+        	"statusWorkplanDean" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_status_workplan_dean",
+        		"storageField" => "status_workplan_dean",
+        		"managerClass" => "CTaxonomyManager",
+        		"managerGetObject" => "getTerm"
+        	),
+        	"statusWorkplanProrektor" => array(
+        		"relationPower" => RELATION_HAS_ONE,
+        		"storageProperty" => "_status_workplan_prorektor",
+        		"storageField" => "status_workplan_prorektor",
         		"managerClass" => "CTaxonomyManager",
         		"managerGetObject" => "getTerm"
         	)
@@ -401,7 +436,13 @@ class CWorkPlan extends CActiveModel {
             "protocolsNMS" => "Протоколы НМС",
             "comment_file" => "Комментарий к файлу",
             "status_on_portal" => "Статус на портале",
-            "status_workplan" => "Статус рабочей программы"
+            "status_workplan_library" => "БИБЛ",
+            "status_workplan_lecturer" => "ПРЕПОД",
+            "status_workplan_head_of_department" => "ЗАВ.КАФ.",
+            "status_workplan_nms" => "НМС",
+            "status_workplan_dean" => "ДЕКАН",
+            "status_workplan_prorektor" => "ПРОРЕКТОР",
+            "comment" => "Комментарий"
         );
     }
 

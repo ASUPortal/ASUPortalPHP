@@ -44,15 +44,40 @@ class CCorriculumWorkPlansStatus extends CAbstractPrintClassField {
 								} else {
 									$dataRow[2] = $plan->commentFile->getValue();
 								}
-								if ($plan->statusWorkplan == "0" or is_null($plan->statusWorkplan)) {
+								if ($plan->status_on_portal == "0" or is_null($plan->statusOnPortal)) {
 									$dataRow[3] = "Нет комментария";
 								} else {
-									$dataRow[3] = $plan->statusWorkplan->getValue();
+									$dataRow[3] = $plan->statusOnPortal->getValue();
 								}
-								if ($plan->statusOnPortal == "0" or is_null($plan->statusOnPortal)) {
-									$dataRow[4] = "Нет комментария";
+								if ($plan->status_workplan_library == "0" or is_null($plan->statusWorkplanLibrary)) {
+									$dataRow[4] = "–";
 								} else {
-									$dataRow[4] = $plan->statusOnPortal->getValue();
+									$dataRow[4] = $plan->statusWorkplanLibrary->getValue();
+								}
+								if ($plan->status_workplan_lecturer == "0" or is_null($plan->statusWorkplanLecturer)) {
+									$dataRow[5] = "–";
+								} else {
+									$dataRow[5] = $plan->statusWorkplanLecturer->getValue();
+								}
+								if ($plan->status_workplan_head_of_department == "0" or is_null($plan->statusWorkplanHeadOfDepartment)) {
+									$dataRow[6] = "–";
+								} else {
+									$dataRow[6] = $plan->statusWorkplanHeadOfDepartment->getValue();
+								}
+								if ($plan->status_workplan_nms == "0" or is_null($plan->statusWorkplanNMS)) {
+									$dataRow[7] = "–";
+								} else {
+									$dataRow[7] = $plan->statusWorkplanNMS->getValue();
+								}
+								if ($plan->status_workplan_dean == "0" or is_null($plan->statusWorkplanDean)) {
+									$dataRow[8] = "–";
+								} else {
+									$dataRow[8] = $plan->statusWorkplanDean->getValue();
+								}
+								if ($plan->status_workplan_prorektor == "0" or is_null($plan->statusWorkplanProrektor)) {
+									$dataRow[9] = "–";
+								} else {
+									$dataRow[9] = $plan->statusWorkplanProrektor->getValue();
 								}
 								$result[] = $dataRow;
 							}

@@ -26,7 +26,6 @@
 	            <th>{CHtml::tableOrder("person.fio", $plans->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("title", $plans->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("comment_file", $plans->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("status_workplan", $plans->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("status_on_portal", $plans->getFirstItem())}</th>
 	        </tr>
 	        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
@@ -53,7 +52,7 @@
 				<td>{$plan->title}</td>
 				<td>
                     <span>
-                        <span class="changeStatusComment" asu-id="{$plan->getId()}" asu-color="{if is_null($plan->commentFile)}white{else}{$plan->commentFile->getAlias()}{/if}">
+                        <span class="changeStatusComment" asu-id="{$plan->getId()}" asu-action="updateCommentFile" asu-color="{if is_null($plan->commentFile)}white{else}{$plan->commentFile->getAlias()}{/if}">
                             {if $plan->comment_file == 0 or is_null($plan->commentFile)}
                                 Нет комментария
                             {else}
@@ -64,18 +63,7 @@
 	            </td>
 	            <td>
                     <span>
-                        <span class="changeStatusWorkPlan" asu-id="{$plan->getId()}" asu-color="{if is_null($plan->statusWorkplan)}white{else}{$plan->statusWorkplan->getAlias()}{/if}">
-                            {if $plan->status_workplan == 0 or is_null($plan->statusWorkplan)}
-                                Нет комментария
-                            {else}
-                                {$plan->statusWorkplan->getValue()}
-                            {/if}
-                        </span>
-                    </span>
-	            </td>
-	            <td>
-                    <span>
-                        <span class="changeStatusOnPortal" asu-id="{$plan->getId()}" asu-color="{if is_null($plan->statusOnPortal)}white{else}{$plan->statusOnPortal->getAlias()}{/if}">
+                        <span class="changeStatusOnPortal" asu-id="{$plan->getId()}" asu-action="updateStatusOnPortal" asu-color="{if is_null($plan->statusOnPortal)}white{else}{$plan->statusOnPortal->getAlias()}{/if}">
                             {if $plan->status_on_portal == 0 or is_null($plan->statusOnPortal)}
                                 Нет комментария
                             {else}

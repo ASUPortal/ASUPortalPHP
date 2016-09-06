@@ -48,4 +48,39 @@ class CWorkPlanManager {
     	}
     	return $competentions;
     }
+    /**
+     * Смена статуса рабочей программы, значение берётся из указанного словаря $taxonomy
+     * 
+     * @param $id рабочей программы
+     * @param $taxonomy - название справочника
+     * @param $status - поле в базе
+     * @param $statusItem - отношение CWorkPlan
+     * @return json_encode
+     */
+    public static function updateStatusWorkplan($id, $taxonomy, $status, $statusItem) {
+    	$plan = CWorkPlanManager::getWorkplan($id);
+    	$result = array(
+    		"title" => "–",
+    		"color" => "white"
+    	);
+    	$termsList = array();
+    	foreach (CTaxonomyManager::getTaxonomy($taxonomy)->getTerms() as $term) {
+    		$termsList[] = $term->getId();
+    	}
+    	$current = array_search($plan->$status, $termsList);
+    	// меняем на следующий статус
+    	if ($current === false) {
+    		$plan->$status = $termsList[0];
+    		$result["title"] = $plan->$statusItem->getValue();
+    		$result["color"] = $plan->$statusItem->getAlias();
+    	} elseif ($current == (count($termsList) - 1)) {
+    		$plan->$status = 0;
+    	} else {
+    		$plan->$status = $termsList[$current + 1];
+    		$result["title"] = $plan->$statusItem->getValue();
+    		$result["color"] = $plan->$statusItem->getAlias();
+    	}
+    	$plan->save();
+    	return $result;
+    }
 }

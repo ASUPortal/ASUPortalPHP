@@ -134,95 +134,55 @@
 	            var cell = jQuery(value).parents("td");
 	            jQuery(cell).css("background-color", color);
 	        }
+	        /**
+	         * Функция смены статуса
+	         *
+	         * @param value
+	         */
+	        function changeStatus(item) {
+	        	var container = item.target || item.srcElement;
+                var id = jQuery(container).attr("asu-id");
+                var action = jQuery(container).attr("asu-action");
+                jQuery.ajax({
+                    url: web_root + "_modules/_corriculum/workplans.php",
+                    beforeSend: function(){
+                        jQuery(container).html('<i class="icon-signal"></i>');
+                    },
+                    cache: false,
+                    context: item,
+                    data: {
+                        action: action,
+                        id: id
+                    },
+                    dataType: "json",
+                    method: "GET",
+                    success: function(data){
+                        jQuery(container).attr("asu-color", data.color);
+                        jQuery(container).html(data.title);
+                        colorizeCell(container);
+                    }
+                });
+	        }
             jQuery(document).ready(function(){
-                jQuery.each(jQuery(".changeStatusComment"), function(key, value){
-                    // раскрашиваем ячейку
-                    colorizeCell(value);
-                });
+                var classes = new Array(".changeStatusComment", 
+                        ".changeStatusOnPortal", 
+                        ".changeStatusWorkPlanLibrary", 
+                        ".changeStatusWorkPlanLecturer", 
+                        ".changeStatusWorkPlanHeadOfDepartment", 
+                        ".changeStatusWorkPlanNMS",
+                        ".changeStatusWorkPlanDean",
+                        ".changeStatusWorkPlanProrektor");
                 /**
-                 * Обрабатываем смену статуса комментария к файлу
+                 * Обрабатываем смену статуса
                  */
-                jQuery(".changeStatusComment").on("click", function(item){
-                    var container = item.target || item.srcElement;
-                    var id = jQuery(container).attr("asu-id");
-                    jQuery.ajax({
-                        url: web_root + "_modules/_corriculum/workplans.php",
-                        beforeSend: function(){
-                            jQuery(container).html('<i class="icon-signal"></i>');
-                        },
-                        cache: false,
-                        context: item,
-                        data: {
-                            action: "updateCommentFile",
-                            id: id
-                        },
-                        dataType: "json",
-                        method: "GET",
-                        success: function(data){
-                            jQuery(container).attr("asu-color", data.color);
-                            jQuery(container).html(data.title);
-                            colorizeCell(container);
-                        }
+                classes.forEach(function(elem, i, arr) {
+                	jQuery.each(jQuery(elem), function(key, value){
+                        // раскрашиваем ячейку статуса
+                        colorizeCell(value);
                     });
-                });
-                jQuery.each(jQuery(".changeStatusWorkPlan"), function(key, value){
-                    // раскрашиваем ячейку
-                    colorizeCell(value);
-                });
-                /**
-                 * Обрабатываем смену статуса рабочей программы
-                 */
-                jQuery(".changeStatusWorkPlan").on("click", function(item){
-                    var container = item.target || item.srcElement;
-                    var id = jQuery(container).attr("asu-id");
-                    jQuery.ajax({
-                        url: web_root + "_modules/_corriculum/workplans.php",
-                        beforeSend: function(){
-                            jQuery(container).html('<i class="icon-signal"></i>');
-                        },
-                        cache: false,
-                        context: item,
-                        data: {
-                            action: "updateStatusWorkPlan",
-                            id: id
-                        },
-                        dataType: "json",
-                        method: "GET",
-                        success: function(data){
-                            jQuery(container).attr("asu-color", data.color);
-                            jQuery(container).html(data.title);
-                            colorizeCell(container);
-                        }
-                    });
-                });
-                jQuery.each(jQuery(".changeStatusOnPortal"), function(key, value){
-                    // раскрашиваем ячейку
-                    colorizeCell(value);
-                });
-                /**
-                 * Обрабатываем смену статуса на портале
-                 */
-                jQuery(".changeStatusOnPortal").on("click", function(item){
-                    var container = item.target || item.srcElement;
-                    var id = jQuery(container).attr("asu-id");
-                    jQuery.ajax({
-                        url: web_root + "_modules/_corriculum/workplans.php",
-                        beforeSend: function(){
-                            jQuery(container).html('<i class="icon-signal"></i>');
-                        },
-                        cache: false,
-                        context: item,
-                        data: {
-                            action: "updateStatusOnPortal",
-                            id: id
-                        },
-                        dataType: "json",
-                        method: "GET",
-                        success: function(data){
-                            jQuery(container).attr("asu-color", data.color);
-                            jQuery(container).html(data.title);
-                            colorizeCell(container);
-                        }
+                    jQuery(elem).on("click", function(item){
+                    	// изменяем статус
+                        changeStatus(item);
                     });
                 });
             });
@@ -234,16 +194,53 @@
             .changeStatusComment:hover {
                 text-decoration: underline;
             }
-            .changeStatusWorkPlan {
-                cursor: pointer;
-            }
-            .changeStatusWorkPlan:hover {
-                text-decoration: underline;
-            }
+            
             .changeStatusOnPortal {
                 cursor: pointer;
             }
             .changeStatusOnPortal:hover {
+                text-decoration: underline;
+            }
+            
+            .changeStatusWorkPlanLibrary {
+                cursor: pointer;
+            }
+            .changeStatusWorkPlanLibrary:hover {
+                text-decoration: underline;
+            }
+            
+            .changeStatusWorkPlanLecturer {
+                cursor: pointer;
+            }
+            .changeStatusWorkPlanLecturer:hover {
+                text-decoration: underline;
+            }
+            
+            .changeStatusWorkPlanHeadOfDepartment {
+                cursor: pointer;
+            }
+            .changeStatusWorkPlanHeadOfDepartment:hover {
+                text-decoration: underline;
+            }
+            
+            .changeStatusWorkPlanNMS {
+                cursor: pointer;
+            }
+            .changeStatusWorkPlanNMS:hover {
+                text-decoration: underline;
+            }
+            
+            .changeStatusWorkPlanDean {
+                cursor: pointer;
+            }
+            .changeStatusWorkPlanDean:hover {
+                text-decoration: underline;
+            }
+            
+            .changeStatusWorkPlanProrektor {
+                cursor: pointer;
+            }
+            .changeStatusWorkPlanProrektor:hover {
                 text-decoration: underline;
             }
         </style>
