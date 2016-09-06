@@ -134,254 +134,130 @@
 	            var cell = jQuery(value).parents("td");
 	            jQuery(cell).css("background-color", color);
 	        }
+	        /**
+	         * Функция смены статуса
+	         *
+	         * @param value
+	         */
+	        function changeStatus(item) {
+	        	var container = item.target || item.srcElement;
+                var id = jQuery(container).attr("asu-id");
+                var action = jQuery(container).attr("asu-action");
+                jQuery.ajax({
+                    url: web_root + "_modules/_corriculum/workplans.php",
+                    beforeSend: function(){
+                        jQuery(container).html('<i class="icon-signal"></i>');
+                    },
+                    cache: false,
+                    context: item,
+                    data: {
+                        action: action,
+                        id: id
+                    },
+                    dataType: "json",
+                    method: "GET",
+                    success: function(data){
+                        jQuery(container).attr("asu-color", data.color);
+                        jQuery(container).html(data.title);
+                        colorizeCell(container);
+                    }
+                });
+	        }
             jQuery(document).ready(function(){
-                
+                /**
+                 * Обрабатываем смену статуса комментария к файлу
+                 */
                 jQuery.each(jQuery(".changeStatusComment"), function(key, value){
                     // раскрашиваем ячейку статуса комментария к файлу
                     colorizeCell(value);
                 });
-                /**
-                 * Обрабатываем смену статуса комментария к файлу
-                 */
                 jQuery(".changeStatusComment").on("click", function(item){
-                    var container = item.target || item.srcElement;
-                    var id = jQuery(container).attr("asu-id");
-                    jQuery.ajax({
-                        url: web_root + "_modules/_corriculum/workplans.php",
-                        beforeSend: function(){
-                            jQuery(container).html('<i class="icon-signal"></i>');
-                        },
-                        cache: false,
-                        context: item,
-                        data: {
-                            action: "updateCommentFile",
-                            id: id
-                        },
-                        dataType: "json",
-                        method: "GET",
-                        success: function(data){
-                            jQuery(container).attr("asu-color", data.color);
-                            jQuery(container).html(data.title);
-                            colorizeCell(container);
-                        }
-                    });
+                	// изменяем статус комментария к файлу
+                    changeStatus(item);
                 });
                 
+                /**
+                 * Обрабатываем смену статуса на портале
+                 */
                 jQuery.each(jQuery(".changeStatusOnPortal"), function(key, value){
                     // раскрашиваем ячейку статуса на портале
                     colorizeCell(value);
                 });
-                /**
-                 * Обрабатываем смену статуса на портале
-                 */
                 jQuery(".changeStatusOnPortal").on("click", function(item){
-                    var container = item.target || item.srcElement;
-                    var id = jQuery(container).attr("asu-id");
-                    jQuery.ajax({
-                        url: web_root + "_modules/_corriculum/workplans.php",
-                        beforeSend: function(){
-                            jQuery(container).html('<i class="icon-signal"></i>');
-                        },
-                        cache: false,
-                        context: item,
-                        data: {
-                            action: "updateStatusOnPortal",
-                            id: id
-                        },
-                        dataType: "json",
-                        method: "GET",
-                        success: function(data){
-                            jQuery(container).attr("asu-color", data.color);
-                            jQuery(container).html(data.title);
-                            colorizeCell(container);
-                        }
-                    });
+                	// изменяем статус на портале
+                    changeStatus(item);
                 });
 
+                /**
+                 * Обрабатываем смену статуса рабочей программы (библиотека)
+                 */
                 jQuery.each(jQuery(".changeStatusWorkPlanLibrary"), function(key, value){
                     // раскрашиваем ячейку библиотеки
                     colorizeCell(value);
                 });
-                /**
-                 * Обрабатываем смену статуса рабочей программы (библиотека)
-                 */
                 jQuery(".changeStatusWorkPlanLibrary").on("click", function(item){
-                    var container = item.target || item.srcElement;
-                    var id = jQuery(container).attr("asu-id");
-                    jQuery.ajax({
-                        url: web_root + "_modules/_corriculum/workplans.php",
-                        beforeSend: function(){
-                            jQuery(container).html('<i class="icon-signal"></i>');
-                        },
-                        cache: false,
-                        context: item,
-                        data: {
-                            action: "updateStatusWorkPlanLibrary",
-                            id: id
-                        },
-                        dataType: "json",
-                        method: "GET",
-                        success: function(data){
-                            jQuery(container).attr("asu-color", data.color);
-                            jQuery(container).html(data.title);
-                            colorizeCell(container);
-                        }
-                    });
+                	// изменяем статус библиотеки
+                    changeStatus(item);
                 });
 
+                /**
+                 * Обрабатываем смену статуса рабочей программы (преподаватель)
+                 */
                 jQuery.each(jQuery(".changeStatusWorkPlanLecturer"), function(key, value){
                     // раскрашиваем ячейку преподавателя
                     colorizeCell(value);
                 });
-                /**
-                 * Обрабатываем смену статуса рабочей программы (преподаватель)
-                 */
                 jQuery(".changeStatusWorkPlanLecturer").on("click", function(item){
-                    var container = item.target || item.srcElement;
-                    var id = jQuery(container).attr("asu-id");
-                    jQuery.ajax({
-                        url: web_root + "_modules/_corriculum/workplans.php",
-                        beforeSend: function(){
-                            jQuery(container).html('<i class="icon-signal"></i>');
-                        },
-                        cache: false,
-                        context: item,
-                        data: {
-                            action: "updateStatusWorkPlanLecturer",
-                            id: id
-                        },
-                        dataType: "json",
-                        method: "GET",
-                        success: function(data){
-                            jQuery(container).attr("asu-color", data.color);
-                            jQuery(container).html(data.title);
-                            colorizeCell(container);
-                        }
-                    });
+                	// изменяем статус преподавателя
+                    changeStatus(item);
                 });
 
+                /**
+                 * Обрабатываем смену статуса рабочей программы (зав. каф.)
+                 */
                 jQuery.each(jQuery(".changeStatusWorkPlanHeadOfDepartment"), function(key, value){
                     // раскрашиваем ячейку зав. каф.
                     colorizeCell(value);
                 });
-                /**
-                 * Обрабатываем смену статуса рабочей программы (зав. каф.)
-                 */
                 jQuery(".changeStatusWorkPlanHeadOfDepartment").on("click", function(item){
-                    var container = item.target || item.srcElement;
-                    var id = jQuery(container).attr("asu-id");
-                    jQuery.ajax({
-                        url: web_root + "_modules/_corriculum/workplans.php",
-                        beforeSend: function(){
-                            jQuery(container).html('<i class="icon-signal"></i>');
-                        },
-                        cache: false,
-                        context: item,
-                        data: {
-                            action: "updateStatusWorkPlanHeadOfDepartment",
-                            id: id
-                        },
-                        dataType: "json",
-                        method: "GET",
-                        success: function(data){
-                            jQuery(container).attr("asu-color", data.color);
-                            jQuery(container).html(data.title);
-                            colorizeCell(container);
-                        }
-                    });
+                	// изменяем статус заведующего кафедрой
+                    changeStatus(item);
                 });
 
+                /**
+                 * Обрабатываем смену статуса рабочей программы (НМС)
+                 */
                 jQuery.each(jQuery(".changeStatusWorkPlanNMS"), function(key, value){
                     // раскрашиваем ячейку НМС
                     colorizeCell(value);
                 });
-                /**
-                 * Обрабатываем смену статуса рабочей программы (НМС)
-                 */
                 jQuery(".changeStatusWorkPlanNMS").on("click", function(item){
-                    var container = item.target || item.srcElement;
-                    var id = jQuery(container).attr("asu-id");
-                    jQuery.ajax({
-                        url: web_root + "_modules/_corriculum/workplans.php",
-                        beforeSend: function(){
-                            jQuery(container).html('<i class="icon-signal"></i>');
-                        },
-                        cache: false,
-                        context: item,
-                        data: {
-                            action: "updateStatusWorkPlanNMS",
-                            id: id
-                        },
-                        dataType: "json",
-                        method: "GET",
-                        success: function(data){
-                            jQuery(container).attr("asu-color", data.color);
-                            jQuery(container).html(data.title);
-                            colorizeCell(container);
-                        }
-                    });
+                	// изменяем статус НМС
+                    changeStatus(item);
                 });
 
-                jQuery.each(jQuery(".changeStatusWorkPlanDean"), function(key, value){
-                    // раскрашиваем ячейку декан
-                    colorizeCell(value);
-                });
                 /**
                  * Обрабатываем смену статуса рабочей программы (декан)
                  */
-                jQuery(".changeStatusWorkPlanDean").on("click", function(item){
-                    var container = item.target || item.srcElement;
-                    var id = jQuery(container).attr("asu-id");
-                    jQuery.ajax({
-                        url: web_root + "_modules/_corriculum/workplans.php",
-                        beforeSend: function(){
-                            jQuery(container).html('<i class="icon-signal"></i>');
-                        },
-                        cache: false,
-                        context: item,
-                        data: {
-                            action: "updateStatusWorkPlanDean",
-                            id: id
-                        },
-                        dataType: "json",
-                        method: "GET",
-                        success: function(data){
-                            jQuery(container).attr("asu-color", data.color);
-                            jQuery(container).html(data.title);
-                            colorizeCell(container);
-                        }
-                    });
-                });
-
-                jQuery.each(jQuery(".changeStatusWorkPlanProrektor"), function(key, value){
-                    // раскрашиваем ячейку проректор
+                jQuery.each(jQuery(".changeStatusWorkPlanDean"), function(key, value){
+                    // раскрашиваем ячейку декана
                     colorizeCell(value);
                 });
+                jQuery(".changeStatusWorkPlanDean").on("click", function(item){
+                	// изменяем статус декана
+                    changeStatus(item);
+                });
+
                 /**
                  * Обрабатываем смену статуса рабочей программы (проректор)
                  */
+                jQuery.each(jQuery(".changeStatusWorkPlanProrektor"), function(key, value){
+                    // раскрашиваем ячейку проректора
+                    colorizeCell(value);
+                });
                 jQuery(".changeStatusWorkPlanProrektor").on("click", function(item){
-                    var container = item.target || item.srcElement;
-                    var id = jQuery(container).attr("asu-id");
-                    jQuery.ajax({
-                        url: web_root + "_modules/_corriculum/workplans.php",
-                        beforeSend: function(){
-                            jQuery(container).html('<i class="icon-signal"></i>');
-                        },
-                        cache: false,
-                        context: item,
-                        data: {
-                            action: "updateStatusWorkPlanProrektor",
-                            id: id
-                        },
-                        dataType: "json",
-                        method: "GET",
-                        success: function(data){
-                            jQuery(container).attr("asu-color", data.color);
-                            jQuery(container).html(data.title);
-                            colorizeCell(container);
-                        }
-                    });
+                	// изменяем статус проректора
+                    changeStatus(item);
                 });
                 
             });

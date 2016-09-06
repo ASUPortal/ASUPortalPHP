@@ -52,7 +52,7 @@
 				<td>{$plan->title}</td>
 				<td>
                     <span>
-                        <span class="changeStatusComment" asu-id="{$plan->getId()}" asu-color="{if is_null($plan->commentFile)}white{else}{$plan->commentFile->getAlias()}{/if}">
+                        <span class="changeStatusComment" asu-id="{$plan->getId()}" asu-action="updateCommentFile" asu-color="{if is_null($plan->commentFile)}white{else}{$plan->commentFile->getAlias()}{/if}">
                             {if $plan->comment_file == 0 or is_null($plan->commentFile)}
                                 Нет комментария
                             {else}
@@ -63,7 +63,7 @@
 	            </td>
 	            <td>
                     <span>
-                        <span class="changeStatusOnPortal" asu-id="{$plan->getId()}" asu-color="{if is_null($plan->statusOnPortal)}white{else}{$plan->statusOnPortal->getAlias()}{/if}">
+                        <span class="changeStatusOnPortal" asu-id="{$plan->getId()}" asu-action="updateStatusOnPortal" asu-color="{if is_null($plan->statusOnPortal)}white{else}{$plan->statusOnPortal->getAlias()}{/if}">
                             {if $plan->status_on_portal == 0 or is_null($plan->statusOnPortal)}
                                 Нет комментария
                             {else}
