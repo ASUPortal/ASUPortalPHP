@@ -23,11 +23,11 @@
 	            <th>{CHtml::tableOrder("person.fio", $plans->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("comment_file", $plans->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("status_on_portal", $plans->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("status_workplan_bibl", $plans->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("status_workplan_prepod", $plans->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("status_workplan_zav_kaf", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("status_workplan_library", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("status_workplan_lecturer", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("status_workplan_head_of_department", $plans->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("status_workplan_nms", $plans->getFirstItem())}</th>
-	            <th>{CHtml::tableOrder("status_workplan_dekan", $plans->getFirstItem())}</th>
+	            <th>{CHtml::tableOrder("status_workplan_dean", $plans->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("status_workplan_prorektor", $plans->getFirstItem())}</th>
 	        </tr>
 	        {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
@@ -72,33 +72,33 @@
 	            </td>
 	            <td>
                     <span>
-                        <span class="changeStatusWorkPlanBibl" asu-id="{$plan->getId()}" asu-color="{if is_null($plan->statusWorkplanBibl)}white{else}{$plan->statusWorkplanBibl->getAlias()}{/if}">
-                            {if $plan->status_workplan_bibl == 0 or is_null($plan->statusWorkplanBibl)}
+                        <span class="changeStatusWorkPlanLibrary" asu-id="{$plan->getId()}" asu-color="{if is_null($plan->statusWorkplanLibrary)}white{else}{$plan->statusWorkplanLibrary->getAlias()}{/if}">
+                            {if $plan->status_workplan_library == 0 or is_null($plan->statusWorkplanLibrary)}
                                 –
                             {else}
-                                {$plan->statusWorkplanBibl->getValue()}
+                                {$plan->statusWorkplanLibrary->getValue()}
                             {/if}
                         </span>
                     </span>
 	            </td>
 	            <td>
                     <span>
-                        <span class="changeStatusWorkPlanPrepod" asu-id="{$plan->getId()}" asu-color="{if is_null($plan->statusWorkplanPrepod)}white{else}{$plan->statusWorkplanPrepod->getAlias()}{/if}">
-                            {if $plan->status_workplan_prepod == 0 or is_null($plan->statusWorkplanPrepod)}
+                        <span class="changeStatusWorkPlanLecturer" asu-id="{$plan->getId()}" asu-color="{if is_null($plan->statusWorkplanLecturer)}white{else}{$plan->statusWorkplanLecturer->getAlias()}{/if}">
+                            {if $plan->status_workplan_lecturer == 0 or is_null($plan->statusWorkplanLecturer)}
                                 –
                             {else}
-                                {$plan->statusWorkplanPrepod->getValue()}
+                                {$plan->statusWorkplanLecturer->getValue()}
                             {/if}
                         </span>
                     </span>
 	            </td>
 	            <td>
                     <span>
-                        <span class="changeStatusWorkPlanZavKaf" asu-id="{$plan->getId()}" asu-color="{if is_null($plan->statusWorkplanZavKaf)}white{else}{$plan->statusWorkplanZavKaf->getAlias()}{/if}">
-                            {if $plan->status_workplan_zav_kaf == 0 or is_null($plan->statusWorkplanZavKaf)}
+                        <span class="changeStatusWorkPlanHeadOfDepartment" asu-id="{$plan->getId()}" asu-color="{if is_null($plan->statusWorkplanHeadOfDepartment)}white{else}{$plan->statusWorkplanHeadOfDepartment->getAlias()}{/if}">
+                            {if $plan->status_workplan_head_of_department == 0 or is_null($plan->statusWorkplanHeadOfDepartment)}
                                 –
                             {else}
-                                {$plan->statusWorkplanZavKaf->getValue()}
+                                {$plan->statusWorkplanHeadOfDepartment->getValue()}
                             {/if}
                         </span>
                     </span>
@@ -116,11 +116,11 @@
 	            </td>
 	            <td>
                     <span>
-                        <span class="changeStatusWorkPlanDekan" asu-id="{$plan->getId()}" asu-color="{if is_null($plan->statusWorkplanDekan)}white{else}{$plan->statusWorkplanDekan->getAlias()}{/if}">
-                            {if $plan->status_workplan_dekan == 0 or is_null($plan->statusWorkplanDekan)}
+                        <span class="changeStatusWorkPlanDean" asu-id="{$plan->getId()}" asu-color="{if is_null($plan->statusWorkplanDean)}white{else}{$plan->statusWorkplanDean->getAlias()}{/if}">
+                            {if $plan->status_workplan_dean == 0 or is_null($plan->statusWorkplanDean)}
                                 –
                             {else}
-                                {$plan->statusWorkplanDekan->getValue()}
+                                {$plan->statusWorkplanDean->getValue()}
                             {/if}
                         </span>
                     </span>

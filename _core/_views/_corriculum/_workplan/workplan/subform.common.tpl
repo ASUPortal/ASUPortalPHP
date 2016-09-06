@@ -118,6 +118,14 @@
     </div>
 </div>
 
+<div class="control-group">
+    {CHtml::activeLabel("comment", $plan)}
+    <div class="controls">
+        {CHtml::activeTextBox("comment", $plan)}
+        {CHtml::error("comment", $plan)}
+    </div>
+</div>
+
 <h3>1. Цели и задачи освоения дисциплины</h3>
 
 {include file="_corriculum/_workplan/goal/subform.index.tpl"}

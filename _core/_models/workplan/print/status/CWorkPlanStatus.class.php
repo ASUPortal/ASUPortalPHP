@@ -52,30 +52,30 @@ class CWorkPlanStatus extends CAbstractPrintClassField {
 			} else {
 				$dataRow[3] = $plan->statusOnPortal->getValue();
 			}
-			if ($plan->status_workplan_bibl == "0" or is_null($plan->statusWorkplanBibl)) {
+			if ($plan->status_workplan_library == "0" or is_null($plan->statusWorkplanLibrary)) {
 				$dataRow[4] = "–";
 			} else {
-				$dataRow[4] = $plan->statusWorkplanBibl->getValue();
+				$dataRow[4] = $plan->statusWorkplanLibrary->getValue();
 			}
-			if ($plan->status_workplan_prepod == "0" or is_null($plan->statusWorkplanPrepod)) {
+			if ($plan->status_workplan_lecturer == "0" or is_null($plan->statusWorkplanLecturer)) {
 				$dataRow[5] = "–";
 			} else {
-				$dataRow[5] = $plan->statusWorkplanPrepod->getValue();
+				$dataRow[5] = $plan->statusWorkplanLecturer->getValue();
 			}
-			if ($plan->status_workplan_zav_kaf == "0" or is_null($plan->statusWorkplanZavKaf)) {
+			if ($plan->status_workplan_head_of_department == "0" or is_null($plan->statusWorkplanHeadOfDepartment)) {
 				$dataRow[6] = "–";
 			} else {
-				$dataRow[6] = $plan->statusWorkplanZavKaf->getValue();
+				$dataRow[6] = $plan->statusWorkplanHeadOfDepartment->getValue();
 			}
 			if ($plan->status_workplan_nms == "0" or is_null($plan->statusWorkplanNMS)) {
 				$dataRow[7] = "–";
 			} else {
 				$dataRow[7] = $plan->statusWorkplanNMS->getValue();
 			}
-			if ($plan->status_workplan_dekan == "0" or is_null($plan->statusWorkplanDekan)) {
+			if ($plan->status_workplan_dean == "0" or is_null($plan->statusWorkplanDean)) {
 				$dataRow[8] = "–";
 			} else {
-				$dataRow[8] = $plan->statusWorkplanDekan->getValue();
+				$dataRow[8] = $plan->statusWorkplanDean->getValue();
 			}
 			if ($plan->status_workplan_prorektor == "0" or is_null($plan->statusWorkplanProrektor)) {
 				$dataRow[9] = "–";

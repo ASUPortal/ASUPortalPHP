@@ -198,14 +198,14 @@
                     });
                 });
 
-                jQuery.each(jQuery(".changeStatusWorkPlanBibl"), function(key, value){
+                jQuery.each(jQuery(".changeStatusWorkPlanLibrary"), function(key, value){
                     // раскрашиваем ячейку библиотеки
                     colorizeCell(value);
                 });
                 /**
                  * Обрабатываем смену статуса рабочей программы (библиотека)
                  */
-                jQuery(".changeStatusWorkPlanBibl").on("click", function(item){
+                jQuery(".changeStatusWorkPlanLibrary").on("click", function(item){
                     var container = item.target || item.srcElement;
                     var id = jQuery(container).attr("asu-id");
                     jQuery.ajax({
@@ -216,7 +216,7 @@
                         cache: false,
                         context: item,
                         data: {
-                            action: "updateStatusWorkPlanBibl",
+                            action: "updateStatusWorkPlanLibrary",
                             id: id
                         },
                         dataType: "json",
@@ -229,14 +229,14 @@
                     });
                 });
 
-                jQuery.each(jQuery(".changeStatusWorkPlanPrepod"), function(key, value){
+                jQuery.each(jQuery(".changeStatusWorkPlanLecturer"), function(key, value){
                     // раскрашиваем ячейку преподавателя
                     colorizeCell(value);
                 });
                 /**
                  * Обрабатываем смену статуса рабочей программы (преподаватель)
                  */
-                jQuery(".changeStatusWorkPlanPrepod").on("click", function(item){
+                jQuery(".changeStatusWorkPlanLecturer").on("click", function(item){
                     var container = item.target || item.srcElement;
                     var id = jQuery(container).attr("asu-id");
                     jQuery.ajax({
@@ -247,7 +247,7 @@
                         cache: false,
                         context: item,
                         data: {
-                            action: "updateStatusWorkPlanPrepod",
+                            action: "updateStatusWorkPlanLecturer",
                             id: id
                         },
                         dataType: "json",
@@ -260,14 +260,14 @@
                     });
                 });
 
-                jQuery.each(jQuery(".changeStatusWorkPlanZavKaf"), function(key, value){
+                jQuery.each(jQuery(".changeStatusWorkPlanHeadOfDepartment"), function(key, value){
                     // раскрашиваем ячейку зав. каф.
                     colorizeCell(value);
                 });
                 /**
                  * Обрабатываем смену статуса рабочей программы (зав. каф.)
                  */
-                jQuery(".changeStatusWorkPlanZavKaf").on("click", function(item){
+                jQuery(".changeStatusWorkPlanHeadOfDepartment").on("click", function(item){
                     var container = item.target || item.srcElement;
                     var id = jQuery(container).attr("asu-id");
                     jQuery.ajax({
@@ -278,7 +278,7 @@
                         cache: false,
                         context: item,
                         data: {
-                            action: "updateStatusWorkPlanZavKaf",
+                            action: "updateStatusWorkPlanHeadOfDepartment",
                             id: id
                         },
                         dataType: "json",
@@ -322,14 +322,14 @@
                     });
                 });
 
-                jQuery.each(jQuery(".changeStatusWorkPlanDekan"), function(key, value){
+                jQuery.each(jQuery(".changeStatusWorkPlanDean"), function(key, value){
                     // раскрашиваем ячейку декан
                     colorizeCell(value);
                 });
                 /**
                  * Обрабатываем смену статуса рабочей программы (декан)
                  */
-                jQuery(".changeStatusWorkPlanDekan").on("click", function(item){
+                jQuery(".changeStatusWorkPlanDean").on("click", function(item){
                     var container = item.target || item.srcElement;
                     var id = jQuery(container).attr("asu-id");
                     jQuery.ajax({
@@ -340,7 +340,7 @@
                         cache: false,
                         context: item,
                         data: {
-                            action: "updateStatusWorkPlanDekan",
+                            action: "updateStatusWorkPlanDean",
                             id: id
                         },
                         dataType: "json",
@@ -401,24 +401,24 @@
                 text-decoration: underline;
             }
             
-            .changeStatusWorkPlanBibl {
+            .changeStatusWorkPlanLibrary {
                 cursor: pointer;
             }
-            .changeStatusWorkPlanBibl:hover {
+            .changeStatusWorkPlanLibrary:hover {
                 text-decoration: underline;
             }
             
-            .changeStatusWorkPlanPrepod {
+            .changeStatusWorkPlanLecturer {
                 cursor: pointer;
             }
-            .changeStatusWorkPlanPrepod:hover {
+            .changeStatusWorkPlanLecturer:hover {
                 text-decoration: underline;
             }
             
-            .changeStatusWorkPlanZavKaf {
+            .changeStatusWorkPlanHeadOfDepartment {
                 cursor: pointer;
             }
-            .changeStatusWorkPlanZavKaf:hover {
+            .changeStatusWorkPlanHeadOfDepartment:hover {
                 text-decoration: underline;
             }
             
@@ -429,10 +429,10 @@
                 text-decoration: underline;
             }
             
-            .changeStatusWorkPlanDekan {
+            .changeStatusWorkPlanDean {
                 cursor: pointer;
             }
-            .changeStatusWorkPlanDekan:hover {
+            .changeStatusWorkPlanDean:hover {
                 text-decoration: underline;
             }
             
