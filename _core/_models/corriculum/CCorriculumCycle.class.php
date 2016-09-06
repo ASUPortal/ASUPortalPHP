@@ -68,6 +68,15 @@ class CCorriculumCycle extends CActiveModel {
                 "relationPower" => RELATION_COMPUTED,
                 "storageProperty" => "_controls",
                 "relationFunction" => "getControls"
+            ),
+            "disciplinesAll" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_disciplines",
+                "storageTable" => TABLE_CORRICULUM_DISCIPLINES,
+                "storageCondition" => "cycle_id=".$this->id,
+                "managerClass" => "CCorriculumsManager",
+                "managerGetObject" => "getDiscipline",
+                "managerOrder" => "`discipline_id` asc"
             )
         );
     }
