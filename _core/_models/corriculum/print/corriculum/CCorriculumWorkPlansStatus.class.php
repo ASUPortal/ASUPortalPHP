@@ -28,8 +28,8 @@ class CCorriculumWorkPlansStatus extends CAbstractPrintClassField {
 		$sort = new CArrayList();
 		if (!is_null($contextObject->cycles)) {
 			foreach ($contextObject->cycles->getItems() as $cycle) {
-				if (!is_null($cycle->disciplinesAll)) {
-					foreach ($cycle->disciplinesAll->getItems() as $discipline) {
+				if (!is_null($cycle->allDisciplines)) {
+					foreach ($cycle->allDisciplines->getItems() as $discipline) {
 						$disciplines->add($discipline->getId(), $discipline);
 						$sort->add($discipline->discipline->getValue(), $discipline->getId());
 					}
