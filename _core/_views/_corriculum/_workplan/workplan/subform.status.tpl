@@ -7,14 +7,6 @@
 </div>
 
 <div class="control-group">
-    {CHtml::activeLabel("status_workplan", $plan)}
-    <div class="controls">
-    {CHtml::activeDropDownList("status_workplan", $plan, CTaxonomyManager::getTaxonomy("status_workplan")->getTermsList())}
-    {CHtml::error("status_workplan", $plan)}
-    </div>
-</div>
-
-<div class="control-group">
     {CHtml::activeLabel("status_on_portal", $plan)}
     <div class="controls">
     {CHtml::activeDropDownList("status_on_portal", $plan, CTaxonomyManager::getTaxonomy("status_workplan_on_portal")->getTermsList())}
