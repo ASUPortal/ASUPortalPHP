@@ -107,10 +107,17 @@ class CRequest {
             "value" => false
         );
         if (CRequest::getString("filter") != "") {
-        	foreach (explode("_", CRequest::getString("filter")) as $filter) {
+        	if (strpos(CRequest::getString("filter"), ".") === false) {
+        		$filter = CUtils::strRight(CRequest::getString("filter"), "=");
         		$params = explode(":", $filter);
         		$result["field"] = $params[0];
         		$result["value"] = $params[1];
+        	} else {
+        		foreach (explode("_", CRequest::getString("filter")) as $filter) {
+        			$params = explode(":", $filter);
+        			$result["field"] = $params[0];
+        			$result["value"] = $params[1];
+        		}
         	}
         }
         return $result;
