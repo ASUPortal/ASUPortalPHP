@@ -10,7 +10,7 @@
 			{if !$isApprove}
 				{if !is_null($currentPerson)}
 					jQuery("#corriculum_selector").change(function(){
-		                window.location.href=web_root + "_modules/_corriculum/workplans.php?filter=corriculum.id:" + jQuery(this).val() + "_person.id:{$currentPerson}";
+		                window.location.href=web_root + "_modules/_corriculum/workplans.php?filter=corriculum.id:" + jQuery(this).val() + "~person.id:{$currentPerson}";
 		            });
 				{else}
 					jQuery("#corriculum_selector").change(function(){
@@ -19,7 +19,7 @@
 		    	{/if}
 		    	{if !is_null($currentCorriculum)}
 			    	jQuery("#person_selector").change(function(){
-		                window.location.href=web_root + "_modules/_corriculum/workplans.php?filter=person.id:" + jQuery(this).val() + "_corriculum.id:{$currentCorriculum}";
+		                window.location.href=web_root + "_modules/_corriculum/workplans.php?filter=person.id:" + jQuery(this).val() + "~corriculum.id:{$currentCorriculum}";
 		            });
 			    {else}
 				    jQuery("#person_selector").change(function(){
@@ -29,7 +29,7 @@
 		    {else}
 				{if !is_null($currentPerson)}
 					jQuery("#corriculum_selector").change(function(){
-		                window.location.href=web_root + "_modules/_corriculum/workplans.php?isApprove=1&filter=corriculum.id:" + jQuery(this).val() + "_person.id:{$currentPerson}";
+		                window.location.href=web_root + "_modules/_corriculum/workplans.php?isApprove=1&filter=corriculum.id:" + jQuery(this).val() + "~person.id:{$currentPerson}";
 		            });
 				{else}
 					jQuery("#corriculum_selector").change(function(){
@@ -38,7 +38,7 @@
 		    	{/if}
 		    	{if !is_null($currentCorriculum)}
 			    	jQuery("#person_selector").change(function(){
-		                window.location.href=web_root + "_modules/_corriculum/workplans.php?isApprove=1&filter=person.id:" + jQuery(this).val() + "_corriculum.id:{$currentCorriculum}";
+		                window.location.href=web_root + "_modules/_corriculum/workplans.php?isApprove=1&filter=person.id:" + jQuery(this).val() + "~corriculum.id:{$currentCorriculum}";
 		            });
 			    {else}
 				    jQuery("#person_selector").change(function(){

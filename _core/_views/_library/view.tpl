@@ -20,7 +20,7 @@
 	       		}
 	       	});
 	       	query[query.length] = "action=view";
-	       	query[query.length] = "filter=" + filter.join("_");
+	       	query[query.length] = "filter=" + filter.join("~");
 	       	window.location.href = "index.php?" + query.join("&");
 	       }
 	   	$("#user_id").change(function(){

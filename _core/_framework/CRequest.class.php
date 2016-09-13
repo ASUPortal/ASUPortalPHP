@@ -107,7 +107,7 @@ class CRequest {
             "value" => false
         );
         if (CRequest::getString("filter") != "") {
-        	foreach (explode("_", CRequest::getString("filter")) as $filter) {
+        	foreach (explode("~", CRequest::getString("filter")) as $filter) {
         		$params = explode(":", $filter);
         		$result["field"] = $params[0];
         		$result["value"] = $params[1];
@@ -162,14 +162,15 @@ class CRequest {
     }
 
     /**
-     * Получить значение фильтра
-     *
+     * Получить значение фильтра.
+     * В качестве разделителя фильтров используется ~
+     * 
      * @param $name
      * @return null|int
      */
     public static function getFilter($name) {
         $filters = new CArrayList();
-        foreach (explode("_", CRequest::getString("filter")) as $filter) {
+        foreach (explode("~", CRequest::getString("filter")) as $filter) {
             $values = explode(":", $filter);
             if (count($values) > 1) {
                 if ($values[1] != 0) {

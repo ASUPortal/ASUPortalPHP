@@ -32,7 +32,7 @@
     		if (isApprove) {
     			query[query.length] = "isApprove=1";
     		}
-    		query[query.length] = "filter=" + filter.join("_");
+    		query[query.length] = "filter=" + filter.join("~");
     		query[query.length] = "action=index";
     		window.location.href = "index.php?" + query.join("&");
     	}
