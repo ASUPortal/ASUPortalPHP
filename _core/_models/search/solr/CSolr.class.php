@@ -17,8 +17,8 @@ class CSolr {
         if (is_null(self::$_client)) {
             $params = array(
                 "hostname" => CSettingsManager::getSettingValue("solr_server"),
-                "port" => CSettingsManager::getSettingValue("solr_port"),
-                "path" => "solr/PortalASU"
+                //"port" => CSettingsManager::getSettingValue("solr_port"),
+                "path" => "solr/new_core"//"solr/PortalASU"
             );
             self::$_client = new SolrClient($params);
         }
