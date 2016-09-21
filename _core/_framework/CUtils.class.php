@@ -974,6 +974,16 @@ class CUtils {
     }
     
     /**
+     * Путь к корневой директории сервера
+     *
+     * @static
+     * @return mixed
+     */
+    public static function getDocumentRoot() {
+    	return $_SERVER["DOCUMENT_ROOT"];
+    }
+    
+    /**
      * Список файлов в папке и подпапках
      *
      * @param string $folder
@@ -981,22 +991,38 @@ class CUtils {
      */
     public static function getListFiles($folder) {
         $files = array();
-
-        $handler = opendir($folder);
-        while ($file = readdir($handler)) {
-            $filename = $folder . $file;
-            if (is_file($filename)) {
-                $files[] = $filename;
-            } elseif ($file != "." && $file != "..") {
-                $filename .= CORE_DS;
-                $childFiles = CUtils::getListFiles($filename);
-                foreach ($childFiles as $childFile) {
-                    $files[] = $childFile;
-                }
-            }
+        
+        if (file_exists($folder)) {
+        	$handler = opendir($folder);
+        	while ($file = readdir($handler)) {
+        		$filename = $folder . $file;
+        		if (is_file($filename)) {
+        			$files[] = $filename;
+        		} elseif ($file != "." && $file != "..") {
+        			$filename .= CORE_DS;
+        			$childFiles = CUtils::getListFiles($filename);
+        			foreach ($childFiles as $childFile) {
+        				$files[] = $childFile;
+        			}
+        		}
+        	}
+        	closedir($handler);
         }
-        closedir($handler);
-
+        
         return $files;
+    }
+    
+    /**
+     * Название файла по указанному пути
+     *
+     * @param $fileName
+     * @return string
+     */
+    public static function getFileName($folder) {
+    	if ($folder!='') {
+    		$pathParts = pathinfo($folder);
+    		$fileName = $pathParts["basename"];
+    		return $fileName;
+    	}
     }
 }

@@ -34,10 +34,12 @@ class CSearchSourceLocal extends CComponent implements ISearchSource {
     public function getId() {
         return $this->id;
     }
-
+    
+    /**
+     * @return CSearchFile
+     */
     public function getFile(CSearchFile $fileDescriptor) {
-        return $fileDescriptor->getRealFilePath();
+        return $fileDescriptor;
     }
-
 
 }

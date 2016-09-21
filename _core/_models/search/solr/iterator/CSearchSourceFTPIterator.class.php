@@ -14,10 +14,14 @@ class CSearchSourceFTPIterator implements Iterator {
     public function current() {
         if (array_key_exists($this->index, $this->filesList)) {
             $file = $this->filesList[$this->index];
-
+            
+            // выбираем из названия файла путь до локальной папки и до папки ftp сервера
+            $localFile = CUtils::strLeft($file, "||");
+            $serverFile = CUtils::strRightBack($file, "||");
+            
             $fileObject = new CSearchFile();
-            $fileObject->setFileSource($file);
-            $fileObject->setRealFilePath($file);
+            $fileObject->setFileSource($localFile);
+            $fileObject->setRealFilePath("ftp://".CSettingsManager::getSettingValue("ftp_server")."/".$serverFile);
             $fileObject->setSourceId($this->source->getId());
 
             return $fileObject;

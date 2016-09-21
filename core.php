@@ -108,25 +108,22 @@
             "cache" => array(
                 "class" => "CCacheMemcache"
             ),
-        	"solr" => array(
-        		"class" => "CIndexFTP"
-        	),
         	"search" => array(
         		"class" => "CSolrManager",
                 "sources" => array(
                     array(
                         "class" => "CSearchSourceFTP",
                         "id" => "ftp_portal",
-                        "server" => "ftp_server",//CSettingsManager::getSettingValue("ftp_server"),
-                        "login" => "ftp_server_user",//CSettingsManager::getSettingValue("ftp_server_user"),
-                        "password" => "ftp_server_password",//CSettingsManager::getSettingValue("ftp_server_password"),
-                    	"path" => "path_for_indexing_files_from_ftp",//CSettingsManager::getSettingValue("path_for_indexing_files_from_ftp"),
-                    	"suffix" => "formats_files_for_indexing"//CSettingsManager::getSettingValue("formats_files_for_indexing")
+                        "server" => "ftp_server",
+                        "login" => "ftp_server_user",
+                        "password" => "ftp_server_password",
+                    	"path" => "path_for_indexing_files_from_ftp",
+                    	"suffix" => "formats_files_for_indexing"
                     ),
                     array(
                         "class" => "CSearchSourceLocal",
                         "id" => "local_files",
-                        "path" => "path_for_indexing_files",//CSettingsManager::getSettingValue("path_for_indexing_files")
+                        "path" => "path_for_indexing_files",
                     	"suffix" => "formats_files_for_indexing"
                     ),
                     array(

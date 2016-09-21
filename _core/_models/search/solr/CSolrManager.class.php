@@ -27,7 +27,7 @@ class CSolrManager extends CComponent {
                 }
             } catch (Exception $e) {
                 // тут будет исключение
-                var_dump($e->getMessage());
+                echo $e->getMessage();
             }
         }
         return $messages;
@@ -37,9 +37,9 @@ class CSolrManager extends CComponent {
         CApp::getApp()->cache->set($file->getFileId(), $file);
         // сообщение о результате обработки файла
         $message = "";
-        // добавление в солр
+        // добавление в Solr
         $ch = curl_init();
-        $data = array("myfile"=>"@".$file->getRealFilePath());
+        $data = array("myfile"=>"@".$file->getFileSource());
         curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles($file->getFileId()));
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -52,10 +52,16 @@ class CSolrManager extends CComponent {
         $error_no = curl_errno($ch);
         curl_close($ch);
         if ($error_no == 0) {
-        	$message .= "<font color='#00CC00'>Файл ".$file->getFileSource()." успешно загружен в индекс</font>";
+        	$message .= "<font color='#00CC00'>Файл ".$file->getRealFilePath()." успешно загружен в индекс</font>";
         } else {
-        	$message .= "<font color='#FF0000'>Ошибка загрузки файла ".$file->getFileSource()." в индекс</font>";
+        	$message .= "<font color='#FF0000'>Ошибка загрузки файла ".$file->getRealFilePath()." в индекс</font>";
         }
+
+        // удаляем локальный файл из временной папки для ftp
+        if (CUtils::strLeft($file->getFileId(), "||") == "ftp_portal") {
+        	unlink($file->getFileSource());
+        }
+        
         return $message;
 
         /*

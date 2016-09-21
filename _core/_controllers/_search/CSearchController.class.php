@@ -236,8 +236,6 @@ class CSearchController extends CBaseController{
     	$this->renderView("_search/searchFiles.tpl");
     }
     public function actionSearchByFiles() {
-    	$host = $_SERVER["DB_HOST"];
-    	$pathRoot = $_SERVER["DOCUMENT_ROOT"];
     	$userQuery = CRequest::getString("stringSearch");
     	$params = array(
     		"_is_file_" => 1,
@@ -248,20 +246,16 @@ class CSearchController extends CBaseController{
     	foreach ($resultObj->getDocuments() as $doc) {
     		$hl = $resultObj->getHighlighingByDocument($doc);
     		$file = CApp::getApp()->search->getFile($doc->id);
-    		$path_parts = pathinfo($file);
-    		$fileName = $path_parts["basename"];
+    		$fileName = CUtils::getFileName($file->getRealFilePath());
     		$res = array();
     		$res["hl"] = implode(", ", $hl);
-    		if (CUtils::strLeft($doc->id, "||") == "local_files") {
-    			//убираем из пути к файлу корневую директорию сервера
-    			$filePath = str_replace(mb_strtolower($pathRoot), "", mb_strtolower($file));
-    			$res["filepath"] = "http://".$host.CORE_DS.$filePath;
-    			$res["location"] = $filePath;
-    		} elseif (CUtils::strLeft($doc->id, "||") == "ftp_portal") {
-    			$res["filepath"] = "ftp://".CSettingsManager::getSettingValue("ftp_server_user").":".CSettingsManager::getSettingValue("ftp_server_password")."@".CSettingsManager::getSettingValue("ftp_server")."/".str_replace("ftp://", "", $file);
-    			$res["location"] = "ftp://".CSettingsManager::getSettingValue("ftp_server")."/".str_replace("ftp://", "", $file);
-    		}
+    		$res["filepath"] = $file->getRealFilePath();
+    		$res["location"] = $file->getFileSource();
     		$res["filename"] = $fileName;
+    		if (CUtils::strLeft($doc->id, "||") == "ftp_portal") {
+    			$res["filepath"] = "ftp://".CSettingsManager::getSettingValue("ftp_server_user").":".CSettingsManager::getSettingValue("ftp_server_password")."@".str_replace("ftp://", "", $file->getRealFilePath());
+    			$res["location"] = $file->getRealFilePath();
+    		}
     		$result[] = $res;
     	}
     	$this->setData("result", $result);
