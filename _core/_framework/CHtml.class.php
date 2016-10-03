@@ -1413,7 +1413,7 @@ class CHtml {
      * @param string $url
      * @param CModel $model
      */
-    public static function activeComponent($controllerUrl = "", CModel $model, $params = array()) {
+    public static function activeComponent($controllerUrl = "", CModel $model, $params = array(), $withoutScripts = false) {
         /**
          * По умолчанию грузим содержимое действия index, если не указано иначе
          */
@@ -1422,7 +1422,7 @@ class CHtml {
             $defaultAction = $params["defaultAction"];
         }
         self::$_widgetsIndex++;
-        echo '<div class="asu_component" id="component_'.(self::$_widgetsIndex).'" asu-controller="'.$controllerUrl.'" asu-action="'.$defaultAction.'" asu-type="component" asu-index="'.self::$_widgetsIndex.'"></div>';
+        echo '<div class="asu_component" id="component_'.(self::$_widgetsIndex).'" asu-controller="'.$controllerUrl.'" asu-action="'.$defaultAction.'" asu-withoutScripts="'.$withoutScripts.'" asu-type="component" asu-index="'.self::$_widgetsIndex.'"></div>';
 
         if (!self::$_componentsInit) {
             self::$_componentsInit = true;
