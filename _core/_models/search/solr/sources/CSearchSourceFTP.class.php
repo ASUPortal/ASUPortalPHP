@@ -30,7 +30,7 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
     }
     
     private function scanDirectory() {
-    	return $this->rawList($this->path);
+    	return $this->ftpRecursiveFileListing($this->path);
     }
     
     public function getFilesToIndex() {
@@ -102,26 +102,20 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
         return $fileDescriptor;
     }
     
-    public function rawList($folder) {
+    function ftpRecursiveFileListing($path) {
     	$link = $this->link;
     	$suffix = $this->suffix;
     	$suffixes = explode(";", $suffix);
-    	$list = ftp_rawlist($link, $folder);
-    	$anzlist = count($list);
-    	$i = 0;
-    	while ($i < $anzlist) {
-    		$split = preg_split("/[\s]+/", $list[$i], 9, PREG_SPLIT_NO_EMPTY);
-    		$ItemName = $split[8];
-    		$endung = strtolower(substr(strrchr($ItemName,"."),1));
-    		$path = "$folder/$ItemName";
-    		if (substr($list[$i],0,1) === "d" AND substr($ItemName,0,1) != ".") {
-    			$this->rawList($path);
-    		} elseif (substr($ItemName,0,2) != "._" AND in_array($endung,$suffixes)) {
-    			array_push($this->files, $path);
+    	$contents = ftp_nlist($link, $path);
+    	foreach($contents as $currentFile) {
+    		if (strpos($currentFile, '.') === false) {
+    			$this->ftpRecursiveFileListing($currentFile);
     		}
-    		$i++;
+    		$extension = end(explode(".", $currentFile));
+    		if (in_array($extension, $suffixes)) {
+    			array_push($this->files, $currentFile);
+    		}
     	}
     	return $this->files;
     }
-    
 }
