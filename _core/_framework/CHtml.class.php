@@ -1421,8 +1421,12 @@ class CHtml {
         if (array_key_exists("defaultAction", $params)) {
             $defaultAction = $params["defaultAction"];
         }
+        $withoutScripts = false;
+        if (array_key_exists("withoutScripts", $params)) {
+        	$withoutScripts = $params["withoutScripts"];
+        }
         self::$_widgetsIndex++;
-        echo '<div class="asu_component" id="component_'.(self::$_widgetsIndex).'" asu-controller="'.$controllerUrl.'" asu-action="'.$defaultAction.'" asu-type="component" asu-index="'.self::$_widgetsIndex.'"></div>';
+        echo '<div class="asu_component" id="component_'.(self::$_widgetsIndex).'" asu-controller="'.$controllerUrl.'" asu-action="'.$defaultAction.'" asu-withoutScripts="'.$withoutScripts.'" asu-type="component" asu-index="'.self::$_widgetsIndex.'"></div>';
 
         if (!self::$_componentsInit) {
             self::$_componentsInit = true;

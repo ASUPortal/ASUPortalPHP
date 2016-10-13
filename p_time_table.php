@@ -111,7 +111,7 @@ echo '</div><div class="middle2">'.$sess.' &nbsp;'.$def_settings['year_name'].' 
     if (!$hide_person_data_rule)
     while($a=mysql_fetch_array($res0))
      {
-      $b=substr($a['FIO'],0,1);
+      $b=mb_substr($a['FIO'],0,1);
       if ($b==$letter)
        {
         $res0aaa=mysql_query ('select * from time where id="'.$a['id'].'" and  

@@ -19,12 +19,13 @@
             this._controllerUrl = jQuery(this).attr("asu-controller");
             this._controllerAction = jQuery(this).attr("asu-action");
             this._componentId = jQuery(this).attr("id");
+            this._withoutScripts = jQuery(this).attr("asu-withoutScripts");
             /**
              * Загрузим данные по умолчанию
              */
             this._loadData(this._controllerUrl, {
                 action: this._controllerAction
-            });
+            }, false, this._withoutScripts);
         };
 
         /**
@@ -34,10 +35,15 @@
          * @param data
          * @private
          */
-        this._loadData = function(url, data, isPost){
+        this._loadData = function(url, data, isPost, withoutScripts){
             var method = "GET";
             if (isPost) {
                 method = "POST";
+            }
+            if (!withoutScripts) {
+            	dataLoad = this._onDataLoaded;
+            } else {
+            	dataLoad = this._onDataLoadedWithoutScripts;
             }
             jQuery.ajax({
                 url: url,
@@ -45,18 +51,62 @@
                 cache: false,
                 method: method,
                 beforeSend: jQuery.proxy(this._onBeforeSend, this),
-                success: jQuery.proxy(this._onDataLoaded, this),
-                error: jQuery.proxy(this._onDataLoaded, this)
+                success: jQuery.proxy(dataLoad, this),
+                error: jQuery.proxy(dataLoad, this)
             });
         };
 
         /**
          * Данные получены, покажем их
+         * 
+         * Для элементов с компонентами внутри компонентов 
+         * будем использовать функцию без поддержки скриптов this._onDataLoadedWithoutScripts
          *
          * @private
          */
-        this._onDataLoaded = function(data){
+        this._onDataLoaded = function(loadedHtml){
+        	var data = jQuery.parseHTML(loadedHtml);
+            var that = this;
+            
+            this._onDataLoad(data, false, false);
+            
+            jQuery(that).html(data);
+
+	        var regexp = /<script>([\s\S]*?)<\/script>/gmi;
+	
+	        var match;
+	        while (match = regexp.exec(loadedHtml)) {
+	            var script = match[1];
+	            jQuery.globalEval(script);
+	        }
+        };
+        
+        /**
+         * Покажем данные без поддержки скриптов (для форм с компонентами внутри компонентов)
+         *
+         * @private
+         */
+        this._onDataLoadedWithoutScripts = function(data){
         	var data = jQuery.parseHTML(data);
+        	var that = this;
+        	
+            this._onDataLoad(data, false, true);
+            
+            jQuery(that).html(data)
+	        	.find(".catalogLookup").catalogLookup().end()
+	            .find("[asu-type='component']").components().end()
+	            .find('select.select2').select2().end();
+            
+	        var regexp = /<script>([\s\S]*?)<\/script>/gmi;
+	
+	        var match;
+	        while (match = regexp.exec(data)) {
+	            var script = match[1];
+	            jQuery.globalEval(script);
+	        }
+        };
+        
+        this._onDataLoad = function(data, method, withoutScripts){
             var that = this;
             /**
              * Удалим со все ссылок удаления их родные события
@@ -100,7 +150,7 @@
                             params[object.substring(0, object.indexOf("="))] =
                                 object.substring(object.indexOf("=") + 1);
                         });
-                        that._loadData(href, params);
+                        that._loadData(href, params, method, withoutScripts);
                         return false;
                     }
                 });
@@ -117,7 +167,7 @@
                     params[object.substring(0, object.indexOf("="))] =
                         object.substring(object.indexOf("=") + 1);
                 });
-                that._loadData(href, params);
+                that._loadData(href, params, method, withoutScripts);
                 return false;
             });
             /**
@@ -147,19 +197,7 @@
                 that._formSubmit(form);
                 return false;
             });
-            jQuery(that).html(data)
-            	.find(".catalogLookup").catalogLookup().end()
-                .find("[asu-type='component']").components().end()
-                .find('select.select2').select2().end();
-
-	        var regexp = /<script>([\s\S]*?)<\/script>/gmi;
-	
-	        var match;
-	        while (match = regexp.exec(data)) {
-	            var script = match[1];
-	            jQuery.globalEval(script);
-	        }
-        };
+        }
 
         /**
          * Штатно сабмитим форму

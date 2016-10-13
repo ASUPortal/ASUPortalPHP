@@ -18,7 +18,7 @@
             {CHtml::activeComponent("workplancontentloads.php?id={$object->getId()}", $object)}
         </div>
         <div class="tab-pane" id="controltypes">
-            {CHtml::activeComponent("workplantypescontrol.php?id={$object->getId()}", $object)}
+            {CHtml::activeComponent("workplantypescontrol.php?id={$object->getId()}", $object, ["withoutScripts" => "true"])}
         </div>
         <div class="tab-pane" id="fundmarktypes">
             {CHtml::activeComponent("workplanfundmarktypes.php?id={$object->getId()}", $object)}

@@ -73,6 +73,8 @@ protected $_isComponent = true;
             "link" => "workplanevaluationmaterials.php?action=index&plan_id=".$object->plan_id,
             "icon" => "actions/edit-undo.png"
         ));
+        $this->addCSSInclude("_modules/_redactor/redactor.css");
+        $this->addJSInclude("_modules/_redactor/redactor.min.js");
         /**
          * Отображение представления
          */

@@ -13,7 +13,7 @@
 
     <div class="tab-content">
         <div class="tab-pane active" id="marks">
-            {CHtml::activeComponent("workplanmarksstudyactivity.php?id={$object->getId()}", $object)}
+            {CHtml::activeComponent("workplanmarksstudyactivity.php?id={$object->getId()}", $object, ["withoutScripts" => "true"])}
         </div>
     </div>
     

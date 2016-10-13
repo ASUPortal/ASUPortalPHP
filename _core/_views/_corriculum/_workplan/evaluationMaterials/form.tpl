@@ -16,7 +16,7 @@
     <div class="control-group">
         {CHtml::activeLabel("material", $object)}
         <div class="controls">
-            {CHtml::activeTextBox("material", $object)}
+            {CHtml::activeTextBox("material", $object, "material")}
             {CHtml::error("material", $object)}
         </div>
     </div>
@@ -34,4 +34,13 @@
             {CHtml::submit("Сохранить", false)}
         </div>
     </div>
+    
+    <script>
+    jQuery(document).ready(function(){
+        jQuery("#material").redactor({
+            imageUpload: '{$web_root}_modules/_redactor/image_upload.php'
+        });
+    });
+	</script>
 </form>
+
