@@ -54,46 +54,26 @@ class CWorkPlanStatusController extends CBaseController{
     			foreach ($fieldsFromTemplate as $fieldName=>$descriptors) {
     				if (!is_null($form->formset->getFieldByName($fieldName))) {
     					$field = $form->formset->getFieldByName($fieldName);
-    					if (is_null($field->parent)) {
-    						if ($field->type_id == "1" || $field->type_id == "0") {
-    							$countFields += 1;
-    							if ($field->evaluateValue($plan) == "") {
-    								$countEmptyTextFields += 1;
-    								$emptyTextFields[] = $field->title;
-    							} else {
-    								$countFullFields += 1;
-    							}
-    						} elseif ($field->type_id == "2") {
-    							$countFields += 1;
-    							if (empty($field->evaluateValue($plan))) {
-    								$countEmptyTableFields += 1;
-    								$emptyTableFields[] = $field->title;
-    							} else {
-    								$countFullFields += 1;
-    							}
-    						}
-    					}
     				} elseif (mb_strpos($fieldName, ".class") !== false) {
     					$classFieldName = CUtils::strLeft($fieldName, ".class");
     					$classField = new $classFieldName();
-    					if (mb_strpos($fieldName, "CWorkPlanSection") === false) {
-    						if ($classField::getFieldType() == "text") {
-    							$countFields += 1;
-    							if ($classField::execute($plan) == "") {
-    								$countEmptyTextFields += 1;
-    								$emptyTextFields[] = $classField::getFieldName();
-    							} else {
-    								$countFullFields += 1;
-    							}
-    						} else {
-    							$countFields += 1;
-    							if (empty($classField::execute($plan))) {
-    								$countEmptyTableFields += 1;
-    								$emptyTableFields[] = $classField::getFieldName();
-    							} else {
-    								$countFullFields += 1;
-    							}
-    						}
+    					$field = new CPrintClassFieldToFieldAdapter($classField, $plan);
+    				}
+    				if ($field->type_id == "1" || $field->type_id == "0") {
+    					$countFields += 1;
+    					if ($field->evaluateValue($plan) == "") {
+    						$countEmptyTextFields += 1;
+    						$emptyTextFields[] = $field->title;
+    					} else {
+    						$countFullFields += 1;
+    					}
+    				} elseif ($field->type_id == "2") {
+    					$countFields += 1;
+    					if (empty($field->evaluateValue($plan))) {
+    						$countEmptyTableFields += 1;
+    						$emptyTableFields[] = $field->title;
+    					} else {
+    						$countFullFields += 1;
     					}
     				}
     			}

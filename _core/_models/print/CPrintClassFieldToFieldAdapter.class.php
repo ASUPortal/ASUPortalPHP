@@ -24,6 +24,7 @@ class CPrintClassFieldToFieldAdapter extends CPrintField{
             } else {
                 $this->type_id = "1";
             }
+            $this->title = $this->getClassField()->getFieldName();
         }
     }
 
