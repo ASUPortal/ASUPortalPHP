@@ -9,6 +9,7 @@
 class CSearchFile {
     private $fileSource; // откуда взять файл
     private $realFilePath; // там, где он на самом деле лежит
+    private $fileLocation; // расположение файла
     private $sourceId;
     private $fileId;
 
@@ -66,6 +67,22 @@ class CSearchFile {
     {
         $this->sourceId = $sourceId;
     } // идентификатор источника данных
+    
+    /**
+     * @return mixed
+     */
+    public function getFileLocation()
+    {
+    	return $this->fileLocation;
+    }
+    
+    /**
+     * @param mixed $fileLocation
+     */
+    public function setFileLocation($fileLocation)
+    {
+    	$this->fileLocation = $fileLocation;
+    }
 
 
 }

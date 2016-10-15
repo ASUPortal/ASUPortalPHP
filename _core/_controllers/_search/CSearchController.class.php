@@ -245,18 +245,20 @@ class CSearchController extends CBaseController{
     	$result = array();
     	foreach ($resultObj->getDocuments() as $doc) {
     		$hl = $resultObj->getHighlighingByDocument($doc);
-    		$file = CApp::getApp()->search->getFile($doc->id);
-    		$fileName = CUtils::getFileName($file->getRealFilePath());
-    		$res = array();
-    		$res["hl"] = implode(", ", $hl);
-    		$res["filepath"] = $file->getRealFilePath();
-    		$res["location"] = $file->getFileSource();
-    		$res["filename"] = $fileName;
-    		if (CUtils::strLeft($doc->id, "||") == "ftp_portal") {
-    			$res["filepath"] = "ftp://".CSettingsManager::getSettingValue("ftp_server_user").":".CSettingsManager::getSettingValue("ftp_server_password")."@".str_replace("ftp://", "", $file->getRealFilePath());
-    			$res["location"] = $file->getRealFilePath();
+    		try {
+    			$file = CApp::getApp()->search->getFile($doc->id);
+    		} catch (Exception $e) {
+    			echo "<font color='#FF0000'>".$e->getMessage()."</font><br>";
     		}
-    		$result[] = $res;
+    		if (!empty($file)) {
+    			$fileName = CFileUtils::getFileName($file->getRealFilePath());
+    			$res = array();
+    			$res["hl"] = implode(", ", $hl);
+    			$res["filepath"] = $file->getRealFilePath();
+    			$res["location"] = $file->getFileLocation();
+    			$res["filename"] = $fileName;
+    			$result[] = $res;
+    		}
     	}
     	$this->setData("result", $result);
     	$this->addActionsMenuItem(array(

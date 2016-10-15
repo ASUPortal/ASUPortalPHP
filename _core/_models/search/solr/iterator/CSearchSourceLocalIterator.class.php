@@ -28,6 +28,7 @@ class CSearchSourceLocalIterator implements Iterator {
             $fileObject = new CSearchFile();
             $fileObject->setFileSource($file);
             $fileObject->setRealFilePath("http://".DB_HOST.CORE_DS.$filePath);
+            $fileObject->setFileLocation($file);
             $fileObject->setSourceId($this->source->getId());
 
             return $fileObject;

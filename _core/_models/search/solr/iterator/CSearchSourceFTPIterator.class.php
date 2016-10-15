@@ -1,11 +1,17 @@
 <?php
 
 class CSearchSourceFTPIterator implements Iterator {
+	private $server;
+	private $login;
+	private $password;
     private $filesList;
     private $source;
     private $index;
 
     function __construct($filesList, $source) {
+    	$this->server = CSettingsManager::getSettingValue("ftp_server");
+    	$this->login = CSettingsManager::getSettingValue("ftp_server_user");
+    	$this->password = CSettingsManager::getSettingValue("ftp_server_password");
         $this->filesList = $filesList;
         $this->source = $source;
     }
@@ -21,7 +27,8 @@ class CSearchSourceFTPIterator implements Iterator {
             
             $fileObject = new CSearchFile();
             $fileObject->setFileSource($localFile);
-            $fileObject->setRealFilePath("ftp://".CSettingsManager::getSettingValue("ftp_server")."/".$serverFile);
+            $fileObject->setRealFilePath("ftp://".$this->login.":".$this->password."@"."$this->server"."/".$serverFile);
+            $fileObject->setFileLocation("ftp://".$this->server."/".$serverFile);
             $fileObject->setSourceId($this->source->getId());
 
             return $fileObject;

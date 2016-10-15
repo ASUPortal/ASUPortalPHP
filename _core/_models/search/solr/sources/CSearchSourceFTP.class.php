@@ -63,7 +63,7 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
     					} else {
     						$mode = FTP_BINARY;
     					}
-    					$fileName = CUtils::getFileName($serverFile);
+    					$fileName = CFileUtils::getFileName($serverFile);
     					// попытка скачать $serverFile и сохранить в $localFile
     					$localFile = CORE_CWD.CORE_DS."tmp".CORE_DS."files_for_indexing".CORE_DS.$fileName;
     					if (ftp_get($link, $localFile, $serverFile, $mode)) {

@@ -12,7 +12,7 @@ class CSearchSourceLocal extends CComponent implements ISearchSource {
     public $suffix;
 
     private function scanDirectory() {
-        return CUtils::getListFiles(CSettingsManager::getSettingValue($this->path));
+        return CFileUtils::getListFiles(CSettingsManager::getSettingValue($this->path));
     }
 
     public function getFilesToIndex() {

@@ -27,7 +27,7 @@ class CSolrManager extends CComponent {
                 }
             } catch (Exception $e) {
                 // тут будет исключение
-                echo $e->getMessage();
+                echo "<font color='#FF0000'>".$e->getMessage()."</font><br>";
             }
         }
         return $messages;
@@ -52,9 +52,9 @@ class CSolrManager extends CComponent {
         $error_no = curl_errno($ch);
         curl_close($ch);
         if ($error_no == 0) {
-        	$message .= "<font color='#00CC00'>Файл ".$file->getRealFilePath()." успешно загружен в индекс</font>";
+        	$message .= "<font color='#00CC00'>Файл ".$file->getFileLocation()." успешно загружен в индекс</font>";
         } else {
-        	$message .= "<font color='#FF0000'>Ошибка загрузки файла ".$file->getRealFilePath()." в индекс</font>";
+        	$message .= "<font color='#FF0000'>Ошибка загрузки файла ".$file->getFileLocation()." в индекс</font>";
         }
 
         // удаляем локальный файл из временной папки для ftp
@@ -78,7 +78,11 @@ class CSolrManager extends CComponent {
             if ($source->getId() == $sourceId) {
                 // попросить у солра документ по id
                 $searchFile = CApp::getApp()->cache->get($fileId);
-                return $source->getFile($searchFile);
+                if (!empty($searchFile)) {
+                	return $source->getFile($searchFile);
+                } else {
+                	throw new Exception("Кэш был очищен, обновите файловый индекс!");
+                }
             }
         }
         return null;
