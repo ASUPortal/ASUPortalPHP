@@ -117,8 +117,8 @@
                         "server" => "ftp_server",
                         "login" => "ftp_server_user",
                         "password" => "ftp_server_password",
-                    	"path" => "path_for_indexing_files_from_ftp",
-                    	"suffix" => "formats_files_for_indexing"
+                        "path" => "path_for_indexing_files_from_ftp",
+                        "suffix" => "formats_files_for_indexing"
                     ),
                     array(
                         "class" => "CSearchSourceLocal",
