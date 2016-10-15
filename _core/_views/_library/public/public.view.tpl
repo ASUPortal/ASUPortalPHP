@@ -36,8 +36,8 @@
                     <a href="{$file->getDownloadLink()}" title="Добавлено {$file->date_time|date_format:"d.m.Y H:i:s"}">
                         {$file->browserFile}
                     </a>
-					{if (CUtils::getFileSize("library/{$file->nameFolder}/{$file->nameFile}")) !=0 }
-	                    <font size=-2 style="font-family:Arial;"> размер файла: <b>{CUtils::getFileSize("library/{$file->nameFolder}/{$file->nameFile}")}</b> МБ</font>
+					{if (CFileUtils::getFileSize("library/{$file->nameFolder}/{$file->nameFile}")) !=0 }
+	                    <font size=-2 style="font-family:Arial;"> размер файла: <b>{CFileUtils::getFileSize("library/{$file->nameFolder}/{$file->nameFile}")}</b> МБ</font>
                     {else}
                     	<span><font size=-2 color="#FF0000" style="font-family:Arial;"> файл не найден.</font></span>
                     {/if}
