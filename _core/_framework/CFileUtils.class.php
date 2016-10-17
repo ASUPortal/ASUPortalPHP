@@ -2,7 +2,7 @@
 
 class CFileUtils {
 	/**
-	 * Размер файла по указанному пути
+	 * Размер файла по указанному пути в мегабайтах
 	 *
 	 * @param $fileName
 	 * @return string
@@ -14,6 +14,8 @@ class CFileUtils {
 			} else {
 				return 0;
 			}
+		} else {
+			throw new Exception("Попытка получить размер для не указанного файла!");
 		}
 	}
 	
@@ -57,6 +59,8 @@ class CFileUtils {
     		$pathParts = pathinfo($folder);
     		$fileName = $pathParts["basename"];
     		return $fileName;
-    	}
+    	} else {
+			throw new Exception("Попытка получить название для не указанного файла!");
+		}
     }
 }
