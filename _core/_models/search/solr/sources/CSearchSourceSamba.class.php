@@ -16,13 +16,11 @@ class CSearchSourceSamba extends CComponent implements ISearchSource {
     /**
      * @return mixed
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
-    public function getFile(CSearchFile $fileDescriptor)
-    {
+    public function getFile(CSearchFile $fileDescriptor) {
         // TODO: Implement getFile() method.
     }
 

@@ -23,64 +23,56 @@ class CSearchFile {
     /**
      * @return mixed
      */
-    public function getFileSource()
-    {
+    public function getFileSource() {
         return $this->fileSource;
     }
 
     /**
      * @param mixed $fileSource
      */
-    public function setFileSource($fileSource)
-    {
+    public function setFileSource($fileSource) {
         $this->fileSource = $fileSource;
     }
 
     /**
      * @return mixed
      */
-    public function getRealFilePath()
-    {
+    public function getRealFilePath() {
         return $this->realFilePath;
     }
 
     /**
      * @param mixed $realFilePath
      */
-    public function setRealFilePath($realFilePath)
-    {
+    public function setRealFilePath($realFilePath) {
         $this->realFilePath = $realFilePath;
     }
 
     /**
      * @return mixed
      */
-    public function getSourceId()
-    {
+    public function getSourceId() {
         return $this->sourceId;
     }
 
     /**
      * @param mixed $sourceId
      */
-    public function setSourceId($sourceId)
-    {
+    public function setSourceId($sourceId) {
         $this->sourceId = $sourceId;
     } // идентификатор источника данных
     
     /**
      * @return mixed
      */
-    public function getFileLocation()
-    {
+    public function getFileLocation() {
     	return $this->fileLocation;
     }
     
     /**
      * @param mixed $fileLocation
      */
-    public function setFileLocation($fileLocation)
-    {
+    public function setFileLocation($fileLocation) {
     	$this->fileLocation = $fileLocation;
     }
 

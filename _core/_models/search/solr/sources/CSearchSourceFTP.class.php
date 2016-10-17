@@ -45,39 +45,37 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
     	if (!$link) {
     		throw new Exception("<font color='#FF0000'>Не удается установить соединение с FTP-сервером: 
     				<a href='ftp://".$ftpServer."/' target='_blank'>ftp://".$ftpServer."/</a></font>");
-    	} else {
-    		// осуществляем регистрацию на сервере
-    		$login = ftp_login($link, $ftpUser, $ftpPassword);
-    		if (!$login) {
-    			throw new Exception("<font color='#FF0000'>Не удается зарегистрироваться на FTP-сервере: 
+    	}
+    	// осуществляем регистрацию на сервере
+    	$login = ftp_login($link, $ftpUser, $ftpPassword);
+    	if (!$login) {
+    		throw new Exception("<font color='#FF0000'>Не удается зарегистрироваться на FTP-сервере:
     					<a href='ftp://".$ftpServer."/' target='_blank'>ftp://".$ftpServer."/</a>. Проверьте регистрационные данные.</font>");
-    		} else {
-    			// получаем все файлы указанного каталога
-    			$ftpFiles = $this->scanDirectory();
-    			if (!empty($ftpFiles)) {
-    				foreach ($ftpFiles as $serverFile) {
-    					$asciiArray = array("txt", "csv");
-    					$extension = end(explode(".", $serverFile));
-    					if (in_array($extension, $asciiArray)) {
-    						$mode = FTP_ASCII;
-    					} else {
-    						$mode = FTP_BINARY;
-    					}
-    					$fileName = CFileUtils::getFileName($serverFile);
-    					// попытка скачать $serverFile и сохранить в $localFile
-    					$localFile = CORE_CWD.CORE_DS."tmp".CORE_DS."files_for_indexing".CORE_DS.$fileName;
-    					if (ftp_get($link, $localFile, $serverFile, $mode)) {
-    						// сохраняем в названии файла путь до локальной папки и до папки ftp сервера
-    						$filesList[] = $localFile."||".$serverFile;
-    					} else {
-    						break;
-    					}
-    				}
+    	}
+    	// получаем все файлы указанного каталога
+    	$ftpFiles = $this->scanDirectory();
+    	if (!empty($ftpFiles)) {
+    		foreach ($ftpFiles as $serverFile) {
+    			$asciiArray = array("txt", "csv");
+    			$extension = end(explode(".", $serverFile));
+    			if (in_array($extension, $asciiArray)) {
+    				$mode = FTP_ASCII;
+    			} else {
+    				$mode = FTP_BINARY;
+    			}
+    			$fileName = CFileUtils::getFileName($serverFile);
+    			// попытка скачать $serverFile и сохранить в $localFile
+    			$localFile = CORE_CWD.CORE_DS."tmp".CORE_DS."files_for_indexing".CORE_DS.$fileName;
+    			if (ftp_get($link, $localFile, $serverFile, $mode)) {
+    				// сохраняем в названии файла путь до локальной папки и до папки ftp сервера
+    				$filesList[] = $localFile."||".$serverFile;
+    			} else {
+    				break;
     			}
     		}
-    		// закрываем соединение FTP
-    		ftp_close($link);
     	}
+    	// закрываем соединение FTP
+    	ftp_close($link);
     	$files = array();
     	$suffixes = explode(";", $this->suffix);
     	foreach ($filesList as $file) {
@@ -92,13 +90,11 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
     /**
      * @return mixed
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
-    public function getFile(CSearchFile $fileDescriptor)
-    {
+    public function getFile(CSearchFile $fileDescriptor) {
         return $fileDescriptor;
     }
     
