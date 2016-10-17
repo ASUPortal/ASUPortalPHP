@@ -6,6 +6,11 @@
  * Time: 18:32
  * To change this template use File | Settings | File Templates.
  */
+
+/**
+ * Class CAbstractDocumentWriter
+ * @deprecated
+ */
 abstract class CAbstractDocumentWriter {
     abstract public function loadTemplate($strFilename);
 }
