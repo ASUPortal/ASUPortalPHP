@@ -22,9 +22,9 @@
                 	<td>{$res["hl"]}</td>
                 	<td>
                 		<a href="{$res['filepath']}">
-	                        {$res['filename']}
+	                        {$res["filename"]}
 	                    </a>
-                		<img src="{CUtils::getFileMimeIcon($res['filename'])}">
+                		<img src="{$res['fileMimeIcon']}">
                 	</td>
                 	<td>{$res["location"]}</td>
                 </tr>

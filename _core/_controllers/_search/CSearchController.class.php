@@ -257,6 +257,7 @@ class CSearchController extends CBaseController{
     			$res["filepath"] = $file->getRealFilePath();
     			$res["location"] = $file->getFileLocation();
     			$res["filename"] = $fileName;
+    			$res["fileMimeIcon"] = CUtils::getFileMimeIcon($fileName);
     			$result[] = $res;
     		}
     	}
