@@ -10,8 +10,7 @@
 
 class CComponent {
 
-    private function init()
-    {
+    protected function init() {
 
     }
 

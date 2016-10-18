@@ -174,7 +174,8 @@ class CUtils {
             "/.*\.jpg$|.*\.jpeg$|.*\.tif$|.*\.bmp$|.*\.png$/i",
             "/.*\.ppt.?|.*\.pps/i",
             "/.*\.chm|.*\.hlp/i",
-            "/.*\.msi|.*\.msp/i"
+            "/.*\.msi|.*\.msp/i",
+            "/.*\.odt/i"
         );
 
         $replacements=array(
@@ -188,7 +189,8 @@ class CUtils {
             "img_file.gif",
             "ppt_file.gif",
             "help_file.gif",
-            "install_file.gif"
+            "install_file.gif",
+            "odt_file.gif"
         );
 
         $str=preg_replace($patterns, $replacements, $fileName);
@@ -905,21 +907,6 @@ class CUtils {
 	
 		return $s;
 	}
-    /**
-     * Размер файла по указанному пути
-     *
-     * @param $fileName
-     * @return string
-     */
-	public static function getFileSize($fileName) {
-		if ($fileName!='') {
-			if (file_exists(CORE_CWD.CORE_DS.$fileName)) {
-				return round(filesize(CORE_CWD.CORE_DS.$fileName)/1024/1024,3);
-			} else {
-				return 0;
-			}
-		}
-	}
 
     /**
      * Вернуть список классов, реализующих выбранный интерфейс
@@ -970,4 +957,15 @@ class CUtils {
     public static function getScriptName() {
     	return $_SERVER["SCRIPT_NAME"];
     }
+    
+    /**
+     * Путь к корневой директории сервера
+     *
+     * @static
+     * @return mixed
+     */
+    public static function getDocumentRoot() {
+    	return $_SERVER["DOCUMENT_ROOT"];
+    }
+    
 }

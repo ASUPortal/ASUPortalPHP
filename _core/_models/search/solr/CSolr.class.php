@@ -18,7 +18,7 @@ class CSolr {
             $params = array(
                 "hostname" => CSettingsManager::getSettingValue("solr_server"),
                 "port" => CSettingsManager::getSettingValue("solr_port"),
-                "path" => "solr/PortalASU"
+                "path" => CSettingsManager::getSettingValue("solr_path")
             );
             self::$_client = new SolrClient($params);
         }
@@ -121,6 +121,20 @@ class CSolr {
         $url = "http://".$options["hostname"].":".$options["port"]."/";
         $url .= $options["path"]."/update?softCommit=true";
         $responseTxt = file_get_contents($url);
+    }
+    /**
+     * url для отправки файлов
+     * 
+     * @param string $id
+     * @param string $filename
+     * @param string $filepath
+     * @return string
+     */
+    public static function commitFiles($id) {
+    	$options = self::getOptions();
+    	$url = "http://".$options["hostname"].":".$options["port"]."/";
+    	$url .= $options["path"]."/update/extract?commit=true&literal.id=".$id."&literal._is_file_=1";
+    	return $url;
     }
 
     /**

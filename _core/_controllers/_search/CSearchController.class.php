@@ -33,6 +33,11 @@ class CSearchController extends CBaseController{
                 "title" => "Настройки",
                 "link" => "index.php?action=settings",
                 "icon" => "places/network-workgroup.png"
+            ),
+            array(
+                "title" => "Поиск по файлам",
+                "icon" => "actions/document-print-preview.png",
+                "link" => "index.php?action=searchFiles"
             )
         ));
         $this->renderView("_search/index.tpl");
@@ -87,7 +92,12 @@ class CSearchController extends CBaseController{
                 "title" => "Обновить индекс",
                 "icon" => "actions/document-print-preview.png",
                 "link" => "index.php?action=updateIndex&redirect=index"
-            )
+            ),
+        	array(
+        		"title" => "Обновить файловый индекс",
+        		"icon" => "actions/document-print-preview.png",
+        		"link" => "index.php?action=updateIndexFiles"
+        	)
         ));
         $this->renderView("_search/settings.tpl");
     }
@@ -203,6 +213,63 @@ class CSearchController extends CBaseController{
         if (CRequest::getString("redirect") != "") {
             $this->redirect("?action=".CRequest::getString("redirect"));
         }
+    }
+    public function actionUpdateIndexFiles() {
+    	$this->setData("messages", CApp::getApp()->search->updateIndex());
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => "index.php?action=settings",
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
+    	$this->renderView("_search/updateIndexFiles.tpl");
+    }
+    public function actionSearchFiles() {
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => "index.php?action=index",
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
+    	$this->renderView("_search/searchFiles.tpl");
+    }
+    public function actionSearchByFiles() {
+    	$userQuery = CRequest::getString("stringSearch");
+    	$params = array(
+    		"_is_file_" => 1,
+    		"_highlight_" => "content"
+    	);
+    	$resultObj = CSolr::search($userQuery, $params);
+    	$result = array();
+    	foreach ($resultObj->getDocuments() as $doc) {
+    		$hl = $resultObj->getHighlighingByDocument($doc);
+    		try {
+    			$file = CApp::getApp()->search->getFile($doc->id);
+    		} catch (Exception $e) {
+    			echo "<font color='#FF0000'>".$e->getMessage()."</font><br>";
+    		}
+    		if (!empty($file)) {
+    			$fileName = CFileUtils::getFileName($file->getRealFilePath());
+    			$res = array();
+    			$res["hl"] = implode(", ", $hl);
+    			$res["filepath"] = $file->getRealFilePath();
+    			$res["location"] = $file->getFileLocation();
+    			$res["filename"] = $fileName;
+    			$res["fileMimeIcon"] = CUtils::getFileMimeIcon($fileName);
+    			$result[] = $res;
+    		}
+    	}
+    	$this->setData("result", $result);
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => "index.php?action=searchFiles",
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
+    	$this->renderView("_search/searchByFiles.tpl");
     }
     protected function onActionBeforeExecute() {
         if ($this->getAction() == "updateIndex") {

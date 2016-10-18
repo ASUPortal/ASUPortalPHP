@@ -103,6 +103,15 @@ class CLibraryFile extends CActiveModel{
     		$file->entry = $file->entry+1;
     		$file->save();
     	}
-        return WEB_ROOT."library/".$this->nameFolder."/".$this->nameFile;
+        return WEB_ROOT."library".CORE_DS.$this->nameFolder.CORE_DS.$this->nameFile;
+    }
+    
+    /**
+     * Размер файла
+     *
+     * @return string
+     */
+    public function getFileSize() {
+    	return CFileUtils::getFileSize("library".CORE_DS.$this->nameFolder.CORE_DS.$this->nameFile);
     }
 }
