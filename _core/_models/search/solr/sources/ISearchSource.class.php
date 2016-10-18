@@ -9,7 +9,18 @@
  */
 
 interface ISearchSource {
-    public function getFilesToIndex(); // получение файлов для индексирования
-    public function getId(); // идентификатор источника данных
-    public function getFile(CSearchFile $fileDescriptor); // получение файла по идентификатору файла в индексе Solr
+	/**
+	 * Получение файлов для индексирования
+	 */
+    public function getFilesToIndex();
+    /**
+     * Идентификатор источника данных
+     */
+    public function getId();
+    /**
+     * Получение файла по идентификатору файла в индексе Solr
+     * 
+     * @param CSearchFile $fileDescriptor
+     */
+    public function getFile(CSearchFile $fileDescriptor);
 }
