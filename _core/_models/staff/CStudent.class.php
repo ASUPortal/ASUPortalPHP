@@ -28,7 +28,6 @@ class CStudent extends CActiveModel {
     protected $_gender = null;
     protected $_group = null;
     protected $_diploms = null;
-    protected $_specialization = null;
     protected $_markInternship = null;
     protected $_markUndergraduate = null;
     protected $_complexExamMark = null;
@@ -54,7 +53,6 @@ class CStudent extends CActiveModel {
             "work_current" => "Текущее место работы",
             "work_proposed" => "Предполагаемое место работы",
             "primary_education_type_id" => "Оконченное образовательное учреждение",
-            "education_specialization_id" => "Специализация",
             "practice_internship_mark_id" => "Оценка за производственную практику",
             "practice_undergraduate_mark_id" => "Оценка за преддипломную практику",
             "exam_complex_mark_id" => "Оценка за междисциплинарный экзамен",
@@ -115,13 +113,6 @@ class CStudent extends CActiveModel {
                 "storageField" => "group_id",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getStudentGroup"
-            ),
-            "specialization" => array(
-                "relationPower" => RELATION_HAS_ONE,
-                "storageProperty" => "_specialization",
-                "storageField" => "education_specialization_id",
-                "managerClass" => "CTaxonomyManager",
-                "managerGetObject" => "getTerm"
             ),
             "practiceInternshipMark" => array(
                 "relationPower" => RELATION_HAS_ONE,
