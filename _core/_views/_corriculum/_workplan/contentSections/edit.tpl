@@ -11,6 +11,7 @@
         <li class="active"><a href="#loads" data-toggle="tab">Нагрузка</a></li>
         <li><a href="#controltypes" data-toggle="tab">Виды контроля</a></li>
         <li><a href="#fundmarktypes" data-toggle="tab">Фонд оценочных средств</a></li>
+        <li><a href="#calculationtasks" data-toggle="tab">Расчётные задания</a></li>
     </ul>
 
     <div class="tab-content">
@@ -22,6 +23,9 @@
         </div>
         <div class="tab-pane" id="fundmarktypes">
             {CHtml::activeComponent("workplanfundmarktypes.php?id={$object->getId()}", $object)}
+        </div>
+        <div class="tab-pane" id="calculationtasks">
+            {CHtml::activeComponent("workplancalculationtasks.php?id={$object->getId()}", $object)}
         </div>
     </div>
     

@@ -125,35 +125,3 @@
         {CHtml::error("comment", $plan)}
     </div>
 </div>
-
-<h3>1. Цели и задачи освоения дисциплины</h3>
-
-{include file="_corriculum/_workplan/goal/subform.index.tpl"}
-
-{include file="_corriculum/_workplan/task/subform.index.tpl"}
-
-<h3>2. Место дисциплины в структуре ООП ВПО</h3>
-
-<div class="control-group">
-    {CHtml::activeLabel("position", $plan)}
-    <div class="controls">
-        {CHtml::activeTextBox("position", $plan)}
-        {CHtml::error("position", $plan)}
-    </div>
-</div>
-
-<div class="control-group">
-    {CHtml::activeLabel("disciplinesBefore", $plan)}
-    <div class="controls">
-        {CHtml::activeLookup("disciplinesBefore", $plan, "class.CSearchCatalogCorriculumDisciplines", true, ["plan_id" => $plan->getId()])}
-        {CHtml::error("disciplinesBefore", $plan)}
-    </div>
-</div>
-
-<div class="control-group">
-    {CHtml::activeLabel("disciplinesAfter", $plan)}
-    <div class="controls">
-        {CHtml::activeLookup("disciplinesAfter", $plan, "class.CSearchCatalogCorriculumDisciplines", true, ["plan_id" => $plan->getId()])}
-        {CHtml::error("disciplinesAfter", $plan)}
-    </div>
-</div>

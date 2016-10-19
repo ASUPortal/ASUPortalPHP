@@ -15,9 +15,10 @@
 
         <ul class="nav nav-tabs">
             <li><a data-toggle="tab" href="#common">Общая информация</a></li>
+            <li><a data-toggle="tab" href="#place">Место дисциплины</a></li>
             <li><a data-toggle="tab" href="#competentions">Компетенции</a></li>
             <li class="active"><a data-toggle="tab" href="#content">Содержание</a></li>
-            <li><a data-toggle="tab" href="#eduTechnologies">Образовательные технологии</a></li>
+            <li><a data-toggle="tab" href="#selfWork">Самостоятельная работа</a></li>
             <li><a data-toggle="tab" href="#markTypes">Оценочные средства</a></li>
             <li><a data-toggle="tab" href="#library">Обеспечение</a></li>
             <li><a data-toggle="tab" href="#changes">Изменения</a></li>
@@ -28,14 +29,17 @@
             <div id="common" class="tab-pane">
                 {include file="_corriculum/_workplan/workplan/subform.common.tpl"}
             </div>
+            <div id="place" class="tab-pane">
+                {include file="_corriculum/_workplan/workplan/subform.place.tpl"}
+            </div>
             <div id="competentions" class="tab-pane">
                 {include file="_corriculum/_workplan/workplan/subform.competentions.tpl"}
             </div>
             <div id="content" class="tab-pane active">
                 {include file="_corriculum/_workplan/workplan/subform.content.tpl"}
             </div>
-            <div id="eduTechnologies" class="tab-pane">
-                {include file="_corriculum/_workplan/workplan/subform.educationTechnologies.tpl"}
+            <div id="selfWork" class="tab-pane">
+                {include file="_corriculum/_workplan/workplan/subform.selfWork.tpl"}
             </div>
             <div id="markTypes" class="tab-pane">
                 {include file="_corriculum/_workplan/workplan/subform.markTypes.tpl"}
