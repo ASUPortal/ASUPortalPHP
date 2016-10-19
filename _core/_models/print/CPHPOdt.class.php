@@ -6,6 +6,11 @@
  * Time: 18:34
  * To change this template use File | Settings | File Templates.
  */
+
+/**
+ * Class CPHPOdt
+ * @deprecated
+ */
 class CPHPOdt extends CAbstractDocumentWriter {
     public function loadTemplate($file) {
         if (file_exists($file)) {

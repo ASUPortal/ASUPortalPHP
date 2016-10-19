@@ -6,6 +6,13 @@
  * Time: 21:42
  * To change this template use File | Settings | File Templates.
  */
+
+/**
+ * Class CPrintForm
+ * @property String form_format
+ * @property String template_file
+ * @property String filename_generation_strategy;
+ */
 class CPrintForm extends CActiveModel{
     protected $_table = TABLE_PRINT_FORMS;
     protected $_formset = null;
