@@ -23,16 +23,20 @@ class CWorkPlanSection1 extends CAbstractPrintClassField {
 
     public function getFieldType()
     {
-        return self::FIELD_TEXT;
+        return self::FIELD_TABLE;
     }
 
     public function execute($contextObject)
     {
-		$result = "";
+		$result = array();
         foreach ($contextObject->getControlTypes()->getItems() as $control) {
         	if ($control->section->sectionIndex == $this->getNumberSection()) {
-        		$result = $control->section->name;
+        		$dataRow = array();
+        		$dataRow[0] = "Раздел ".$this->getNumberSection()." ".$control->section->name;
         	}
+        }
+        if (isset($dataRow)) {
+        	$result[] = $dataRow;
         }
         return $result;
     }

@@ -44,7 +44,6 @@ class CWorkPlanLabWorks extends CAbstractPrintClassField {
         	$total[2] = "Итого";
         	$total[3] = $sum;
         } else {
-        	$sum = 0;
         	foreach ($discipline->sections->getItems() as $section) {
         		foreach ($section->labors->getItems() as $labor) {
         			if ($labor->type->getAlias() == "labwork") {
@@ -68,7 +67,9 @@ class CWorkPlanLabWorks extends CAbstractPrintClassField {
         	$total[2] = "Итого";
         	$total[3] = $sum;
         }
-        $result[] = $total;
+        if ($sum != 0) {
+        	$result[] = $total;
+        }
         return $result;
     }
 }

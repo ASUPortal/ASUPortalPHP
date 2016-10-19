@@ -24,8 +24,15 @@ class CWorkPlanFundMarkTypes extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
 		$result = array();
-        if (!is_null($contextObject->fundMarkTypes)) {
-        	foreach ($contextObject->fundMarkTypes->getItems() as $row) {
+		$ar_sort = array();
+		if (!is_null($contextObject->fundMarkTypes)) {
+			$ar = $contextObject->fundMarkTypes->getItems();
+			foreach ($ar as $row) {
+				$ar_sort[] = $row->section->sectionIndex;
+			}
+			array_multisort($ar_sort, SORT_ASC, $ar);
+			 
+			foreach ($ar as $row) {
 				$dataRow = array();
 				$dataRow[0] = count($result) + 1;
 				$dataRow[1] = $row->section->name;
@@ -42,11 +49,11 @@ class CWorkPlanFundMarkTypes extends CAbstractPrintClassField {
 					}
 				}
 				$dataRow[2] = implode(", ", $codes);
-				$dataRow[3] = implode(", ", $levels);
+				$dataRow[3] = implode(", ", array_unique($levels));
 				$dataRow[4] = implode(", ", CBaseManager::getWorkPlanContentSection($sectionId)->controls->getItems());
 				$result[] = $dataRow;
-        	}
-        }
+			}
+		}
         return $result;
     }
 }
