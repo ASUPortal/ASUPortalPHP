@@ -26,7 +26,7 @@ class CWorkPlanLabWorks extends CAbstractPrintClassField {
         $result = array();
         $discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
         $sum = 0;
-        if (!empty($contextObject->getLabWorks()->getItems())) {
+        if (!$contextObject->getLabWorks()->isEmpty()) {
         	foreach ($contextObject->getLabWorks()->getItems() as $termData) {
         		foreach ($termData as $row) {
         			$dataRow = array();

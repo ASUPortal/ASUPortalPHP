@@ -26,7 +26,7 @@ class CWorkPlanPractices extends CAbstractPrintClassField {
         $result = array();
         $discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
         $sum = 0;
-        if (!empty($contextObject->getLabWorks()->getItems())) {
+        if (!$contextObject->getLabWorks()->isEmpty()) {
         	foreach ($contextObject->getPractices()->getItems() as $row) {
         		$dataRow = array();
         		$dataRow[0] = count($result) + 1;
