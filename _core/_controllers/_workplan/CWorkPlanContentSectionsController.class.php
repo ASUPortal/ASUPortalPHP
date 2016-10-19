@@ -66,6 +66,8 @@ class CWorkPlanContentSectionsController extends CBaseController{
     public function actionEdit() {
         $object = CBaseManager::getWorkPlanContentSection(CRequest::getInt("id"));
         $this->setData("object", $object);
+        $this->addCSSInclude("_modules/_redactor/redactor.css");
+        $this->addJSInclude("_modules/_redactor/redactor.min.js");
         /**
          * Генерация меню
          */
