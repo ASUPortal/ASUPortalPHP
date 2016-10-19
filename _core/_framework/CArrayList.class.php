@@ -52,6 +52,16 @@ class CArrayList implements Iterator{
     public function getItems() {
         return $this->_items;
     }
+    /**
+     * @return bool
+     */
+    public function isEmpty() {
+        if (empty($this->_items)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public function getItem($key) {
         if ($this->hasElement($key)) {
