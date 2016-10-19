@@ -12,7 +12,10 @@
  * @property CWorkPlan plan
  * @property CWorkPlanContentCategory category
  * @property CArrayList loads
+ * @property CArrayList loadsDisplay
  * @property CArrayList controlTypes
+ * @property CArrayList fundMarkTypes
+ * @property CArrayList calculationTasks
  * @property CArrayList recommendedLiterature
  */
 class CWorkPlanContentSection extends CActiveModel{
@@ -65,6 +68,13 @@ class CWorkPlanContentSection extends CActiveModel{
         		"storageCondition" => "section_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
         		"targetClass" => "CWorkPlanFundMarkType",
                 "managerOrder" => "`ordering` asc"
+        	),
+        	"calculationTasks" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_CALCULATION_TASKS,
+        		"storageCondition" => "section_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
+        		"targetClass" => "CWorkPlanCalculationTask",
+        		"managerOrder" => "`ordering` asc"
         	),
             "recommendedLiterature" => array(
             	"relationPower" => RELATION_MANY_TO_MANY,

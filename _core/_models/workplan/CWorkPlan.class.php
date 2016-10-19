@@ -40,11 +40,35 @@
  * @property CArrayList goals
  * @property CArrayList tasks
  * @property CArrayList competentions
+ * @property CArrayList competentionsFormed
+ * @property CArrayList disciplinesBefore
+ * @property CArrayList disciplinesAfter
  * @property CArrayList terms
+ * @property CArrayList projects
  * @property CArrayList projectThemes
+ * @property CArrayList rgrThemes
  * @property CArrayList authors
  * @property CArrayList categories
  * @property CArrayList selfEducations
+ * @property CArrayList fundMarkTypes
+ * @property CArrayList calculationTasks
+ * @property CArrayList BRS
+ * @property CArrayList markTypes
+ * @property CArrayList literature
+ * @property CArrayList baseLiterature
+ * @property CArrayList additionalLiterature
+ * @property CArrayList internetResources
+ * @property CArrayList software
+ * @property CArrayList additionalSupply
+ * @property CArrayList finalControls
+ * @property CArrayList questions
+ * @property CArrayList examQuestions
+ * @property CArrayList creditQuestions
+ * @property CArrayList materialsOfEvaluation
+ * @property CArrayList criteria
+ * @property CArrayList criteriaExamOfEvaluation
+ * @property CArrayList criteriaCreditOfEvaluation
+ * @property CArrayList criteriaMaterialsOfEvaluation
  * @property CArrayList protocolsDep
  * @property CArrayList protocolsNMS
  */
@@ -205,6 +229,13 @@ class CWorkPlan extends CActiveModel {
         		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
         		"targetClass" => "CWorkPlanFundMarkType",
                 "managerOrder" => "`ordering` asc"
+        	),
+        	"calculationTasks" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_CALCULATION_TASKS,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
+        		"targetClass" => "CWorkPlanCalculationTask",
+        		"managerOrder" => "`ordering` asc"
         	),
         	"BRS" => array(
         		"relationPower" => RELATION_HAS_MANY,
