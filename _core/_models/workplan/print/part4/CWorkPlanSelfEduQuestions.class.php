@@ -25,47 +25,45 @@ class CWorkPlanSelfEduQuestions extends CAbstractPrintClassField {
     {
         $result = array();
         $dataRow = array();
-        if (!is_null($contextObject->categories)) {
-        	foreach ($contextObject->categories->getItems() as $category) {
-        		if (!is_null($category->sections)) {
-        			foreach ($category->sections->getItems() as $section) {
-        				$questionExist = false;
-        				foreach ($section->loadsDisplay->getItems() as $load) {
-        					foreach ($load->selfEducationsDisplay->getItems() as $selfEdu) {
-        						$questionExist = true;
-        					}
+        foreach ($contextObject->categories->getItems() as $category) {
+        	if (!is_null($category->sections)) {
+        		foreach ($category->sections->getItems() as $section) {
+        			$questionExist = false;
+        			foreach ($section->loadsDisplay->getItems() as $load) {
+        				foreach ($load->selfEducationsDisplay->getItems() as $selfEdu) {
+        					$questionExist = true;
         				}
-        				if ($questionExist) {
-        					$dataRow[] = "Тема ".$section->sectionIndex.". ".$section->name;
-        					$dataRow[] = "Вопросы для самостоятельного изучения:";
+        			}
+        			if ($questionExist) {
+        				$dataRow[] = "Тема ".$section->sectionIndex.". ".$section->name;
+        				$dataRow[] = "Вопросы для самостоятельного изучения:";
+        			}
+        			$i = 1;
+        			foreach ($section->loadsDisplay->getItems() as $load) {
+        				foreach ($load->selfEducationsDisplay->getItems() as $selfEdu) {
+        					$number = $i;
+        					$dataRow[] = $number.". ".$selfEdu->question_title;
+        					$i++;
         				}
-        				$i = 1;
-        				foreach ($section->loadsDisplay->getItems() as $load) {
-        					foreach ($load->selfEducationsDisplay->getItems() as $selfEdu) {
-        						$number = $i;
-        						$dataRow[] = $number.". ".$selfEdu->question_title;
-        						$i++;
-        					}
-        				}
-        				$taskExist = false;
-        				if (!empty($section->calculationTasks->getItems())) {
-        					$taskExist = true;
-        				}
-        				if ($taskExist and !$questionExist) {
-        					$dataRow[] = "Тема ".$section->sectionIndex.". ".$section->name;
-        				}
-        				if ($taskExist) {
-        					$dataRow[] = "Расчётные задания (задачи и пр.):";
-        				}
-        				$n = 1;
-        				foreach ($section->calculationTasks->getItems() as $calculationTask) {
-        					$number = $n;
-        					$dataRow[] = $number.". ".$calculationTask->task;
-        					$n++;
-        				}
-        				if ($questionExist or $taskExist) {
-        					$dataRow[] = "";
-        				}
+        			}
+        			$taskExist = false;
+        			if (!$section->calculationTasks->isEmpty()) {
+        				$taskExist = true;
+        			}
+        			if ($taskExist and !$questionExist) {
+        				$dataRow[] = "Тема ".$section->sectionIndex.". ".$section->name;
+        			}
+        			if ($taskExist) {
+        				$dataRow[] = "Расчётные задания (задачи и пр.):";
+        			}
+        			$n = 1;
+        			foreach ($section->calculationTasks->getItems() as $calculationTask) {
+        				$number = $n;
+        				$dataRow[] = $number.". ".$calculationTask->task;
+        				$n++;
+        			}
+        			if ($questionExist or $taskExist) {
+        				$dataRow[] = "";
         			}
         		}
         	}

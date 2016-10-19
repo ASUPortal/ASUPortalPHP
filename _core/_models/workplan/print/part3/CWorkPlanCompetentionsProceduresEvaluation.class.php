@@ -46,7 +46,7 @@ class CWorkPlanCompetentionsProceduresEvaluation extends CAbstractPrintClassFiel
         				$knowledgesTask = array();
         				$knowledgesProcedure = array();
         				$knowledgesCriteria = array();
-        				if (!empty($item->knowledges->getItems())) {
+        				if (!$item->knowledges->isEmpty()) {
         					foreach ($item->knowledges->getItems() as $o) {
         						if (!is_null($o->knowledge)) {
         							$knowledges[] = $o->knowledge->getValue();
@@ -71,7 +71,7 @@ class CWorkPlanCompetentionsProceduresEvaluation extends CAbstractPrintClassFiel
         				$skillsTask = array();
         				$skillsProcedure = array();
         				$skillsCriteria = array();
-        				if (!empty($item->skills->getItems())) {
+        				if (!$item->skills->isEmpty()) {
         					$dataRow2[0] = $competention;
         					foreach ($item->skills->getItems() as $o) {
         						if (!is_null($o->skill)) {
@@ -92,7 +92,7 @@ class CWorkPlanCompetentionsProceduresEvaluation extends CAbstractPrintClassFiel
         				$experiencesTask = array();
         				$experiencesProcedure = array();
         				$experiencesCriteria = array();
-        				if (!empty($item->experiences->getItems())) {
+        				if (!$item->experiences->isEmpty()) {
         					$dataRow3[0] = $competention;
         					foreach ($item->experiences->getItems() as $o) {
         						if (!is_null($o->experience)) {

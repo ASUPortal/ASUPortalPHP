@@ -4,6 +4,9 @@
  * @property int plan_id
  * @property int section_id
  * 
+ * Расчётные задания по разделу дисциплины для пункта 
+ * 4. Учебно-методическое обеспечение самостоятельной работы студентов
+ * 
  */
 class CWorkPlanCalculationTask extends CActiveModel{
     protected $_table = TABLE_WORK_PLAN_CALCULATION_TASKS;
