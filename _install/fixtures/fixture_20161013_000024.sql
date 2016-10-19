@@ -1,1 +1,0 @@
-ALTER TABLE `print_form` ADD `form_odt` INT NOT NULL ;

@@ -9,7 +9,6 @@
 class CPrintManager {
     private static $_cacheFormset = null;
     private static $_cacheFormsetInit = false;
-    private static $_cacheFormsInit = false;
     private static $_cacheForm = null;
     private static $_cacheField = null;
     private static $_cacheFieldInit = false;
@@ -87,21 +86,6 @@ class CPrintManager {
             }
         }
         return self::getCacheForm()->getItem($key);
-    }
-    
-    /**
-     * @return CArrayList|null
-     */
-    public static function getAllForms() {
-    	if (!self::$_cacheFormsInit) {
-    		self::$_cacheFormsInit = true;
-    		foreach (CActiveRecordProvider::getAllFromTable(TABLE_PRINT_FORMS)->getItems() as $item) {
-    			$form = new CPrintForm($item);
-    			self::getCacheForm()->add($form->getId(), $form);
-    			self::getCacheForm()->add($form->alias, $form);
-    		}
-    	}
-    	return self::getCacheForm();
     }
 
     /**

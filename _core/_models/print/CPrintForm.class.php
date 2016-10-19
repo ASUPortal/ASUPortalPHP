@@ -38,7 +38,6 @@ class CPrintForm extends CActiveModel{
             "alias" => "Короткое название",
             "description" => "Описание",
             "formset_id" => "Набор форм",
-            "form_odt" => "На основе какого шаблона odt сделан html",
             "form_format" => "Формат",
             "template_file" => "Файл шаблона",
             "isActive" => "Активен",

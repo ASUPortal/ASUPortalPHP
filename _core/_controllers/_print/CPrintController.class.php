@@ -49,136 +49,8 @@ class CPrintController extends CFlowController {
         } elseif ($form->form_format == "odt") {
             $writer = new CPHPOdt();
         } elseif ($form->form_format == "html") {
-        	$templateFile = PRINT_TEMPLATES_DIR.$form->template_file;
-        	/**
-        	 * Открываем файл шаблона для получения существующего содержимого
-        	 */
-        	$current = file_get_contents($templateFile);
-        	/**
-        	 * Пишем содержимое в новый файл
-        	 */
-        	$file = PRINT_DOCUMENTS_DIR.$this->getFileName($object, $form);
-        	file_put_contents($file, $current);
-        	/**
-        	 * Получаем список описателей из шаблона odt,
-        	 * на основе которого сделан html, 
-        	 * и заменяем в файле html найденные описатели
-        	 */
-        	if ($form->form_odt != 0) {
-        		$formOdt = CPrintManager::getForm($form->form_odt);
-        		if (file_exists(PRINT_TEMPLATES_DIR.$formOdt->template_file)) {
-        			$writer = new CPHPOdt();
-        			$wordTemplate = $writer->loadTemplate(PRINT_TEMPLATES_DIR.$formOdt->template_file);
-        			$fieldsFromTemplate = $wordTemplate->getFields();
-        			foreach ($fieldsFromTemplate as $fieldName=>$descriptors) {
-        				/**
-        				 * Обрабатываем описатели из базы данных
-        				 */
-        				if (!is_null($form->formset->getFieldByName($fieldName))) {
-        					$field = $form->formset->getFieldByName($fieldName);
-        					$fieldAlias = $field->alias;
-        				}
-        				/**
-        				 * Обрабатываем описатели-классы
-        				 */
-        				elseif (mb_strpos($fieldName, ".class") !== false) {
-        					$classFieldName = CUtils::strLeft($fieldName, ".class");
-        					$classField = new $classFieldName();
-        					$field = new CPrintClassFieldToFieldAdapter($classField, $object);
-        					$fieldAlias = $fieldName;
-        				}
-        				/**
-        				 * 1. Вывод текста (по умолчанию)
-        				 * 2. Вывод таблицы
-        				 */
-        				if ($field->type_id == "1" || $field->type_id == "0") {
-        					/**
-        					 * Открываем файл для получения содержимого
-        					 */
-        					$current = file_get_contents($file);
-        					$string = $field->evaluateValue($object);
-        					/**
-        					 * Заменяем найденные названия описателей в файле на результат вычисления описателя
-        					 */
-        					$bodytag = str_replace($fieldAlias, $string, $current);
-        					/**
-        					 * Пишем изменения в файл
-        					*/
-        					file_put_contents($file, $bodytag);
-        					
-        				} elseif ($field->type_id == "2") {
-        					/**
-        					 * Открываем файл для получения содержимого
-        					 */
-        					$current = file_get_contents($file);
-        					$arr = $field->evaluateValue($object);
-        					$string = "";
-        					foreach ($arr as $items) {
-        						for ($i=0; $i<=count($arr[0])-1; $i++) {
-        							if (mb_strpos($fieldAlias, "CWorkPlanSection") !== false and mb_strpos($fieldAlias, "StudyTypes") === false) {
-        								$string .= '<td colspan="5" align="left" style="border: 1px solid #000000; padding: 0.1cm">
-							    					<p class="western" align="left" style="page-break-before: auto">';
-        							} else {
-        								$string .= '<td align="left" style="border: 1px solid #000000; padding: 0.1cm">
-							    					<p class="western" align="left" style="page-break-before: auto">';
-        							}
-        							$string .= $items[$i].'</p></td>';
-        						}
-        						$string .= '</tr>';
-        					}
-        					/**
-        					 * Заменяем найденные названия описателей в файле на результат вычисления описателя
-        					 */
-        					$bodytag = str_replace($fieldAlias, $string, $current);
-        					/**
-        					 * Пишем изменения в файл
-        					*/
-        					file_put_contents($file, $bodytag);
-        				}
-        			}
-        		}
-        	} else {
-        		/**
-        		 * Отображаем заранее подготовленный шаблон Smarty
-        		 */
-        		$this->setData("plan", $object);
-        		$this->renderView($file);
-        		exit;
-        	}
-        	/**
-        	 * Подключаем PHP Simple HTML DOM Parser
-        	 */
-        	require_once(CORE_CWD."/_core/_external/smarty/vendor/simple_html_dom.php");
-        	$html = file_get_html($file);
-        	/**
-        	 * Находим все теги с изображениями на странице
-        	 */
-        	if(count($html->find('img'))){
-        		foreach($html->find('img') as $img){
-        			/**
-        			 * Заменяем теги с изображениями на 64-разрядный код
-        			 */
-        			$img->src = CUtils::getBase64encodedImage($img->src);
-        		}
-        	}
-        	/**
-        	 * Пишем изменения в файл
-        	 */
-        	file_put_contents($file, $html->save());
-        	$html->clear();
-        	unset($html);
-        	/**
-        	 * Отдаем документ пользователю
-        	 * Не отдаем, если у нас тут групповая печать
-        	 */
-        	if (CRequest::getInt("noredirect") == "1") {
-        		echo json_encode(array(
-        			"filename" => PRINT_DOCUMENTS_DIR.$this->getFileName($object, $form),
-        			"url" => PRINT_DOCUMENTS_DIR.$this->getFileName($object, $form)
-        		));
-        	} else {
-        		$this->redirect(PRINT_DOCUMENTS_URL.$this->getFileName($object, $form));
-        	}
+        	$this->setData("plan", $object);
+        	$this->renderView(PRINT_TEMPLATES_DIR.$form->template_file);
             /**
              * Для html шаблонов останавливаем действие скрипта
              */
@@ -288,46 +160,43 @@ class CPrintController extends CFlowController {
         /**
          * Сохраняем документ
          */
-        $wordTemplate->save(PRINT_DOCUMENTS_DIR.$this->getFileName($object, $form));
+        if ($managerClass == "CWorkPlanManager") {
+        	$plan = CWorkPlanManager::getWorkplan($objectId);
+        	$discipline = "";
+        	if (!is_null($plan->discipline)) {
+        		//$discipline = CUtils::toTranslit($plan->discipline->getValue());
+        		$discipline = $plan->discipline->getValue();
+        	}
+        	$authors = array();
+        	if (!is_null($plan->authors)) {
+        		foreach ($plan->authors->getItems() as $author) {
+        			$authors[] = $author->getNameShort();
+        		}
+        	}
+        	//$author = CUtils::toTranslit(implode(", ", $authors));
+        	$author = implode(", ", $authors);
+        	$filename = $author." - ".$discipline.".".$form->form_format;
+        } else {
+        	$filename = date("dmY_Hns")."_".$form->template_file;
+        	$i = 0;
+        	while (file_exists(PRINT_DOCUMENTS_DIR.$filename)) {
+        		$filename = date("dmY_Hns")."_".$i."_".$form->template_file;
+        		$i++;
+        	}
+        }
+        $wordTemplate->save(PRINT_DOCUMENTS_DIR.$filename);
         /**
          * Отдаем документ пользователю
          * Не отдаем, если у нас тут групповая печать
          */
         if (CRequest::getInt("noredirect") == "1") {
             echo json_encode(array(
-                "filename" => PRINT_DOCUMENTS_DIR.$this->getFileName($object, $form),
-                "url" => PRINT_DOCUMENTS_DIR.$this->getFileName($object, $form)
+                "filename" => PRINT_DOCUMENTS_DIR.$filename,
+                "url" => PRINT_DOCUMENTS_DIR.$filename
             ));
         } else {
-            $this->redirect(PRINT_DOCUMENTS_URL.$this->getFileName($object, $form));
+            $this->redirect(PRINT_DOCUMENTS_URL.$filename);
         }
-    }
-    private function getFileName($object, $form) {
-    	if (get_class($object) == "CWorkPlan") {
-    		$plan = $object;
-    		$discipline = "";
-    		if (!is_null($plan->discipline)) {
-    			//$discipline = CUtils::toTranslit($plan->discipline->getValue());
-    			$discipline = $plan->discipline->getValue();
-    		}
-    		$authors = array();
-    		if (!is_null($plan->authors)) {
-    			foreach ($plan->authors->getItems() as $author) {
-    				$authors[] = $author->getNameShort();
-    			}
-    		}
-    		//$author = CUtils::toTranslit(implode(", ", $authors));
-    		$author = implode(", ", $authors);
-    		$filename = $author." - ".$discipline.".odt";
-    	} else {
-    		$filename = date("dmY_Hns")."_".$form->template_file;
-    		$i = 0;
-    		while (file_exists(PRINT_DOCUMENTS_DIR.$filename)) {
-    			$filename = date("dmY_Hns")."_".$i."_".$form->template_file;
-    			$i++;
-    		}
-    	}
-    	return $filename;
     }
     private function processNode(DOMNode $node, CPrintField $field, $object, CPrintForm $form) {
         $doc = $node->ownerDocument;
