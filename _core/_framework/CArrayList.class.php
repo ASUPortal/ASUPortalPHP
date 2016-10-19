@@ -52,6 +52,14 @@ class CArrayList implements Iterator{
     public function getItems() {
         return $this->_items;
     }
+    /**
+     * Проверка массива на пустоту
+     * 
+     * @return bool
+     */
+    public function isEmpty() {
+        return empty($this->getItems());
+    }
 
     public function getItem($key) {
         if ($this->hasElement($key)) {

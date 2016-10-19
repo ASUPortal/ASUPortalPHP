@@ -372,6 +372,7 @@
     define("TABLE_WORK_PLAN_RECOMMENDED_LITERATURE", "pl_corriculum_workplan_recommended_literature");
     define("TABLE_WORK_PLAN_PROTOCOLS_DEP", "pl_corriculum_workplan_protocols_dep");
     define("TABLE_WORK_PLAN_PROTOCOLS_NMS", "pl_corriculum_workplan_protocols_nms");
+    define("TABLE_WORK_PLAN_CALCULATION_TASKS", "pl_corriculum_workplan_calculation_tasks");
     /**
      * Константы пагинатора
      */

@@ -26,7 +26,7 @@ class CWorkPlanLabWorks extends CAbstractPrintClassField {
         $result = array();
         $discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
         $sum = 0;
-        if (!empty($contextObject->getLabWorks()->getItems())) {
+        if (!$contextObject->getLabWorks()->isEmpty()) {
         	foreach ($contextObject->getLabWorks()->getItems() as $termData) {
         		foreach ($termData as $row) {
         			$dataRow = array();
@@ -44,7 +44,6 @@ class CWorkPlanLabWorks extends CAbstractPrintClassField {
         	$total[2] = "Итого";
         	$total[3] = $sum;
         } else {
-        	$sum = 0;
         	foreach ($discipline->sections->getItems() as $section) {
         		foreach ($section->labors->getItems() as $labor) {
         			if ($labor->type->getAlias() == "labwork") {
@@ -68,7 +67,9 @@ class CWorkPlanLabWorks extends CAbstractPrintClassField {
         	$total[2] = "Итого";
         	$total[3] = $sum;
         }
-        $result[] = $total;
+        if ($sum != 0) {
+        	$result[] = $total;
+        }
         return $result;
     }
 }

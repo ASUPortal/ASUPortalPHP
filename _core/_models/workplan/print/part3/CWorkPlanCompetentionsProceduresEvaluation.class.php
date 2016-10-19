@@ -46,7 +46,7 @@ class CWorkPlanCompetentionsProceduresEvaluation extends CAbstractPrintClassFiel
         				$knowledgesTask = array();
         				$knowledgesProcedure = array();
         				$knowledgesCriteria = array();
-        				if (!is_null($item->knowledges)) {
+        				if (!$item->knowledges->isEmpty()) {
         					foreach ($item->knowledges->getItems() as $o) {
         						if (!is_null($o->knowledge)) {
         							$knowledges[] = $o->knowledge->getValue();
@@ -59,16 +59,20 @@ class CWorkPlanCompetentionsProceduresEvaluation extends CAbstractPrintClassFiel
         					$dataRow1[2] = implode("; ", $knowledgesTask);
         					$dataRow1[3] = implode("; ", $knowledgesProcedure);
         					$dataRow1[4] = implode("; ", $knowledgesCriteria);
+        				} else {
+        					$dataRow1[1] = "";
+        					$dataRow1[2] = "";
+        					$dataRow1[3] = "";
+        					$dataRow1[4] = "";
         				}
         				$result[] = $dataRow1;
-        			
         				$dataRow2 = array();
-        				$dataRow2[0] = $competention;
         				$skills = array();
         				$skillsTask = array();
         				$skillsProcedure = array();
         				$skillsCriteria = array();
-        				if (!is_null($item->skills)) {
+        				if (!$item->skills->isEmpty()) {
+        					$dataRow2[0] = $competention;
         					foreach ($item->skills->getItems() as $o) {
         						if (!is_null($o->skill)) {
         							$skills[] = $o->skill->getValue();
@@ -81,16 +85,15 @@ class CWorkPlanCompetentionsProceduresEvaluation extends CAbstractPrintClassFiel
         					$dataRow2[2] = implode("; ", $skillsTask);
         					$dataRow2[3] = implode("; ", $skillsProcedure);
         					$dataRow2[4] = implode("; ", $skillsCriteria);
+        					$result[] = $dataRow2;
         				}
-        				$result[] = $dataRow2;
-        			
         				$dataRow3 = array();
-        				$dataRow3[0] = $competention;
         				$experiences = array();
         				$experiencesTask = array();
         				$experiencesProcedure = array();
         				$experiencesCriteria = array();
-        				if (!is_null($item->experiences)) {
+        				if (!$item->experiences->isEmpty()) {
+        					$dataRow3[0] = $competention;
         					foreach ($item->experiences->getItems() as $o) {
         						if (!is_null($o->experience)) {
         							$experiences[] = $o->experience->getValue();
@@ -103,8 +106,8 @@ class CWorkPlanCompetentionsProceduresEvaluation extends CAbstractPrintClassFiel
         					$dataRow3[2] = implode("; ", $experiencesTask);
         					$dataRow3[3] = implode("; ", $experiencesProcedure);
         					$dataRow3[4] = implode("; ", $experiencesCriteria);
+        					$result[] = $dataRow3;
         				}
-        				$result[] = $dataRow3;
         			}
         		}
         	}

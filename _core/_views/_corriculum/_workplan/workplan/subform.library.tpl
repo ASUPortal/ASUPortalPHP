@@ -1,29 +1,15 @@
-<h3>7.1. Основная литература</h3>
+<h3>6. Учебно-методическое и информационное обеспечение дисциплины (модуля)</h3>
 
+<h4>6.1. Основная литература</h4>
 {CHtml::activeComponent("workplanliterature.php?type=1&plan_id={$plan->getId()}", $plan)}
 
-<h3>7.2. Дополнительная литература</h3>
-
+<h4>6.2. Дополнительная литература</h4>
 {CHtml::activeComponent("workplanliterature.php?type=2&plan_id={$plan->getId()}", $plan)}
 
-<h3>7.3. Интернет-ресурсы</h3>
-
+<h4>6.3. Интернет-ресурсы</h4>
 {CHtml::activeComponent("workplanliterature.php?type=3&plan_id={$plan->getId()}", $plan)}
 
-<h3>7.4. Программное обеспечение</h3>
-
-{CHtml::activeComponent("workplansoftware.php?&plan_id={$plan->getId()}", $plan)}
-
-<h3>8. Методические указания по освоению дисциплины</h3>
-<div class="control-group">
-    {CHtml::activeLabel("method_instructs", $plan)}
-    <div class="controls">
-        {CHtml::activeTextBox("method_instructs", $plan, "method_instructs")}
-        {CHtml::error("method_instructs", $plan)}
-    </div>
-</div>
-
-<h4>8.1 Методические указания к практическим занятиям</h4>
+<h4>6.4. Методические указания к практическим занятиям</h4>
 <div class="control-group">
     {CHtml::activeLabel("method_practic_instructs", $plan)}
     <div class="controls">
@@ -32,7 +18,7 @@
     </div>
 </div>
 
-<h4>8.2 Методические указания к лабораторным занятиям</h4>
+<h4>6.5. Методические указания к лабораторным занятиям</h4>
 <div class="control-group">
     {CHtml::activeLabel("method_labor_instructs", $plan)}
     <div class="controls">
@@ -41,12 +27,45 @@
     </div>
 </div>
 
-<h4>8.3 Методические указания к курсовому проектированию и другим видам самостоятельной работы</h4>
+<h4>6.6. Методические указания к курсовому проектированию и другим видам самостоятельной работы</h4>
 <div class="control-group">
     {CHtml::activeLabel("method_project_instructs", $plan)}
     <div class="controls">
         {CHtml::activeTextBox("method_project_instructs", $plan, "method_project_instructs")}
         {CHtml::error("method_project_instructs", $plan)}
+    </div>
+</div>
+
+<h3>7. Образовательные технологии</h3>
+
+<div class="control-group">
+    {CHtml::activeLabel("education_technologies", $plan)}
+    <div class="controls">
+        {CHtml::activeTextBox("education_technologies", $plan, "education_technologies")}
+        {CHtml::error("education_technologies", $plan)}
+    </div>
+</div>
+
+<h4>Интерактивные образовательные технологии</h4>
+{CHtml::activeComponent("workplancontent.php?plan_id={$plan->getId()}", $plan, ["defaultAction" => "technologies"])}
+
+<h4>7.1. Программное обеспечение</h4>
+{CHtml::activeComponent("workplansoftware.php?&plan_id={$plan->getId()}", $plan)}
+
+<script>
+    jQuery(document).ready(function(){
+        jQuery("#education_technologies").redactor({
+            imageUpload: '{$web_root}_modules/_redactor/image_upload.php'
+        });
+    });
+</script>
+
+<h3>8. Методические указания по освоению дисциплины</h3>
+<div class="control-group">
+    {CHtml::activeLabel("method_instructs", $plan)}
+    <div class="controls">
+        {CHtml::activeTextBox("method_instructs", $plan, "method_instructs")}
+        {CHtml::error("method_instructs", $plan)}
     </div>
 </div>
 

@@ -25,7 +25,7 @@ class CWorkPlanTerms extends CAbstractPrintClassField {
     {
         $result = array();
         $discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
-        if (!empty($contextObject->terms->getItems())) {
+        if (!$contextObject->terms->isEmpty()) {
         	$arr = array("");
         	foreach ($contextObject->terms->getItems() as $term) {
         		if (!is_null($term->corriculum_discipline_section)) {
@@ -34,7 +34,7 @@ class CWorkPlanTerms extends CAbstractPrintClassField {
         	}
         	$result[] = $arr;
         } else {
-        	if (!empty($discipline->sections->getItems())) {
+        	if (!$discipline->sections->isEmpty()) {
         		$arr = array("");
         		foreach ($discipline->sections->getItems() as $section) {
         			$arr[] = $section->title." семестр";
