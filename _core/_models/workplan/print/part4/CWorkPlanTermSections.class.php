@@ -85,6 +85,12 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         	$selfeduSum = 0;
         	$totalSum = 0;
         	foreach ($termSectionsData->getItems() as $termId=>$termData) {
+        		$lectureSum = 0;
+        		$practiceSum = 0;
+        		$labworkSum = 0;
+        		$ksrSum = 0;
+        		$selfeduSum = 0;
+        		$totalSum = 0;
         		foreach ($termData as $row) {
         			$queryTech = new CQuery();
         			$queryTech->select("tech.technology_id")
@@ -145,6 +151,18 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         			}
         			$totalSum += $row[CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_TOTAL];
         		}
+        		$total = array();
+        		$total[0] = "";
+        		$total[1] = "Итого за ".CBaseManager::getWorkPlanTerm($termId)->corriculum_discipline_section->title." семестр";
+        		$total[2] = $lectureSum;
+        		$total[3] = $practiceSum;
+        		$total[4] = $labworkSum;
+        		$total[5] = $ksrSum;
+        		$total[6] = $selfeduSum;
+        		$total[7] = $totalSum;
+        		$total[8] = "";
+        		$total[9] = "";
+        		$result[] = $total;
         	}
         	$total = array();
         	$total[0] = "";
