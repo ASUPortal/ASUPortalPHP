@@ -49,15 +49,16 @@ class CWorkPlanTotalHours extends CAbstractPrintClassField {
         	foreach ($objects->getItems() as $key=>$value) {
         		$result += $value["t_sum"];
         	}
-        	if (!is_null($contextObject->finalControls)) {
-        		foreach ($contextObject->finalControls->getItems() as $control) {
-        			$item = $control->controlType;
+        	$items = array();
+        	if (!is_null($plan->finalControls)) {
+        		foreach ($plan->finalControls->getItems() as $control) {
+        			$items[] = $control->controlType;
         		}
         	}
-        	if (isset($item) && $item == "Зачет") {
-        		$result += 9;
-        	} elseif(isset($item)) {
-        		$result += 36;
+        	if (in_array("Экзамен", $items)) {
+        		$result += CTaxonomyManager::getTaxonomy("corriculum_final_control_hours")->getTerm("examenHours")->getValue();
+        	} elseif (in_array("Зачет", $items)) {
+        		$result += CTaxonomyManager::getTaxonomy("corriculum_final_control_hours")->getTerm("creditHours")->getValue();
         	}
         } else {
         	$result = $discipline->getLaborValue();

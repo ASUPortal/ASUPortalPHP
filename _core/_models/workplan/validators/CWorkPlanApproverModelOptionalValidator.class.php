@@ -48,30 +48,8 @@ class CWorkPlanApproverModelOptionalValidator extends IModelValidatorOptional {
 		if (count($termIds) > 0) {
 			$terms[] = "sum(if(l.term_id in (".join(", ", $termIds)."), l.value, 0)) as t_sum";
 		}
-		$query = new CQuery();
-		$query->select(join(", ", $terms))
-			->from(TABLE_WORK_PLAN_CONTENT_LOADS." as l")
-			->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
-			->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
-			->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
-			->condition("category.plan_id = ".$this->model->getId()." and l._deleted = 0 and category._deleted = 0");
-		$objects = $query->execute();
-		$result = 0;
-		foreach ($objects->getItems() as $key=>$value) {
-			$result += $value["t_sum"];
-		}
-		if (!is_null($this->model->finalControls)) {
-			foreach ($this->model->finalControls->getItems() as $control) {
-				$item = $control->controlType;
-			}
-		}
-		if (isset($item) && $item == "Зачет") {
-			$result += 9;
-		} elseif(isset($item)) {
-			$result += 36;
-		}
-		$totalHours = $result;
-		$totalCredits = round($result/36, 2);
+		$totalHours = CWorkPlanTotalHours::execute($this->model);
+		$totalCredits = round($totalHours/36, 2);
 		if(intval($totalCredits) != $totalCredits) {
 			$errors[] = "<b>Число зачётных единиц дисциплины (".$totalCredits.") должно быть целым (cумма часов: ".$totalHours.")</b>";
 		}
