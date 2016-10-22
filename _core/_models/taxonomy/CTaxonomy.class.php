@@ -132,7 +132,7 @@ class CTaxonomy extends CActiveModel {
         } elseif (is_string($key)) {
             $key = mb_strtoupper($key);
             if (!$this->getCacheTerms()->hasElement($key)) {
-                foreach (CActiveRecordProvider::getWithCondition(TABLE_TAXONOMY_TERMS, "UPPER(name) = '".$key."'")->getItems() as $item) {
+                foreach (CActiveRecordProvider::getWithCondition(TABLE_TAXONOMY_TERMS, "UPPER(name) = '".$key."' or UPPER(alias) = '".$key."'")->getItems() as $item) {
                     $term = new CTerm($item);
                     $this->getCacheTerms()->add($term->getId(), $term);
                     $this->getCacheTerms()->add($key, $term);
