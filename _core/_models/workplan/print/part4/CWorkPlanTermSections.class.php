@@ -70,9 +70,11 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
 	        		->innerJoin(TABLE_WORK_PLAN_CONTENT_LOADS." as l", "l.section_id = section.id")
 	        		->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
 	        		->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
-	        		->leftJoin(TABLE_WORK_PLAN_SELFEDUCATION." as selfedu", "selfedu.load_id = l.id")
 	        		->group("l.section_id")
 	        		->condition("l.term_id = ".$term->getId()." and l._deleted = 0 and category._deleted = 0");
+        		if (!$selfWork) {
+        			$query->leftJoin(TABLE_WORK_PLAN_SELFEDUCATION." as selfedu", "selfedu.load_id = l.id");
+        		}
         		$items = $query->execute();
         		if ($items->getCount() > 0) {
         			$termSectionsData->add($term->getId(), $items);
@@ -85,12 +87,12 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         	$selfeduSum = 0;
         	$totalSum = 0;
         	foreach ($termSectionsData->getItems() as $termId=>$termData) {
-        		$lectureSum = 0;
-        		$practiceSum = 0;
-        		$labworkSum = 0;
-        		$ksrSum = 0;
-        		$selfeduSum = 0;
-        		$totalSum = 0;
+        		$lectureSumTerm = 0;
+        		$practiceSumTerm = 0;
+        		$labworkSumTerm = 0;
+        		$ksrSumTerm = 0;
+        		$selfeduSumTerm = 0;
+        		$totalSumTerm = 0;
         		foreach ($termData as $row) {
         			$queryTech = new CQuery();
         			$queryTech->select("tech.technology_id")
@@ -140,6 +142,7 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         			$dataRow[9] = implode(", ", $technologies);
         			$result[] = $dataRow;
         			
+        			//суммы общие
         			$lectureSum += $row[CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_LECTURE];
         			$practiceSum += $row[CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_PRACTICE];
         			$labworkSum += $row[CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_LAB_WORK];
@@ -150,19 +153,32 @@ class CWorkPlanTermSections extends CAbstractPrintClassField {
         				$selfeduSum += $row[CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_SELF_EDUCATION];
         			}
         			$totalSum += $row[CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_TOTAL];
+        			
+        			//суммы по семестрам
+        			$lectureSumTerm += $row[CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_LECTURE];
+        			$practiceSumTerm += $row[CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_PRACTICE];
+        			$labworkSumTerm += $row[CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_LAB_WORK];
+        			$ksrSumTerm += $row[CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_KSR];
+        			if ($selfWork) {
+        				$selfeduSumTerm += $row[CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_SELF_WORK];
+        			} else {
+        				$selfeduSumTerm += $row[CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_SELF_EDUCATION];
+        			}
+        			$totalSumTerm += $row[CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_TOTAL];
+        			
         		}
-        		$total = array();
-        		$total[0] = "";
-        		$total[1] = "Итого за ".CBaseManager::getWorkPlanTerm($termId)->corriculum_discipline_section->title." семестр";
-        		$total[2] = $lectureSum;
-        		$total[3] = $practiceSum;
-        		$total[4] = $labworkSum;
-        		$total[5] = $ksrSum;
-        		$total[6] = $selfeduSum;
-        		$total[7] = $totalSum;
-        		$total[8] = "";
-        		$total[9] = "";
-        		$result[] = $total;
+        		$totalTerm = array();
+        		$totalTerm[0] = "";
+        		$totalTerm[1] = "Итого за ".CBaseManager::getWorkPlanTerm($termId)->corriculum_discipline_section->title." семестр";
+        		$totalTerm[2] = $lectureSumTerm;
+        		$totalTerm[3] = $practiceSumTerm;
+        		$totalTerm[4] = $labworkSumTerm;
+        		$totalTerm[5] = $ksrSumTerm;
+        		$totalTerm[6] = $selfeduSumTerm;
+        		$totalTerm[7] = $totalSumTerm;
+        		$totalTerm[8] = "";
+        		$totalTerm[9] = "";
+        		$result[] = $totalTerm;
         	}
         	$total = array();
         	$total[0] = "";

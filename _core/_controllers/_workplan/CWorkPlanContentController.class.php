@@ -149,10 +149,12 @@ class CWorkPlanContentController extends CBaseController{
                 ->innerJoin(TABLE_WORK_PLAN_CONTENT_LOADS." as l", "l.section_id = section.id")
                 ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
                 ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
-                ->leftJoin(TABLE_WORK_PLAN_SELFEDUCATION." as selfedu", "selfedu.load_id = l.id")
                 ->group("l.section_id")
                 ->condition("l.term_id = ".$term->getId()." and l._deleted = 0 and category._deleted = 0")
                 ->order("section.sectionIndex");
+            if (!$selfWork) {
+            	$query->leftJoin(TABLE_WORK_PLAN_SELFEDUCATION." as selfedu", "selfedu.load_id = l.id");
+            }
             $items = $query->execute();
             if ($items->getCount() > 0) {
                 $termSectionsData->add($term->getId(), $items);

@@ -36,7 +36,7 @@ class CPublicNewsController extends CBaseController {
         $query = new CQuery();
         $query->select("news.*")
             ->from(TABLE_NEWS." as news")
-            ->order("news.id desc");
+            ->order("news.date_time desc");
         $set->setQuery($query);
         $news = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
