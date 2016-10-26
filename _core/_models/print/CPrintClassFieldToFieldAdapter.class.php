@@ -10,6 +10,9 @@ class CPrintClassFieldToFieldAdapter extends CPrintField{
     private $_classField = null;
     private $_context = null;
     public $children = null;
+    public $parent = null;
+    public $title = null;
+    public $alias = null;
 
     public function __construct(IPrintClassField $classField, $context) {
         $this->_classField = $classField;
@@ -24,6 +27,9 @@ class CPrintClassFieldToFieldAdapter extends CPrintField{
             } else {
                 $this->type_id = "1";
             }
+            $this->parent = $this->getClassField()->getParentClassField();
+            $this->title = $this->getClassField()->getFieldName();
+            $this->alias = get_class($classField);
         }
     }
 

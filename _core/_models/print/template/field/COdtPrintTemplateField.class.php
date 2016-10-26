@@ -6,14 +6,20 @@
  * Time: 20:50
  */
 
+/**
+ * Класс для работы с полями в XML-документе,
+ * построенном на основе ODT-шаблона
+ * 
+ * Class COdtPrintTemplateField
+ */
 class COdtPrintTemplateField implements IPrintTemplateField {
     private $name;
-    private $node;
+    private $descriptors;
     private $isStyleField;
 
-    function __construct($name, $node, $isStyleField) {
+    function __construct($name, $descriptors, $isStyleField) {
         $this->name = $name;
-        $this->node = $node;
+        $this->descriptors = $descriptors;
         $this->isStyleField = $isStyleField;
     }
 
@@ -27,18 +33,42 @@ class COdtPrintTemplateField implements IPrintTemplateField {
     }
 
     /**
-     * Установить значение поля
-     *
-     * @param $value
-     */
-    public function setValue($value) {
-        // TODO: Implement setValue() method.
-    }
-
-    /**
      * Весь код ниже специфичен для работы с полями в XML-документе,
      * построенном на основе ODT-шаблона. Вот пусть здесь он и остается
      */
+    
+    /**
+     * Установить значение поля
+     *
+     * @param CPrintField $field
+     * @param CModel $object
+     * @param CPrintForm $form
+     * @return string
+     */
+    public function setValue(CPrintField $field, CModel $object, CPrintForm $form, IPrintTemplate $template) {
+		$descriptors = $this->descriptors;
+		$isStyleField = $this->isStyleField;
+		/**
+		 * Если поле из шаблона есть в наборе полей,
+		 * то вычисляем его. Перед вычислением проверяем,
+		 * есть ли привязанные к нему дочерние описатели. Если дочерние
+		 * описатели есть, то не вычисляем, так как вычислением дочерних
+		 * будет заниматься родительский
+		*/
+		if (is_null($field->parent)) {
+			foreach ($descriptors as $node) {
+				$xml = $this->processNode($node, $field, $object, $form);
+			}
+			/**
+			 * Устанавливаем xml и стили odt документа
+			 */
+			if (!$isStyleField) {
+				$template->setDocXML($xml);
+			} else {
+				$template->setStyleXML($xml);
+			}
+		}
+    }
 
     /**
      * Удалить из дерева элементов все элементы, у которых
@@ -105,7 +135,7 @@ class COdtPrintTemplateField implements IPrintTemplateField {
         }
         return $res;
     }
-
+    
     /**
      * @param DOMNode $node
      * @param CPrintField $field
@@ -114,6 +144,7 @@ class COdtPrintTemplateField implements IPrintTemplateField {
      * @return string
      */
     private function processNode(DOMNode $node, CPrintField $field, $object, CPrintForm $form) {
+        $this->_isDebug = $form->debug == "1";
         $doc = $node->ownerDocument;
         /**
          * Определим поля двух типов: простые и сложные. Простые нужны для
@@ -128,7 +159,7 @@ class COdtPrintTemplateField implements IPrintTemplateField {
              * 1. Просто вывод текста (по умолчанию)
              * 2. Вывод таблицы
              */
-            if ($field->type_id == "1" || $field->type_id == "0") {
+            if ($field->getFieldType() == "text") {
                 $debug = array();
                 /**
                  * Это вывод просто текста. Мы заменяем DOMNode текстом, который
@@ -160,7 +191,7 @@ class COdtPrintTemplateField implements IPrintTemplateField {
                  * Сохраняем
                  */
                 return $doc->saveXML();
-            } elseif ($field->type_id == "2") {
+            } elseif ($field->getFieldType() == "table") {
                 $debug = array();
                 /**
                  * Это вывод таблицы. Описатель поля должен стоять в первой ячейке

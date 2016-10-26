@@ -4,7 +4,7 @@
 	{if isset($error)}
 		<ul><font color="#FF0000">{$error}</font></ul>
 	{else}
-		<h4>Шаблон {CPrintManager::getForm(CRequest::getInt("template"))->title}</h4>
+		<h4>Шаблон {$template}</h4>
 		<ul>
 	        <li>
 	            Всего описателей в шаблоне: {$countFields}

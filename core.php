@@ -89,6 +89,7 @@
         "_models" => CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models',
         "_controllers" => CORE_CWD.CORE_DS.'_core'.CORE_DS.'_controllers',
         "_framework" => CORE_CWD.CORE_DS.'_core'.CORE_DS.'_framework',
+        "_services" => CORE_CWD.CORE_DS.'_core'.CORE_DS.'_services',
     );
     foreach ($subfoldersToLoad as $folder) {
         scanFolderForClasses($folder, $import);

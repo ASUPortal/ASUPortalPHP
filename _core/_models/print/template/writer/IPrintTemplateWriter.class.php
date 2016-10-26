@@ -7,7 +7,7 @@
  */
 
 /**
- * Загружает/сохраняет шаблон документа
+ * Загружает шаблон документа
  *
  * Class IPrintTemplateWriter
  */
@@ -18,13 +18,5 @@ interface IPrintTemplateWriter {
      * @return IPrintTemplate
      */
     public function loadTemplate();
-
-    /**
-     * Сохранить печатную форму
-     *
-     * @param IPrintTemplate $template
-     * @param String filename
-     * @return String
-     */
-    public function save(IPrintTemplate $template, $filename);
+    
 }

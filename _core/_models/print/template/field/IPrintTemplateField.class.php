@@ -22,7 +22,11 @@ interface IPrintTemplateField {
     /**
      * Установить значение поля
      *
-     * @param $value
+     * @param CPrintField $field
+     * @param CModel $object
+     * @param CPrintForm $form
+     * @param IPrintTemplate $template
+     * @return string
      */
-    public function setValue($value);
+    public function setValue(CPrintField $field, CModel $object, CPrintForm $form, IPrintTemplate $template);
 }

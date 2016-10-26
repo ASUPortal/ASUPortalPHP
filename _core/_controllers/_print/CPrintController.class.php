@@ -57,37 +57,27 @@ class CPrintController extends CFlowController {
         /**
          * Печатаем
          */
-        $filename = $this->getPrintService()->printTemplate($form, $object);
-        /**
-         * Отдаем документ пользователю
-         * Не отдаем, если у нас тут групповая печать
-         */
-        if (CRequest::getInt("noredirect") == "1") {
-            echo json_encode(array(
-                "filename" => PRINT_DOCUMENTS_DIR.$filename,
-                "url" => PRINT_DOCUMENTS_DIR.$filename
-            ));
-        } else {
-            $this->redirect(PRINT_DOCUMENTS_URL.$filename);
-        }
+		try {
+			$filename = $this->getPrintService()->printTemplate($form, $object);
+			/**
+			 * Отдаем документ пользователю
+			 * Не отдаем, если у нас тут групповая печать
+			 */
+			if (CRequest::getInt("noredirect") == "1") {
+				echo json_encode(array(
+					"filename" => PRINT_DOCUMENTS_DIR.$filename,
+					"url" => PRINT_DOCUMENTS_DIR.$filename
+				));
+			} else {
+				$this->redirect(PRINT_DOCUMENTS_URL.$filename);
+			}
+		} catch (Exception $e) {
+			/**
+			 * Показываем исключения, возникшие в процессе печати
+			 */
+			echo $e->getMessage();
+		}
     }
-    /**
-     * Печать таблицы для отладки
-     *
-     * @param array $value
-     */
-    private function debugTable($value = array()) {
-        echo '<table width="100%" cellpadding="2" cellspacing="0" border="1">';
-        foreach ($value as $row) {
-            echo '<tr>';
-            foreach ($row as $cell) {
-                echo '<td>'.$cell.'</td>';
-            }
-            echo '</tr>';
-        }
-        echo '</table>';
-    }
-
     public function actionShowForms() {
         $formsetName = CRequest::getString("template");
         $formset = CPrintManager::getFormset($formsetName);
