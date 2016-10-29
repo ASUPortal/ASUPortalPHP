@@ -50,8 +50,8 @@ class CWorkPlanTotalHours extends CAbstractPrintClassField {
         		$result += $value["t_sum"];
         	}
         	$items = array();
-        	if (!is_null($plan->finalControls)) {
-        		foreach ($plan->finalControls->getItems() as $control) {
+        	if (!is_null($contextObject->finalControls)) {
+        		foreach ($contextObject->finalControls->getItems() as $control) {
         			$items[] = $control->controlType;
         		}
         	}

@@ -37,4 +37,11 @@ class CNMSProtocol extends CActiveModel{
             )
         );
     }
+    
+    public function getNumber() {
+    	return $this->getRecord()->getItemValue("num");
+    }
+    public function getDate() {
+    	return $this->getRecord()->getItemValue("date_text");
+    }
 }
