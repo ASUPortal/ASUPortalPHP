@@ -16,6 +16,10 @@
 
 {CHtml::activeComponent("workplanfinalcontrol.php?plan_id={$plan->getId()}", $plan)}
 
+<h4>Вид промежуточного контроля</h4>
+
+{CHtml::activeComponent("workplanmediumcontrol.php?plan_id={$plan->getId()}", $plan)}
+
 <h3>3.1. Содержание разделов дисциплины</h3>
 
 {include file="_corriculum/_workplan/contentCategories/subform.index.tpl"}
