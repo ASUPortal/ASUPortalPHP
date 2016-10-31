@@ -29,7 +29,11 @@ class CWorkPlanProtocolNMSNumber extends CAbstractPrintClassField {
 				$protocols[] = $protocol->getNumber();
 			}
 		}
-		$result = @$protocols[0];
+		if (!empty($protocols)) {
+			$result = $protocols[0];
+		} else {
+			$result = "__";
+		}
         return $result;
     }
 }

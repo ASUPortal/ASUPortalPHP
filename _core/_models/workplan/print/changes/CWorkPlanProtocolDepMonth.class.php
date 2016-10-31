@@ -29,9 +29,12 @@ class CWorkPlanProtocolDepMonth extends CAbstractPrintClassField {
 				$protocols[] = date("m", strtotime($protocol->getDate()));
 			}
 		}
-		$monthNum = @$protocols[0];
-		if (isset($monthNum)) {
-			return CUtils::getMonthAsWord($monthNum);
+		if (!empty($protocols)) {
+			$monthNum = $protocols[0];
+			$result = CUtils::getMonthAsWord($monthNum);
+		} else {
+			$result = "______";
 		}
+		return $result;
     }
 }

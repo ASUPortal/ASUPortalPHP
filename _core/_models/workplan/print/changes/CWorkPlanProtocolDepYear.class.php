@@ -29,7 +29,11 @@ class CWorkPlanProtocolDepYear extends CAbstractPrintClassField {
 				$protocols[] = date("Y", strtotime($protocol->getDate()));
 			}
 		}
-		$result = @$protocols[0];
+		if (!empty($protocols)) {
+			$result = $protocols[0];
+		} else {
+			$result = "20__";
+		}
         return $result;
     }
 }

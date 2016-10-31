@@ -29,7 +29,11 @@ class CWorkPlanProtocolNMSDay extends CAbstractPrintClassField {
 				$protocols[] = date("d", strtotime($protocol->getDate()));
 			}
 		}
-		$result = @$protocols[0];
+		if (!empty($protocols)) {
+			$result = $protocols[0];
+		} else {
+			$result = "__";
+		}
         return $result;
     }
 }
