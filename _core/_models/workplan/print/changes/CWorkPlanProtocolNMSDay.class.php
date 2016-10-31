@@ -23,6 +23,7 @@ class CWorkPlanProtocolNMSDay extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
+		$result = "__";
 		$protocols = array();
 		if (!is_null($contextObject->protocolsNMS)) {
 			foreach ($contextObject->protocolsNMS->getItems() as $protocol) {
@@ -31,9 +32,7 @@ class CWorkPlanProtocolNMSDay extends CAbstractPrintClassField {
 		}
 		if (!empty($protocols)) {
 			$result = $protocols[0];
-		} else {
-			$result = "__";
 		}
-        return $result;
+		return $result;
     }
 }

@@ -23,6 +23,7 @@ class CWorkPlanProtocolNMSMonth extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
+		$result = "______";
 		$protocols = array();
 		if (!is_null($contextObject->protocolsNMS)) {
 			foreach ($contextObject->protocolsNMS->getItems() as $protocol) {
@@ -32,8 +33,6 @@ class CWorkPlanProtocolNMSMonth extends CAbstractPrintClassField {
 		if (!empty($protocols)) {
 			$monthNum = $protocols[0];
 			$result = CUtils::getMonthAsWord($monthNum);
-		} else {
-			$result = "______";
 		}
 		return $result;
     }

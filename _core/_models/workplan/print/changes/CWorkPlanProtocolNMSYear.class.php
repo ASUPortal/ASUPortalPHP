@@ -23,6 +23,7 @@ class CWorkPlanProtocolNMSYear extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
+		$result = "20__";
 		$protocols = array();
 		if (!is_null($contextObject->protocolsNMS)) {
 			foreach ($contextObject->protocolsNMS->getItems() as $protocol) {
@@ -31,9 +32,7 @@ class CWorkPlanProtocolNMSYear extends CAbstractPrintClassField {
 		}
 		if (!empty($protocols)) {
 			$result = $protocols[0];
-		} else {
-			$result = "20__";
 		}
-        return $result;
+		return $result;
     }
 }

@@ -23,6 +23,7 @@ class CWorkPlanProtocolDepNumber extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
+		$result = "__";
 		$protocols = array();
 		if (!is_null($contextObject->protocolsDep)) {
 			foreach ($contextObject->protocolsDep->getItems() as $protocol) {
@@ -31,9 +32,7 @@ class CWorkPlanProtocolDepNumber extends CAbstractPrintClassField {
 		}
 		if (!empty($protocols)) {
 			$result = $protocols[0];
-		} else {
-			$result = "__";
 		}
-        return $result;
+		return $result;
     }
 }
