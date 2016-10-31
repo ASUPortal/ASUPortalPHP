@@ -299,6 +299,13 @@ class CWorkPlan extends CActiveModel {
         		"targetClass" => "CWorkPlanFinalControl",
                 "managerOrder" => "`ordering` asc"
         	),
+        	"mediumControls" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageTable" => TABLE_WORK_PLAN_MEDIUM_CONTROL,
+        		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
+        		"targetClass" => "CWorkPlanMediumControl",
+                "managerOrder" => "`ordering` asc"
+        	),
         	"questions" => array(
         		"relationPower" => RELATION_HAS_MANY,
         		"storageTable" => TABLE_EXAMINATION_QUESTIONS,
