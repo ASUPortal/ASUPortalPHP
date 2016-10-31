@@ -22,6 +22,7 @@
 <h4>Критерии оценки материалов</h4>
 {CHtml::activeComponent("workplancriteriaofevaluation.php?type=3&plan_id={$plan->getId()}", $plan)}
 
+{*
 <h3>Перечень оценочных средств</h3>
 {CHtml::activeComponent("workplanmarktypes.php?plan_id={$plan->getId()}", $plan)}
-
+*}
