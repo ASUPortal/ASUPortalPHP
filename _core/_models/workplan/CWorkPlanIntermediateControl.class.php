@@ -10,8 +10,8 @@
  * для таблицы трудоёмкости дисциплины по видам работ
  * 
  */
-class CWorkPlanMediumControl extends CActiveModel{
-    protected $_table = TABLE_WORK_PLAN_MEDIUM_CONTROL;
+class CWorkPlanIntermediateControl extends CActiveModel{
+    protected $_table = TABLE_WORK_PLAN_INTERMEDIATE_CONTROL;
 
     protected function relations() {
         return array(
