@@ -1,6 +1,6 @@
 <?php
 
-class CWorkPlanMediumControls extends CAbstractPrintClassField {
+class CWorkPlanIntermediateControls extends CAbstractPrintClassField {
     public function getFieldName()
     {
         return "Виды промежуточного контроля";
@@ -26,11 +26,11 @@ class CWorkPlanMediumControls extends CAbstractPrintClassField {
 		$result = array();
 		$terms = array("term.name");
 		foreach ($contextObject->terms->getItems() as $term) {
-			$terms[] = "sum(if(l.term_id = ".$term->getId().", ".CTaxonomyManager::getTaxonomy("corriculum_final_control_hours")->getTerm("medimControl")->getValue().", 0)) as t_".$term->getId();
+			$terms[] = "sum(if(l.term_id = ".$term->getId().", ".CTaxonomyManager::getTaxonomy("corriculum_final_control_hours")->getTerm("intermediateControl")->getValue().", 0)) as t_".$term->getId();
 		}
 		$query = new CQuery();
 		$query->select(join(", ", $terms))
-			->from(TABLE_WORK_PLAN_MEDIUM_CONTROL." as l")
+			->from(TABLE_WORK_PLAN_INTERMEDIATE_CONTROL." as l")
 			->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.control_type_id")
 			->condition("l.plan_id = ".$contextObject->getId()." and l._deleted = 0")
 			->group("l.control_type_id")

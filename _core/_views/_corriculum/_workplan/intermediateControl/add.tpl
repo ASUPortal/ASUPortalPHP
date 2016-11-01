@@ -5,9 +5,9 @@
 
     {CHtml::helpForCurrentPage()}
 
-    {include file="_corriculum/_workplan/mediumControl/form.tpl"}
+    {include file="_corriculum/_workplan/intermediateControl/form.tpl"}
 {/block}
 
 {block name="asu_right"}
-    {include file="_corriculum/_workplan/mediumControl/common.right.tpl"}
+    {include file="_corriculum/_workplan/intermediateControl/common.right.tpl"}
 {/block}

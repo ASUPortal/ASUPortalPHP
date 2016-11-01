@@ -64,9 +64,9 @@ class CWorkPlanTotalHours extends CAbstractPrintClassField {
         	if (in_array("creditWithMark", $finalControls)) {
         		$result += CTaxonomyManager::getTaxonomy("corriculum_final_control_hours")->getTerm("creditHours")->getValue();
         	}
-        	if (!$contextObject->mediumControls->isEmpty()) {
-        		foreach ($contextObject->mediumControls->getItems() as $control) {
-        			$result += CTaxonomyManager::getTaxonomy("corriculum_final_control_hours")->getTerm("medimControl")->getValue();
+        	if (!$contextObject->intermediateControls->isEmpty()) {
+        		foreach ($contextObject->intermediateControls->getItems() as $control) {
+        			$result += CTaxonomyManager::getTaxonomy("corriculum_final_control_hours")->getTerm("intermediateControl")->getValue();
         		}
         	}
         } else {

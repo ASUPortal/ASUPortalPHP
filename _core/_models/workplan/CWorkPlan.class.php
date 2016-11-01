@@ -61,6 +61,7 @@
  * @property CArrayList software
  * @property CArrayList additionalSupply
  * @property CArrayList finalControls
+ * @property CArrayList intermediateControls
  * @property CArrayList questions
  * @property CArrayList examQuestions
  * @property CArrayList creditQuestions
@@ -299,11 +300,11 @@ class CWorkPlan extends CActiveModel {
         		"targetClass" => "CWorkPlanFinalControl",
                 "managerOrder" => "`ordering` asc"
         	),
-        	"mediumControls" => array(
+        	"intermediateControls" => array(
         		"relationPower" => RELATION_HAS_MANY,
-        		"storageTable" => TABLE_WORK_PLAN_MEDIUM_CONTROL,
+        		"storageTable" => TABLE_WORK_PLAN_INTERMEDIATE_CONTROL,
         		"storageCondition" => "plan_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and _deleted=0",
-        		"targetClass" => "CWorkPlanMediumControl",
+        		"targetClass" => "CWorkPlanIntermediateControl",
                 "managerOrder" => "`ordering` asc"
         	),
         	"questions" => array(

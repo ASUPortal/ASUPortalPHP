@@ -18,7 +18,7 @@
 
 <h4>Вид промежуточного контроля</h4>
 
-{CHtml::activeComponent("workplanmediumcontrol.php?plan_id={$plan->getId()}", $plan)}
+{CHtml::activeComponent("workplanintermediatecontrol.php?plan_id={$plan->getId()}", $plan)}
 
 <h3>3.1. Содержание разделов дисциплины</h3>
 
