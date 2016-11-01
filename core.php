@@ -373,6 +373,7 @@
     define("TABLE_WORK_PLAN_PROTOCOLS_DEP", "pl_corriculum_workplan_protocols_dep");
     define("TABLE_WORK_PLAN_PROTOCOLS_NMS", "pl_corriculum_workplan_protocols_nms");
     define("TABLE_WORK_PLAN_CALCULATION_TASKS", "pl_corriculum_workplan_calculation_tasks");
+    define("TABLE_WORK_PLAN_INTERMEDIATE_CONTROL", "pl_corriculum_workplan_intermediate_control");
     /**
      * Константы пагинатора
      */
