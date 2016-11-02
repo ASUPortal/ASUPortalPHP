@@ -15,7 +15,12 @@ class CSearchSourceLocal extends CComponent implements ISearchSource {
         return CFileUtils::getListFiles(CSettingsManager::getSettingValue($this->path));
     }
 
-    public function getFilesToIndex() {
+    /**
+     * Получение файлов для индексирования
+     *
+     * @param CSearchSettings $coreId
+     */
+    public function getFilesToIndex(CSearchSettings $coreId) {
         $files = $this->scanDirectory();
         $filelist = array();
         $suffixes = explode(";", CSettingsManager::getSettingValue($this->suffix));

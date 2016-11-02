@@ -18,12 +18,12 @@ class CSolrManager extends CComponent {
         }
     }
 
-    public function updateIndex() {
+    public function updateIndex(CSearchSettings $coreId) {
     	$messages = array();
         foreach ($this->sources as $source) {
             try {
-                foreach ($source->getFilesToIndex() as $file) {
-                    $messages[] = $this->addToIndex($file);
+                foreach ($source->getFilesToIndex($coreId) as $file) {
+                    $messages[] = $this->addToIndex($file, $coreId);
                 }
             } catch (Exception $e) {
                 // тут будет исключение
@@ -33,14 +33,14 @@ class CSolrManager extends CComponent {
         return $messages;
     }
 
-    private function addToIndex(CSearchFile $file) {
+    private function addToIndex(CSearchFile $file, CSearchSettings $coreId) {
         CApp::getApp()->cache->set($file->getFileId(), $file);
         // сообщение о результате обработки файла
         $message = "";
         // добавление в Solr
         $ch = curl_init();
         $data = array("myfile"=>"@".$file->getFileSource());
-        curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles($file->getFileId()));
+        curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles($file->getFileId(), $coreId));
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         $result = curl_exec($ch);

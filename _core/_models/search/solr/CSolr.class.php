@@ -126,14 +126,14 @@ class CSolr {
      * url для отправки файлов
      * 
      * @param string $id
-     * @param string $filename
-     * @param string $filepath
+     * @param string $coreId
      * @return string
      */
-    public static function commitFiles($id) {
+    public static function commitFiles($id, $coreId) {
+    	$solrPath = $coreId->getValue();
     	$options = self::getOptions();
     	$url = "http://".$options["hostname"].":".$options["port"]."/";
-    	$url .= $options["path"]."/update/extract?commit=true&literal.id=".$id."&literal._is_file_=1";
+    	$url .= $solrPath."/update/extract?commit=true&literal.id=".$id."&literal._is_file_=1";
     	return $url;
     }
 

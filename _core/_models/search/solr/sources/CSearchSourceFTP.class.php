@@ -33,7 +33,12 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
     	return $this->ftpRecursiveFileListing($this->path);
     }
     
-    public function getFilesToIndex() {
+    /**
+     * Получение файлов для индексирования
+     *
+     * @param CSearchSettings $coreId
+     */
+    public function getFilesToIndex(CSearchSettings $coreId) {
     	$filesList = array();
     	// массив с файлами ftp сервера
     	$ftpFiles = array();

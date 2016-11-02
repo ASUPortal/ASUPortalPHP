@@ -35,6 +35,11 @@ class CSearchController extends CBaseController{
                 "icon" => "places/network-workgroup.png"
             ),
             array(
+                "title" => "Настройки для поиска по файлам",
+                "link" => "settings.php?action=index",
+                "icon" => "places/network-workgroup.png"
+            ),
+            array(
                 "title" => "Поиск по файлам",
                 "icon" => "actions/document-print-preview.png",
                 "link" => "index.php?action=searchFiles"
@@ -92,12 +97,7 @@ class CSearchController extends CBaseController{
                 "title" => "Обновить индекс",
                 "icon" => "actions/document-print-preview.png",
                 "link" => "index.php?action=updateIndex&redirect=index"
-            ),
-        	array(
-        		"title" => "Обновить файловый индекс",
-        		"icon" => "actions/document-print-preview.png",
-        		"link" => "index.php?action=updateIndexFiles"
-        	)
+            )
         ));
         $this->renderView("_search/settings.tpl");
     }
@@ -215,7 +215,8 @@ class CSearchController extends CBaseController{
         }
     }
     public function actionUpdateIndexFiles() {
-    	$this->setData("messages", CApp::getApp()->search->updateIndex());
+    	$coreId = CSearchSettingsManager::getSetting(CRequest::getInt("id"));
+    	$this->setData("messages", CApp::getApp()->search->updateIndex($coreId));
     	$this->addActionsMenuItem(array(
     		array(
     			"title" => "Назад",
