@@ -66,7 +66,7 @@ class CWorkPlanTotalHours extends CAbstractPrintClassField {
         	}
         	if (!$contextObject->intermediateControls->isEmpty()) {
         		foreach ($contextObject->intermediateControls->getItems() as $control) {
-        			$result += CTaxonomyManager::getTaxonomy("corriculum_final_control_hours")->getTerm("intermediateControl")->getValue();
+        			$result += $control->controlType->getAlias();
         		}
         	}
         } else {
