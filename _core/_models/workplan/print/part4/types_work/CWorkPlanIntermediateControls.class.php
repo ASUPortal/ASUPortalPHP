@@ -26,7 +26,7 @@ class CWorkPlanIntermediateControls extends CAbstractPrintClassField {
 		$result = array();
 		$terms = array("term.name");
 		foreach ($contextObject->terms->getItems() as $term) {
-			$terms[] = "sum(if(l.term_id = ".$term->getId().", ".CTaxonomyManager::getTaxonomy("corriculum_final_control_hours")->getTerm("intermediateControl")->getValue().", 0)) as t_".$term->getId();
+			$terms[] = "if(l.term_id = ".$term->getId().", term.alias, 0) as t_".$term->getId();
 		}
 		$query = new CQuery();
 		$query->select(join(", ", $terms))
