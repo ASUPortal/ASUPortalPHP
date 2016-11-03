@@ -10,7 +10,6 @@
             <th width="5"></th>
             <th width="5">#</th>
             <th>Название</th>
-            <th>Псевдоним</th>
             <th>Значение</th>
         </tr>
         {foreach $settings->getItems() as $setting}
@@ -18,7 +17,6 @@
             <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить настройку {$setting->title}')) { location.href='?action=delete&id={$setting->id}'; }; return false;"></a></td>
             <td>{counter}</td>
             <td><a href="?action=edit&id={$setting->id}">{$setting->title}</a></td>
-            <td>{$setting->alias}</td>
             <td>{$setting->value}</td>
         </tr>
         {/foreach}

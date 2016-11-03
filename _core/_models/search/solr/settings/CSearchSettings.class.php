@@ -10,7 +10,6 @@ class CSearchSettings extends CActiveModel {
     public function attributeLabels() {
         return array(
             "title" => "Название",
-            "alias" => "Ключ",
             "value" => "Значение",
             "description" => "Описание"
         );
@@ -19,7 +18,6 @@ class CSearchSettings extends CActiveModel {
         return array(
             "required" => array(
                 "title",
-                "alias",
                 "value"
             )
         );
@@ -46,5 +44,20 @@ class CSearchSettings extends CActiveModel {
             $settings->add($setting->getId(), $setting);
         }
         return $settings;
+    }
+    
+    /**
+     * Получить настройку коллекции по псевдониму
+     *
+     * @param string $alias
+     * @return CSearchSettingsList
+     */
+    public function getSettingsItem($alias) {
+    	$settingsItem = null;
+    	$key = mb_strtoupper($alias);
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_SETTINGS_SOLR_SEARCH, "solr_core=".$this->getId()." and UPPER(alias) = ".$key)->getItems() as $item) {
+    		$settingsItem = new CSearchSettingsList($item);
+    	}
+    	return $settingsItem;
     }
 }

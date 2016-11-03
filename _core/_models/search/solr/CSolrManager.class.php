@@ -18,6 +18,11 @@ class CSolrManager extends CComponent {
         }
     }
 
+    /**
+     * Обновление индекса Solr
+     *
+     * @param CSearchSettings $coreId
+     */
     public function updateIndex(CSearchSettings $coreId) {
     	$messages = array();
         foreach ($this->sources as $source) {
@@ -33,6 +38,12 @@ class CSolrManager extends CComponent {
         return $messages;
     }
 
+    /**
+     * Добавление файлов в индекс Solr
+     *
+     * @param CSearchFile $file
+     * @param CSearchSettings $coreId
+     */
     private function addToIndex(CSearchFile $file, CSearchSettings $coreId) {
         CApp::getApp()->cache->set($file->getFileId(), $file);
         // сообщение о результате обработки файла
@@ -63,15 +74,13 @@ class CSolrManager extends CComponent {
         }
         
         return $message;
-
-        /*
-         * $solrObject.id = $file->getId()
-         * $solrObject.$fileSource
-         * $solrObject.$realFilePath
-         * $solrObject.$sourceId
-         */
     }
 
+    /**
+     * Получить файл по id, сохранённому в кэше
+     *
+     * @param String $fileId
+     */
     public function getFile($fileId) {
         $sourceId = CUtils::strLeft($fileId, "||");
         foreach ($this->sources as $source) {

@@ -215,7 +215,7 @@ class CSearchController extends CBaseController{
         }
     }
     public function actionUpdateIndexFiles() {
-    	$coreId = CSearchSettingsManager::getSetting(CRequest::getInt("id"));
+    	$coreId = CSearchSettingsManager::getSetting(CRequest::getInt("core_id"));
     	$this->setData("messages", CApp::getApp()->search->updateIndex($coreId));
     	$this->addActionsMenuItem(array(
     		array(

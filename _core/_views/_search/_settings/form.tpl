@@ -11,14 +11,6 @@
             {CHtml::error("title", $setting)}
         </div>
     </div>
-
-    <div class="control-group">
-        {CHtml::activeLabel("alias", $setting)}
-        <div class="controls">
-            {CHtml::activeTextField("alias", $setting)}
-            {CHtml::error("alias", $setting)}
-        </div>
-    </div>
     
     <div class="control-group">
         {CHtml::activeLabel("value", $setting)}

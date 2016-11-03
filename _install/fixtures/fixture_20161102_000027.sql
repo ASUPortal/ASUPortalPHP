@@ -1,7 +1,6 @@
 CREATE TABLE `solr_cores` (
   `id` int(11) NOT NULL,
   `title` text NOT NULL,
-  `alias` text NOT NULL,
   `description` text NOT NULL,
   `value` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

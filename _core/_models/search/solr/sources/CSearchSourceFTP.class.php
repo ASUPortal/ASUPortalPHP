@@ -7,30 +7,24 @@
  */
 
 class CSearchSourceFTP extends CComponent implements ISearchSource {
-    public $server = "";
-    public $login = "";
-    public $password = "";
+    public $server;
+    public $login;
+    public $password;
     public $id;
     public $path;
     public $link;
     public $suffix;
 
     protected function init() {
-        $this->server = CSettingsManager::getSettingValue($this->server);
-        $this->login = CSettingsManager::getSettingValue($this->login);
-        $this->password = CSettingsManager::getSettingValue($this->password);
         // установка соединения с FTP-сервером
-        $this->link = ftp_connect($this->server);
-        // форматы файлов для индексирования
-        $this->suffix = CSettingsManager::getSettingValue($this->suffix);
-        // путь к папке с файлами для индексирования
-        $this->path = CSettingsManager::getSettingValue($this->path);
+        $this->link = ftp_connect("10.61.2.62");
         // массив с путями к файлам для индексирования
         $this->files = array();
     }
     
     private function scanDirectory() {
     	return $this->ftpRecursiveFileListing($this->path);
+    	
     }
     
     /**
@@ -39,6 +33,26 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
      * @param CSearchSettings $coreId
      */
     public function getFilesToIndex(CSearchSettings $coreId) {
+    	/**
+    	 * Получаем настройки коллекции Solr
+    	 */
+    	foreach ($coreId->getSearchSettingsList() as $setting) {
+    		if ($setting->getAlias() == $this->server) {
+    			$this->server = $setting->getValue();
+    		}
+    		if ($setting->getAlias() == $this->login) {
+    			$this->login = $setting->getValue();
+    		}
+    		if ($setting->getAlias() == $this->password) {
+    			$this->password = $setting->getValue();
+    		}
+    		if ($setting->getAlias() == $this->suffix) {
+    			$this->suffix = $setting->getValue();
+    		}
+    		if ($setting->getAlias() == $this->path) {
+    			$this->path = $setting->getValue();
+    		}
+    	}
     	$filesList = array();
     	// массив с файлами ftp сервера
     	$ftpFiles = array();
@@ -89,7 +103,7 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
     			$files[] = $file;
     		}
     	}
-    	return new CSearchSourceFTPIterator($files, $this);
+    	return new CSearchSourceFTPIterator($files, $this, $coreId);
     }
     
     /**
