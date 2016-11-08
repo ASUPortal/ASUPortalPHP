@@ -30,16 +30,27 @@ class CDocxPrintTemplateWriter implements IPrintTemplateWriter {
      * @return IPrintTemplate
      */
     public function loadTemplate() {
-		$form = $this->form;
-		$object = $this->object;
-		$file = PRINT_TEMPLATES_DIR.$form->template_file;
-		if (file_exists($file)) {
-			$template = new CDocxPrintTemplate($file, $object);
-			return $template;
-		} else {
-			throw new Exception("Файл ".$file." не найден");
-		}
+		// TODO: Implement loadTemplate() method.
     }
-
+    
+    /**
+     * Сохранить печатную форму
+     *
+     * @param IPrintTemplate $template
+     * @param String filename
+     * @return String
+     */
+    public function save(IPrintTemplate $template, $filename) {
+		// TODO: Implement save() method.
+    }
+    
+    /**
+     * Удалить временный файл печатной формы
+     *
+     * @param IPrintTemplate $template
+    */
+    public function deleteTempFile(IPrintTemplate $template) {
+		// TODO: Implement deleteTempFile() method.
+    }
 
 }

@@ -70,10 +70,16 @@ class CPrintService {
             $templateField->setValue($field, $object, $form, $template);
         }
         /**
+         * В HTML-шаблонах заменяем изображения на 64-разрядный код
+         */
+        if (CStringUtils::equalsIgnoreCase($form->form_format, "html")) {
+            $template->replaceImage64encoded();
+        }
+        /**
          * Сохраняем документ
          */
         $filename = $this->getFilename($form, $object);
-        $template->save(PRINT_DOCUMENTS_DIR.$filename);
+        $writer->save($template, $filename);
         /**
          * При отладке не выгружаем обратно документ
          */
@@ -140,7 +146,7 @@ class CPrintService {
         $strategy = null;
         if (CStringUtils::isBlank($strategyClass)) {
             $strategy = new CDefaultFilenameGenerationStrategy($form);
-        } elseif ($strategyClass == "CWorkPlan") {
+        } elseif ($strategyClass == "CWorkPlanFilenameGenerationStrategy") {
             $strategy = new CWorkPlanFilenameGenerationStrategy($form, $object);
         } else {
 			throw new Exception("Стратегия именования файла ".$strategyClass." не определена!");

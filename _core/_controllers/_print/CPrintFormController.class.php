@@ -76,14 +76,9 @@ class CPrintFormController extends CBaseController {
             "odt" => "OpenOffice Writer (odt)",
             "html" => "HTML Document (html)"
         );
-        $forms = array();
-        foreach (CPrintManager::getAllForms()->getItems() as $formOdt) {
-            $forms[$formOdt->id] = $formOdt->title;
-        }
         $this->setData("types", $types);
         $this->setData("form", $form);
         $this->setData("formsets", $formsets);
-        $this->setData("forms", $forms);
         $this->renderView("_print/form/edit.tpl");
     }
     public function actionDelete() {

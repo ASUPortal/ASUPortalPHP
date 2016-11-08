@@ -12,17 +12,6 @@
  * Interface IPrintTemplate
  */
 interface IPrintTemplate {
-	/**
-	 * Сохранить шаблон печатной формы
-	 *
-	 * @param String $filename
-	 * @return String
-	*/
-	public function save($filename);
-	/**
-	 * Удалить временный файл печатной формы
-	 */
-	public function deleteTempFile();
     /**
      * Получить поля из шаблона
      *

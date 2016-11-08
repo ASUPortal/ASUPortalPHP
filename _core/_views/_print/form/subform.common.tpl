@@ -38,16 +38,6 @@
     </div>
 </div>
 
-{if ($form->form_format == "html")}
-<div class="control-group">
-    {CHtml::activeLabel("form_odt", $form)}
-    <div class="controls">
-        {CHtml::activeDropDownList("form_odt", $form, $forms)}
-        {CHtml::error("form_odt", $form)}
-    </div>
-</div>
-{/if}
-
 <div class="control-group">
     {CHtml::activeLabel("template_file", $form)}
     <div class="controls">

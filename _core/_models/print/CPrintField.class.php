@@ -133,6 +133,8 @@ class CPrintField extends CActiveModel {
             return IPrintClassField::FIELD_TEXT;
         } elseif ($this->type_id == "2") {
             return IPrintClassField::FIELD_TABLE;
+        } else {
+            throw new Exception("Unsupported field type " . $this->type_id);
         }
     }
 }

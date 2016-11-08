@@ -40,5 +40,33 @@ class CHtmlPrintTemplateWriter implements IPrintTemplateWriter {
 			throw new Exception("Файл ".$file." не найден");
 		}
     }
+    
+    /**
+     * Сохранить печатную форму
+     *
+     * @param IPrintTemplate $template
+     * @param String filename
+     * @return String
+     */
+    public function save(IPrintTemplate $template, $filename) {
+		/*require CORE_CWD."/_core/_external/convertio/autoload.php";
+		use \Convertio\Convertio;
+    	
+		// You can obtain API Key here: https://convertio.co/api/
+		$API = new Convertio("_YOUR_API_KEY_");           
+		$API->start($template->_tempFileName, 'odt')->wait()->download(PRINT_DOCUMENTS_DIR.$filename)->delete();*/
+		rename($template->_tempFileName, PRINT_DOCUMENTS_DIR.$filename);
+    }
+    
+    /**
+     * Удалить временный файл печатной формы
+     * 
+     * @param IPrintTemplate $template
+     */
+    public function deleteTempFile(IPrintTemplate $template) {
+		if(file_exists($template->_tempFileName)) {
+			unlink($template->_tempFileName);
+		}
+    }
 
 }

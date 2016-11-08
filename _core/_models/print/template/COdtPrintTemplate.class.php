@@ -15,9 +15,10 @@ class COdtPrintTemplate implements IPrintTemplate {
 	private $form;
 	private $object;
 	private $_xmlDocument = null;
-	private $_documentXML = null;
-	private $_styleXML = null;
 	private $_xmlStyle = null;
+	public $_documentXML = null;
+	public $_styleXML = null;
+	public $_tempFileName = null;
 
     /**
      * @param CPrintForm $form
@@ -39,38 +40,6 @@ class COdtPrintTemplate implements IPrintTemplate {
         
 		$this->_documentXML = $this->_objZip->getFromName('content.xml');
 		$this->_styleXML = $this->_objZip->getFromName('styles.xml');
-    }
-    
-    /**
-     * Сохранить шаблон печатной формы
-     *
-     * @param String $filename
-     * @throws Exception
-     * @return String
-     */
-    public function save($filename) {
-		$this->_objZip->addFromString("content.xml", $this->_documentXML);
-		$this->_objZip->addFromString("styles.xml", $this->_styleXML);
-    	
-		// Close zip file
-		if($this->_objZip->close() === false) {
-			throw new Exception("Could not close zip file");
-		}
-    	
-		rename($this->_tempFileName, $filename);
-    }
-    
-    /**
-     * Удалить временный файл печатной формы
-     */
-    public function deleteTempFile() {
-		// Close zip file
-		if($this->_objZip->close() === false) {
-			throw new Exception("Could not close zip file");
-		}
-		if(file_exists($this->_tempFileName)) {
-			unlink($this->_tempFileName);
-		}
     }
 
     /**

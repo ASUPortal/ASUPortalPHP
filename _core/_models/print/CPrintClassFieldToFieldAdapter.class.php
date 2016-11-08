@@ -29,7 +29,7 @@ class CPrintClassFieldToFieldAdapter extends CPrintField{
             }
             $this->parent = $this->getClassField()->getParentClassField();
             $this->title = $this->getClassField()->getFieldName();
-            $this->alias = get_class($classField);
+            $this->alias = get_class($classField).".class";
         }
     }
 

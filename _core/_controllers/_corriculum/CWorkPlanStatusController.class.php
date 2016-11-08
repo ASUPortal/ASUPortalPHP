@@ -72,7 +72,7 @@ class CWorkPlanStatusController extends CBaseController{
     					}
     				}
     			}
-    			$wordTemplate->deleteTempFile();
+    			$writer->deleteTempFile($wordTemplate);
     		} catch (Exception $e) {
     			$this->setData("error", $e->getMessage());
     		}

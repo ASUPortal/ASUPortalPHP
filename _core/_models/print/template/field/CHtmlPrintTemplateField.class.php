@@ -92,27 +92,5 @@ class CHtmlPrintTemplateField implements IPrintTemplateField {
 			*/
 			file_put_contents($tempFile, $bodytag);
 		}
-		/**
-		 * Подключаем PHP Simple HTML DOM Parser
-		 */
-		require_once(CORE_CWD."/_core/_external/smarty/vendor/simple_html_dom.php");
-		$html = file_get_html($tempFile);
-		/**
-		 * Находим все теги с изображениями на странице
-		*/
-		if (count($html->find('img'))) {
-			foreach ($html->find('img') as $img) {
-				/**
-				 * Заменяем теги с изображениями на 64-разрядный код
-				 */
-				$img->src = CPrintUtils::getBase64encodedImage($img->src);
-			}
-		}
-		/**
-		 * Пишем изменения в файл
-		 */
-		file_put_contents($tempFile, $html->save());
-		$html->clear();
-		unset($html);
 	}
 }

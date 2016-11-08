@@ -9,7 +9,6 @@
 class CPrintManager {
     private static $_cacheFormset = null;
     private static $_cacheFormsetInit = false;
-    private static $_cacheFormsInit = false;
     private static $_cacheForm = null;
     private static $_cacheField = null;
     private static $_cacheFieldInit = false;
@@ -95,15 +94,12 @@ class CPrintManager {
      * @return CArrayList|null
      */
     public static function getAllForms() {
-		if (!self::$_cacheFormsInit) {
-			self::$_cacheFormsInit = true;
-			foreach (CActiveRecordProvider::getAllFromTable(TABLE_PRINT_FORMS)->getItems() as $item) {
-				$form = new CPrintForm($item);
-				self::getCacheForm()->add($form->getId(), $form);
-				self::getCacheForm()->add($form->alias, $form);
-			}
+		$allForms = new CArrayList();
+		foreach (CActiveRecordProvider::getAllFromTable(TABLE_PRINT_FORMS)->getItems() as $item) {
+            $form = new CPrintForm($item);
+            $allForms->add($form->getId(), $form);
 		}
-		return self::getCacheForm();
+		return $allForms;
     }
 
     /**
@@ -153,5 +149,20 @@ class CPrintManager {
             }
         }
         return self::getCacheField();
+    }
+    
+    /**
+     * Получить список описателей по id набора печатной формы
+     *
+     * @param $key
+     * @return CArrayList
+     */
+    public static function getListFieldsByFormset($key) {
+    	$listFields = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_PRINT_FIELDS, "formset_id = ".$key)->getItems() as $item) {
+    		$field = new CPrintField($item);
+    		$listFields->add($field->getId(), $field);
+    	}
+    	return $listFields;
     }
 }
