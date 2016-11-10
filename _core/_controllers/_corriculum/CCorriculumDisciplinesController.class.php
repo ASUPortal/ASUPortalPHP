@@ -100,10 +100,17 @@ class CCorriculumDisciplinesController extends CFlowController {
         );
         $this->setData("types", $types);
         $this->addActionsMenuItem(array(
-            "title" => "Печать по шаблону",
-            "link" => "#",
-            "icon" => "devices/printer.png",
-            "template" => "formset_literature_statements"
+        	array(
+        		"title" => "Печать по шаблону",
+        		"link" => "#",
+        		"icon" => "devices/printer.png",
+        		"template" => "formset_literature_statements"
+        	),
+        	array(
+        		"title" => "Удалить заявку",
+        		"link" => "disciplines.php?action=deleteStatement&id=".$statement->getId(),
+        		"icon" => "actions/edit-delete.png"
+        	)
         ));
         $this->setData("statement", $statement);
         $this->renderView("_corriculum/_disciplines/statementOnBooks/edit.tpl");
@@ -118,6 +125,12 @@ class CCorriculumDisciplinesController extends CFlowController {
             return true;
         }
         $this->renderView("_corriculum/_disciplines/statementOnBooks/edit.tpl");
+    }
+    public function actionDeleteStatement() {
+        $statement = CBaseManager::getCorriculumDisciplineStatement(CRequest::getInt("id"));
+        $disciplineId = CCorriculumsManager::getDiscipline($statement->discipline_id)->getId();
+        $statement->remove();
+        $this->redirect("disciplines.php?action=edit&id=".$disciplineId);
     }
     public function actionDel() {
         $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("id"));
