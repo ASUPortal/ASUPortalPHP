@@ -81,6 +81,44 @@ class CCorriculumDisciplinesController extends CFlowController {
         $this->setData("discipline", $discipline);
         $this->renderView("_corriculum/_disciplines/add.tpl");
     }
+    public function actionAddStatement() {
+        $statement = new CCorriculumDisciplineStatement();
+        $statement->discipline_id = CRequest::getInt("discipline_id");
+        $types = array(
+            "1" => "основной",
+            "2" => "дополнительной"
+        );
+        $this->setData("types", $types);
+        $this->setData("statement", $statement);
+        $this->renderView("_corriculum/_disciplines/statementOnBooks/add.tpl");
+    }
+    public function actionEditStatement() {
+        $statement = CBaseManager::getCorriculumDisciplineStatement(CRequest::getInt("id"));
+        $types = array(
+            "1" => "основной",
+            "2" => "дополнительной"
+        );
+        $this->setData("types", $types);
+        $this->addActionsMenuItem(array(
+            "title" => "Печать по шаблону",
+            "link" => "#",
+            "icon" => "devices/printer.png",
+            "template" => "formset_literature_statements"
+        ));
+        $this->setData("statement", $statement);
+        $this->renderView("_corriculum/_disciplines/statementOnBooks/edit.tpl");
+    }
+    public function actionSaveStatement() {
+        $statement = new CCorriculumDisciplineStatement();
+        $statement->setAttributes(CRequest::getArray($statement::getClassName()));
+        if ($statement->validate()) {
+            $statement->save();
+            $discipline = CCorriculumsManager::getDiscipline($statement->discipline_id);
+            $this->redirect("disciplines.php?action=editStatement&discipline_id=".$discipline->getId()."&id=".$statement->getId());
+            return true;
+        }
+        $this->renderView("_corriculum/_disciplines/statementOnBooks/edit.tpl");
+    }
     public function actionDel() {
         $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("id"));
         $id = $discipline->cycle_id;

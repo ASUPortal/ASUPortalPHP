@@ -248,6 +248,7 @@
     define("TABLE_CORRICULUM_DISCIPLINE_KNOWLEDGES", "pl_corriculum_discipline_knowledges");
     define("TABLE_CORRICULUM_DISCIPLINE_SKILLS", "pl_corriculum_discipline_skills");
     define("TABLE_CORRICULUM_DISCIPLINE_EXPERIENCES", "pl_corriculum_discipline_experiences");
+    define("TABLE_CORRICULUM_DISCIPLINE_STATEMENTS", "pl_corriculum_discipline_statements");
     define("TABLE_CORRICULUM_ATTESTATIONS", "pl_corriculum_attestations");
     define("TABLE_CORRICULUM_BOOKS", "pl_corriculum_books");
     define("TABLE_TAXONOMY", "taxonomy");
