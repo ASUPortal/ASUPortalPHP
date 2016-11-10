@@ -56,6 +56,9 @@ class CWorkPlanSelfEduQuestions extends CAbstractPrintClassField {
         			if ($taskExist) {
         				$dataRow[] = "Расчётные задания (задачи и пр.):";
         			}
+        			if (!$taskExist and $questionExist) {
+        				$dataRow[] = "Расчётные задания (задачи и пр.): не предусмотрены";
+        			}
         			$n = 1;
         			foreach ($section->calculationTasks->getItems() as $calculationTask) {
         				$number = $n;
