@@ -523,9 +523,9 @@ class CWorkPlan extends CActiveModel {
          */
         foreach ($this->categories->getItems() as $category) {
             foreach ($category->sections->getItems() as $section) {
-                foreach ($section->loads->getItems() as $load) {
+                foreach ($section->loadsDisplay->getItems() as $load) {
                     if ($load->loadType->getAlias() == "practice") {
-                        foreach ($load->topics as $topic) {
+                        foreach ($load->topicsDisplay as $topic) {
                             $practices->add($topic->getId(), $topic);
                         }
 
@@ -553,7 +553,7 @@ class CWorkPlan extends CActiveModel {
         $loads = new CArrayList();
         foreach ($this->categories->getItems() as $category) {
             foreach ($category->sections->getItems() as $section) {
-                foreach ($section->loads->getItems() as $load) {
+                foreach ($section->loadsDisplay->getItems() as $load) {
                     if ($load->loadType->getAlias() == "labwork") {
                         if ($load->topicsDisplay->getCount() > 0) {
                             $loads->add($load->getId(), $load);
@@ -591,7 +591,7 @@ class CWorkPlan extends CActiveModel {
     	*/
     	foreach ($this->categories->getItems() as $category) {
     		foreach ($category->sections->getItems() as $section) {
-    			foreach ($section->loads->getItems() as $load) {
+    			foreach ($section->loadsDisplay->getItems() as $load) {
     				if ($load->loadType->getAlias() == "lecture") {
     					foreach ($load->topicsDisplay as $topic) {
     						$lectures->add($topic->getId(), $topic);
@@ -620,7 +620,7 @@ class CWorkPlan extends CActiveModel {
          */
         foreach ($this->categories->getItems() as $category) {
             foreach ($category->sections->getItems() as $section) {
-                foreach ($section->loads->getItems() as $load) {
+                foreach ($section->loadsDisplay->getItems() as $load) {
                     foreach ($load->technologiesDisplay->getItems() as $technology) {
                         $technologies->add($technology->getId(), $technology);
                     }
@@ -628,6 +628,34 @@ class CWorkPlan extends CActiveModel {
             }
         }
         return $technologies;
+    }
+    
+    /**
+     * Вопросы по темам нагрузки самостоятельной работы из раздела
+     * 
+     * @return CArrayList
+     */
+    public function getSelfWorkQuestions() {
+    	$selfWorkQuestions = new CArrayList();
+    	/**
+    	 * @var $category CWorkPlanContentCategory
+    	 * @var $section CWorkPlanContentSection
+    	 * @var $load CWorkPlanContentSectionLoad
+    	 * @var $topic CWorkPlanContentSectionLoadTopic
+    	*/
+    	foreach ($this->categories->getItems() as $category) {
+    		foreach ($category->sections->getItems() as $section) {
+    			foreach ($section->loadsDisplay->getItems() as $load) {
+    				if ($load->loadType->getAlias() == "self_work") {
+    					foreach ($load->topicsDisplay as $topic) {
+    						$selfWorkQuestions->add($topic->getId(), $topic);
+    					}
+    
+    				}
+    			}
+    		}
+    	}
+    	return $selfWorkQuestions;
     }
     
     /**

@@ -65,6 +65,16 @@ class CWorkPlanContentController extends CBaseController{
         $this->setData("objects", $plan->getTechnologies());
         $this->renderView("_corriculum/_workplan/content/technologies.tpl");
     }
+    public function actionSelfWorkQuestions() {
+        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
+        $this->addActionsMenuItem(array(
+            "title" => "Обновить",
+            "link" => "workplancontent.php?action=selfWorkQuestions&plan_id=".CRequest::getInt("plan_id"),
+            "icon" => "actions/view-refresh.png"
+        ));
+        $this->setData("objects", $plan->getSelfWorkQuestions());
+        $this->renderView("_corriculum/_workplan/content/selfWorkQuestions.tpl");
+    }
 
     /**
      * Структура дисциплины.
