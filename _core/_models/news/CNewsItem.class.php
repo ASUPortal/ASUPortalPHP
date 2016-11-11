@@ -36,6 +36,9 @@ class CNewsItem extends CActiveModel{
                 "title",
                 "file",
                 "date_time"
+            ),
+            "isImage" => array(
+                "image"
             )
         );
     }

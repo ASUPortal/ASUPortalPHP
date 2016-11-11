@@ -427,6 +427,7 @@
     define("ERROR_FIELD_NUMERIC", "Значение поля \"%name%\" должно быть числовым");
     define("ERROR_FIELD_SELECTED", "Значение поля \"%name%\" должно быть выбрано из списка");
     define("ERROR_FIELD_NOT_A_DATE", "Значение в поле \"%name%\" должно быть датой в формате дд.мм.гггг");
+    define("ERROR_FIELD_IS_IMAGE", "Значение поля \"%name%\" должно быть изображением");
     define("ERROR_INSUFFICIENT_ACCESS_LEVEL", "У Вас недостаточно прав для доступа к данной задаче");
 
     // события валидации
