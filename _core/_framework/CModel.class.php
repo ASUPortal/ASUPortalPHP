@@ -186,7 +186,7 @@ class CModel {
                             }
                         } elseif ($validator == "isImage") {
                         	foreach ($this->fieldsProperty() as $key=>$property) {
-                        		if ($key == $field) {
+                        		if ($key == $field and $this->$field != "") {
                         			if (!CUtils::isImage($property["upload_dir"].$this->$field)) {
                         				$error = str_replace("%name%", $labels[$field], ERROR_FIELD_IS_IMAGE);
                         				$this->getValidationErrors()->add($field, $error);
