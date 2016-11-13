@@ -25,7 +25,7 @@ class CWorkPlanProjectValueOfLoad extends CAbstractPrintClassField {
     {
     	$result = 0;
 		foreach ($contextObject->corriculumDiscipline->labors->getItems() as $labor) {
-        	if ($labor->type->getAlias() == "course_work") {
+        	if ($labor->type->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_COURSE_WORK) {
         		$result = $labor->value;
         	}
         }

@@ -26,14 +26,14 @@ class CWorkPlanSelfWork extends CAbstractPrintClassField {
     	//самостоятельная работа из нагрузки дисциплины учебного плана
     	$selfWorkValueOfLoad = 0;
     	foreach ($contextObject->corriculumDiscipline->labors->getItems() as $labor) {
-    		if ($labor->type->getAlias() == "self_work") {
+    		if ($labor->type->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_SELF_WORK) {
     			$selfWorkValueOfLoad = $labor->value;
     		}
     	}
     	//курсовая работа из нагрузки дисциплины учебного плана
     	$projectValueOfLoad = 0;
     	foreach ($contextObject->corriculumDiscipline->labors->getItems() as $labor) {
-    		if ($labor->type->getAlias() == "course_work") {
+    		if ($labor->type->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_COURSE_WORK) {
     			$projectValueOfLoad = $labor->value;
     		}
     	}

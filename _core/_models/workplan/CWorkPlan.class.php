@@ -524,7 +524,7 @@ class CWorkPlan extends CActiveModel {
         foreach ($this->categories->getItems() as $category) {
             foreach ($category->sections->getItems() as $section) {
                 foreach ($section->loadsDisplay->getItems() as $load) {
-                    if ($load->loadType->getAlias() == "practice") {
+                    if ($load->loadType->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_PRACTICE) {
                         foreach ($load->topicsDisplay as $topic) {
                             $practices->add($topic->getId(), $topic);
                         }
@@ -554,7 +554,7 @@ class CWorkPlan extends CActiveModel {
         foreach ($this->categories->getItems() as $category) {
             foreach ($category->sections->getItems() as $section) {
                 foreach ($section->loadsDisplay->getItems() as $load) {
-                    if ($load->loadType->getAlias() == "labwork") {
+                    if ($load->loadType->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_LAB_WORK) {
                         if ($load->topicsDisplay->getCount() > 0) {
                             $loads->add($load->getId(), $load);
                         }
@@ -592,7 +592,7 @@ class CWorkPlan extends CActiveModel {
     	foreach ($this->categories->getItems() as $category) {
     		foreach ($category->sections->getItems() as $section) {
     			foreach ($section->loadsDisplay->getItems() as $load) {
-    				if ($load->loadType->getAlias() == "lecture") {
+    				if ($load->loadType->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_LECTURE) {
     					foreach ($load->topicsDisplay as $topic) {
     						$lectures->add($topic->getId(), $topic);
     					}
@@ -646,7 +646,7 @@ class CWorkPlan extends CActiveModel {
     	foreach ($this->categories->getItems() as $category) {
     		foreach ($category->sections->getItems() as $section) {
     			foreach ($section->loadsDisplay->getItems() as $load) {
-    				if ($load->loadType->getAlias() == "self_work") {
+    				if ($load->loadType->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_SELF_WORK) {
     					foreach ($load->topicsDisplay as $topic) {
     						$selfWorkQuestions->add($topic->getId(), $topic);
     					}

@@ -52,7 +52,7 @@ class CWorkPlanContentLoadModelOptionalValidator extends IModelValidatorOptional
 					$sum += $selfEdu->question_hours;
 				}
 			}
-			/*if ($load->loadType->getAlias() == "self_work") {
+			/*if ($load->loadType->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_SELF_WORK) {
 				if ($load->value != $selfEduValue) {
 					$errors[] = "Число часов по СРС: ".$load->value." не совпадает с суммой часов по вопросам самостоятельного изучения: ".
 							$selfEduValue;
