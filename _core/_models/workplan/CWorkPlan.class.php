@@ -523,9 +523,9 @@ class CWorkPlan extends CActiveModel {
          */
         foreach ($this->categories->getItems() as $category) {
             foreach ($category->sections->getItems() as $section) {
-                foreach ($section->loads->getItems() as $load) {
+                foreach ($section->loadsDisplay->getItems() as $load) {
                     if ($load->loadType->getAlias() == "practice") {
-                        foreach ($load->topics as $topic) {
+                        foreach ($load->topicsDisplay as $topic) {
                             $practices->add($topic->getId(), $topic);
                         }
 
@@ -553,7 +553,7 @@ class CWorkPlan extends CActiveModel {
         $loads = new CArrayList();
         foreach ($this->categories->getItems() as $category) {
             foreach ($category->sections->getItems() as $section) {
-                foreach ($section->loads->getItems() as $load) {
+                foreach ($section->loadsDisplay->getItems() as $load) {
                     if ($load->loadType->getAlias() == "labwork") {
                         if ($load->topicsDisplay->getCount() > 0) {
                             $loads->add($load->getId(), $load);
@@ -591,7 +591,7 @@ class CWorkPlan extends CActiveModel {
     	*/
     	foreach ($this->categories->getItems() as $category) {
     		foreach ($category->sections->getItems() as $section) {
-    			foreach ($section->loads->getItems() as $load) {
+    			foreach ($section->loadsDisplay->getItems() as $load) {
     				if ($load->loadType->getAlias() == "lecture") {
     					foreach ($load->topicsDisplay as $topic) {
     						$lectures->add($topic->getId(), $topic);
@@ -620,7 +620,7 @@ class CWorkPlan extends CActiveModel {
          */
         foreach ($this->categories->getItems() as $category) {
             foreach ($category->sections->getItems() as $section) {
-                foreach ($section->loads->getItems() as $load) {
+                foreach ($section->loadsDisplay->getItems() as $load) {
                     foreach ($load->technologiesDisplay->getItems() as $technology) {
                         $technologies->add($technology->getId(), $technology);
                     }
@@ -628,6 +628,34 @@ class CWorkPlan extends CActiveModel {
             }
         }
         return $technologies;
+    }
+    
+    /**
+     * Вопросы по темам нагрузки самостоятельной работы из раздела
+     * 
+     * @return CArrayList
+     */
+    public function getSelfWorkQuestions() {
+    	$selfWorkQuestions = new CArrayList();
+    	/**
+    	 * @var $category CWorkPlanContentCategory
+    	 * @var $section CWorkPlanContentSection
+    	 * @var $load CWorkPlanContentSectionLoad
+    	 * @var $topic CWorkPlanContentSectionLoadTopic
+    	*/
+    	foreach ($this->categories->getItems() as $category) {
+    		foreach ($category->sections->getItems() as $section) {
+    			foreach ($section->loadsDisplay->getItems() as $load) {
+    				if ($load->loadType->getAlias() == "self_work") {
+    					foreach ($load->topicsDisplay as $topic) {
+    						$selfWorkQuestions->add($topic->getId(), $topic);
+    					}
+    
+    				}
+    			}
+    		}
+    	}
+    	return $selfWorkQuestions;
     }
     
     /**
@@ -660,36 +688,42 @@ class CWorkPlan extends CActiveModel {
     	$newPlan->title = "Копия ".$newPlan->title;
     	/**
     	 * Клонируем профили рабочей программы
+    	 * @var CTerm $profile
     	 */
     	foreach ($this->profiles->getItems() as $profile) {
     		$newPlan->profiles->add($profile->getId(), $profile->getId());
     	}
     	/**
     	 * Клонируем предшествующие дисциплины рабочей программы
+    	 * @var CCorriculumDiscipline $disciplineBefore
     	 */
     	foreach ($this->disciplinesBefore->getItems() as $disciplineBefore) {
     		$newPlan->disciplinesBefore->add($disciplineBefore->getId(), $disciplineBefore->getId());
     	}
     	/**
     	 * Клонируем последующие дисциплины рабочей программы
+    	 * @var CCorriculumDiscipline $disciplineBefore
     	 */
     	foreach ($this->disciplinesAfter->getItems() as $disciplineAfter) {
     		$newPlan->disciplinesAfter->add($disciplineAfter->getId(), $disciplineAfter->getId());
     	}
     	/**
     	 * Клонируем авторов рабочей программы
+    	 * @var CPerson $author
     	 */
     	foreach ($this->authors->getItems() as $author) {
     		$newPlan->authors->add($author->getId(), $author->getId());
     	}
     	/**
     	 * Клонируем протоколы кафедры рабочей программы
+    	 * @var CDepartmentProtocol $protocolsDep
     	 */
     	foreach ($this->protocolsDep->getItems() as $protocolsDep) {
     		$newPlan->protocolsDep->add($protocolsDep->getId(), $protocolsDep->getId());
     	}
     	/**
     	 * Клонируем протоколы НМС рабочей программы
+    	 * @var CNMSProtocol $protocolsNMS
     	 */
     	foreach ($this->protocolsNMS->getItems() as $protocolsNMS) {
     		$newPlan->protocolsNMS->add($protocolsNMS->getId(), $protocolsNMS->getId());
@@ -697,13 +731,15 @@ class CWorkPlan extends CActiveModel {
     	$newPlan->save();
     	/**
     	 * Клонируем цели рабочей программы
-    	*/
+    	 * @var CWorkPlanGoal $goal
+    	 */
     	foreach ($this->goals->getItems() as $goal) {
     		$newGoal = $goal->copy();
     		$newGoal->plan_id = $newPlan->getId();
     		$newGoal->save();
     		/**
     		 * Клонируем задачи целей рабочей программы
+    		 * @var CWorkPlanTask $task
     		 */
     		foreach ($goal->tasks->getItems() as $task) {
     			$newTask = $task->copy();
@@ -714,6 +750,7 @@ class CWorkPlan extends CActiveModel {
     	}
     	/**
     	 * Клонируем компетенции рабочей программы
+    	 * @var CWorkPlanCompetention $competention
     	 */
     	foreach ($this->competentions->getItems() as $competention) {
     		$newCompetention = $competention->copy();
@@ -756,6 +793,7 @@ class CWorkPlan extends CActiveModel {
     	}
     	/**
     	 * Клонируем семестры рабочей программы
+    	 * @var CWorkPlanTerm $term
     	 */
     	$termsMapping = array();
     	foreach ($this->terms->getItems() as $term) {
@@ -767,6 +805,7 @@ class CWorkPlan extends CActiveModel {
     	 
     	/**
     	 * Клонируем категории рабочей программы
+    	 * @var CWorkPlanContentCategory $categorie
     	 */
     	foreach ($this->categories->getItems() as $categorie) {
     		$newCategorie = $categorie->copy();
@@ -785,6 +824,13 @@ class CWorkPlan extends CActiveModel {
     			*/
     			foreach ($section->controls->getItems() as $control) {
     				$newSection->controls->add($control->getId(), $control->getId());
+    			}
+    			/**
+    			 * Копируем рекомендуемую литературу из разделов
+    			 * @var CTerm $control
+    			 */
+    			foreach ($section->recommendedLiterature->getItems() as $literature) {
+    				$newSection->recommendedLiterature->add($literature->getId(), $literature->getId());
     			}
     			$newSection->save();
     			/**
@@ -835,7 +881,7 @@ class CWorkPlan extends CActiveModel {
     				/**
     				 * Копируем баллы из видов контроля
     				 * @var CWorkPlanMarkStudyActivity $mark
-    				*/
+    				 */
     				foreach ($controlType->marks->getItems() as $mark) {
     					$newMark = $mark->copy();
     					$newMark->activity_id = $newControlType->getId();
@@ -844,6 +890,7 @@ class CWorkPlan extends CActiveModel {
     			}
     			/**
     			 * Копируем фонд оценочных средств из разделов
+    			 * @var CWorkPlanFundMarkType $fundMarkType
     			 */
     			foreach ($section->fundMarkTypes->getItems() as $fundMarkType) {
     				$newFundMarkType = $fundMarkType->copy();
@@ -872,10 +919,21 @@ class CWorkPlan extends CActiveModel {
     				}
     				$newFundMarkType->save();
     			}
+    			/**
+    			 * Копируем расчётные задания из разделов
+    			 * @var CWorkPlanCalculationTask $calculationTask
+    			 */
+    			foreach ($section->calculationTasks->getItems() as $calculationTask) {
+    				$newCalculationTask = $calculationTask->copy();
+    				$newCalculationTask->plan_id = $newPlan->getId();
+    				$newCalculationTask->section_id = $newSection->getId();
+    				$newCalculationTask->save();
+    			}
     		}
     	}
     	/**
     	 * Клонируем темы курсовых и РГР рабочей программы
+    	 * @var CWorkPlanProjectTheme $projectTheme
     	 */
     	foreach ($this->projects->getItems() as $projectTheme) {
     		$newProjectTheme = $projectTheme->copy();
@@ -884,6 +942,7 @@ class CWorkPlan extends CActiveModel {
     	}
     	/**
     	 * Клонируем самостоятельное изучение рабочей программы
+    	 * @var CWorkPlanSelfEducationBlock $selfEducation
     	 */
     	foreach ($this->selfEducations->getItems() as $selfEducation) {
     		$newSelfEducation = $selfEducation->copy();
@@ -892,6 +951,7 @@ class CWorkPlan extends CActiveModel {
     	}
     	/**
     	 * Клонируем балльно-рейтинговую систему рабочей программы
+    	 * @var CWorkPlanBRS $BRS
     	 */
     	foreach ($this->BRS->getItems() as $BRS) {
     		$newBRS = $BRS->copy();
@@ -900,6 +960,7 @@ class CWorkPlan extends CActiveModel {
     	}
     	/**
     	 * Клонируем оценочные средства рабочей программы
+    	 * @var CWorkPlanMarkType $markTypes
     	 */
     	foreach ($this->markTypes->getItems() as $markTypes) {
     		$newMarkTypes = $markTypes->copy();
@@ -922,6 +983,7 @@ class CWorkPlan extends CActiveModel {
     	}
     	/**
     	 * Клонируем литературу рабочей программы
+    	 * @var CWorkPlanLiterature $literature
     	 */
     	foreach ($this->literature->getItems() as $literature) {
     		$newLiterature = $literature->copy();
@@ -930,6 +992,7 @@ class CWorkPlan extends CActiveModel {
     	}
     	/**
     	 * Клонируем программное обеспечение рабочей программы
+    	 * @var CWorkPlanSoftware $software
     	 */
     	foreach ($this->software->getItems() as $software) {
     		$newSoftware = $software->copy();
@@ -938,6 +1001,7 @@ class CWorkPlan extends CActiveModel {
     	}
     	/**
     	 * Клонируем доп. обеспечение рабочей программы
+    	 * @var CWorkPlanAdditionalSupply $additionalSupply
     	 */
     	foreach ($this->additionalSupply->getItems() as $additionalSupply) {
     		$newAdditionalSupply = $additionalSupply->copy();
@@ -946,6 +1010,7 @@ class CWorkPlan extends CActiveModel {
     	}
     	/**
     	 * Клонируем итоговый контроль рабочей программы
+    	 * @var CWorkPlanFinalControl $finalControl
     	 */
     	foreach ($this->finalControls->getItems() as $finalControl) {
     		$newFinalControl = $finalControl->copy();
@@ -953,7 +1018,17 @@ class CWorkPlan extends CActiveModel {
     		$newFinalControl->save();
     	}
     	/**
+    	 * Клонируем промежуточный контроль рабочей программы
+    	 * @var CWorkPlanIntermediateControl $intermediateControl
+    	 */
+    	foreach ($this->intermediateControls->getItems() as $intermediateControl) {
+    		$newIntermediateControl = $intermediateControl->copy();
+    		$newIntermediateControl->plan_id = $newPlan->getId();
+    		$newIntermediateControl->save();
+    	}
+    	/**
     	 * Клонируем вопросы к экзамену и зачету рабочей программы
+    	 * @var CExamQuestion $question
     	 */
     	foreach ($this->questions->getItems() as $question) {
     		$newQuestion = $question->copy();
@@ -962,6 +1037,7 @@ class CWorkPlan extends CActiveModel {
     	}
     	/**
     	 * Клонируем оценочные материалы рабочей программы
+    	 * @var CWorkPlanEvaluationMaterial $materialOfEvaluation
     	 */
     	foreach ($this->materialsOfEvaluation->getItems() as $materialOfEvaluation) {
     		$newMaterialOfEvaluation = $materialOfEvaluation->copy();
@@ -970,6 +1046,7 @@ class CWorkPlan extends CActiveModel {
     	}
     	/**
     	 * Клонируем оценочные критерии рабочей программы
+    	 * @var CWorkPlanCriteriaOfEvaluation $criteria
     	 */
     	foreach ($this->criteria->getItems() as $criteria) {
     		$newCriteria = $criteria->copy();

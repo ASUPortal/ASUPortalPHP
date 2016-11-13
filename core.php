@@ -248,6 +248,7 @@
     define("TABLE_CORRICULUM_DISCIPLINE_KNOWLEDGES", "pl_corriculum_discipline_knowledges");
     define("TABLE_CORRICULUM_DISCIPLINE_SKILLS", "pl_corriculum_discipline_skills");
     define("TABLE_CORRICULUM_DISCIPLINE_EXPERIENCES", "pl_corriculum_discipline_experiences");
+    define("TABLE_CORRICULUM_DISCIPLINE_STATEMENTS", "pl_corriculum_discipline_statements");
     define("TABLE_CORRICULUM_ATTESTATIONS", "pl_corriculum_attestations");
     define("TABLE_CORRICULUM_BOOKS", "pl_corriculum_books");
     define("TABLE_TAXONOMY", "taxonomy");
@@ -426,6 +427,7 @@
     define("ERROR_FIELD_NUMERIC", "Значение поля \"%name%\" должно быть числовым");
     define("ERROR_FIELD_SELECTED", "Значение поля \"%name%\" должно быть выбрано из списка");
     define("ERROR_FIELD_NOT_A_DATE", "Значение в поле \"%name%\" должно быть датой в формате дд.мм.гггг");
+    define("ERROR_FIELD_IS_IMAGE", "Значение поля \"%name%\" должно быть изображением");
     define("ERROR_INSUFFICIENT_ACCESS_LEVEL", "У Вас недостаточно прав для доступа к данной задаче");
 
     // события валидации

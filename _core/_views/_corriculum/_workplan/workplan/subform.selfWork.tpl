@@ -2,7 +2,8 @@
 
 <h4>4.1. Вопросы для самостоятельного изучения</h4>
 
-{CHtml::activeComponent("workplanselfeducationblocks.php?plan_id={$plan->getId()}", $plan)}
+{CHtml::activeComponent("workplancontent.php?plan_id={$plan->getId()}", $plan, ["defaultAction" => "selfWorkQuestions"])}
+{*CHtml::activeComponent("workplanselfeducationblocks.php?plan_id={$plan->getId()}", $plan)*}
 
 <h4>4.2. Расчётные задания (задачи и пр.)</h4>
 
