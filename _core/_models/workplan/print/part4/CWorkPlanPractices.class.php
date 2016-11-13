@@ -29,7 +29,7 @@ class CWorkPlanPractices extends CAbstractPrintClassField {
         $sumPractice = 0;
         foreach ($discipline->sections->getItems() as $section) {
         	foreach ($section->labors->getItems() as $labor) {
-        		if ($labor->type->getAlias() == "practice") {
+        		if ($labor->type->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_PRACTICE) {
         			$sumPractice += $labor->value;
         		}
         	}

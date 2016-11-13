@@ -29,7 +29,7 @@ class CWorkPlanSelfEduQuestions extends CAbstractPrintClassField {
         	foreach ($category->sections->getItems() as $section) {
         		$questionExist = false;
         		foreach ($section->loadsDisplay->getItems() as $load) {
-        			if ($load->loadType->getAlias() == "self_work") {
+        			if ($load->loadType->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_SELF_WORK) {
         				if (!$load->topicsDisplay->isEmpty()) {
         					$questionExist = true;
         				}
@@ -41,7 +41,7 @@ class CWorkPlanSelfEduQuestions extends CAbstractPrintClassField {
         		}
         		$i = 1;
         		foreach ($section->loadsDisplay->getItems() as $load) {
-        			if ($load->loadType->getAlias() == "self_work") {
+        			if ($load->loadType->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_SELF_WORK) {
         				foreach ($load->topicsDisplay as $topic) {
         					$number = $i;
         					$dataRow[] = $number.". ".$topic->title;

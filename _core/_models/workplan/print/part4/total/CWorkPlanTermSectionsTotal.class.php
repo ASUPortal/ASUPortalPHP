@@ -30,13 +30,13 @@ class CWorkPlanTermSectionsTotal extends CAbstractPrintClassField {
     	}
     	$query = new CQuery();
     	$query->select(join(", ", $terms))
-    	->from(TABLE_WORK_PLAN_CONTENT_LOADS." as l")
-    	->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
-    	->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
-    	->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
-    	->condition("category.plan_id = ".$contextObject->getId()." and l._deleted = 0 and category._deleted = 0")
-    	->group("l.load_type_id")
-    	->order("term.name");
+	    	->from(TABLE_WORK_PLAN_CONTENT_LOADS." as l")
+	    	->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.load_type_id")
+	    	->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
+	    	->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
+	    	->condition("category.plan_id = ".$contextObject->getId()." and l._deleted = 0 and category._deleted = 0")
+	    	->group("l.load_type_id")
+	    	->order("term.name");
     	$objects = $query->execute();
     	$auditorTotal = 0;
     	foreach ($objects->getItems() as $key=>$value) {
@@ -51,7 +51,7 @@ class CWorkPlanTermSectionsTotal extends CAbstractPrintClassField {
     	}
     	$selfWorkValueOfLoad = 0;
     	foreach ($contextObject->corriculumDiscipline->labors->getItems() as $labor) {
-    		if ($labor->type->getAlias() == "self_work") {
+    		if ($labor->type->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_SELF_WORK) {
     			$selfWorkValueOfLoad = $labor->value;
     		}
     	}
