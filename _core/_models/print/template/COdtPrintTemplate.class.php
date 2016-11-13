@@ -10,6 +10,7 @@
  * Шаблон печатной формы на основе ODT-документа
  *
  * Class COdtPrintTemplate
+ * @property CPrintForm form
  */
 class COdtPrintTemplate implements IPrintTemplate {
     private $form;
