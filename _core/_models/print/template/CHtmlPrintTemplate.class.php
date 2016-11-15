@@ -10,6 +10,7 @@
  * Шаблон печатной формы на основе HTML-документа
  *
  * Class CHtmlPrintTemplate
+ * @property CPrintForm form
  */
 class CHtmlPrintTemplate implements IPrintTemplate {
 	private $form;
@@ -36,8 +37,7 @@ class CHtmlPrintTemplate implements IPrintTemplate {
     
     /**
      * Получить поля из шаблона.
-     * Поля будем получать, используя механизм работы с ODT-файлами.
-     * Для этого необходимо, чтобы был указан файл шаблона-основы, из которого сделан HTML-шаблон
+     * Название описателей-классов должно начинаться с имени класса-объекта
      *
      * @return IPrintClassField[]
      */
@@ -47,21 +47,32 @@ class CHtmlPrintTemplate implements IPrintTemplate {
 		$file = $this->file;
 		
 		$fields = array();
+		$formsetFields = new CArrayList();
 		/**
 		 * Получаем описатели из базы данных
 		 */
-		foreach (CPrintManager::getListFieldsByFormset($form->formset_id) as $field) {
-			$fields[] = new CHtmlPrintTemplateField($field->alias);
-		}
+		$formsetFields = $this->form->formset->fields;
 		/**
 		 * Получаем описатели-классы
 		 */
 		$start = get_class($object);
 		$end = ".class";
-		$text = file_get_contents($file);
-		preg_match_all("/$start(.*?)$end/", $text, $result);
-		foreach ($result[0] as $field) {
-			$fields[] = new CHtmlPrintTemplateField($field);
+		preg_match_all("/$start(.*?)$end/", file_get_contents($file), $result);
+		foreach ($result[0] as $fieldName) {
+			$field = CPrintManager::getPrintClassField($fieldName, $object);
+			$formsetFields->add($field->alias, $field);
+		}
+		/**
+		 * @var CPrintField $field
+		 */
+		foreach ($formsetFields as $field) {
+			if ($field->getFieldType() == IPrintClassField::FIELD_TEXT) {
+				$fields[] = new CHtmlTextPrintTemplateField($field);
+			} else if ($field->getFieldType() == IPrintClassField::FIELD_TABLE or $field->getFieldType() == IPrintClassField::FIELD_PRINT_TABLE) {
+				$fields[] = new CHtmlTablePrintTemplateField($field);
+			} else {
+				throw new Exception("Unsupported field type" . $field->type_id);
+			}
 		}
 		return $fields;
     }

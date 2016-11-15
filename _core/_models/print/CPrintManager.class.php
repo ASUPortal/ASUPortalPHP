@@ -165,4 +165,36 @@ class CPrintManager {
     	}
     	return $listFields;
     }
+    
+    /**
+     * Получить объект описателя-класса по названию поля
+     *
+     * @param String $fieldName
+     * @param CModel $object
+     * @throws Exception
+     * @return IPrintClassField
+     */
+    public static function getPrintClassField($fieldName, CModel $object) {
+        $field = null;
+        if (mb_strpos($fieldName, ".class") !== false) {
+            $classFieldName = CUtils::strLeft($fieldName, ".class");
+            /**
+             * @var $classField IPrintClassField
+             */
+            if (class_exists($classFieldName)) {
+                $classField = new $classFieldName();
+            } else {
+                throw new Exception("Класс ".$classFieldName." не объявлен в системе!");
+            }
+            if (!is_a($classField, "IPrintClassField")) {
+                throw new Exception("Класс ".$classField." не реализует интерфейс IPrintClassField");
+            }
+            /**
+             * Дабы не ломать уже имеющуюся структуру работать будем через
+             * класс-адаптер
+             */
+            $field = new CPrintClassFieldToFieldAdapter($classField, $object);
+        }
+        return $field;
+    }
 }

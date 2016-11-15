@@ -10,6 +10,7 @@
  * Шаблон печатной формы на основе ODT-документа
  *
  * Class COdtPrintTemplate
+ * @property CPrintForm form
  */
 class COdtPrintTemplate implements IPrintTemplate {
 	private $form;
@@ -50,10 +51,38 @@ class COdtPrintTemplate implements IPrintTemplate {
     public function getFields() {
         $fields = array();
         foreach ($this->getDocumentFields() as $name => $descriptors) {
-            $fields[] = new COdtPrintTemplateField($name, $descriptors, false);
+            /**
+             * Обрабатываем описатели из базы данных
+             * @var CPrintField $field
+             */
+            if (!is_null(CPrintManager::getField($name))) {
+                $field = CPrintManager::getField($name);
+            }
+            /**
+             * Получаем описатели-классы
+             * @var IPrintClassField $field
+             */
+            if (!is_null(CPrintManager::getPrintClassField($name, $this->object))) {
+                $field = CPrintManager::getPrintClassField($name, $this->object);
+            }
+            $fields[] = new COdtPrintTemplateField($field, $this->form, $descriptors, false);
         }
         foreach ($this->getStyleFields() as $name => $descriptors) {
-            $fields[] = new COdtPrintTemplateField($name, $descriptors, true);
+            /**
+             * Обрабатываем описатели из базы данных
+             * @var CPrintField $field
+             */
+            if (!is_null(CPrintManager::getField($name))) {
+        		$field = CPrintManager::getField($name);
+            }
+            /**
+             * Получаем описатели-классы
+             * @var IPrintClassField $field
+             */
+            if (!is_null(CPrintManager::getPrintClassField($name, $this->object))) {
+                $field = CPrintManager::getPrintClassField($name, $this->object);
+            }
+            $fields[] = new COdtPrintTemplateField($field, $this->form, $descriptors, true);
         }
         return $fields;
     }

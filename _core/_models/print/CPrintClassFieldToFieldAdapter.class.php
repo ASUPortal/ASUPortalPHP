@@ -53,6 +53,14 @@ class CPrintClassFieldToFieldAdapter extends CPrintField{
     public function evaluateValue($object) {
         return $this->getClassField()->execute($this->getContext());
     }
+    
+    public function getColSpan() {
+        return $this->getClassField()->getColSpan();
+    }
+    
+    public function getRowSpan() {
+        return $this->getClassField()->getRowSpan();
+    }
 
 
 }

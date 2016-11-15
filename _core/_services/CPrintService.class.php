@@ -66,8 +66,8 @@ class CPrintService {
          * @var IPrintTemplateField $templateField
          */
         foreach ($fieldsFromTemplate as $templateField) {
-            $field = $this->getFieldValue($templateField->getName(), $object, $form);
-            $templateField->setValue($field, $object, $form, $template);
+            $value = $templateField->getEvaluateValue($object);
+            $templateField->setValue($value, $template);
         }
         /**
          * В HTML-шаблонах заменяем изображения на 64-разрядный код
@@ -88,52 +88,7 @@ class CPrintService {
         }
         return $filename;
     }
-
-    /**
-     * Получить объект описателя поля
-     *
-     * @param $fieldName
-     * @param CModel $object
-     * @param CPrintForm $form
-     * @return CPrintField
-     */
-    public function getFieldValue($fieldName, CModel $object, CPrintForm $form) {
-		/**
-		 * Обрабатываем описатели из базы данных
-		 */
-		if (!is_null($form->formset->getFieldByName($fieldName))) {
-			$field = $form->formset->getFieldByName($fieldName);
-		}
-		/**
-		 * Обрабатываем описатели-классы
-		 */
-		elseif (mb_strpos($fieldName, ".class") !== false) {
-			/**
-			 * Это новый описатель, параметры которого хранятся в отдельном классе
-			 */
-			$classFieldName = CUtils::strLeft($fieldName, ".class");
-			/**
-			 * @var $classField IPrintClassField
-			 */
-			if (class_exists($classFieldName)) {
-				$classField = new $classFieldName();
-			} else {
-				throw new Exception("Класс ".$classFieldName." не объявлен в системе!");
-			}
-			if (!is_a($classField, "IPrintClassField")) {
-				throw new Exception("Класс ".$classField." не реализует интерфейс IPrintClassField");
-			}
-			/**
-			 * Дабы не ломать уже имеющуюся структуру работать будем через
-			 * класс-адаптер
-			 */
-			$field = new CPrintClassFieldToFieldAdapter($classField, $object);
-		} else {
-			throw new Exception("Описатель ".$fieldName." не найден в системе!");
-		}
-		return $field;
-    }
-
+    
     /**
      * Получить название файла
      *

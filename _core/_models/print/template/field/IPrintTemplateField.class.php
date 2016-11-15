@@ -18,15 +18,20 @@ interface IPrintTemplateField {
      * @return String
      */
     public function getName();
+    
+	/**
+	 * Вычислить значение поля
+	 *
+	 * @param CModel $object
+	 * @return String/Array
+	 */
+	public function getEvaluateValue(CModel $object);
 
-    /**
-     * Установить значение поля
-     *
-     * @param CPrintField $field
-     * @param CModel $object
-     * @param CPrintForm $form
-     * @param IPrintTemplate $template
-     * @return string
-     */
-    public function setValue(CPrintField $field, CModel $object, CPrintForm $form, IPrintTemplate $template);
+	/**
+	 * Установить значение поля
+	 *
+	 * @param String $value
+	 * @param IPrintTemplate $template
+	 */
+	public function setValue($value, IPrintTemplate $template);
 }

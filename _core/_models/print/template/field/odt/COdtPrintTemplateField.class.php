@@ -13,12 +13,14 @@
  * Class COdtPrintTemplateField
  */
 class COdtPrintTemplateField implements IPrintTemplateField {
-    private $name;
+    private $_field;
+    private $_form;
     private $descriptors;
     private $isStyleField;
 
-    function __construct($name, $descriptors, $isStyleField) {
-        $this->name = $name;
+    function __construct(CPrintField $field, CPrintForm $form, $descriptors, $isStyleField) {
+        $this->_field = $field;
+        $this->_form = $form;
         $this->descriptors = $descriptors;
         $this->isStyleField = $isStyleField;
     }
@@ -29,7 +31,17 @@ class COdtPrintTemplateField implements IPrintTemplateField {
      * @return String
      */
     public function getName() {
-        return $this->name;
+        return $this->_field->alias;
+    }
+    
+    /**
+     * Вычислить значение поля
+     *
+     * @param CModel $object
+     * @return String/Array
+     */
+    public function getEvaluateValue(CModel $object) {
+    	return $this->_field->evaluateValue($object);
     }
 
     /**
@@ -37,15 +49,13 @@ class COdtPrintTemplateField implements IPrintTemplateField {
      * построенном на основе ODT-шаблона. Вот пусть здесь он и остается
      */
     
-    /**
-     * Установить значение поля
-     *
-     * @param CPrintField $field
-     * @param CModel $object
-     * @param CPrintForm $form
-     * @return string
-     */
-    public function setValue(CPrintField $field, CModel $object, CPrintForm $form, IPrintTemplate $template) {
+	/**
+	 * Установить значение поля
+	 *
+	 * @param String $value
+	 * @param IPrintTemplate $template
+	 */
+	public function setValue($value, IPrintTemplate $template) {
 		$descriptors = $this->descriptors;
 		$isStyleField = $this->isStyleField;
 		/**
@@ -55,9 +65,9 @@ class COdtPrintTemplateField implements IPrintTemplateField {
 		 * описатели есть, то не вычисляем, так как вычислением дочерних
 		 * будет заниматься родительский
 		*/
-		if (is_null($field->parent)) {
+		if (is_null($this->_field->parent)) {
 			foreach ($descriptors as $node) {
-				$xml = $this->processNode($node, $field, $object, $form);
+				$xml = $this->processNode($node, $this->_field, $value, $this->_form);
 			}
 			/**
 			 * Устанавливаем xml и стили odt документа
@@ -139,11 +149,11 @@ class COdtPrintTemplateField implements IPrintTemplateField {
     /**
      * @param DOMNode $node
      * @param CPrintField $field
-     * @param $object
+     * @param $value
      * @param CPrintForm $form
      * @return string
      */
-    private function processNode(DOMNode $node, CPrintField $field, $object, CPrintForm $form) {
+    private function processNode(DOMNode $node, CPrintField $field, $value, CPrintForm $form) {
         $this->_isDebug = $form->debug == "1";
         $doc = $node->ownerDocument;
         /**
@@ -159,7 +169,7 @@ class COdtPrintTemplateField implements IPrintTemplateField {
              * 1. Просто вывод текста (по умолчанию)
              * 2. Вывод таблицы
              */
-            if ($field->getFieldType() == "text") {
+            if ($field->getFieldType() == IPrintClassField::FIELD_TEXT) {
                 $debug = array();
                 /**
                  * Это вывод просто текста. Мы заменяем DOMNode текстом, который
@@ -175,7 +185,7 @@ class COdtPrintTemplateField implements IPrintTemplateField {
                  */
                 // echo $field->alias.", ";
                 try {
-                    $newNode = $doc->createTextNode($field->evaluateValue($object));
+                    $newNode = $doc->createTextNode($value);
                 } catch (Exception $e) {
                     echo "Возникла ошибка ".$e->getMessage()." в поле ".$field->alias;
                 }
@@ -191,7 +201,7 @@ class COdtPrintTemplateField implements IPrintTemplateField {
                  * Сохраняем
                  */
                 return $doc->saveXML();
-            } elseif ($field->getFieldType() == "table") {
+            } elseif ($field->getFieldType() == IPrintClassField::FIELD_TABLE) {
                 $debug = array();
                 /**
                  * Это вывод таблицы. Описатель поля должен стоять в первой ячейке
@@ -222,7 +232,7 @@ class COdtPrintTemplateField implements IPrintTemplateField {
                  * Теперь ищем все ячейке в выбранной строке. Мы будем их клонировать
                  * и заполнять данными из результирующего массива
                  */
-                $arr = $field->evaluateValue($object);
+                $arr = $value;
                 foreach ($arr as $data_row) {
                     $i = 0;
                     /**
@@ -273,7 +283,7 @@ class COdtPrintTemplateField implements IPrintTemplateField {
              * Это место, где вычисляются групповые описатели.
              * Посмотрим-с
              */
-            $items = $field->evaluateValue($object);
+            $items = $value;
             /**
              * Сразу отрубаем, если описатель возвращает не тот тип
              * данных. Можно было бы тянуть вторую часть else, но

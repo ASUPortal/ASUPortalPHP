@@ -12,6 +12,7 @@
  * @property String form_format
  * @property String template_file
  * @property String filename_generation_strategy;
+ * @property CPrintFormset formset
  */
 class CPrintForm extends CActiveModel{
     protected $_table = TABLE_PRINT_FORMS;

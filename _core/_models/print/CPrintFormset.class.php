@@ -6,6 +6,12 @@
  * Time: 20:46
  * To change this template use File | Settings | File Templates.
  */
+
+/**
+ * Class CPrintFormset
+ *
+ * @property CArrayList fields
+ */
 class CPrintFormset extends CActiveModel{
     protected $_table = TABLE_PRINT_FORMSETS;
     protected $_forms = null;

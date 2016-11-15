@@ -137,4 +137,12 @@ class CPrintField extends CActiveModel {
             throw new Exception("Unsupported field type " . $this->type_id);
         }
     }
+    
+    public function getColSpan() {
+        return "1";
+    }
+    
+    public function getRowSpan() {
+        return "1";
+    }
 }
