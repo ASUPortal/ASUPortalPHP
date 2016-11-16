@@ -68,7 +68,7 @@ class CHtmlPrintTemplate implements IPrintTemplate {
 		foreach ($formsetFields as $field) {
 			if ($field->getFieldType() == IPrintClassField::FIELD_TEXT) {
 				$fields[] = new CHtmlTextPrintTemplateField($field);
-			} else if ($field->getFieldType() == IPrintClassField::FIELD_TABLE or $field->getFieldType() == IPrintClassField::FIELD_PRINT_TABLE) {
+			} else if ($field->getFieldType() == IPrintClassField::FIELD_TABLE) {
 				$fields[] = new CHtmlTablePrintTemplateField($field);
 			} else {
 				throw new Exception("Unsupported field type" . $field->type_id);
