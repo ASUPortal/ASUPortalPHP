@@ -1410,8 +1410,15 @@ class CStaffManager{
             
             $year = $delta->format("%y");
             $month = $delta->format("%m");
+            $days = $delta->format("%d");
             
-            return $year." ".CUtils::getNumberInCase($year, "год", "года", "лет")." ".$month." ".CUtils::getNumberInCase($month, "месяц", "месяца", "месяцев");
+            if ($year == 0 and $month == 0) {
+                return $days." ".CUtils::getNumberInCase($days, "день", "дня", "дней");
+            } elseif ($year == 0 and $month != 0) {
+                return $month." ".CUtils::getNumberInCase($month, "месяц", "месяца", "месяцев");
+            } else {
+                return $year." ".CUtils::getNumberInCase($year, "год", "года", "лет")." ".$month." ".CUtils::getNumberInCase($month, "месяц", "месяца", "месяцев");
+            }
         }
     }
 }

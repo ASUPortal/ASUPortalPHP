@@ -7,7 +7,7 @@
     <tr>
         <td align="right">Начиная с</td>
         <td></td>
-        <td align="left">{CHtml::activeDateField("person[stag_ugatu]", $form, "", "", "",'style="width: 300px;"')}</td>
+        <td align="left">{CHtml::activeDateField("person[stag_ugatu]", $form, "dd.mm.yyyy", "", "", 'style="width: 300px;"')}</td>
     </tr>
     
     <tr>
@@ -18,7 +18,7 @@
     <tr>
         <td align="right">Начиная с</td>
         <td></td>
-        <td align="left">{CHtml::activeDateField("person[stag_pps]", $form, "", "", "",'style="width: 300px;"')}</td>
+        <td align="left">{CHtml::activeDateField("person[stag_pps]", $form, "dd.mm.yyyy", "", "", 'style="width: 300px;"')}</td>
     </tr>
     
     <tr>
@@ -29,7 +29,7 @@
     <tr>
         <td align="right">Начиная с</td>
         <td></td>
-        <td align="left">{CHtml::activeDateField("person[stag_itogo]", $form, "", "", "",'style="width: 300px;"')}</td>
+        <td align="left">{CHtml::activeDateField("person[stag_itogo]", $form, "dd.mm.yyyy", "", "", 'style="width: 300px;"')}</td>
     </tr>
 </table>
 <br>
