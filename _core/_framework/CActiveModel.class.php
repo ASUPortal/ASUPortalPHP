@@ -463,7 +463,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
                             $array[$field] = $value;
                         }
                     } else {
-                        $array[$field] = date($format, 0);
+                        $array[$field] = "0000-00-00";
                     }
                 }
             }
