@@ -289,6 +289,18 @@ class CPerson extends CActiveModel{
             'photo' => array(
                 'type'  => FIELD_UPLOADABLE,
                 'upload_dir' => CORE_CWD.CORE_DS."images".CORE_DS."lects".CORE_DS
+            ),
+            "stag_ugatu" => array(
+                "type"  => FIELD_MYSQL_DATE,
+                "format" => "d.m.Y"
+            ),
+            "stag_pps" => array(
+                "type"  => FIELD_MYSQL_DATE,
+                "format" => "d.m.Y"
+            ),
+            "stag_itogo" => array(
+                "type"  => FIELD_MYSQL_DATE,
+                "format" => "d.m.Y"
             )
         );
     }

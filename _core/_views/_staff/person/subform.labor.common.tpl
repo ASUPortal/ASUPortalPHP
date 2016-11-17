@@ -1,24 +1,38 @@
-<div class="control-group">
-    {CHtml::activeLabel("person[stag_ugatu]", $form)}
-    <div class="controls">
-        {CHtml::activeTextField("person[stag_ugatu]", $form)}
-        {CHtml::error("person[stag_ugatu]", $form)}
-    </div></div>
-
-<div class="control-group">
-    {CHtml::activeLabel("person[stag_pps]", $form)}
-    <div class="controls">
-        {CHtml::activeTextField("person[stag_pps]", $form)}
-        {CHtml::error("person[stag_pps]", $form)}
-    </div></div>
-
-<div class="control-group">
-    {CHtml::activeLabel("person[stag_itogo]", $form)}
-    <div class="controls">
-        {CHtml::activeTextField("person[stag_itogo]", $form)}
-        {CHtml::error("person[stag_itogo]", $form)}
-    </div></div>
-
+<table>
+    <tr>
+        <td>{CHtml::activeLabel("person[stag_ugatu]", $form)}</td>
+        <td width="16px"></td>
+        <td>{CStaffManager::getLengthWork($form->person->stag_ugatu)}</td>
+    </tr>
+    <tr>
+        <td align="right">Начиная с</td>
+        <td></td>
+        <td align="left">{CHtml::activeDateField("person[stag_ugatu]", $form, "", "", "",'style="width: 300px;"')}</td>
+    </tr>
+    
+    <tr>
+        <td>{CHtml::activeLabel("person[stag_pps]", $form)}</td>
+        <td></td>
+        <td>{CStaffManager::getLengthWork($form->person->stag_pps)}</td>
+    </tr>
+    <tr>
+        <td align="right">Начиная с</td>
+        <td></td>
+        <td align="left">{CHtml::activeDateField("person[stag_pps]", $form, "", "", "",'style="width: 300px;"')}</td>
+    </tr>
+    
+    <tr>
+        <td>{CHtml::activeLabel("person[stag_itogo]", $form)}</td>
+        <td></td>
+        <td>{CStaffManager::getLengthWork($form->person->stag_itogo)}</td>
+    </tr>
+    <tr>
+        <td align="right">Начиная с</td>
+        <td></td>
+        <td align="left">{CHtml::activeDateField("person[stag_itogo]", $form, "", "", "",'style="width: 300px;"')}</td>
+    </tr>
+</table>
+<br>
 <div class="control-group">
     {CHtml::activeLabel("person[din_nauch_kar]", $form)}
     <div class="controls">

@@ -1394,4 +1394,24 @@ class CStaffManager{
         }
         return $history;
     }
+    
+    /**
+     * Стаж работы в годах и месяцах
+     *
+     * @param $date mysql_date
+     * @return String
+     */
+    public static function getLengthWork($date) {
+        if ($date !== "") {
+            $firstDateTimeObject = DateTime::createFromFormat('Y-m-d', date("Y-m-d"));
+            $secondDateTimeObject = DateTime::createFromFormat('d.m.Y', $date);
+            
+            $delta = $secondDateTimeObject->diff($firstDateTimeObject);
+            
+            $year = $delta->format("%y");
+            $month = $delta->format("%m");
+            
+            return $year." ".CUtils::getNumberInCase($year, "год", "года", "лет")." ".$month." ".CUtils::getNumberInCase($month, "месяц", "месяца", "месяцев");
+        }
+    }
 }
