@@ -366,8 +366,8 @@ class CHtml {
         $id = str_replace("[", "_", $id);
         $id = str_replace("]", "_", $id);
         ?>
-        <div class="input-append date <?php echo self::getFielsizeClass(); ?> datepicker" id="<?php echo $id; ?>" data-date="<?php echo $model->$name; ?>" data-date-format="<?php echo $format; ?>" <?php echo $html; ?>>
-            <input name="<?php echo $field; ?>" class="<?php echo self::getFielsizeClass(); ?>" type="text" value="<?php echo $model->$name; ?>" readonly>
+        <div class="input-append date <?php echo self::getFielsizeClass(); ?> datepicker" id="<?php echo $id; ?>" data-date="<?php echo $model->$name; ?>" data-date-format="<?php echo $format; ?>">
+            <input name="<?php echo $field; ?>" class="<?php echo self::getFielsizeClass(); ?>" type="text" value="<?php echo $model->$name; ?>">
             <span class="add-on"><i class="icon-th"></i></span>
         </div>
         <?php
