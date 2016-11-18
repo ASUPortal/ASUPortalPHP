@@ -270,9 +270,9 @@ class CPerson extends CActiveModel{
             "e_mail" => "Адрес электронной почты",
             "add_contact" => "Дополнительные контакты",
             "site" => "Адрес сайта",
-            "stag_ugatu" => "Стаж в УГАТУ",
-            "stag_pps" => "Стаж ППС",
-            "stag_itogo" => "Стаж общий",
+            "experience_ugatu" => "Стаж в УГАТУ",
+            "experience_pps" => "Стаж ППС",
+            "experience_total" => "Стаж общий",
             "din_nauch_kar" => "Динамика научной карьеры",
             "ekspert_spec" => "Экспертная область, научная специальность",
             "ekspert_kluch_slova" => "Экспертная область, ключевые слова",
@@ -289,6 +289,18 @@ class CPerson extends CActiveModel{
             'photo' => array(
                 'type'  => FIELD_UPLOADABLE,
                 'upload_dir' => CORE_CWD.CORE_DS."images".CORE_DS."lects".CORE_DS
+            ),
+            "experience_ugatu" => array(
+                "type"  => FIELD_MYSQL_DATE,
+                "format" => "d.m.Y"
+            ),
+            "experience_pps" => array(
+                "type"  => FIELD_MYSQL_DATE,
+                "format" => "d.m.Y"
+            ),
+            "experience_total" => array(
+                "type"  => FIELD_MYSQL_DATE,
+                "format" => "d.m.Y"
             )
         );
     }

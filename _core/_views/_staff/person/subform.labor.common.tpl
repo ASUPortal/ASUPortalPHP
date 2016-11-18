@@ -1,23 +1,47 @@
 <div class="control-group">
-    {CHtml::activeLabel("person[stag_ugatu]", $form)}
+    {CHtml::activeLabel("person[experience_ugatu]", $form)}
     <div class="controls">
-        {CHtml::activeTextField("person[stag_ugatu]", $form)}
-        {CHtml::error("person[stag_ugatu]", $form)}
-    </div></div>
+        {CHtml::textField("", CStaffManager::getLengthWork($form->person->experience_ugatu), "", "", "readonly")}
+    </div>
+</div>
 
 <div class="control-group">
-    {CHtml::activeLabel("person[stag_pps]", $form)}
+    {CHtml::label("Начиная с", "")}
     <div class="controls">
-        {CHtml::activeTextField("person[stag_pps]", $form)}
-        {CHtml::error("person[stag_pps]", $form)}
-    </div></div>
+        {CHtml::activeDateField("person[experience_ugatu]", $form)}
+        {CHtml::error("person[experience_ugatu]", $form)}
+    </div>
+</div>
 
 <div class="control-group">
-    {CHtml::activeLabel("person[stag_itogo]", $form)}
+    {CHtml::activeLabel("person[experience_pps]", $form)}
     <div class="controls">
-        {CHtml::activeTextField("person[stag_itogo]", $form)}
-        {CHtml::error("person[stag_itogo]", $form)}
-    </div></div>
+        {CHtml::textField("", CStaffManager::getLengthWork($form->person->experience_pps), "", "", "readonly")}
+    </div>
+</div>
+
+<div class="control-group">
+    {CHtml::label("Начиная с", "")}
+    <div class="controls">
+        {CHtml::activeDateField("person[experience_pps]", $form)}
+        {CHtml::error("person[experience_pps]", $form)}
+    </div>
+</div>
+
+<div class="control-group">
+    {CHtml::activeLabel("person[experience_total]", $form)}
+    <div class="controls">
+        {CHtml::textField("", CStaffManager::getLengthWork($form->person->experience_total), "", "", "readonly")}
+    </div>
+</div>
+
+<div class="control-group">
+    {CHtml::label("Начиная с", "")}
+    <div class="controls">
+        {CHtml::activeDateField("person[experience_total]", $form)}
+        {CHtml::error("person[experience_total]", $form)}
+    </div>
+</div>
 
 <div class="control-group">
     {CHtml::activeLabel("person[din_nauch_kar]", $form)}

@@ -212,11 +212,13 @@ class CUtils {
      * @return mixed
      */
     public static function getNumberInCase($number, $one, $two, $many) {
-        if ($number % 10 == 1) {
+        if ($number % 10 == 1 and $number != 11) {
             return $one;
-        } elseif ($number >= 2 and $number <= 4){
+        } elseif ($number >= 2 and $number <= 4) {
             return $two;
         } elseif ($number % 10 >= 2 and $number % 10 <= 4) {
+            return $many;
+        } elseif ($number == 11) {
             return $many;
         } else {
             return $many;
