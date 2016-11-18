@@ -970,4 +970,33 @@ class CUtils {
     	return $_SERVER["DOCUMENT_ROOT"];
     }
     
+    /**
+     * Время, прошедшее от указанной даты до текущего момента в годах и месяцах
+     *
+     * @param $date mysql_date
+     * @return String
+     */
+    public static function getTimeFromDate($date) {
+        if ($date !== "") {
+            $firstDateTimeObject = DateTime::createFromFormat('Y-m-d', date("Y-m-d"));
+            $secondDateTimeObject = DateTime::createFromFormat('d.m.Y', $date);
+    
+            $delta = $secondDateTimeObject->diff($firstDateTimeObject);
+    
+            $year = $delta->format("%y");
+            $month = $delta->format("%m");
+            $days = $delta->format("%d");
+    
+            if ($year == 0 and $month == 0) {
+                return $days." ".$this->getNumberInCase($days, "день", "дня", "дней");
+            } elseif ($year == 0 and $month != 0) {
+                return $month." ".$this->getNumberInCase($month, "месяц", "месяца", "месяцев");
+            } elseif ($year != 0 and $month == 0) {
+                return $year." ".$this->getNumberInCase($year, "год", "года", "лет");
+            } else {
+                return $year." ".$this->getNumberInCase($year, "год", "года", "лет")." ".$month." ".$this->getNumberInCase($month, "месяц", "месяца", "месяцев");
+            }
+        }
+    }
+    
 }
