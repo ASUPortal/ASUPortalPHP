@@ -9,6 +9,7 @@
     {CHtml::label("Начиная с", "")}
     <div class="controls">
         {CHtml::activeDateField("person[experience_ugatu]", $form)}
+        {CHtml::error("person[experience_ugatu]", $form)}
     </div>
 </div>
 
@@ -23,6 +24,7 @@
     {CHtml::label("Начиная с", "")}
     <div class="controls">
         {CHtml::activeDateField("person[experience_pps]", $form)}
+        {CHtml::error("person[experience_pps]", $form)}
     </div>
 </div>
 
@@ -37,6 +39,7 @@
     {CHtml::label("Начиная с", "")}
     <div class="controls">
         {CHtml::activeDateField("person[experience_total]", $form)}
+        {CHtml::error("person[experience_total]", $form)}
     </div>
 </div>
 
