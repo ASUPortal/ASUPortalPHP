@@ -1416,6 +1416,8 @@ class CStaffManager{
                 return $days." ".CUtils::getNumberInCase($days, "день", "дня", "дней");
             } elseif ($year == 0 and $month != 0) {
                 return $month." ".CUtils::getNumberInCase($month, "месяц", "месяца", "месяцев");
+            } elseif ($year != 0 and $month == 0) {
+                return $year." ".CUtils::getNumberInCase($year, "год", "года", "лет");
             } else {
                 return $year." ".CUtils::getNumberInCase($year, "год", "года", "лет")." ".$month." ".CUtils::getNumberInCase($month, "месяц", "месяца", "месяцев");
             }

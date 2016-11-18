@@ -1,38 +1,45 @@
-<table>
-    <tr>
-        <td>{CHtml::activeLabel("person[stag_ugatu]", $form)}</td>
-        <td width="16px"></td>
-        <td>{CStaffManager::getLengthWork($form->person->stag_ugatu)}</td>
-    </tr>
-    <tr>
-        <td align="right">Начиная с</td>
-        <td></td>
-        <td align="left">{CHtml::activeDateField("person[stag_ugatu]", $form, "dd.mm.yyyy", "", "", 'style="width: 300px;"')}</td>
-    </tr>
-    
-    <tr>
-        <td>{CHtml::activeLabel("person[stag_pps]", $form)}</td>
-        <td></td>
-        <td>{CStaffManager::getLengthWork($form->person->stag_pps)}</td>
-    </tr>
-    <tr>
-        <td align="right">Начиная с</td>
-        <td></td>
-        <td align="left">{CHtml::activeDateField("person[stag_pps]", $form, "dd.mm.yyyy", "", "", 'style="width: 300px;"')}</td>
-    </tr>
-    
-    <tr>
-        <td>{CHtml::activeLabel("person[stag_itogo]", $form)}</td>
-        <td></td>
-        <td>{CStaffManager::getLengthWork($form->person->stag_itogo)}</td>
-    </tr>
-    <tr>
-        <td align="right">Начиная с</td>
-        <td></td>
-        <td align="left">{CHtml::activeDateField("person[stag_itogo]", $form, "dd.mm.yyyy", "", "", 'style="width: 300px;"')}</td>
-    </tr>
-</table>
-<br>
+<div class="control-group">
+    {CHtml::activeLabel("person[experience_ugatu]", $form)}
+    <div class="controls">
+        {CHtml::textField("", CStaffManager::getLengthWork($form->person->experience_ugatu), "", "", "readonly")}
+    </div>
+</div>
+
+<div class="control-group">
+    {CHtml::label("Начиная с", "")}
+    <div class="controls">
+        {CHtml::activeDateField("person[experience_ugatu]", $form)}
+    </div>
+</div>
+
+<div class="control-group">
+    {CHtml::activeLabel("person[experience_pps]", $form)}
+    <div class="controls">
+        {CHtml::textField("", CStaffManager::getLengthWork($form->person->experience_pps), "", "", "readonly")}
+    </div>
+</div>
+
+<div class="control-group">
+    {CHtml::label("Начиная с", "")}
+    <div class="controls">
+        {CHtml::activeDateField("person[experience_pps]", $form)}
+    </div>
+</div>
+
+<div class="control-group">
+    {CHtml::activeLabel("person[experience_total]", $form)}
+    <div class="controls">
+        {CHtml::textField("", CStaffManager::getLengthWork($form->person->experience_total), "", "", "readonly")}
+    </div>
+</div>
+
+<div class="control-group">
+    {CHtml::label("Начиная с", "")}
+    <div class="controls">
+        {CHtml::activeDateField("person[experience_total]", $form)}
+    </div>
+</div>
+
 <div class="control-group">
     {CHtml::activeLabel("person[din_nauch_kar]", $form)}
     <div class="controls">
