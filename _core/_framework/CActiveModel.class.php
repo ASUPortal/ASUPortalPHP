@@ -280,7 +280,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
                 if (array_key_exists("type", $property)) {
                     if ($property["type"] == FIELD_MYSQL_DATE) {
                         $value = $this->getRecord()->getItemValue($name);
-                        if (strpos($value, "0000-00-00") !== false) {
+                        if (strpos($value, "0000-00-00") !== false or $value == null) {
                             return "";
                         }
                         return date($property["format"], strtotime($value));
