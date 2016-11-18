@@ -1,14 +1,7 @@
 <div class="control-group">
     {CHtml::activeLabel("person[experience_ugatu]", $form)}
     <div class="controls">
-        {CHtml::textField("", CStaffManager::getLengthWork($form->person->experience_ugatu), "", "", "readonly")}
-    </div>
-</div>
-
-<div class="control-group">
-    {CHtml::label("Начиная с", "")}
-    <div class="controls">
-        {CHtml::activeDateField("person[experience_ugatu]", $form)}
+        {CHtml::activeTextField("person[experience_ugatu]", $form)}
         {CHtml::error("person[experience_ugatu]", $form)}
     </div>
 </div>
@@ -16,14 +9,7 @@
 <div class="control-group">
     {CHtml::activeLabel("person[experience_pps]", $form)}
     <div class="controls">
-        {CHtml::textField("", CStaffManager::getLengthWork($form->person->experience_pps), "", "", "readonly")}
-    </div>
-</div>
-
-<div class="control-group">
-    {CHtml::label("Начиная с", "")}
-    <div class="controls">
-        {CHtml::activeDateField("person[experience_pps]", $form)}
+        {CHtml::activeTextField("person[experience_pps]", $form)}
         {CHtml::error("person[experience_pps]", $form)}
     </div>
 </div>
@@ -31,14 +17,7 @@
 <div class="control-group">
     {CHtml::activeLabel("person[experience_total]", $form)}
     <div class="controls">
-        {CHtml::textField("", CStaffManager::getLengthWork($form->person->experience_total), "", "", "readonly")}
-    </div>
-</div>
-
-<div class="control-group">
-    {CHtml::label("Начиная с", "")}
-    <div class="controls">
-        {CHtml::activeDateField("person[experience_total]", $form)}
+        {CHtml::activeTextField("person[experience_total]", $form)}
         {CHtml::error("person[experience_total]", $form)}
     </div>
 </div>
