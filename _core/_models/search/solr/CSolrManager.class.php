@@ -21,9 +21,9 @@ class CSolrManager extends CComponent {
     /**
      * Обновление индекса Solr
      *
-     * @param CSearchSettings $coreId
+     * @param CSetting $coreId
      */
-    public function updateIndex(CSearchSettings $coreId) {
+    public function updateIndex(CSetting $coreId) {
     	$messages = array();
         foreach ($this->sources as $source) {
             try {
@@ -42,9 +42,9 @@ class CSolrManager extends CComponent {
      * Добавление файлов в индекс Solr
      *
      * @param CSearchFile $file
-     * @param CSearchSettings $coreId
+     * @param CSetting $coreId
      */
-    private function addToIndex(CSearchFile $file, CSearchSettings $coreId) {
+    private function addToIndex(CSearchFile $file, CSetting $coreId) {
         CApp::getApp()->cache->set($file->getFileId(), $file);
         // сообщение о результате обработки файла
         $message = "";

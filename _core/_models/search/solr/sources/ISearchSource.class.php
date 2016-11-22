@@ -12,9 +12,9 @@ interface ISearchSource {
 	/**
 	 * Получение файлов для индексирования
 	 * 
-     * @param CSearchSettings $coreId
+     * @param CSetting $coreId
 	 */
-    public function getFilesToIndex(CSearchSettings $coreId);
+    public function getFilesToIndex(CSetting $coreId);
     /**
      * Идентификатор источника данных
      */

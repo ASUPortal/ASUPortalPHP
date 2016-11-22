@@ -264,8 +264,6 @@
     define("TABLE_PUBLICATIONS_TYPES", "izdan_type");
     define("TABLE_TITLES", "zvanie");
     define("TABLE_SETTINGS", "settings");
-    define("TABLE_SETTINGS_SOLR_SEARCH", "settings_for_search");
-    define("TABLE_SETTINGS_SOLR_CORES", "solr_cores");
     define("TABLE_RATING_INDEX_VALUES", "rating_index_value");
     define("TABLE_HELP", "help");
     define("TABLE_DEGREES", "stepen");

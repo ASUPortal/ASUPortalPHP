@@ -18,7 +18,7 @@ class CConfigurationController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
-        $set = CActiveRecordProvider::getAllFromTable(TABLE_SETTINGS, "title asc");
+        $set = CActiveRecordProvider::getWithCondition(TABLE_SETTINGS, "solr=0", "title asc");
         $settings = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $item) {
             $setting = new CSetting($item);

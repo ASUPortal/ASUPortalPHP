@@ -18,10 +18,10 @@ class CSettingsSearchController extends CBaseController {
 		parent::__construct();
 	}
     public function actionIndex() {
-        $set = CActiveRecordProvider::getAllFromTable(TABLE_SETTINGS_SOLR_CORES, "title asc");
+        $set = CActiveRecordProvider::getWithCondition(TABLE_SETTINGS, "solr=-1", "title asc");
         $settings = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $item) {
-            $setting = new CSearchSettings($item);
+            $setting = new CSetting($item);
             $settings->add($setting->getId(), $setting);
         }
         $this->addActionsMenuItem(array(
@@ -34,6 +34,11 @@ class CSettingsSearchController extends CBaseController {
         		"title" => "Добавить коллекцию",
         		"icon" => "actions/list-add.png",
         		"link" => "settings.php?action=add"
+        	),
+        	array(
+        		"title" => "Обновить файловый индекс для всех коллекций",
+        		"icon" => "actions/document-print-preview.png",
+        		"link" => "settings.php?action=updateIndexFiles"
         	)
         ));
         $this->setData("settings", $settings);
@@ -41,7 +46,10 @@ class CSettingsSearchController extends CBaseController {
         $this->renderView("_search/_settings/index.tpl");
     }
     public function actionAdd() {
-        $setting = new CSearchSettings();
+        $setting = new CSetting();
+        $setting->solr = -1;
+        $setting->alias = "solrCore_";
+        $setting->value = "solr/";
         $this->addActionsMenuItem(array(
         	array(
         		"title" => "Назад",
@@ -53,7 +61,7 @@ class CSettingsSearchController extends CBaseController {
         $this->renderView("_search/_settings/add.tpl");
     }
     public function actionEdit() {
-        $setting = CSearchSettingsManager::getSetting(CRequest::getInt("id"));
+        $setting = CSettingsManager::getSetting(CRequest::getInt("id"));
         $this->addActionsMenuItem(array(
         	array(
         		"title" => "Назад",
@@ -70,14 +78,18 @@ class CSettingsSearchController extends CBaseController {
         $this->renderView("_search/_settings/edit.tpl");
     }
     public function actionDelete() {
-        $setting = CSearchSettingsManager::getSetting(CRequest::getInt("id"));
+        $setting = CSettingsManager::getSetting(CRequest::getInt("id"));
         $setting->remove();
         $this->redirect("?action=index");
     }
     public function actionSave() {
-        $setting = new CSearchSettings();
+        $setting = new CSetting();
         $setting->setAttributes(CRequest::getArray($setting::getClassName()));
+        $cacheKeyString = CACHE_APPLICATION_SETTINGS . '_' . strtoupper($setting->alias);
+        $cacheKeyNumeric = CACHE_APPLICATION_SETTINGS . '_' . $setting->id;
         if ($setting->validate()) {
+            CApp::getApp()->cache->set($cacheKeyString, $setting);
+            CApp::getApp()->cache->set($cacheKeyNumeric, $setting);
             $setting->save();
             if ($this->continueEdit()) {
                 $this->redirect("?action=edit&id=".$setting->getId());
@@ -88,5 +100,27 @@ class CSettingsSearchController extends CBaseController {
         }
         $this->setData("setting", $setting);
         $this->renderView("_search/_settings/edit.tpl");
+    }
+    public function actionUpdateIndexFiles() {
+        $messages = array();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_SETTINGS, "solr=-1")->getItems() as $setting) {
+            $coreId = CSettingsManager::getSetting($setting->getId());
+            $messages[] = CApp::getApp()->search->updateIndex($coreId);
+        }
+        $results = array();
+        foreach ($messages as $message) {
+            foreach ($message as $result) {
+                $results[] = $result;
+            }
+        }
+        $this->setData("messages", $results);
+        $this->addActionsMenuItem(array(
+        	array(
+        		"title" => "Назад",
+        		"link" => "settings.php?action=index",
+        		"icon" => "actions/edit-undo.png"
+        	)
+        ));
+        $this->renderView("_search/updateIndexFiles.tpl");
     }
 }

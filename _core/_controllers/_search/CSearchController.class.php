@@ -215,16 +215,16 @@ class CSearchController extends CBaseController{
         }
     }
     public function actionUpdateIndexFiles() {
-    	$coreId = CSearchSettingsManager::getSetting(CRequest::getInt("core_id"));
-    	$this->setData("messages", CApp::getApp()->search->updateIndex($coreId));
-    	$this->addActionsMenuItem(array(
-    		array(
-    			"title" => "Назад",
-    			"link" => "index.php?action=settings",
-    			"icon" => "actions/edit-undo.png"
-    		)
-    	));
-    	$this->renderView("_search/updateIndexFiles.tpl");
+        $coreId = CSettingsManager::getSetting(CRequest::getInt("core_id"));
+        $this->setData("messages", CApp::getApp()->search->updateIndex($coreId));
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "settings.php?action=index",
+                "icon" => "actions/edit-undo.png"
+            )
+        ));
+        $this->renderView("_search/updateIndexFiles.tpl");
     }
     public function actionSearchFiles() {
     	$this->addActionsMenuItem(array(
@@ -450,13 +450,20 @@ class CSearchController extends CBaseController{
                     foreach ($model->fields->getItems() as $field) {
                         if (property_exists($doc, $field->field_name)) {
                             $fieldName = $field->field_name;
-                            $fieldValue = mb_strtolower($doc->$fieldName);
-                            if (mb_strpos($fieldValue, $userQuery) !== false) {
-                                if (mb_strlen($fieldValue) < 100) {
-                                    $urlParams[] = "filter=".$fieldName.":".$fieldValue;
-                                } else {
-                                    $urlParams[] = "filter=".$fieldName.":".$userQuery;
-                                }
+                            if (is_array($doc->$fieldName)) {
+                            	$str = implode('', $doc->$fieldName);
+                            } else {
+                            	$str = $doc->$fieldName;
+                            }
+                            $fieldValue = mb_strtolower($str);
+                            if ($userQuery != "") {
+                            	if (mb_strpos($fieldValue, $userQuery) !== false) {
+                            		if (mb_strlen($fieldValue) < 100) {
+                            			$urlParams[] = "filter=".$fieldName.":".$fieldValue;
+                            		} else {
+                            			$urlParams[] = "filter=".$fieldName.":".$userQuery;
+                            		}
+                            	}
                             }
                         }
                     }

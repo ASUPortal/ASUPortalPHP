@@ -16,51 +16,46 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
     public $suffix;
 
     protected function init() {
-        // установка соединения с FTP-сервером
-        $this->link = ftp_connect("10.61.2.62");
         // массив с путями к файлам для индексирования
         $this->files = array();
     }
     
-    private function scanDirectory() {
-    	return $this->ftpRecursiveFileListing($this->path);
+    private function scanDirectory($path, $link, $coreId) {
+        return $this->ftpRecursiveFileListing($path, $link, $coreId);
     	
     }
     
     /**
      * Получение файлов для индексирования
      *
-     * @param CSearchSettings $coreId
+     * @param CSetting $coreId
      */
-    public function getFilesToIndex(CSearchSettings $coreId) {
+    public function getFilesToIndex(CSetting $coreId) {
     	/**
     	 * Получаем настройки коллекции Solr
     	 */
     	foreach ($coreId->getSearchSettingsList() as $setting) {
     		if ($setting->getAlias() == $this->server) {
-    			$this->server = $setting->getValue();
+    			$ftpServer = $setting->getValue();
     		}
     		if ($setting->getAlias() == $this->login) {
-    			$this->login = $setting->getValue();
+    			$ftpUser = $setting->getValue();
     		}
     		if ($setting->getAlias() == $this->password) {
-    			$this->password = $setting->getValue();
+    			$ftpPassword = $setting->getValue();
     		}
     		if ($setting->getAlias() == $this->suffix) {
-    			$this->suffix = $setting->getValue();
+    			$suffix = $setting->getValue();
     		}
     		if ($setting->getAlias() == $this->path) {
-    			$this->path = $setting->getValue();
+    			$path = $setting->getValue();
     		}
     	}
     	$filesList = array();
     	// массив с файлами ftp сервера
     	$ftpFiles = array();
-    	$ftpServer = $this->server;
-    	$ftpUser = $this->login;
-    	$ftpPassword = $this->password;
     	// пытаемся установить соединение
-    	$link = $this->link;
+    	$link = ftp_connect(CSettingsManager::getSettingSolr($coreId, $this->server)->value);
     	if (!$link) {
     		throw new Exception("<font color='#FF0000'>Не удается установить соединение с FTP-сервером: 
     				<a href='ftp://".$ftpServer."/' target='_blank'>ftp://".$ftpServer."/</a></font>");
@@ -72,7 +67,7 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
     					<a href='ftp://".$ftpServer."/' target='_blank'>ftp://".$ftpServer."/</a>. Проверьте регистрационные данные.</font>");
     	}
     	// получаем все файлы указанного каталога
-    	$ftpFiles = $this->scanDirectory();
+    	$ftpFiles = $this->scanDirectory($path, $link, $coreId);
     	if (!empty($ftpFiles)) {
     		foreach ($ftpFiles as $serverFile) {
     			$asciiArray = array("txt", "csv");
@@ -96,7 +91,7 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
     	// закрываем соединение FTP
     	ftp_close($link);
     	$files = array();
-    	$suffixes = explode(";", $this->suffix);
+    	$suffixes = explode(";", $suffix);
     	foreach ($filesList as $file) {
     		$extension = end(explode(".", $file));
     		if (in_array($extension, $suffixes)) {
@@ -117,12 +112,11 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
         return $fileDescriptor;
     }
     
-    function ftpRecursiveFileListing($path) {
-    	$link = $this->link;
-    	$suffix = $this->suffix;
-    	$suffixes = explode(";", $suffix);
-    	$contents = ftp_nlist($link, $path);
-    	foreach($contents as $currentFile) {
+    function ftpRecursiveFileListing($path, $link, $coreId) {
+        $suffix = CSettingsManager::getSettingSolr($coreId, $this->suffix)->value;
+        $suffixes = explode(";", $suffix);
+        $contents = ftp_nlist($link, $path);
+        foreach($contents as $currentFile) {
     		if (strpos($currentFile, '.') === false) {
     			$this->ftpRecursiveFileListing($currentFile);
     		}
@@ -130,7 +124,7 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
     		if (in_array($extension, $suffixes)) {
     			array_push($this->files, $currentFile);
     		}
-    	}
-    	return $this->files;
+        }
+        return $this->files;
     }
 }

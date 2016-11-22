@@ -130,11 +130,11 @@ class CSolr {
      * @return string
      */
     public static function commitFiles($id, $coreId) {
-    	$solrPath = $coreId->getValue();
-    	$options = self::getOptions();
-    	$url = "http://".$options["hostname"].":".$options["port"]."/";
-    	$url .= $solrPath."/update/extract?commit=true&literal.id=".$id."&literal._is_file_=1";
-    	return $url;
+        $solrPath = $coreId->value;
+        $options = self::getOptions();
+        $url = "http://".$options["hostname"].":".$options["port"]."/";
+        $url .= $solrPath."/update/extract?commit=true&literal.id=".$id."&literal._is_file_=1";
+        return $url;
     }
 
     /**

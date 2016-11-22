@@ -11,9 +11,9 @@ class CSearchSourceFTPIterator implements Iterator {
     /**
      * @param array $filesList
      * @param ISearchSource $source
-     * @param CSearchSettings $coreId
+     * @param CSetting $coreId
      */
-    function __construct($filesList, $source, CSearchSettings $coreId) {
+    function __construct($filesList, $source, CSetting $coreId) {
     	/**
     	 * Получаем настройки коллекции Solr
     	 */

@@ -1,7 +1,8 @@
 <form action="settingsList.php" method="post" class="form-horizontal">
 {CHtml::hiddenField("action", "save")}
 {CHtml::activeHiddenField("id", $setting)}
-{CHtml::activeHiddenField("solr_core", $setting)}
+{CHtml::activeHiddenField("solr", $setting)}
+{CHtml::activeHiddenField("alias", $setting)}
 
     {CHtml::errorSummary($setting)}
 
@@ -10,14 +11,6 @@
         <div class="controls">
             {CHtml::activeTextField("title", $setting)}
             {CHtml::error("title", $setting)}
-        </div>
-    </div>
-
-    <div class="control-group">
-        {CHtml::activeLabel("alias", $setting)}
-        <div class="controls">
-            {CHtml::activeTextField("alias", $setting)}
-            {CHtml::error("alias", $setting)}
         </div>
     </div>
     
