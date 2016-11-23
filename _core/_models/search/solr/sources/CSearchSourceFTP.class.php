@@ -33,28 +33,17 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
     	/**
     	 * Получаем настройки коллекции Solr
     	 */
-    	foreach ($coreId->getSearchSettingsList() as $setting) {
-    		if ($setting->getAlias() == $this->server) {
-    			$ftpServer = $setting->getValue();
-    		}
-    		if ($setting->getAlias() == $this->login) {
-    			$ftpUser = $setting->getValue();
-    		}
-    		if ($setting->getAlias() == $this->password) {
-    			$ftpPassword = $setting->getValue();
-    		}
-    		if ($setting->getAlias() == $this->suffix) {
-    			$suffix = $setting->getValue();
-    		}
-    		if ($setting->getAlias() == $this->path) {
-    			$path = $setting->getValue();
-    		}
-    	}
+    	$ftpServer = CSettingsManager::getSettingSolr($coreId, $this->server)->getValue();
+    	$ftpUser = CSettingsManager::getSettingSolr($coreId, $this->login)->getValue();
+    	$ftpPassword = CSettingsManager::getSettingSolr($coreId, $this->password)->getValue();
+    	$suffix = CSettingsManager::getSettingSolr($coreId, $this->suffix)->getValue();
+    	$path = CSettingsManager::getSettingSolr($coreId, $this->path)->getValue();
+    	
     	$filesList = array();
     	// массив с файлами ftp сервера
     	$ftpFiles = array();
     	// пытаемся установить соединение
-    	$link = ftp_connect(CSettingsManager::getSettingSolr($coreId, $this->server)->getValue());
+    	$link = ftp_connect($ftpServer);
     	if (!$link) {
     		throw new Exception("<font color='#FF0000'>Не удается установить соединение с FTP-сервером: 
     				<a href='ftp://".$ftpServer."/' target='_blank'>ftp://".$ftpServer."/</a></font>");
