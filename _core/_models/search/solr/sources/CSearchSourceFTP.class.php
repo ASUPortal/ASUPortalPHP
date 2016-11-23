@@ -22,7 +22,6 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
     
     private function scanDirectory($path, $link, $coreId) {
         return $this->ftpRecursiveFileListing($path, $link, $coreId);
-    	
     }
     
     /**
@@ -55,7 +54,7 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
     	// массив с файлами ftp сервера
     	$ftpFiles = array();
     	// пытаемся установить соединение
-    	$link = ftp_connect(CSettingsManager::getSettingSolr($coreId, $this->server)->value);
+    	$link = ftp_connect(CSettingsManager::getSettingSolr($coreId, $this->server)->getValue());
     	if (!$link) {
     		throw new Exception("<font color='#FF0000'>Не удается установить соединение с FTP-сервером: 
     				<a href='ftp://".$ftpServer."/' target='_blank'>ftp://".$ftpServer."/</a></font>");
@@ -113,12 +112,12 @@ class CSearchSourceFTP extends CComponent implements ISearchSource {
     }
     
     function ftpRecursiveFileListing($path, $link, $coreId) {
-        $suffix = CSettingsManager::getSettingSolr($coreId, $this->suffix)->value;
+        $suffix = CSettingsManager::getSettingSolr($coreId, $this->suffix)->getValue();
         $suffixes = explode(";", $suffix);
         $contents = ftp_nlist($link, $path);
         foreach($contents as $currentFile) {
     		if (strpos($currentFile, '.') === false) {
-    			$this->ftpRecursiveFileListing($currentFile);
+    			$this->ftpRecursiveFileListing($currentFile, $link, $coreId);
     		}
     		$extension = end(explode(".", $currentFile));
     		if (in_array($extension, $suffixes)) {

@@ -37,7 +37,7 @@ class CSetting extends CActiveModel {
      * @return mixed|null
      */
     public function getValue() {
-        if ($this->type == 1) {
+        if ($this->type == 1 or $this->solr != 0) {
             return $this->value;
         } elseif ($this->type == 2) {
             eval('$res = '.$this->value.";");
