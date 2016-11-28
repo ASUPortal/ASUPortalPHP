@@ -1,1 +1,1 @@
-ALTER TABLE `settings` ADD `solr` TINYINT(1) NOT NULL DEFAULT '0' ;
+ALTER TABLE `settings` ADD `solr` INT(11) NOT NULL DEFAULT '0';
