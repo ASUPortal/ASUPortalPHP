@@ -39,21 +39,26 @@ class CSettingsListSearchController extends CBaseController {
         		"icon" => "actions/view-refresh.png"
         	),
         	array(
-        		"title" => "Добавить настройки",
+        		"title" => "Добавить все настройки",
         		"icon" => "actions/list-add.png",
-        		"link" => "settingsList.php?action=add&core_id=".CRequest::getInt("core_id")
+        		"link" => "settingsList.php?action=addSettings&core_id=".CRequest::getInt("core_id")
         	),
         	array(
         		"title" => "Удалить все настройки",
         		"icon" => "actions/edit-delete.png",
         		"link" => "settingsList.php?action=deleteAll&core_id=".CRequest::getInt("core_id")
+        	),
+        	array(
+        		"title" => "Добавить настройку",
+        		"icon" => "actions/list-add.png",
+        		"link" => "settingsList.php?action=add&core_id=".CRequest::getInt("core_id")
         	)
         ));
         $this->setData("settings", $settings);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_search/_settingsList/index.tpl");
     }
-    public function actionAdd() {
+    public function actionAddSettings() {
         $setting = new CSetting();
         $setting->title = "Адрес FTP-сервера";
         $setting->alias = "ftp_server";
@@ -97,6 +102,19 @@ class CSettingsListSearchController extends CBaseController {
         $setting->save();
         
         $this->redirect("settingsList.php?action=index&core_id=".CRequest::getInt("core_id"));
+    }
+    public function actionAdd() {
+        $setting = new CSetting();
+        $setting->solr = CRequest::getInt("core_id");
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "settingsList.php?action=index&core_id=".$setting->solr,
+                "icon" => "actions/edit-undo.png"
+            )
+        ));
+        $this->setData("setting", $setting);
+        $this->renderView("_search/_settingsList/add.tpl");
     }
     public function actionEdit() {
         $setting = CSettingsManager::getSetting(CRequest::getInt("id"));
