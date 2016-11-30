@@ -1,0 +1,1 @@
+ALTER TABLE `help` ADD `wiki` text NOT NULL ;

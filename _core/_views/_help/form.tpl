@@ -21,6 +21,14 @@
     </div>
 
     <div class="control-group">
+        {CHtml::activeLabel("wiki", $help)}
+        <div class="controls">
+        {CHtml::activeTextField("wiki", $help)}
+        {CHtml::error("wiki", $help)}
+        </div>
+    </div>
+    
+    <div class="control-group">
         {CHtml::activeTextBox("content", $help, "content")}
         {CHtml::error("content", $help)}
     </div>

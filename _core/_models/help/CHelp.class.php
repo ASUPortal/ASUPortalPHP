@@ -16,6 +16,7 @@ class CHelp extends CActiveModel {
         return array(
             "title" => "Название страницы",
             "url" => "Адрес внутри портала",
+            "wiki" => "Страница справки в локальной Википедии",
             "content" => "Текст справки"
         );
     }

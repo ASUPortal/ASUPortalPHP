@@ -8,9 +8,10 @@
     <tr>
         <th></th>
         <th>#</th>
-        <th>Заголовок</th>
-        <th>URL</th>
-        <th>Текст справки</th>
+        <th>{CHtml::tableOrder("title", $helps->getFirstItem())}</th>
+        <th>{CHtml::tableOrder("url", $helps->getFirstItem())}</th>
+        <th>{CHtml::tableOrder("wiki", $helps->getFirstItem())}</th>
+        <th>{CHtml::tableOrder("content", $helps->getFirstItem())}</th>
     </tr>
     {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
     {foreach $helps->getItems() as $help}
@@ -19,6 +20,7 @@
             <td valign="top">{counter}</td>
             <td valign="top"><a href="?action=edit&id={$help->id}">{$help->title}</a></td>
             <td valign="top">{$help->url}</td>
+            <td valign="top">{$help->wiki}</td>
             <td valign="top">{$help->content}</td>
         </tr>
     {/foreach}
