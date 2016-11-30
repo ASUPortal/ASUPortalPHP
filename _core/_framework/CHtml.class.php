@@ -992,7 +992,7 @@ class CHtml {
                     $html->clear();
                     unset($html);
             	} else {
-                    self::modalWindow("wikiHelp", "Справка", "Указанной страницы нет в локальной Википедии кафедры!");
+                    self::modalWindow("wikiHelp", "Справка", "Локальная Википедия недоступна!");
             	}
             }
         } elseif (CSession::getCurrentUser()->hasRole("help_add_inline")) {
