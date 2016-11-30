@@ -22,7 +22,7 @@ class CIndPlanPrintController extends CFlowController{
             if (!is_null($load->year)) {
                 $item = $load->year->getValue();
             }
-            $item .= " ".$load->type;
+            $item .= " ".$load->getType();
             $items->add($load->getId(), $item);
         }
         $this->setData("items", $items);
@@ -103,7 +103,7 @@ class CIndPlanPrintController extends CFlowController{
         foreach ($persons->getItems() as $person) {
             foreach ($person->getIndPlansByYears($year_id)->getItems() as $year_id=>$plans) {
                 foreach ($plans->getItems() as $plan) {
-                    $types->add($plan->type, $plan->type);
+                    $types->add($plan->getType(), $plan->getType());
                 }
             }
         }
