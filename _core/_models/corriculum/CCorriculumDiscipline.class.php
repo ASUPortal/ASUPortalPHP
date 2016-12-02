@@ -26,6 +26,7 @@ class CCorriculumDiscipline extends CActiveModel {
     protected $_competentions = null;
     protected $_plans = null;
     protected $_books = null;
+    protected $_department = null;
 
     /**
      * Разнообразные публичные свойства
@@ -120,7 +121,14 @@ class CCorriculumDiscipline extends CActiveModel {
         		"relationPower" => RELATION_COMPUTED,
         		"storageProperty" => "_books",
         		"relationFunction" => "getBooks"
-        	)
+        	),
+            "department" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_department",
+                "storageField" => "department_id",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getTerm"
+            )
         );
     }
     public function attributeLabels() {
@@ -128,7 +136,8 @@ class CCorriculumDiscipline extends CActiveModel {
             "discipline_id" => "Дисциплина",
             "ordering" => "Порядок в списке",
             "parent_id" => "Родительская дисциплина",
-			"component_type_id" => "Вид компонента"
+			"component_type_id" => "Вид компонента",
+			"department_id" => "Кафедра"
         );
     }
     /**
