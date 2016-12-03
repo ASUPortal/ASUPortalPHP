@@ -119,15 +119,15 @@ class CHelpManager {
     /**
      * Модальное окно для страницы локальной Википедии
      *
-     * @param CHelp $help
+     * @param String $wikiUrl
      * @return String
      */
-    public static function getWikiAddressModalWindow(CHelp $help) {
+    public static function getWikiAddressModalWindow($wikiUrl) {
         require_once(CORE_CWD."/_core/_external/smarty/vendor/simple_html_dom.php");
         $proxy = CSettingsManager::getSettingValue("proxy_address");
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_PROXY, $proxy);
-        curl_setopt($curl, CURLOPT_URL, $help->wiki_url);
+        curl_setopt($curl, CURLOPT_URL, $wikiUrl);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 2);
         $str = curl_exec($curl);

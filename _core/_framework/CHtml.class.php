@@ -965,7 +965,7 @@ class CHtml {
                 self::modalWindow("help", "Справка", $content);
             }
             if ($wikiHelp) {
-            	CHelpManager::getWikiAddressModalWindow(CHelpManager::getHelpForCurrentPage());
+            	CHelpManager::getWikiAddressModalWindow(CHelpManager::getHelpForCurrentPage()->wiki_url);
             }
         } elseif (CSession::getCurrentUser()->hasRole("help_add_inline")) {
             echo '<div class="alert alert-info">';
