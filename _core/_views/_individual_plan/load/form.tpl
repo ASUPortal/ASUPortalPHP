@@ -16,7 +16,7 @@
     <div class="control-group">
         {CHtml::activeLabel("type", $load)}
         <div class="controls">
-            {CHtml::activeTextField("type", $load)}
+            {CHtml::activeLookup("type", $load, "type_teaching_load", false, array(), true)}
             {CHtml::error("type", $load)}
         </div>
     </div>

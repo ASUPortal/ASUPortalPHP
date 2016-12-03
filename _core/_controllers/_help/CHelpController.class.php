@@ -72,7 +72,6 @@ class CHelpController extends CBaseController {
         if (CRequest::getInt("id") !== 0) {
             $help = CHelpManager::getHelp(CRequest::getInt("id"));
             if (!is_null($help)) {
-                $help->content = CRequest::getString("content", $help::getClassName());
                 $help->save();
             }
         }

@@ -1,0 +1,1 @@
+ALTER TABLE `pl_corriculum_disciplines` ADD `department_id` int(11) DEFAULT NULL;

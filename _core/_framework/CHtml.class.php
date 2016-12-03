@@ -901,15 +901,41 @@ class CHtml {
         echo '</div>';
         echo '<span>';
     }
+    /**
+     * Модальное окно
+     * 
+     * @param string $id
+     * @param string $header
+     * @param string $content
+     * @return string
+     */
+    public static function modalWindow($id, $header, $content) {
+        echo '
+    		<div id="'.$id.'" class="modal hide fade">
+    			<div class="modal-header">
+    				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    				<h3>'.$header.'</h3>
+    			</div>
+    			<div class="modal-body">
+    				'.$content.'
+        		</div>
+        		<div class="modal-footer">
+        			<button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        		</div>
+        	</div>
+        ';
+    }
     public static function helpForCurrentPage() {
         if (!is_null(CHelpManager::getHelpForCurrentPage())) {
+            $content = CHelpManager::getHelpForCurrentPage()->content;
             echo '<div class="alert alert-info">';
             echo '<h4>'.CHelpManager::getHelpForCurrentPage()->title.'</h4>';
             $printHelpBox = false;
-            if (mb_strlen(CHelpManager::getHelpForCurrentPage()->content) > 512) {
+            $wikiHelp = false;
+            if (mb_strlen($content) > 512) {
                 $symbols = 512; // Количество символов которые надо вывести
                 $text = "";
-                $words = explode(" ", CHelpManager::getHelpForCurrentPage()->content);
+                $words = explode(" ", $content);
                 for ($i=0; $i<count($words); $i++) {
                 	$nv_str=$text.$words[$i]." ";
                 	if(strlen($nv_str)<$symbols){
@@ -923,7 +949,11 @@ class CHtml {
                 echo '<p><a href="#help" data-toggle="modal">Читать полностью</a></p>';
                 $printHelpBox = true;
             } else {
-                echo CHelpManager::getHelpForCurrentPage()->content;
+                echo $content;
+            }
+            if (CHelpManager::getHelpForCurrentPage()->wiki_url != "") {
+                echo '<p><a href="#wikiHelp" data-toggle="modal">Справка из Википедии</a></p>';
+                $wikiHelp = true;
             }
             if (CSession::getCurrentUser()->hasRole("help_add_inline")) {
                 echo '<p>';
@@ -932,20 +962,10 @@ class CHtml {
             }
             echo '</div>';
             if ($printHelpBox) {
-                echo '
-                    <div class="modal hide fade" id="help">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">?</button>
-                            <h3 id="myModalLabel">Справка</h3>
-                        </div>
-                        <div class="modal-body">
-                            '.CHelpManager::getHelpForCurrentPage()->content.'
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
-                        </div>
-                    </div>
-                ';
+                self::modalWindow("help", "Справка", $content);
+            }
+            if ($wikiHelp) {
+            	CHelpManager::getWikiAddressModalWindow(CHelpManager::getHelpForCurrentPage()->wiki_url);
             }
         } elseif (CSession::getCurrentUser()->hasRole("help_add_inline")) {
             echo '<div class="alert alert-info">';

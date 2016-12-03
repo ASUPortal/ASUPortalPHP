@@ -44,7 +44,7 @@ class CIndPlanPersonsReportTableByTime extends CAbstractPrintClassField {
         foreach ($persons->getItems() as $person) {
             foreach ($person->getIndPlansByYears($bean->getItem("year_id"))->getItems() as $year_id=>$plans) {
                 foreach ($plans->getItems() as $plan) {
-                    if (in_array($plan->type, $bean->getItem("types")->getItems())) {
+                    if (in_array($plan->getType(), $bean->getItem("types")->getItems())) {
                         $targetPlans->add($plan->getId(), $plan);
                     }
                 }

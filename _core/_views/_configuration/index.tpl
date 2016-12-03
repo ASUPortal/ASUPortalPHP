@@ -9,9 +9,10 @@
         <tr>
             <th width="5"></th>
             <th width="5">#</th>
-            <th>Название</th>
-            <th>Псевдоним</th>
-            <th>Значение</th>
+            <th>{CHtml::tableOrder("title", $settings->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("alias", $settings->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("value", $settings->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("description", $settings->getFirstItem())}</th>
         </tr>
         {foreach $settings->getItems() as $setting}
         <tr>
@@ -20,6 +21,7 @@
             <td><a href="?action=edit&id={$setting->id}">{$setting->title}</a></td>
             <td>{$setting->alias}</td>
             <td>{$setting->value|htmlspecialchars}</td>
+            <td>{$setting->description}</td>
         </tr>
         {/foreach}
     </table>

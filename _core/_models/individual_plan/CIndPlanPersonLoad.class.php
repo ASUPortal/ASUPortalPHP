@@ -43,6 +43,14 @@ class CIndPlanPersonLoad extends CActiveModel{
             )
         );
     }
+    
+    public function getType() {
+        if (is_numeric($this->type)) {
+            return CTaxonomyManager::getTerm($this->type);
+        } else {
+            return $this->type;
+        }
+    }
 
     protected function getWorks() {
         if (is_null($this->_works)) {

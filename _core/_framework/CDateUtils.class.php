@@ -10,7 +10,7 @@ class CDateUtils {
 	 * @return String
 	 */
 	public static function getTimeDifferenceString($dateStart, $dateEnd) {
-		if ($date !== "") {
+		if ($dateStart !== "" and $dateEnd !== "") {
 			$firstDateTimeObject = DateTime::createFromFormat('d.m.Y', $dateStart);
 			$secondDateTimeObject = DateTime::createFromFormat('d.m.Y', $dateEnd);
 			

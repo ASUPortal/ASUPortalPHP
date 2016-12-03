@@ -116,4 +116,42 @@ class CHelpManager {
         }
         return self::getHelp($uri);
     }
+    /**
+     * Модальное окно для страницы локальной Википедии
+     *
+     * @param String $wikiUrl
+     * @return String
+     */
+    public static function getWikiAddressModalWindow($wikiUrl) {
+        require_once(CORE_CWD."/_core/_external/smarty/vendor/simple_html_dom.php");
+        $proxy = CSettingsManager::getSettingValue("proxy_address");
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_PROXY, $proxy);
+        curl_setopt($curl, CURLOPT_URL, $wikiUrl);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 2);
+        $str = curl_exec($curl);
+        curl_close($curl);
+        $html = str_get_html($str);
+        if (!empty($html)) {
+            if(count($html->find('div[id="mw-content-text"]'))) {
+                foreach($html->find('div[id="mw-content-text"]') as $value) {
+                    foreach($value->find('img') as $element) {
+                        foreach($element->find('a') as $a) {
+                            $a->href = CSettingsManager::getSettingValue("wiki_address").$a->href;
+                        }
+                        $element->src = CSettingsManager::getSettingValue("wiki_address").$element->src;
+                    }
+                    $modalWindow = CHtml::modalWindow("wikiHelp", "Справка", $value);
+                }
+            } else {
+                $modalWindow = CHtml::modalWindow("wikiHelp", "Справка", "Указанной страницы нет в локальной Википедии кафедры!");
+            }
+            $html->clear();
+            unset($html);
+        } else {
+            $modalWindow = CHtml::modalWindow("wikiHelp", "Справка", "Локальная Википедия недоступна!");
+        }
+        return $modalWindow;
+    }
 }
