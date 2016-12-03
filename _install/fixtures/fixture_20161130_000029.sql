@@ -1,1 +1,1 @@
-ALTER TABLE `help` ADD `wiki` text NOT NULL ;
+ALTER TABLE `help` ADD `wiki_url` text NOT NULL ;

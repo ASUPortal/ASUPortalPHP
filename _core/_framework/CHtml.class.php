@@ -951,7 +951,7 @@ class CHtml {
             } else {
                 echo $content;
             }
-            if (CHelpManager::getHelpForCurrentPage()->wiki != "") {
+            if (CHelpManager::getHelpForCurrentPage()->wiki_url != "") {
                 echo '<p><a href="#wikiHelp" data-toggle="modal">Справка из Википедии</a></p>';
                 $wikiHelp = true;
             }
@@ -965,35 +965,7 @@ class CHtml {
                 self::modalWindow("help", "Справка", $content);
             }
             if ($wikiHelp) {
-                require_once(CORE_CWD."/_core/_external/smarty/vendor/simple_html_dom.php");
-                $proxy = CSettingsManager::getSettingValue("proxy_address");
-                $curl = curl_init();
-                curl_setopt($curl, CURLOPT_PROXY, $proxy);
-                curl_setopt($curl, CURLOPT_URL, CHelpManager::getHelpForCurrentPage()->wiki);
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 2);
-                $str = curl_exec($curl);
-                curl_close($curl);
-                $html = str_get_html($str);
-                if (!empty($html)) {
-                    if(count($html->find('div[id="mw-content-text"]'))) {
-                        foreach($html->find('div[id="mw-content-text"]') as $value) {
-                            foreach($value->find('img') as $element) {
-                                foreach($element->find('a') as $a) {
-                                    $a->href = CSettingsManager::getSettingValue("wiki_address").$a->href;
-                                }
-                                $element->src = CSettingsManager::getSettingValue("wiki_address").$element->src;
-                            }
-                            self::modalWindow("wikiHelp", "Справка", $value);
-                        }
-                    } else {
-                        self::modalWindow("wikiHelp", "Справка", "Указанной страницы нет в локальной Википедии кафедры!");
-                    }
-                    $html->clear();
-                    unset($html);
-            	} else {
-                    self::modalWindow("wikiHelp", "Справка", "Локальная Википедия недоступна!");
-            	}
+            	CHelpManager::getWikiAddressModalWindow(CHelpManager::getHelpForCurrentPage());
             }
         } elseif (CSession::getCurrentUser()->hasRole("help_add_inline")) {
             echo '<div class="alert alert-info">';

@@ -21,10 +21,10 @@
     </div>
 
     <div class="control-group">
-        {CHtml::activeLabel("wiki", $help)}
+        {CHtml::activeLabel("wiki_url", $help)}
         <div class="controls">
-        {CHtml::activeTextField("wiki", $help)}
-        {CHtml::error("wiki", $help)}
+        {CHtml::activeTextField("wiki_url", $help)}
+        {CHtml::error("wiki_url", $help)}
         </div>
     </div>
     
