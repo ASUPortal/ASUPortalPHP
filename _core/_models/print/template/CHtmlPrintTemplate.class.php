@@ -53,11 +53,16 @@ class CHtmlPrintTemplate implements IPrintTemplate {
 		 */
 		$formsetFields = $this->form->formset->fields;
 		/**
+		 * Подключаем PHP Simple HTML DOM Parser
+		 */
+		require_once(CORE_CWD."/_core/_external/smarty/vendor/simple_html_dom.php");
+		$html = file_get_html($file);
+		/**
 		 * Получаем описатели-классы
 		 */
 		$start = get_class($object);
 		$end = ".class";
-		preg_match_all("/$start(.*?)$end/", file_get_contents($file), $result);
+		preg_match_all("/$start(.*?)$end/", $html->plaintext, $result);
 		foreach ($result[0] as $fieldName) {
 			$field = CPrintManager::getPrintClassField($fieldName, $object);
 			$formsetFields->add($field->alias, $field);
@@ -74,6 +79,8 @@ class CHtmlPrintTemplate implements IPrintTemplate {
 				throw new Exception("Unsupported field type" . $field->type_id);
 			}
 		}
+		$html->clear();
+		unset($html);
 		return $fields;
     }
     
