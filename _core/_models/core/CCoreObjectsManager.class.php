@@ -386,4 +386,23 @@ class CCoreObjectsManager {
         }
         return $result;
     }
+    
+    /**
+     * Поле модели по названию
+     *
+     * @param CModel $model
+     * @param String $fieldName
+     * @return CCoreModelField $field
+     */
+    public static function getCoreModelFieldByFieldName(CModel $model, $fieldName) {
+        $fields = new CArrayList();
+        $coreModel = CCoreObjectsManager::getCoreModel(get_class($model));
+        if (!is_null($coreModel)) {
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_CORE_MODEL_FIELDS, 'model_id = '.$coreModel->getId().' and field_name = "'.$fieldName.'"')->getItems() as $item) {
+                $field = new CCoreModelField($item);
+                $fields->add($field->getId(), $field);
+            }
+        }
+        return $fields->getFirstItem();
+    }
 }

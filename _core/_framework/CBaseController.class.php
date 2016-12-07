@@ -198,6 +198,10 @@ class CBaseController {
         $this->addJSInclude('_core/select2/select2.js');
         $this->addCSSInclude('_core/select2/select2.css');
         /**
+         * Всплывающая подсказка
+         */
+        $this->addJSInclude("_core/tooltip.js");
+        /**
          * Уровни доступа
          */
         $this->setData("ACCESS_LEVEL_NO_ACCESS", ACCESS_LEVEL_NO_ACCESS);

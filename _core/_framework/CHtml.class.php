@@ -69,7 +69,7 @@ class CHtml {
      * @param string $class
      * @param string $html
      */
-    public static function dropDownList($name, $values, $selected = null, $id = "", $class = "", $html = "") {
+    public static function dropDownList($name, $values, $selected = null, $id = "", $class = "", $html = "", $tooltipTitle = null) {
         $inline = "";
         if ($id != "") {
             $inline .= ' id="'.$id.'"';
@@ -98,7 +98,7 @@ class CHtml {
                 $values[0] = "- Выберите из списка (".count($values).") -";
             }
         }
-        echo '<select name="'.$name.'" '.$inline.'>';
+        echo '<select name="'.$name.'" data-toggle="tooltip" title="'.$tooltipTitle.'" '.$inline.'>';
         // часто выбор делается из словаря, так что преобразуем объекты CTerm к строке
         foreach ($values as $key=>$value) {
             if (is_object($value)) {
@@ -158,7 +158,11 @@ class CHtml {
         if (array_key_exists($name, $validators)) {
             $fieldRequired = true;
         }
-        self::dropDownList($field, $values, $model->$name, $id, $class, $html);
+        $tooltipTitle = null;
+        if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
+            $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
+        }
+        self::dropDownList($field, $values, $model->$name, $id, $class, $html, $tooltipTitle);
         if ($fieldRequired) {
             self::requiredStar();
         }
@@ -249,7 +253,7 @@ class CHtml {
      * @param string $class
      * @param string $html
      */
-    public static function textField($name, $value = null, $id = "", $class = "", $html = "") {
+    public static function textField($name, $value = null, $id = "", $class = "", $html = "", $tooltipTitle = null) {
         if ($id == "") {
             $id = $name;
         }
@@ -266,7 +270,7 @@ class CHtml {
         if ($html != "") {
             $inline .= $html;
         }
-        echo '<input type="text" name="'.$name.'" value="'.htmlspecialchars($value).'" '.$inline.'>';
+        echo '<input type="text" name="'.$name.'" data-toggle="tooltip" title="'.$tooltipTitle.'" value="'.htmlspecialchars($value).'" '.$inline.'>';
     }
     /**
      * Активное текстовое поле
@@ -304,7 +308,11 @@ class CHtml {
         if (array_key_exists($name, $validators)) {
             $fieldRequired = true;
         }
-        self::textField($field, $model->$name, $id, $class, $html);
+        $tooltipTitle = null;
+        if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
+            $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
+        }
+        self::textField($field, $model->$name, $id, $class, $html, $tooltipTitle);
         if ($fieldRequired) {
             self::requiredStar();
         }
@@ -316,9 +324,13 @@ class CHtml {
         }
         $id = str_replace("[", "_", $id);
         $id = str_replace("]", "_", $id);
+        $tooltipTitle = null;
+        if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
+            $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
+        }
         ?>
         <div class="input-append bootstrap-timepicker">
-            <input id="<?php echo $id; ?>" type="text" name="<?php echo $field; ?>" class="timepicker <?php echo self::getFielsizeClass(); ?>" value="<?php echo $model->$name; ?>">
+            <input id="<?php echo $id; ?>" type="text" data-toggle="tooltip" title="<?php echo $tooltipTitle; ?>" name="<?php echo $field; ?>" class="timepicker <?php echo self::getFielsizeClass(); ?>" value="<?php echo $model->$name; ?>">
             <span class="add-on"><i class="icon-time"></i></span>
         </div>
         <?php
@@ -365,9 +377,13 @@ class CHtml {
         }
         $id = str_replace("[", "_", $id);
         $id = str_replace("]", "_", $id);
+        $tooltipTitle = null;
+        if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
+            $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
+        }
         ?>
         <div class="input-append date <?php echo self::getFielsizeClass(); ?> datepicker" id="<?php echo $id; ?>" data-date="<?php echo $model->$name; ?>" data-date-format="<?php echo $format; ?>">
-            <input name="<?php echo $field; ?>" class="<?php echo self::getFielsizeClass(); ?>" type="text" value="<?php echo $model->$name; ?>">
+            <input name="<?php echo $field; ?>" data-toggle="tooltip" title="<?php echo $tooltipTitle; ?>" class="<?php echo self::getFielsizeClass(); ?>" type="text" value="<?php echo $model->$name; ?>">
             <span class="add-on"><i class="icon-th"></i></span>
         </div>
         <?php
@@ -411,7 +427,11 @@ class CHtml {
             $field .= "[".$submodelName."]";
         }
         $field .= "[".$name."]";
-        self::textBox($field, $model->$name, $id, $class, $html);
+        $tooltipTitle = null;
+        if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
+            $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
+        }
+        self::textBox($field, $model->$name, $id, $class, $html, $tooltipTitle);
         $fieldRequired = false;
         $validators = CCoreObjectsManager::getFieldValidators($model);
         if (array_key_exists($name, $validators)) {
@@ -539,8 +559,9 @@ class CHtml {
      * @param string $id
      * @param string $class
      * @param string $html
+     * @param string $tooltipTitle
      */
-    public static function textBox($name, $value = null, $id = "", $class = "", $html = "") {
+    public static function textBox($name, $value = null, $id = "", $class = "", $html = "", $tooltipTitle = null) {
         if ($id == "") {
             $id = $name;
         }
@@ -560,9 +581,9 @@ class CHtml {
         if ($html != "") {
             $inline .= $html;
         }
-        echo '<textarea name="'.$name.'" '.$inline.'>'.$value.'</textarea>';
+        echo '<textarea data-toggle="tooltip" title="'.$tooltipTitle.'" name="'.$name.'" '.$inline.'>'.$value.'</textarea>';
     }
-    public static function checkBox($name, $value, $checked = false, $id = "", $class = "", $html = "") {
+    public static function checkBox($name, $value, $checked = false, $id = "", $class = "", $html = "", $tooltipTitle = null) {
         if ($id == "") {
             $id = $name;
         }
@@ -584,7 +605,7 @@ class CHtml {
         } else {
             $checked = "";
         }
-        echo '<input type="checkbox" name="'.$name.'" '.$checked.' '.$inline.'>';
+        echo '<input type="checkbox" data-toggle="tooltip" title="'.$tooltipTitle.'" name="'.$name.'" '.$checked.' '.$inline.'>';
     }
     public static function activeCheckBoxGroup($name, CModel $model, $values = null) {
         /**
@@ -599,6 +620,10 @@ class CHtml {
             $name = substr($name, 0, strlen($name) - 1);
             $model = $model->$submodelName;
         }
+        $tooltipTitle = null;
+        if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
+            $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
+        }
         foreach ($values as $key=>$value) {
             $inputName = $model::getClassName();
             if ($submodelName !== "") {
@@ -606,7 +631,7 @@ class CHtml {
             }
             $inputName .= "[".$name."][]";
             echo '<label class="checkbox">';
-            echo '<input type="checkbox" name="'.$inputName.'"';
+            echo '<input type="checkbox" data-toggle="tooltip" title="'.$tooltipTitle.'" name="'.$inputName.'"';
             if (is_array($model->$name)) {
                 if (array_key_exists($key, $model->$name)) {
                     echo ' checked';
@@ -721,12 +746,16 @@ class CHtml {
             $name = substr($name, 0, strlen($name) - 1);
             $model = $model->$submodelName;
         }
+        $tooltipTitle = null;
+        if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
+            $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
+        }
         if ($model->$name == true) {
             $name = $model::getClassName()."[".$name."]";
-            self::checkBox($name, "1", true, $id, $class, $html);
+            self::checkBox($name, "1", true, $id, $class, $html, $tooltipTitle);
         } else {
             $name = $model::getClassName()."[".$name."]";
-            self::checkBox($name, "1", false, $id, $class, $html);
+            self::checkBox($name, "1", false, $id, $class, $html, $tooltipTitle);
         }
     }
     public static function error($name, CModel $model) {
@@ -752,6 +781,10 @@ class CHtml {
             $field .= "[".$submodelName."]";
         }
         $field .= "[".$name."][]";
+        $tooltipTitle = null;
+        if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
+            $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
+        }
         // дописываем скрипт для мультивыбора
         if (!self::$_multiselectInit) {
             echo '
@@ -778,7 +811,7 @@ class CHtml {
         foreach ($model->$name->getItems() as $f) {
             // отрисовываем поле со значением
             echo '<span>';
-            self::dropDownList($field, $values, $f->getId());
+            self::dropDownList($field, $values, $f->getId(), "", "", "", $tooltipTitle);
             echo '&nbsp;&nbsp; <img src="'.WEB_ROOT.'images/design/mn.gif" style="cursor: pointer; " onclick="jQuery(this).parent().remove(); return false;" />';
             echo '<br /></span>';
         }
@@ -1025,6 +1058,10 @@ class CHtml {
                 $uploadDir = $property["upload_dir"];
             }
         }
+        $tooltipTitle = null;
+        if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
+            $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
+        }
         ?>
         <div class="activeUpload" asu-storage="<?php echo $uploadDir; ?>" asu-multiple="<?php echo ($isMultiple) ? "true":"false" ;?>" asu-size="<?php echo $imageWidth; ?>" asu-value-name="<?php echo $field; ?>">
 
@@ -1040,7 +1077,7 @@ class CHtml {
                 <tbody>
                 <tr>
                     <td width="100%">
-                        <input type="file" name="upload_<?php echo $name; ?>" asu-type="upload" />
+                        <input type="file" data-toggle="tooltip" title="<?php echo $tooltipTitle; ?>" name="upload_<?php echo $name; ?>" asu-type="upload" />
                     </td>
                     <td style="width: 16px; " valign="top">
                         <i class="icon-remove" />
@@ -1258,6 +1295,10 @@ class CHtml {
         $class = self::getFielsizeClass();
         $inline .= ' class="'.$class.'"';
         $data = $model->$name;
+        $tooltipTitle = null;
+        if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
+            $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
+        }
         ?>
         <div class="catalogLookup" asu-catalog="<?php echo $catalog; ?>" asu-multiple="<?php echo ($isMultiple) ? "true":"false" ;?>" asu-value-name="<?php echo $field; ?>" asu-creation="<?php echo ($allowCreation) ? "true":"false" ;?>">
 
@@ -1276,7 +1317,7 @@ class CHtml {
         <table <?php echo $inline; ?> id="<?php echo $name;?>" style="margin-left: 0px; ">
             <tr>
                 <td width="100%">
-                    <input type="text" value="" asu-name="lookup" placeholder="Введите текст для поиска" style="width: 95%; ">
+                    <input type="text" data-toggle="tooltip" title="<?php echo $tooltipTitle; ?>" value="" asu-name="lookup" placeholder="Введите текст для поиска" style="width: 95%; ">
                 </td>
                 <td style="width: 16px; ">
                     <i class="icon-search" />
