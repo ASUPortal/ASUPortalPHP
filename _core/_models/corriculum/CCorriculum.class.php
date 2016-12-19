@@ -98,7 +98,6 @@ class CCorriculum extends CActiveModel{
             "profile_id" => "Специализация",
             "duration" => "Длительность обучения",
             "qualification_id" => "Квалификация выпускника",
-            "speciality_id" => "Специальность",
             "title" => "Название плана",
             "description" => "Описание",
             "final_exam_title" => "Название итогового экзамена",
