@@ -23,7 +23,10 @@ class CWorkPlanApproverName extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$result = $contextObject->approver_name;
-        return $result;
+		$result = "";
+		if (!is_null($contextObject->approverName)) {
+			$result = $contextObject->approverName->getValue();
+		}
+		return $result;
     }
 }
