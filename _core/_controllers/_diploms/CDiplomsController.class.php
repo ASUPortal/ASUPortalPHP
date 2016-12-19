@@ -248,12 +248,6 @@ class CDiplomsController extends CBaseController {
 		 * Формируем меню
 		 */
 		$this->addActionsMenuItem(array(
-            array(
-                "title" => "Печать по шаблону",
-                "link" => "#",
-                "icon" => "devices/printer.png",
-                "template" => "formset_diploms_theme"
-            ),
 			array(
                 "title" => "Добавить тему ВКР",
                 "link" => "?action=add",
@@ -293,6 +287,21 @@ class CDiplomsController extends CBaseController {
 				)
 			)
 		));
+		/**
+		 * Параметры для групповой печати по шаблону
+		 */
+		$this->setData("template", "formset_diploms");
+		$this->setData("selectedDoc", true);
+		$this->setData("url", null);
+		$this->setData("action", null);
+		$this->setData("id", null);
+		/**
+		 * Параметры для печати по шаблону списка тем ВКР
+		*/
+		$template = "formset_diploms_theme";
+		$formset = CPrintManager::getFormset($template);
+		$this->setData("formsetThemes", $formset);
+		$this->setData("templateThemes", $template);
 		if ($isArchive) {
 			$requestParams = array();
 			foreach (CRequest::getGlobalRequestVariables()->getItems() as $key=>$value) {

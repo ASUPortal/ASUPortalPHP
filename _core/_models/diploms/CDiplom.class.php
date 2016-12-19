@@ -138,9 +138,23 @@ class CDiplom extends CActiveModel {
             "implement_recomendation" => "Рекомендовано к внедрению",
             "implemented" => "Внедрено",
             "average_mark" => "Средний балл",
-			"normokontroler_id" => "Нормоконтролер",
-        	"protocol" => "Номер протокола (номер защиты)",
-        	"num_order" => "Номер распоряжения декана",
+            "normokontroler_id" => "Нормоконтролер",
+            "protocol" => "Номер протокола (номер защиты)",
+            "num_order" => "Номер распоряжения декана",
+            "date_check" => "Дата проверки",
+            "time_check" => "Время проверки",
+            "borrowing" => "Процент заимствований",
+            "citations" => "Процент цитирования",
+            "originality" => "Процент оригинальности",
+            "comments" => "Комментарии"
+        );
+    }
+    public function fieldsProperty() {
+        return array(
+            "date_check" => array(
+                "type"  => FIELD_MYSQL_DATE,
+                "format" => "d.m.Y"
+            )
         );
     }
     /**

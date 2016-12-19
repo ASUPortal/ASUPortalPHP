@@ -52,11 +52,11 @@ class CDiplomPreviewComission extends CActiveModel {
 	}
 	public function attributeLabels() {
 		return array(
-				"secretary_id" => "Секретарь комиссии",
+    			"secretary_id" => "Секретарь комиссии",
     			"name" => "Имя/Номер комиссии",
     			"date_act" => "Дата создания комиссии",
     			"comment" => "Примечание",
-				"members" => "Члены комиссии"
+    			"members" => "Члены комиссии"
 		);
 	}
 	public function validationRules() {
