@@ -1,5 +1,7 @@
 <?php
 class CCorriculumDisciplineBooksController extends CBaseController{
+    protected $_isComponent = true;
+	
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -26,18 +28,32 @@ class CCorriculumDisciplineBooksController extends CBaseController{
         $param->subject_id = $discipline->discipline->getId();
         $param->book_id = $discipline->getId();
         $this->setData("param", $param);
+        $this->setData("plan_id", CRequest::getInt("plan_id"));
+        $this->setData("type", CRequest::getInt("type"));
         /**
          * Генерация меню
          */
-        $this->addActionsMenuItem(array(
-            "title" => "Назад",
-            "link" => "disciplines.php?action=edit&id=".$discipline->getId(),
-            "icon" => "actions/edit-undo.png"
-        ));
-        /**
-         * Отображение представления
-         */
-        $this->renderView("_corriculum/_books/add.tpl");
+        if (CRequest::getInt("type") != 0) {
+            $this->addActionsMenuItem(array(
+                "title" => "Назад",
+                "link" => "workplanliterature.php?action=index&plan_id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
+                "icon" => "actions/edit-undo.png"
+            ));
+            /**
+             * Отображение представления
+             */
+            $this->renderView("_corriculum/_books/addFromComponent.tpl");
+        } else {
+            $this->addActionsMenuItem(array(
+                "title" => "Назад",
+                "link" => "disciplines.php?action=edit&id=".$discipline->getId(),
+                "icon" => "actions/edit-undo.png"
+            ));
+            /**
+             * Отображение представления
+             */
+            $this->renderView("_corriculum/_books/add.tpl");
+        }
     }
     public function actionEdit() {
         $object = CBaseManager::getCorriculumBook(CRequest::getInt("id"));
@@ -49,18 +65,32 @@ class CCorriculumDisciplineBooksController extends CBaseController{
         $param->subject_id = $discipline->discipline->getId();
         $param->book_id = $discipline->getId();
         $this->setData("param", $param);
+        $this->setData("plan_id", CRequest::getInt("plan_id"));
+        $this->setData("type", CRequest::getInt("type"));
         /**
          * Генерация меню
          */
-        $this->addActionsMenuItem(array(
-            "title" => "Назад",
-            "link" => "disciplines.php?action=edit&id=".$discipline->getId(),
-            "icon" => "actions/edit-undo.png"
-        ));
-        /**
-         * Отображение представления
-         */
-        $this->renderView("_corriculum/_books/edit.tpl");
+        if (CRequest::getInt("type") != 0) {
+            $this->addActionsMenuItem(array(
+                "title" => "Назад",
+                "link" => "workplanliterature.php?action=index&plan_id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
+                "icon" => "actions/edit-undo.png"
+            ));
+            /**
+             * Отображение представления
+             */
+            $this->renderView("_corriculum/_books/editFromComponent.tpl");
+        } else {
+            $this->addActionsMenuItem(array(
+                "title" => "Назад",
+                "link" => "disciplines.php?action=edit&id=".$discipline->getId(),
+                "icon" => "actions/edit-undo.png"
+            ));
+            /**
+             * Отображение представления
+             */
+            $this->renderView("_corriculum/_books/edit.tpl");
+        }
     }
     public function actionDelete() {
         $object = CBaseManager::getCorriculumBook(CRequest::getInt("id"));
@@ -82,6 +112,8 @@ class CCorriculumDisciplineBooksController extends CBaseController{
         $param->setAttributes(CRequest::getArray($param::getClassName()));
         $subject_id = $param->subject_id;
         $discipline_id = $param->book_id;
+        $plan_id = CRequest::getInt("plan_id");
+        $type = CRequest::getInt("type");
         if ($object->validate()) {
             $object->save();
             $disciplineBook = new CCorriculumDisciplineBook();
@@ -89,9 +121,13 @@ class CCorriculumDisciplineBooksController extends CBaseController{
             $disciplineBook->subject_id = $subject_id;
             $disciplineBook->save();
             if ($this->continueEdit()) {
-                $this->redirect("books.php?action=edit&id=".$object->getId()."&discipline_id=".$discipline_id);
+            	$this->redirect("books.php?action=edit&id=".$object->getId()."&discipline_id=".$discipline_id."&plan_id=".$plan_id."&type=".$type);
             } else {
-                $this->redirect("disciplines.php?action=edit&id=".$discipline_id);
+            	if ($type != 0) {
+            		$this->redirect("workplanliterature.php?action=index&plan_id=".$plan_id."&type=".$type);
+            	} else {
+            		$this->redirect("disciplines.php?action=edit&id=".$discipline_id);
+            	}
             }
             return true;
         }

@@ -1,6 +1,12 @@
 {extends file="_core.component.tpl"}
-
 {block name="asu_center"}
+
+{if (isset($corriculumDisciplineId))}
+<br>
+    <a href="disciplines.php?action=addStatement&discipline_id={$corriculumDisciplineId}" target="_blank">Сформировать заявку на учебную литературу</a>
+<br><br>
+{/if}
+
     {if ($objects->getCount() == 0)}
         Нет объектов для отображения
     {else}
