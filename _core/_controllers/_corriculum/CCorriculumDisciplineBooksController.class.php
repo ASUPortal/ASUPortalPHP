@@ -33,7 +33,7 @@ class CCorriculumDisciplineBooksController extends CBaseController{
         /**
          * Генерация меню
          */
-        if (CRequest::getInt("type") == CWorkPlanLiteratureTypeConstants::WORKPLAN_BASE_LITERATURE or CRequest::getInt("type") == CWorkPlanLiteratureTypeConstants::WORKPLAN_ADDITIONAL_LITERATURE) {
+        if (CRequest::getInt("type") == CWorkPlanLiteratureType::WORKPLAN_BASE_LITERATURE or CRequest::getInt("type") == CWorkPlanLiteratureType::WORKPLAN_ADDITIONAL_LITERATURE) {
             $this->addActionsMenuItem(array(
                 "title" => "Назад",
                 "link" => "workplanliterature.php?action=index&plan_id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
@@ -70,7 +70,7 @@ class CCorriculumDisciplineBooksController extends CBaseController{
         /**
          * Генерация меню
          */
-        if (CRequest::getInt("type") == CWorkPlanLiteratureTypeConstants::WORKPLAN_BASE_LITERATURE or CRequest::getInt("type") == CWorkPlanLiteratureTypeConstants::WORKPLAN_ADDITIONAL_LITERATURE) {
+        if (CRequest::getInt("type") == CWorkPlanLiteratureType::WORKPLAN_BASE_LITERATURE or CRequest::getInt("type") == CWorkPlanLiteratureType::WORKPLAN_ADDITIONAL_LITERATURE) {
             $this->addActionsMenuItem(array(
                 "title" => "Назад",
                 "link" => "workplanliterature.php?action=index&plan_id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
