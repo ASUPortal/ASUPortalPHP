@@ -1,9 +1,9 @@
 <?php
 
-class CDiplomCheckAntiplagiatBorrowing extends CAbstractPrintClassField {
+class CDiplomAntiplagiatCheckTeacher extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Процент заимствований ВКР на антиплагиат";
+        return "Руководитель темы ВКР";
     }
 
     public function getFieldDescription()
@@ -24,8 +24,11 @@ class CDiplomCheckAntiplagiatBorrowing extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
     	$result = "";
-    	if ($contextObject->checksOnAntiplagiat->getCount() != 0) {
-    		$result = $contextObject->checksOnAntiplagiat->getLastItem()->borrowing_percent;
+    	if ($contextObject->antiplagiatChecks->getCount() != 0) {
+    		$person = $contextObject->antiplagiatChecks->getLastItem()->diplom->person;
+    		if (!is_null($person)) {
+    			$result = $person->getName();
+    		}
     	}
         return $result;
     }

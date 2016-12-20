@@ -7,18 +7,18 @@
     {CHtml::errorSummary($check)}
 
 	<div class="control-group">
-	    {CHtml::activeLabel("check_date_on_antiplagiat", $check)}
+	    {CHtml::activeLabel("check_date", $check)}
 	    <div class="controls">
-	        {CHtml::activeDateField("check_date_on_antiplagiat", $check)}
-	        {CHtml::error("check_date_on_antiplagiat", $check)}
+	        {CHtml::activeDateField("check_date", $check)}
+	        {CHtml::error("check_date", $check)}
 	    </div>
 	</div>
 	
 	<div class="control-group">
-	    {CHtml::activeLabel("check_time_on_antiplagiat", $check)}
+	    {CHtml::activeLabel("check_time", $check)}
 	    <div class="controls">
-	        {CHtml::activeTimeField("check_time_on_antiplagiat", $check)}
-	        {CHtml::error("check_time_on_antiplagiat", $check)}
+	        {CHtml::activeTimeField("check_time", $check)}
+	        {CHtml::error("check_time", $check)}
 	    </div>
 	</div>
 	
@@ -47,10 +47,10 @@
 	</div>
 	
 	<div class="control-group">
-	    {CHtml::activeLabel("comments_on_antiplagiat", $check)}
+	    {CHtml::activeLabel("comments", $check)}
 	    <div class="controls">
-	        {CHtml::activeTextField("comments_on_antiplagiat", $check)}
-	        {CHtml::error("comments_on_antiplagiat", $check)}
+	        {CHtml::activeTextField("comments", $check)}
+	        {CHtml::error("comments", $check)}
 	    </div>
 	</div>
 	

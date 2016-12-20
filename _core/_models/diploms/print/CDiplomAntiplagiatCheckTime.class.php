@@ -1,6 +1,6 @@
 <?php
 
-class CDiplomCheckAntiplagiatTime extends CAbstractPrintClassField {
+class CDiplomAntiplagiatCheckTime extends CAbstractPrintClassField {
     public function getFieldName()
     {
         return "Время проверки ВКР на антиплагиат";
@@ -24,9 +24,9 @@ class CDiplomCheckAntiplagiatTime extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
     	$result = "";
-    	if ($contextObject->checksOnAntiplagiat->getCount() != 0) {
-    		if ($contextObject->checksOnAntiplagiat->getLastItem()->check_time_on_antiplagiat !== "") {
-    			$checkTime = $contextObject->checksOnAntiplagiat->getLastItem()->check_time_on_antiplagiat;
+    	if ($contextObject->antiplagiatChecks->getCount() != 0) {
+    		if ($contextObject->antiplagiatChecks->getLastItem()->check_time !== "") {
+    			$checkTime = $contextObject->antiplagiatChecks->getLastItem()->check_time;
     			$result = substr($checkTime, 0, strpos($checkTime, ":"))." час. ";
     			$result .= substr($checkTime, strpos($checkTime, ":") + 1)." мин.";
     		}

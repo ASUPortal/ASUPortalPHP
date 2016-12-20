@@ -2,8 +2,8 @@
 /**
  * Проверка тем ВКР на антиплагиат
  */
-class CDiplomCheckAntiplagiat extends CActiveModel{
-    protected $_table = TABLE_DIPLOM_CHECKS_ON_ANTIPLAGIAT;
+class CDiplomAntiplagiatCheck extends CActiveModel{
+    protected $_table = TABLE_DIPLOM_ANTIPLAGIAT_CHECKS;
 
     protected function relations() {
         return array(
@@ -28,18 +28,18 @@ class CDiplomCheckAntiplagiat extends CActiveModel{
         return array(
             "diplom_id" => "Тема ВКР",
             "responsible_id" => "Ответственный за проверку",
-            "check_date_on_antiplagiat" => "Дата проверки на антиплагиат",
-            "check_time_on_antiplagiat" => "Время проверки на антиплагиат",
+            "check_date" => "Дата проверки на антиплагиат",
+            "check_time" => "Время проверки на антиплагиат",
             "borrowing_percent" => "Процент заимствований",
             "citations_percent" => "Процент цитирования",
             "originality_percent" => "Процент оригинальности",
-            "comments_on_antiplagiat" => "Комментарии"
+            "comments" => "Комментарии"
         );
     }
     
     public function fieldsProperty() {
     	return array(
-    		"check_date_on_antiplagiat" => array(
+    		"check_date" => array(
     				"type"  => FIELD_MYSQL_DATE,
     				"format" => "d.m.Y"
     		)
@@ -52,7 +52,7 @@ class CDiplomCheckAntiplagiat extends CActiveModel{
                 "responsible_id"
             ),
         	"checkdate" => array(
-    			"check_date_on_antiplagiat"
+    			"check_date"
     		)
         );
     }

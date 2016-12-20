@@ -1,9 +1,9 @@
 <?php
 
-class CDiplomCheckAntiplagiatCitations extends CAbstractPrintClassField {
+class CDiplomAntiplagiatCheckResponsible extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Процент цитирования ВКР на антиплагиат";
+        return "Ответственный проверки ВКР на антиплагиат";
     }
 
     public function getFieldDescription()
@@ -24,8 +24,11 @@ class CDiplomCheckAntiplagiatCitations extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
     	$result = "";
-    	if ($contextObject->checksOnAntiplagiat->getCount() != 0) {
-    		$result = $contextObject->checksOnAntiplagiat->getLastItem()->citations_percent;
+    	if ($contextObject->antiplagiatChecks->getCount() != 0) {
+    		$responsible = $contextObject->antiplagiatChecks->getLastItem()->responsible;
+    		if (!is_null($responsible)) {
+    			$result = $responsible->getNameShort();
+    		}
     	}
         return $result;
     }

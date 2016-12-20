@@ -1,6 +1,6 @@
 <?php
 
-class CDiplomCheckAntiplagiatDate extends CAbstractPrintClassField {
+class CDiplomAntiplagiatCheckDate extends CAbstractPrintClassField {
     public function getFieldName()
     {
         return "Дата проверки ВКР на антиплагиат";
@@ -24,9 +24,9 @@ class CDiplomCheckAntiplagiatDate extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
     	$result = "";
-    	if ($contextObject->checksOnAntiplagiat->getCount() != 0) {
-    		if ($contextObject->checksOnAntiplagiat->getLastItem()->check_date_on_antiplagiat !== "") {
-    			$result = date("d.m.Y", strtotime($contextObject->checksOnAntiplagiat->getLastItem()->check_date_on_antiplagiat));
+    	if ($contextObject->antiplagiatChecks->getCount() != 0) {
+    		if ($contextObject->antiplagiatChecks->getLastItem()->check_date !== "") {
+    			$result = date("d.m.Y", strtotime($contextObject->antiplagiatChecks->getLastItem()->check_date));
     		}
     	}
         return $result;

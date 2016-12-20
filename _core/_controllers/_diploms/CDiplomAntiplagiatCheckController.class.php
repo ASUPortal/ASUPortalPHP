@@ -1,5 +1,5 @@
 <?php
-class CDiplomCheckAntiplagiatController extends CBaseController{
+class CDiplomAntiplagiatCheckController extends CBaseController{
     public function __construct() {
         if (!CSession::isAuth()) {
         	$action = CRequest::getString("action");
@@ -19,11 +19,10 @@ class CDiplomCheckAntiplagiatController extends CBaseController{
         $query = new CQuery();
         $set->setQuery($query);
         $query->select("t.*")
-            ->from(TABLE_DIPLOM_CHECKS_ON_ANTIPLAGIAT." as t")
-            ->condition("diplom_id=".CRequest::getInt("id"));
+            ->from(TABLE_DIPLOM_ANTIPLAGIAT_CHECKS." as t");
         $checks = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
-            $check = new CDiplomCheckAntiplagiat($ar);
+            $check = new CDiplomAntiplagiatCheck($ar);
             $checks->add($check->getId(), $check);
         }
         $this->setData("checks", $checks);
@@ -31,7 +30,7 @@ class CDiplomCheckAntiplagiatController extends CBaseController{
         $this->renderView("_diploms/diplom_check/index.tpl");
     }
     public function actionAdd() {
-        $check = new CDiplomCheckAntiplagiat();
+        $check = new CDiplomAntiplagiatCheck();
         $check->diplom_id = CRequest::getInt("id");
         $this->setData("check", $check);
         $this->addActionsMenuItem(array(
@@ -44,7 +43,7 @@ class CDiplomCheckAntiplagiatController extends CBaseController{
         $this->renderView("_diploms/diplom_check/add.tpl");
     }
     public function actionEdit() {
-        $check = CBaseManager::getDiplomCheckAntiplagiat(CRequest::getInt("id"));
+        $check = CBaseManager::getDiplomAntiplagiatCheck(CRequest::getInt("id"));
         $this->setData("check", $check);
         $this->addActionsMenuItem(array(
         	array(
@@ -56,13 +55,13 @@ class CDiplomCheckAntiplagiatController extends CBaseController{
         $this->renderView("_diploms/diplom_check/edit.tpl");
     }
     public function actionDelete() {
-        $check = CBaseManager::getDiplomCheckAntiplagiat(CRequest::getInt("id"));
+        $check = CBaseManager::getDiplomAntiplagiatCheck(CRequest::getInt("id"));
         $diplom = $check->diplom;
         $check->remove();
         $this->redirect("index.php?action=edit&id=".$diplom->getId());
     }
     public function actionSave() {
-        $check = new CDiplomCheckAntiplagiat();
+        $check = new CDiplomAntiplagiatCheck();
         $check->setAttributes(CRequest::getArray($check::getClassName()));
         if ($check->validate()) {
         	$check->save();

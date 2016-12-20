@@ -20,6 +20,7 @@ class CDiplom extends CActiveModel {
     protected $_commission = null;
     private $_averageMark = null;
     protected $_normocontroller = null;
+    protected $_antiplagiatChecks = null;
     
     public $aspire_recomendation = 0;
     protected function relations() {
@@ -99,15 +100,22 @@ class CDiplom extends CActiveModel {
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPerson"
             ),
-            "checksOnAntiplagiat" => array(
+            "antiplagiatChecks" => array(
                 "relationPower" => RELATION_HAS_MANY,
-                "storageProperty" => "_checksOnAntiplagiat",
-                "storageTable" => TABLE_DIPLOM_CHECKS_ON_ANTIPLAGIAT,
+                "storageProperty" => "_antiplagiatChecks",
+                "storageTable" => TABLE_DIPLOM_ANTIPLAGIAT_CHECKS,
                 "storageCondition" => "diplom_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "targetClass" => "CDiplomCheckAntiplagiat",
-                "managerOrder" => "`check_date_on_antiplagiat` asc"
+                "targetClass" => "CDiplomAntiplagiatCheck",
+                "managerOrder" => "`check_date` asc"
             )
         );
+    }
+    public function validationRules() {
+    	return array(
+    		"checkdate" => array(
+    				"date_act"
+    		)
+    	);
     }
     public function attributeLabels() {
         return array(

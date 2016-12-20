@@ -1,6 +1,6 @@
 <?php
 
-class CDiplomCheckAntiplagiatOriginality extends CAbstractPrintClassField {
+class CDiplomAntiplagiatCheckOriginality extends CAbstractPrintClassField {
     public function getFieldName()
     {
         return "Процент оригинальности ВКР на антиплагиат";
@@ -24,8 +24,8 @@ class CDiplomCheckAntiplagiatOriginality extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
     	$result = "";
-    	if ($contextObject->checksOnAntiplagiat->getCount() != 0) {
-    		$result = $contextObject->checksOnAntiplagiat->getLastItem()->originality_percent;
+    	if ($contextObject->antiplagiatChecks->getCount() != 0) {
+    		$result = $contextObject->antiplagiatChecks->getLastItem()->originality_percent;
     	}
         return $result;
     }

@@ -1,9 +1,9 @@
 <?php
 
-class CDiplomCheckAntiplagiatSpeciality extends CAbstractPrintClassField {
+class CDiplomAntiplagiatCheckStudentGroup extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Специальность студента темы ВКР";
+        return "Группа студента темы ВКР";
     }
 
     public function getFieldDescription()
@@ -24,15 +24,12 @@ class CDiplomCheckAntiplagiatSpeciality extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
     	$result = "";
-    	if ($contextObject->checksOnAntiplagiat->getCount() != 0) {
-    		$student = $contextObject->checksOnAntiplagiat->getLastItem()->diplom->student;
+    	if ($contextObject->antiplagiatChecks->getCount() != 0) {
+    		$student = $contextObject->antiplagiatChecks->getLastItem()->diplom->student;
     		if (!is_null($student)) {
     			$group = $student->group;
     			if (!is_null($group)) {
-    				$corriculum = $group->corriculum;
-    				if (!is_null($corriculum)) {
-    					$result = $corriculum->speciality_direction->getValue();
-    				}
+    				$result = $group->getName();
     			}
     		}
     	}
