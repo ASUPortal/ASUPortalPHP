@@ -41,8 +41,7 @@ class CWorkPlanLiteratureController extends CBaseController{
             "link" => "workplanliterature.php?action=add&plan_id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
             "icon" => "actions/list-add.png"
         ));
-        // type: 1 - Основная литература, 2 - Дополнительная литература
-        if (CRequest::getInt("type") == 1 or CRequest::getInt("type") == 2) {
+        if (CRequest::getInt("type") == CWorkPlanLiteratureConstants::WORKPLAN_BASE_LITERATURE or CRequest::getInt("type") == CWorkPlanLiteratureConstants::WORKPLAN_ADDITIONAL_LITERATURE) {
             $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
             $corriculumDisciplineId = $plan->corriculumDiscipline->getId();
             $this->setData("corriculumDisciplineId", $corriculumDisciplineId);

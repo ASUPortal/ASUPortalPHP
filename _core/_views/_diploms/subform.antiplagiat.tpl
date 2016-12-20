@@ -17,7 +17,7 @@
 <div class="control-group">
     {CHtml::activeLabel("borrowing_percent", $diplom)}
     <div class="controls">
-        {CHtml::activeTextField("borrowing_percent", $diplom, "borrowing")}
+        {CHtml::activeTextField("borrowing_percent", $diplom, "borrowing_percent")}
         {CHtml::error("borrowing_percent", $diplom)}
     </div>
 </div>
@@ -25,7 +25,7 @@
 <div class="control-group">
     {CHtml::activeLabel("citations_percent", $diplom)}
     <div class="controls">
-        {CHtml::activeTextField("citations_percent", $diplom, "citations")}
+        {CHtml::activeTextField("citations_percent", $diplom, "citations_percent")}
         {CHtml::error("citations_percent", $diplom)}
     </div>
 </div>
@@ -33,7 +33,7 @@
 <div class="control-group">
     {CHtml::activeLabel("originality_percent", $diplom)}
     <div class="controls">
-        {CHtml::activeTextField("originality_percent", $diplom, "originality")}
+        {CHtml::activeTextField("originality_percent", $diplom, "originality_percent")}
         {CHtml::error("originality_percent", $diplom)}
     </div>
 </div>
