@@ -99,12 +99,13 @@ class CDiplom extends CActiveModel {
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPerson"
             ),
-        );
-    }
-    public function validationRules() {
-        return array(
-            "checkdate" => array(
-                "date_act"
+            "checksOnAntiplagiat" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_checksOnAntiplagiat",
+                "storageTable" => TABLE_DIPLOM_CHECKS_ON_ANTIPLAGIAT,
+                "storageCondition" => "diplom_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CDiplomCheckAntiplagiat",
+                "managerOrder" => "`check_date_on_antiplagiat` asc"
             )
         );
     }
@@ -140,21 +141,7 @@ class CDiplom extends CActiveModel {
             "average_mark" => "Средний балл",
             "normokontroler_id" => "Нормоконтролер",
             "protocol" => "Номер протокола (номер защиты)",
-            "num_order" => "Номер распоряжения декана",
-            "check_date_on_antiplagiat" => "Дата проверки на антиплагиат",
-            "check_time_on_antiplagiat" => "Время проверки на антиплагиат",
-            "borrowing_percent" => "Процент заимствований",
-            "citations_percent" => "Процент цитирования",
-            "originality_percent" => "Процент оригинальности",
-            "comments_on_antiplagiat" => "Комментарии к антиплагиату"
-        );
-    }
-    public function fieldsProperty() {
-        return array(
-            "check_date_on_antiplagiat" => array(
-                "type"  => FIELD_MYSQL_DATE,
-                "format" => "d.m.Y"
-            )
+            "num_order" => "Номер распоряжения декана"
         );
     }
     /**

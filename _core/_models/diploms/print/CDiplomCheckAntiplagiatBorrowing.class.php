@@ -1,9 +1,9 @@
 <?php
 
-class CDiplomComments extends CAbstractPrintClassField {
+class CDiplomCheckAntiplagiatBorrowing extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Комментарии к антиплагиату темы ВКР";
+        return "Процент заимствований ВКР на антиплагиат";
     }
 
     public function getFieldDescription()
@@ -23,10 +23,9 @@ class CDiplomComments extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	if ($contextObject->comments_on_antiplagiat != "") {
-    		$result = $contextObject->comments_on_antiplagiat;
-    	} else {
-    		$result = "не указано";
+    	$result = "";
+    	if ($contextObject->checksOnAntiplagiat->getCount() != 0) {
+    		$result = $contextObject->checksOnAntiplagiat->getLastItem()->borrowing_percent;
     	}
         return $result;
     }

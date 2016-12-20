@@ -467,6 +467,11 @@ class CDiplomsController extends CBaseController {
 				"title" => "Добавить предзащиту",
 				"link" => WEB_ROOT."_modules/_diploms/preview.php?action=add&id=".$diplom->getId(),
 				"icon" => "actions/list-add.png"
+			),
+			array(
+				"title" => "Добавить проверку на антиплагиат",
+				"link" => WEB_ROOT."_modules/_diploms/antiplagiat.php?action=add&id=".$diplom->getId(),
+				"icon" => "actions/list-add.png"
 			)
         ));	
         $this->renderView("_diploms/edit.tpl");

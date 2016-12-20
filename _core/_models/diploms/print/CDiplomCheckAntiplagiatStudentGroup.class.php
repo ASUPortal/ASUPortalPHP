@@ -1,6 +1,6 @@
 <?php
 
-class CDiplomStudentGroup extends CAbstractPrintClassField {
+class CDiplomCheckAntiplagiatStudentGroup extends CAbstractPrintClassField {
     public function getFieldName()
     {
         return "Группа студента темы ВКР";
@@ -24,11 +24,13 @@ class CDiplomStudentGroup extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
     	$result = "";
-    	$student = $contextObject->student;
-    	if (!is_null($student)) {
-    		$group = $student->group;
-    		if (!is_null($group)) {
-    			$result = $group->getName();
+    	if ($contextObject->checksOnAntiplagiat->getCount() != 0) {
+    		$student = $contextObject->checksOnAntiplagiat->getLastItem()->diplom->student;
+    		if (!is_null($student)) {
+    			$group = $student->group;
+    			if (!is_null($group)) {
+    				$result = $group->getName();
+    			}
     		}
     	}
         return $result;

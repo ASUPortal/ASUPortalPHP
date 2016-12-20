@@ -1,11 +1,19 @@
-ALTER TABLE `diploms` ADD `check_date_on_antiplagiat` DATE NOT NULL COMMENT 'Дата проверки на антиплагиат';
+CREATE TABLE `diplom_checks_on_antiplagiat` (
+  `id` int(11) NOT NULL,
+  `diplom_id` int(11) NOT NULL COMMENT 'Тема ВКР [diploms]',
+  `check_date_on_antiplagiat` DATE NOT NULL COMMENT 'Дата проверки на антиплагиат',
+  `check_time_on_antiplagiat` VARCHAR(5) NOT NULL COMMENT 'Время проверки на антиплагиат',
+  `borrowing_percent` TEXT NOT NULL COMMENT 'Процент заимствований',
+  `citations_percent` TEXT NOT NULL COMMENT 'Процент цитирования',
+  `originality_percent` TEXT NOT NULL COMMENT 'Процент оригинальности',
+  `comments_on_antiplagiat` TEXT NOT NULL COMMENT 'Комментарии к антиплагиату',
+  `responsible_id` int(11) NOT NULL COMMENT 'Ответственный за проверку [kadri]'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-ALTER TABLE `diploms` ADD `check_time_on_antiplagiat` VARCHAR(5) NOT NULL COMMENT 'Время проверки на антиплагиат';
+ALTER TABLE `diplom_checks_on_antiplagiat`
+ ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `diploms` ADD `borrowing_percent` TEXT NOT NULL COMMENT 'Процент заимствований';
+ALTER TABLE `diplom_checks_on_antiplagiat`
+ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `diploms` ADD `citations_percent` TEXT NOT NULL COMMENT 'Процент цитирования';
-
-ALTER TABLE `diploms` ADD `originality_percent` TEXT NOT NULL COMMENT 'Процент оригинальности';
-
-ALTER TABLE `diploms` ADD `comments_on_antiplagiat` TEXT NOT NULL COMMENT 'Комментарии к антиплагиату';
+ALTER TABLE `diplom_checks_on_antiplagiat` COMMENT = 'Проверки ВКР на антиплагиат';

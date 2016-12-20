@@ -1,9 +1,9 @@
 <?php
 
-class CDiplomDateCheck extends CAbstractPrintClassField {
+class CDiplomCheckAntiplagiatComments extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Дата проверки ВКР на антиплагиат";
+        return "Комментарии к антиплагиату темы ВКР";
     }
 
     public function getFieldDescription()
@@ -23,9 +23,11 @@ class CDiplomDateCheck extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$result = "";
-    	if ($contextObject->check_date_on_antiplagiat !== "") {
-    		$result = date("d.m.Y", strtotime($contextObject->check_date_on_antiplagiat));
+    	$result = "не указано";
+    	if ($contextObject->checksOnAntiplagiat->getCount() != 0) {
+    		if ($contextObject->checksOnAntiplagiat->getLastItem()->comments_on_antiplagiat != "") {
+    			$result = $contextObject->checksOnAntiplagiat->getLastItem()->comments_on_antiplagiat;
+    		}
     	}
         return $result;
     }
