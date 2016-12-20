@@ -141,17 +141,17 @@ class CDiplom extends CActiveModel {
             "normokontroler_id" => "Нормоконтролер",
             "protocol" => "Номер протокола (номер защиты)",
             "num_order" => "Номер распоряжения декана",
-            "date_check" => "Дата проверки",
-            "time_check" => "Время проверки",
-            "borrowing" => "Процент заимствований",
-            "citations" => "Процент цитирования",
-            "originality" => "Процент оригинальности",
-            "comments" => "Комментарии"
+            "check_date_on_antiplagiat" => "Дата проверки на антиплагиат",
+            "check_time_on_antiplagiat" => "Время проверки на антиплагиат",
+            "borrowing_percent" => "Процент заимствований",
+            "citations_percent" => "Процент цитирования",
+            "originality_percent" => "Процент оригинальности",
+            "comments_on_antiplagiat" => "Комментарии к антиплагиату"
         );
     }
     public function fieldsProperty() {
         return array(
-            "date_check" => array(
+            "check_date_on_antiplagiat" => array(
                 "type"  => FIELD_MYSQL_DATE,
                 "format" => "d.m.Y"
             )

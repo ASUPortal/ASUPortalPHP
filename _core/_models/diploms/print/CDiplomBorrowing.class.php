@@ -23,7 +23,7 @@ class CDiplomBorrowing extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$result = $contextObject->borrowing;
+    	$result = $contextObject->borrowing_percent;
         return $result;
     }
 }

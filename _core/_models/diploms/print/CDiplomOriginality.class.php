@@ -23,7 +23,7 @@ class CDiplomOriginality extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$result = $contextObject->originality;
+    	$result = $contextObject->originality_percent;
         return $result;
     }
 }

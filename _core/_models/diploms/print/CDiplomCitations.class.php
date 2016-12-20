@@ -23,7 +23,7 @@ class CDiplomCitations extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$result = $contextObject->citations;
+    	$result = $contextObject->citations_percent;
         return $result;
     }
 }

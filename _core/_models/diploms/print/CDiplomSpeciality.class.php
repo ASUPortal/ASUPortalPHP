@@ -26,9 +26,9 @@ class CDiplomSpeciality extends CAbstractPrintClassField {
     	$result = "";
     	$student = $contextObject->student;
     	if (!is_null($student)) {
-    		$group = $contextObject->student->group;
+    		$group = $student->group;
     		if (!is_null($group)) {
-    			$corriculum = $contextObject->student->group->corriculum;
+    			$corriculum = $group->corriculum;
     			if (!is_null($corriculum)) {
     				$result = $corriculum->speciality_direction->getValue();
     			}

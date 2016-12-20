@@ -23,8 +23,8 @@ class CDiplomComments extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	if ($contextObject->comments != "") {
-    		$result = $contextObject->comments;
+    	if ($contextObject->comments_on_antiplagiat != "") {
+    		$result = $contextObject->comments_on_antiplagiat;
     	} else {
     		$result = "не указано";
     	}

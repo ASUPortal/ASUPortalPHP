@@ -24,9 +24,10 @@ class CDiplomTimeCheck extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
     	$result = "";
-    	if ($contextObject->time_check !== "") {
-    		$result = substr($contextObject->time_check, 0, strpos($contextObject->time_check, ":"))." час. ";
-    		$result .= substr($contextObject->time_check, strpos($contextObject->time_check, ":") + 1)." мин.";
+    	if ($contextObject->check_time_on_antiplagiat !== "") {
+    		$checkTime = $contextObject->check_time_on_antiplagiat;
+    		$result = substr($checkTime, 0, strpos($checkTime, ":"))." час. ";
+    		$result .= substr($checkTime, strpos($checkTime, ":") + 1)." мин.";
     	}
         return $result;
     }

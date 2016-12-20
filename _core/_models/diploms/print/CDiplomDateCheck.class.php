@@ -24,8 +24,8 @@ class CDiplomDateCheck extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
     	$result = "";
-    	if ($contextObject->date_check !== "") {
-    		$result = date("d.m.Y", strtotime($contextObject->date_check));
+    	if ($contextObject->check_date_on_antiplagiat !== "") {
+    		$result = date("d.m.Y", strtotime($contextObject->check_date_on_antiplagiat));
     	}
         return $result;
     }
