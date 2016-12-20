@@ -519,7 +519,9 @@ class CWorkPlan extends CActiveModel {
                 "direction_id",
                 "qualification_id",
                 "education_form_id",
-                "level_id"
+                "level_id",
+                "approver_post",
+                "approver_name"
             )
         );
     }
