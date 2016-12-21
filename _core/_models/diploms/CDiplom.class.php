@@ -20,6 +20,7 @@ class CDiplom extends CActiveModel {
     protected $_commission = null;
     private $_averageMark = null;
     protected $_normocontroller = null;
+    protected $_antiplagiatChecks = null;
     
     public $aspire_recomendation = 0;
     protected function relations() {
@@ -99,14 +100,22 @@ class CDiplom extends CActiveModel {
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPerson"
             ),
+            "antiplagiatChecks" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_antiplagiatChecks",
+                "storageTable" => TABLE_DIPLOM_ANTIPLAGIAT_CHECKS,
+                "storageCondition" => "diplom_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CDiplomAntiplagiatCheck",
+                "managerOrder" => "`check_date` asc"
+            )
         );
     }
     public function validationRules() {
-        return array(
-            "checkdate" => array(
-                "date_act"
-            )
-        );
+    	return array(
+    		"checkdate" => array(
+    				"date_act"
+    		)
+    	);
     }
     public function attributeLabels() {
         return array(
@@ -138,9 +147,9 @@ class CDiplom extends CActiveModel {
             "implement_recomendation" => "Рекомендовано к внедрению",
             "implemented" => "Внедрено",
             "average_mark" => "Средний балл",
-			"normokontroler_id" => "Нормоконтролер",
-        	"protocol" => "Номер протокола (номер защиты)",
-        	"num_order" => "Номер распоряжения декана",
+            "normokontroler_id" => "Нормоконтролер",
+            "protocol" => "Номер протокола (номер защиты)",
+            "num_order" => "Номер распоряжения декана"
         );
     }
     /**

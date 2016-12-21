@@ -41,6 +41,16 @@ class CWorkPlanLiteratureController extends CBaseController{
             "link" => "workplanliterature.php?action=add&plan_id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
             "icon" => "actions/list-add.png"
         ));
+        if (CRequest::getInt("type") == CWorkPlanLiteratureType::WORKPLAN_BASE_LITERATURE or CRequest::getInt("type") == CWorkPlanLiteratureType::WORKPLAN_ADDITIONAL_LITERATURE) {
+            $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
+            $corriculumDisciplineId = $plan->corriculumDiscipline->getId();
+            $this->setData("corriculumDisciplineId", $corriculumDisciplineId);
+            $this->addActionsMenuItem(array(
+                "title" => "Добавить новый",
+                "link" => "books.php?action=add&discipline_id=".$plan->corriculumDiscipline->getId()."&plan_id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
+                "icon" => "actions/list-add.png"
+            ));
+        }
         /**
          * Отображение представления
          */
@@ -51,6 +61,7 @@ class CWorkPlanLiteratureController extends CBaseController{
         $object->plan_id = CRequest::getInt("plan_id");
         $object->type = CRequest::getInt("type");
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
+        // type: 1 - Основная литература, 2 - Дополнительная литература, 3 - Интернет-ресурсы
         if ($object->type == 1) {
         	$object->ordering = $plan->baseLiterature->getCount() + 1;
         } elseif($object->type == 2) {

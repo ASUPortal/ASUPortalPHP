@@ -48,3 +48,4 @@
     {/foreach}
 </table>
 {/if}
+</form>

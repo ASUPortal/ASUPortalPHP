@@ -33,7 +33,7 @@
 <div class="control-group">
     {CHtml::activeLabel("approver_post", $plan)}
     <div class="controls">
-        {CHtml::activeTextBox("approver_post", $plan)}
+        {CHtml::activeLookup("approver_post", $plan, "approver_workplan_posts", false, array(), true)}
         {CHtml::error("approver_post", $plan)}
     </div>
 </div>
@@ -41,7 +41,7 @@
 <div class="control-group">
     {CHtml::activeLabel("approver_name", $plan)}
     <div class="controls">
-        {CHtml::activeTextBox("approver_name", $plan)}
+        {CHtml::activeLookup("approver_name", $plan, "approver_workplan_names", false, array(), true)}
         {CHtml::error("approver_name", $plan)}
     </div>
 </div>

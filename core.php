@@ -220,6 +220,7 @@
     define("TABLE_DIPLOM_CONFIRMATIONS", "diplom_confirms");
     define("TABLE_DIPLOM_PREVIEW_COMISSIONS", "diplom_preview_committees");
     define("TABLE_DIPLOM_PREVIEW_MEMBERS", "diplom_preview_kadri");
+    define("TABLE_DIPLOM_ANTIPLAGIAT_CHECKS", "diplom_antiplagiat_checks");
     define("TABLE_PRACTICE_PLACES", "pract_places");
     define("TABLE_TOWNS", "towns");
     define("TABLE_FILIAL_GOING", "filial_going");

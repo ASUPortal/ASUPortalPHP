@@ -8,8 +8,8 @@
  * @property int id
  * @property string title
  * @property int department_id
- * @property string approver_post
- * @property string approver_name
+ * @property int approverPost
+ * @property int approverName
  * @property int corriculum_discipline_id
  * @property int discipline_id
  * @property int direction_id
@@ -193,6 +193,20 @@ class CWorkPlan extends CActiveModel {
                 "relationPower" => RELATION_HAS_ONE,
                 "storageProperty" => "_department",
                 "storageField" => "department_id",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getTerm"
+            ),
+            "approverPost" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_approverPost",
+                "storageField" => "approver_post",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getTerm"
+            ),
+            "approverName" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_approverName",
+                "storageField" => "approver_name",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
             ),
@@ -505,7 +519,9 @@ class CWorkPlan extends CActiveModel {
                 "direction_id",
                 "qualification_id",
                 "education_form_id",
-                "level_id"
+                "level_id",
+                "approver_post",
+                "approver_name"
             )
         );
     }
