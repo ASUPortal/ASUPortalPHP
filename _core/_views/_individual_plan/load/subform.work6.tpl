@@ -13,6 +13,7 @@
             <th>{CHtml::tableOrder("change_add_date", $load->getWorksByType(6)->getFirstItem())}</th>
             <th>{CHtml::tableOrder("is_executed", $load->getWorksByType(6)->getFirstItem())}</th>
         </tr>
+        {counter start=0 print=false}
         {foreach $load->getWorksByType(6)->getItems() as $work}
             <tr>
                 <td>

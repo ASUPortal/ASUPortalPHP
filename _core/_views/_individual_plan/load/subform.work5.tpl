@@ -11,6 +11,7 @@
             <th>{CHtml::tableOrder("title_id", $load->getWorksByType(5)->getFirstItem())}</th>
             <th>{CHtml::tableOrder("paper_pages", $load->getWorksByType(5)->getFirstItem())}</th>
         </tr>
+        {counter start=0 print=false}
         {foreach $load->getWorksByType(5)->getItems() as $work}
             <tr>
                 <td>

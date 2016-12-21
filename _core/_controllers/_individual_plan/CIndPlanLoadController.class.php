@@ -180,4 +180,96 @@ class CIndPlanLoadController extends CBaseController{
     	}
     	echo json_encode($res);
     }
+    /**
+     * Выбор года для копирования нагрузки
+     */
+    public function actionSelectYearLoad() {
+        $load = CIndPlanManager::getLoad(CRequest::getInt("id"));
+        $items = CTaxonomyManager::getYearsList();
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "load.php?action=view&id=".$load->person_id."&year=".$load->year_id,
+                "icon" => "actions/edit-undo.png"
+            )
+        ));
+        $this->setData("items", $items);
+        $this->setData("load", $load);
+        $this->renderView("_individual_plan/load/selectYearLoad.tpl");
+    }
+    /**
+     * Копирование нагрузки
+     */
+    public function actionCopyLoad() {
+        $load = CIndPlanManager::getLoad(CRequest::getInt("id"));
+        $year = CTaxonomyManager::getYear(CRequest::getInt("year_id"));
+        $newLoad = $load->copy();
+        $newLoad->year_id = $year->getId();
+        $newLoad->conclusion = "Скопировано из ".$year->getValue()." года".$newLoad->conclusion;
+        $newLoad->save();
+        $this->redirect("load.php?action=view&id=".$load->person_id."&year=".$year->getId());
+    }
+    /**
+     * Выбор года для копирования работ из нагрузки
+     */
+    public function actionSelectYearLoadWorks() {
+        $load = CIndPlanManager::getLoad(CRequest::getInt("load_id"));
+        $items = CTaxonomyManager::getYearsList();
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "load.php?action=view&id=".$load->person_id."&year=".$load->year_id,
+                "icon" => "actions/edit-undo.png"
+            )
+        ));
+        $this->setData("type", CRequest::getInt("type"));
+        $this->setData("items", $items);
+        $this->setData("load", $load);
+        $this->renderView("_individual_plan/load/selectYearLoadWorks.tpl");
+    }
+    /**
+     * Выбор нагрузки из выбранного учебного года для копирования работ
+     */
+    public function actionSelectLoad() {
+        $load = CIndPlanManager::getLoad(CRequest::getInt("load_id"));
+        $year = CTaxonomyManager::getYear(CRequest::getInt("year_id"));
+        $items = CIndPlanManager::getLoadsByYear($year);
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "load.php?action=selectYearLoadWorks&load_id=".$load->getId()."&year=".$load->year_id,
+                "icon" => "actions/edit-undo.png"
+            )
+        ));
+        $this->setData("type", CRequest::getInt("type"));
+        $this->setData("items", $items);
+        $this->setData("load", $load);
+        $this->renderView("_individual_plan/load/selectLoad.tpl");
+    }
+    /**
+     * Копирование работ из нагрузки
+     */
+    public function actionCopyLoadWorks() {
+        $load = CIndPlanManager::getLoad(CRequest::getInt("id"));
+        $year = CTaxonomyManager::getYear($load->year_id);
+        $newLoad = CIndPlanManager::getLoad(CRequest::getInt("load_id"));
+        $type = CRequest::getInt("type");
+        foreach ($load->getWorksByType($type)->getItems() as $work) {
+            $newWork = $work->copy();
+            if ($type == CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD or
+    				$type == CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD or
+    				$type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD) {
+                $newWork->comment = "Скопировано из ".$year->getValue()." года".$newWork->comment;
+            }
+            if ($type == CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD or
+    				$type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD or
+    				$type == CIndPlanPersonWorkType::CHANGE_RECORDS) {
+                $newWork->is_executed = 0;
+            }
+            $newWork->load_id = $newLoad->getId();
+            $newWork->work_type = $type;
+            $newWork->save();
+        }
+        $this->redirect("load.php?action=view&id=".$newLoad->person_id."&year=".$newLoad->year_id);
+    }
 }
