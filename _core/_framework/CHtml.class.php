@@ -605,6 +605,7 @@ class CHtml {
         } else {
             $checked = "";
         }
+        echo '<input type="hidden" name="'.$name.'" value="0">';
         echo '<input type="checkbox" data-toggle="tooltip" title="'.$tooltipTitle.'" name="'.$name.'" '.$checked.' '.$inline.'>';
     }
     public static function activeCheckBoxGroup($name, CModel $model, $values = null) {
