@@ -114,4 +114,18 @@ class CIndPlanManager {
         }
         return $result;
     }
+    
+    /**
+     * Получить нагрузки выбранного года
+     * @param CTerm $year
+     * @return array
+     */
+    public static function getLoadsByYear(CTerm $year) {
+        $loads = array();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_LOADS, "year_id =".$year->getId())->getItems() as $item) {
+            $load = new CIndPlanPersonLoad($item);
+            $loads[$load->getId()] = CStaffManager::getPerson($load->person_id)->getNameShort()." - ".$load->getType();
+        }
+        return $loads;
+    }
 }

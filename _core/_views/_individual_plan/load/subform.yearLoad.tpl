@@ -9,7 +9,8 @@
     <li {if $smarty.foreach.loadItem.first}class="active"{/if}>
         <a href="#load_{$load->getId()}" data-toggle="tab">
             {$load->getType()}
-            <i class="icon-pencil" onclick="window.location.href='?action=edit&id={$load->getId()}&year={$load->year->id}'" style="cursor: pointer; "></i>
+            <i title="Редактировать нагрузку" class="icon-pencil" onclick="window.open('{$web_root}_modules/_individual_plan/load.php?action=edit&id={$load->getId()}&year={$load->year->id}')" style="cursor: pointer; "></i>
+            <i title="Скопировать нагрузку" class="icon-share" onclick="window.open('{$web_root}_modules/_individual_plan/load.php?action=selectYearLoad&id={$load->getId()}')" style="cursor: pointer; "></i>
         </a>
     </li>
 {/foreach}

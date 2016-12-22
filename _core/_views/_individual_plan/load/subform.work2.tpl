@@ -15,6 +15,7 @@
             <th>{CHtml::tableOrder("is_executed", $load->getWorksByType(2)->getFirstItem())}</th>
             <th>{CHtml::tableOrder("comment", $load->getWorksByType(2)->getFirstItem())}</th>
         </tr>
+        {counter start=0 print=false}
         {foreach $load->getWorksByType(2)->getItems() as $work}
             <tr>
                 <td>

@@ -15,6 +15,7 @@
             <th>{CHtml::tableOrder("plan_report_type", $load->getWorksByType(3)->getFirstItem())}</th>
             <th>{CHtml::tableOrder("comment", $load->getWorksByType(3)->getFirstItem())}</th>
         </tr>
+        {counter start=0 print=false}
         {foreach $load->getWorksByType(3)->getItems() as $work}
             <tr>
                 <td>
