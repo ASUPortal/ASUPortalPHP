@@ -203,11 +203,23 @@ class CIndPlanLoadController extends CBaseController{
     public function actionCopyLoad() {
         $load = CIndPlanManager::getLoad(CRequest::getInt("id"));
         $year = CTaxonomyManager::getYear(CRequest::getInt("year_id"));
-        $newLoad = $load->copy();
-        $newLoad->year_id = $year->getId();
-        $newLoad->conclusion = "Скопировано из ".$year->getValue()." года".$newLoad->conclusion;
-        $newLoad->save();
-        $this->redirect("load.php?action=view&id=".$load->person_id."&year=".$year->getId());
+        if (!is_null($year)) {
+            $newLoad = $load->copy();
+            $newLoad->year_id = $year->getId();
+            $newLoad->conclusion = "Скопировано из ".$year->getValue()." года ".$newLoad->conclusion;
+            $newLoad->save();
+            $this->redirect("load.php?action=view&id=".$load->person_id."&year=".$year->getId());
+        } else {
+            $this->addActionsMenuItem(array(
+                array(
+    				"title" => "Назад",
+    				"link" => "load.php?action=selectYearLoad&id=".CRequest::getInt("id"),
+    				"icon" => "actions/edit-undo.png"
+                )
+            ));
+            $this->setData("message", "Год не выбран, продолжение невозможно!");
+            $this->renderView("_individual_plan/load/error.tpl");
+        }
     }
     /**
      * Выбор года для копирования работ из нагрузки
@@ -233,18 +245,31 @@ class CIndPlanLoadController extends CBaseController{
     public function actionSelectLoad() {
         $load = CIndPlanManager::getLoad(CRequest::getInt("load_id"));
         $year = CTaxonomyManager::getYear(CRequest::getInt("year_id"));
-        $items = CIndPlanManager::getLoadsByYear($year);
-        $this->addActionsMenuItem(array(
-            array(
-                "title" => "Назад",
-                "link" => "load.php?action=selectYearLoadWorks&load_id=".$load->getId()."&year=".$load->year_id,
-                "icon" => "actions/edit-undo.png"
-            )
-        ));
-        $this->setData("type", CRequest::getInt("type"));
-        $this->setData("items", $items);
-        $this->setData("load", $load);
-        $this->renderView("_individual_plan/load/selectLoad.tpl");
+        if (!is_null($year)) {
+            $items = CIndPlanManager::getLoadsByYear($year);
+            $this->addActionsMenuItem(array(
+                array(
+    				"title" => "Назад",
+    				"link" => "load.php?action=selectYearLoadWorks&load_id=".$load->getId()."&year=".$load->year_id,
+    				"icon" => "actions/edit-undo.png"
+                )
+            ));
+            $this->setData("type", CRequest::getInt("type"));
+            $this->setData("items", $items);
+            $this->setData("load", $load);
+            $this->renderView("_individual_plan/load/selectLoad.tpl");
+        } else {
+            $this->addActionsMenuItem(array(
+                array(
+    				"title" => "Назад",
+    				"link" => "load.php?action=selectYearLoadWorks&load_id=".$load->getId()."&type=".CRequest::getInt("type"),
+    				"icon" => "actions/edit-undo.png"
+                )
+            ));
+            $this->setData("message", "Год не выбран, продолжение невозможно!");
+            $this->renderView("_individual_plan/load/error.tpl");
+        }
+
     }
     /**
      * Копирование работ из нагрузки
@@ -254,22 +279,34 @@ class CIndPlanLoadController extends CBaseController{
         $year = CTaxonomyManager::getYear($load->year_id);
         $newLoad = CIndPlanManager::getLoad(CRequest::getInt("load_id"));
         $type = CRequest::getInt("type");
-        foreach ($load->getWorksByType($type)->getItems() as $work) {
-            $newWork = $work->copy();
-            if ($type == CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD or
-    				$type == CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD or
-    				$type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD) {
-                $newWork->comment = "Скопировано из ".$year->getValue()." года".$newWork->comment;
+        if (!is_null($newLoad)) {
+            foreach ($load->getWorksByType($type)->getItems() as $work) {
+                $newWork = $work->copy();
+                if ($type == CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD or
+    					$type == CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD or
+    					$type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD) {
+                	$newWork->comment = "Скопировано из ".$year->getValue()." года ".$newWork->comment;
+                }
+                if ($type == CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD or
+    					$type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD or
+    					$type == CIndPlanPersonWorkType::CHANGE_RECORDS) {
+                	$newWork->is_executed = 0;
+                }
+                $newWork->load_id = $newLoad->getId();
+                $newWork->work_type = $type;
+                $newWork->save();
             }
-            if ($type == CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD or
-    				$type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD or
-    				$type == CIndPlanPersonWorkType::CHANGE_RECORDS) {
-                $newWork->is_executed = 0;
-            }
-            $newWork->load_id = $newLoad->getId();
-            $newWork->work_type = $type;
-            $newWork->save();
+            $this->redirect("load.php?action=view&id=".$newLoad->person_id."&year=".$newLoad->year_id);
+        } else {
+            $this->addActionsMenuItem(array(
+                array(
+    				"title" => "Назад",
+    				"link" => "load.php?action=selectYearLoadWorks&load_id=".$load->getId()."&type=".$type,
+    				"icon" => "actions/edit-undo.png"
+                )
+            ));
+            $this->setData("message", "Нугрузка не выбрана, продолжение невозможно!");
+            $this->renderView("_individual_plan/load/error.tpl");
         }
-        $this->redirect("load.php?action=view&id=".$newLoad->person_id."&year=".$newLoad->year_id);
     }
 }
