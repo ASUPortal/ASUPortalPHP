@@ -3,7 +3,9 @@
         <a href="#work_{$load->getId()}_1" data-toggle="tab">
             Учебная
             <i title="Редактировать" class="icon-pencil" onclick="window.open('{$web_root}_modules/_individual_plan/work.php?action=add&id={$load->getId()}&type=1&year={$load->year->id}')"></i>
+            {*
             <i title="Скопировать" class="icon-share" onclick="window.open('{$web_root}_modules/_individual_plan/load.php?action=selectYearLoadWorks&load_id={$load->getId()}&type=1')"></i>
+            *}
         </a>
     </li>
     <li>

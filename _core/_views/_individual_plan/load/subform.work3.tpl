@@ -37,5 +37,86 @@
                 <td>{$work->comment}</td>
             </tr>
         {/foreach}
+        	<tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        	<tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><b>Итого по планируемому количеству часов</b></td>
+                <td></td>
+                <td><b>{$load->getSumPlanAmountWorksByType(3)}</b></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Сумма часов по учебной нагрузке</td>
+                <td></td>
+                <td>{$load->getSumHoursStudyLoad()}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            {if ($load->getTotalHoursRatesPersonOfBasicOrders($person) != 0) }
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Всего часов с учётом ставок сотрудника по основным приказам</td>
+                <td></td>
+                <td>{$load->getTotalHoursRatesPersonOfBasicOrders($person)}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><b>Разница между суммой по учебной нагрузке и часами ставок сотрудника по основным приказам</b></td>
+                <td></td>
+                <td><b>{$load->getDifferenceHoursRatesPersonOfBasicOrders($person)}</b></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            {/if}
+            {if ($load->getTotalHoursRatesPersonOfCombineOrders($person) != 0)}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Всего часов с учётом ставок сотрудника по совместительству</td>
+                <td></td>
+                <td>{$load->getTotalHoursRatesPersonOfCombineOrders($person)}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><b>Разница между суммой по учебной нагрузке и часами ставок сотрудника по совместительству</b></td>
+                <td></td>
+                <td><b>{$load->getDifferenceHoursRatesPersonOfCombineOrders($person)}</b></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            {/if}
     </table>
 {/if}

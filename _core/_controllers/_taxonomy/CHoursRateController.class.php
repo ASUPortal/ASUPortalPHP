@@ -18,20 +18,39 @@ class CHoursRateController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
+        $selectedYear = null;
+        $set = new CRecordSet(false);
         $query = new CQuery();
         $query->select("rate.*")
             ->from(TABLE_HOURS_RATE." as rate")
             ->leftJoin(TABLE_POSTS." as post", "rate.dolgnost_id = post.id")
             ->order("post.name asc");
-        $rates = new CArrayList();
-        $set->setQuery($query);
-        foreach ($set->getPaginated()->getItems() as $ar) {
-            $rate = new CHoursRate($ar);
-            $rates->add($rate->getId(), $rate);
+        
+        // фильтр по году
+        if (!is_null(CRequest::getFilter("year.id"))) {
+        	$query->condition("rate.year_id =".CRequest::getFilter("year.id"));
+        	$selectedYear = CRequest::getFilter("year.id");
         }
+        
+        $isAll = false;
+        if (CRequest::getInt("isAll") == "1") {
+        	$isAll = true;
+        }
+        if (!$isAll and CRequest::getFilter("year.id") == "") {
+        	$query->condition("rate.year_id =".CUtils::getCurrentYear()->getId());
+        }
+        
+        $set->setQuery($query);
+        $rates = new CArrayList();
+        foreach ($set->getPaginated()->getItems() as $ar) {
+        	$rate = new CHoursRate($ar);
+        	$rates->add($rate->getId(), $rate);
+        }
+
         $this->setData("paginator", $set->getPaginator());
         $this->setData("rates", $rates);
+        $this->setData("selectedYear", $selectedYear);
+        $this->setData("isAll", $isAll);
         $this->renderView("_hrs_rate/index.tpl");
     }
     public function actionAdd() {

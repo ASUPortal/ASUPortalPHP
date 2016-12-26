@@ -116,15 +116,16 @@ class CIndPlanManager {
     }
     
     /**
-     * Получить нагрузки выбранного года
+     * Получить нагрузки выбранного года и преподавателя
      * @param CTerm $year
+     * @param CPerson $person
      * @return array
      */
-    public static function getLoadsByYear(CTerm $year) {
+    public static function getLoadsByYearAndPerson(CTerm $year, CPerson $person) {
         $loads = array();
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_LOADS, "year_id =".$year->getId())->getItems() as $item) {
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_LOADS, "year_id =".$year->getId()." and person_id =".$person->getId())->getItems() as $item) {
             $load = new CIndPlanPersonLoad($item);
-            $loads[$load->getId()] = CStaffManager::getPerson($load->person_id)->getNameShort()." - ".$load->getType();
+            $loads[$load->getId()] = $load->getType();
         }
         return $loads;
     }

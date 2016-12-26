@@ -7,7 +7,8 @@ class CHoursRate extends CActiveModel{
     	return array(
     			"dolgnost_id" => "Должность",
     			"rate" => "Размер нагрузки, часы",
-    			"comment" => "Примечание"
+    			"comment" => "Примечание",
+    			"year_id" => "Учебный год"
     	);
     }
     
@@ -17,7 +18,8 @@ class CHoursRate extends CActiveModel{
                 "rate"
             ),
             "selected" => array(
-                "dolgnost_id"
+                "dolgnost_id",
+                "year_id"
             )
         );
     }
