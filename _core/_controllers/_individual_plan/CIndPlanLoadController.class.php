@@ -293,8 +293,8 @@ class CIndPlanLoadController extends CBaseController{
                 	
                 	// указываем срок выполнения в соответствии с годом, в который копируем
                 	$date = date("Y-m-d", strtotime($newWork->plan_expiration_date));
-                	$dateFirstPart = date("Y-09-01", strtotime($newWork->plan_expiration_date));
-                	$dateSecondPart = date("Y-08-31", strtotime($newWork->plan_expiration_date));
+                	$dateFirstPart = date(CSettingsManager::getSettingValue("dateStartPlanExpirationDateCurrentYear"), strtotime($newWork->plan_expiration_date));
+                	$dateSecondPart = date(CSettingsManager::getSettingValue("dateStartPlanExpirationDateNextYear"), strtotime($newWork->plan_expiration_date));
                 	if ($date >= $dateFirstPart) {
                 		$newWork->plan_expiration_date = date("d.m.".date("Y", strtotime($newYear->date_start)), strtotime($date));
                 	}
