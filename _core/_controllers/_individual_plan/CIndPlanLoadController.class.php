@@ -202,13 +202,14 @@ class CIndPlanLoadController extends CBaseController{
      */
     public function actionCopyLoad() {
         $load = CIndPlanManager::getLoad(CRequest::getInt("id"));
-        $year = CTaxonomyManager::getYear(CRequest::getInt("year_id"));
-        if (!is_null($year)) {
+        $year = CTaxonomyManager::getYear($load->year_id);
+        $newYear = CTaxonomyManager::getYear(CRequest::getInt("year_id"));
+        if (!is_null($newYear)) {
             $newLoad = $load->copy();
-            $newLoad->year_id = $year->getId();
+            $newLoad->year_id = $newYear->getId();
             $newLoad->conclusion = "Скопировано из ".$year->getValue()." года ".$newLoad->conclusion;
             $newLoad->save();
-            $this->redirect("load.php?action=view&id=".$load->person_id."&year=".$year->getId());
+            $this->redirect("load.php?action=view&id=".$load->person_id."&year=".$newYear->getId());
         } else {
             $this->addActionsMenuItem(array(
                 array(
@@ -245,8 +246,9 @@ class CIndPlanLoadController extends CBaseController{
     public function actionSelectLoad() {
         $load = CIndPlanManager::getLoad(CRequest::getInt("load_id"));
         $year = CTaxonomyManager::getYear(CRequest::getInt("year_id"));
+        $person = CStaffManager::getPerson($load->person_id);
         if (!is_null($year)) {
-            $items = CIndPlanManager::getLoadsByYear($year);
+            $items = CIndPlanManager::getLoadsByYearAndPerson($year, $person);
             $this->addActionsMenuItem(array(
                 array(
     				"title" => "Назад",
@@ -278,6 +280,7 @@ class CIndPlanLoadController extends CBaseController{
         $load = CIndPlanManager::getLoad(CRequest::getInt("id"));
         $year = CTaxonomyManager::getYear($load->year_id);
         $newLoad = CIndPlanManager::getLoad(CRequest::getInt("load_id"));
+        $newYear = CTaxonomyManager::getYear($newLoad->year_id);
         $type = CRequest::getInt("type");
         if (!is_null($newLoad)) {
             foreach ($load->getWorksByType($type)->getItems() as $work) {
@@ -285,7 +288,20 @@ class CIndPlanLoadController extends CBaseController{
                 if ($type == CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD or
     					$type == CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD or
     					$type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD) {
+    						
                 	$newWork->comment = "Скопировано из ".$year->getValue()." года ".$newWork->comment;
+                	
+                	// указываем срок выполнения в соответствии с годом, в который копируем
+                	$date = date("Y-m-d", strtotime($newWork->plan_expiration_date));
+                	$dateFirstPart = date(CSettingsManager::getSettingValue("dateStartPlanExpirationDateCurrentYear"), strtotime($newWork->plan_expiration_date));
+                	$dateSecondPart = date(CSettingsManager::getSettingValue("dateStartPlanExpirationDateNextYear"), strtotime($newWork->plan_expiration_date));
+                	if ($date >= $dateFirstPart) {
+                		$newWork->plan_expiration_date = date("d.m.".date("Y", strtotime($newYear->date_start)), strtotime($date));
+                	}
+                	if ($date <= $dateSecondPart) {
+                		$newWork->plan_expiration_date = date("d.m.".date("Y", strtotime($newYear->date_end)), strtotime($date));
+                	}
+                	
                 }
                 if ($type == CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD or
     					$type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD or

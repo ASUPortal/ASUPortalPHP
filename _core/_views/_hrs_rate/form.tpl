@@ -18,6 +18,14 @@
         </div>
     </div>
     
+    <div class="control-group">
+        {CHtml::activeLabel("year_id", $rate)}
+        <div class="controls">
+            {CHtml::activeDropDownList("year_id", $rate, CTaxonomyManager::getYearsList())}
+            {CHtml::error("year_id", $rate)}
+        </div>
+    </div>
+    
 	<div class="control-group">
         {CHtml::activeLabel("comment", $rate)}
         <div class="controls">

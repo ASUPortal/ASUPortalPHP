@@ -30,7 +30,6 @@ class CWorkPlanController extends CFlowController{
      */
     public function actionAddFromView() {
         $items = new CArrayList();
-        $this->setData("items", $items);
         /**
          * @var $corriculum CCorriculum
          */
@@ -38,7 +37,8 @@ class CWorkPlanController extends CFlowController{
             $items->add($corriculum->getId(), $corriculum->title);
         }
         $this->setData("items", $items);
-        $this->renderView("_flow/pickList.tpl", get_class($this), "AddFromView_SelectDiscipline");
+        $this->renderView("_corriculum/_workplan/workplan/addWorkplanFromView.tpl");
+        //$this->renderView("_flow/pickList.tpl", get_class($this), "AddFromView_SelectDiscipline");
     }
 
     /**
@@ -56,7 +56,8 @@ class CWorkPlanController extends CFlowController{
             $items->add($discipline->getId(), $discipline->discipline->getValue());
         }
         $this->setData("items", $items);
-        $this->renderView("_flow/pickList.tpl", get_class($this), "AddFromView_CreateWorkPlan");
+        $this->renderView("_corriculum/_workplan/workplan/addWorkplanFromViewSelectDiscipline.tpl");
+        //$this->renderView("_flow/pickList.tpl", get_class($this), "AddFromView_CreateWorkPlan");
     }
 
     /**
@@ -347,6 +348,9 @@ class CWorkPlanController extends CFlowController{
         if (!is_null($discipline->cycle)) {
             $plan->position = "Дисциплина относится к базовой части учебного цикла ".$discipline->cycle->title ;
         }
+        // утверждающий и должность утверждающего - значение по умолчанию из справочника
+        $plan->approver_post = CTaxonomyManager::getTaxonomy("approver_workplan_posts")->getTerm("defaultPost")->getId();
+        $plan->approver_name = CTaxonomyManager::getTaxonomy("approver_workplan_names")->getTerm("defaultName")->getId();
         $plan->save();
         /**
          * Скопируем компетенции из плана
