@@ -13,7 +13,7 @@ class CIndividualPlanLoadService {
      * @param $type
      * @return int
      */
-    public function getSumPlanAmountWorksByType(CIndPlanPersonLoad $load, $type) {
+    public static function getSumPlanAmountWorksByType(CIndPlanPersonLoad $load, $type) {
         $result = 0;
         if ($type == CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD) {
             foreach ($load->works->getItems() as $work) {
@@ -38,7 +38,7 @@ class CIndividualPlanLoadService {
      * @param CIndPlanPersonLoad $load
      * @return int
      */
-    public function getSumHoursStudyLoad(CIndPlanPersonLoad $load) {
+    public static function getSumHoursStudyLoad(CIndPlanPersonLoad $load) {
         $sumHours = 0;
         $dataRow = array();
         foreach ($load->works->getItems() as $work) {
@@ -70,7 +70,7 @@ class CIndividualPlanLoadService {
      * @param CIndPlanPersonLoad $load
      * @return int
      */
-    public function getTotalHoursInHoursRate(CIndPlanPersonLoad $load) {
+    public static function getTotalHoursInHoursRate(CIndPlanPersonLoad $load) {
         $hours = 0;
         foreach (CActiveRecordProvider::getWithCondition(TABLE_HOURS_RATE, "dolgnost_id =".CIndPlanPersonLoadConstants::TOTAL_HOURS_IN_INDIVIDUAL_PLAN." and year_id =".$load->year_id)->getItems() as $item) {
             $load = new CHoursRate($item);
@@ -86,7 +86,7 @@ class CIndividualPlanLoadService {
      * @param CPerson $person
      * @return int
      */
-    public function getTotalHoursRatesPersonOfBasicOrders(CIndPlanPersonLoad $load, CPerson $person) {
+    public static function getTotalHoursRatesPersonOfBasicOrders(CIndPlanPersonLoad $load, CPerson $person) {
         $totalHours = 0;
         $hours = CIndividualPlanLoadService::getTotalHoursInHoursRate($load);
         $rates = 0;
@@ -114,7 +114,7 @@ class CIndividualPlanLoadService {
      * @param CPerson $person
      * @return int
      */
-    public function getDifferenceHoursRatesPersonOfBasicOrders(CIndPlanPersonLoad $load, CPerson $person) {
+    public static function getDifferenceHoursRatesPersonOfBasicOrders(CIndPlanPersonLoad $load, CPerson $person) {
         $difference = 0;
         $totalHours = CIndividualPlanLoadService::getTotalHoursRatesPersonOfBasicOrders($load, $person);
         $studyHours = CIndividualPlanLoadService::getSumHoursStudyLoad($load);
@@ -129,7 +129,7 @@ class CIndividualPlanLoadService {
      * @param CPerson $person
      * @return int
      */
-    public function getTotalHoursRatesPersonOfCombineOrders(CIndPlanPersonLoad $load, CPerson $person) {
+    public static function getTotalHoursRatesPersonOfCombineOrders(CIndPlanPersonLoad $load, CPerson $person) {
         $totalHours = 0;
         $hours = CIndividualPlanLoadService::getTotalHoursInHoursRate($load);
         $rates = 0;
@@ -157,7 +157,7 @@ class CIndividualPlanLoadService {
      * @param CPerson $person
      * @return int
      */
-    public function getDifferenceHoursRatesPersonOfCombineOrders(CIndPlanPersonLoad $load, CPerson $person) {
+    public static function getDifferenceHoursRatesPersonOfCombineOrders(CIndPlanPersonLoad $load, CPerson $person) {
         $difference = 0;
         $totalHours = CIndividualPlanLoadService::getTotalHoursRatesPersonOfCombineOrders($load, $person);
         $studyHours = CIndividualPlanLoadService::getSumHoursStudyLoad($load);

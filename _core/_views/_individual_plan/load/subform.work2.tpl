@@ -38,84 +38,84 @@
             </tr>
         {/foreach}
             <tr>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
             </tr>
         	<tr>
-                <td> </td>
-                <td> </td>
-                <td> </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
                 <td><b>Итого по планируемому количеству часов</b></td>
                 <td><b>{CIndividualPlanLoadService::getSumPlanAmountWorksByType($load, CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD)}</b></td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
             </tr>
             <tr>
-                <td> </td>
-                <td> </td>
-                <td> </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
                 <td>Сумма часов по учебной нагрузке</td>
                 <td>{CIndividualPlanLoadService::getSumHoursStudyLoad($load)}</td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
             </tr>
             {if (CIndividualPlanLoadService::getTotalHoursRatesPersonOfBasicOrders($load, $person) != 0) }
             <tr>
-                <td> </td>
-                <td> </td>
-                <td> </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
                 <td>Всего часов с учётом ставок сотрудника по основным приказам</td>
                 <td>{CIndividualPlanLoadService::getTotalHoursRatesPersonOfBasicOrders($load, $person)}</td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
             </tr>
             <tr>
-                <td> </td>
-                <td> </td>
-                <td> </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
                 <td><b>Разница между суммой по учебной нагрузке и часами ставок сотрудника по основным приказам</b></td>
                 <td><b>{CIndividualPlanLoadService::getDifferenceHoursRatesPersonOfBasicOrders($load, $person)}</b></td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
             </tr>
             {/if}
             {if (CIndividualPlanLoadService::getTotalHoursRatesPersonOfCombineOrders($load, $person) != 0)}
             <tr>
-                <td> </td>
-                <td> </td>
-                <td> </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
                 <td>Всего часов с учётом ставок сотрудника по совместительству</td>
                 <td>{CIndividualPlanLoadService::getTotalHoursRatesPersonOfCombineOrders($load, $person)}</td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
             </tr>
             <tr>
-                <td> </td>
-                <td> </td>
-                <td> </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
                 <td><b>Разница между суммой по учебной нагрузке и часами ставок сотрудника по совместительству</b></td>
                 <td><b>{CIndividualPlanLoadService::getDifferenceHoursRatesPersonOfCombineOrders($load, $person)}</b></td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
             </tr>
             {/if}
     </table>
