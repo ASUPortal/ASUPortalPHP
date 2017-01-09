@@ -64,4 +64,29 @@ class CTaxonomyLegacy extends CTaxonomy{
     public function getAlias() {
         return $this->getTableName();
     }
+    
+    /**
+     * Термин по псевдониму
+     *
+     * @param $key
+     * @return CTerm
+     */
+    public function getTerm($key) {
+        $term = null;
+        if (is_numeric($key)) {
+            $term = $this->getCacheTerms()->getItem($key);
+        } elseif (is_string($key)) {
+            $key = mb_strtoupper($key);
+            if (!$this->getCacheTerms()->hasElement($key)) {
+                foreach (CActiveRecordProvider::getWithCondition($this->getTableName(), "UPPER(name_short) = '".$key."'")->getItems() as $item) {
+                    $term = new CTerm($item);
+                    $this->getCacheTerms()->add($term->getId(), $term);
+                    $this->getCacheTerms()->add($key, $term);
+                }
+            } else {
+                $term = $this->getCacheTerms()->getItem($key);
+            }
+        }
+        return $term;
+    }
 }

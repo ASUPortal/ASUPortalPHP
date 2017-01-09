@@ -232,6 +232,7 @@ class CStaffManager{
      * @return CPerson
      */
     public static function getPersonByPostId($key) {
+    	$person = null;
     	foreach (CActiveRecordProvider::getWithCondition(TABLE_PERSON, "dolgnost = '".$key."'")->getItems() as $item) {
     		$person = new CPerson($item);
     		self::getCachePerson()->add($person->id, $person);
