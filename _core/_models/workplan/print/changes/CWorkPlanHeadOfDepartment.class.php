@@ -23,7 +23,7 @@ class CWorkPlanHeadOfDepartment extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-		$result = CStaffService::getHeadOfDepartment(false);
+		$result = CStaffService::getHeadOfDepartment();
         return $result;
     }
 }

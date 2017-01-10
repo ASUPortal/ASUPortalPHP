@@ -66,7 +66,7 @@ class CTaxonomyLegacy extends CTaxonomy{
     }
     
     /**
-     * Термин по псевдониму
+     * Термин по псевдониму или комментарию
      *
      * @param $key
      * @return CTerm
@@ -78,7 +78,7 @@ class CTaxonomyLegacy extends CTaxonomy{
         } elseif (is_string($key)) {
             $key = mb_strtoupper($key);
             if (!$this->getCacheTerms()->hasElement($key)) {
-                foreach (CActiveRecordProvider::getWithCondition($this->getTableName(), "UPPER(name_short) = '".$key."'")->getItems() as $item) {
+                foreach (CActiveRecordProvider::getWithCondition($this->getTableName(), "UPPER(name_short) = '".$key."' or UPPER(comment) = '".$key."'")->getItems() as $item) {
                     $term = new CTerm($item);
                     $this->getCacheTerms()->add($term->getId(), $term);
                     $this->getCacheTerms()->add($key, $term);
