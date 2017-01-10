@@ -17,6 +17,7 @@ class CIndPlanPersonLoad extends CActiveModel{
     protected $_person = null;
     protected $_works = null;
     protected $_year = null;
+    protected $_order = null;
     private $_loadTable = null;
     public $person_id;
 
@@ -40,6 +41,13 @@ class CIndPlanPersonLoad extends CActiveModel{
                 "storageField" => "year_id",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getYear"
+            ),
+            "order" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_order",
+                "storageField" => "order_id",
+                "managerClass" => "CStaffManager",
+                "managerGetObject" => "getOrder"
             )
         );
     }

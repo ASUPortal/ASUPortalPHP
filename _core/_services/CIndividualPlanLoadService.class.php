@@ -164,4 +164,45 @@ class CIndividualPlanLoadService {
         $difference = $totalHours-$studyHours;
         return $difference;
     }
+    
+    /**
+     * Всего часов в индивидуальном плане сотрудника из справочника ставок в текущем году с учётом ставки по приказу, указанному в плане
+     *
+     * @param CIndPlanPersonLoad $load
+     * @return int
+     */
+    public static function getTotalHoursRates(CIndPlanPersonLoad $load) {
+        $totalHours = 0;
+        $hours = CIndividualPlanLoadService::getTotalHoursInHoursRate($load);
+        $rate = 0;
+        $order = $load->order;
+        if (!is_null($order)) {
+            // если приказ активный, значит, что сегодня между началом и концом срока действия приказа
+            if ($order->isActive()) {
+                $rate = $order->rate;
+            }
+        }
+        $totalHours = $rate*$hours;
+        return $totalHours;
+    }
+    
+    /**
+     * Разница между часами по учебной нагрузке и часами ставок сотрудника в приказе с учётом заполненных видов работ
+     *
+     * @param CIndPlanPersonLoad $load
+     * @return int
+     */
+    public static function getDifferenceHours(CIndPlanPersonLoad $load) {
+        $difference = 0;
+        $totalHours = CIndividualPlanLoadService::getTotalHoursRates($load);
+    	
+        $studyHours = CIndividualPlanLoadService::getSumHoursStudyLoad($load);
+    	
+        $studyAndMethodicalLoadHours = CIndividualPlanLoadService::getSumPlanAmountWorksByType($load, CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD);
+        $scientificMethodicalLoadHours = CIndividualPlanLoadService::getSumPlanAmountWorksByType($load, CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD);
+        $studyAndEducationalLoadHours = CIndividualPlanLoadService::getSumPlanAmountWorksByType($load, CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD);
+    	
+        $difference = $totalHours-$studyHours-$studyAndMethodicalLoadHours-$scientificMethodicalLoadHours-$studyAndEducationalLoadHours;
+        return $difference;
+    }
 }
