@@ -403,11 +403,6 @@ class CWorkPlanController extends CFlowController{
         		"link" => "disciplines.php?action=edit&id=".$plan->corriculum_discipline_id,
         		"icon" => "actions/edit-undo.png"
         	),
-            array(
-                "title" => "Добавить категорию",
-                "link" => "workplancontentcategories.php?action=add&id=".$plan->getId(),
-                "icon" => "actions/list-add.png"
-            ),
         	array(
         		"title" => "Печать по шаблону",
         		"link" => "#",
