@@ -1,5 +1,6 @@
     <h3>Категории</h3>
-
+	<a href="{$web_root}_modules/_corriculum/workplancontentcategories.php?action=add&id={$plan->getId()}" class="btn btn-success" target="_blank">Добавить категорию</a>
+	
     {if ($plan->categories->getCount() == 0)}
         Нет объектов для отображения
     {else}
