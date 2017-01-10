@@ -45,4 +45,24 @@ class CStaffService {
         $person = CStaffManager::getPersonByPostId($headOfDepartment->getId())->getNameShort();
         return $person;
     }
+    
+    /**
+     * Должность заведующего кафедрой или исполняющего его обязанности
+     *
+     * @return string
+     */
+    public static function getPostHeadOfDepartment() {
+        $post = "";
+    	
+        $headOfDepartment = CTaxonomyManager::getLegacyTaxonomy(TABLE_POSTS)->getTerm(CPostConstants::HEAD_OF_DEPARTMENT);
+        $actingHeadOfDepartment = CTaxonomyManager::getLegacyTaxonomy(TABLE_POSTS)->getTerm(CPostConstants::ACTING_HEAD_OF_DEPARTMENT);
+    	
+        if (!is_null(CStaffManager::getPersonByPostId($actingHeadOfDepartment->getId()))) {
+        	$post = $actingHeadOfDepartment->name_short;
+        } else {
+        	$post = $headOfDepartment->name_short;
+        }
+    	
+        return $post;
+    }
 }
