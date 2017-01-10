@@ -5,7 +5,7 @@
 
     {CHtml::helpForCurrentPage()}
 
-    {include file="_corriculum/_workplan/task/form.tpl"}
+    {include file="_corriculum/_workplan/task/formTask.tpl"}
 {/block}
 
 {block name="asu_right"}

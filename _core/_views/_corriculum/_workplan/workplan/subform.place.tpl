@@ -24,9 +24,11 @@
     </div>
 </div>
 
-<h4>Цели и задачи освоения дисциплины</h4>
-{include file="_corriculum/_workplan/goal/subform.index.tpl"}
-{include file="_corriculum/_workplan/task/subform.index.tpl"}
+<h4>Цели освоения дисциплины</h4>
+{CHtml::activeComponent("workplangoals.php?plan_id={$plan->getId()}", $plan)}
+
+<h4>Задачи освоения дисциплины</h4>
+{CHtml::activeComponent("workplantasks.php?plan_id={$plan->getId()}", $plan)}
 
 <h4>Входные компетенции</h4>
 {CHtml::activeComponent("workplancompetentions.php?type=1&plan_id={$plan->getId()}", $plan, ["withoutScripts" => "true"])}

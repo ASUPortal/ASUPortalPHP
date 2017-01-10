@@ -1,5 +1,7 @@
 <?php
 class CWorkPlanTasksController extends CBaseController{
+	protected $_isComponent = true;
+	
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -80,6 +82,22 @@ class CWorkPlanTasksController extends CBaseController{
          */
         $this->renderView("_corriculum/_workplan/task/edit.tpl");
     }
+    public function actionEditTask() {
+        $object = CBaseManager::getWorkPlanTask(CRequest::getInt("id"));
+        $this->setData("object", $object);
+        /**
+         * Генерация меню
+         */
+        $this->addActionsMenuItem(array(
+            "title" => "Назад",
+            "link" => "workplantasks.php?action=index&plan_id=".$object->plan_id,
+            "icon" => "actions/edit-undo.png"
+        ));
+        /**
+         * Отображение представления
+         */
+        $this->renderView("_corriculum/_workplan/task/editTask.tpl");
+    }
     public function actionDelete() {
     	$object = CBaseManager::getWorkPlanTask(CRequest::getInt("id"));
     	if (!is_null($object)) {
@@ -105,7 +123,7 @@ class CWorkPlanTasksController extends CBaseController{
     		$task->ordering = $order++;
     		$task->save();
     	}
-    	$this->redirect("workplangoals.php?action=edit&id=".$goal->getId());
+    	$this->redirect("workplans.php?action=edit&id=".$goal->plan_id);
     }
     public function actionSave() {
         $object = new CWorkPlanTask();
@@ -116,6 +134,21 @@ class CWorkPlanTasksController extends CBaseController{
                 $this->redirect("workplantasks.php?action=edit&id=".$object->getId());
             } else {
                 $this->redirect("workplangoals.php?action=edit&id=".$object->goal_id);
+            }
+            return true;
+        }
+        $this->setData("object", $object);
+        $this->renderView("_corriculum/_workplan/task/edit.tpl");
+    }
+    public function actionSaveTask() {
+        $object = new CWorkPlanTask();
+        $object->setAttributes(CRequest::getArray($object::getClassName()));
+        if ($object->validate()) {
+            $object->save();
+            if ($this->continueEdit()) {
+                $this->redirect("workplantasks.php?action=edit&id=".$object->getId());
+            } else {
+                $this->redirect("workplantasks.php?action=index&plan_id=".$object->plan_id);
             }
             return true;
         }
