@@ -173,7 +173,7 @@ class CRecordSet {
      *
      * @return CArrayList
      */
-    public function getPaginated() {
+    public function getPaginated($paginated = true) {
         /**
          * Разбивка на страницы на случай, если записи добавлялись вручную
          * и на случай, если рекордсет получен из таблицы
@@ -228,9 +228,11 @@ class CRecordSet {
             if ($this->_isAclControlledSet) {
                 $this->updateQueryForACLLimitations();
             }
-            if ($this->getPageSize() != PAGINATION_ALL) {
-                $start = ($this->getCurrentPage() - 1) * $this->getPageSize();
-                $query->limit($start, $this->getPageSize());
+            if ($paginated) {
+                if ($this->getPageSize() != PAGINATION_ALL) {
+                    $start = ($this->getCurrentPage() - 1) * $this->getPageSize();
+                    $query->limit($start, $this->getPageSize());
+                }
             }
             $items = $query->execute();
             foreach ($items->getItems() as $item) {
