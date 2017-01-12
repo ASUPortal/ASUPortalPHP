@@ -50,7 +50,7 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
         foreach ($persons->getItems() as $person) {
             foreach ($person->getIndPlansByYears($bean->getItem("year_id"))->getItems() as $year_id=>$plans) {
                 foreach ($plans->getItems() as $plan) {
-                    if (in_array($plan->getType(), $bean->getItem("types")->getItems())) {
+                    if (in_array($plan->type, $bean->getItem("types")->getItems())) {
                         $targetPlans->add($plan->getId(), $plan);
                     }
                 }
@@ -84,7 +84,7 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
             if (!is_null($plan->person)) {
                 $row[3] = $plan->person->fio_short;
             }
-            // план на семестр
+            // запланировано на год
             if (!array_key_exists(4, $row)) {
                 $row[4] = 0;
             }
@@ -104,17 +104,14 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
                     $preparedData[] = $r;
                 }
             }
-            if (in_array($month, array(
-                2, 3, 4, 5, 6
-            ))) {
-                foreach ($preparedData as $preparedRow) {
-                    $row[4] += $preparedRow[1];
-                }
-            } else {
-                foreach ($preparedData as $preparedRow) {
-                    $row[4] += $preparedRow[8];
-                }
+            $plannedForYear = 0;
+            foreach ($preparedData as $preparedRow) {
+                // план на весенний семестр
+                $plannedForYear += $preparedRow[1];
+                // план на осенний семестр
+                $plannedForYear += $preparedRow[8];
             }
+            $row[4] = $plannedForYear;
             $rows = array(
                 5 => 0, //лекц
                 6 => 1, //прак

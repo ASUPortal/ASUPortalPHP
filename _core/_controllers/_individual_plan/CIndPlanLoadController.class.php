@@ -56,7 +56,7 @@ class CIndPlanLoadController extends CBaseController{
 
         $persons = new CArrayList();
 
-        foreach ($set->getPaginated()->getItems() as $ar) {
+        foreach ($set->getPaginated(false)->getItems() as $ar) {
             $person = new CPerson($ar);
             $persons->add($person->getId(), $person);
         }
@@ -77,7 +77,6 @@ class CIndPlanLoadController extends CBaseController{
             )
         );
 
-        $this->setData("paginator", $set->getPaginator());
         $this->setData("persons", $persons);
         $this->setData("years", $years);
         $this->setData("selectedYear", $selectedYear);
@@ -283,35 +282,7 @@ class CIndPlanLoadController extends CBaseController{
         $newYear = CTaxonomyManager::getYear($newLoad->year_id);
         $type = CRequest::getInt("type");
         if (!is_null($newLoad)) {
-            foreach ($load->getWorksByType($type)->getItems() as $work) {
-                $newWork = $work->copy();
-                if ($type == CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD or
-    					$type == CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD or
-    					$type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD) {
-    						
-                	$newWork->comment = "Скопировано из ".$year->getValue()." года ".$newWork->comment;
-                	
-                	// указываем срок выполнения в соответствии с годом, в который копируем
-                	$date = date("Y-m-d", strtotime($newWork->plan_expiration_date));
-                	$dateFirstPart = date(CSettingsManager::getSettingValue("dateStartPlanExpirationDateCurrentYear"), strtotime($newWork->plan_expiration_date));
-                	$dateSecondPart = date(CSettingsManager::getSettingValue("dateStartPlanExpirationDateNextYear"), strtotime($newWork->plan_expiration_date));
-                	if ($date >= $dateFirstPart) {
-                		$newWork->plan_expiration_date = date("d.m.".date("Y", strtotime($newYear->date_start)), strtotime($date));
-                	}
-                	if ($date <= $dateSecondPart) {
-                		$newWork->plan_expiration_date = date("d.m.".date("Y", strtotime($newYear->date_end)), strtotime($date));
-                	}
-                	
-                }
-                if ($type == CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD or
-    					$type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD or
-    					$type == CIndPlanPersonWorkType::CHANGE_RECORDS) {
-                	$newWork->is_executed = 0;
-                }
-                $newWork->load_id = $newLoad->getId();
-                $newWork->work_type = $type;
-                $newWork->save();
-            }
+            CIndividualPlanLoadService::copyLoadWorks($load, $newLoad, $year, $newYear, $type);
             $this->redirect("load.php?action=view&id=".$newLoad->person_id."&year=".$newLoad->year_id);
         } else {
             $this->addActionsMenuItem(array(

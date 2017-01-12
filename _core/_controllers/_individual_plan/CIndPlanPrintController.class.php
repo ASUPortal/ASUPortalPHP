@@ -103,7 +103,7 @@ class CIndPlanPrintController extends CFlowController{
         foreach ($persons->getItems() as $person) {
             foreach ($person->getIndPlansByYears($year_id)->getItems() as $year_id=>$plans) {
                 foreach ($plans->getItems() as $plan) {
-                    $types->add($plan->getType(), $plan->getType());
+                    $types->add($plan->type, $plan->getType());
                 }
             }
         }

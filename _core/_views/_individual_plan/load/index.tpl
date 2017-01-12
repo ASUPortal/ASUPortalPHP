@@ -41,16 +41,16 @@
         <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
                 <th>#</th>
-                <th><input type="checkbox" id="selectAll"></th>
+                <th><input type="checkbox" id="selectAll" checked></th>
                 <th>{CHtml::tableOrder("fio", $persons->getFirstItem())}</th>
                 <th>Год</th>
             </tr>
-            {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
+            {counter start=0 print=false}
             {foreach $persons->getItems() as $person}
             <tr>
                 <td rowspan="{$person->getIndPlansByYears()->getCount() + 1}">{counter}</td>
                 <td rowspan="{$person->getIndPlansByYears()->getCount() + 1}">
-                    <input type="checkbox" value="{$person->getId()}" name="selectedDoc[]">
+                    <input type="checkbox" value="{$person->getId()}" name="selectedDoc[]" checked>
                 </td>
                 <td rowspan="{$person->getIndPlansByYears()->getCount() + 1}">
                     <a href="load.php?action=view&id={$person->getId()}">
@@ -75,7 +75,6 @@
             {/foreach}
         </table>
 
-        {CHtml::paginator($paginator, "?action=index")}
     {/if}
 {/block}
 
