@@ -23,7 +23,7 @@ class CIndPlanLoadController extends CBaseController{
     }
     public function actionIndex() {
         $selectedYear = null;
-        $set = new CRecordSet();
+        $set = new COnePageRecordSet();
         $query = new CQuery();
         $set->setQuery($query);
 
@@ -56,7 +56,7 @@ class CIndPlanLoadController extends CBaseController{
 
         $persons = new CArrayList();
 
-        foreach ($set->getPaginated(false)->getItems() as $ar) {
+        foreach ($set->getPaginated()->getItems() as $ar) {
             $person = new CPerson($ar);
             $persons->add($person->getId(), $person);
         }
