@@ -25,14 +25,18 @@ class CSABManager {
      * @return CSABCommission|null
      */
     public static function getCommission($key) {
-        if (!self::getCacheCommission()->hasElement($key)) {
-            $ar = CActiveRecordProvider::getById(TABLE_SAB_COMMISSIONS, $key);
-            if (!is_null($ar)) {
-                $commission = new CSABCommission($ar);
-                self::getCacheCommission()->add($commission->getId(), $commission);
-            }
-        }
-        return self::getCacheCommission()->getItem($key);
+    	if ($key != "") {
+    		if (!self::getCacheCommission()->hasElement($key)) {
+    			$ar = CActiveRecordProvider::getById(TABLE_SAB_COMMISSIONS, $key);
+    			if (!is_null($ar)) {
+    				$commission = new CSABCommission($ar);
+    				self::getCacheCommission()->add($commission->getId(), $commission);
+    			}
+    		}
+    		return self::getCacheCommission()->getItem($key);
+    	} else {
+    		return null;
+    	}
     }
 
     /**
