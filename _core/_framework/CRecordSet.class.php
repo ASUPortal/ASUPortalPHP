@@ -12,9 +12,9 @@ class CRecordSet {
     private $_pageSize = null;
     private $_paginator = null;
     private $_query = null;
-    private $_manualAdded = false;
-    private $_useGlobalSearch = false;
-    private $_isAclControlledSet = false;
+    public $_manualAdded = false;
+    public $_useGlobalSearch = false;
+    public $_isAclControlledSet = false;
 
     /**
      * Использовать ли глобальный поиск

@@ -4,14 +4,6 @@
  *
  */
 class COnePageRecordSet extends CRecordSet {
-    private $_items = null;
-    private $_page = null;
-    private $_pageSize = null;
-    private $_paginator = null;
-    private $_query = null;
-    private $_manualAdded = false;
-    private $_useGlobalSearch = false;
-    private $_isAclControlledSet = false;
 
     /**
      * Набор данных на одной странице
