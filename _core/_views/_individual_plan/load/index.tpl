@@ -12,16 +12,31 @@
                     items[i].checked = this.checked;
                 }
             });
+			jQuery("#isAll").change(function(){
+				window.location.href=web_root + "_modules/_individual_plan/load.php?isAll=" + (jQuery(this).is(":checked") ? "1":"0");
+			});
         });
     </script>
-    <div class="form-horizontal">
-        <div class="control-group">
-            <label class="control-label" for="year.id">Учебный год</label>
-            <div class="controls">
-            	{CHtml::dropDownList("year.id", $years, $selectedYear, "year_selector", "span12")}
-            </div>
-        </div>
-    </div>
+    <td valign="top">
+		<div class="form-horizontal">
+			<div class="control-group">
+				<label class="control-label" for="year.id">Учебный год</label>
+				<div class="controls">
+					{CHtml::dropDownList("year.id", $years, $selectedYear, "year_selector", "span12")}
+				</div>
+			</div>
+		</div>
+	</td>
+	<td valign="top">
+		<div class="form-horizontal">
+			<div class="control-group">
+			<label class="control-label" for="isAll">Показать всех</label>
+				<div class="controls">
+					{CHtml::checkBox("isAll", "1", $isAll, "isAll")}
+				</div>
+			</div>
+		</div>
+	</td>
 {/block}
 
 {block name="asu_center"}
@@ -41,16 +56,16 @@
         <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
                 <th>#</th>
-                <th><input type="checkbox" id="selectAll"></th>
+                <th><input type="checkbox" id="selectAll" checked></th>
                 <th>{CHtml::tableOrder("fio", $persons->getFirstItem())}</th>
                 <th>Год</th>
             </tr>
-            {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
+            {counter start=0 print=false}
             {foreach $persons->getItems() as $person}
             <tr>
                 <td rowspan="{$person->getIndPlansByYears()->getCount() + 1}">{counter}</td>
                 <td rowspan="{$person->getIndPlansByYears()->getCount() + 1}">
-                    <input type="checkbox" value="{$person->getId()}" name="selectedDoc[]">
+                    <input type="checkbox" value="{$person->getId()}" name="selectedDoc[]" checked>
                 </td>
                 <td rowspan="{$person->getIndPlansByYears()->getCount() + 1}">
                     <a href="load.php?action=view&id={$person->getId()}">
@@ -75,7 +90,6 @@
             {/foreach}
         </table>
 
-        {CHtml::paginator($paginator, "?action=index")}
     {/if}
 {/block}
 

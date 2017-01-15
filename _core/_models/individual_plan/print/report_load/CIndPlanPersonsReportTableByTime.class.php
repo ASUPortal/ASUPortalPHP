@@ -44,7 +44,7 @@ class CIndPlanPersonsReportTableByTime extends CAbstractPrintClassField {
         foreach ($persons->getItems() as $person) {
             foreach ($person->getIndPlansByYears($bean->getItem("year_id"))->getItems() as $year_id=>$plans) {
                 foreach ($plans->getItems() as $plan) {
-                    if (in_array($plan->getType(), $bean->getItem("types")->getItems())) {
+                    if (in_array($plan->type, $bean->getItem("types")->getItems())) {
                         $targetPlans->add($plan->getId(), $plan);
                     }
                 }
@@ -78,11 +78,11 @@ class CIndPlanPersonsReportTableByTime extends CAbstractPrintClassField {
             if (!is_null($plan->person)) {
                 $row[3] = $plan->person->fio_short;
             }
-            // план на семестр бюджет
+            // запланировано на год бюджет
             if (!array_key_exists(4, $row)) {
                 $row[4] = 0;
             }
-            // план на семестр контракт
+            // запланировано на год контракт
             if (!array_key_exists(5, $row)) {
             	$row[5] = 0;
             }
@@ -123,23 +123,42 @@ class CIndPlanPersonsReportTableByTime extends CAbstractPrintClassField {
                 }
             }
             if ($plan->isSeparateContract()) {
-            	if (in_array($month, array(
-            			2, 3, 4, 5, 6
-            	))) {
-            		foreach ($preparedData as $preparedRow) {
-            			$row[4] += $preparedRow[18];
-            			$row[5] += $preparedRow[19];
-            			$row[23] += $preparedRow[20];
-            			$row[24] += $preparedRow[21];
-            		}
-            	} else {
-            		foreach ($preparedData as $preparedRow) {
-            			$row[4] += $preparedRow[20];
-            			$row[5] += $preparedRow[21];
-            			$row[23] += $preparedRow[22];
-            			$row[24] += $preparedRow[23];
-            		}
+            	$plannedForYearBudget = 0;
+            	foreach ($preparedData as $preparedRow) {
+            		// план на осенний семестр бюджет
+            		$plannedForYearBudget += $preparedRow[18];
+            		// план на весенний семестр бюджет
+            		$plannedForYearBudget += $preparedRow[20];
             	}
+            	$row[4] = $plannedForYearBudget;
+            	
+            	$plannedForYearContract = 0;
+            	foreach ($preparedData as $preparedRow) {
+            		// план на осенний семестр контракт
+            		$plannedForYearContract += $preparedRow[19];
+            		// план на весенний семестр контракт
+            		$plannedForYearContract += $preparedRow[21];
+            	}
+            	$row[5] = $plannedForYearContract;
+            	
+            	$resultForYearBudget = 0;
+            	foreach ($preparedData as $preparedRow) {
+            		// итог на осенний семестр бюджет
+            		$resultForYearBudget += $preparedRow[20];
+            		// итог на весенний семестр бюджет
+            		$resultForYearBudget += $preparedRow[22];
+            	}
+            	$row[23] = $resultForYearBudget;
+            	
+            	$resultForYearContract = 0;
+            	foreach ($preparedData as $preparedRow) {
+            		// итог на осенний семестр контракт
+            		$resultForYearContract += $preparedRow[21];
+            		// итог на весенний семестр контракт
+            		$resultForYearContract += $preparedRow[23];
+            	}
+            	$row[24] = $resultForYearContract;
+            	
             	$rows = array(
             			6 => 0, //лекц
             			7 => 1, //прак
@@ -160,17 +179,14 @@ class CIndPlanPersonsReportTableByTime extends CAbstractPrintClassField {
             			22 => 12 //асп
             	);
             } else {
-            	if (in_array($month, array(
-            			2, 3, 4, 5, 6
-            	))) {
-            		foreach ($preparedData as $preparedRow) {
-            			$row[4] += $preparedRow[1];
-            		}
-            	} else {
-            		foreach ($preparedData as $preparedRow) {
-            			$row[4] += $preparedRow[8];
-            		}
+            	$plannedForYear = 0;
+            	foreach ($preparedData as $preparedRow) {
+            		// план на весенний семестр
+            		$plannedForYear += $preparedRow[1];
+            		// план на осенний семестр
+            		$plannedForYear += $preparedRow[8];
             	}
+            	$row[4] = $plannedForYear;
             	$rows = array(
             			5 => 0, //лекц
             			6 => 1, //прак
