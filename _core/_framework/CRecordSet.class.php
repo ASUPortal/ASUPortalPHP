@@ -12,9 +12,9 @@ class CRecordSet {
     private $_pageSize = null;
     private $_paginator = null;
     private $_query = null;
-    public $_manualAdded = false;
-    public $_useGlobalSearch = false;
-    public $_isAclControlledSet = false;
+    private $_manualAdded = false;
+    private $_useGlobalSearch = false;
+    private $_isAclControlledSet = false;
 
     /**
      * Использовать ли глобальный поиск
@@ -229,8 +229,8 @@ class CRecordSet {
                 $this->updateQueryForACLLimitations();
             }
             if ($this->getPageSize() != PAGINATION_ALL) {
-            	$start = ($this->getCurrentPage() - 1) * $this->getPageSize();
-            	$query->limit($start, $this->getPageSize());
+                $start = ($this->getCurrentPage() - 1) * $this->getPageSize();
+                $query->limit($start, $this->getPageSize());
             }
             $items = $query->execute();
             foreach ($items->getItems() as $item) {
@@ -332,7 +332,7 @@ class CRecordSet {
      *
      * @return CQuery
      */
-    public function getQuery() {
+    private function getQuery() {
         return $this->_query;
     }
     private function getTableName() {
@@ -346,5 +346,65 @@ class CRecordSet {
             return substr($this->getQuery()->getTable(), strpos($this->getQuery()->getTable(), " as ") + 3);
         }
         return $this->getQuery()->getTable();
+    }
+    
+    /**
+     * Набор данных на одной странице с использованием глобального поиска и сортировок
+     *
+     * @return CArrayList
+     */
+    public function getOnePageRecordSet() {
+    	if ($this->_manualAdded) {
+    		$res = new CArrayList();
+    		foreach ($this->getItems() as $key=>$value) {
+    			$res->add($key, $value);
+    		}
+    		return $res;
+    	} else {
+    		$res = new CArrayList();
+    		$query = $this->getQuery();
+    		/**
+    		 * Использование глобального поиска и глобальных сортировок
+    		*/
+    		if ($this->_useGlobalSearch) {
+    			// глобальный поиск
+    			$globalFilter = CRequest::getGlobalFilter();
+    			if ($globalFilter["field"] !== false) {
+    				$condition = $query->getCondition();
+    				if (is_numeric($globalFilter["value"])) {
+    					if ($condition != "") {
+    						$condition .= " AND ".$globalFilter["field"].'='.$globalFilter["value"];
+    					} else {
+    						$condition = $globalFilter["field"].'='.$globalFilter["value"];
+    					}
+    				} else {
+    					if ($condition != "") {
+    						$condition .= " AND ".$globalFilter["field"]." like '%".$globalFilter["value"]."%'";
+    					} else {
+    						$condition = $globalFilter["field"]." like '%".$globalFilter["value"]."%'";
+    					}
+    				}
+    				$query->condition($condition);
+    			}
+    			// глобальные сортировки
+    			$globalOrder = CRequest::getGlobalOrder();
+    			if ($globalOrder["field"] !== false) {
+    				$query->order($globalOrder["field"]." ".$globalOrder["direction"]);
+    			}
+    		}
+    		/**
+    		 * Использование глобального ограничения доступа
+    		 */
+    		if ($this->_isAclControlledSet) {
+    			$this->updateQueryForACLLimitations();
+    		}
+    		$items = $query->execute();
+    		foreach ($items->getItems() as $item) {
+    			$ar = new CActiveRecord($item);
+    			$ar->setTable($query->getTable());
+    			$res->add($ar->getId(), $ar);
+    		}
+    		return $res;
+    	}
     }
 }
