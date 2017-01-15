@@ -12,16 +12,31 @@
                     items[i].checked = this.checked;
                 }
             });
+			jQuery("#isAll").change(function(){
+				window.location.href=web_root + "_modules/_individual_plan/load.php?isAll=" + (jQuery(this).is(":checked") ? "1":"0");
+			});
         });
     </script>
-    <div class="form-horizontal">
-        <div class="control-group">
-            <label class="control-label" for="year.id">Учебный год</label>
-            <div class="controls">
-            	{CHtml::dropDownList("year.id", $years, $selectedYear, "year_selector", "span12")}
-            </div>
-        </div>
-    </div>
+    <td valign="top">
+		<div class="form-horizontal">
+			<div class="control-group">
+				<label class="control-label" for="year.id">Учебный год</label>
+				<div class="controls">
+					{CHtml::dropDownList("year.id", $years, $selectedYear, "year_selector", "span12")}
+				</div>
+			</div>
+		</div>
+	</td>
+	<td valign="top">
+		<div class="form-horizontal">
+			<div class="control-group">
+			<label class="control-label" for="isAll">Показать всех</label>
+				<div class="controls">
+					{CHtml::checkBox("isAll", "1", $isAll, "isAll")}
+				</div>
+			</div>
+		</div>
+	</td>
 {/block}
 
 {block name="asu_center"}

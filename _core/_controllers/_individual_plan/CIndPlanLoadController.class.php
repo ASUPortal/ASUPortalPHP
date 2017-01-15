@@ -22,8 +22,8 @@ class CIndPlanLoadController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $selectedYear = null;
-        $set = new COnePageRecordSet();
+        $selectedYear = CUtils::getCurrentYear()->getId();
+        $set = new CRecordSet();
         $query = new CQuery();
         $set->setQuery($query);
 
@@ -38,11 +38,22 @@ class CIndPlanLoadController extends CBaseController{
                 $query->condition("p.id = ".CSession::getCurrentPerson()->getId());
             }
         }
+        $isAll = false;
+        if (CRequest::getInt("isAll") == "1") {
+            $isAll = true;
+            $selectedYear = null;
+        }
+        if (!$isAll and CRequest::getString("filterClass") == "") {
+            $query->innerJoin(TABLE_IND_PLAN_LOADS." as l", "l.person_id = p.id");
+            $query->innerJoin(TABLE_YEARS." as year", "l.year_id = year.id");
+            $query->condition("year.id = ".$selectedYear);
+        }
         // фильтр по году
         if (!is_null(CRequest::getFilter("year.id"))) {
-        	$query->innerJoin(TABLE_IND_PLAN_LOADS." as l", "l.person_id = p.id");
-        	$query->innerJoin(TABLE_YEARS." as year", "l.year_id = year.id");
-        	$selectedYear = CRequest::getFilter("year.id");
+            $query->innerJoin(TABLE_IND_PLAN_LOADS." as l", "l.person_id = p.id");
+            $query->innerJoin(TABLE_YEARS." as year", "l.year_id = year.id");
+            $selectedYear = CRequest::getFilter("year.id");
+            $query->condition("year.id = ".$selectedYear);
         }
         $yearsQuery = new CQuery();
         $yearsQuery->select("year.*")
@@ -56,7 +67,7 @@ class CIndPlanLoadController extends CBaseController{
 
         $persons = new CArrayList();
 
-        foreach ($set->getPaginated()->getItems() as $ar) {
+        foreach ($set->getOnePageRecordSet() as $ar) {
             $person = new CPerson($ar);
             $persons->add($person->getId(), $person);
         }
@@ -80,6 +91,7 @@ class CIndPlanLoadController extends CBaseController{
         $this->setData("persons", $persons);
         $this->setData("years", $years);
         $this->setData("selectedYear", $selectedYear);
+        $this->setData("isAll", $isAll);
         $this->renderView("_individual_plan/load/index.tpl");
     }
     public function actionView() {
