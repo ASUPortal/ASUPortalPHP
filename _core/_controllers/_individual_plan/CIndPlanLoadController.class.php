@@ -67,7 +67,7 @@ class CIndPlanLoadController extends CBaseController{
 
         $persons = new CArrayList();
 
-        foreach ($set->getOnePageRecordSet() as $ar) {
+        foreach ($set->getOnePageRecordSet()->getItems() as $ar) {
             $person = new CPerson($ar);
             $persons->add($person->getId(), $person);
         }
