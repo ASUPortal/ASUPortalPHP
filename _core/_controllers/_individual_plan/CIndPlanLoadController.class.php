@@ -67,7 +67,10 @@ class CIndPlanLoadController extends CBaseController{
 
         $persons = new CArrayList();
 
-        foreach ($set->getOnePageRecordSet()->getItems() as $ar) {
+        //установим размер страницы - все записи
+        $set->setPageSize(PAGINATION_ALL);
+        
+        foreach ($set->getPaginated()->getItems() as $ar) {
             $person = new CPerson($ar);
             $persons->add($person->getId(), $person);
         }
