@@ -27,7 +27,8 @@ class CNewsItem extends CActiveModel{
             "file" => "Текст новости",
             "image" => "Прикрепленное фото",
             "file_attach" => "Вложение",
-            "date_time" => "Дата создания"
+            "date_time" => "Дата создания",
+            "post_in_vk" => "Опубликовать новость в группе ВКонтакте"
         );
     }
     public function validationRules() {

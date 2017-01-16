@@ -51,6 +51,13 @@
         {CHtml::activeUpload("file_attach", $newsItem)}
         {CHtml::error("file_attach", $newsItem)}
     </div></div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("post_in_vk", $newsItem)}
+        <div class="controls">
+            {CHtml::activeCheckbox("post_in_vk", $newsItem)}
+            {CHtml::error("post_in_vk", $newsItem)}
+    </div></div>
 
     <div class="control-group">
         <div class="controls">

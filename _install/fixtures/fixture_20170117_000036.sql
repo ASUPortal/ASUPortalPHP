@@ -1,0 +1,1 @@
+ALTER TABLE `news` ADD `post_in_vk` BOOLEAN NOT NULL ;

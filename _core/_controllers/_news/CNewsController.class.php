@@ -77,6 +77,15 @@ class CNewsController extends CBaseController {
         if ($newsItem->validate()) {
             $newsItem->date_time = date("Y-m-d H:i:s", strtotime($newsItem->date_time));
             $newsItem->save();
+            if ($newsItem->post_in_vk) {
+                require_once(CORE_CWD."/_core/_external/vk/Vkapi.php");
+                $message = $newsItem->title."\n".strip_tags($newsItem->file)."\n".$newsItem->getAuthorName();
+                VkApi::invoke("wall.post", array(
+                    "owner_id" => CSettingsManager::getSettingValue("ID_group_vk"),
+                    "message" => $message,
+                    "from_group" => 1
+                ));
+            }
             if ($this->continueEdit()) {
                 $this->redirect("?action=edit&id=".$newsItem->getId());
             } else {
