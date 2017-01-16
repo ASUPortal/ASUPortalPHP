@@ -270,7 +270,7 @@
 	            <th>{CHtml::tableOrder("dipl_prew.date_preview", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("date_act", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("foreign_lang", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("antiplagiat", $diploms->getFirstItem(), true)}</th>
+	            <th>{CHtml::tableOrder("antiplagiat_originality_percent", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("recenz_id", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("study_mark", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("gak_num", $diploms->getFirstItem(), true)}</th>
