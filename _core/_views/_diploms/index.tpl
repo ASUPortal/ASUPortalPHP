@@ -270,7 +270,7 @@
 	            <th>{CHtml::tableOrder("dipl_prew.date_preview", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("date_act", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("foreign_lang", $diploms->getFirstItem(), true)}</th>
-	            <th>{CHtml::tableOrder("protocol_2aspir_id", $diploms->getFirstItem(), true)}</th>
+	            <th>{CHtml::tableOrder("antiplagiat_originality_percent", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("recenz_id", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("study_mark", $diploms->getFirstItem(), true)}</th>
 	            <th>{CHtml::tableOrder("gak_num", $diploms->getFirstItem(), true)}</th>
@@ -334,8 +334,8 @@
 	                {/if}
 	            </td>
 	            <td>
-	                {if !is_null($diplom->recomendationProtocol)}
-	                    {$diplom->recomendationProtocol->getNumber()} от {$diplom->recomendationProtocol->getDate()}
+	                {if ($diplom->antiplagiatChecks->getCount() != 0)}
+	                    {$diplom->antiplagiatChecks->getLastItem()->originality_percent}%
 	                {/if}
 	            </td>
 	            <td>
