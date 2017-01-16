@@ -149,7 +149,8 @@ class CDiplom extends CActiveModel {
             "average_mark" => "Средний балл",
             "normokontroler_id" => "Нормоконтролер",
             "protocol" => "Номер протокола (номер защиты)",
-            "num_order" => "Номер распоряжения декана"
+            "num_order" => "Номер распоряжения декана",
+            "antiplagiat" => "антиплаг."
         );
     }
     /**
