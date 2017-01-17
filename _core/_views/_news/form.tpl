@@ -51,6 +51,12 @@
         {CHtml::activeUpload("file_attach", $newsItem)}
         {CHtml::error("file_attach", $newsItem)}
     </div></div>
+    
+    <div class="control-group">
+        {CHtml::label("Опубликовать новость в группе ВКонтакте", "post_in_vk")}
+        <div class="controls">
+            {CHtml::checkBox("post_in_vk", "1", $post_in_vk)}
+    </div></div>
 
     <div class="control-group">
         <div class="controls">

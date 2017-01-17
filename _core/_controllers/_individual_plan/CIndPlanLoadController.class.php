@@ -43,7 +43,7 @@ class CIndPlanLoadController extends CBaseController{
             $isAll = true;
             $selectedYear = null;
         }
-        if (!$isAll and CRequest::getString("filterClass") == "") {
+        if (!$isAll and CRequest::getString("filterClass") == "" and CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_ALL) {
             $query->innerJoin(TABLE_IND_PLAN_LOADS." as l", "l.person_id = p.id");
             $query->innerJoin(TABLE_YEARS." as year", "l.year_id = year.id");
             $query->condition("year.id = ".$selectedYear);
