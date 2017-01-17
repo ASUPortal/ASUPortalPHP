@@ -60,6 +60,7 @@ class CNewsController extends CBaseController {
         $this->addCSSInclude("_modules/_redactor/redactor.css");
         $this->addJSInclude("_modules/_redactor/redactor.min.js");
         $this->setData("newsItem", $newsItem);
+        $this->setData("post_in_vk", 0);
         $this->renderView("_news/add.tpl");
     }
     public function actionEdit() {
@@ -69,6 +70,7 @@ class CNewsController extends CBaseController {
         $this->addCSSInclude("_modules/_redactor/redactor.css");
         $this->addJSInclude("_modules/_redactor/redactor.min.js");
         $this->setData("newsItem", $newsItem);
+        $this->setData("post_in_vk", 0);
         $this->renderView("_news/edit.tpl");
     }
     public function actionSave() {
@@ -77,7 +79,7 @@ class CNewsController extends CBaseController {
         if ($newsItem->validate()) {
             $newsItem->date_time = date("Y-m-d H:i:s", strtotime($newsItem->date_time));
             $newsItem->save();
-            if ($newsItem->post_in_vk) {
+            if (CRequest::getInt("post_in_vk")) {
                 require_once(CORE_CWD."/_core/_external/vk/Vkapi.php");
                 $message = $newsItem->title."\n".strip_tags($newsItem->file)."\n".$newsItem->getAuthorName();
                 VkApi::invoke("wall.post", array(

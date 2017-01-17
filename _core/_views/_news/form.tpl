@@ -53,10 +53,9 @@
     </div></div>
     
     <div class="control-group">
-        {CHtml::activeLabel("post_in_vk", $newsItem)}
+        {CHtml::label("Опубликовать новость в группе ВКонтакте", "post_in_vk")}
         <div class="controls">
-            {CHtml::activeCheckbox("post_in_vk", $newsItem)}
-            {CHtml::error("post_in_vk", $newsItem)}
+            {CHtml::checkBox("post_in_vk", "1", $post_in_vk)}
     </div></div>
 
     <div class="control-group">
