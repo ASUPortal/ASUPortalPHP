@@ -81,7 +81,7 @@ class CNewsController extends CBaseController {
             $newsItem->save();
             if (CRequest::getInt("post_in_vk")) {
                 require_once(CORE_CWD."/_core/_external/vk/Vkapi.php");
-                $message = $newsItem->title."\n".strip_tags($newsItem->file)."\n".$newsItem->getAuthorName();
+                $message = $newsItem->title."\n".strip_tags($newsItem->file)."\n\n".$newsItem->getAuthorName();
                 VkApi::invoke("wall.post", array(
                     "owner_id" => CSettingsManager::getSettingValue("ID_group_vk"),
                     "message" => $message,
@@ -100,6 +100,7 @@ class CNewsController extends CBaseController {
         $this->addCSSInclude("_modules/_redactor/redactor.css");
         $this->addJSInclude("_modules/_redactor/redactor.min.js");
         $this->setData("newsItem", $newsItem);
+        $this->setData("post_in_vk", 0);
         $this->renderView("_news/add.tpl");
     }
     public function actionDelete() {
