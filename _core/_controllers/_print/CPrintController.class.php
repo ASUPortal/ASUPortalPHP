@@ -101,20 +101,13 @@ class CPrintController extends CFlowController {
              * пользователя на страницу генерации документа
              */
             if ($selectedForm->properties_show_dialog != "1") {
-                $formset = $selectedForm->formset;
-                $variables = $formset->computeTemplateVariables();
-                /*
-                $url = WEB_ROOT."_modules/_print/?action=print".
-                    "&manager=".$variables['manager'].
-                    "&method=".$variables['method'].
-                    "&id=".$variables['id'].
-                    "&template=".$selectedForm->getId();
-                    */
                 $url = WEB_ROOT."_modules/_print/?action=print".
                         "&template=".$selectedForm->getId();
                 foreach (self::getStatefullBean()->getItems() as $key=>$value) {
                     $url .= "&".$key."=".$value;
                 }
+                // для совместимости передадим в качестве параметра "id" первое значение из массива "selectedInView"
+                $url .= "&id=".self::getStatefullBean()->getItem("id")->getFirstItem();
                 $this->redirect($url);
             } else {
                 // тут с диалогом, передадим ему управление
@@ -130,7 +123,8 @@ class CPrintController extends CFlowController {
                 $url .= "&".$key."=".$value;
             }
         }
-        $url .= "&beanId=".self::getStatefullBean()->getBeanId();
+        // для совместимости передадим в качестве параметра "id" первое значение из массива "selectedInView"
+        $url .= "&beanId=".self::getStatefullBean()->getBeanId()."&id=".self::getStatefullBean()->getItem("id")->getFirstItem();
         $this->redirect($url);
     }
 }
