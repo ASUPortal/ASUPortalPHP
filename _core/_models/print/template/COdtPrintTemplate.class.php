@@ -55,8 +55,8 @@ class COdtPrintTemplate implements IPrintTemplate {
              * Обрабатываем описатели из базы данных
              * @var CPrintField $field
              */
-            if (!is_null(CPrintManager::getField($name))) {
-                $field = CPrintManager::getField($name);
+            if (!is_null($this->form->formset->getFieldByName($name))) {
+                $field = $this->form->formset->getFieldByName($name);
             }
             /**
              * Получаем описатели-классы
@@ -72,8 +72,8 @@ class COdtPrintTemplate implements IPrintTemplate {
              * Обрабатываем описатели из базы данных
              * @var CPrintField $field
              */
-            if (!is_null(CPrintManager::getField($name))) {
-        		$field = CPrintManager::getField($name);
+            if (!is_null($this->form->formset->getFieldByName($name))) {
+                $field = $this->form->formset->getFieldByName($name);
             }
             /**
              * Получаем описатели-классы
