@@ -50,10 +50,10 @@ class CHtmlTablePrintTemplateField extends CHtmlPrintTemplateField {
 	/**
 	 * Вычислить значение поля
 	 *
-	 * @param CModel $object
+	 * @param $object
 	 * @return String/Array
 	 */
-	public function getEvaluateValue(CModel $object) {
+	public function getEvaluateValue($object) {
 		$this->_object = $object;
 		$field = $this->getField();
 		$arr = $this->_field->evaluateValue($object);

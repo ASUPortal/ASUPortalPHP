@@ -22,10 +22,10 @@ interface IPrintTemplateField {
 	/**
 	 * Вычислить значение поля
 	 *
-	 * @param CModel $object
+	 * @param $object
 	 * @return String/Array
 	 */
-	public function getEvaluateValue(CModel $object);
+	public function getEvaluateValue($object);
 
 	/**
 	 * Установить значение поля
