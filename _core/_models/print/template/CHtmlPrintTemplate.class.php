@@ -20,9 +20,9 @@ class CHtmlPrintTemplate implements IPrintTemplate {
 
 	/**
 	 * @param CPrintForm $form
-	 * @param $object
+	 * @param CModel $object
 	 */
-    function __construct($form, $object) {
+    function __construct(CPrintForm $form, CModel $object) {
         $this->form = $form;
         $this->object = $object;
     	
