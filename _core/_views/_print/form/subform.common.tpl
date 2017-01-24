@@ -47,6 +47,14 @@
 </div>
 
 <div class="control-group">
+    {CHtml::activeLabel("filename_generation_strategy", $form)}
+    <div class="controls">
+        {CHtml::activeTextField("filename_generation_strategy", $form)}
+        {CHtml::error("filename_generation_strategy", $form)}
+    </div>
+</div>
+
+<div class="control-group">
     {CHtml::activeLabel("isActive", $form)}
     <div class="controls">
         {CHtml::activeCheckBox("isActive", $form, 1)}

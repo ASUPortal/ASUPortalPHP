@@ -47,59 +47,37 @@ class CWorkPlanStatusController extends CBaseController{
     	$emptyTableFields = array();
     	if (CRequest::getInt("template") != 0) {
     		$form = CPrintManager::getForm(CRequest::getInt("template"));
-    		if (file_exists(PRINT_TEMPLATES_DIR.$form->template_file)) {
-    			$writer = new CPHPOdt();
-    			$wordTemplate = $writer->loadTemplate(PRINT_TEMPLATES_DIR.$form->template_file);
+    		$template = $form->title;
+    		try {
+    			$writer = CPrintService::getTemplateWriter($form, $plan);
+    			$wordTemplate = $writer->loadTemplate();
     			$fieldsFromTemplate = $wordTemplate->getFields();
-    			foreach ($fieldsFromTemplate as $fieldName=>$descriptors) {
-    				if (!is_null($form->formset->getFieldByName($fieldName))) {
-    					$field = $form->formset->getFieldByName($fieldName);
-    					if (is_null($field->parent)) {
-    						if ($field->type_id == "1" || $field->type_id == "0") {
-    							$countFields += 1;
-    							if ($field->evaluateValue($plan) == "") {
-    								$countEmptyTextFields += 1;
-    								$emptyTextFields[] = $field->title;
-    							} else {
-    								$countFullFields += 1;
-    							}
-    						} elseif ($field->type_id == "2") {
-    							$countFields += 1;
-    							if (empty($field->evaluateValue($plan))) {
-    								$countEmptyTableFields += 1;
-    								$emptyTableFields[] = $field->title;
-    							} else {
-    								$countFullFields += 1;
-    							}
-    						}
+    			foreach ($fieldsFromTemplate as $templateField) {
+    				$field = CPrintService::getFieldValue($templateField->getName(), $plan, $form);
+    				if ($field->getFieldType() == "text") {
+    					$countFields += 1;
+    					if ($field->evaluateValue($plan) == "") {
+    						$countEmptyTextFields += 1;
+    						$emptyTextFields[] = $field->title;
+    					} else {
+    						$countFullFields += 1;
     					}
-    				} elseif (mb_strpos($fieldName, ".class") !== false) {
-    					$classFieldName = CUtils::strLeft($fieldName, ".class");
-    					$classField = new $classFieldName();
-    					if (mb_strpos($fieldName, "CWorkPlanSection") === false) {
-    						if ($classField::getFieldType() == "text") {
-    							$countFields += 1;
-    							if ($classField::execute($plan) == "") {
-    								$countEmptyTextFields += 1;
-    								$emptyTextFields[] = $classField::getFieldName();
-    							} else {
-    								$countFullFields += 1;
-    							}
-    						} else {
-    							$countFields += 1;
-    							if (empty($classField::execute($plan))) {
-    								$countEmptyTableFields += 1;
-    								$emptyTableFields[] = $classField::getFieldName();
-    							} else {
-    								$countFullFields += 1;
-    							}
-    						}
+    				} elseif ($field->getFieldType() == "table") {
+    					$countFields += 1;
+    					if (empty($field->evaluateValue($plan))) {
+    						$countEmptyTableFields += 1;
+    						$emptyTableFields[] = $field->title;
+    					} else {
+    						$countFullFields += 1;
     					}
     				}
     			}
-    		} else {
-    			$this->setData("error", "Не найден шаблон!");
+    			$writer->deleteTempFile($wordTemplate);
+    		} catch (Exception $e) {
+    			$this->setData("error", $e->getMessage());
     		}
+    	} else {
+    		$template = "не выбран!";
     	}
     	if ($countFields != 0) {
     		$percentFull = round(($countFullFields/$countFields)*100, 2);
@@ -113,6 +91,7 @@ class CWorkPlanStatusController extends CBaseController{
     			"icon" => "actions/edit-undo.png"
     		)
     	));
+    	$this->setData("template", $template);
     	$this->setData("countFields", $countFields);
     	$this->setData("countFullFields", $countFullFields);
     	$this->setData("countEmptyTextFields", $countEmptyTextFields);

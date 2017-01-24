@@ -1,0 +1,1 @@
+ALTER TABLE `print_form` ADD `filename_generation_strategy` TEXT NOT NULL ;

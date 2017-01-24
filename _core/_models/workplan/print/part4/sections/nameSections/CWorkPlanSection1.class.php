@@ -40,4 +40,9 @@ class CWorkPlanSection1 extends CAbstractPrintClassField {
         }
         return $result;
     }
+
+    public function getColSpan()
+    {
+        return 5;
+    }
 }

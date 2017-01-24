@@ -6,6 +6,14 @@
  * Time: 21:42
  * To change this template use File | Settings | File Templates.
  */
+
+/**
+ * Class CPrintForm
+ * @property String form_format
+ * @property String template_file
+ * @property String filename_generation_strategy;
+ * @property CPrintFormset formset
+ */
 class CPrintForm extends CActiveModel{
     protected $_table = TABLE_PRINT_FORMS;
     protected $_formset = null;
@@ -40,6 +48,7 @@ class CPrintForm extends CActiveModel{
             "formset_id" => "Набор форм",
             "form_format" => "Формат",
             "template_file" => "Файл шаблона",
+            "filename_generation_strategy" => "Стратегия генерации имени файла",
             "isActive" => "Активен",
             "debug" => "Режим отладки"
         );

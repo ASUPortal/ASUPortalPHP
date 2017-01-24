@@ -87,6 +87,20 @@ class CPrintManager {
         }
         return self::getCacheForm()->getItem($key);
     }
+    
+    /**
+     * Получить список всех печатных форм
+     * 
+     * @return CArrayList|null
+     */
+    public static function getAllForms() {
+		$allForms = new CArrayList();
+		foreach (CActiveRecordProvider::getAllFromTable(TABLE_PRINT_FORMS)->getItems() as $item) {
+            $form = new CPrintForm($item);
+            $allForms->add($form->getId(), $form);
+		}
+		return $allForms;
+    }
 
     /**
      * @return CArrayList|null
@@ -135,5 +149,52 @@ class CPrintManager {
             }
         }
         return self::getCacheField();
+    }
+    
+    /**
+     * Получить список описателей по id набора печатной формы
+     *
+     * @param $key
+     * @return CArrayList
+     */
+    public static function getListFieldsByFormset($key) {
+    	$listFields = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_PRINT_FIELDS, "formset_id = ".$key)->getItems() as $item) {
+    		$field = new CPrintField($item);
+    		$listFields->add($field->getId(), $field);
+    	}
+    	return $listFields;
+    }
+    
+    /**
+     * Получить объект описателя-класса по названию поля
+     *
+     * @param String $fieldName
+     * @param CModel $object
+     * @throws Exception
+     * @return IPrintClassField
+     */
+    public static function getPrintClassField($fieldName, CModel $object) {
+        $field = null;
+        if (mb_strpos($fieldName, ".class") !== false) {
+            $classFieldName = CUtils::strLeft($fieldName, ".class");
+            /**
+             * @var $classField IPrintClassField
+             */
+            if (class_exists($classFieldName)) {
+                $classField = new $classFieldName();
+            } else {
+                throw new Exception("Класс ".$classFieldName." не объявлен в системе!");
+            }
+            if (!is_a($classField, "IPrintClassField")) {
+                throw new Exception("Класс ".$classField." не реализует интерфейс IPrintClassField");
+            }
+            /**
+             * Дабы не ломать уже имеющуюся структуру работать будем через
+             * класс-адаптер
+             */
+            $field = new CPrintClassFieldToFieldAdapter($classField, $object);
+        }
+        return $field;
     }
 }

@@ -124,4 +124,25 @@ class CPrintField extends CActiveModel {
             }
         }
     }
+    
+    /**
+     * @return String
+     */
+    public function getFieldType() {
+        if ($this->type_id == "1" || $this->type_id == "0") {
+            return IPrintClassField::FIELD_TEXT;
+        } elseif ($this->type_id == "2") {
+            return IPrintClassField::FIELD_TABLE;
+        } else {
+            throw new Exception("Unsupported field type " . $this->type_id);
+        }
+    }
+    
+    public function getColSpan() {
+        return "1";
+    }
+    
+    public function getRowSpan() {
+        return "1";
+    }
 }

@@ -21,4 +21,14 @@ abstract class CAbstractPrintClassField implements IPrintClassField{
     abstract public function getFieldType();
 
     abstract public function execute($contextObject);
+    
+    public function getColSpan()
+    {
+        return 1;
+    }
+    
+    public function getRowSpan()
+    {
+        return 1;
+    }
 }
