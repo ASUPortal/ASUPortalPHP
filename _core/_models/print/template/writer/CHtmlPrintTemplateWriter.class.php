@@ -17,7 +17,7 @@ class CHtmlPrintTemplateWriter implements IPrintTemplateWriter {
     
     /**
      * @param CPrintForm $form
-     * @param $object
+     * @param CModel $object
      */
     function __construct($form, $object) {
         $this->form = $form;

@@ -170,11 +170,11 @@ class CPrintManager {
      * Получить объект описателя-класса по названию поля
      *
      * @param String $fieldName
-     * @param $object
+     * @param CModel $object
      * @throws Exception
      * @return IPrintClassField
      */
-    public static function getPrintClassField($fieldName, $object) {
+    public static function getPrintClassField($fieldName, CModel $object) {
         $field = null;
         if (mb_strpos($fieldName, ".class") !== false) {
             $classFieldName = CUtils::strLeft($fieldName, ".class");
