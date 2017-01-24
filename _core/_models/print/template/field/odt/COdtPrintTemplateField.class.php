@@ -37,10 +37,10 @@ class COdtPrintTemplateField implements IPrintTemplateField {
     /**
      * Вычислить значение поля
      *
-     * @param CModel $object
+     * @param $object
      * @return String/Array
      */
-    public function getEvaluateValue(CModel $object) {
+    public function getEvaluateValue($object) {
     	return $this->_field->evaluateValue($object);
     }
 

@@ -11,7 +11,7 @@ class CPrintService {
      * @throws Exception
      * @return IPrintTemplateWriter
      */
-    public function getTemplateWriter(CPrintForm $form, CModel $object) {
+    public function getTemplateWriter(CPrintForm $form, $object) {
         if (CStringUtils::equalsIgnoreCase($form->form_format, "odt")) {
             return new COdtPrintTemplateWriter($form, $object);
         } else if (CStringUtils::equalsIgnoreCase($form->form_format, "docx")) {
@@ -30,7 +30,7 @@ class CPrintService {
      * @param CModel $object
      * @throws Exception
      */
-    public function printTemplate(CPrintForm $form, CModel $object) {
+    public function printTemplate(CPrintForm $form, $object) {
         /**
          * Загружаем шаблон
          */

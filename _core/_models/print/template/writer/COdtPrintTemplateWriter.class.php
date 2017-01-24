@@ -17,7 +17,7 @@ class COdtPrintTemplateWriter implements IPrintTemplateWriter {
 	
 	/**
 	 * @param CPrintForm $form
-	 * @param CModel $object
+	 * @param $object
 	 */
 	function __construct($form, $object) {
 		$this->form = $form;
