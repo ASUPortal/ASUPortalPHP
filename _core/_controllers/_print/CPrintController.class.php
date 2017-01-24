@@ -107,7 +107,9 @@ class CPrintController extends CFlowController {
                     $url .= "&".$key."=".$value;
                 }
                 // для совместимости передадим в качестве параметра "id" первое значение из массива "selectedInView"
-                $url .= "&id=".self::getStatefullBean()->getItem("id")->getFirstItem();
+                if (self::getStatefullBean()->getItem("id") instanceof CArrayList) {
+                    $url .= "&id=".self::getStatefullBean()->getItem("id")->getFirstItem();
+                }
                 $this->redirect($url);
             } else {
                 // тут с диалогом, передадим ему управление
@@ -123,8 +125,11 @@ class CPrintController extends CFlowController {
                 $url .= "&".$key."=".$value;
             }
         }
+        $url .= "&beanId=".self::getStatefullBean()->getBeanId();
         // для совместимости передадим в качестве параметра "id" первое значение из массива "selectedInView"
-        $url .= "&beanId=".self::getStatefullBean()->getBeanId()."&id=".self::getStatefullBean()->getItem("id")->getFirstItem();
+        if (self::getStatefullBean()->getItem("id") instanceof CArrayList) {
+            $url .= "&id=".self::getStatefullBean()->getItem("id")->getFirstItem();
+        }
         $this->redirect($url);
     }
 }
