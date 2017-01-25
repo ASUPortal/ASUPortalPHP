@@ -163,7 +163,7 @@ class CStudent extends CActiveModel {
      */
     public function getShortName() {
         $name = explode(" ", $this->getName());
-        $shortName = $name[0]." ".mb_substr($name[1], 0, 1).".".mb_substr($name[2], 0, 1).".";
+        $shortName = $name[0]." ".mb_substr(@$name[1], 0, 1).".".mb_substr(@$name[2], 0, 1).".";
         return $shortName;
     }
     /**
