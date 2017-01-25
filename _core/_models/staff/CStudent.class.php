@@ -162,8 +162,22 @@ class CStudent extends CActiveModel {
      * @return string
      */
     public function getShortName() {
-        $name = explode(" ", $this->getName());
-        $shortName = $name[0]." ".mb_substr(@$name[1], 0, 1).".".mb_substr(@$name[2], 0, 1).".";
+        // уберём из строки с ФИО пробелы в начале и конце
+        $str = trim($this->getName());
+        // если в строке с ФИО есть точка, то ФИО уже написано с инициалами
+        $point = strpos($str, ".");
+        if ($point === false) {
+            $name = explode(" ", $str);
+            $shortName = $name[0];
+            if (array_key_exists(1, $name)) {
+                $shortName .= " ".mb_substr($name[1], 0, 1).".";
+            }
+            if (array_key_exists(2, $name)) {
+                $shortName .= mb_substr($name[2], 0, 1).".";
+            }
+        } else {
+            $shortName = $str;
+        }
         return $shortName;
     }
     /**
