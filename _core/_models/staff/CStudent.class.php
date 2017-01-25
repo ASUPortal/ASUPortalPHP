@@ -156,6 +156,16 @@ class CStudent extends CActiveModel {
     public function getName() {
         return $this->getRecord()->getItemValue("fio");
     }
+    
+    /**
+     * Фамилия и инициалы студента
+     * @return string
+     */
+    public function getShortName() {
+        $name = explode(" ", $this->getName());
+        $shortName = $name[0]." ".mb_substr($name[1], 0, 1).".".mb_substr($name[2], 0, 1).".";
+        return $shortName;
+    }
     /**
      * Группа, к которой студент относится
      *
