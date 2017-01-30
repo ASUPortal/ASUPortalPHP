@@ -125,7 +125,12 @@ $filter='';
 if (isset($_POST['filter'])) {$filter=$_POST['filter'];} //выборка по отмеченным
 	
 //вывод отмеченный преподавателей на экран
-echo '<div align="left" style="font-size:14pt; font-weight:bold;">Расписание занятий  <font size=-1> на <u>'.$def_settings['part_name'].'</u> семестр &nbsp;<u>'.$def_settings['year_name'].'</u> учебного года</font></div>';
+if (isset($_GET['save']) && $_GET['save']==1) {
+	echo iconv('utf-8', 'windows-1251', '<div align="left" style="font-size:14pt; font-weight:bold;">Расписание занятий  <font size=-1> на <u>'.$def_settings['part_name'].'</u> семестр &nbsp;<u>'.$def_settings['year_name'].'</u> учебного года</font></div>');
+} else {
+	echo '<div align="left" style="font-size:14pt; font-weight:bold;">Расписание занятий  <font size=-1> на <u>'.$def_settings['part_name'].'</u> семестр &nbsp;<u>'.$def_settings['year_name'].'</u> учебного года</font></div>';
+}
+
 if (!isset($_GET['save']))
 {
 	echo '<a href=javascript:hide_filter("time_form") class=text>выбрать другой период</a> &nbsp;&nbsp; <a href=#time class=text>к времени занятий</a>
@@ -156,14 +161,25 @@ if (!isset($_GET['save']))
 	echo '</div>';
 }
 if ($cols<=0) {echo '<br>Преподавателей с расписанием за этот период не найдено.';exit();}
-echo '<br>Всего преподавателей с расписанием: '.$cols.'<p>';
+
+if (isset($_GET['save']) && $_GET['save']==1) {
+	echo iconv('utf-8', 'windows-1251', '<br>Всего преподавателей с расписанием: '.$cols.'<p>');
+} else {
+	echo '<br>Всего преподавателей с расписанием: '.$cols.'<p>';
+}
 
 if ($new_cols==0) {$new_cols=$cols;}
 $tab_width='width="'.($new_cols*150+100).'"';
 $cols_i=floor($new_cols/6);
 $prev_cell_lab_array=array();
 $prev_cell_lab_tmp='';
-echo "\n\n<table name=time_table_all border=1 cellspacing=0 class=middle_lite1 ".$tab_width.">\n<tr class=middle>\n<td>\\</td>";
+
+if (isset($_GET['save']) && $_GET['save']==1) {
+	echo iconv('utf-8', 'windows-1251', "\n\n<table name=time_table_all border=1 cellspacing=0 class=middle_lite1 ".$tab_width.">\n<tr class=middle>\n<td>\\</td>");
+} else {
+	echo "\n\n<table name=time_table_all border=1 cellspacing=0 class=middle_lite1 ".$tab_width.">\n<tr class=middle>\n<td>\\</td>";
+}
+
 for ($day=1;$day<=6;$day++)
 {
 			$numLects=1;
@@ -171,23 +187,41 @@ for ($day=1;$day<=6;$day++)
  			{	
 				$tmp_var1='checkbox'.$numLects;
 				//формирование шапки с названием преподавателей
-				if (isset($_POST[$tmp_var1]) && $_POST[$tmp_var1]=='on' || $filter!='on') 
-					{echo '<td width=150><b>';
+				if (isset($_POST[$tmp_var1]) && $_POST[$tmp_var1]=='on' || $filter!='on') {
+					echo '<td width=150><b>';
 					if (!isset($_GET['save'])) {
-					 	echo '<a href="_modules/_lecturers/index.php?action=view&id='.$a['user_id'].'" title="о преподавателе"> '.$a['FIO'].'</a>';}
-					else {echo $a['FIO'];}
+					 	echo '<a href="_modules/_lecturers/index.php?action=view&id='.$a['user_id'].'" title="о преподавателе"> '.$a['FIO'].'</a>';
+					} else {
+						echo iconv('utf-8', 'windows-1251', $a['FIO']);
+					}
 					echo '</b></td>';
 					$lects[$numLects]=$a['time_id'];
-					}
+				}
 				$numLects++;
 			}
 			echo "</tr>\n"; 
 			echo "\n<tr class=light_color_max>\n";
-			for ($i=1;$i<=$cols_i;$i++){echo "<td colspan=6 ><b>".$exist_days[$day-1]."</b></td>";}
-			echo "<td colspan=".($cols+1-$cols_i*6)." ><b>".$exist_days[$day-1]."</b></td></tr>\n";
+			for ($i=1;$i<=$cols_i;$i++) {
+				if (isset($_GET['save']) && $_GET['save']==1) {
+					echo iconv('utf-8', 'windows-1251', "<td colspan=6 ><b>".$exist_days[$day-1]."</b></td>");
+				} else {
+					echo "<td colspan=6 ><b>".$exist_days[$day-1]."</b></td>";
+				}			
+			}
+			if (isset($_GET['save']) && $_GET['save']==1) {
+				echo iconv('utf-8', 'windows-1251', "<td colspan=".($cols+1-$cols_i*6)." ><b>".$exist_days[$day-1]."</b></td></tr>\n");
+			} else {
+				echo "<td colspan=".($cols+1-$cols_i*6)." ><b>".$exist_days[$day-1]."</b></td></tr>\n";
+			}
+			
 	 for ($num=1;$num<=count($time);$num++)
  		{	
-		echo "\n<tr class=news>\n<td  align=left width=120> &nbsp;<b> ".$num."</b> &nbsp;<font size=1>".$time[$num]."</font> </td>";
+ 			if (isset($_GET['save']) && $_GET['save']==1) {
+ 				echo iconv('utf-8', 'windows-1251', "\n<tr class=news>\n<td  align=left width=120> &nbsp;<b> ".$num."</b> &nbsp;<font size=1>".$time[$num]."</font> </td>");
+ 			} else {
+ 				echo "\n<tr class=news>\n<td  align=left width=120> &nbsp;<b> ".$num."</b> &nbsp;<font size=1>".$time[$num]."</font> </td>";
+ 			}
+ 			
 		for ($numLects=1;$numLects<=$cols;$numLects++)	
 			{
 			$tmp_var1='checkbox'.$numLects;
@@ -206,7 +240,14 @@ for ($day=1;$day<=6;$day++)
 				if (isset($prev_cell_lab_array[$numLects]) && $prev_cell_lab_array[$numLects]!='' && $num_rows>=1) 
 					{$prev_cell_lab_array[$numLects]=$prev_cell_lab_array[$numLects].'<hr>';}
 				echo '<td valign=top width="150">&nbsp;';
-				if (isset($prev_cell_lab_array[$numLects])) {echo $prev_cell_lab_array[$numLects];}	//с дублированием л/р
+				if (isset($prev_cell_lab_array[$numLects])) {
+					//с дублированием л/р
+					if (isset($_GET['save']) && $_GET['save']==1) {
+						echo iconv('utf-8', 'windows-1251', $prev_cell_lab_array[$numLects]);
+					} else {
+						echo $prev_cell_lab_array[$numLects];
+					}
+				}	
 					
 				while ($b=mysql_fetch_array($res) )
 				{//-------------------------------------------------------------------------------
@@ -250,7 +291,13 @@ for ($day=1;$day<=6;$day++)
 					if (isset($b['place']))		{$b['place']=	', ауд.'.$b['place'].'';}	//кабинет
 					if (isset($b['kind']))		{$b['kind']=	' ('.$b['kind'].')';}	//тип занятия (пр,лаб,л)
 					if (isset($b['study']))		{$b['study']=	', '.$b['study'];}	//название предмета 
+					
+					if (isset($_GET['save']) && $_GET['save']==1) {
+						echo iconv('utf-8', 'windows-1251', $b['length'].$b['grup'].$b['place'].$b['study'].$b['kind'].'');
+					} else {
 						echo $b['length'].$b['grup'].$b['place'].$b['study'].$b['kind'].'';
+					}
+					
 						if ($i<$num_rows) {echo '<br>';}
 						$i++;	
 					if(isset($b['kind']) && $b['kind']==' (л/р)')
@@ -270,7 +317,9 @@ for ($day=1;$day<=6;$day++)
 		}
 } 
 echo "</table><br>\n\n\n";
-echo '<a name="time"></a><div clss=text> Расписание звонков по времени </div>
+
+if (isset($_GET['save']) && $_GET['save']==1) {
+	echo iconv('utf-8', 'windows-1251', '<a name="time"></a><div clss=text> Расписание звонков по времени </div>
 	  <table class="news" border=1 style="text-align:center" cellspacing=0>
 	  	<tr class=news style="font-weight:bold;text-align:center"><td>№ </td> <td width=200>время</td></tr>
 		<tr><td>1 </td> <td>8.00-9.35</td></tr>
@@ -281,8 +330,24 @@ echo '<a name="time"></a><div clss=text> Расписание звонков п�
 		<tr><td colspan=2><b>перерыв 40 мин.</b></td></tr>
 		<tr><td>5 </td> <td>16.10-17.45</td></tr>
 		<tr><td>6 </td> <td>17.55-19.30</td></tr>
-		<tr><td colspan=2>в середине занятия перерыв 5 мин.</td></tr>  
+		<tr><td colspan=2>в середине занятия перерыв 5 мин.</td></tr>
+	  </table><p>');
+} else {
+	echo '<a name="time"></a><div clss=text> Расписание звонков по времени </div>
+	  <table class="news" border=1 style="text-align:center" cellspacing=0>
+	  	<tr class=news style="font-weight:bold;text-align:center"><td>№ </td> <td width=200>время</td></tr>
+		<tr><td>1 </td> <td>8.00-9.35</td></tr>
+		<tr><td>2 </td> <td>9.45-11.20</td></tr>
+		<tr><td colspan=2> <b>перерыв 40 мин</b> </td></tr>
+		<tr><td>3 </td> <td>12.10-13.45</td></tr>
+		<tr><td>4 </td> <td>13.55-15.30</td></tr>
+		<tr><td colspan=2><b>перерыв 40 мин.</b></td></tr>
+		<tr><td>5 </td> <td>16.10-17.45</td></tr>
+		<tr><td>6 </td> <td>17.55-19.30</td></tr>
+		<tr><td colspan=2>в середине занятия перерыв 5 мин.</td></tr>
 	  </table><p>';
+}
+
 if (!isset($_GET['save']))
 {
 echo '	<br> <a href="#top"> наверх </a>
