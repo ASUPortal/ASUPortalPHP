@@ -217,6 +217,8 @@
     define("TABLE_STUDENT_GROUPS", "study_groups");
     define("TABLE_STUDENTS", "students");
     define("TABLE_DIPLOMS", "diploms");
+    define("TABLE_COURSE_PROJECTS", "course_projects");
+    define("TABLE_COURSE_PROJECTS_TASKS", "course_projects_tasks");
     define("TABLE_DIPLOM_PREVIEWS", "diplom_previews");
     define("TABLE_DIPLOM_CONFIRMATIONS", "diplom_confirms");
     define("TABLE_DIPLOM_PREVIEW_COMISSIONS", "diplom_preview_committees");
