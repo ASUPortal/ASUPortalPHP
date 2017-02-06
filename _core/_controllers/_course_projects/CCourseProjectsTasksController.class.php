@@ -33,9 +33,21 @@ class CCourseProjectsTasksController extends CBaseController {
             "icon" => "actions/view-refresh.png"
         ));
         $this->addActionsMenuItem(array(
-            "title" => "Добавить задание",
+            "title" => "Добавить",
             "link" => "task.php?action=add&course_project_id=".CRequest::getInt("course_project_id"),
             "icon" => "actions/list-add.png"
+        ));
+        $this->addActionsMenuItem(array(
+            "title" => "Добавить задания",
+            "link" => "task.php?action=addGroup&course_project_id=".CRequest::getInt("course_project_id"),
+            "icon" => "actions/list-add.png"
+        ));
+        $this->addActionsMenuItem(array(
+            "title" => "Удалить выделенные",
+            "icon" => "actions/edit-delete.png",
+            "form" => "#mainViewTasks",
+            "link" => "task.php?action=delete&id=".CRequest::getInt("course_project_id"),
+            "action" => "delete"
         ));
         $this->setData("tasks", $tasks);
         $this->setData("paginator", $set->getPaginator());
@@ -60,6 +72,26 @@ class CCourseProjectsTasksController extends CBaseController {
         ));
         $this->renderView("_course_projects/tasks/add.tpl");
     }
+    public function actionAddGroup() {
+        $courseProject = CBaseManager::getCourseProject(CRequest::getInt("course_project_id"));
+        if ($courseProject->tasks->isEmpty()) {
+            foreach ($courseProject->group->getStudents() as $student) {
+                $task = new CCourseProjectsTask();
+                $task->course_project_id = $courseProject->getId();
+                $task->student_id = $student->getId();
+                $task->save();
+            }
+        }
+        $this->addActionsMenuItem(array(
+            array(
+                "title" => "Назад",
+                "link" => "task.php?action=index&course_project_id=".$courseProject->getId(),
+                "icon" => "actions/edit-undo.png"
+            )
+        ));
+        $this->setData("courseProject", $courseProject);
+        $this->renderView("_course_projects/tasks/addGroup.tpl");
+    }
     public function actionEdit() {
         $task = CBaseManager::getCourseProjectsTask(CRequest::getInt("id"));
         $courseProject = CBaseManager::getCourseProject($task->course_project_id);
@@ -80,9 +112,18 @@ class CCourseProjectsTasksController extends CBaseController {
     }
     public function actionDelete() {
         $task = CBaseManager::getCourseProjectsTask(CRequest::getInt("id"));
-        $courseProject = $task->courseProject;
-        $task->remove();
-        $this->redirect("task.php?action=index&course_project_id=".$courseProject->getId());
+        if (!is_null($task)) {
+            $courseProject = $task->courseProject;
+            $task->remove();
+            $this->redirect("task.php?action=index&course_project_id=".$courseProject->getId());
+        }
+        $items = CRequest::getArray("selectedInView");
+        $courseProject = CBaseManager::getCourseProject(CRequest::getInt("id"));
+        foreach ($items as $id){
+            $task = CBaseManager::getCourseProjectsTask($id);
+            $task->remove();
+        }
+        $this->redirect("index.php?action=edit&id=".$courseProject->getId());
     }
     public function actionSave() {
         $task = new CCourseProjectsTask();
@@ -104,5 +145,14 @@ class CCourseProjectsTasksController extends CBaseController {
         $this->setData("task", $task);
         $this->setData("students", $students);
         $this->renderView("_course_projects/tasks/edit.tpl");
+    }
+    public function actionSaveGroup() {
+        $courseProject = CBaseManager::getCourseProject(CRequest::getInt("id"));
+        foreach ($courseProject->tasks->getItems() as $item) {
+            $task = CBaseManager::getCourseProjectsTask($item->getId());
+            $task->theme = CRequest::getString($item->getId());
+            $task->save();
+        }
+        $this->redirect("task.php?action=index&course_project_id=".$courseProject->getId());
     }
 }
