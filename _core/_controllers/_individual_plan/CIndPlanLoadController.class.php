@@ -139,9 +139,9 @@ class CIndPlanLoadController extends CBaseController{
             $year = new CTimeIntervals(new CActiveRecord($ar));
             $years[$year->getId()] = $year->name;
         }
-    
+        
         $loads = new CArrayList();
-    
+        
         //установим размер страницы - все записи
         $set->setPageSize(PAGINATION_ALL);
     
@@ -259,12 +259,12 @@ class CIndPlanLoadController extends CBaseController{
     	*/
     	$query = new CQuery();
     	$query->select("distinct(person.id) as id, person.fio as name")
-    	->from(TABLE_PERSON." as person")
-    	->condition("person.fio like '%".$term."%'")
-    	->limit(0, 5);
+	    	->from(TABLE_PERSON." as person")
+	    	->condition("person.fio like '%".$term."%'")
+	    	->limit(0, 5);
     	foreach ($query->execute()->getItems() as $item) {
     		$res[] = array(
-    				"field" => "id",
+    				"field" => "p.id",
     				"value" => $item["id"],
     				"label" => $item["name"],
     				"class" => "CPerson"

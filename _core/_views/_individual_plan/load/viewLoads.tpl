@@ -68,7 +68,7 @@
                     <input type="checkbox" value="{$load->getId()}" name="selectedDoc[]" checked>
                 </td>
                 <td>
-                    <a href="load.php?action=view&id={$load->person->getId()}">
+                    <a href="load.php?action=view&id={$load->person->getId()}&year={$load->year->getId()}">
                         {$load->person->fio} ({$load->getType()})
                     </a>
                 <td>{$load->year->getValue()}</td>
