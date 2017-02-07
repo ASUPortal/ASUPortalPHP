@@ -214,6 +214,7 @@ class CIndPlanLoadController extends CBaseController{
         	)
         );
         $this->setData("load", $load);
+        $this->setData("year", $year);
         $this->renderView("_individual_plan/load/add.tpl");
     }
     public function actionEdit() {
@@ -227,6 +228,7 @@ class CIndPlanLoadController extends CBaseController{
         		)
         );
         $this->setData("load", $load);
+        $this->setData("year", $load->year_id);
         $this->renderView("_individual_plan/load/edit.tpl");
     }
     public function actionSave() {
