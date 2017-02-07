@@ -203,7 +203,7 @@ class CIndividualPlanLoadService {
         $studyAndEducationalLoadHours = CIndividualPlanLoadService::getSumPlanAmountWorksByType($load, CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD);
     	
         $difference = $totalHours-$studyHours-$studyAndMethodicalLoadHours-$scientificMethodicalLoadHours-$studyAndEducationalLoadHours;
-        return $difference;
+        return round($difference, 2);
     }
     
     /**

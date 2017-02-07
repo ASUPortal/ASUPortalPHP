@@ -97,6 +97,84 @@ class CIndPlanLoadController extends CBaseController{
         $this->setData("isAll", $isAll);
         $this->renderView("_individual_plan/load/index.tpl");
     }
+    public function actionViewLoads() {
+        $selectedYear = CUtils::getCurrentYear()->getId();
+        $set = new CRecordSet();
+        $query = new CQuery();
+        $set->setQuery($query);
+    
+        $query->select("l.*")
+            ->from(TABLE_IND_PLAN_LOADS." as l")
+            ->innerJoin(TABLE_PERSON." as p", "l.person_id = p.id")
+            ->order("p.fio asc");
+        if(CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY ||
+                CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY){
+            if(is_null(CSession::getCurrentPerson())){
+                $query->condition("p.id = 0");
+            } else {
+                $query->condition("p.id = ".CSession::getCurrentPerson()->getId());
+            }
+        }
+        $isAll = false;
+        if (CRequest::getInt("isAll") == "1") {
+            $isAll = true;
+            $selectedYear = null;
+        }
+        if (!$isAll and CRequest::getString("filterClass") == "" and CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_ALL) {
+            $query->innerJoin(TABLE_YEARS." as year", "l.year_id = year.id");
+            $query->condition("year.id = ".$selectedYear);
+        }
+        // фильтр по году
+        if (!is_null(CRequest::getFilter("year.id"))) {
+            $query->innerJoin(TABLE_YEARS." as year", "l.year_id = year.id");
+            $selectedYear = CRequest::getFilter("year.id");
+            $query->condition("year.id = ".$selectedYear);
+        }
+        $yearsQuery = new CQuery();
+        $yearsQuery->select("year.*")
+            ->from(TABLE_YEARS." as year")
+            ->order("year.name asc");
+        $years = array();
+        foreach ($yearsQuery->execute()->getItems() as $ar) {
+            $year = new CTimeIntervals(new CActiveRecord($ar));
+            $years[$year->getId()] = $year->name;
+        }
+        
+        $loads = new CArrayList();
+        
+        //установим размер страницы - все записи
+        $set->setPageSize(PAGINATION_ALL);
+    
+        foreach ($set->getPaginated()->getItems() as $ar) {
+            $load = new CIndPlanPersonLoad($ar);
+            $loads->add($load->getId(), $load);
+        }
+    
+        $this->addActionsMenuItem(
+            array(
+                array(
+                    "title" => "Назад",
+                    "link" => "index.php",
+                    "icon" => "actions/edit-undo.png"
+                )
+            )
+        );
+    
+        /**
+         * Параметры для групповой печати по шаблону
+         */
+        $this->setData("template", "formset_individual_plan_print_group");
+        $this->setData("selectedDoc", true);
+        $this->setData("url", null);
+        $this->setData("action", null);
+        $this->setData("id", null);
+    	
+        $this->setData("loads", $loads);
+        $this->setData("years", $years);
+        $this->setData("selectedYear", $selectedYear);
+        $this->setData("isAll", $isAll);
+        $this->renderView("_individual_plan/load/viewLoads.tpl");
+    }
     public function actionView() {
         $person = CStaffManager::getPerson(CRequest::getInt("id"));
         $year = CRequest::getInt("year");
@@ -181,12 +259,12 @@ class CIndPlanLoadController extends CBaseController{
     	*/
     	$query = new CQuery();
     	$query->select("distinct(person.id) as id, person.fio as name")
-    	->from(TABLE_PERSON." as person")
-    	->condition("person.fio like '%".$term."%'")
-    	->limit(0, 5);
+	    	->from(TABLE_PERSON." as person")
+	    	->condition("person.fio like '%".$term."%'")
+	    	->limit(0, 5);
     	foreach ($query->execute()->getItems() as $item) {
     		$res[] = array(
-    				"field" => "id",
+    				"field" => "p.id",
     				"value" => $item["id"],
     				"label" => $item["name"],
     				"class" => "CPerson"

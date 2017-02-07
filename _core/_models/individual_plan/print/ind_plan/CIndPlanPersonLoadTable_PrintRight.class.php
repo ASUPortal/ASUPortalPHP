@@ -30,7 +30,11 @@ class CIndPlanPersonLoadTable_PrintRight extends CAbstractPrintClassField{
     public function execute($contextObject)
     {
         $result = array();
-        $load = CIndPlanManager::getLoad(CRequest::getInt("planId"));
+        if (!is_null(CIndPlanManager::getLoad(CRequest::getInt("planId")))) {
+            $load = CIndPlanManager::getLoad(CRequest::getInt("planId"));
+        } else {
+            $load = CIndPlanManager::getLoad($contextObject->getId());
+        }
         $studyLoad = $load->getStudyLoadTable();
         $table = $studyLoad->getTable(true);
         // это только весенний семестр семестр

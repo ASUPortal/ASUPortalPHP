@@ -23,3 +23,11 @@
             Учебная нагрузка
         </center></a>
 </p>
+
+<p>
+    <a href="load.php?action=viewLoads">
+        <center>
+            <img src="{$web_root}images/{$icon_theme}/32x32/apps/preferences-system-windows.png"><br>
+            Просмотр нагрузок
+        </center></a>
+</p>

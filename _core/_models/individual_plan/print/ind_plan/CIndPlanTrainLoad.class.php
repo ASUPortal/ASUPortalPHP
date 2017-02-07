@@ -25,7 +25,11 @@ class CIndPlanTrainLoad extends CAbstractPrintClassField{
 	{
         $result = array();
         $studyLoad = new CArrayList();
-        $load = CIndPlanManager::getLoad(CRequest::getInt("planId"));
+        if (!is_null(CIndPlanManager::getLoad(CRequest::getInt("planId")))) {
+            $load = CIndPlanManager::getLoad(CRequest::getInt("planId"));
+        } else {
+            $load = CIndPlanManager::getLoad($contextObject->getId());
+        }
         $studyLoad = $load->getWorksByType(4);
         foreach ($studyLoad->getItems() as $row) {
         	$dataRow = array();
