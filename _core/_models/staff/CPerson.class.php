@@ -674,36 +674,6 @@ class CPerson extends CActiveModel{
         }
         return $result;
     }
-    
-    /**
-     * Действующие приказы для указанного года
-     *
-     * @param CTerm $year
-     * @return CArrayList
-     */
-    public function getActiveOrdersForYear(CTerm $year) {
-        $result = new CArrayList();
-        foreach ($this->orders->getItems() as $order) {
-            if ($order->isActiveForYear($year)) {
-                $result->add($order->getId(), $order);
-            }
-        }
-        return $result;
-    }
-    
-    /**
-     * Список действующих приказов для указанного года
-     * 
-     * @param CTerm $year
-     * @return array
-     */
-    public function getActiveOrdersListForYear(CTerm $year) {
-        $result = array();
-        foreach ($this->getActiveOrdersForYear($year)->getItems() as $order) {
-            $result[$order->getId()] = "Приказ № ".$order->num_order." от ".$order->date_order;
-        }
-        return $result;
-    }
 
     /**
      * Активные приказы указанного типа

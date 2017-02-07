@@ -58,20 +58,4 @@ class COrder extends CActiveModel {
     public function isOrderType($type) {
         return (strpos(strtolower($this->num_order), strtolower($type)) !== false);
     }
-    /**
-     * Действует ли для указанного года
-     *
-     * @param CTerm $year
-     * @return bool
-     */
-    public function isActiveForYear(CTerm $year) {
-        $dateStartYear = strtotime(CTaxonomyManager::getYear($year->getId())->date_start);
-        $dateBeginOrder = strtotime($this->date_begin);
-        $dateEndYear = strtotime(CTaxonomyManager::getYear($year->getId())->date_end);
-        $dateEndOrder = strtotime($this->date_end);
-        if ($dateStartYear <= $dateBeginOrder and $dateEndYear <= $dateEndOrder) {
-            return true;
-        }
-        return false;
-    }
 }
