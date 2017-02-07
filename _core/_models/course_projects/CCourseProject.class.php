@@ -39,6 +39,15 @@ class CCourseProject extends CActiveModel {
                 "storageCondition" => "course_project_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CCourseProjectsTask",
                 "managerOrder" => "`student_id` asc"
+            ),
+            "commision_members" => array(
+                "relationPower" => RELATION_MANY_TO_MANY,
+                "storageProperty" => "_commision_members",
+                "joinTable" => TABLE_COURSE_PROJECTS_COMMISSION_MEMBERS,
+                "leftCondition" => "course_project_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "rightKey" => "person_id",
+                "managerClass" => "CBaseManager",
+                "managerGetObject" => "getPerson"
             )
         );
     }
@@ -48,6 +57,10 @@ class CCourseProject extends CActiveModel {
             "order_date" => array(
                 "type" => FIELD_MYSQL_DATE,
                 "format" => "d.m.Y"
+            ),
+            "issue_date" => array(
+                "type" => FIELD_MYSQL_DATE,
+                "format" => "d.m.Y"
             )
         );
     }
@@ -55,12 +68,14 @@ class CCourseProject extends CActiveModel {
     public function validationRules() {
         return array(
             "checkdate" => array(
-                "order_date"
+                "order_date",
+                "issue_date"
             ),
             "selected" => array(
                 "group_id",
                 "discipline_id",
-                "lecturer_id"
+                "lecturer_id",
+                "chairman_of_commission"
             )
         );
     }
@@ -71,7 +86,14 @@ class CCourseProject extends CActiveModel {
             "discipline_id" => "Дисциплина",
             "lecturer_id" => "Преподаватель",
             "order_number" => "Номер распоряжения",
-            "order_date" => "Дата распоряжения"
+            "order_date" => "Дата распоряжения",
+            "chairman_of_commission" => "Председатель комиссии",
+            "commision_members" => "Члены комиссии",
+            "issue_date" => "Дата выдачи задания",
+            "main_content" => "Основное содержание",
+            "graduation_date" => "Даты защит",
+            "graduation_time" => "Время защит",
+            "auditorium" => "Аудитория"
         );
     }
     
