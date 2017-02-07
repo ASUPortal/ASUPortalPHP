@@ -24,7 +24,7 @@
     <div class="control-group">
         {CHtml::activeLabel("order_id", $load)}
         <div class="controls">
-            {CHtml::activeDropDownList("order_id", $load, $load->person->getActiveOrdersList())}
+            {CHtml::activeDropDownList("order_id", $load, CStaffService::getActiveOrdersListForYear($load->person, CTaxonomyManager::getYear($year)))}
             {CHtml::error("order_id", $load)}
         </div>
     </div>

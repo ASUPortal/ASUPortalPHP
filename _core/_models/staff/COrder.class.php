@@ -57,5 +57,5 @@ class COrder extends CActiveModel {
      */
     public function isOrderType($type) {
         return (strpos(strtolower($this->num_order), strtolower($type)) !== false);
-    }    
+    }
 }

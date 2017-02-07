@@ -65,7 +65,13 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>Разница</td>
-                <td>{CIndividualPlanLoadService::getDifferenceHours($load)}</td>
+                <td>
+                    {if (CIndividualPlanLoadService::getDifferenceHours($load) < 0)}
+                        <font color='#FF0000'>{CIndividualPlanLoadService::getDifferenceHours($load)}</font>
+                    {else}
+                        <font color='#00FF00'>{CIndividualPlanLoadService::getDifferenceHours($load)}</font>
+                    {/if}
+                </td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>

@@ -65,4 +65,54 @@ class CStaffService {
     	
         return $post;
     }
+    
+    /**
+     * Действующие приказы для указанного года
+     *
+     * @param CPerson $person
+     * @param CTerm $year
+     * @return CArrayList
+     */
+    public static function getActiveOrdersForYear(CPerson $person, CTerm $year) {
+        $result = new CArrayList();
+        foreach ($person->orders->getItems() as $order) {
+            if (CStaffService::orderIsActiveForYear($order, $year)) {
+                $result->add($order->getId(), $order);
+            }
+        }
+        return $result;
+    }
+    
+    /**
+     * Список действующих приказов для указанного года
+     *
+     * @param CPerson $person
+     * @param CTerm $year
+     * @return array
+     */
+    public static function getActiveOrdersListForYear(CPerson $person, CTerm $year) {
+        $result = array();
+        foreach (CStaffService::getActiveOrdersForYear($person, $year)->getItems() as $order) {
+            $result[$order->getId()] = "Приказ № ".$order->num_order." от ".$order->date_order;
+        }
+        return $result;
+    }
+    
+    /**
+     * Действует ли приказ сотрудника для указанного года
+     *
+     * @param COrder $order
+     * @param CTerm $year
+     * @return bool
+     */
+    public static function orderIsActiveForYear(COrder $order, CTerm $year) {
+        $dateStartYear = strtotime(CTaxonomyManager::getYear($year->getId())->date_start);
+        $dateBeginOrder = strtotime($order->date_begin);
+        $dateEndYear = strtotime(CTaxonomyManager::getYear($year->getId())->date_end);
+        $dateEndOrder = strtotime($order->date_end);
+        if ($dateStartYear <= $dateBeginOrder and $dateEndYear <= $dateEndOrder) {
+            return true;
+        }
+        return false;
+    }
 }
