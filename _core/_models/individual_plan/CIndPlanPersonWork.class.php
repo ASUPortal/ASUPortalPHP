@@ -65,7 +65,7 @@ class CIndPlanPersonWork extends CActiveModel{
     }
     public function isExecuted() {
         if ($this->is_executed == 1) {
-            return "Да";
+            return "Вып";
         }
         return "Нет";
     }
