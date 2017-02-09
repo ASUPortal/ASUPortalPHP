@@ -106,11 +106,11 @@ class CStaffService {
      * @return bool
      */
     public static function orderIsActiveForYear(COrder $order, CTerm $year) {
-        $dateStartYear = strtotime(CTaxonomyManager::getYear($year->getId())->date_start);
+        $dateStartYear = strtotime($year->date_start);
         $dateBeginOrder = strtotime($order->date_begin);
-        $dateEndYear = strtotime(CTaxonomyManager::getYear($year->getId())->date_end);
+        $dateEndYear = strtotime($year->date_end);
         $dateEndOrder = strtotime($order->date_end);
-        if ($dateStartYear <= $dateBeginOrder and $dateEndYear <= $dateEndOrder) {
+        if ($dateStartYear <= $dateBeginOrder and $dateEndYear >= $dateBeginOrder) {
             return true;
         }
         return false;
