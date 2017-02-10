@@ -110,7 +110,7 @@ class CStaffService {
         $dateBeginOrder = strtotime($order->date_begin);
         $dateEndYear = strtotime($year->date_end);
         $dateEndOrder = strtotime($order->date_end);
-        if ($dateStartYear <= $dateBeginOrder and $dateEndYear >= $dateBeginOrder) {
+        if ($dateBeginOrder < $dateEndYear and $dateStartYear < $dateEndOrder and $dateBeginOrder <= $dateEndYear) {
             return true;
         }
         return false;
