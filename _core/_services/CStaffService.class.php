@@ -93,7 +93,7 @@ class CStaffService {
     public static function getActiveOrdersListForYear(CPerson $person, CTerm $year) {
         $result = array();
         foreach (CStaffService::getActiveOrdersForYear($person, $year)->getItems() as $order) {
-            $result[$order->getId()] = "Приказ № ".$order->num_order." от ".$order->date_order;
+            $result[$order->getId()] = "Приказ № ".$order->num_order." от ".$order->date_order." (".$order->rate.")";
         }
         return $result;
     }
