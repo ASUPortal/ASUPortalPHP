@@ -326,6 +326,7 @@
     define("TABLE_CORE_MODEL_FIELD_VALIDATORS", "core_model_field_validators");
     define("TABLE_IND_PLAN_WORKTYPES", "spravochnik_vidov_rabot");
     define("TABLE_IND_PLAN_LOADS", "ip_loads");
+    define("TABLE_IND_PLAN_LOADS_ORDERS", "ip_loads_orders");
     define("TABLE_IND_PLAN_WORKS", "ip_works");
     define("TABLE_IND_PLAN_PLANNED", "hours_kind");
     define("TABLE_ACCESS_LEVELS", "task_rights");

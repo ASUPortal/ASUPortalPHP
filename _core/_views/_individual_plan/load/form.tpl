@@ -28,7 +28,15 @@
             {CHtml::error("order_id", $load)}
         </div>
     </div>
-
+    
+    <div class="control-group">
+	    {CHtml::activeLabel("orders", $load)}
+	    <div class="controls">
+	        {CHtml::activeLookup("orders", $load, "class.CSearchCatalogOrdersIndPlan", true, ["person_id" => $load->person->getId(), "year_id" => $year])}
+	        {CHtml::error("orders", $load)}
+	    </div>
+	</div>
+	
     <div class="control-group">
         {CHtml::activeLabel("conclusion", $load)}
         <div class="controls">
