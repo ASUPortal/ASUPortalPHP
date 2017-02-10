@@ -48,7 +48,22 @@ class CIndPlanPersonLoad extends CActiveModel{
                 "storageField" => "order_id",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getOrder"
+            ),
+            "orders" => array(
+                "relationPower" => RELATION_MANY_TO_MANY,
+                "storageProperty" => "_orders",
+                "joinTable" => TABLE_IND_PLAN_LOADS_ORDERS,
+                "leftCondition" => "ip_load_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "rightKey" => "order_id",
+                "managerClass" => "CStaffManager",
+                "managerGetObject" => "getOrder"
             )
+        );
+    }
+    
+    public function attributeLabels() {
+        return array(
+                "orders" => "Приказы"
         );
     }
     

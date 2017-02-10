@@ -67,6 +67,6 @@ class CIndPlanPersonWork extends CActiveModel{
         if ($this->is_executed == 1) {
             return "Вып";
         }
-        return "Не вып";
+        return "";
     }
 }
