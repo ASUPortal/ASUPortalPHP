@@ -1,9 +1,9 @@
 <?php
 
-class CCourseProjectEducationalProgramName extends CAbstractPrintClassField {
+class CCourseProjectAuditorium extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Наименование образовательной программы для курсового проектирования";
+        return "Аудитория для курсового проектирования";
     }
 
     public function getFieldDescription()
@@ -23,13 +23,7 @@ class CCourseProjectEducationalProgramName extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-        $group = $contextObject->group;
-        if (!is_null($group)) {
-            $corriculum = $group->corriculum;
-            if (!is_null($corriculum)) {
-                $result = $corriculum->profile->getValue();
-            }
-        }
+        $result = $contextObject->auditorium;
         return $result;
     }
 }

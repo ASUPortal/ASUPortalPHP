@@ -23,7 +23,7 @@ class CCourseProjectsTasksController extends CBaseController {
         $query->select("t.*")
             ->from(TABLE_COURSE_PROJECTS_TASKS." as t");
         $tasks = new CArrayList();
-        foreach ($set->getPaginated()->getItems() as $ar) {
+        foreach ($set->getItems() as $ar) {
             $task = new CCourseProjectsTask($ar);
             $tasks->add($task->getId(), $task);
         }
@@ -39,18 +39,17 @@ class CCourseProjectsTasksController extends CBaseController {
         ));
         $this->addActionsMenuItem(array(
             "title" => "Добавить задания",
-            "link" => "task.php?action=addGroup&course_project_id=".CRequest::getInt("course_project_id"),
+            "link" => "task.php?action=addTasks&course_project_id=".CRequest::getInt("course_project_id"),
             "icon" => "actions/list-add.png"
         ));
         $this->addActionsMenuItem(array(
             "title" => "Удалить выделенные",
             "icon" => "actions/edit-delete.png",
             "form" => "#mainViewTasks",
-            "link" => "task.php?action=delete&id=".CRequest::getInt("course_project_id"),
+            "link" => "task.php?action=delete&course_project_id=".CRequest::getInt("course_project_id"),
             "action" => "delete"
         ));
         $this->setData("tasks", $tasks);
-        $this->setData("paginator", $set->getPaginator());
         $this->renderView("_course_projects/tasks/index.tpl");
     }
     public function actionAdd() {
@@ -72,7 +71,7 @@ class CCourseProjectsTasksController extends CBaseController {
         ));
         $this->renderView("_course_projects/tasks/add.tpl");
     }
-    public function actionAddGroup() {
+    public function actionAddTasks() {
         $courseProject = CBaseManager::getCourseProject(CRequest::getInt("course_project_id"));
         if ($courseProject->tasks->isEmpty()) {
             foreach ($courseProject->group->getStudents() as $student) {
@@ -82,15 +81,55 @@ class CCourseProjectsTasksController extends CBaseController {
                 $task->save();
             }
         }
+        $this->redirect("task.php?action=addGroup&course_project_id=".$courseProject->getId());
+    }
+    public function actionAddGroup() {
+        $courseProject = CBaseManager::getCourseProject(CRequest::getInt("course_project_id"));
         $this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
                 "link" => "task.php?action=index&course_project_id=".$courseProject->getId(),
                 "icon" => "actions/edit-undo.png"
+            ),
+        	array(
+        		"title" => "Заполнить темы",
+        		"link" => "task.php?action=fillThemes&course_project_id=".$courseProject->getId(),
+        		"icon" => "actions/format-indent-more.png"
             )
         ));
         $this->setData("courseProject", $courseProject);
         $this->renderView("_course_projects/tasks/addGroup.tpl");
+    }
+    public function actionFillThemes() {
+        $courseProject = CBaseManager::getCourseProject(CRequest::getInt("course_project_id"));
+        $group = $courseProject->group;
+        $projectThemes = array();
+        if (!is_null($group)) {
+            $corriculum = $group->corriculum;
+            if (!is_null($corriculum)) {
+        	    foreach ($corriculum->cycles as $cycle) {
+        	        foreach ($cycle->allDisciplines as $discipline) {
+        	            if ($courseProject->discipline->getId() == $discipline->discipline->getId()) {
+        	                foreach ($discipline->plans->getItems() as $plan) {
+        	                    foreach ($plan->projectThemes->getItems() as $projectTheme) {
+        	                        $projectThemes[$projectTheme->getId()] = $projectTheme->project_title;
+        	                    }
+        	                }
+        	            }
+        	        }
+        	    }
+            }
+        }
+        if (!empty($projectThemes)) {
+            $randomProjectThemes = array_rand($projectThemes, $courseProject->tasks->getCount());
+            $i = 0;
+            foreach ($courseProject->tasks->getItems() as $task) {
+        	    $task->theme = CBaseManager::getWorkPlanProjectTheme($randomProjectThemes[$i])->project_title;
+        	    $task->save();
+        	    $i++;
+            }
+        }
+        $this->redirect("task.php?action=addGroup&course_project_id=".$courseProject->getId());
     }
     public function actionEdit() {
         $task = CBaseManager::getCourseProjectsTask(CRequest::getInt("id"));
@@ -118,7 +157,7 @@ class CCourseProjectsTasksController extends CBaseController {
             $this->redirect("task.php?action=index&course_project_id=".$courseProject->getId());
         }
         $items = CRequest::getArray("selectedInView");
-        $courseProject = CBaseManager::getCourseProject(CRequest::getInt("id"));
+        $courseProject = CBaseManager::getCourseProject(CRequest::getInt("course_project_id"));
         foreach ($items as $id){
             $task = CBaseManager::getCourseProjectsTask($id);
             $task->remove();

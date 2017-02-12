@@ -18,5 +18,5 @@
 {/block}
 
 {block name="asu_right"}
-	{include file="_course_projects/common.right.tpl"}
+	{include file="_course_projects/edit.right.tpl"}
 {/block}

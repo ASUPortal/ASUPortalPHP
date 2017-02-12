@@ -107,8 +107,12 @@ class CPrintService {
             $strategy = new CIndPlanFilenameGenerationStrategy($form, $object);
         } elseif ($strategyClass == "CIndPlanPrintGroupFilenameGenerationStrategy") {
             $strategy = new CIndPlanPrintGroupFilenameGenerationStrategy($form, $object);
+        } elseif ($strategyClass == "CCourseProjectFilenameGenerationStrategy") {
+            $strategy = new CCourseProjectFilenameGenerationStrategy($form, $object);
+        } elseif ($strategyClass == "CCourseProjectTaskFilenameGenerationStrategy") {
+            $strategy = new CCourseProjectTaskFilenameGenerationStrategy($form, $object);
         } else {
-			throw new Exception("Стратегия именования файла ".$strategyClass." не определена!");
+            throw new Exception("Стратегия именования файла ".$strategyClass." не определена!");
         }
         return $strategy->getFilename();
     }

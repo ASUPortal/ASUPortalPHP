@@ -164,6 +164,8 @@ class CStudent extends CActiveModel {
     public function getShortName() {
         // уберём из строки с ФИО пробелы в начале и конце
         $str = trim($this->getName());
+        // заменяем символы табуляции в строке имени студента на пробелы
+        $str = str_replace(chr(9), " ", $str);
         // если в строке с ФИО есть точка, то ФИО уже написано с инициалами
         $point = strpos($str, ".");
         if ($point === false) {

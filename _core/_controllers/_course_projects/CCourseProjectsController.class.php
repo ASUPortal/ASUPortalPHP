@@ -63,6 +63,13 @@ class CCourseProjectsController extends CBaseController {
     }
     public function actionAdd() {
         $courseProject = new CCourseProject();
+        $groups = array();
+        foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
+        	if ($group->getStudents()->getCount() > 0) {
+        		$groups[$group->getId()] = $group->getName();
+        	}
+        }
+        $this->setData("groups", $groups);
         $this->setData("courseProject", $courseProject);
         $this->addActionsMenuItem(array(
             array(
@@ -75,6 +82,22 @@ class CCourseProjectsController extends CBaseController {
     }
     public function actionEdit() {
         $courseProject = CBaseManager::getCourseProject(CRequest::getInt("id"));
+        $date = date("Y-m-d 00:00:00", strtotime($courseProject->issue_date));
+        $years = array();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_YEARS, 'date_start <= "'.$date.'" and date_end >= "'.$date.'"')->getItems() as $ar) {
+        	$term = new CTerm($ar);
+        	$years[] = $term->getId();
+        }
+        $groups = array();
+        if (!empty($years)) {
+        	$year = CTaxonomyManager::getYear($years[0]);
+        	foreach (CStaffManager::getStudentGroupsByYear($year)->getItems() as $group) {
+        		if ($group->getStudents()->getCount() > 0) {
+        			$groups[$group->getId()] = $group->getName();
+        		}
+        	}
+        }
+        $this->setData("groups", $groups);
         $this->setData("courseProject", $courseProject);
         $this->addActionsMenuItem(array(
             array(
@@ -88,8 +111,26 @@ class CCourseProjectsController extends CBaseController {
                 "icon" => "devices/printer.png",
                 "template" => "formset_course_projects"
             )
-        ));	
+        ));
+        
+        /**
+         * Параметры для групповой печати по шаблону
+         */
+        $this->setData("template", "formset_course_projects_tasks");
+        $this->setData("selectedDoc", false);
+        $this->setData("url", WEB_ROOT."_modules/_course_projects/index.php");
+        $this->setData("actionGetTasks", "JSONGetTasks");
+        $this->setData("id", CRequest::getInt("id"));
+        
         $this->renderView("_course_projects/edit.tpl");
+    }
+    public function actionJSONGetTasks() {
+        $courseProject = CBaseManager::getCourseProject(CRequest::getInt("id"));
+        $arr = array();
+        foreach ($courseProject->tasks->getItems() as $task) {
+            $arr[$task->getId()] = $task->theme;
+        }
+        echo json_encode($arr);
     }
     public function actionDelete() {
         $courseProject = CBaseManager::getCourseProject(CRequest::getInt("id"));
