@@ -137,7 +137,7 @@ class CStaffService {
         $activity = null;
         if (!empty($years)) {
             $year = CTaxonomyManager::getYear($years[0]);
-            foreach (CActiveRecordProvider::getWithCondition(TABLE_STUDENTS_ACTIVITY, '(date_acts >= "'.$year->date_start.'" and date_act <= "'.$year->date_end.'") 
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_STUDENTS_ACTIVITY, '(date_act >= "'.$year->date_start.'" and date_act <= "'.$year->date_end.'") 
                     and student_id = '.$student->getId().' and subject_id = '.$discipline->getId().' and kadri_id = '.$lecturer->getId().' 
                     and study_act_id = '.$controlType->getId())->getItems() as $item) {
                 $activity = new CStudentActivity($item);
