@@ -25,7 +25,7 @@ class CCourseProjectsTaskIssueDate extends CAbstractPrintClassField {
     {
         $result = "";
         $activity = CStaffService::getStudentActivityByTypeAndDate($contextObject->student, $contextObject->courseProject->discipline, $contextObject->courseProject->lecturer,
-        		CCourseProjectConstants::CONTROL_TYPE_COURSE_PROJECT, $contextObject->courseProject->issue_date);
+        		CTaxonomyManager::getLegacyTaxonomy("study_act")->getTerm(CCourseProjectConstants::CONTROL_TYPE_COURSE_PROJECT), $contextObject->courseProject->issue_date);
         if (!is_null($activity)) {
         	$result = date("d.m.Y", strtotime($activity->date_act));
         }

@@ -4,23 +4,23 @@
  */
 interface CCourseProjectConstants {
 	/**
-	 * ID вида контроля - курсовой проект
+	 * комментарий вида контроля - курсовой проект
 	 */
-	const CONTROL_TYPE_COURSE_PROJECT = 43;
+	const CONTROL_TYPE_COURSE_PROJECT = "course_project";
 	/**
-	 * ID оценки - неудовлетворительно
+	 * комментарий оценки - неудовлетворительно
 	 */
-	const UNSATISFACTORILY_STUDY_MARK = 4;
+	const UNSATISFACTORILY_STUDY_MARK = "unsatisfactorily";
 	/**
-	 * ID оценки - не зачтено
+	 * комментарий оценки - не зачтено
 	 */
-	const FAIL_STUDY_MARK = 6;
+	const FAIL_STUDY_MARK = "fail";
 	/**
-	 * ID оценки - отсутствие
+	 * комментарий оценки - отсутствие
 	 */
-	const ABSENSE_STUDY_MARK = 8;
+	const ABSENSE_STUDY_MARK = "absense";
 	/**
-	 * ID оценки - не выполнено
+	 * комментарий оценки - не выполнено
 	 */
-	const NOT_DONE_STUDY_MARK = 10;
+	const NOT_DONE_STUDY_MARK = "not_done";
 }

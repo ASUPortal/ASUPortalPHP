@@ -27,7 +27,7 @@ class CCourseProjectNotAllowedStudents extends CAbstractPrintClassField {
         $studentActivities = new CArrayList();
         foreach ($contextObject->group->getStudents() as $student) {
         	$activity = CStaffService::getStudentActivityByTypeAndDate($student, $contextObject->discipline, $contextObject->lecturer,
-        			CCourseProjectConstants::CONTROL_TYPE_COURSE_PROJECT, $contextObject->issue_date);
+        			CTaxonomyManager::getLegacyTaxonomy("study_act")->getTerm(CCourseProjectConstants::CONTROL_TYPE_COURSE_PROJECT), $contextObject->issue_date);
         	if (!is_null($activity)) {
         		$studentActivities->add($activity->getId(), $activity);
         	}

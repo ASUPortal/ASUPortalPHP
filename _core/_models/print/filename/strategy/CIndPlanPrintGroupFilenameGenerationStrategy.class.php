@@ -25,8 +25,8 @@ class CIndPlanPrintGroupFilenameGenerationStrategy implements IPrintFilenameGene
         $load = CIndPlanManager::getLoad($object->getId());
         $person = $load->person;
         $year = "";
-        if (!is_null(CTaxonomyManager::getYear($load->year_id))) {
-            $year = CTaxonomyManager::getYear($load->year_id)->getValue();
+        if (!is_null($load->year)) {
+            $year = $load->year->getValue();
         }
         if (!CSettingsManager::getSettingValue("template_filename_translit")) {
             $name = $person->getNameShort();

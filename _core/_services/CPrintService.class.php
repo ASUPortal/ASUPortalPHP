@@ -101,18 +101,11 @@ class CPrintService {
         $strategy = null;
         if (CStringUtils::isBlank($strategyClass)) {
             $strategy = new CDefaultFilenameGenerationStrategy($form);
-        } elseif ($strategyClass == "CWorkPlanFilenameGenerationStrategy") {
-            $strategy = new CWorkPlanFilenameGenerationStrategy($form, $object);
-        } elseif ($strategyClass == "CIndPlanFilenameGenerationStrategy") {
-            $strategy = new CIndPlanFilenameGenerationStrategy($form, $object);
-        } elseif ($strategyClass == "CIndPlanPrintGroupFilenameGenerationStrategy") {
-            $strategy = new CIndPlanPrintGroupFilenameGenerationStrategy($form, $object);
-        } elseif ($strategyClass == "CCourseProjectFilenameGenerationStrategy") {
-            $strategy = new CCourseProjectFilenameGenerationStrategy($form, $object);
-        } elseif ($strategyClass == "CCourseProjectTaskFilenameGenerationStrategy") {
-            $strategy = new CCourseProjectTaskFilenameGenerationStrategy($form, $object);
         } else {
-            throw new Exception("Стратегия именования файла ".$strategyClass." не определена!");
+            $reflection = new ReflectionClass($strategyClass);
+            if ($reflection->isInstantiable()) {
+                $strategy = new $strategyClass($form, $object);
+            }
         }
         return $strategy->getFilename();
     }
