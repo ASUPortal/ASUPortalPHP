@@ -32,9 +32,9 @@
 		            <td>{$task->theme}</td>
 		            <td>
 		            	{if !is_null(CStaffService::getStudentActivityByTypeAndDate($task->student, $task->courseProject->discipline, $task->courseProject->lecturer, 
-		                    	CCourseProjectConstants::CONTROL_TYPE_COURSE_PROJECT, $task->courseProject->issue_date))}
+		                    	CTaxonomyManager::getLegacyTaxonomy("study_act")->getTerm(CCourseProjectConstants::CONTROL_TYPE_COURSE_PROJECT), $task->courseProject->issue_date))}
 		            		{CStaffService::getStudentActivityByTypeAndDate($task->student, $task->courseProject->discipline, $task->courseProject->lecturer, 
-		                    	CCourseProjectConstants::CONTROL_TYPE_COURSE_PROJECT, $task->courseProject->issue_date)->mark->getValue()}
+		                    	CTaxonomyManager::getLegacyTaxonomy("study_act")->getTerm(CCourseProjectConstants::CONTROL_TYPE_COURSE_PROJECT), $task->courseProject->issue_date)->mark->getValue()}
 		            	{else}
 		            		Записи об успеваемости нет
 		            	{/if}
