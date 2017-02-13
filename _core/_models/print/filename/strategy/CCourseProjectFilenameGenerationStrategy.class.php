@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Стратегия генерации имён файлов рабочих программ
+ * Стратегия генерации имён файлов для курсового проектирования
  *
- * Class CWorkPlanFilenameGenerationStrategy
+ * Class CIndPlanFilenameGenerationStrategy
  */
-class CWorkPlanFilenameGenerationStrategy implements IPrintFilenameGenerationStrategy {
+class CCourseProjectFilenameGenerationStrategy implements IPrintFilenameGenerationStrategy {
     private $form;
     private $object;
 
@@ -22,21 +22,14 @@ class CWorkPlanFilenameGenerationStrategy implements IPrintFilenameGenerationStr
      */
     public function getFilename() {
         $object = $this->object;
-        $discipline = "";
-        $authors = array();
-        if (!is_null($object->authors)) {
-            foreach ($object->authors->getItems() as $author) {
-                $authors[] = $author->getNameShort();
-            }
-        }
         if (!CSettingsManager::getSettingValue("template_filename_translit")) {
-            $author = implode(", ", $authors);
+            $group = $object->group->getName();
             $discipline = $object->discipline->getValue();
         } else {
-            $author = CUtils::toTranslit(implode(", ", $authors));
+            $group = CUtils::toTranslit($object->group->getName());
             $discipline = CUtils::toTranslit($object->discipline->getValue());
         }
-        $filename = $author." - ".$discipline.".odt";
+        $filename = $group." - (".$discipline.").odt";
         return $filename;
     }
 

@@ -69,7 +69,7 @@ class CHtml {
      * @param string $class
      * @param string $html
      */
-    public static function dropDownList($name, $values, $selected = null, $id = "", $class = "", $html = "", $tooltipTitle = null) {
+    public static function dropDownList($name, $values, $selected = null, $id = "", $class = "", $html = "", $tooltipTitle = null, $sort = false) {
         $inline = "";
         if ($id != "") {
             $inline .= ' id="'.$id.'"';
@@ -107,7 +107,9 @@ class CHtml {
                 }
             }
         }
-        asort($values);
+        if (!$sort) {
+            asort($values);
+        }
         foreach ($values as $key=>$value) {
             $checked = "";
             if (is_null($selected)) {
@@ -132,7 +134,7 @@ class CHtml {
      * @param string $class
      * @param string $html
      */
-    public static function activeDropDownList($name, CModel $model, $values, $id = "", $class = "", $html = "", $multiple_key = "") {
+    public static function activeDropDownList($name, CModel $model, $values, $id = "", $class = "", $html = "", $multiple_key = "", $sort = false) {
         /**
          * Безумно полезная штука для работы со связанными
          * моделями. Если в названии поля есть скобки, то производится
@@ -162,7 +164,7 @@ class CHtml {
         if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
             $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
         }
-        self::dropDownList($field, $values, $model->$name, $id, $class, $html, $tooltipTitle);
+        self::dropDownList($field, $values, $model->$name, $id, $class, $html, $tooltipTitle, $sort);
         if ($fieldRequired) {
             self::requiredStar();
         }

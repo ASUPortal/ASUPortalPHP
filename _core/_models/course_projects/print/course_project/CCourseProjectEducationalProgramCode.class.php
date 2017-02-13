@@ -1,9 +1,9 @@
 <?php
 
-class CCourseProjectEducationForm extends CAbstractPrintClassField {
+class CCourseProjectEducationalProgramCode extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Форма обучения для курсового проектирования";
+        return "Код образовательной программы для курсового проектирования";
     }
 
     public function getFieldDescription()
@@ -23,11 +23,12 @@ class CCourseProjectEducationForm extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
+        $result = "";
         $group = $contextObject->group;
         if (!is_null($group)) {
             $corriculum = $group->corriculum;
             if (!is_null($corriculum)) {
-                $result = $corriculum->educationForm->getValue();
+                $result = $corriculum->speciality_direction->getValue();
             }
         }
         return $result;

@@ -56,10 +56,10 @@ class CProtocolManager {
         foreach (self::getAllDepProtocols()->getItems() as $i) {
             $arr[$i->getId()] = date("Ymd", strtotime($i->getDate()));
         }
-        asort($arr, false);
+        arsort($arr, false);
         foreach ($arr as $key=>$value) {
             $protocol = self::getDepProtocol($key);
-            $res[$protocol->getId()] = "Протокол №".$protocol->getNumber()." от ".$protocol->getDate();
+            $res[$protocol->getId()] = "Протокол №".$protocol->getNumber()." от ".date("d.m.Y", strtotime($protocol->getDate()));
         }
         return $res;
     }

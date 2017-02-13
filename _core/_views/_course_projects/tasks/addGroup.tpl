@@ -23,7 +23,12 @@
 	                    {CHtml::textField($task->getId(), $task->student->getName(), "", "", 'style="width: 100%;"')}
 	                </td>
 	                <td width="60%">
-	                    {CHtml::textField($task->getId(), "", "", "", 'style="width: 100%;"')}
+	                	{if $task->theme != ""}
+	                		{CHtml::textField($task->getId(), $task->theme, "", "", 'style="width: 100%;"')}
+	                	{else}
+	                		{CHtml::textField($task->getId(), "", "", "", 'style="width: 100%;"')}
+	                	{/if}
+	                    
 	                </td>
 	            </tr>
 	        {/foreach}

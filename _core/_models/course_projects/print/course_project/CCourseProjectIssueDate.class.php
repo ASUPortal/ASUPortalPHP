@@ -1,9 +1,9 @@
 <?php
 
-class CCourseProjectEducationalProgramCode extends CAbstractPrintClassField {
+class CCourseProjectIssueDate extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Код образовательной программы для курсового проектирования";
+        return "Дата выдачи задания для курсового проектирования";
     }
 
     public function getFieldDescription()
@@ -23,13 +23,7 @@ class CCourseProjectEducationalProgramCode extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-        $group = $contextObject->group;
-        if (!is_null($group)) {
-            $corriculum = $group->corriculum;
-            if (!is_null($corriculum)) {
-                $result = $corriculum->speciality_direction->getValue();
-            }
-        }
+        $result = date("d.m.Y", strtotime($contextObject->issut_date));
         return $result;
     }
 }

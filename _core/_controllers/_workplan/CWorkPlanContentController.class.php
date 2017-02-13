@@ -174,22 +174,7 @@ class CWorkPlanContentController extends CBaseController{
         /**
          * Виды контроля
          */
-        $set = new CRecordSet();
-		$queryControlTypes = new CQuery();
-        $set->setQuery($queryControlTypes);
-        $queryControlTypes->select("l.*")
-	        ->from(TABLE_WORK_PLAN_TYPES_CONTROL." as l")
-	        ->innerJoin(TABLE_TAXONOMY_TERMS." as term", "term.id = l.control_id")
-	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_SECTIONS." as section", "l.section_id = section.id")
-	        ->innerJoin(TABLE_WORK_PLAN_CONTENT_CATEGORIES." as category", "section.category_id = category.id")
-	        ->condition("category.plan_id = ".$plan->getId()." and category._deleted = 0")
-	        ->order("section.sectionIndex asc");
-        $controlTypes = new CArrayList();
-        foreach ($set->getItems() as $ar) {
-        	$controlType = new CWorkPlanControlTypes($ar);
-        	$controlTypes->add($controlType->getId(), $controlType);
-        }
-        $this->setData("controlTypes", $controlTypes);
+        $this->setData("controlTypes", $plan->getControlTypes());
         /**
          * Описание и количество баллов по видам учебной деятельности
          */

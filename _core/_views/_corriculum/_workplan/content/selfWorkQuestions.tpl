@@ -14,9 +14,10 @@
                 </tr>
             </thead>
             <tbody>
+            {counter start=0 print=false}
             {foreach $objects->getItems() as $object}
                 <tr>
-                    <td>{$object->ordering}</td>
+                    <td>{counter}</td>
                     <td>{$object->load->section->sectionIndex}</td>
                     <td>{$object->title}</td>
                     <td>{$object->value}</td>

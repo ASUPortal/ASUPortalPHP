@@ -115,4 +115,52 @@ class CStaffService {
         }
         return false;
     }
+    
+    /**
+     * Сведения об успеваемости студента по дисциплине, преподавателю и виду контроля
+     *
+     * @param CStudent $student
+     * @param CTerm $discipline
+     * @param CPerson $lecturer
+     * @param CTerm $controlType
+     * @param $issueDate
+     * 
+     * @return CStudentActivity
+     */
+    public static function getStudentActivityByTypeAndDate(CStudent $student, CTerm $discipline, CPerson $lecturer, CTerm $controlType, $issueDate) {
+        $date = date("Y-m-d 00:00:00", strtotime($issueDate));
+        $years = array();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_YEARS, 'date_start <= "'.$date.'" and date_end >= "'.$date.'"')->getItems() as $ar) {
+            $term = new CTerm($ar);
+            $years[] = $term->getId();
+        }
+        $activity = null;
+        if (!empty($years)) {
+            $year = CTaxonomyManager::getYear($years[0]);
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_STUDENTS_ACTIVITY, '(date_act >= "'.$year->date_start.'" and date_act <= "'.$year->date_end.'") 
+                    and student_id = '.$student->getId().' and subject_id = '.$discipline->getId().' and kadri_id = '.$lecturer->getId().' 
+                    and study_act_id = '.$controlType->getId())->getItems() as $item) {
+                $activity = new CStudentActivity($item);
+            }
+        }
+        return $activity;
+    }
+    
+    /**
+     * Проверка успеваемости студента на неудовлетворительные оценки
+     *
+     * @param CStudentActivity $studentActivity
+     * @param $studyMark
+     *
+     * @return bool
+     */
+    public static function isStudentActivityWithBadMark(CStudentActivity $studentActivity) {
+    	if ($studentActivity->study_mark == CTaxonomyManager::getLegacyTaxonomy("study_marks")->getTerm(CCourseProjectConstants::UNSATISFACTORILY_STUDY_MARK)->getId() or
+    			$studentActivity->study_mark == CTaxonomyManager::getLegacyTaxonomy("study_marks")->getTerm(CCourseProjectConstants::FAIL_STUDY_MARK)->getId() or
+    			$studentActivity->study_mark == CTaxonomyManager::getLegacyTaxonomy("study_marks")->getTerm(CCourseProjectConstants::ABSENSE_STUDY_MARK)->getId() or
+    			$studentActivity->study_mark == CTaxonomyManager::getLegacyTaxonomy("study_marks")->getTerm(CCourseProjectConstants::NOT_DONE_STUDY_MARK)->getId()) {
+    		return true;
+    	}
+        return false;
+    }
 }

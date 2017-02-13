@@ -37,8 +37,14 @@ class CCourseProject extends CActiveModel {
                 "storageProperty" => "_tasks",
                 "storageTable" => TABLE_COURSE_PROJECTS_TASKS,
                 "storageCondition" => "course_project_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-                "targetClass" => "CCourseProjectsTask",
-                "managerOrder" => "`student_id` asc"
+                "targetClass" => "CCourseProjectsTask"
+            ),
+            "chairmanOfCommission" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_chairman_of_commission",
+                "storageField" => "chairman_of_commission",
+                "managerClass" => "CStaffManager",
+                "managerGetObject" => "getPerson"
             ),
             "commision_members" => array(
                 "relationPower" => RELATION_MANY_TO_MANY,
@@ -48,6 +54,13 @@ class CCourseProject extends CActiveModel {
                 "rightKey" => "person_id",
                 "managerClass" => "CBaseManager",
                 "managerGetObject" => "getPerson"
+            ),
+            "protocol" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_protocol",
+                "storageField" => "protocol_id",
+                "managerClass" => "CProtocolManager",
+                "managerGetObject" => "getDepProtocol"
             )
         );
     }
@@ -93,7 +106,9 @@ class CCourseProject extends CActiveModel {
             "main_content" => "Основное содержание",
             "graduation_date" => "Даты защит",
             "graduation_time" => "Время защит",
-            "auditorium" => "Аудитория"
+            "auditorium" => "Аудитория",
+            "protocol_id" => "Протокол заседания кафедры",
+            "requirements_for_registration" => "Требования к оформлению"
         );
     }
     

@@ -21,18 +21,21 @@ class CIndPlanFilenameGenerationStrategy implements IPrintFilenameGenerationStra
      * @return String
      */
     public function getFilename() {
-		$object = $this->object;
-		$person = $object->getNameShort();
-		//$person = CUtils::toTranslit($object->getNameShort());
-		$load = CIndPlanManager::getLoad(CRequest::getInt("planId"));
-		$year = "";
-		if (!is_null(CTaxonomyManager::getYear($load->year_id))) {
-			$year = CTaxonomyManager::getYear($load->year_id)->getValue();
-		}
-		$typeLoad = $load->getType();
-		//$typeLoad = CUtils::toTranslit($load->getType());
-		$filename = $person." - ".$year." (".$typeLoad.").odt";
-		return $filename;
+        $object = $this->object;
+        $load = CIndPlanManager::getLoad(CRequest::getInt("planId"));
+        $year = "";
+        if (!is_null($load->year)) {
+            $year = $load->year->getValue();
+        }
+        if (!CSettingsManager::getSettingValue("template_filename_translit")) {
+            $person = $object->getNameShort();
+            $typeLoad = $load->getType();
+        } else {
+            $person = CUtils::toTranslit($object->getNameShort());
+            $typeLoad = CUtils::toTranslit($load->getType());
+        }
+        $filename = $person." - ".$year." (".$typeLoad.").odt";
+        return $filename;
     }
 
 }

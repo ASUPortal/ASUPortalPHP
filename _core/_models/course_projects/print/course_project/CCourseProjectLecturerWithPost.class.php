@@ -1,9 +1,9 @@
 <?php
 
-class CCourseProjectOrderDate extends CAbstractPrintClassField {
+class CCourseProjectLecturerWithPost extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Дата распоряжения для курсового проектирования";
+        return "Преподаватель с должностью для курсового проектирования";
     }
 
     public function getFieldDescription()
@@ -23,7 +23,7 @@ class CCourseProjectOrderDate extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-        $result = date("d.m.Y", strtotime($contextObject->order_date));
+        $result = $contextObject->lecturer->getPost()->getValue()." каф. АСУ ".$contextObject->lecturer->getNameShort();
         return $result;
     }
 }

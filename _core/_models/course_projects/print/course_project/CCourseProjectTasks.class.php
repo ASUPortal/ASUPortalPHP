@@ -1,6 +1,6 @@
 <?php
 
-class CCourseProjectsTasks extends CAbstractPrintClassField {
+class CCourseProjectTasks extends CAbstractPrintClassField {
     public function getFieldName()
     {
         return "Задания для курсового проектирования";
@@ -30,7 +30,7 @@ class CCourseProjectsTasks extends CAbstractPrintClassField {
                 $dataRow[0] = count($result) + 1;
                 $dataRow[1] = $item->student->getName();
                 $dataRow[2] = $item->theme;
-                $dataRow[3] = "";
+                $dataRow[3] = date("d.m.Y", strtotime($contextObject->issue_date));
                 $result[] = $dataRow;
             }
         }
