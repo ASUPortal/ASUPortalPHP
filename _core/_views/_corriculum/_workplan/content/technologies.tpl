@@ -15,9 +15,10 @@
             </tr>
             </thead>
             <tbody>
+            {counter start=0 print=false}
             {foreach $objects->getItems() as $object}
                 <tr>
-                	<td>{$object->ordering}</td>
+                	<td>{counter}</td>
                     {if !is_null($object->load->term->corriculum_discipline_section)}
                     	<td>{$object->load->term->corriculum_discipline_section->title}</td>
                     {else}

@@ -22,9 +22,10 @@
             </tr>
             </thead>
             <tbody>
+            	{counter start=0 print=false}
                 {foreach $termData as $lab}
                     <tr>
-                        <td>{$lab->ordering}</td>
+                        <td>{counter}</td>
                         <td>{$lab->load->section->sectionIndex}</td>
                         <td>{$lab->title}</td>
                         <td>{$lab->value}</td>
