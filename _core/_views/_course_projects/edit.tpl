@@ -4,6 +4,8 @@
 <h2>Редактирование курсового проектирования</h2>
 
     {CHtml::helpForCurrentPage()}
+    
+    {CHtml::warningSummary($courseProject)}
 
 	{include file="_course_projects/form.tpl"}
 	
