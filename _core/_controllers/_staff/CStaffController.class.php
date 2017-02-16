@@ -87,12 +87,6 @@ class CStaffController extends CBaseController{
                     "icon" => "actions/list-add.png"
                 ),
                 array(
-                    "title" => "Печать по шаблону",
-                    "link" => "#",
-                    "icon" => "devices/printer.png",
-                    "template" => "formset_person"
-                ),
-                array(
                     "title" => "Импортировать информацию о совместителях",
                     "icon" => "actions/document-save.png",
                     "form" => "#MainView",
@@ -101,6 +95,21 @@ class CStaffController extends CBaseController{
                 )
             )
         );
+		/**
+		 * Параметры для групповой печати по шаблону
+		 */
+		$this->setData("template", "formset_person");
+		$this->setData("selectedDoc", true);
+		$this->setData("url", null);
+		$this->setData("action", null);
+		$this->setData("id", null);
+		/**
+		 * Параметры для печати по шаблону списка сотрудников
+		 */
+		$template = "formset_person_list";
+		$formset = CPrintManager::getFormset($template);
+		$this->setData("formsetList", $formset);
+		$this->setData("templateList", $template);
         /**
          * Отображение представления
          */
@@ -202,15 +211,15 @@ class CStaffController extends CBaseController{
                 )
             ),
             array(
-                "title" => "Печать по шаблону",
-                "link" => "#",
-                "icon" => "devices/printer.png",
-                "template" => "formset_person"
-            ),
-            array(
                 "title" => "Импортировать информацию о сотруднике",
                 "link" => "staffInfo.php?action=add&id=".CRequest::getInt("id"),
                 "icon" => "actions/document-save.png"
+            ),
+            array(
+                "title" => "Печать по карточке сотрудника",
+                "link" => "#",
+                "icon" => "devices/printer.png",
+                "template" => "formset_person"
             )
         ));
         /**

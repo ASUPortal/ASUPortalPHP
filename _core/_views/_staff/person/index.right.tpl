@@ -17,3 +17,20 @@
         {CHtml::printOnTemplate("formset_all_persons")}
     </div>
 </div>
+
+{include file="_staff/person/printGroupOnTemplate.tpl"}
+
+<div class="menu_item_container">
+	<a href="{$web_root}_modules/_print/?action=ShowForms&template={$templateList}" asu-action="flow">
+		{if !is_null($formsetList)}
+			{$var = $formsetList->computeTemplateVariables()}
+			{foreach $var as $key=>$value}
+				<div asu-type="flow-property" name="{$key}" value="{$value}"></div>
+			{/foreach}
+		{/if}
+		<center>
+			<img src="{$web_root}images/{$icon_theme}/32x32/devices/printer.png"><br>
+				Печать списка сотрудников
+		</center>
+	</a>
+</div>

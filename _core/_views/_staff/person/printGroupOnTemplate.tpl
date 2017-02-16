@@ -1,12 +1,12 @@
 <p>
-    <a href="#printDialog" data-toggle="modal">
+    <a href="#printDialogMass" data-toggle="modal">
     	<center>
         	<img src="{$web_root}images/{$icon_theme}/32x32/devices/printer.png"><br>
         	Массовая печать
     	</center></a>
 </p>
 
-<div id="printDialog" class="modal hide fade">
+<div id="printDialogMass" class="modal hide fade">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>Печать по шаблону</h3>
@@ -36,7 +36,7 @@ function printWithTemplate(manager, method, template_id, selectedDoc, url, actio
 	/**
 	 * Закрываем диалог чтобы не мешался
 	 */
-	jQuery("#printDialog").modal("hide");
+	jQuery("#printDialogMass").modal("hide");
 	/**
 	 * Открываем свой диалог групповой печати
 	*/
