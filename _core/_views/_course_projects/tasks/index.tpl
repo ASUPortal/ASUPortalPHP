@@ -16,7 +16,7 @@
 		        <th>{CHtml::activeViewGroupSelect("id", $tasks->getFirstItem(), true)}</th>
 		        <th>{CHtml::tableOrder("student_id", $tasks->getFirstItem())}</th>
 		        <th>{CHtml::tableOrder("theme", $tasks->getFirstItem())}</th>
-		        <th>Оценка в журнале успеваемости</th>
+		        <th>{CHtml::tableOrder("mark", $tasks->getFirstItem(), true)}</th>
 		    </tr>
 		    {counter start=0 print=false}
 		    {foreach $tasks->getItems() as $task}

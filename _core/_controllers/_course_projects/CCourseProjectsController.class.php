@@ -69,6 +69,7 @@ class CCourseProjectsController extends CBaseController {
         		$groups[$group->getId()] = $group->getName();
         	}
         }
+        $courseProject->lecturer_id = CSession::getCurrentPerson()->getId();
         $this->setData("groups", $groups);
         $this->setData("courseProject", $courseProject);
         $this->addActionsMenuItem(array(

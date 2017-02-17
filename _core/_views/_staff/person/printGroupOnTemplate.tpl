@@ -1,11 +1,12 @@
-<a href="#printDialog" data-toggle="modal">
-    <center>
-        <img src="{$web_root}images/{$icon_theme}/32x32/devices/printer.png"><br>
-        Массовая печать на группу
-    </center>
-</a>
+<p>
+    <a href="#printDialogMass" data-toggle="modal">
+    	<center>
+        	<img src="{$web_root}images/{$icon_theme}/32x32/devices/printer.png"><br>
+        	Массовая печать
+    	</center></a>
+</p>
 
-<div id="printDialog" class="modal hide fade">
+<div id="printDialogMass" class="modal hide fade">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>Печать по шаблону</h3>
@@ -13,11 +14,11 @@
     <div class="modal-body">
         <b>Массовая печать</b>
 
-        {CHtml::printGroupOnTemplate($template, $selectedDoc, $url, $actionGetTasks, $id)}
+        {CHtml::printGroupOnTemplate($template, $selectedDoc, $url, $action, $id)}
     </div>
 </div>
 
-<div id="groupPrintDialog" class="modal hide fade">
+<div id="groupPrintDialog"  class="modal hide fade">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>Печать по шаблону</h3>
@@ -35,7 +36,7 @@ function printWithTemplate(manager, method, template_id, selectedDoc, url, actio
 	/**
 	 * Закрываем диалог чтобы не мешался
 	 */
-	jQuery("#printDialog").modal("hide");
+	jQuery("#printDialogMass").modal("hide");
 	/**
 	 * Открываем свой диалог групповой печати
 	*/
@@ -94,12 +95,12 @@ function printWithTemplate(manager, method, template_id, selectedDoc, url, actio
 			 * архив и отдадим его пользователю
 			*/
 			if (attachments.length == items.length) {
-				generateZipWorkplans(attachments);
+				generateZip(attachments);
 			}
 		});
 	});
 }
-function generateZipWorkplans(attachments) {
+function generateZip(attachments) {
 	jQuery.ajax({
 		type: "POST",
 		url: web_root + "_modules/_zip/",

@@ -17,13 +17,38 @@ class CCourseProjectsTasksController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
+        $set = new CRecordSet(false);
         $query = new CQuery();
         $set->setQuery($query);
-        $query->select("t.*")
-            ->from(TABLE_COURSE_PROJECTS_TASKS." as t");
+        $query->select("tasks.*")
+            ->from(TABLE_COURSE_PROJECTS_TASKS." as tasks");
+        if (CRequest::getString("order") == "student_id") {
+            $direction = "asc";
+            if (CRequest::getString("direction") != "") {
+                $direction = CRequest::getString("direction");
+            }
+            $query->innerJoin(TABLE_STUDENTS." as student", "tasks.student_id=student.id");
+            $query->order("student.fio ".$direction);
+        } elseif (CRequest::getString("order") == "theme") {
+            $direction = "asc";
+            if (CRequest::getString("direction") != "") {
+                $direction = CRequest::getString("direction");
+            }
+            $query->order("tasks.theme ".$direction);
+        } elseif (CRequest::getString("order") == "mark") {
+            $direction = "asc";
+            if (CRequest::getString("direction") != "") {
+                $direction = CRequest::getString("direction");
+            }
+            $query->innerJoin(TABLE_STUDENTS." as student", "tasks.student_id=student.id");
+            $query->innerJoin(TABLE_STUDENTS_ACTIVITY." as activity", "activity.student_id=student.id");
+            $query->innerJoin(TABLE_MARKS." as mark", "activity.study_mark=mark.id");
+            $query->condition("activity.study_act_id = ".CTaxonomyManager::getLegacyTaxonomy("study_act")->getTerm(CCourseProjectConstants::CONTROL_TYPE_COURSE_PROJECT)->getId());
+            $query->order("mark.name ".$direction);
+        }
+        $set->setPageSize(PAGINATION_ALL);
         $tasks = new CArrayList();
-        foreach ($set->getItems() as $ar) {
+        foreach ($set->getPaginated()->getItems() as $ar) {
             $task = new CCourseProjectsTask($ar);
             $tasks->add($task->getId(), $task);
         }

@@ -78,6 +78,12 @@ class CCourseProject extends CActiveModel {
         );
     }
     
+    protected function modelValidators() {
+        return array(
+            new CCourseProjectValidator()
+        );
+    }
+    
     public function validationRules() {
         return array(
             "checkdate" => array(

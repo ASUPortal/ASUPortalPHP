@@ -23,7 +23,8 @@ class CCourseProjectsTask extends CActiveModel {
     public function attributeLabels() {
         return array(
             "student_id" => "ФИО студента",
-            "theme" => "Тема"
+            "theme" => "Тема",
+            "mark" => "Оценка в журнале успеваемости"
         );
     }
 

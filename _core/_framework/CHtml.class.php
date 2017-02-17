@@ -1133,27 +1133,31 @@ class CHtml {
                     if (!self::$_printFormViewInit) {
                         self::$_printFormViewInit = true;
                         ?>
-                        <script>
-                            function printTemplateFromView(baseUrl, formId){
-                                var selected = jQuery("input[name='selectedDoc']:checked")
-                                if (selected.length == 0) {
-                                    alert("Выберите один или несколько документов");
-                                    return false;
-                                }
-                                var ids = new Array();
-                                for(var i = 0; i < selected.length; i++) {
-                                    ids[ids.length] = selected[i].value;
-                                }
-                                window.open(web_root + "_modules/_print/" + baseUrl + "&id=" + ids.join(":"), "Печать по шаблону");
-                            }
-                        </script>
+						<script>
+							function printTemplateFromView(baseUrl){
+								var selected = new Array();
+								jQuery.each(jQuery("input[name='selectedDoc[]']:checked"), function(key, value){
+									selected.push(jQuery(value).val());
+								});
+								if (selected.length == 0) {
+									alert("Выберите один или несколько документов");
+									return false;
+								}
+								var ids = new Array();
+								jQuery.each(selected, function(key, value){
+									ids[ids.length] = value;
+								});
+								jQuery("#printDialog").modal("hide");
+								window.location.href = web_root + "_modules/_print/" + baseUrl + "&id=" + ids.join(":");
+							}
+						</script>
                         <?php
                     }
                     $url = "?action=print".
                         "&manager=".$variables['manager'].
                         "&method=".$variables['method'].
                         "&template=".$form->getId();
-                    echo '<li><a href="#" onclick="printTemplateFromView(\''.$url.'\', '.$form->getId().'); return false;" target="_blank">'.$form->title.'</a></li>';;
+                    echo '<li><a href="#" onclick="printTemplateFromView(\''.$url.'\'); return false;">'.$form->title.'</a></li>';;
                 }
     		}
     		echo '</ul>';

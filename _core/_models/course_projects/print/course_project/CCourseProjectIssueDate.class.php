@@ -23,7 +23,7 @@ class CCourseProjectIssueDate extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-        $result = date("d.m.Y", strtotime($contextObject->issut_date));
+        $result = date("d.m.Y", strtotime($contextObject->issue_date));
         return $result;
     }
 }

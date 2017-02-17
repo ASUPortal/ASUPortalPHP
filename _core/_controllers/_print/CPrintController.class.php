@@ -52,7 +52,12 @@ class CPrintController extends CFlowController {
     	/**
     	 * Получаем объект через менеджер
     	 */
-    	$object = $managerClass::$managerMethod($objectId);
+    	// если объект является экземпляром CArrayList, для совместимости получим первое значение экземпляра CModel из CArrayList
+    	if (!$managerClass::$managerMethod($objectId) instanceof CArrayList) {
+    		$object = $managerClass::$managerMethod($objectId);
+    	} else {
+    		$object = $managerClass::$managerMethod($objectId)->getFirstItem();
+    	}
     	$form = CPrintManager::getForm($formId);
         /**
          * Печатаем
