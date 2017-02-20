@@ -384,8 +384,8 @@ class CHtml {
             $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
         }
         ?>
-        <div class="input-append date <?php echo self::getFielsizeClass(); ?> datepicker" id="<?php echo $id; ?>" data-date="<?php echo $model->$name; ?>" data-date-format="<?php echo $format; ?>">
-            <input name="<?php echo $field; ?>" data-toggle="tooltip" title="<?php echo $tooltipTitle; ?>" class="<?php echo self::getFielsizeClass(); ?>" type="text" value="<?php echo $model->$name; ?>">
+        <div class="input-append date <?php echo self::getFielsizeClass(); ?> datepicker" id="<?php echo $id; ?>" data-date="<?php echo $model->$name; ?>" data-toggle="tooltip" title="<?php echo $tooltipTitle; ?>" data-date-format="<?php echo $format; ?>">
+            <input name="<?php echo $field; ?>" class="<?php echo self::getFielsizeClass(); ?>" type="text" value="<?php echo $model->$name; ?>">
             <span class="add-on"><i class="icon-th"></i></span>
         </div>
         <?php
