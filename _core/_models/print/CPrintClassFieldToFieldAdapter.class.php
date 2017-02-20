@@ -50,8 +50,12 @@ class CPrintClassFieldToFieldAdapter extends CPrintField{
      * @param $object
      * @return mixed
      */
-    public function evaluateValue($object) {
-        return $this->getClassField()->execute($this->getContext());
+    public function evaluateValue($object, $stripTags = false) {
+        if ($this->getClassField()->getFieldType() == IPrintClassField::FIELD_TEXT and $stripTags) {
+            return strip_tags($this->getClassField()->execute($this->getContext()));
+        } else {
+            return $this->getClassField()->execute($this->getContext());
+        }
     }
     
     public function getColSpan() {
