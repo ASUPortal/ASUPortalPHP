@@ -35,6 +35,31 @@ class CWorkPlanContentController extends CBaseController{
         $this->setData("objects", $plan->getPractices());
         $this->renderView("_corriculum/_workplan/content/practices.tpl");
     }
+    public function actionEditPractices() {
+        $object = CBaseManager::getWorkPlanContentSectionLoadTopic(CRequest::getInt("id"));
+        $this->setData("object", $object);
+        $this->addActionsMenuItem(array(
+            "title" => "Назад",
+            "link" => "workplancontent.php?action=practices&plan_id=".$object->load->section->category->plan_id,
+            "icon" => "actions/edit-undo.png"
+        ));
+        $this->renderView("_corriculum/_workplan/content/practicesForm.tpl");
+    }
+    public function actionSavePractices() {
+        $object = new CWorkPlanContentSectionLoadTopic();
+        $object->setAttributes(CRequest::getArray($object::getClassName()));
+        if ($object->validate()) {
+            $object->save();
+            if ($this->continueEdit()) {
+                $this->redirect("workplancontent.php?action=editPractices&id=".$object->getId());
+            } else {
+                $this->redirect("workplancontent.php?action=practices&plan_id=".$object->load->section->category->plan_id);
+            }
+            return true;
+        }
+        $this->setData("object", $object);
+        $this->renderView("_corriculum/_workplan/content/practicesForm.tpl");
+    }
     public function actionLabWorks() {
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
         $this->addActionsMenuItem(array(
@@ -45,15 +70,65 @@ class CWorkPlanContentController extends CBaseController{
         $this->setData("objects", $plan->getLabWorks());
         $this->renderView("_corriculum/_workplan/content/labworks.tpl");
     }
+    public function actionEditLabWorks() {
+        $object = CBaseManager::getWorkPlanContentSectionLoadTopic(CRequest::getInt("id"));
+        $this->setData("object", $object);
+        $this->addActionsMenuItem(array(
+            "title" => "Назад",
+            "link" => "workplancontent.php?action=labworks&plan_id=".$object->load->section->category->plan_id,
+            "icon" => "actions/edit-undo.png"
+        ));
+        $this->renderView("_corriculum/_workplan/content/labworksForm.tpl");
+    }
+    public function actionSaveLabWorks() {
+        $object = new CWorkPlanContentSectionLoadTopic();
+        $object->setAttributes(CRequest::getArray($object::getClassName()));
+        if ($object->validate()) {
+            $object->save();
+            if ($this->continueEdit()) {
+                $this->redirect("workplancontent.php?action=editLabWorks&id=".$object->getId());
+            } else {
+                $this->redirect("workplancontent.php?action=labWorks&plan_id=".$object->load->section->category->plan_id);
+            }
+            return true;
+        }
+        $this->setData("object", $object);
+        $this->renderView("_corriculum/_workplan/content/labworksForm.tpl");
+    }
     public function actionLectures() {
     	$plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
     	$this->addActionsMenuItem(array(
-    			"title" => "Обновить",
-    			"link" => "workplancontent.php?action=lectures&plan_id=".CRequest::getInt("plan_id"),
-    			"icon" => "actions/view-refresh.png"
+            "title" => "Обновить",
+            "link" => "workplancontent.php?action=lectures&plan_id=".CRequest::getInt("plan_id"),
+            "icon" => "actions/view-refresh.png"
     	));
     	$this->setData("objects", $plan->getLectures());
     	$this->renderView("_corriculum/_workplan/content/lectures.tpl");
+    }
+    public function actionEditLectures() {
+        $object = CBaseManager::getWorkPlanContentSectionLoadTopic(CRequest::getInt("id"));
+        $this->setData("object", $object);
+        $this->addActionsMenuItem(array(
+            "title" => "Назад",
+            "link" => "workplancontent.php?action=lectures&plan_id=".$object->load->section->category->plan_id,
+            "icon" => "actions/edit-undo.png"
+        ));
+        $this->renderView("_corriculum/_workplan/content/lecturesForm.tpl");
+    }
+    public function actionSaveLectures() {
+        $object = new CWorkPlanContentSectionLoadTopic();
+        $object->setAttributes(CRequest::getArray($object::getClassName()));
+        if ($object->validate()) {
+            $object->save();
+            if ($this->continueEdit()) {
+                $this->redirect("workplancontent.php?action=editLectures&id=".$object->getId());
+            } else {
+                $this->redirect("workplancontent.php?action=lectures&plan_id=".$object->load->section->category->plan_id);
+            }
+            return true;
+        }
+        $this->setData("object", $object);
+        $this->renderView("_corriculum/_workplan/content/lecturesForm.tpl");
     }
     public function actionTechnologies() {
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
@@ -65,6 +140,31 @@ class CWorkPlanContentController extends CBaseController{
         $this->setData("objects", $plan->getTechnologies());
         $this->renderView("_corriculum/_workplan/content/technologies.tpl");
     }
+    public function actionEditTechnologies() {
+        $object = CBaseManager::getWorkPlanContentSectionLoadTechnology(CRequest::getInt("id"));
+        $this->setData("object", $object);
+        $this->addActionsMenuItem(array(
+            "title" => "Назад",
+            "link" => "workplancontent.php?action=technologies&plan_id=".$object->load->section->category->plan_id,
+            "icon" => "actions/edit-undo.png"
+        ));
+        $this->renderView("_corriculum/_workplan/content/technologiesForm.tpl");
+    }
+    public function actionSaveTechnologies() {
+        $object = new CWorkPlanContentSectionLoadTechnology();
+        $object->setAttributes(CRequest::getArray($object::getClassName()));
+        if ($object->validate()) {
+            $object->save();
+            if ($this->continueEdit()) {
+                $this->redirect("workplancontent.php?action=editTechnologies&id=".$object->getId());
+            } else {
+                $this->redirect("workplancontent.php?action=technologies&plan_id=".$object->load->section->category->plan_id);
+            }
+            return true;
+        }
+        $this->setData("object", $object);
+        $this->renderView("_corriculum/_workplan/content/technologiesForm.tpl");
+    }
     public function actionSelfWorkQuestions() {
         $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
         $this->addActionsMenuItem(array(
@@ -74,6 +174,31 @@ class CWorkPlanContentController extends CBaseController{
         ));
         $this->setData("objects", $plan->getSelfWorkQuestions());
         $this->renderView("_corriculum/_workplan/content/selfWorkQuestions.tpl");
+    }
+    public function actionEditSelfWorkQuestions() {
+        $object = CBaseManager::getWorkPlanContentSectionLoadTopic(CRequest::getInt("id"));
+        $this->setData("object", $object);
+        $this->addActionsMenuItem(array(
+            "title" => "Назад",
+            "link" => "workplancontent.php?action=selfWorkQuestions&plan_id=".$object->load->section->category->plan_id,
+            "icon" => "actions/edit-undo.png"
+        ));
+        $this->renderView("_corriculum/_workplan/content/selfWorkQuestionsForm.tpl");
+    }
+    public function actionSaveSelfWorkQuestions() {
+        $object = new CWorkPlanContentSectionLoadTopic();
+        $object->setAttributes(CRequest::getArray($object::getClassName()));
+        if ($object->validate()) {
+            $object->save();
+            if ($this->continueEdit()) {
+                $this->redirect("workplancontent.php?action=editSelfWorkQuestions&id=".$object->getId());
+            } else {
+                $this->redirect("workplancontent.php?action=selfWorkQuestions&plan_id=".$object->load->section->category->plan_id);
+            }
+            return true;
+        }
+        $this->setData("object", $object);
+        $this->renderView("_corriculum/_workplan/content/selfWorkQuestionsForm.tpl");
     }
 
     /**

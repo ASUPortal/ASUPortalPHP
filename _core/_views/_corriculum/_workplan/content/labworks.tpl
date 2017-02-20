@@ -22,12 +22,11 @@
             </tr>
             </thead>
             <tbody>
-            	{counter start=0 print=false}
                 {foreach $termData as $lab}
                     <tr>
-                        <td>{counter}</td>
+                        <td>{$lab->ordering}</td>
                         <td>{$lab->load->section->sectionIndex}</td>
-                        <td>{$lab->title}</td>
+                        <td><a href="{$web_root}_modules/_corriculum/workplancontent.php?action=editLabWorks&id={$lab->getId()}">{$lab->title}</a></td>
                         <td>{$lab->value}</td>
                     </tr>
                 {/foreach}
