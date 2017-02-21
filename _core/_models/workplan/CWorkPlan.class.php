@@ -555,7 +555,7 @@ class CWorkPlan extends CActiveModel {
             $item = $practices->getItem($i);
             $sortedPractices->add($item->getId(), $item);
         }
-        return $sortedPractices;
+        return $practices;
     }
 
     /**
@@ -628,7 +628,7 @@ class CWorkPlan extends CActiveModel {
             $item = $lectures->getItem($i);
             $sortedLectures->add($item->getId(), $item);
         }
-        return $sortedLectures;
+        return $lectures;
     }
 
     /**
@@ -660,7 +660,7 @@ class CWorkPlan extends CActiveModel {
             $item = $technologies->getItem($i);
             $sortedTechnologies->add($item->getId(), $item);
         }
-        return $sortedTechnologies;
+        return $technologies;
     }
     
     /**
@@ -695,7 +695,7 @@ class CWorkPlan extends CActiveModel {
             $item = $selfWorkQuestions->getItem($i);
             $sortedSelfWorkQuestions->add($item->getId(), $item);
         }
-        return $sortedSelfWorkQuestions;
+        return $selfWorkQuestions;
     }
     
     /**
