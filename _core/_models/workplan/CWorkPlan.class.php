@@ -531,7 +531,7 @@ class CWorkPlan extends CActiveModel {
      */
     public function getPractices() {
         $practices = new CArrayList();
-        $sort = new CArrayList();
+        $sorted = array();
         /**
          * @var $category CWorkPlanContentCategory
          * @var $section CWorkPlanContentSection
@@ -544,18 +544,14 @@ class CWorkPlan extends CActiveModel {
                     if ($load->loadType->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_PRACTICE) {
                         foreach ($load->topicsDisplay as $topic) {
                             $practices->add($topic->getId(), $topic);
-                            $sort->add($topic->ordering, $topic->getId());
+                            $sorted[$topic->getId()] = $topic->ordering;
                         }
                     }
                 }
             }
         }
-        $sortedPractices = new CArrayList();
-        foreach ($sort->getSortedByKey(true)->getItems() as $i) {
-            $item = $practices->getItem($i);
-            $sortedPractices->add($item->getId(), $item);
-        }
-        return $practices;
+        $sortedPractices = CArrayListService::getSortedByField($sorted, $practices, true);
+        return $sortedPractices;
     }
 
     /**
@@ -604,7 +600,7 @@ class CWorkPlan extends CActiveModel {
      */
     public function getLectures() {
     	$lectures = new CArrayList();
-    	$sort = new CArrayList();
+    	$sorted = array();
     	/**
     	 * @var $category CWorkPlanContentCategory
     	 * @var $section CWorkPlanContentSection
@@ -617,18 +613,14 @@ class CWorkPlan extends CActiveModel {
     				if ($load->loadType->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_LECTURE) {
     					foreach ($load->topicsDisplay->getItems() as $topic) {
     						$lectures->add($topic->getId(), $topic);
-    						$sort->add($topic->ordering, $topic->getId());
+    						$sorted[$topic->getId()] = $topic->ordering;
     					}
     				}
     			}
     		}
     	}
-        $sortedLectures = new CArrayList();
-        foreach ($sort->getSortedByKey(true)->getItems() as $i) {
-            $item = $lectures->getItem($i);
-            $sortedLectures->add($item->getId(), $item);
-        }
-        return $lectures;
+    	$sortedLectures = CArrayListService::getSortedByField($sorted, $lectures, true);
+        return $sortedLectures;
     }
 
     /**
@@ -638,7 +630,7 @@ class CWorkPlan extends CActiveModel {
      */
     public function getTechnologies() {
         $technologies = new CArrayList();
-        $sort = new CArrayList();
+        $sorted = array();
         /**
          * @var $category CWorkPlanContentCategory
          * @var $section CWorkPlanContentSection
@@ -650,17 +642,13 @@ class CWorkPlan extends CActiveModel {
                 foreach ($section->loadsDisplay->getItems() as $load) {
                     foreach ($load->technologiesDisplay->getItems() as $technology) {
                         $technologies->add($technology->getId(), $technology);
-                        $sort->add($technology->ordering, $technology->getId());
+                        $sorted[$technology->getId()] = $technology->ordering;
                     }
                 }
             }
         }
-        $sortedTechnologies = new CArrayList();
-        foreach ($sort->getSortedByKey(true)->getItems() as $i) {
-            $item = $technologies->getItem($i);
-            $sortedTechnologies->add($item->getId(), $item);
-        }
-        return $technologies;
+        $sortedTechnologies = CArrayListService::getSortedByField($sorted, $technologies, true);
+        return $sortedTechnologies;
     }
     
     /**
@@ -670,7 +658,7 @@ class CWorkPlan extends CActiveModel {
      */
     public function getSelfWorkQuestions() {
     	$selfWorkQuestions = new CArrayList();
-    	$sort = new CArrayList();
+    	$sorted = array();
     	/**
     	 * @var $category CWorkPlanContentCategory
     	 * @var $section CWorkPlanContentSection
@@ -683,19 +671,15 @@ class CWorkPlan extends CActiveModel {
     				if ($load->loadType->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_SELF_WORK) {
     					foreach ($load->topicsDisplay->getItems() as $topic) {
     						$selfWorkQuestions->add($topic->getId(), $topic);
-    						$sort->add($topic->ordering, $topic->getId());
+    						$sorted[$topic->getId()] = $topic->ordering;
     					}
     
     				}
     			}
     		}
     	}
-        $sortedSelfWorkQuestions = new CArrayList();
-        foreach ($sort->getSortedByKey(true)->getItems() as $i) {
-            $item = $selfWorkQuestions->getItem($i);
-            $sortedSelfWorkQuestions->add($item->getId(), $item);
-        }
-        return $selfWorkQuestions;
+        $sortedSelfWorkQuestions = CArrayListService::getSortedByField($sorted, $selfWorkQuestions, true);
+        return $sortedSelfWorkQuestions;
     }
     
     /**
