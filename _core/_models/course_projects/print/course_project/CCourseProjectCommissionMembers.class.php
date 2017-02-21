@@ -25,25 +25,26 @@ class CCourseProjectCommissionMembers extends CAbstractPrintClassField {
     {
         $result = array();
         if (!is_null($contextObject->commision_members)) {
-        	$arrayLength = $contextObject->commision_members->getCount();
-        	$counter = 0;
         	foreach ($contextObject->commision_members->getItems() as $member) {
-        		$counter++;
         		$person = $member->getNameShort()." – ";
         		$person .= $member->degree->comment;
         		if (!is_null($member->getPost())) {
         			$person .= ", ".$member->getPost()->getValue()." каф. АСУ";
         		}
-        		if ($counter == $arrayLength) {
-        			$prefix = ".";
-        		} else {
-        			$prefix = ";";
-        		}
         		$dataRow = array();
-        		$dataRow[0] = $person.$prefix;
+        		$dataRow[0] = $person.";";
         		$result[] = $dataRow;
         	}
         }
+        // добавляем к списку членов комиссии преподавателя
+        $lecturer = $contextObject->lecturer->getNameShort()." – ";
+        $lecturer .= $contextObject->lecturer->degree->comment;
+        if (!is_null($contextObject->lecturer->getPost())) {
+        	$lecturer .= ", ".$contextObject->lecturer->getPost()->getValue()." каф. АСУ";
+        }
+        $row = array();
+        $row[0] = $lecturer.".";
+        $result[] = $row;
         return $result;
     }
 }

@@ -15,17 +15,16 @@
             </tr>
             </thead>
             <tbody>
-            {counter start=0 print=false}
             {foreach $objects->getItems() as $object}
                 <tr>
-                	<td>{counter}</td>
+                	<td>{$object->ordering}</td>
                     {if !is_null($object->load->term->corriculum_discipline_section)}
                     	<td>{$object->load->term->corriculum_discipline_section->title}</td>
                     {else}
                     	<td><font color="#FF0000">Обновите значение семестра из дисциплины!</font></td>
                     {/if}
                     <td>{$object->load->loadType}</td>
-                    <td>{$object->technology}</td>
+                    <td><a href="{$web_root}_modules/_corriculum/workplancontent.php?action=editTechnologies&id={$object->getId()}">{$object->technology}</a></td>
                     <td>{$object->value}</td>
                 </tr>
             {/foreach}

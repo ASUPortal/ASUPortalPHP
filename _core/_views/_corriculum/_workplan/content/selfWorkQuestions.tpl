@@ -14,12 +14,11 @@
                 </tr>
             </thead>
             <tbody>
-            {counter start=0 print=false}
             {foreach $objects->getItems() as $object}
                 <tr>
-                    <td>{counter}</td>
+                    <td>{$object->ordering}</td>
                     <td>{$object->load->section->sectionIndex}</td>
-                    <td>{$object->title}</td>
+                    <td><a href="{$web_root}_modules/_corriculum/workplancontent.php?action=editSelfWorkQuestions&id={$object->getId()}">{$object->title}</a></td>
                     <td>{$object->value}</td>
                 </tr>
             {/foreach}

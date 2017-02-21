@@ -70,7 +70,12 @@ class CCourseProjectsController extends CBaseController {
         	}
         }
         $courseProject->lecturer_id = CSession::getCurrentPerson()->getId();
+        $disciplines = array();
+        if (count(CStaffService::getDisciplinesWithCourseProjectFromLoadByYear(CSession::getCurrentPerson(), CUtils::getCurrentYear())) > 0) {
+            $disciplines = CStaffService::getDisciplinesWithCourseProjectFromLoadByYear(CSession::getCurrentPerson(), CUtils::getCurrentYear());
+        }
         $this->setData("groups", $groups);
+        $this->setData("disciplines", $disciplines);
         $this->setData("courseProject", $courseProject);
         $this->addActionsMenuItem(array(
             array(
@@ -90,6 +95,7 @@ class CCourseProjectsController extends CBaseController {
         	$years[] = $term->getId();
         }
         $groups = array();
+        $disciplines = array();
         if (!empty($years)) {
         	$year = CTaxonomyManager::getYear($years[0]);
         	foreach (CStaffManager::getStudentGroupsByYear($year)->getItems() as $group) {
@@ -97,8 +103,12 @@ class CCourseProjectsController extends CBaseController {
         			$groups[$group->getId()] = $group->getName();
         		}
         	}
+            if (count(CStaffService::getDisciplinesWithCourseProjectFromLoadByYear($courseProject->lecturer, $year)) > 0) {
+                $disciplines = CStaffService::getDisciplinesWithCourseProjectFromLoadByYear($courseProject->lecturer, $year);
+            }
         }
         $this->setData("groups", $groups);
+        $this->setData("disciplines", $disciplines);
         $this->setData("courseProject", $courseProject);
         $this->addActionsMenuItem(array(
             array(

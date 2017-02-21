@@ -74,7 +74,7 @@ class CPrintField extends CActiveModel {
      * @param $object
      * @return string|array|CArrayList
      */
-    public function evaluateValue($object) {
+    public function evaluateValue($object, $stripTags = false) {
         /**
          * На случай, если это дочерний описатель
          * переопределяем значения
@@ -96,7 +96,11 @@ class CPrintField extends CActiveModel {
             } else {
                 $value = "";
                 eval($this->value_evaluate);
-                return $value;
+                if (!$stripTags) {
+                	return $value;
+                } else {
+                	return strip_tags($value);
+                }
             }
         } elseif ($this->type_id == "2") {
             if ($isChild) {

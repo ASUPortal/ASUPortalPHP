@@ -163,4 +163,29 @@ class CStaffService {
     	}
         return false;
     }
+    
+    /**
+     * Список дисциплин преподавателя по году, по которым есть нагрузка по курсовому проектированию
+     *
+     * @param CPerson $lecturer
+     * @param CTerm $year
+     * 
+     * @return array
+     */
+    public static function getDisciplinesWithCourseProjectFromLoadByYear(CPerson $lecturer, CTerm $year) {
+        $disciplines = array();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_PLANNED, "kadri_id = ".$lecturer->getId()." AND year_id = ".$year->getId())->getItems() as $item) {
+    		$studyKursProj = 0;
+    		$study = new CStudyLoad($item);
+			$studyKursProj += $study->kurs_proj + $study->kurs_proj_add;
+			if ($studyKursProj != 0) {
+				$disciplines[$study->subject_id] = CDisciplinesManager::getDiscipline($study->subject_id)->name;
+			}
+        }
+        if (!empty($disciplines)) {
+			asort($disciplines);
+        }
+        return $disciplines;
+    }
+    
 }
