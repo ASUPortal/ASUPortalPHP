@@ -549,12 +549,9 @@ class CWorkPlan extends CActiveModel {
             }
         }
         $sorted = $practices->getItems();
-        uasort($sorted, array("CWorkPlan", "practicesSorter"));
+        uasort($sorted, array("CWorkPlanContentSectionLoadTopicComparator", "compare"));
         $sortedPractices = new CArrayList($sorted);
         return $sortedPractices;
-    }
-    public static function practicesSorter(CWorkPlanContentSectionLoadTopic $first, CWorkPlanContentSectionLoadTopic $second) {
-        return strcmp($first->ordering, $second->ordering);
     }
 
     /**
@@ -621,12 +618,9 @@ class CWorkPlan extends CActiveModel {
     		}
     	}
         $sorted = $lectures->getItems();
-        uasort($sorted, array("CWorkPlan", "lecturesSorter"));
+        uasort($sorted, array("CWorkPlanContentSectionLoadTopicComparator", "compare"));
         $sortedLectures = new CArrayList($sorted);
         return $sortedLectures;
-    }
-    public static function lecturesSorter(CWorkPlanContentSectionLoadTopic $first, CWorkPlanContentSectionLoadTopic $second) {
-        return strcmp($first->ordering, $second->ordering);
     }
 
     /**
@@ -652,12 +646,9 @@ class CWorkPlan extends CActiveModel {
             }
         }
         $sorted = $technologies->getItems();
-        uasort($sorted, array("CWorkPlan", "technologiesSorter"));
+        uasort($sorted, array("CWorkPlanContentSectionLoadTechnologyComparator", "compare"));
         $sortedTechnologies = new CArrayList($sorted);
         return $sortedTechnologies;
-    }
-    public static function technologiesSorter(CWorkPlanContentSectionLoadTechnology $first, CWorkPlanContentSectionLoadTechnology $second) {
-        return strcmp($first->ordering, $second->ordering);
     }
     
     /**
@@ -685,12 +676,9 @@ class CWorkPlan extends CActiveModel {
     		}
     	}
         $sorted = $selfWorkQuestions->getItems();
-        uasort($sorted, array("CWorkPlan", "selfWorkQuestionsSorter"));
+        uasort($sorted, array("CWorkPlanContentSectionLoadTopicComparator", "compare"));
         $sortedSelfWorkQuestions = new CArrayList($sorted);
         return $sortedSelfWorkQuestions;
-    }
-    public static function selfWorkQuestionsSorter(CWorkPlanContentSectionLoadTopic $first, CWorkPlanContentSectionLoadTopic $second) {
-        return strcmp($first->ordering, $second->ordering);
     }
     
     /**
