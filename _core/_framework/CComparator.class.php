@@ -9,7 +9,7 @@ class CComparator {
      * @param $field
      * @return int
      **/
-    public static function compare($first, $second, $field) {
+    public function compare($first, $second, $field) {
         return strcmp($first->$field, $second->$field);
     }
 }
