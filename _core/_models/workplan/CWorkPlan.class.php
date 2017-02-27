@@ -548,10 +548,9 @@ class CWorkPlan extends CActiveModel {
                 }
             }
         }
-        $sorted = $practices->getItems();
-        uasort($sorted, array("CWorkPlanContentSectionLoadTopicComparator", "compare"));
-        $sortedPractices = new CArrayList($sorted);
-        return $sortedPractices;
+        $comparator = new CComparator();
+        $sorted = CCollectionUtils::sort($practices, $comparator, "ordering");
+        return $sorted;
     }
 
     /**
@@ -617,10 +616,9 @@ class CWorkPlan extends CActiveModel {
     			}
     		}
     	}
-        $sorted = $lectures->getItems();
-        uasort($sorted, array("CWorkPlanContentSectionLoadTopicComparator", "compare"));
-        $sortedLectures = new CArrayList($sorted);
-        return $sortedLectures;
+        $comparator = new CComparator();
+        $sorted = CCollectionUtils::sort($lectures, $comparator, "ordering");
+        return $sorted;
     }
 
     /**
@@ -645,10 +643,9 @@ class CWorkPlan extends CActiveModel {
                 }
             }
         }
-        $sorted = $technologies->getItems();
-        uasort($sorted, array("CWorkPlanContentSectionLoadTechnologyComparator", "compare"));
-        $sortedTechnologies = new CArrayList($sorted);
-        return $sortedTechnologies;
+        $comparator = new CComparator();
+        $sorted = CCollectionUtils::sort($technologies, $comparator, "ordering");
+        return $sorted;
     }
     
     /**
@@ -675,10 +672,9 @@ class CWorkPlan extends CActiveModel {
     			}
     		}
     	}
-        $sorted = $selfWorkQuestions->getItems();
-        uasort($sorted, array("CWorkPlanContentSectionLoadTopicComparator", "compare"));
-        $sortedSelfWorkQuestions = new CArrayList($sorted);
-        return $sortedSelfWorkQuestions;
+        $comparator = new CComparator();
+        $sorted = CCollectionUtils::sort($selfWorkQuestions, $comparator, "ordering");
+        return $sorted;
     }
     
     /**
