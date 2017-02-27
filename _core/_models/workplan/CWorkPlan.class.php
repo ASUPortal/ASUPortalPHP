@@ -548,8 +548,8 @@ class CWorkPlan extends CActiveModel {
                 }
             }
         }
-        $comparator = new CComparator();
-        $sorted = CCollectionUtils::sort($practices, $comparator, "ordering");
+        $comparator = new CComparator("ordering");
+        $sorted = CCollectionUtils::sort($practices, $comparator);
         return $sorted;
     }
 
@@ -616,8 +616,8 @@ class CWorkPlan extends CActiveModel {
     			}
     		}
     	}
-        $comparator = new CComparator();
-        $sorted = CCollectionUtils::sort($lectures, $comparator, "ordering");
+        $comparator = new CComparator("ordering");
+        $sorted = CCollectionUtils::sort($lectures, $comparator);
         return $sorted;
     }
 
@@ -643,8 +643,8 @@ class CWorkPlan extends CActiveModel {
                 }
             }
         }
-        $comparator = new CComparator();
-        $sorted = CCollectionUtils::sort($technologies, $comparator, "ordering");
+        $comparator = new CComparator("ordering");
+        $sorted = CCollectionUtils::sort($technologies, $comparator);
         return $sorted;
     }
     
@@ -672,8 +672,8 @@ class CWorkPlan extends CActiveModel {
     			}
     		}
     	}
-        $comparator = new CComparator();
-        $sorted = CCollectionUtils::sort($selfWorkQuestions, $comparator, "ordering");
+        $comparator = new CComparator("ordering");
+        $sorted = CCollectionUtils::sort($selfWorkQuestions, $comparator);
         return $sorted;
     }
     
