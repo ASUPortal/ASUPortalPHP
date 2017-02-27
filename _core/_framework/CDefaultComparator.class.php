@@ -1,11 +1,12 @@
 <?php
 class CDefaultComparator implements CComparator {
+	private $_field;
 	
 	/**
 	 * @param $field
 	 */
 	function __construct($field) {
-		$this->field = $field;
+		$this->_field = $field;
 	}
 	
     /**
@@ -17,7 +18,7 @@ class CDefaultComparator implements CComparator {
      * @return int
      */
     public function compare($first, $second) {
-        $field = $this->field;
+        $field = $this->_field;
         return strcmp($first->$field, $second->$field);
     }
 }
