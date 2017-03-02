@@ -43,7 +43,7 @@ class CStudentGroup extends CActiveModel {
     public function attributeLabels() {
         return array(
             "name" => "Название",
-            "students_cnt" => "Число студентов",
+            "man_cnt" => "Число студентов",
             "speciality_id" => "Специальность",
             "head_student_id" => "Староста",
             "year_id" => "Учебный год",
@@ -126,5 +126,19 @@ class CStudentGroup extends CActiveModel {
     		}
     	}
     	return $this->_schedules;
+    }
+    /**
+     * Число студентов группы
+     *
+     * @return int
+     */
+    public function getCountStudents() {
+        $countStudents = 0;
+        if ($this->getStudents()->getCount() != 0) {
+            $countStudents = $this->getStudents()->getCount();
+        } else {
+            $countStudents = $this->man_cnt;
+        }
+        return $countStudents;
     }
 }

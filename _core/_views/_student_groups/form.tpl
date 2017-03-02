@@ -47,6 +47,13 @@
         {CHtml::activeDropDownList("corriculum_id", $group, CCorriculumsManager::getCorriculumsList())}
         {CHtml::error("corriculum_id", $group)}
     </div>     </div>
+    
+    <div class="control-group">
+        {CHtml::activeLabel("man_cnt", $group)}
+        <div class="controls">
+        {CHtml::activeTextField("man_cnt", $group)}
+        {CHtml::error("man_cnt", $group)}
+    </div>     </div>
 
     <div class="control-group">
         {CHtml::activeLabel("comment", $group)}
