@@ -9,7 +9,7 @@
 
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
-            <th>Студенты: ({$group->getStudents()->getCount()})</th>
+            <th>Студенты: ({$group->getCountStudents()})</th>
             <th>Расписание</th>
             <th>Куратор</th>
             <th>Староста</th>

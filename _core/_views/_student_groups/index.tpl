@@ -12,7 +12,7 @@
             <th></th>
             <th>#</th>
             <th>{CHtml::tableOrder("name", $groups->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("man_cnt", $groups->getFirstItem(), true)}</th>
+            <th>{CHtml::tableOrder("man_cnt", $groups->getFirstItem())}</th>
             <th>{CHtml::tableOrder("speciality_id", $groups->getFirstItem())}</th>
             <th>{CHtml::tableOrder("head_student_id", $groups->getFirstItem())}</th>
             <th>{CHtml::tableOrder("year_id", $groups->getFirstItem())}</th>
