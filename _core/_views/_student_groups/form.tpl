@@ -49,10 +49,10 @@
     </div>     </div>
     
     <div class="control-group">
-        {CHtml::activeLabel("man_cnt", $group)}
+        {CHtml::activeLabel("students_count", $group)}
         <div class="controls">
-        {CHtml::activeTextField("man_cnt", $group)}
-        {CHtml::error("man_cnt", $group)}
+        {CHtml::activeTextField("students_count", $group)}
+        {CHtml::error("students_count", $group)}
     </div>     </div>
 
     <div class="control-group">
