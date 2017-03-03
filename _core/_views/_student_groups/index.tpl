@@ -12,7 +12,7 @@
             <th></th>
             <th>#</th>
             <th>{CHtml::tableOrder("name", $groups->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("students_cnt", $groups->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("students_count", $groups->getFirstItem())}</th>
             <th>{CHtml::tableOrder("speciality_id", $groups->getFirstItem())}</th>
             <th>{CHtml::tableOrder("head_student_id", $groups->getFirstItem())}</th>
             <th>{CHtml::tableOrder("year_id", $groups->getFirstItem())}</th>
@@ -26,7 +26,7 @@
                 <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить группу {$group->name}')) { location.href='?action=delete&id={$group->id}'; }; return false;"></a></td>
                 <td>{counter}</td>
                 <td><a href="?action=edit&id={$group->getId()}">{$group->name}</a></td>
-                <td>{$group->getStudents()->getCount()}</td>
+                <td>{$group->getStudentsCount()}</td>
                 <td>
                     {if !is_null($group->getSpeciality())}
                         {$group->getSpeciality()->getValue()}

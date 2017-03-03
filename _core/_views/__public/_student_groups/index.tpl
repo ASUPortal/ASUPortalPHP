@@ -37,7 +37,7 @@
         <tr>
             <th>#</th>
             <th>{CHtml::tableOrder("name", $groups->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("students_cnt", $groups->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("students_count", $groups->getFirstItem())}</th>
             <th>Расписание</th>
         </tr>
         {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
@@ -45,7 +45,7 @@
             <tr>
                 <td>{counter}</td>
                 <td><a href="?action=view&id={$group->getId()}">{$group->name}</a></td>
-                <td>{$group->getStudents()->getCount()}</td>
+                <td>{$group->getStudentsCount()}</td>
                 <td>
 					{if {$group->getSchedule()->getCount()}!=0}
 		    			<a href="{$web_root}p_time_table.php?onget=1&idlect={$group->getSchedule()->getFirstItem()->grup}&gr_mode=1">посмотреть</a>

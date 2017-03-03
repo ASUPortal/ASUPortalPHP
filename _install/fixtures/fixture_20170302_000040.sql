@@ -1,0 +1,1 @@
+ALTER TABLE `study_groups` CHANGE `man_cnt` `students_count` INT(10) NOT NULL DEFAULT '0' COMMENT 'Число студентов';
