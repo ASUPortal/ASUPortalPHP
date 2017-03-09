@@ -208,6 +208,7 @@
     define("TABLE_DISCIPLINES_BOOKS", "subject_books");
     define("TABLE_SPECIALITIES", "specialities");
     define("TABLE_SCIENCE_SPECIALITIES", "specialities_science");
+    define("TABLE_STUDY_LEVELS", "levels");
     define("TABLE_DEPARTMENT_PROTOCOLS", "protocols");
     define("TABLE_DEP_PROTOCOL_AGENDA", "protocol_details");
     define("TABLE_DEP_PROTOCOL_VISIT", "protocol_visit");
@@ -329,6 +330,8 @@
     define("TABLE_IND_PLAN_LOADS_ORDERS", "ip_loads_orders");
     define("TABLE_IND_PLAN_WORKS", "ip_works");
     define("TABLE_IND_PLAN_PLANNED", "hours_kind");
+    define("TABLE_IND_PLAN_PLANNED_TYPES", "hours_kind_type");
+    define("TABLE_IND_PLAN_PLANNED_STUDY_GROUPS", "hours_kind_study_groups");
     define("TABLE_ACCESS_LEVELS", "task_rights");
     define("TABLE_DOCUMENT_FOLDERS", "files_folders");
     define("TABLE_DOCUMENTS", "files");
