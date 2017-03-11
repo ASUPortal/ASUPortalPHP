@@ -1,6 +1,7 @@
 <form action="index.php" method="post" id="withLoadView">
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
+            <th></th>
             <th>#</th>
             <th>ФИО преподавателя</th>
             <th>долж.</th>
@@ -19,8 +20,9 @@
         {counter start=0 print=false}
         {foreach $persons as $person}
 	        <tr>
+	            <td><a href="#"><i title="Добавить" class="icon-plus" onclick="window.open('{$web_root}_modules/_study_loads/index.php?action=add&kadri_id={$person["kadri_id"]}&year_id={$person["year_id"]}')"></i></a></td>
 	            <td>{counter}</td>
-	            <td><a href="?action=editLoads&kadri_id={$person['kadri_id']}&year_id={$person['year_id']}" data-toggle="tooltip" title="{$person['fio']}">{$person['fio_short']}</a></td>
+	            <td><a href="?action=editLoads&kadri_id={$person['kadri_id']}&year_id={$person['year_id']}" title="{$person['fio']}">{$person['fio_short']}</a></td>
 	            <td>{$person['dolgnost']}</td>
 	            {if ($person['rate'] != 0)}
 		            <td>{round($person['hours_sum']/$person['rate'], 2)}</td>
@@ -44,6 +46,7 @@
 	        </tr>
         {/foreach}
         <tr bgcolor="#ff9966">
+        	<td>&nbsp;</td>
         	<td>&nbsp;</td>
             <td><b>Итого</b></td>
 			<td>&nbsp;</td>

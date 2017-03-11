@@ -8,7 +8,7 @@
         {foreach $persons->getItems() as $person}
         <tr>
             <td>{counter}</td>
-            <td><a href="?action=edit&id={$person->getId()}">{$person->getNameShort()}</a></td>
+            <td><a href="?action=add&kadri_id={$person->getId()}&year_id={$selectedYear}" title="Добавить" target="_blank">{$person->getName()}</a></td>
         </tr>
         {/foreach}
     </table>

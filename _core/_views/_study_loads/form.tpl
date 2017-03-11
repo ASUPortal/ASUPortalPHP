@@ -23,7 +23,7 @@
     <div class="control-group">
 	    {CHtml::activeLabel("part_id", $studyLoad)}
 	    <div class="controls">
-	        {CHtml::activeDropDownList("part_id", $studyLoad, $parts)}
+	        {CHtml::activeDropDownList("part_id", $studyLoad, CTaxonomyManager::getYearPartsList())}
 	        {CHtml::error("part_id", $studyLoad)}
 	    </div>
 	</div>

@@ -188,35 +188,4 @@ class CStaffService {
         return $disciplines;
     }
     
-    /**
-     * Учебная нагрузка
-     *
-     * @param $key
-     * @return CStudyLoad
-     */
-    public static function getStudyLoad($key) {
-        $ar = CActiveRecordProvider::getById(TABLE_IND_PLAN_PLANNED, $key);
-        if (!is_null($ar)) {
-            $studyLoad = new CStudyLoad($ar);
-        }
-        return $studyLoad;
-    }
-    
-    /**
-     * Лист нагрузок преподавателя по году
-     *
-     * @param CPerson $lecturer
-     * @param CTerm $year
-     *
-     * @return CArrayList
-     */
-    public static function getStudyLoadByYear(CPerson $lecturer, CTerm $year) {
-        $loads = new CArrayList();
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_PLANNED, "kadri_id = ".$lecturer->getId()." AND year_id = ".$year->getId())->getItems() as $item) {
-            $study = new CStudyLoad($item);
-            $loads->add($study->getId(), $study);
-        }
-        return $loads;
-    }
-    
 }
