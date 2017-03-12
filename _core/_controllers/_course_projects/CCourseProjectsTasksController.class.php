@@ -21,7 +21,8 @@ class CCourseProjectsTasksController extends CBaseController {
         $query = new CQuery();
         $set->setQuery($query);
         $query->select("tasks.*")
-            ->from(TABLE_COURSE_PROJECTS_TASKS." as tasks");
+            ->from(TABLE_COURSE_PROJECTS_TASKS." as tasks")
+            ->condition("course_project_id=".CRequest::getInt("course_project_id"));
         if (CRequest::getString("order") == "student_id") {
             $direction = "asc";
             if (CRequest::getString("direction") != "") {
