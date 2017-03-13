@@ -1,9 +1,9 @@
-{if $protocolPoints->getItems() == 0}
+{if $protocol->agenda->getCount() == 0}
     Решения еще не добавлены
 {else}
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tbody>
-        {foreach $protocolPoints->getItems() as $point}
+        {foreach $protocol->agenda->getItems() as $point}
             <tr>
                 <td rowspan="2">{$point->section_id}</td>
                 <td><strong>Слушали:</strong></td>
@@ -14,8 +14,8 @@
             <tr>
                 <td><strong>Постановили:</strong></td>
                 <td>
-                    {if !is_null($point->opinion)}
-                        {$point->opinion->getValue()}
+                    {if !is_null($point->decision)}
+                        {$point->decision->getValue()}
                     {/if}
                     {$point->opinion_text}
                 </td>

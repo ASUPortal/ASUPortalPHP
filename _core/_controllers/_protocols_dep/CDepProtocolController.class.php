@@ -44,14 +44,6 @@ class CDepProtocolController extends CBaseController {
     public function actionView() {
     	$protocol = CProtocolManager::getDepProtocol(CRequest::getInt("id"));
     	
-    	// пункты протокола
-    	$points = new CArrayList();
-    	foreach ($protocol->agenda->getItems() as $point) {
-    		$points->add($point->getId(), $point);
-    	}
-    	$comparator = new CDefaultComparator("section_id");
-    	$protocolPoints = CCollectionUtils::sort($points, $comparator);
-    	
     	// посещаемость заседаний
     	$set = new CRecordSet();
     	$query = new CQuery();
@@ -74,7 +66,6 @@ class CDepProtocolController extends CBaseController {
     		)
     	));
     	$this->setData("protocol", $protocol);
-    	$this->setData("protocolPoints", $protocolPoints);
     	$this->setData("protocolVisits", $protocolVisits);
     	$this->renderView("_protocols_dep/protocol/view.tpl");
     }

@@ -14,12 +14,15 @@
     
 		<table class="table table-striped table-bordered table-hover table-condensed">
 	        <tr>
+	            <th>#</th>
 	            <th>{CHtml::tableOrder("kadri_id", $protocol->visits->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("visit_type", $protocol->visits->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("matter_text", $protocol->visits->getFirstItem())}</th>
 	        </tr>
+	        {counter start=0 print=false}
 	        {foreach $protocol->visits->getItems() as $visit}
 	            <tr>
+	                <td>{counter}</td>
 	                <td width="50%">
 	                    {CHtml::textField($visit->person->getName(), $visit->person->getName(), "", "", 'style="width: 100%;"')}
 	                </td>

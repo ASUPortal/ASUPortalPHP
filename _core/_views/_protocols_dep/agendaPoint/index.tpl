@@ -22,8 +22,8 @@
 	            <tr>
 	                <td><strong>Постановили:</strong></td>
 	                <td>
-	                    {if !is_null($point->opinion)}
-	                        {$point->opinion->getValue()}
+	                    {if !is_null($point->decision)}
+	                        {$point->decision->getValue()}
 	                    {/if}
 	                    {$point->opinion_text}
 	                </td>

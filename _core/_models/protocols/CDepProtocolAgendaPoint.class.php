@@ -6,7 +6,7 @@
 class CDepProtocolAgendaPoint extends CActiveModel {
     protected $_table = TABLE_DEP_PROTOCOL_AGENDA;
     protected $_protocol = null;
-    protected $_opinion = null;
+    protected $_decision = null;
     public $_person;
 
     public function relations() {
@@ -18,9 +18,9 @@ class CDepProtocolAgendaPoint extends CActiveModel {
                 "managerClass" => "CProtocolManager",
                 "managerGetObject" => "getDepProtocol"
             ),
-            "opinion" => array(
+            "decision" => array(
                 "relationPower" => RELATION_HAS_ONE,
-                "storageProperty" => "_opinion",
+                "storageProperty" => "_decision",
                 "storageField" => "opinion_id",
                 "managerClass" => "CProtocolManager",
                 "managerGetObject" => "getProtocolOpinion"

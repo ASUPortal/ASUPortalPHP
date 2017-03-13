@@ -74,18 +74,9 @@ class CDepProtocolVisitsController extends CBaseController{
     }
     public function actionAddGroup() {
     	$protocol = CProtocolManager::getDepProtocol(CRequest::getInt("protocol_id"));
-    	
     	$persons = new CArrayList();
-    	$items = new CArrayList();
-    	$roles = new CArrayList();
-    	foreach (explode(",", "1, 6") as $val) {
-    		$roles->add($val, $val);
-    	}
-    	foreach (CStaffManager::getPersonsWithTypes($roles)->getItems() as $person) {
-    		$items->add($person->getId(), $person);
-    	}
-    	foreach ($items as $person) {
-    		if ($person->hasActiveOrder()) {
+    	foreach (CStaffManager::getAllPersons()->getItems() as $person) {
+    		if ($person->hasPersonType(TYPE_PPS) and $person->hasActiveOrder()) {
     			$persons->add($person->getId(), $person);
     		}
     	}
@@ -102,22 +93,12 @@ class CDepProtocolVisitsController extends CBaseController{
     }
     public function actionSaveAdd() {
     	$protocol = CProtocolManager::getDepProtocol(CRequest::getInt("id"));
-    	
     	$persons = new CArrayList();
-    	$items = new CArrayList();
-    	$roles = new CArrayList();
-    	foreach (explode(",", "1, 6") as $val) {
-    		$roles->add($val, $val);
-    	}
-    	foreach (CStaffManager::getPersonsWithTypes($roles)->getItems() as $person) {
-    		$items->add($person->getId(), $person);
-    	}
-    	foreach ($items as $person) {
-    		if ($person->hasActiveOrder()) {
+    	foreach (CStaffManager::getAllPersons()->getItems() as $person) {
+    		if ($person->hasPersonType(TYPE_PPS) and $person->hasActiveOrder()) {
     			$persons->add($person->getId(), $person);
     		}
     	}
-    	
     	foreach ($persons->getItems() as $item) {
     		$protocolVisit = new CDepProtocolVisit();
     		$protocolVisit->protocol_id = $protocol->getId();

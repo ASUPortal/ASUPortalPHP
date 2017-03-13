@@ -21,24 +21,22 @@ class CDepartmentProtocol extends CActiveModel {
 					"storageProperty" => "_agenda",
 					"storageTable" => TABLE_DEP_PROTOCOL_AGENDA,
 					"storageCondition" => "protocol_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND on_control=1",
-					"managerClass" => "CBaseManager",
-					"managerGetObject" => "getDepProtocolAgendaPoint"
+					"targetClass" => "CDepProtocolAgendaPoint"
 			),
 			"agenda" => array(
 					"relationPower" => RELATION_HAS_MANY,
 					"storageProperty" => "_agenda",
 					"storageTable" => TABLE_DEP_PROTOCOL_AGENDA,
 					"storageCondition" => "protocol_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
-					"managerClass" => "CBaseManager",
-					"managerGetObject" => "getDepProtocolAgendaPoint"
+					"targetClass" => "CDepProtocolAgendaPoint",
+					"managerOrder" => "`section_id` asc"
 			),
 			"visits" => array(
 					"relationPower" => RELATION_HAS_MANY,
 					"storageProperty" => "_visits",
 					"storageTable" => TABLE_DEP_PROTOCOL_VISIT,
 					"storageCondition" => "protocol_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
-					"managerClass" => "CBaseManager",
-					"managerGetObject" => "getDepProtocolVisit"
+					"targetClass" => "CDepProtocolVisit"
 			)
 		);
 	}

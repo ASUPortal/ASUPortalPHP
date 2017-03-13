@@ -14,15 +14,18 @@
     
 		<table class="table table-striped table-bordered table-hover table-condensed">
 	        <tr>
+	            <th>#</th>
 	            <th>Преподаватель</th>
 	            <th>Посещение</th>
 	        </tr>
+	        {counter start=0 print=false}
 	        {foreach $persons as $person}
 	            <tr>
-	                <td width="50%">
+	                <td>{counter}</td>
+	                <td width="80%">
 	                    {CHtml::textField($person->getName(), $person->getName(), "", "", 'style="width: 100%;"')}
 	                </td>
-	                <td align="left" width="10%">
+	                <td align="left" width="20%">
 	                    {CHtml::checkBox($person->getId(), "1")}
 	                </td>
 	            </tr>
