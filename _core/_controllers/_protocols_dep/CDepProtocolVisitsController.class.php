@@ -21,21 +21,9 @@ class CDepProtocolVisitsController extends CBaseController{
     public function actionIndex() {
     	$protocol = CProtocolManager::getDepProtocol(CRequest::getInt("protocol_id"));
     	
-    	$set = new CRecordSet();
-    	$query = new CQuery();
-    	$query->select("visit.*")
-	    	->from(TABLE_DEP_PROTOCOL_VISIT." as visit")
-	    	->innerJoin(TABLE_PERSON." as person", "person.id = visit.kadri_id")
-	    	->condition("protocol_id=".$protocol->getId())
-    		->order("person.fio asc");
-    	$set->setQuery($query);
-    	$set->setPageSize(PAGINATION_ALL);
-    	
-    	$protocolVisits = new CArrayList();
-    	foreach ($set->getPaginated()->getItems() as $item) {
-    		$visit = new CDepProtocolVisit($item);
-    		$protocolVisits->add($visit->getId(), $visit);
-    	}
+    	$visits = $protocol->visits;
+    	$comparator = new CPersonComparator("fio");
+    	$protocolVisits = CCollectionUtils::sort($visits, $comparator);
     	
     	$this->addActionsMenuItem(array(
     			"title" => "Обновить",

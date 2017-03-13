@@ -45,24 +45,21 @@ class CDepProtocolController extends CBaseController {
     	$protocol = CProtocolManager::getDepProtocol(CRequest::getInt("id"));
     	
     	// посещаемость заседаний
-    	$set = new CRecordSet();
-    	$query = new CQuery();
-    	$query->select("visit.*")
-	    	->from(TABLE_DEP_PROTOCOL_VISIT." as visit")
-	    	->innerJoin(TABLE_PERSON." as person", "person.id = visit.kadri_id")
-	    	->condition("protocol_id=".CRequest::getInt("id"))
-	    	->order("person.fio asc");
-    	$set->setQuery($query);
-    	$protocolVisits = new CArrayList();
-    	foreach ($set->getItems() as $item) {
-    		$visit = new CDepProtocolVisit($item);
-    		$protocolVisits->add($visit->getId(), $visit);
-    	}
+    	$visits = $protocol->visits;
+    	$comparator = new CPersonComparator("fio");
+    	$protocolVisits = CCollectionUtils::sort($visits, $comparator);
+    	
     	$this->addActionsMenuItem(array(
     		array(
     			"title" => "Назад",
     			"link" => "index.php?action=index",
     			"icon" => "actions/edit-undo.png"
+    		),
+    		array(
+    			"title" => "Печать по шаблону",
+    			"link" => "#",
+    			"icon" => "devices/printer.png",
+    			"template" => "formset_protocols_department"
     		)
     	));
     	$this->setData("protocol", $protocol);
