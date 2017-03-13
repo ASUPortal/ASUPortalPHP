@@ -24,11 +24,8 @@ class CDepartmentProtocolNotVisited extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = "";
-        $visits = $contextObject->visits;
-        $comparator = new CPersonByFioComparator();
-        $protocolVisits = CCollectionUtils::sort($visits, $comparator);
         $items = array();
-        foreach ($protocolVisits->getItems() as $visit) {
+        foreach ($contextObject->visits->getItems() as $visit) {
         	if ($visit->visit_type != 0) {
         		$items[] = $visit->person->fio_short;
         	}
