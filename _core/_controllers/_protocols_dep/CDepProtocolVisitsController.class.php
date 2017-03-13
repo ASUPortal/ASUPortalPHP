@@ -20,17 +20,11 @@ class CDepProtocolVisitsController extends CBaseController{
     }
     public function actionIndex() {
     	$protocol = CProtocolManager::getDepProtocol(CRequest::getInt("protocol_id"));
-    	
-    	$visits = $protocol->visits;
-    	$comparator = new CPersonByFioComparator();
-    	$protocolVisits = CCollectionUtils::sort($visits, $comparator);
-    	
     	$this->addActionsMenuItem(array(
     			"title" => "Обновить",
     			"link" => "visit.php?action=index&protocol_id=".$protocol->getId(),
     			"icon" => "actions/view-refresh.png"
     	));
-    	
     	if ($protocol->visits->getCount() == 0) {
     		$this->addActionsMenuItem(array(
     			"title" => "Добавить",
@@ -44,8 +38,7 @@ class CDepProtocolVisitsController extends CBaseController{
     			"icon" => "actions/list-add.png"
     		));
     	}
-    	
-    	$this->setData("protocolVisits", $protocolVisits);
+    	$this->setData("protocol", $protocol);
     	$this->renderView("_protocols_dep/visit/index.tpl");
     }
     public function actionEditGroup() {

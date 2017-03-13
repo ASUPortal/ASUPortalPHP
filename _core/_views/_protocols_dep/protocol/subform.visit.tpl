@@ -1,4 +1,4 @@
-{if $protocolVisits->getCount() == 0}
+{if $protocol->visits->getCount() == 0}
     Нет объектов для отображения
 {else}
     <table class="table table-striped table-bordered table-hover table-condensed">
@@ -6,7 +6,7 @@
             <tr>
                 <td><strong>Присутствовали:</strong></td>
                 <td>
-                	{foreach $protocolVisits->getItems() as $visit}
+                	{foreach $protocol->visits->getItems() as $visit}
                 		{if $visit->visit_type != 0}
 	                		{$visit->person->fio_short};
 	                	{/if}
@@ -16,7 +16,7 @@
             <tr>
                 <td><strong>Отсутствовали:</strong></td>
                 <td>
-                	{foreach $protocolVisits->getItems() as $visit}
+                	{foreach $protocol->visits->getItems() as $visit}
 	                    {if $visit->visit_type == 0 and $visit->matter_text != ""}
 	                        {$visit->person->fio_short}
 	                        ({$visit->matter_text});

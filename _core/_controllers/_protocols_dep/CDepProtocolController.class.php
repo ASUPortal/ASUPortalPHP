@@ -43,12 +43,6 @@ class CDepProtocolController extends CBaseController {
     }
     public function actionView() {
     	$protocol = CProtocolManager::getDepProtocol(CRequest::getInt("id"));
-    	
-    	// посещаемость заседаний
-    	$visits = $protocol->visits;
-    	$comparator = new CPersonByFioComparator();
-    	$protocolVisits = CCollectionUtils::sort($visits, $comparator);
-    	
     	$this->addActionsMenuItem(array(
     		array(
     			"title" => "Назад",
@@ -63,7 +57,6 @@ class CDepProtocolController extends CBaseController {
     		)
     	));
     	$this->setData("protocol", $protocol);
-    	$this->setData("protocolVisits", $protocolVisits);
     	$this->renderView("_protocols_dep/protocol/view.tpl");
     }
     public function actionEdit() {

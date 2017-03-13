@@ -1,9 +1,9 @@
 <?php
 /**
- * Сортировка по ФИО сотрудников из модели CPerson
+ * Сравнение по ФИО записей из модели CPerson, связанных с сортируемой коллекцией
  *
  */
-class CPersonByFioComparator implements CComparator {
+class CArrayListByPersonFioComparator implements CComparator {
 	
     /**
      * Сравниваем объекты. Если они равны, то
