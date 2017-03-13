@@ -25,7 +25,7 @@ class CDepartmentProtocolVisited extends CAbstractPrintClassField {
     {
         $result = "";
         $visits = $contextObject->visits;
-        $comparator = new CPersonComparator("fio");
+        $comparator = new CPersonByFioComparator();
         $protocolVisits = CCollectionUtils::sort($visits, $comparator);
         $items = array();
         foreach ($protocolVisits->getItems() as $visit) {

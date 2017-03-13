@@ -1,17 +1,9 @@
 <?php
 /**
- * Сравнение полей модели CPerson
+ * Сортировка по ФИО сотрудников из модели CPerson
  *
  */
-class CPersonComparator implements CComparator {
-	private $_field;
-	
-	/**
-	 * @param $field
-	 */
-	function __construct($field) {
-		$this->_field = $field;
-	}
+class CPersonByFioComparator implements CComparator {
 	
     /**
      * Сравниваем объекты. Если они равны, то
@@ -22,7 +14,6 @@ class CPersonComparator implements CComparator {
      * @return int
      */
     public function compare($first, $second) {
-        $field = $this->_field;
-        return strcmp($first->person->$field, $second->person->$field);
+        return strcmp($first->person->fio, $second->person->fio);
     }
 }

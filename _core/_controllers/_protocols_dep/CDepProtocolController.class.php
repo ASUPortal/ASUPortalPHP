@@ -46,7 +46,7 @@ class CDepProtocolController extends CBaseController {
     	
     	// посещаемость заседаний
     	$visits = $protocol->visits;
-    	$comparator = new CPersonComparator("fio");
+    	$comparator = new CPersonByFioComparator();
     	$protocolVisits = CCollectionUtils::sort($visits, $comparator);
     	
     	$this->addActionsMenuItem(array(
