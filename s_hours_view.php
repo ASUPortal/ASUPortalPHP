@@ -237,7 +237,7 @@ for ($i=0;$i<sizeof($hour_kind_code);$i++)
 	$q_fields_list.=', '.$hour_kind_code[$i].', '.$hour_kind_code[$i].'_add';	
 }
 
-$query_all='SELECT hours_kind.id,hours_kind.stud_cnt,hours_kind.stud_cnt_add, subjects.name as subj_name, specialities.name as spec_name, levels.name as level_name, study_groups.name as group_name, study_groups.man_cnt as man_cnt,hours_kind.hours_kind_type,hours_kind.groups_cnt,hours_kind.comment,hours_kind.year_id,hours_kind.part_id'.
+$query_all='SELECT hours_kind.id,hours_kind.stud_cnt,hours_kind.stud_cnt_add, subjects.name as subj_name, specialities.name as spec_name, levels.name as level_name, study_groups.name as group_name, study_groups.students_count as man_cnt,hours_kind.hours_kind_type,hours_kind.groups_cnt,hours_kind.comment,hours_kind.year_id,hours_kind.part_id'.
 $q_fields_list.',
 	time_intervals.name as year_name, time_parts.name as part_name,hours_kind_type.name as hours_kind_type_name,hours_kind.on_filial  
 	FROM hours_kind left join subjects on hours_kind.subject_id=subjects.id 
