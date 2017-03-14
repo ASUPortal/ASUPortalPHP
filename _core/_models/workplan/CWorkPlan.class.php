@@ -180,7 +180,10 @@ class CWorkPlan extends CActiveModel {
                 "leftCondition" => "plan_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
                 "rightKey" => "person_id",
                 "managerClass" => "CBaseManager",
-                "managerGetObject" => "getPerson"
+                "managerGetObject" => "getPerson",
+                "comparator" => "CDefaultComparator",
+                "comparatorRelation" => null,
+                "comparatorField" => "fio"
             ),
             "selfEducations" => array(
                 "relationPower" => RELATION_HAS_MANY,
@@ -548,7 +551,7 @@ class CWorkPlan extends CActiveModel {
                 }
             }
         }
-        $comparator = new CDefaultComparator("ordering");
+        $comparator = new CDefaultComparator(null, "ordering");
         $sorted = CCollectionUtils::sort($practices, $comparator);
         return $sorted;
     }
@@ -616,7 +619,7 @@ class CWorkPlan extends CActiveModel {
     			}
     		}
     	}
-        $comparator = new CDefaultComparator("ordering");
+        $comparator = new CDefaultComparator(null, "ordering");
         $sorted = CCollectionUtils::sort($lectures, $comparator);
         return $sorted;
     }
@@ -643,7 +646,7 @@ class CWorkPlan extends CActiveModel {
                 }
             }
         }
-        $comparator = new CDefaultComparator("ordering");
+        $comparator = new CDefaultComparator(null, "ordering");
         $sorted = CCollectionUtils::sort($technologies, $comparator);
         return $sorted;
     }
@@ -672,7 +675,7 @@ class CWorkPlan extends CActiveModel {
     			}
     		}
     	}
-        $comparator = new CDefaultComparator("ordering");
+        $comparator = new CDefaultComparator(null, "ordering");
         $sorted = CCollectionUtils::sort($selfWorkQuestions, $comparator);
         return $sorted;
     }
