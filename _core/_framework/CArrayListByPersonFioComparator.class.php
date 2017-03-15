@@ -1,13 +1,9 @@
 <?php
-class CDefaultComparator implements CComparator {
-	private $_field;
-	
-	/**
-	 * @param $field
-	 */
-	function __construct($field) {
-		$this->_field = $field;
-	}
+/**
+ * Сравнение по ФИО записей из модели CPerson, связанных с сортируемой коллекцией
+ *
+ */
+class CArrayListByPersonFioComparator implements CComparator {
 	
     /**
      * Сравниваем объекты. Если они равны, то
@@ -18,7 +14,6 @@ class CDefaultComparator implements CComparator {
      * @return int
      */
     public function compare($first, $second) {
-        $field = $this->_field;
-        return strcmp($first->$field, $second->$field);
+        return strcmp($first->person->fio, $second->person->fio);
     }
 }

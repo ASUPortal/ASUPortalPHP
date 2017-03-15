@@ -377,7 +377,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
                     }
                 }
                 if (array_key_exists("comparator", $relation)) {
-                    $comparator = new $relation['comparator']($relation['comparatorRelation'], $relation['comparatorField']);
+                    $comparator = new $relation['comparator']();
                     $this->$private = CCollectionUtils::sort($this->$private, $comparator);
                 }
                 return $this->$private;
@@ -437,10 +437,6 @@ class CActiveModel extends CModel implements IJSONSerializable{
                     if ($useCache) {
                         CApp::getApp()->cache->set($cacheKey, $this->$private, 60);
                     }
-                }
-                if (array_key_exists("comparator", $relation)) {
-                    $comparator = new $relation['comparator']($relation['comparatorRelation'], $relation['comparatorField']);
-                    $this->$private = CCollectionUtils::sort($this->$private, $comparator);
                 }
                 return $this->$private;
             }
