@@ -37,7 +37,7 @@ class CDepartmentProtocol extends CActiveModel {
 					"storageTable" => TABLE_DEP_PROTOCOL_VISIT,
 					"storageCondition" => "protocol_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
 					"targetClass" => "CDepProtocolVisit",
-					"comparator" => "CArrayListByPersonFioComparator"
+					"comparator" => "CProtocolVisitByPersonComparator"
 			)
 		);
 	}

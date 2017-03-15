@@ -438,6 +438,10 @@ class CActiveModel extends CModel implements IJSONSerializable{
                         CApp::getApp()->cache->set($cacheKey, $this->$private, 60);
                     }
                 }
+                if (array_key_exists("comparator", $relation)) {
+                    $comparator = new $relation['comparator']();
+                    $this->$private = CCollectionUtils::sort($this->$private, $comparator);
+                }
                 return $this->$private;
             }
         }

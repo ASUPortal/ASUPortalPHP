@@ -1,9 +1,9 @@
 <?php
 /**
- * Сравнение по ФИО записей из модели CPerson, связанных с сортируемой коллекцией
+ * Сортировка посещаемости заседаний кафедры для протоколов по ФИО из модели CPerson
  *
  */
-class CArrayListByPersonFioComparator implements CComparator {
+class CProtocolVisitByPersonComparator implements CComparator {
 	
     /**
      * Сравниваем объекты. Если они равны, то
