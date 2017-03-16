@@ -21,7 +21,7 @@ class CStaffTimeController extends CBaseController{
         $set = new CRecordSet();
         $query = new CQuery();
         $set->setQuery($query);
-        $query->select("person.*")
+        $query->select("distinct person.*")
         	->innerJoin(TABLE_STAFF_ORDERS." as orders", "person.id = orders.kadri_id")
         	->innerJoin(TABLE_PERSON_BY_TYPES." as type", "person.id = type.kadri_id")
             ->from(TABLE_PERSON." as person")
