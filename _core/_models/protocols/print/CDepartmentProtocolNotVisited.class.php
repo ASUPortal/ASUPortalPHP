@@ -26,7 +26,7 @@ class CDepartmentProtocolNotVisited extends CAbstractPrintClassField {
         $result = "";
         $items = array();
         foreach ($contextObject->visits->getItems() as $visit) {
-        	if ($visit->visit_type != 0) {
+        	if ($visit->visit_type == 0) {
         		$items[] = $visit->person->fio_short;
         	}
         }

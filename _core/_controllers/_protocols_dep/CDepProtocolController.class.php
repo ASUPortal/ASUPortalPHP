@@ -109,22 +109,6 @@ class CDepProtocolController extends CBaseController {
     	$res = array();
     	$term = CRequest::getString("query");
     	/**
-    	 * Поиск по дате
-    	*/
-    	$query = new CQuery();
-    	$query->select("distinct(protocol.id) as id, protocol.date_text as name")
-	    	->from(TABLE_DEPARTMENT_PROTOCOLS." as protocol")
-	    	->condition("protocol.date_text like '%".$term."%'")
-	    	->limit(0, 5);
-    	foreach ($query->execute()->getItems() as $item) {
-    		$res[] = array(
-    				"field" => "protocol.id",
-    				"value" => $item["id"],
-    				"label" => $item["name"],
-    				"class" => "CDepartmentProtocol"
-    		);
-    	}
-    	/**
     	 * Поиск по тексту повестки
     	 */
     	$query = new CQuery();
