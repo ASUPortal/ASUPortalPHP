@@ -4,28 +4,7 @@
 
     // соединялка с базой
     require_once("sql_connect_credentials.php");
-    /**
-     * Базовые константы
-     */
-    define('CORE_DS', DIRECTORY_SEPARATOR);
-    define('CORE_CWD', str_replace(CORE_DS."core.php", "", __FILE__));
-    define("CACHE_DIR", CORE_CWD.CORE_DS."tmp".CORE_DS."cache");
-    define('SMARTY_FOLDER', CORE_CWD.'/_core/_external/smarty');
-    define('SMARTY_DIR', SMARTY_FOLDER.'/libs/');
-    define('VIEWS_DIR', CORE_CWD.CORE_DS.'_core'.CORE_DS.'_views'.CORE_DS);
-    define('TEMPLATES_DIR', CORE_CWD.CORE_DS.'_core'.CORE_DS.'_templates'.CORE_DS);
-    define('CORE_ENABLED', true);
-    define("JSON_CONTROLLERS_DIR", CORE_CWD.CORE_DS.'_core'.CORE_DS.'_json_controllers'.CORE_DS);
-    define('AJAX_VIEW', "_ajax.html.php");
-    define('SMARTY_TEMPLATES', VIEWS_DIR);
-    define('SMARTY_COMPILE', CORE_CWD.CORE_DS.'tmp'.CORE_DS.'smarty'.CORE_DS);
-    define('SMARTY_CACHE', CORE_CWD.CORE_DS.'tmp'.CORE_DS.'smarty'.CORE_DS);
-    define("PHPMAILER_DIR", CORE_CWD.'/_core/_external/phpmailer');
-    define("PRINT_ENGINE_WORD", CORE_CWD.CORE_DS.'_core'.CORE_DS.'_external'.CORE_DS.'phpword'.CORE_DS);
-    define("PRINT_TEMPLATES_DIR", CORE_CWD.CORE_DS.'library'.CORE_DS.'templates'.CORE_DS);
-    define("PRINT_DOCUMENTS_DIR", CORE_CWD.CORE_DS.'tmp'.CORE_DS.'print'.CORE_DS);
-    define("ZIP_DOCUMENTS_DIR", CORE_CWD.CORE_DS.'tmp'.CORE_DS.'zip'.CORE_DS);
-    define("TIMTHUMB_CACHE", CORE_CWD.CORE_DS.'tmp'.CORE_DS.'timthumb'.CORE_DS);
+    require_once("core_classloader.php");
     /**
      * Перекидываем настройки соединения с БД в константы
      */
@@ -41,59 +20,6 @@
     define("LOG_DB_PASSWORD", $sql_stats_passw);
     define("LOG_DB_DATABASE", $sql_stats_base);
     define("LOG_TABLE_STATS", "stats");
-    /**
-     * Директории, из которых выполняется автолоад классов
-     * и выполняется поиск
-     */
-    $import = array(
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_widgets'.CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_interfaces'.CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_controllers'.CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models'.CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_framework'.CORE_DS,
-        CORE_CWD.CORE_DS.'_core'.CORE_DS.'_external'.CORE_DS.'phpmailer'.CORE_DS,
-        SMARTY_DIR,
-        PHPMAILER_DIR,
-        PRINT_ENGINE_WORD
-    );
-    /**
-     * Сделаем небольшую оптимизацию для загрузки классов
-     * Это еще более новая версия, с рекурсивной загружалкой
-     */
-    global $classAutoloadMapping;
-    $classAutoloadMapping = array();
-
-    function scanFolderForClasses($folder, &$import) {
-        global $classAutoloadMapping;
-
-        $folderHandler = opendir($folder);
-        while (false !== ($file = readdir($folderHandler))) {
-            if ($file != "." && $file != "..") {
-                if (is_dir($folder.CORE_DS.$file)) {
-                    $import[] = $folder.CORE_DS.$file;
-                    scanFolderForClasses($folder.CORE_DS.$file, $import);
-                } elseif (is_file($folder.CORE_DS.$file)) {
-                    $filename = $folder.CORE_DS.$file;
-                    if (mb_substr($file, mb_strlen($file) - 10) == ".class.php") {
-                        $className = mb_substr($file, 0, mb_strlen($file) - 10);
-                        $classAutoloadMapping[$className] = $filename;
-                    }
-                }
-            }
-        }
-    }
-    /**
-     * Добавляем подпапки
-     */
-    $subfoldersToLoad = array(
-        "_models" => CORE_CWD.CORE_DS.'_core'.CORE_DS.'_models',
-        "_controllers" => CORE_CWD.CORE_DS.'_core'.CORE_DS.'_controllers',
-        "_framework" => CORE_CWD.CORE_DS.'_core'.CORE_DS.'_framework',
-        "_services" => CORE_CWD.CORE_DS.'_core'.CORE_DS.'_services',
-    );
-    foreach ($subfoldersToLoad as $folder) {
-        scanFolderForClasses($folder, $import);
-    }
     /**
      * Конфигурация всего приложения
      */
@@ -142,41 +68,6 @@
             "cacheEnabled" => false
         )
     );
-    /**
-     * Автолоадер
-     */
-    foreach ($import as $i) {
-        set_include_path(get_include_path().PATH_SEPARATOR.$i);
-    }
-    set_include_path(get_include_path().PATH_SEPARATOR.JSON_CONTROLLERS_DIR);
-    spl_autoload_extensions(".class.php");
-    spl_autoload_register('classAutoload');
-
-    function classAutoload($className) {
-        global $classAutoloadMapping;
-        //
-        $hasFile = false;
-        if (array_key_exists($className, $classAutoloadMapping)) {
-            if (file_exists($classAutoloadMapping[$className])) {
-                $hasFile = true;
-                require_once($classAutoloadMapping[$className]);
-                return true;
-            }
-        }
-        foreach (explode(PATH_SEPARATOR, get_include_path()) as $path) {
-            if (file_exists($path.$className.".class.php")) {
-                $classAutoloadMapping[$className] = $path.$className.".class.php";
-                $hasFile = true;
-                require_once($className.".class.php");
-                break;
-            }
-        }
-        if (!$hasFile) {
-            // логгируем ошибку, выходим.
-            // пока оставим так
-        }
-    }
-
     /**
      * Особые таксономии
      */

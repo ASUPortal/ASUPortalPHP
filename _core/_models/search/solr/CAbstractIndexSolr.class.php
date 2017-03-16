@@ -1,6 +1,6 @@
 <?php
 
-abstract class CAbstractIndexSolr extends CComponent implements ISolrInterface {
+abstract class CAbstractIndexSolr extends CComponent {
 
     public function getListIndexingFiles()
     {
