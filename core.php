@@ -69,76 +69,10 @@
         )
     );
     /**
-     * Особые таксономии
-     */
-    define("TAXONOMY_DEPARTMENT_ROLES", "department_roles");
-    define("TAXONOMY_COMPETENTIONS", "corriculum_competentions");
-    define("TAXONOMY_SPECIALITY", "specialities");
-    /**
-     * Импорт отсальных констант. Там уже можно использовать настройки
-     * из базы данных, так как автолоадер уже запущен
-     */
-    /**
-     * Константы пагинатора
-     */
-    define("PAGINATION_ALL", "all");
-    define("PAGINATION_DEFAULT", 20);
-    /**
-     * Константы для диссертаций
-     */
-    define("DISSER_DOCTOR", "доктор");
-    define("DISSER_PHD", "кандидат");
-    define("DISSER_DEGREE", "степень");
-    /**
-     * Стандартные действия
-     */
-    define("ACTION_INDEX", "index");
-    /**
-     * Уровни доступа константами
-     */
-    define("ACCESS_LEVEL_NO_ACCESS", 0);
-    define("ACCESS_LEVEL_READ_OWN_ONLY", 1);
-    define("ACCESS_LEVEL_READ_ALL", 2);
-    define("ACCESS_LEVEL_WRITE_OWN_ONLY", 3);
-    define("ACCESS_LEVEL_WRITE_ALL", 4);
-    /**
      * Запуск приложения. Инициализация автозагружаемых классов и кэша
      */
     CApp::createApplication($config)->run();
-    // Типы участия на кафедре
-    define("TYPE_PPS", "профессорско-преподавательский состав");
-    define("TYPE_REVIEWER", "рецензент");
-    define("TYPE_REVIEWER_ARCHIVE", "архив рецензент");
-    define("USER_TYPE_ADMIN", "администратор");
-    define("HEAD_OF_DEPARTMENT", "2");
-
-    // типы связей
-    define("RELATION_HAS_ONE", "1");
-    define("RELATION_HAS_MANY", "many");
-    define("RELATION_COMPUTED", "computed");
-    define("RELATION_MANY_TO_MANY", "many_to_many");
-
-    /**
-     * Типы полей.
-     * Для загрузки файлов и других корректировок
-     */
-    define("FIELD_UPLOADABLE", "uploadable");
-    define("FIELD_MYSQL_DATE", "mysql_date");
-
-    // сообщения об ошибках
-    define("ERROR_FIELD_REQUIRED", "Поле \"%name%\" обязательно для заполнения");
-    define("ERROR_FIELD_NUMERIC", "Значение поля \"%name%\" должно быть числовым");
-    define("ERROR_FIELD_SELECTED", "Значение поля \"%name%\" должно быть выбрано из списка");
-    define("ERROR_FIELD_NOT_A_DATE", "Значение в поле \"%name%\" должно быть датой в формате дд.мм.гггг");
-    define("ERROR_FIELD_IS_IMAGE", "Значение поля \"%name%\" должно быть изображением");
-    define("ERROR_INSUFFICIENT_ACCESS_LEVEL", "У Вас недостаточно прав для доступа к данной задаче");
-
-    // события валидации
-    define("VALIDATION_EVENT_READ", "onRead");
-    define("VALIDATION_EVENT_UPDATE", "onUpdate");
-    define("VALIDATION_EVENT_CREATE", "onCreate");
-    define("VALIDATION_EVENT_REMOVE", "onDelete");
-
+    
     define("WEB_ROOT", CSettingsManager::getSettingValue("web_root"));
     define("ROOT_FOLDER", CSettingsManager::getSettingValue("root_folder"));
     define("PRINT_DOCUMENTS_URL", WEB_ROOT."/tmp/print/");
