@@ -1,0 +1,4 @@
+language: php
+php:
+  - '5.6'
+script: phpunit _tests/_unit/_model/ModelTest.class.php
