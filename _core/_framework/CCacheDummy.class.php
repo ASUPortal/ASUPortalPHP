@@ -7,17 +7,18 @@
  * To change this template use File | Settings | File Templates.
  */
 class CCacheDummy extends CCache{
-    private $_cache = null;
+    private static $_cache = null;
+
     private function getCache() {
-        if (is_null($this->_cache)) {
-            $this->_cache = new CArrayList();
+        if (is_null(CCacheDummy::$_cache)) {
+            CCacheDummy::$_cache = new CArrayList();
         }
-        return $this->_cache;
+        return CCacheDummy::$_cache;
     }
     public function get($key) {
         return $this->getCache()->getItem($key);
     }
-    public function set($key, $value) {
+    public function set($key, $value, $expire = 0) {
        $this->getCache()->add($key, $value);
     }
     public function hasCache($key) {
