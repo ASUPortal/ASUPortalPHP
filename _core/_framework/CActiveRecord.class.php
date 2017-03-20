@@ -25,7 +25,9 @@ class CActiveRecord {
      * @return CActiveRecord
      */
     public function __construct($arr) {
-        $this->_id = $arr[self::getPk()];
+        if (array_key_exists(self::getPk(), $arr)) {
+            $this->_id = $arr[self::getPk()];
+        }
         $this->_items = $arr;
         return $this;
     }

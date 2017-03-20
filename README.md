@@ -26,3 +26,8 @@ startsev@gmail.com для получения необходимых файлов
   * web_root - должно содержать полный url-адрес к корневой директории инсталляции
   * inner_url_name - должно совпадать с web_root
 6. Для входа в административный раздел использовать логин и пароль admin
+
+Метрики
+=========
+
+[![Build Status](https://travis-ci.org/ASUPortal/ASUPortalPHP.svg?branch=master)](https://travis-ci.org/ASUPortal/ASUPortalPHP) - статус сборки

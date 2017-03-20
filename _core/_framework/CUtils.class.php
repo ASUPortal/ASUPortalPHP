@@ -917,7 +917,7 @@ class CUtils {
      * @param string $folder
      * @return CArrayList
      */
-    public static function getAllClassesWithInterface($interfaceName, $folder = "") {
+    public static function getAllClassesWithInterface($interfaceName, $folder = "", $excludes = array()) {
         if ($folder == "") {
             $folder = CORE_CWD.CORE_DS."_core".CORE_DS."_models";
         }
@@ -926,10 +926,10 @@ class CUtils {
         while (false !== ($file = readdir($folderHandle))) {
             if ($file != "." && $file != "..") {
                 if (is_dir($folder.CORE_DS.$file)) {
-                    $part = self::getAllClassesWithInterface($interfaceName, $folder.CORE_DS.$file);
+                    $part = self::getAllClassesWithInterface($interfaceName, $folder.CORE_DS.$file, $excludes);
                     $result->addAll($part);
                 } else {
-                    if (mb_strpos($file, ".class.php") !== false) {
+                    if (mb_strpos($file, ".class.php") !== false && !in_array(CUtils::strLeft($file, '.class.php'), $excludes)) {
                         if (!class_exists($file, false)) {
                             require_once($folder.CORE_DS.$file);
                         }
