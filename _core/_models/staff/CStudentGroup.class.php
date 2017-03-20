@@ -134,10 +134,10 @@ class CStudentGroup extends CActiveModel {
      */
     public function getStudentsCount() {
         $countStudents = 0;
-        if ($this->getStudents()->getCount() != 0) {
-            $countStudents = $this->getStudents()->getCount();
-        } else {
+        if ($this->students_count != 0) {
             $countStudents = $this->students_count;
+        } else {
+            $countStudents = $this->getStudents()->getCount();
         }
         return $countStudents;
     }
