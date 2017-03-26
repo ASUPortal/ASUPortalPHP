@@ -1,8 +1,6 @@
 {extends file="_core.component.tpl"}
 
 {block name="asu_center"}
-    <h2>Посещаемость</h2>
-
     {CHtml::helpForCurrentPage()}
     
     <form action="visit.php" method="post" class="form-horizontal">
@@ -17,16 +15,20 @@
 	            <th>#</th>
 	            <th>Преподаватель</th>
 	            <th>Посещение</th>
+	            <th>Причина отсутствия</th>
 	        </tr>
 	        {counter start=0 print=false}
 	        {foreach $persons as $person}
 	            <tr>
 	                <td>{counter}</td>
-	                <td width="80%">
-	                    {CHtml::textField($person->getName(), $person->getName(), "", "", 'style="width: 100%;"')}
+	                <td width="50%">
+	                    {CHtml::label($person->getName(), "", true)}
 	                </td>
-	                <td align="left" width="20%">
-	                    {CHtml::checkBox($person->getId(), "1")}
+	                <td width="10%" style="text-align:center;">
+	                    {CHtml::checkBox(CProtocolManager::getFieldName($person->getId(), "visit_type"), "1")}
+	                </td>
+	                <td width="40%">
+	                	{CHtml::textField(CProtocolManager::getFieldName($person->getId(), "matter_text"), "", "", "", 'style="width: 100%;"')}
 	                </td>
 	            </tr>
 	        {/foreach}

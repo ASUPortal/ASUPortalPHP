@@ -69,6 +69,7 @@ class CDepProtocolController extends CBaseController {
         	)
         ));
         $this->setData("protocol", $protocol);
+        $this->setData("save", "save");
         $this->renderView("_protocols_dep/protocol/edit.tpl");
     }
     public function actionAdd() {
@@ -80,6 +81,36 @@ class CDepProtocolController extends CBaseController {
         		"icon" => "actions/edit-undo.png"
         	)
         ));
+        $this->setData("protocol", $protocol);
+        $this->setData("save", "saveAdd");
+        $this->renderView("_protocols_dep/protocol/add.tpl");
+    }
+    public function actionSaveAdd() {
+        $protocol = new CDepartmentProtocol();
+        $protocol->setAttributes(CRequest::getArray($protocol::getClassName()));
+        if ($protocol->validate()) {
+            $protocol->save();
+            // добавляем сотрудников, которые должны присутствовать на заседании
+            $persons = new CArrayList();
+            foreach (CStaffManager::getAllPersons()->getItems() as $person) {
+                if ($person->hasPersonType(TYPE_PPS) and $person->hasActiveOrder()) {
+                    $persons->add($person->getId(), $person);
+                }
+            }
+            foreach ($persons->getItems() as $item) {
+                $protocolVisit = new CDepProtocolVisit();
+                $protocolVisit->protocol_id = $protocol->getId();
+                $protocolVisit->kadri_id = $item->getId();
+                $protocolVisit->visit_type = 0;
+                $protocolVisit->save();
+            }
+            if ($this->continueEdit()) {
+                $this->redirect("?action=edit&id=".$protocol->getId());
+            } else {
+                $this->redirect("?action=index");
+            }
+            return true;
+        }
         $this->setData("protocol", $protocol);
         $this->renderView("_protocols_dep/protocol/add.tpl");
     }
@@ -95,13 +126,14 @@ class CDepProtocolController extends CBaseController {
             }
             return true;
         }
-        $this->addJSInclude(JQUERY_UI_JS_PATH);
-        $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("protocol", $protocol);
         $this->renderView("_protocols_dep/protocol/add.tpl");
     }
     public function actionDelete() {
         $protocol = CProtocolManager::getDepProtocol(CRequest::getInt("id"));
+        foreach ($protocol->visits->getItems() as $visit) {
+            $visit->remove();
+        }
         $protocol->remove();
         $this->redirect("?action=index");
     }

@@ -53,7 +53,7 @@ class CDepProtocolAgendaPointsController extends CBaseController{
         if ($protocol->agenda->isEmpty()) {
         	$protocolPoint->section_id = 1;
         } else {
-        	$protocolPoint->section_id = $protocolPoint->protocol->agenda->getCount() + 1;
+        	$protocolPoint->section_id = $protocol->agenda->getCount() + 1;
         }
         $this->setData("protocolPoint", $protocolPoint);
         $this->addActionsMenuItem(array(
