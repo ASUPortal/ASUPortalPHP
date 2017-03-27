@@ -475,10 +475,10 @@ class CHtml {
      * @static
      * @param $text
      * @param $for
-     * @param $control
      * @param $html
+     * @param $control
      */
-    public static function label($text, $for, $control = false, $html = "") {
+    public static function label($text, $for, $html = "", $control = false) {
         $inline = "";
         if ($html != "") {
             $inline .= $html;
