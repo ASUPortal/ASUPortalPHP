@@ -1,8 +1,6 @@
 {extends file="_core.component.tpl"}
 
 {block name="asu_center"}
-    <h2>Посещаемость</h2>
-
     {CHtml::helpForCurrentPage()}
     
     <form action="visit.php" method="post" class="form-horizontal">
@@ -18,23 +16,28 @@
 	            <th>{CHtml::tableOrder("kadri_id", $protocol->visits->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("visit_type", $protocol->visits->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("matter_text", $protocol->visits->getFirstItem())}</th>
+	            <th align="center">Пропустить</th>
 	        </tr>
 	        {counter start=0 print=false}
 	        {foreach $protocol->visits->getItems() as $visit}
+	            {CHtml::hiddenField(CProtocolManager::getFieldName($visit->getId(), "person"), $visit->person->getId())}
 	            <tr>
 	                <td>{counter}</td>
 	                <td width="50%">
-	                    {CHtml::textField($visit->person->getName(), $visit->person->getName(), "", "", 'style="width: 100%;"')}
-	                </td>
-	                <td align="left" width="10%">
-	                    {CHtml::checkBox($visit->getId(), "1", $visit->visit_type)}
-	                </td>
-	                <td width="40%">
-	                	{if $visit->matter_text != ""}
-	                		{CHtml::textField($visit->matter_text, $visit->matter_text, "", "", 'style="width: 100%;"')}
+	                	{if $visit->visit_type != 1}
+	                		{CHtml::label($visit->person->getName(), "", 'style="color:red;"', true)}
 	                	{else}
-	                		{CHtml::textField($visit->matter_text, "", "", "", 'style="width: 100%;"')}
+	                		{CHtml::label($visit->person->getName(), "", 'style="color:green;"', true)}
 	                	{/if}
+	                </td>
+	                <td width="10%" style="text-align:center;">
+	                    {CHtml::checkBox(CProtocolManager::getFieldName($visit->getId(), "visit_type"), "1", $visit->visit_type)}
+	                </td>
+	                <td width="30%">
+	                	{CHtml::textField(CProtocolManager::getFieldName($visit->getId(), "matter_text"), $visit->matter_text, "", "", 'style="width: 100%;"')}
+	                </td>
+	                <td width="10%" style="text-align:center;">
+	                	{CHtml::checkBox(CProtocolManager::getFieldName($visit->getId(), "skip"), "1")}
 	                </td>
 	            </tr>
 	        {/foreach}

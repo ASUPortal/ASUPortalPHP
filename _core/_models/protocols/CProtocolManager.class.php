@@ -200,4 +200,13 @@ class CProtocolManager {
         }
         return self::getCacheProtocolOpinion()->getItem($key);
     }
+    
+    /**
+     * @param $id
+     * @param $field
+     * @return string
+     */
+    public static function getFieldName($id, $field) {
+        return "CModel[data][".$id."][".$field."]";
+    }
 }

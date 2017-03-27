@@ -7,10 +7,10 @@
 
 
     <div class="control-group">
-        {CHtml::activeLabel("section_id", $protocolPoint)}
+        {CHtml::activeLabel("ordering", $protocolPoint)}
         <div class="controls">
-            {CHtml::activeTextField("section_id", $protocolPoint)}
-            {CHtml::error("section_id", $protocolPoint)}
+            {CHtml::activeTextField("ordering", $protocolPoint)}
+            {CHtml::error("ordering", $protocolPoint)}
         </div>
     </div>
 

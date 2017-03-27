@@ -1,5 +1,5 @@
 <form action="index.php" method="post" enctype="multipart/form-data" class="form-horizontal">
-	{CHtml::hiddenField("action", "save")}
+	{CHtml::hiddenField("action", $save)}
 	{CHtml::activeHiddenField("id", $protocol)}
 
     <p>{CHtml::errorSummary($protocol)}</p>

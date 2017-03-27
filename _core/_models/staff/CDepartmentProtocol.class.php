@@ -29,7 +29,7 @@ class CDepartmentProtocol extends CActiveModel {
 					"storageTable" => TABLE_DEP_PROTOCOL_AGENDA,
 					"storageCondition" => "protocol_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
 					"targetClass" => "CDepProtocolAgendaPoint",
-					"managerOrder" => "`section_id` asc"
+					"managerOrder" => "`ordering` asc"
 			),
 			"visits" => array(
 					"relationPower" => RELATION_HAS_MANY,

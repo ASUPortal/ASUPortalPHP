@@ -70,7 +70,7 @@
 		        <td>{str_replace("\n", "<br>", $protocol->program_content)}</td>
 		        <td width=30%>
 			        {foreach $protocol->control->getItems() as $point}
-			        	{$point->section_id}&nbsp;<b>{$point->person->fio_short}</b>&nbsp;{$point->text_content}
+			        	{$point->ordering}&nbsp;<b>{$point->person->fio_short}</b>&nbsp;{$point->text_content}
 			        {/foreach}
 		        </td>
 		        <td>{$protocol->comment}</td>

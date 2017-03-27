@@ -12,7 +12,7 @@
 	            <tr>
 	                <td rowspan="2"><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить пункт')) { location.href='point.php?action=delete&id={$point->getId()}'; }; return false;"></a></td>
 	                <td rowspan="2"><a href="point.php?action=edit&id={$point->getId()}" class="icon-pencil"></a></td>
-	                <td rowspan="2">{$point->section_id}</td>
+	                <td rowspan="2">{$point->ordering}</td>
 	                <td><strong>Слушали:</strong></td>
 	                <td>
 	                	<b>{$point->person->fio_short}</b>
