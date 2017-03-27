@@ -37,7 +37,7 @@ class CDepProtocolAgendaPoint extends CActiveModel {
     
     public function attributeLabels() {
     	return array(
-    			"section_id" => "Номер пункта протокола",
+    			"ordering" => "Номер пункта протокола",
     			"kadri_id" => "Слушали (автор доклада)",
     			"text_content" => "Текст доклада",
     			"opinion_id" => "Постановили",

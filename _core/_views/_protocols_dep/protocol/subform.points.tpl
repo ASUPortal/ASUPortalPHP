@@ -5,7 +5,7 @@
         <tbody>
         {foreach $protocol->agenda->getItems() as $point}
             <tr>
-                <td rowspan="2">{$point->section_id}</td>
+                <td rowspan="2">{$point->ordering}</td>
                 <td><strong>Слушали:</strong></td>
                 <td><b>{$point->person->fio_short}</b>
 	                {$point->text_content}
