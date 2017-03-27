@@ -66,7 +66,13 @@ class CDepProtocolController extends CBaseController {
         		"title" => "Назад",
         		"link" => "index.php?action=index",
         		"icon" => "actions/edit-undo.png"
-        	)
+        	),
+    		array(
+    			"title" => "Печать по шаблону",
+    			"link" => "#",
+    			"icon" => "devices/printer.png",
+    			"template" => "formset_protocols_department"
+    		)
         ));
         $this->setData("protocol", $protocol);
         $this->setData("save", "save");
@@ -82,10 +88,10 @@ class CDepProtocolController extends CBaseController {
         	)
         ));
         $this->setData("protocol", $protocol);
-        $this->setData("save", "saveAdd");
+        $this->setData("save", "saveWithAddProtocolVisits");
         $this->renderView("_protocols_dep/protocol/add.tpl");
     }
-    public function actionSaveAdd() {
+    public function actionSaveWithAddProtocolVisits() {
         $protocol = new CDepartmentProtocol();
         $protocol->setAttributes(CRequest::getArray($protocol::getClassName()));
         if ($protocol->validate()) {

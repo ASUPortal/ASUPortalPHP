@@ -22,7 +22,7 @@
 	            <tr>
 	                <td>{counter}</td>
 	                <td width="50%">
-	                    {CHtml::label($person->getName(), "", true)}
+	                    {CHtml::label($person->getName(), "", "", true)}
 	                </td>
 	                <td width="10%" style="text-align:center;">
 	                    {CHtml::checkBox(CProtocolManager::getFieldName($person->getId(), "visit_type"), "1")}

@@ -28,20 +28,20 @@ class CDepProtocolVisitsController extends CBaseController{
     	if ($protocol->visits->getCount() == 0) {
     		$this->addActionsMenuItem(array(
     			"title" => "Добавить",
-    			"link" => "visit.php?action=add&protocol_id=".$protocol->getId(),
+    			"link" => "visit.php?action=addReqiuredProtocolVisits&protocol_id=".$protocol->getId(),
     			"icon" => "actions/list-add.png"
     		));
     	} else {
     		$this->addActionsMenuItem(array(
     			"title" => "Добавить пропущенных",
-    			"link" => "visit.php?action=addGroup&protocol_id=".$protocol->getId(),
+    			"link" => "visit.php?action=addSkippedProtocolVisits&protocol_id=".$protocol->getId(),
     			"icon" => "actions/list-add.png"
     		));
     	}
     	$this->setData("protocol", $protocol);
     	$this->renderView("_protocols_dep/visit/editGroup.tpl");
     }
-    public function actionAdd() {
+    public function actionAddReqiuredProtocolVisits() {
     	$protocol = CProtocolManager::getDepProtocol(CRequest::getInt("protocol_id"));
     	// добавляем сотрудников, которые должны присутствовать на заседании
     	$persons = new CArrayList();
@@ -59,7 +59,7 @@ class CDepProtocolVisitsController extends CBaseController{
     	}
     	$this->redirect("visit.php?action=index&protocol_id=".$protocol->getId());
     }
-    public function actionAddGroup() {
+    public function actionAddSkippedProtocolVisits() {
     	$protocol = CProtocolManager::getDepProtocol(CRequest::getInt("protocol_id"));
     	$persons = new CArrayList();
     	foreach (CStaffManager::getAllPersons()->getItems() as $person) {

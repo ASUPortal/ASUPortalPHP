@@ -25,9 +25,9 @@
 	                <td>{counter}</td>
 	                <td width="50%">
 	                	{if $visit->visit_type != 1}
-	                		{CHtml::label($visit->person->getName(), "", true, 'style="color:red;"')}
+	                		{CHtml::label($visit->person->getName(), "", 'style="color:red;"', true)}
 	                	{else}
-	                		{CHtml::label($visit->person->getName(), "", true, 'style="color:green;"')}
+	                		{CHtml::label($visit->person->getName(), "", 'style="color:green;"', true)}
 	                	{/if}
 	                </td>
 	                <td width="10%" style="text-align:center;">
