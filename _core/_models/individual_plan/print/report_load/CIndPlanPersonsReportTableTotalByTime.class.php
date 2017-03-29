@@ -146,7 +146,7 @@ class CIndPlanPersonsReportTableTotalByTime extends CAbstractPrintClassField {
             			5 => 2, //лаб
             			6 => -1,
             			7 => 4, //кп
-            			8 => -1,
+            			8 => 8, //коллоквиум
             			9 => 14, //ргр
             			10 => 3, //конс
             			11 => 15, //уч. прак.
@@ -174,7 +174,7 @@ class CIndPlanPersonsReportTableTotalByTime extends CAbstractPrintClassField {
             			4 => 2, //лаб
             			5 => -1,
             			6 => 4, //кп
-            			7 => -1,
+            			7 => 8, //коллоквиум
             			8 => 14, //ргр
             			9 => 3, //конс
             			10 => 15, //уч. прак.

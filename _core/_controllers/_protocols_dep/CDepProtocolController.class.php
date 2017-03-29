@@ -110,11 +110,7 @@ class CDepProtocolController extends CBaseController {
                 $protocolVisit->visit_type = 0;
                 $protocolVisit->save();
             }
-            if ($this->continueEdit()) {
-                $this->redirect("?action=edit&id=".$protocol->getId());
-            } else {
-                $this->redirect("?action=index");
-            }
+            $this->redirect("?action=edit&id=".$protocol->getId());
             return true;
         }
         $this->setData("protocol", $protocol);

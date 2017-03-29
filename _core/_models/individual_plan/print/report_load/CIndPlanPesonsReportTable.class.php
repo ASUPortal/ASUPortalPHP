@@ -118,7 +118,7 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
                 7 => 2, //лаб
                 8 => -1, 
                 9 => 4, //кп
-                10 => -1,
+                10 => 8, //коллоквиум
                 11 => 14, //ргр
                 12 => 3, //конс
                 13 => 15, //уч. прак.
