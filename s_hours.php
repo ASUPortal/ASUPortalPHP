@@ -131,10 +131,10 @@ $months=array(9=>'сентябрь','октябрь','ноябрь','декаб�
 $multy_ptypes=true;	//множественные "тип участия на каф." у сотрудника
 
 //для расчета нагрузки - список показателей видов часов
-$hour_kind_name=array('лекции', 'практич.', 'лаборатор. занятий', 'расчет.-грф. работы', 'КСР', 'рецензир. контр. работ', 'консультация', 'зачеты',
+$hour_kind_name=array('лекции', 'практич.', 'лаборатор. занятий', 'расчет.-грф. работы', 'КСР', 'коллоквиум', 'консультация', 'зачеты',
     'экзамены', 'учебная практика', 'производств. практика', 'курсовые проекты', 'консультац. диплом. проект', 'ГЭК', 'занятия с аспирантами',
     'руководство аспирант.', 'посещение занятий');
-$hour_kind_code=array('lects', 'practs', 'labor', 'rgr', 'ksr', 'recenz', 'consult', 'test', 'exams', 'study_pract', 'work_pract', 'kurs_proj', 'consult_dipl', 'gek', 'aspirants', 'aspir_manage', 'duty');
+$hour_kind_code=array('lects', 'practs', 'labor', 'rgr', 'ksr', 'kollokvium', 'consult', 'test', 'exams', 'study_pract', 'work_pract', 'kurs_proj', 'consult_dipl', 'gek', 'aspirants', 'aspir_manage', 'duty');
 
 
 if (!isset($_GET['kadri_id']) or $_GET['kadri_id']=="")
@@ -744,7 +744,7 @@ if (array_key_exists("type_kind", $_POST)) {
 		$gArr['sum'][] = "ifnull(hours.labor, 0)";
 		$gArr['sum'][] = "ifnull(hours.rgr, 0)";
 		$gArr['sum'][] = "ifnull(hours.ksr, 0)";
-		$gArr['sum'][] = "ifnull(hours.recenz, 0)";
+		$gArr['sum'][] = "ifnull(hours.kollokvium, 0)";
 		$gArr['sum'][] = "ifnull(hours.kurs_proj, 0)";
 		$gArr['sum'][] = "ifnull(hours.consult, 0)";
 		$gArr['sum'][] = "ifnull(hours.test, 0)";
@@ -763,7 +763,7 @@ if (array_key_exists("type_kind", $_POST)) {
 		$gArr['sum'][] = "ifnull(hours.labor_add, 0)";
 		$gArr['sum'][] = "ifnull(hours.rgr_add, 0)";
 		$gArr['sum'][] = "ifnull(hours.ksr_add, 0)";
-		$gArr['sum'][] = "ifnull(hours.recenz_add, 0)";
+		$gArr['sum'][] = "ifnull(hours.kollokvium_add, 0)";
 		$gArr['sum'][] = "ifnull(hours.kurs_proj_add, 0)";
 		$gArr['sum'][] = "ifnull(hours.consult_add, 0)";
 		$gArr['sum'][] = "ifnull(hours.test_add, 0)";
@@ -966,7 +966,7 @@ WHERE concat(substring(date_end,7,4),".",substring(date_end,4,2),".",substring(d
         $gArr['sum'][] = "ifnull(hours.labor, 0)";
         $gArr['sum'][] = "ifnull(hours.rgr, 0)";
         $gArr['sum'][] = "ifnull(hours.ksr, 0)";
-        $gArr['sum'][] = "ifnull(hours.recenz, 0)";
+        $gArr['sum'][] = "ifnull(hours.kollokvium, 0)";
         $gArr['sum'][] = "ifnull(hours.kurs_proj, 0)";
         $gArr['sum'][] = "ifnull(hours.consult, 0)";
         $gArr['sum'][] = "ifnull(hours.test, 0)";
@@ -988,7 +988,7 @@ WHERE concat(substring(date_end,7,4),".",substring(date_end,4,2),".",substring(d
         $gArr['sum'][] = "ifnull(hours.labor_add, 0)";
         $gArr['sum'][] = "ifnull(hours.rgr_add, 0)";
         $gArr['sum'][] = "ifnull(hours.ksr_add, 0)";
-        $gArr['sum'][] = "ifnull(hours.recenz_add, 0)";
+        $gArr['sum'][] = "ifnull(hours.kollokvium_add, 0)";
         $gArr['sum'][] = "ifnull(hours.kurs_proj_add, 0)";
         $gArr['sum'][] = "ifnull(hours.consult_add, 0)";
         $gArr['sum'][] = "ifnull(hours.test_add, 0)";
