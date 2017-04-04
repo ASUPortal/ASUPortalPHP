@@ -1,7 +1,7 @@
 {extends file="_core.component.tpl"}
 
 {block name="asu_center"}
-    <h2>Добавление решения</h2>
+    <h3>Добавление решения</h3>
 
     {CHtml::helpForCurrentPage()}
 

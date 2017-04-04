@@ -334,14 +334,14 @@ if (isset($_POST['num']))
 				for ($i=1;$i<=$_POST['max_protocols_details']+1;$i++) 
 					{
 					if ($_POST['kadri_id_'.$i]!=0) {
-					$_POST['section_id_'.$i]=str_replace("_","",$_POST['section_id_'.$i]);	//убираем все нечисловые символы
+					$_POST['ordering_'.$i]=str_replace("_","",$_POST['ordering_'.$i]);	//убираем все нечисловые символы
 					
 					if ($_POST['on_control_'.$i]=='on') {$_POST['on_control_'.$i]=1;}
 					else {$_POST['on_control_'.$i]=0;}
 					
-					$query_details="insert into protocol_details(protocol_id,section_id,kadri_id,text_content,opinion_id,
+					$query_details="insert into protocol_details(protocol_id,ordering,kadri_id,text_content,opinion_id,
 							on_control,opinion_text) 
-						values('".$protocol_id."','".$_POST['section_id_'.$i]."',
+						values('".$protocol_id."','".$_POST['ordering_'.$i]."',
 						'".$_POST['kadri_id_'.$i]."','".$_POST['text_content_'.$i]."','".$_POST['opinion_id_'.$i]."',
 						'".$_POST['on_control_'.$i]."','".$_POST['opinion_text_'.$i]."')";
 					if (!mysql_query($query_details)) {$err_opinions=true;$err=true;}
@@ -433,14 +433,14 @@ if (isset($_POST['num']))
 				for ($i=1;$i<=$_POST['max_protocols_details']+1;$i++) 
 					{
 					if ($_POST['kadri_id_'.$i]!=0) {
-					$_POST['section_id_'.$i]=str_replace("_","",$_POST['section_id_'.$i]);	//убираем все нечисловые символы
+					$_POST['ordering_'.$i]=str_replace("_","",$_POST['ordering_'.$i]);	//убираем все нечисловые символы
 					
 					if ($_POST['on_control_'.$i]=='on') {$_POST['on_control_'.$i]=1;}
 					else {$_POST['on_control_'.$i]=0;}
 
-					$query_details="insert into protocol_details(protocol_id,section_id,kadri_id,text_content,opinion_id,
+					$query_details="insert into protocol_details(protocol_id,ordering,kadri_id,text_content,opinion_id,
 						on_control,opinion_text) 
-						values('".$protocol_id."','".$_POST['section_id_'.$i]."',
+						values('".$protocol_id."','".$_POST['ordering_'.$i]."',
 						'".$_POST['kadri_id_'.$i]."','".$_POST['text_content_'.$i]."','".$_POST['opinion_id_'.$i]."',
 						'".$_POST['on_control_'.$i]."','".$_POST['opinion_text_'.$i]."')";
 					if (!mysql_query($query_details)) {$err_opinions=true;$err=true;}
@@ -517,18 +517,18 @@ $row_id_on=0; $row_id_off=0;$str_visit_on='';$str_visit_off='';
 		$res_view['program_content']=str_replace("\r\n","<br>",f_ro($res_view['program_content']));
 		echo '<div align=left>'.$res_view['program_content'].'</div><p>&nbsp;</p>';
 
-$query="select protocol_details.protocol_id,protocol_details.section_id,kadri.fio_short,
+$query="select protocol_details.protocol_id,protocol_details.ordering,kadri.fio_short,
 			protocol_details.text_content,protocol_opinions.name as opinion_name,on_control,opinion_text   
 		from protocol_details 
 			left join kadri on kadri.id=protocol_details.kadri_id 
 			left join protocol_opinions on protocol_opinions.id=protocol_details.opinion_id
-		where protocol_details.protocol_id='".$_GET['item_id']."' order by protocol_details.section_id";
+		where protocol_details.protocol_id='".$_GET['item_id']."' order by protocol_details.ordering";
 		//echo $query;
 		$res_=mysql_query($query);
  echo '<table border=0>';
  while ($z=mysql_fetch_array($res_))	//вывод по номерам пар (number)
  	{ 
-	  echo '<tr valign=top align=left><td wi><b>'.$z['section_id'].'</b></td><td>СЛУШАЛИ: </td><td><b>'.$z['fio_short'].'</b> - '.preg_replace("/\n/","<br>",$z['text_content']).'</td></tr>';	
+	  echo '<tr valign=top align=left><td wi><b>'.$z['ordering'].'</b></td><td>СЛУШАЛИ: </td><td><b>'.$z['fio_short'].'</b> - '.preg_replace("/\n/","<br>",$z['text_content']).'</td></tr>';	
  	 	echo '<tr valign=top align=left><td>&nbsp;</td><td>ПОСТАНОВИЛИ: </td><td><b>'.$z['opinion_name'].' '.$z['opinion_text'].'</b><p>&nbsp;</p></td></tr>';
 	  }
 echo '</table><p>&nbsp;</p>';
@@ -874,12 +874,12 @@ $row_id_detail=1;
 
     // <abarmin date="23.09.2012">
     // ошибка undefined index item_id
-    $query="select id,protocol_id,section_id,kadri_id,text_content,opinion_id,on_control,opinion_text from protocol_details
+    $query="select id,protocol_id,ordering,kadri_id,text_content,opinion_id,on_control,opinion_text from protocol_details
 	where protocol_id='";
     if (array_key_exists("item_id", $_GET)) {
         $query .= $_GET["item_id"];
     }
-    $query .= "' order by section_id";
+    $query .= "' order by ordering";
     // </abarmin>
 		//echo $query;
 		$res_=mysql_query($query);
@@ -887,8 +887,8 @@ $row_id_detail=1;
  while ($z=mysql_fetch_array($res_))	//вывод по номерам пар (number)
  	{ 
 	  echo '<a name="'.'detailsId_'.$z['id'].'"></a>';
-	  echo '<input type=text name="section_id_'.$row_id_detail.'" value="_'.$z['section_id'].'" title="порядок" style="width:30"> ';
-	  //<b>'.$z['section_id'].'.</b>
+	  echo '<input type=text name="ordering_'.$row_id_detail.'" value="_'.$z['ordering'].'" title="порядок" style="width:30"> ';
+	  //<b>'.$z['ordering'].'.</b>
 	  echo ' Слушали';
 ?>
 		   <select name="kadri_id_<?php echo $row_id_detail;?>" style="width:300;">	  	 	
@@ -926,26 +926,26 @@ $row_id_detail=1;
       <a href="?">просмотр списка протоколов</a> &nbsp; &nbsp; &nbsp;
       <?php
 //---------------------------- выписки по путевкам начало      
-      if (getScalarVal('select count(*) from protocol_trips where protocol_id='.intval($_GET['item_id']).' and section_id='.$z['section_id'].' ')==0) {?>
-            <a href="?item_id=<?php echo $_GET['item_id'];?>&s_id=<?php echo $z['section_id'];?>&type=addtrip" title="о распределении путевок в Авиатор">сформировать выписку по путевкам</a>
+      if (getScalarVal('select count(*) from protocol_trips where protocol_id='.intval($_GET['item_id']).' and ordering='.$z['ordering'].' ')==0) {?>
+            <a href="?item_id=<?php echo $_GET['item_id'];?>&s_id=<?php echo $z['ordering'];?>&type=addtrip" title="о распределении путевок в Авиатор">сформировать выписку по путевкам</a>
       <?php } else {  ?>
-	    <a onclick="javascript:del_confirm_act('выписку к протоколу.\n Все привязанные сотрудники будут удалены из путевок','?item_id=<?php echo $_GET['item_id'];?>&s_id=<?php echo $z['section_id'];?>&type=deltrip');" href="#" title="о распределении путевок в Авиатор">удалить выписку по путевкам
+	    <a onclick="javascript:del_confirm_act('выписку к протоколу.\n Все привязанные сотрудники будут удалены из путевок','?item_id=<?php echo $_GET['item_id'];?>&s_id=<?php echo $z['ordering'];?>&type=deltrip');" href="#" title="о распределении путевок в Авиатор">удалить выписку по путевкам
 	    <?php
 	    $kadri_cnt=intval(getScalarVal('select count(*) from protocol_trip_details where trip_id in
-					   (select id from protocol_trips where protocol_id ='.intval($_GET['item_id']).' and section_id='.$z['section_id'].')'),0);
+					   (select id from protocol_trips where protocol_id ='.intval($_GET['item_id']).' and ordering='.$z['ordering'].')'),0);
 	    if ($kadri_cnt>0) echo ' (найдено сотрудников: '.$kadri_cnt.')';
 	    ?></a>
       <?php }
 //---------------------------- выписки по путевкам окончание      
 
 //---------------------------- реком.в аспирантуру начало      
-      if (getScalarVal('select count(*) from protocol_2aspir where protocol_id='.intval($_GET['item_id']).' and section_id='.$z['section_id'].' ')==0) {?>
-            <a href="?item_id=<?php echo $_GET['item_id'];?>&s_id=<?php echo $z['section_id'];?>&type=addaspir" title="о рекомендации студентов в аспирантуру">сформировать выписку с рекомендацией</a>
+      if (getScalarVal('select count(*) from protocol_2aspir where protocol_id='.intval($_GET['item_id']).' and ordering='.$z['ordering'].' ')==0) {?>
+            <a href="?item_id=<?php echo $_GET['item_id'];?>&s_id=<?php echo $z['ordering'];?>&type=addaspir" title="о рекомендации студентов в аспирантуру">сформировать выписку с рекомендацией</a>
       <?php } else {  ?>
-	    <a onclick="javascript:del_confirm_act('выписку с рекомендацией в аспирантуру.\n Протокол исчезнет в форме дипломного проекта','?item_id=<?php echo $_GET['item_id'];?>&s_id=<?php echo $z['section_id'];?>&type=delaspir');" href="#" title="о рекомендации студентов в аспирантуру">удалить выписку с рекомендацией
+	    <a onclick="javascript:del_confirm_act('выписку с рекомендацией в аспирантуру.\n Протокол исчезнет в форме дипломного проекта','?item_id=<?php echo $_GET['item_id'];?>&s_id=<?php echo $z['ordering'];?>&type=delaspir');" href="#" title="о рекомендации студентов в аспирантуру">удалить выписку с рекомендацией
 	    <?php
 	    $items_cnt=intval(getScalarVal('select count(*) from diploms where protocol_2aspir_id in
-					   (select id from protocol_2aspir where protocol_id ='.intval($_GET['item_id']).' and section_id='.$z['section_id'].')'),0);
+					   (select id from protocol_2aspir where protocol_id ='.intval($_GET['item_id']).' and ordering='.$z['ordering'].')'),0);
 	    if ($items_cnt>0) echo ' (найдено дипломных проектов: '.$items_cnt.')';
 	    ?></a>
       <?php }
@@ -968,7 +968,7 @@ $row_id_detail=1;
        <td valign="top" align="center">
 	   <a href="#" onclick="return addline('protocols_details');" style="text-decoration:none"><img src="images/design/pl.gif" border="0" WIDTH="17" HEIGHT="18"></a></td></tr>
     <tr id="newline" nomer="_0">
-      <td><input type=text name="section_id_<?php echo $row_id_detail;?>" value="_<?php echo $row_id_detail;?>" title="порядок" style="width:30">
+      <td><input type=text name="ordering_<?php echo $row_id_detail;?>" value="_<?php echo $row_id_detail;?>" title="порядок" style="width:30">
 	  	Слушали 
 		   <select name="kadri_id_<?php echo $row_id_detail;?>" style="width:300;">	  	 	
 		  <?php 
@@ -1032,7 +1032,7 @@ if (isset($_GET['item_id']) &&  isset($_GET['type']) && intval($_GET['item_id'])
       //------------------------------- выписки по путевкам начало 
       if (isset($_GET['s_id']) && $_GET['type']=='addtrip' && intval($_GET['s_id'])>0)
       {
-      $query_add_trip='insert into protocol_trips(`date_act` , `protocol_id` , `section_id`)
+      $query_add_trip='insert into protocol_trips(`date_act` , `protocol_id` , `ordering`)
 	    values(\''.date("Y-m-d").'\','.intval($_GET['item_id']).','.intval($_GET['s_id']).')';
       if (mysql_query($query_add_trip) && mysql_affected_rows()>0) {
 	    echo '<div class=success>выписка успешно добавлена</div>';
@@ -1044,8 +1044,8 @@ if (isset($_GET['item_id']) &&  isset($_GET['type']) && intval($_GET['item_id'])
       {
       
       $query_del_trip1='delete from protocol_trip_details where trip_id in
-	    (select id from protocol_trips where  `protocol_id`='.intval($_GET['item_id']).' and section_id='.intval($_GET['s_id']).');';
-      $query_del_trip2='delete from protocol_trips where `protocol_id`='.intval($_GET['item_id']).' and section_id='.intval($_GET['s_id']).';';
+	    (select id from protocol_trips where  `protocol_id`='.intval($_GET['item_id']).' and ordering='.intval($_GET['s_id']).');';
+      $query_del_trip2='delete from protocol_trips where `protocol_id`='.intval($_GET['item_id']).' and ordering='.intval($_GET['s_id']).';';
       //echo $query_del_trip;
       if (mysql_query($query_del_trip1) && mysql_query($query_del_trip2) && mysql_affected_rows()>0) {
 	    echo '<div class=success>выписка успешно удалена</div>';
@@ -1059,7 +1059,7 @@ if (isset($_GET['item_id']) &&  isset($_GET['type']) && intval($_GET['item_id'])
       //------------------------------- реком.в аспирантуру начало
       if (isset($_GET['s_id']) && $_GET['type']=='addaspir' && intval($_GET['s_id'])>0)
       {
-      $query_add='insert into protocol_2aspir(`date_act` , `protocol_id` , `section_id`)
+      $query_add='insert into protocol_2aspir(`date_act` , `protocol_id` , `ordering`)
 	    values(\''.date("Y-m-d").'\','.intval($_GET['item_id']).','.intval($_GET['s_id']).')';
       if (mysql_query($query_add) && mysql_affected_rows()>0) {
 	    echo '<div class=success>выписка успешно добавлена</div>';
@@ -1070,9 +1070,9 @@ if (isset($_GET['item_id']) &&  isset($_GET['type']) && intval($_GET['item_id'])
        if ($_GET['type']=='delaspir' && intval($_GET['s_id'])>0)
       {
      $query_del1='update diploms set protocol_2aspir_id=null where protocol_2aspir_id in
-	    (select id from protocol_2aspir where  `protocol_id`='.intval($_GET['item_id']).' and section_id='.intval($_GET['s_id']).');';      
+	    (select id from protocol_2aspir where  `protocol_id`='.intval($_GET['item_id']).' and ordering='.intval($_GET['s_id']).');';      
 
-      $query_del2='delete from protocol_2aspir where `protocol_id`='.intval($_GET['item_id']).' and section_id='.intval($_GET['s_id']).';';
+      $query_del2='delete from protocol_2aspir where `protocol_id`='.intval($_GET['item_id']).' and ordering='.intval($_GET['s_id']).';';
       //echo $query_del_trip;
       if (mysql_query($query_del1) && mysql_query($query_del2) && mysql_affected_rows()>0) {
 	    echo '<div class=success>выписка успешно удалена</div>';
@@ -1218,21 +1218,21 @@ echo '<div align=center>страницы '.getPagenumList($pages_cnt,$page,6,'pa
 			 //выборка на контроле---------------------------------------------------------------
             // <abarmin date="23.09.2012">
             // ошибка undefined variable search_query
-			$query_control="SELECT protocol_details.id as details_id,protocol_details.section_id,protocol_details.text_content,
+			$query_control="SELECT protocol_details.id as details_id,protocol_details.ordering,protocol_details.text_content,
 			 	kadri.fio_short FROM protocol_details 
 			 	left join  kadri on kadri.id=protocol_details.kadri_id 
 			where protocol_id='".$tmpval['id']."' and on_control=1 ";
             if (isset($search_query)) {
                 $query_control .= $search_query;
             }
-            $query_control .= " order by section_id,kadri_id ASC limit 0,20";
+            $query_control .= " order by ordering,kadri_id ASC limit 0,20";
             // </abarmin>
 			 //echo $query_control;
 			 $res_control=mysql_query($query_control);
 			 while ($a_control=mysql_fetch_array($res_control))
 			 {
 			  
-			  echo ''.$a_control['section_id'].' <b>'.$a_control['fio_short'].'</b> '.
+			  echo ''.$a_control['ordering'].' <b>'.$a_control['fio_short'].'</b> '.
 			  	substr($a_control['text_content'],0,strpos($a_control['text_content'],' ',40)).''.
 				'<a href="?item_id='.$tmpval['id'].'&type=edit#detailsId_'.$a_control['details_id'].'" title="перейти к пункту для правки"> <b>... -></b></a><br style="font-size:2pt;"><br style="font-size:2pt;">';
 			  }

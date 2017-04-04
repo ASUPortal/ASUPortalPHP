@@ -475,9 +475,19 @@ class CHtml {
      * @static
      * @param $text
      * @param $for
+     * @param $html
+     * @param $control
      */
-    public static function label($text, $for) {
-        echo '<label for="'.$for.'" class="control-label" >'.$text.'</label>';
+    public static function label($text, $for, $html = "", $control = false) {
+        $inline = "";
+        if ($html != "") {
+            $inline .= $html;
+        }
+        if ($control) {
+            echo '<label for="'.$for.'" '.$html.'>'.$text.'</label>';
+        } else {
+            echo '<label for="'.$for.'" class="control-label" "'.$html.'">'.$text.'</label>';
+        }
     }
     /**
      * Метка, привязанная к модели

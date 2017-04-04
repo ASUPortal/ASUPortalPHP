@@ -24,7 +24,7 @@ class CDepProtocolAgendaPointsController extends CBaseController{
     	$query->select("point.*")
 	    	->from(TABLE_DEP_PROTOCOL_AGENDA." as point")
 	    	->condition("protocol_id=".CRequest::getInt("protocol_id"))
-    		->order("point.section_id asc");
+    		->order("point.ordering asc");
     	$set->setQuery($query);
     	$set->setPageSize(PAGINATION_ALL);
     	
@@ -51,9 +51,9 @@ class CDepProtocolAgendaPointsController extends CBaseController{
         $protocolPoint = new CDepProtocolAgendaPoint();
         $protocolPoint->protocol_id = $protocol->getId();
         if ($protocol->agenda->isEmpty()) {
-        	$protocolPoint->section_id = 1;
+        	$protocolPoint->ordering = 1;
         } else {
-        	$protocolPoint->section_id = $protocolPoint->protocol->agenda->getCount() + 1;
+        	$protocolPoint->ordering = $protocol->agenda->getCount() + 1;
         }
         $this->setData("protocolPoint", $protocolPoint);
         $this->addActionsMenuItem(array(

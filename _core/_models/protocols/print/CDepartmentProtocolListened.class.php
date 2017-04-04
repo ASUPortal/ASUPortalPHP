@@ -26,7 +26,7 @@ class CDepartmentProtocolListened extends CAbstractPrintClassField {
         $result = array();
         foreach ($contextObject->agenda->getItems() as $point) {
         	$dataRow = array();
-        	$dataRow[0] = $point->section_id;
+        	$dataRow[0] = $point->ordering;
         	$dataRow[1] = "СЛУШАЛИ";
         	$dataRow[2] = $point->person->fio_short." ".$point->text_content;
         	$result[] = $dataRow;

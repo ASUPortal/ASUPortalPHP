@@ -1,0 +1,1 @@
+ALTER TABLE `protocol_details` CHANGE `section_id` `ordering` INT(4) NOT NULL DEFAULT '0' COMMENT 'номер пункта протокола';
