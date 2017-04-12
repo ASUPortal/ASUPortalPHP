@@ -13,7 +13,7 @@
  * Class COdtPrintTemplateField
  */
 class COdtPrintTemplateField implements IPrintTemplateField {
-    private $_field;
+    public $_field;
     private $_form;
     private $descriptors;
     private $isStyleField;
@@ -182,11 +182,18 @@ class COdtPrintTemplateField implements IPrintTemplateField {
                  */
                 $debug[0] = $doc->saveXML($parent);
                 /**
+                 * Для совместимости с групповыми описателями вычислим для них объект $value здесь
+                 */
+                if ($field->type_id == 0 or $field->parent_id != 0) {
+                    $textNode = $field->evaluateValue($value);
+                } else {
+                    $textNode = $value;
+                }
+                /**
                  * Заменяем пользовательское поле просто текстовой нодой
                  */
-                // echo $field->alias.", ";
                 try {
-                    $newNode = $doc->createTextNode($value);
+                    $newNode = $doc->createTextNode($textNode);
                 } catch (Exception $e) {
                     echo "Возникла ошибка ".$e->getMessage()." в поле ".$field->alias;
                 }
