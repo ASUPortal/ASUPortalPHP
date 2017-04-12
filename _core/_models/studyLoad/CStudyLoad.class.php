@@ -2,21 +2,21 @@
 /**
  * Учебная нагрузка
  */
-class CStudyLoad extends CActiveModel {
-    protected $_table = TABLE_IND_PLAN_PLANNED;
+class CStudyLoad extends CActiveModel implements IVersionControl {
+    protected $_table = TABLE_WORKLOAD;
     protected $_direction = null;
     protected $_studyLevel = null;
     protected $_studyLoadType = null;
-    protected $_group = null;
     protected $_discipline = null;
     protected $_lecturer = null;
+    protected $_createdBy = null;
     
     protected function relations() {
     	return array(
     		"direction" => array(
     			"relationPower" => RELATION_HAS_ONE,
     			"storageProperty" => "_direction",
-    			"storageField" => "spec_id",
+    			"storageField" => "speciality_id",
     			"managerClass" => "CTaxonomyManager",
     			"managerGetObject" => "getSpeciality"
     		),
@@ -30,40 +30,40 @@ class CStudyLoad extends CActiveModel {
     		"studyLoadType" => array(
     			"relationPower" => RELATION_HAS_ONE,
     			"storageProperty" => "_studyLoadType",
-    			"storageField" => "hours_kind_type",
+    			"storageField" => "load_type_id",
     			"managerClass" => "CBaseManager",
     			"managerGetObject" => "getStudyLoadType"
-    		),
-    		"group" => array(
-    			"relationPower" => RELATION_HAS_ONE,
-    			"storageProperty" => "_group",
-    			"storageField" => "group_id",
-    			"managerClass" => "CStaffManager",
-    			"managerGetObject" => "getStudentGroup"
     		),
     		"discipline" => array(
     			"relationPower" => RELATION_HAS_ONE,
     			"storageProperty" => "_discipline",
-    			"storageField" => "subject_id",
+    			"storageField" => "discipline_id",
     			"managerClass" => "CTaxonomyManager",
     			"managerGetObject" => "getDiscipline"
     		),
     		"lecturer" => array(
     			"relationPower" => RELATION_HAS_ONE,
     			"storageProperty" => "_lecturer",
-    			"storageField" => "kadri_id",
+    			"storageField" => "person_id",
     			"managerClass" => "CStaffManager",
     			"managerGetObject" => "getPerson"
     		),
             "study_groups" => array(
                 "relationPower" => RELATION_MANY_TO_MANY,
                 "storageProperty" => "_study_groups",
-                "joinTable" => TABLE_IND_PLAN_PLANNED_STUDY_GROUPS,
-                "leftCondition" => "hours_kind_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "joinTable" => TABLE_WORKLOAD_STUDY_GROUPS,
+                "leftCondition" => "workload_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
                 "rightKey" => "group_id",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getStudentGroup"
-            )
+            ),
+    		"createdBy" => array(
+    			"relationPower" => RELATION_HAS_ONE,
+    			"storageProperty" => "_createdBy",
+    			"storageField" => "_created_by",
+    			"managerClass" => "CStaffManager",
+    			"managerGetObject" => "getPerson"
+    		)
     	);
     }
     public function attributeLabels() {

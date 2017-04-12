@@ -67,7 +67,7 @@ class CStudyLoadService {
     		$gArr['sum'][] = "ifnull(hours.labor, 0)";
     		$gArr['sum'][] = "ifnull(hours.rgr, 0)";
     		$gArr['sum'][] = "ifnull(hours.ksr, 0)";
-    		$gArr['sum'][] = "ifnull(hours.recenz, 0)";
+    		$gArr['sum'][] = "ifnull(hours.kollokvium, 0)";
     		$gArr['sum'][] = "ifnull(hours.kurs_proj, 0)";
     		$gArr['sum'][] = "ifnull(hours.consult, 0)";
     		$gArr['sum'][] = "ifnull(hours.test, 0)";
@@ -89,7 +89,7 @@ class CStudyLoadService {
     		$gArr['sum'][] = "ifnull(hours.labor_add, 0)";
     		$gArr['sum'][] = "ifnull(hours.rgr_add, 0)";
     		$gArr['sum'][] = "ifnull(hours.ksr_add, 0)";
-    		$gArr['sum'][] = "ifnull(hours.recenz_add, 0)";
+    		$gArr['sum'][] = "ifnull(hours.kollokvium_add, 0)";
     		$gArr['sum'][] = "ifnull(hours.kurs_proj_add, 0)";
     		$gArr['sum'][] = "ifnull(hours.consult_add, 0)";
     		$gArr['sum'][] = "ifnull(hours.test_add, 0)";
