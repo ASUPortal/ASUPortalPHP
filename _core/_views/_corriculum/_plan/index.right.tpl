@@ -7,3 +7,5 @@
         Добавить учебный план
     </center></a>
 </p>
+
+{include file="_printGroupOnTemplate.tpl"}
