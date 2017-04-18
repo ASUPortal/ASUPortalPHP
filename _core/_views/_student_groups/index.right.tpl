@@ -14,5 +14,3 @@
         Добавить группу
     </center></a>
 </p>
-
-{include file="_printGroupOnTemplate.tpl"}
