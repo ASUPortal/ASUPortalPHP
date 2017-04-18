@@ -4,18 +4,18 @@ class CDiplomPreviewCommissionForm extends CFormModel {
     public $commission;
     public function save() {
         $commission = $this->commission;
-        $members = array();
+        /*$members = array();
         if (array_key_exists("members", $commission)) {
             $members = $commission["members"];
             unset($commission["members"]);
-        }
+        }*/
         $commObj = new CDiplomPreviewComission();
         $commObj->setAttributes($commission);
         $commObj->save();
 		
 		$this->commission = $commObj;
 		
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_DIPLOM_PREVIEW_MEMBERS, "comm_id=".$commObj->getId())->getItems() as $ar) {
+        /*foreach (CActiveRecordProvider::getWithCondition(TABLE_DIPLOM_PREVIEW_MEMBERS, "comm_id=".$commObj->getId())->getItems() as $ar) {
             $ar->remove();
         }
         foreach ($members as $m) {
@@ -28,6 +28,6 @@ class CDiplomPreviewCommissionForm extends CFormModel {
                 $ar->setTable(TABLE_DIPLOM_PREVIEW_MEMBERS);
                 $ar->insert();
             }
-        }
+        }*/
     }
 }

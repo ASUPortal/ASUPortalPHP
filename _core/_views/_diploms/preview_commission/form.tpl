@@ -5,6 +5,7 @@
 	<ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#tab-common">Общая информация</a></li>
         <li><a data-toggle="tab" href="#tab-students">Студенты</a></li>
+        <li><a data-toggle="tab" href="#tab-members">Члены комиссии</a></li>
     </ul>
 	<div class="tab-content">
         <div class="tab-pane active" id="tab-common">
@@ -16,6 +17,9 @@
             {else}
                 {include file="_diploms/preview_commission/subform.students.tpl"}
             {/if}
+        </div>
+        <div class="tab-pane" id="tab-members">
+            {CHtml::activeComponent("members.php?comm_id={$form->commission->getId()}", $form->commission)}
         </div>
     </div>
 
