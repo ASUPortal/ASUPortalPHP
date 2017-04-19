@@ -150,7 +150,9 @@
                 <td valign="top">
                     <ul>
                     {foreach $commission->members->getItems() as $member}
-                        <li>{$member->getName()}</li>
+                    	{if ($member->person_id != 0)}
+	                        <li>{$member->person->getName()}</li>
+	                    {/if}
                     {/foreach}
                     </ul>
                 </td>

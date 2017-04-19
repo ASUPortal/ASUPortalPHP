@@ -26,11 +26,9 @@
     {CHtml::error("commission[secretary_id]", $form)}
 </div></div>
 
-{*
 <div class="control-group">
     {CHtml::activeLabel("commission[members]", $form)}
 	<div class="controls">
     {CHtml::activeLookup("commission[members]", $form, "staff", true)}
     {CHtml::error("commission[members]", $form)}
 </div></div>
-*}

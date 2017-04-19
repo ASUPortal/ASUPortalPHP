@@ -2,15 +2,15 @@
 
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $member)}
-    {CHtml::activeHiddenField("comm_id", $member)}
+    {CHtml::activeHiddenField("commission_id", $member)}
 
     {CHtml::errorSummary($member)}
     
 	<div class="control-group">
-	    {CHtml::activeLabel("kadri_id", $member)}
+	    {CHtml::activeLabel("person_id", $member)}
 	    <div class="controls">
-	        {CHtml::activeLookup("kadri_id", $member, "staff")}
-	        {CHtml::error("kadri_id", $member)}
+	        {CHtml::activeLookup("person_id", $member, "staff")}
+	        {CHtml::error("person_id", $member)}
 	    </div>
 	</div>
 	

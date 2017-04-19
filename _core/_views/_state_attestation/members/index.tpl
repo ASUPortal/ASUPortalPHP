@@ -12,7 +12,7 @@
     <tr>
         <th>#</th>
         <th>&nbsp;</th>
-        <th>{CHtml::tableOrder("kadri_id", $members->getFirstItem())}</th>
+        <th>{CHtml::tableOrder("person_id", $members->getFirstItem())}</th>
         <th>{CHtml::tableOrder("date_preview", $members->getFirstItem())}</th>
         <th>{CHtml::tableOrder("is_member", $members->getFirstItem())}</th>
         <th>{CHtml::tableOrder("comment", $members->getFirstItem())}</th>
@@ -44,5 +44,5 @@
 {/block}
 
 {block name="asu_right"}
-	{include file="_diploms/diplom_preview_members/common.right.tpl"}
+	{include file="_state_attestation/members/common.right.tpl"}
 {/block}
