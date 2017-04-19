@@ -2,22 +2,22 @@
 /**
  * Член комиссии по предзащите ВКР
  */
-class CDiplomPreviewCommissionMember extends CActiveModel{
-    protected $_table = TABLE_DIPLOM_PREVIEW_MEMBERS;
+class CSABCommissionMember extends CActiveModel{
+    protected $_table = TABLE_SAB_COMMISSION_MEMBERS;
 
     protected function relations() {
         return array(
 			"commission" => array(
 				"relationPower" => RELATION_HAS_ONE,
 				"storageProperty" => "_comm",
-				"storageField" => "comm_id",
+				"storageField" => "commission_id",
 				"managerClass" => "CSABManager",
-				"managerGetObject" => "getPreviewCommission"
+				"managerGetObject" => "getCommission"
 			),
             "person" => array(
                 "relationPower" => RELATION_HAS_ONE,
                 "storageProperty" => "_person",
-                "storageField" => "kadri_id",
+                "storageField" => "person_id",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPerson"
             )
@@ -26,8 +26,8 @@ class CDiplomPreviewCommissionMember extends CActiveModel{
 
     public function attributeLabels() {
         return array(
-            "comm_id" => "Комиссия",
-            "kadri_id" => "Член комиссии",
+            "commission_id" => "Комиссия",
+            "person_id" => "Член комиссии",
             "date_preview" => "Дата предзащиты",
             "is_member" => "Является участником?",
             "comment" => "Комментарий"
@@ -46,7 +46,7 @@ class CDiplomPreviewCommissionMember extends CActiveModel{
     protected function validationRules() {
         return array(
             "selected" => array(
-                "kadri_id"
+                "person_id"
             )
         );
     }

@@ -5,9 +5,9 @@
 
     {CHtml::helpForCurrentPage()}
 
-    {include file="_diploms/diplom_preview_members/form.tpl"}
+    {include file="_state_attestation/members/form.tpl"}
 {/block}
 
 {block name="asu_right"}
-	{include file="_diploms/diplom_preview_members/common.right.tpl"}
+	{include file="_state_attestation/members/common.right.tpl"}
 {/block}

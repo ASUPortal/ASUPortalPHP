@@ -19,13 +19,11 @@ class CSABCommission extends CActiveModel {
     public function relations() {
         return array(
             "members" => array(
-                "relationPower" => RELATION_MANY_TO_MANY,
+                "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_members",
-                "joinTable" => TABLE_SAB_COMMISSION_MEMBERS,
-                "leftCondition" => "commission_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
-                "rightKey" => "person_id",
-                "managerClass" => "CStaffManager",
-                "managerGetObject" => "getPerson"
+                "storageTable" => TABLE_SAB_COMMISSION_MEMBERS,
+                "storageCondition" => "commission_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CSABCommissionMember"
             ),
             "diploms" => array(
                 "relationPower" => RELATION_HAS_MANY,
@@ -92,8 +90,11 @@ class CSABCommission extends CActiveModel {
          */
         if ($this->order_id !== 0) {
             $persons = new CArrayList();
-            foreach ($this->members->getItems() as $person) {
-                $persons->add($person->getId(), $person);
+            foreach ($this->members->getItems() as $member) {
+            	if ($member->person_id != 0) {
+            		$person = $member->person;
+            		$persons->add($person->getId(), $person);
+            	}
             }
             if (!is_null($this->manager)) {
                 $persons->add($this->manager->getId(), $this->manager);

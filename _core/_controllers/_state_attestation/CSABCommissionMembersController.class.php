@@ -1,5 +1,5 @@
 <?php
-class CDiplomPreviewCommissionMembersController extends CBaseController{
+class CSABCommissionMembersController extends CBaseController{
 	protected $_isComponent = true;
 	
     public function __construct() {
@@ -13,7 +13,7 @@ class CDiplomPreviewCommissionMembersController extends CBaseController{
             }
         }
         $this->_smartyEnabled = true;
-        $this->setPageTitle("Члены комиссии по предзащите ВКР");
+        $this->setPageTitle("Члены комиссии по защите ВКР");
         parent::__construct();
     }
     public function actionIndex() {
@@ -21,11 +21,11 @@ class CDiplomPreviewCommissionMembersController extends CBaseController{
         $query = new CQuery();
         $set->setQuery($query);
         $query->select("t.*")
-            ->from(TABLE_DIPLOM_PREVIEW_MEMBERS." as t")
-            ->condition("comm_id=".CRequest::getInt("comm_id"));
+            ->from(TABLE_SAB_COMMISSION_MEMBERS." as t")
+            ->condition("commission_id=".CRequest::getInt("comm_id"));
         $members = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
-            $member = new CDiplomPreviewCommissionMember($ar);
+            $member = new CSABCommissionMember($ar);
             $members->add($member->getId(), $member);
         }
         $this->addActionsMenuItem(array(
@@ -40,52 +40,52 @@ class CDiplomPreviewCommissionMembersController extends CBaseController{
         ));
         $this->setData("members", $members);
         $this->setData("paginator", $set->getPaginator());
-        $this->renderView("_diploms/diplom_preview_members/index.tpl");
+        $this->renderView("_state_attestation/members/index.tpl");
     }
     public function actionAdd() {
-        $member = new CDiplomPreviewCommissionMember();
-        $member->comm_id = CRequest::getInt("comm_id");
+        $member = new CSABCommissionMember();
+        $member->commission_id = CRequest::getInt("comm_id");
         $this->setData("member", $member);
         $this->addActionsMenuItem(array(
         	array(
         		"title" => "Назад",
-        		"link" => WEB_ROOT."_modules/_diploms/members.php?action=index&comm_id=".$member->comm_id,
+        		"link" => WEB_ROOT."_modules/_state_attestation/members.php?action=index&comm_id=".$member->commission_id,
         		"icon" => "actions/edit-undo.png"
         	)
         ));
-        $this->renderView("_diploms/diplom_preview_members/add.tpl");
+        $this->renderView("_state_attestation/members/add.tpl");
     }
     public function actionEdit() {
-        $member = CBaseManager::getDiplomPreviewCommissionMember(CRequest::getInt("id"));
+        $member = CBaseManager::getSABCommissionMember(CRequest::getInt("id"));
         $this->setData("member", $member);
         $this->addActionsMenuItem(array(
         	array(
         		"title" => "Назад",
-        		"link" => WEB_ROOT."_modules/_diploms/members.php?action=index&comm_id=".$member->comm_id,
+        		"link" => WEB_ROOT."_modules/_state_attestation/members.php?action=index&comm_id=".$member->commission_id,
         		"icon" => "actions/edit-undo.png"
         	)
         ));
-        $this->renderView("_diploms/diplom_preview_members/edit.tpl");
+        $this->renderView("_state_attestation/members/edit.tpl");
     }
     public function actionDelete() {
-        $member = CBaseManager::getDiplomAntiplagiatCheck(CRequest::getInt("id"));
+        $member = CBaseManager::getSABCommissionMember(CRequest::getInt("id"));
         $commission = $member->diplom;
         $member->remove();
         $this->redirect("members.php?action=edit&id=".$commission->getId());
     }
     public function actionSave() {
-        $member = new CDiplomPreviewCommissionMember();
+        $member = new CSABCommissionMember();
         $member->setAttributes(CRequest::getArray($member::getClassName()));
         if ($member->validate()) {
         	$member->save();
         	if ($this->continueEdit()) {
         		$this->redirect("members.php?action=edit&id=".$member->getId());
         	} else {
-        		$this->redirect("members.php?action=index&comm_id=".$member->comm_id);
+        		$this->redirect("members.php?action=index&comm_id=".$member->commission_id);
         	}
         	return true;
         }
         $this->setData("member", $member);
-        $this->renderView("_diploms/diplom_preview_members/edit.tpl");
+        $this->renderView("_state_attestation/members/edit.tpl");
     }
 }
