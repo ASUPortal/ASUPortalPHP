@@ -65,7 +65,7 @@ class CCourseProjectsController extends CBaseController {
         $courseProject = new CCourseProject();
         $groups = array();
         foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
-        	if ($group->getStudents()->getCount() > 0) {
+        	if ($group->getStudentsWithConsiderHistoryGroup()->getCount() > 0) {
         		$groups[$group->getId()] = $group->getName();
         	}
         }
@@ -99,7 +99,7 @@ class CCourseProjectsController extends CBaseController {
         if (!empty($years)) {
         	$year = CTaxonomyManager::getYear($years[0]);
         	foreach (CStaffManager::getStudentGroupsByYear($year)->getItems() as $group) {
-        		if ($group->getStudents()->getCount() > 0) {
+        		if ($group->getStudentsWithConsiderHistoryGroup()->getCount() > 0) {
         			$groups[$group->getId()] = $group->getName();
         		}
         	}
