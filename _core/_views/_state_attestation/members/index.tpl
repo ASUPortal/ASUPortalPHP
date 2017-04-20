@@ -19,6 +19,7 @@
     </tr>
     {counter start=0 print=false}
     {foreach $members->getItems() as $member}
+        {if ($member->person_id != 0)}
         <tr>
             <td>{counter}</td>
             <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить члена комиссии')) { location.href='members.php?action=delete&id={$member->id}'; }; return false;"></a></td>
@@ -30,13 +31,14 @@
             <td>{$member->date_preview|date_format:"d.m.Y"}</td>
             <td>
             	{if ($member->is_member)}
-            		Да
+            		Явка
             	{else}
-            		Нет
+            		Неявка
             	{/if}
             </td>
             <td>{$member->comment}</td>
         </tr>
+        {/if}
     {/foreach}
 </table>
 {/if}
