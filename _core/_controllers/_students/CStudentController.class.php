@@ -139,8 +139,6 @@ class CStudentController extends CBaseController {
         $student = new CStudent();
         $student->setAttributes(CRequest::getArray(CStudent::getClassName()));
         if ($student->validate()) {
-            // заменим символы табуляции в строке имени студента на пробелы
-            $student->fio = str_replace(chr(9), " ", $student->fio);
             $student->save();
             if ($this->continueEdit()) {
                 $this->redirect("?action=edit&id=".$student->getId());
