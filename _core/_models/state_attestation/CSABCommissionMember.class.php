@@ -29,8 +29,8 @@ class CSABCommissionMember extends CActiveModel{
             "commission_id" => "Комиссия",
             "person_id" => "Член комиссии",
             "date_preview" => "Дата защиты",
-            "is_member" => "Явка/неявка",
-            "comment" => "Причина неявки"
+            "is_visited" => "Явка/неявка",
+            "not_visited_reason" => "Причина неявки"
         );
     }
     

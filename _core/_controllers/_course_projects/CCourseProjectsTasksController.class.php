@@ -83,7 +83,7 @@ class CCourseProjectsTasksController extends CBaseController {
         $courseProject = CBaseManager::getCourseProject(CRequest::getInt("course_project_id"));
         $task->course_project_id = $courseProject->getId();
         $students = array();
-        foreach ($courseProject->group->getStudentsWithConsiderHistoryGroup() as $student) {
+        foreach ($courseProject->group->getStudentsWithChangeGroupsHistory() as $student) {
             $students[$student->getId()] = $student->getName();
         }
         $this->setData("task", $task);
@@ -100,7 +100,7 @@ class CCourseProjectsTasksController extends CBaseController {
     public function actionAddTasks() {
         $courseProject = CBaseManager::getCourseProject(CRequest::getInt("course_project_id"));
         if ($courseProject->tasks->isEmpty()) {
-            foreach ($courseProject->group->getStudentsWithConsiderHistoryGroup() as $student) {
+            foreach ($courseProject->group->getStudentsWithChangeGroupsHistory() as $student) {
                 $task = new CCourseProjectsTask();
                 $task->course_project_id = $courseProject->getId();
                 $task->student_id = $student->getId();
@@ -161,7 +161,7 @@ class CCourseProjectsTasksController extends CBaseController {
         $task = CBaseManager::getCourseProjectsTask(CRequest::getInt("id"));
         $courseProject = CBaseManager::getCourseProject($task->course_project_id);
         $students = array();
-        foreach ($courseProject->group->getStudentsWithConsiderHistoryGroup() as $student) {
+        foreach ($courseProject->group->getStudentsWithChangeGroupsHistory() as $student) {
             $students[$student->getId()] = $student->getName();
         }
         $this->setData("task", $task);
@@ -204,7 +204,7 @@ class CCourseProjectsTasksController extends CBaseController {
         }
         $courseProject = CBaseManager::getCourseProject($task->course_project_id);
         $students = array();
-        foreach ($courseProject->group->getStudentsWithConsiderHistoryGroup() as $student) {
+        foreach ($courseProject->group->getStudentsWithChangeGroupsHistory() as $student) {
             $students[$student->getId()] = $student->getName();
         }
         $this->setData("task", $task);

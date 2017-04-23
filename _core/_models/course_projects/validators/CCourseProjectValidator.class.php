@@ -29,7 +29,7 @@ class CCourseProjectValidator extends IModelValidatorOptional {
 		if (!empty($years)) {
 			$year = CTaxonomyManager::getYear($years[0]);
 			foreach (CStaffManager::getStudentGroupsByYear($year)->getItems() as $groupByYear) {
-				if ($groupByYear->getStudentsWithConsiderHistoryGroup()->getCount() > 0) {
+				if ($groupByYear->getStudentsWithChangeGroupsHistory()->getCount() > 0) {
 					$groupsByYear[] = $groupByYear->getId();
 				}
 			}

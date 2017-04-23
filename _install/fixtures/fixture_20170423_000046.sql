@@ -1,0 +1,2 @@
+ALTER TABLE `sab_commission_members` CHANGE `is_member` `is_visited` INT(11) NOT NULL DEFAULT '0' COMMENT 'Явка/неявка',
+ CHANGE `comment` `not_visited_reason` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Причина неявки';

@@ -103,7 +103,7 @@ class CStudentGroup extends CActiveModel {
      *
      * @return CArrayList
      */
-    public function getStudentsWithConsiderHistoryGroup() {
+    public function getStudentsWithChangeGroupsHistory() {
         $groups = new CArrayList();
         foreach (CActiveRecordProvider::getWithCondition(TABLE_STUDENT_GROUP_HISTORY, "source_id=".$this->getId())->getItems() as $item) {
             $groupHistory = new CStudentGroupChangeHistory($item);
