@@ -14,11 +14,14 @@
     
 		<table class="table table-striped table-bordered table-hover table-condensed">
 	        <tr>
+	            <th>#</th>
 	            <th>{CHtml::tableOrder("student_id", $courseProject->tasks->getFirstItem())}</th>
 	            <th>{CHtml::tableOrder("theme", $courseProject->tasks->getFirstItem())}</th>
 	        </tr>
+	        {counter start=0 print=false}
 	        {foreach $courseProject->tasks->getItems() as $task}
 	            <tr>
+	                <td>{counter}</td>
 	                <td width="40%">
 	                    {CHtml::textField($task->getId(), $task->student->getName(), "", "", 'style="width: 100%;"')}
 	                </td>

@@ -28,9 +28,9 @@ class CSABCommissionMember extends CActiveModel{
         return array(
             "commission_id" => "Комиссия",
             "person_id" => "Член комиссии",
-            "date_preview" => "Дата предзащиты",
-            "is_member" => "Является участником?",
-            "comment" => "Комментарий"
+            "date_preview" => "Дата защиты",
+            "is_visited" => "Явка/неявка",
+            "not_visited_reason" => "Причина неявки"
         );
     }
     

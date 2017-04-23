@@ -14,11 +14,12 @@
         <th>&nbsp;</th>
         <th>{CHtml::tableOrder("person_id", $members->getFirstItem())}</th>
         <th>{CHtml::tableOrder("date_preview", $members->getFirstItem())}</th>
-        <th>{CHtml::tableOrder("is_member", $members->getFirstItem())}</th>
-        <th>{CHtml::tableOrder("comment", $members->getFirstItem())}</th>
+        <th>{CHtml::tableOrder("is_visited", $members->getFirstItem())}</th>
+        <th>{CHtml::tableOrder("not_visited_reason", $members->getFirstItem())}</th>
     </tr>
     {counter start=0 print=false}
     {foreach $members->getItems() as $member}
+        {if ($member->person_id != 0)}
         <tr>
             <td>{counter}</td>
             <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить члена комиссии')) { location.href='members.php?action=delete&id={$member->id}'; }; return false;"></a></td>
@@ -29,14 +30,15 @@
             </td>
             <td>{$member->date_preview|date_format:"d.m.Y"}</td>
             <td>
-            	{if ($member->is_member)}
-            		Да
+            	{if ($member->is_visited)}
+            		Явка
             	{else}
-            		Нет
+            		Неявка
             	{/if}
             </td>
-            <td>{$member->comment}</td>
+            <td>{$member->not_visited_reason}</td>
         </tr>
+        {/if}
     {/foreach}
 </table>
 {/if}

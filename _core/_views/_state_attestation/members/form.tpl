@@ -23,18 +23,18 @@
 	</div>
 	
 	<div class="control-group">
-	    {CHtml::activeLabel("is_member", $member)}
+	    {CHtml::activeLabel("is_visited", $member)}
 	    <div class="controls">
-	        {CHtml::activeCheckBox("is_member", $member)}
-	        {CHtml::error("is_member", $member)}
+	        {CHtml::activeCheckBox("is_visited", $member)}
+	        {CHtml::error("is_visited", $member)}
 	    </div>
 	</div>
 	
 	<div class="control-group">
-	    {CHtml::activeLabel("comment", $member)}
+	    {CHtml::activeLabel("not_visited_reason", $member)}
 	    <div class="controls">
-	        {CHtml::activeTextField("comment", $member)}
-	        {CHtml::error("comment", $member)}
+	        {CHtml::activeTextField("not_visited_reason", $member)}
+	        {CHtml::error("not_visited_reason", $member)}
 	    </div>
 	</div>
 	

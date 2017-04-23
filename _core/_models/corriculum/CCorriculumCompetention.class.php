@@ -16,7 +16,7 @@ class CCorriculumCompetention extends CTerm {
     public function getSpeciality() {
         if (is_null($this->_speciality)) {
             $taxonomy = CTaxonomyManager::getLegacyTaxonomy(TAXONOMY_SPECIALITY);
-            if (!is_null($taxonomy)) {
+            if (!is_null($taxonomy) and $this->alias != "") {
                 $this->_speciality = $taxonomy->getTerm($this->alias);
             }
         }
