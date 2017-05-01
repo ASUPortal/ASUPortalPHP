@@ -150,7 +150,10 @@ class CDiplom extends CActiveModel {
             "normokontroler_id" => "Нормоконтролер",
             "protocol" => "Номер протокола (номер защиты)",
             "num_order" => "Номер распоряжения декана",
-            "antiplagiat_originality_percent" => "Антиплагиат (процент оригинальности)"
+            "antiplagiat_originality_percent" => "Антиплагиат (процент оригинальности)",
+            "magistr_recomendation" => "Рекомендован в магистратуру",
+            "patent_research" => "Выполнено с патентным исследованием",
+            "level_invention" => "Выполнено на уровне подачи заявки на изобретение"
         );
     }
     /**

@@ -39,6 +39,14 @@
 </div>
 
 <div class="control-group">
+    {CHtml::activeLabel("magistr_recomendation", $diplom)}
+    <div class="controls">
+        {CHtml::activeCheckBox("magistr_recomendation", $diplom)}
+        {CHtml::error("magistr_recomendation", $diplom)}
+    </div>
+</div>
+
+<div class="control-group">
     {CHtml::activeLabel("aspire_recomendation", $diplom)}
     <div class="controls">
         {CHtml::activeCheckBox("aspire_recomendation", $diplom)}
@@ -59,6 +67,22 @@
     <div class="controls">
         {CHtml::activeCheckBox("implemented", $diplom)}
         {CHtml::error("implemented", $diplom)}
+    </div>
+</div>
+
+<div class="control-group">
+    {CHtml::activeLabel("patent_research", $diplom)}
+    <div class="controls">
+        {CHtml::activeCheckBox("patent_research", $diplom)}
+        {CHtml::error("patent_research", $diplom)}
+    </div>
+</div>
+
+<div class="control-group">
+    {CHtml::activeLabel("level_invention", $diplom)}
+    <div class="controls">
+        {CHtml::activeCheckBox("level_invention", $diplom)}
+        {CHtml::error("level_invention", $diplom)}
     </div>
 </div>
 
