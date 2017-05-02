@@ -23,7 +23,7 @@ final class CCourseProjectValidatorTest extends TestCase {
         $model = new CCourseProject();
         $validator = new CCourseProjectValidator();
         $validator->onRead($model);
-        $validator->validate();
+        $this->assertTrue($validator->validate());
     }
     
     public function testModelValidator() {
@@ -34,6 +34,6 @@ final class CCourseProjectValidatorTest extends TestCase {
         $model->group->corriculum = new CCorriculum();
         $validator = new CCourseProjectValidator();
         $validator->onRead($model);
-        $validator->getError();
+        $this->assertEmpty($validator->getError());
     }
 }
