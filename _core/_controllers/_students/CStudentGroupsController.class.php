@@ -45,6 +45,14 @@ class CStudentGroupsController extends CBaseController {
         foreach ($group->getStudents()->getItems() as $student) {
             $students[$student->getId()] = $student->getName();
         }
+        $this->addActionsMenuItem(array(
+        	array(
+        		"title" => "Печать по шаблону",
+        		"link" => "#",
+        		"icon" => "devices/printer.png",
+        		"template" => "formset_student_group"
+        	)
+        ));
         /**
          * Параметры для групповой печати по шаблону
          */

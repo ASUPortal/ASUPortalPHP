@@ -167,7 +167,20 @@ class CCourseProjectsController extends CBaseController {
             }
             return true;
         }
+        $groups = array();
+        foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
+            if ($group->getStudentsWithChangeGroupsHistory()->getCount() > 0) {
+                $groups[$group->getId()] = $group->getName();
+            }
+        }
+        $courseProject->lecturer_id = CSession::getCurrentPerson()->getId();
+        $disciplines = array();
+        if (count(CStaffService::getDisciplinesWithCourseProjectFromLoadByYear(CSession::getCurrentPerson(), CUtils::getCurrentYear())) > 0) {
+            $disciplines = CStaffService::getDisciplinesWithCourseProjectFromLoadByYear(CSession::getCurrentPerson(), CUtils::getCurrentYear());
+        }
+        $this->setData("groups", $groups);
+        $this->setData("disciplines", $disciplines);
         $this->setData("courseProject", $courseProject);
-        $this->renderView("_course_projects/edit.tpl");
+        $this->renderView("_course_projects/add.tpl");
     }
 }
