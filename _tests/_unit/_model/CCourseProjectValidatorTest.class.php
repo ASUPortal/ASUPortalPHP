@@ -19,10 +19,21 @@ CApp::getApp()->cache->set('application_settings_SYSTEM_LANGUAGE_DEFAULT', new C
 final class CCourseProjectValidatorTest extends TestCase {
 
     public function testEmptyModelValidations() {
-        // проверим, что валидация пустой модели не возвращает ошибок
+        // проверим, что объект CCourseProjectValidator для пустой модели не возвращает ошибок
         $model = new CCourseProject();
         $validator = new CCourseProjectValidator();
         $validator->onRead($model);
         $validator->validate();
+    }
+    
+    public function testModelValidator() {
+        // проверим, что объект CCourseProjectValidator с минимумом необходимых данных не возвращает ошибок
+        $model = new CCourseProject();
+        $model->group = new CStudentGroup();
+        $model->group->name = "Name";
+        $model->group->corriculum = new CCorriculum();
+        $validator = new CCourseProjectValidator();
+        $validator->onRead($model);
+        $validator->getError();
     }
 }
