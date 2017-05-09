@@ -37,14 +37,14 @@ class CWorkPlanExamQuestionsController extends CBaseController{
          * Генерация меню 
          */
         $this->addActionsMenuItem(array(
-            "title" => "Добавить",
+            "title" => "Добавить один вопрос",
             "link" => "workplanexamquestions.php?action=add&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
             "icon" => "actions/list-add.png"
         ));
         $this->addActionsMenuItem(array(
-        		"title" => "Групповое добавление",
-        		"link" => "workplanexamquestions.php?action=addGroup&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
-        		"icon" => "actions/list-add.png"
+            "title" => "Добавить список вопросов",
+            "link" => "workplanexamquestions.php?action=addGroup&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
+            "icon" => "actions/list-add.png"
         ));
         /**
          * Отображение представления

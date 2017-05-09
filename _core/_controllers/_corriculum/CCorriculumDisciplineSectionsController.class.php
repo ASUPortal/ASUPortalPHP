@@ -1,5 +1,7 @@
 <?php
 class CCorriculumDisciplineSectionsController extends CBaseController{
+	protected $_isComponent = true;
+	
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -16,6 +18,16 @@ class CCorriculumDisciplineSectionsController extends CBaseController{
 
         parent::__construct();
     }
+    public function actionIndex() {
+        $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("discipline_id"));
+        $this->addActionsMenuItem(array(
+            "title" => "Добавить семестр",
+            "link" => "disciplineSections.php?action=add&id=".CRequest::getInt("discipline_id"),
+            "icon" => "actions/list-add.png"
+        ));
+        $this->setData("discipline", $discipline);
+        $this->renderView("_corriculum/_disciplineSections/index.tpl");
+    }
     public function actionAdd() {
         $object = new CCorriculumDisciplineSection();
         $object->discipline_id = CRequest::getInt("id");
@@ -25,7 +37,7 @@ class CCorriculumDisciplineSectionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "disciplines.php?action=edit&id=".$object->discipline_id,
+            "link" => "disciplineSections.php?action=index&discipline_id=".$object->discipline_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -41,7 +53,7 @@ class CCorriculumDisciplineSectionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "disciplines.php?action=edit&id=".$object->discipline_id,
+            "link" => "disciplineSections.php?action=index&discipline_id=".$object->discipline_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -62,7 +74,7 @@ class CCorriculumDisciplineSectionsController extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("disciplineSections.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("disciplines.php?action=edit&id=".$object->discipline_id);
+                $this->redirect("disciplineSections.php?action=index&discipline_id=".$object->discipline_id);
             }
             return true;
         }

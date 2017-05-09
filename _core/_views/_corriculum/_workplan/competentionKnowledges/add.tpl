@@ -1,7 +1,7 @@
 {extends file="_core.component.tpl"}
 
 {block name="asu_center"}
-    <h2>Добавление умения по компетенции рабочей программы</h2>
+    <h2>Добавление знания по компетенции рабочей программы</h2>
 
     {CHtml::helpForCurrentPage()}
 

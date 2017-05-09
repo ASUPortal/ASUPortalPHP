@@ -18,6 +18,23 @@ class CCorriculumDisciplineBooksController extends CBaseController{
 
         parent::__construct();
     }
+    public function actionIndex() {
+        $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("discipline_id"));
+        $this->addActionsMenuItem(array(
+            "title" => "Добавить учебник вручную",
+            "link" => "books.php?action=add&discipline_id=".$discipline->getId(),
+            "icon" => "actions/list-add.png"
+        ));
+        $this->addActionsMenuItem(array(
+            "title" => "Удалить выделенные учебники",
+            "icon" => "actions/edit-delete.png",
+            "form" => "#Books",
+            "link" => "books.php",
+            "action" => "delete"
+        ));
+        $this->setData("discipline", $discipline);
+        $this->renderView("_corriculum/_books/index.tpl");
+    }
     public function actionAdd() {
         $object = new CCorriculumBook();
         $this->setData("object", $object);
@@ -46,7 +63,7 @@ class CCorriculumDisciplineBooksController extends CBaseController{
         } else {
             $this->addActionsMenuItem(array(
                 "title" => "Назад",
-                "link" => "disciplines.php?action=edit&id=".$discipline->getId(),
+                "link" => "books.php?action=index&discipline_id=".$discipline->getId(),
                 "icon" => "actions/edit-undo.png"
             ));
             /**
@@ -83,7 +100,7 @@ class CCorriculumDisciplineBooksController extends CBaseController{
         } else {
             $this->addActionsMenuItem(array(
                 "title" => "Назад",
-                "link" => "disciplines.php?action=edit&id=".$discipline->getId(),
+                "link" => "books.php?action=index&discipline_id=".$discipline->getId(),
                 "icon" => "actions/edit-undo.png"
             ));
             /**
@@ -126,7 +143,7 @@ class CCorriculumDisciplineBooksController extends CBaseController{
             	if ($type != 0) {
             		$this->redirect("workplanliterature.php?action=index&plan_id=".$plan_id."&type=".$type);
             	} else {
-            		$this->redirect("disciplines.php?action=edit&id=".$discipline_id);
+            		$this->redirect("books.php?action=index&discipline_id=".$discipline_id);
             	}
             }
             return true;

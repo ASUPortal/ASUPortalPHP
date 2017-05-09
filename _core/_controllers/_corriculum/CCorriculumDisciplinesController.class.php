@@ -21,26 +21,6 @@ class CCorriculumDisciplinesController extends CFlowController {
         $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("id"));
         $disciplineTaxonomy = CDisciplinesManager::getDiscipline($discipline->discipline->getId());
         $corriculum = CCorriculumsManager::getCorriculum($discipline->cycle->corriculum->getId());
-        $this->addActionsMenuItem(array(
-        	"title" => "Удалить выделенные компетенции",
-        	"icon" => "actions/edit-delete.png",
-        	"form" => "#MainView",
-        	"link" => "competentions.php",
-        	"action" => "delete"
-        ));
-        $this->addActionsMenuItem(array(
-        	"title" => "Удалить выделенные учебники",
-        	"icon" => "actions/edit-delete.png",
-        	"form" => "#Books",
-        	"link" => "books.php?discipline_id=".CRequest::getInt("id"),
-        	"action" => "delete"
-        ));
-        $this->addActionsMenuItem(array(
-        	"title" => "Печать по шаблону",
-        	"link" => "#",
-        	"icon" => "devices/printer.png",
-        	"template" => "formset_corriculum_disciplines"
-        ));
         /**
          * Подключаем скрипты для няшности
          */

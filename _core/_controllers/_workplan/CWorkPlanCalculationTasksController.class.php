@@ -70,11 +70,13 @@ class CWorkPlanCalculationTasksController extends CBaseController{
     	/**
     	 * Генерация меню
     	 */
+    	/*
     	$this->addActionsMenuItem(array(
     		"title" => "Обновить",
     		"link" => "workplancalculationtasks.php?action=view&plan_id=".CRequest::getInt("plan_id"),
     		"icon" => "actions/view-refresh.png"
     	));
+    	*/
     	/**
     	 * Отображение представления
     	*/

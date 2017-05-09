@@ -36,11 +36,13 @@ class CWorkPlanCompetentionsController extends CBaseController{
         /**
          * Генерация меню
          */
+        /*
         $this->addActionsMenuItem(array(
             "title" => "Добавить компетенцию",
             "link" => "workplancompetentions.php?action=add&id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),
             "icon" => "actions/list-add.png"
         ));
+        */
         $this->addActionsMenuItem(array(
         	"title" => "Обновить",
         	"link" => "workplancompetentions.php?action=index&plan_id=".CRequest::getInt("plan_id")."&type=".CRequest::getInt("type"),

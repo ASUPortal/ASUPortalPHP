@@ -21,7 +21,7 @@
             <li><a data-toggle="tab" href="#selfWork">Самостоятельная работа</a></li>
             <li><a data-toggle="tab" href="#markTypes">Оценочные средства</a></li>
             <li><a data-toggle="tab" href="#library">Обеспечение</a></li>
-            <li><a data-toggle="tab" href="#changes">Изменения</a></li>
+            <li><a data-toggle="tab" href="#changes">Лист изменений и дополнений в рабочей программе</a></li>
             <li><a data-toggle="tab" href="#protocols">Протоколы</a></li>
             <li><a data-toggle="tab" href="#status">Статус</a></li>
         </ul>

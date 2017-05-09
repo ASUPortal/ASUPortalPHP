@@ -5,6 +5,8 @@
 {CHtml::helpForCurrentPage()}
 {include file="_corriculum/_cycles/form.tpl"}
 
+{include file="_corriculum/_cycles/edit.center.tpl"}
+
 <h2>Дисциплины</h2>
 
     <ul class="nav nav-tabs">
@@ -15,8 +17,4 @@
             {include file="_corriculum/_cycles/subform.labors.tpl"}
         </div>
     </div>
-{/block}
-
-{block name="asu_right"}
-{include file="_corriculum/_cycles/edit.right.tpl"}
 {/block}

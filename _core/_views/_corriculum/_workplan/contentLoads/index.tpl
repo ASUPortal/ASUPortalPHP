@@ -49,7 +49,9 @@
             {sf_showIfVisible bean=$bean element="load_{$load->getId()}_details"}
                 {include file="_corriculum/_workplan/contentLoads/subform.themes.tpl"}
                 {include file="_corriculum/_workplan/contentLoads/subform.technologies.tpl"}
-                {include file="_corriculum/_workplan/contentLoads/subform.selfeducation.tpl"}
+                {*
+                	{include file="_corriculum/_workplan/contentLoads/subform.selfeducation.tpl"}
+                *}
             {/sf_showIfVisible}
         {/foreach}
         {sf_showIfVisible bean=$bean element='load_new'}

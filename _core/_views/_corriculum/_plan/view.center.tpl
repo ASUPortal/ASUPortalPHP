@@ -9,7 +9,7 @@
         <td>
             <a href="index.php?action=edit&id={$corriculum->getId()}"><center>
 		        <img src="{$web_root}images/{$icon_theme}/32x32/apps/accessories-text-editor.png"><br>
-		        Редактировать
+		        Редактировать основную информацию об учебном плане
 		    </center></a>
         </td>
         <td>
@@ -21,17 +21,14 @@
         <td>
             <a href="index.php?action=copy&id={$corriculum->id}"><center>
 		        <img src="{$web_root}images/{$icon_theme}/32x32/actions/edit-copy.png"><br>
-		        Копировать план
+		        Копировать текущий учебный план
 		    </center></a>
         </td>
         <td>
             <a href="workplans.php?action=index&corriculumId={$corriculum->id}"><center>
 		        <img src="{$web_root}images/{$icon_theme}/32x32/actions/edit-copy.png"><br>
-		        Рабочие программы учебного плана
+		        Список рабочих программ с авторами, статусами и комментариями
 		    </center></a>
-        </td>
-        <td>
-            {CHtml::displayActionsMenu($_actions_menu)}
         </td>
         <td width="200">
             {include file="_corriculum/_plan/_printGroupOnTemplateCorriculumDisciplines.tpl"}
@@ -50,7 +47,7 @@
 		        	{/if}
 			        <center>
 				        <img src="{$web_root}images/{$icon_theme}/32x32/devices/printer.png"><br>
-				        Печать по шаблону
+				        Форма 1<br>Форма 2
 				    </center>
 			    </a>
 		    </div>
