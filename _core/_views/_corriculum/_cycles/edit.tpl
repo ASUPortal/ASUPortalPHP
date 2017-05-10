@@ -5,7 +5,7 @@
 {CHtml::helpForCurrentPage()}
 {include file="_corriculum/_cycles/form.tpl"}
 
-{include file="_corriculum/_cycles/edit.center.tpl"}
+{include file="_corriculum/_cycles/subform.center.tpl"}
 
 <h2>Дисциплины</h2>
 

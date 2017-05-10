@@ -11,7 +11,6 @@
 
 <h4>6.4. Методические указания к практическим занятиям</h4>
 <div class="control-group">
-    {*CHtml::activeLabel("method_practic_instructs", $plan)*}
     <div class="controls">
         {CHtml::activeTextBox("method_practic_instructs", $plan, "method_practic_instructs")}
         {CHtml::error("method_practic_instructs", $plan)}
@@ -20,7 +19,6 @@
 
 <h4>6.5. Методические указания к лабораторным занятиям</h4>
 <div class="control-group">
-    {*CHtml::activeLabel("method_labor_instructs", $plan)*}
     <div class="controls">
         {CHtml::activeTextBox("method_labor_instructs", $plan, "method_labor_instructs")}
         {CHtml::error("method_labor_instructs", $plan)}
@@ -29,7 +27,6 @@
 
 <h4>6.6. Методические указания к курсовому проектированию и другим видам самостоятельной работы</h4>
 <div class="control-group">
-    {*CHtml::activeLabel("method_project_instructs", $plan)*}
     <div class="controls">
         {CHtml::activeTextBox("method_project_instructs", $plan, "method_project_instructs")}
         {CHtml::error("method_project_instructs", $plan)}
@@ -39,7 +36,6 @@
 <h3>7. Образовательные технологии</h3>
 
 <div class="control-group">
-    {*CHtml::activeLabel("education_technologies", $plan)*}
     <div class="controls">
         {CHtml::activeTextBox("education_technologies", $plan, "education_technologies")}
         {CHtml::error("education_technologies", $plan)}
@@ -62,7 +58,6 @@
 
 <h3>8. Методические указания по освоению дисциплины</h3>
 <div class="control-group">
-    {*CHtml::activeLabel("method_instructs", $plan)*}
     <div class="controls">
         {CHtml::activeTextBox("method_instructs", $plan, "method_instructs")}
         {CHtml::error("method_instructs", $plan)}
@@ -71,7 +66,6 @@
 
 <h3>9. Материально-техническое обеспечение</h3>
 <div class="control-group">
-    {*CHtml::activeLabel("material_technical_supply", $plan)*}
     <div class="controls">
         {CHtml::activeTextBox("material_technical_supply", $plan, "material_technical_supply")}
         {CHtml::error("material_technical_supply", $plan)}
@@ -79,17 +73,6 @@
 </div>
 
 {CHtml::activeComponent("workplansupplies.php?&plan_id={$plan->getId()}", $plan)}
-
-{*
-<h3>10. Адаптация рабочей программы для лиц с ОВЗ</h3>
-<div class="control-group">
-    {CHtml::activeLabel("adapt_for_ovz", $plan)}
-    <div class="controls">
-        {CHtml::activeTextBox("adapt_for_ovz", $plan, "adapt_for_ovz")}
-        {CHtml::error("adapt_for_ovz", $plan)}
-    </div>
-</div>
-*}
 
 <script>
     jQuery(document).ready(function(){

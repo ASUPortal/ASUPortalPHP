@@ -68,16 +68,6 @@ class CWorkPlanCalculationTasksController extends CBaseController{
     	$this->setData("objects", $objects);
     	$this->setData("paginator", $set->getPaginator());
     	/**
-    	 * Генерация меню
-    	 */
-    	/*
-    	$this->addActionsMenuItem(array(
-    		"title" => "Обновить",
-    		"link" => "workplancalculationtasks.php?action=view&plan_id=".CRequest::getInt("plan_id"),
-    		"icon" => "actions/view-refresh.png"
-    	));
-    	*/
-    	/**
     	 * Отображение представления
     	*/
     	$this->renderView("_corriculum/_workplan/calculationTasks/view.tpl");
