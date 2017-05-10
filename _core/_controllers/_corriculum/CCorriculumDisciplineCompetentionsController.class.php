@@ -1,5 +1,7 @@
 <?php
 class CCorriculumDisciplineCompetentionsController extends CBaseController{
+	protected $_isComponent = true;
+	
     public function __construct() {
         if (!CSession::isAuth()) {
             $action = CRequest::getString("action");
@@ -16,6 +18,34 @@ class CCorriculumDisciplineCompetentionsController extends CBaseController{
 
         parent::__construct();
     }
+    public function actionIndex() {
+        $set = new CRecordSet();
+        $query = new CQuery();
+        $set->setQuery($query);
+        $query->select("competentions.*")
+            ->from(TABLE_CORRICULUM_DISCIPLINE_COMPETENTIONS." as competentions")
+            ->condition("discipline_id=".CRequest::getInt("discipline_id"));
+        $set->setPageSize(PAGINATION_ALL);
+        $objects = new CArrayList();
+        foreach ($set->getPaginated()->getItems() as $ar) {
+            $competention = new CCorriculumDisciplineCompetention($ar);
+            $objects->add($competention->getId(), $competention);
+        }
+        $this->addActionsMenuItem(array(
+            "title" => "Добавить компетенцию",
+            "link" => "competentions.php?action=add&id=".CRequest::getInt("discipline_id"),
+            "icon" => "actions/list-add.png"
+        ));
+        $this->addActionsMenuItem(array(
+            "title" => "Удалить выделенные компетенции",
+            "icon" => "actions/edit-delete.png",
+            "form" => "#MainView",
+            "link" => "competentions.php",
+            "action" => "delete"
+        ));
+        $this->setData("objects", $objects);
+        $this->renderView("_corriculum/_competentions/index.tpl");
+    }
     public function actionAdd() {
         $object = new CCorriculumDisciplineCompetention();
         $object->discipline_id = CRequest::getInt("id");
@@ -25,7 +55,7 @@ class CCorriculumDisciplineCompetentionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "disciplines.php?action=edit&id=".$object->discipline_id,
+            "link" => "competentions.php?action=index&discipline_id=".$object->discipline_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -41,7 +71,7 @@ class CCorriculumDisciplineCompetentionsController extends CBaseController{
          */
         $this->addActionsMenuItem(array(
             "title" => "Назад",
-            "link" => "disciplines.php?action=edit&id=".$object->discipline_id,
+            "link" => "competentions.php?action=index&discipline_id=".$object->discipline_id,
             "icon" => "actions/edit-undo.png"
         ));
         /**
@@ -74,7 +104,7 @@ class CCorriculumDisciplineCompetentionsController extends CBaseController{
             if ($this->continueEdit()) {
                 $this->redirect("competentions.php?action=edit&id=".$object->getId());
             } else {
-                $this->redirect("disciplines.php?action=edit&id=".$object->discipline_id);
+                $this->redirect("competentions.php?action=index&discipline_id=".$object->discipline_id);
             }
             return true;
         }

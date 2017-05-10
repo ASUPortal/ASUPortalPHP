@@ -1,11 +1,12 @@
-{extends file="_core.3col.tpl"}
+{extends file="_core.component.tpl"}
 
 {block name="asu_center"}
-<h2>Добавление вида нагрузки</h2>
-{CHtml::helpForCurrentPage()}
-{include file="_corriculum/_labors/form.tpl"}
+	<h2>Добавление вида нагрузки</h2>
+	{CHtml::helpForCurrentPage()}
+	
+	{include file="_corriculum/_labors/form.tpl"}
 {/block}
 
 {block name="asu_right"}
-{include file="_corriculum/_labors/add.right.tpl"}
+	{include file="_corriculum/_labors/common.right.tpl"}
 {/block}

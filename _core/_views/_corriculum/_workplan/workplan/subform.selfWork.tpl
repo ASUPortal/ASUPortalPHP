@@ -12,7 +12,6 @@
 <h4>4.3. Курсовой проект (работа)</h4>
 
 <div class="control-group">
-    {CHtml::activeLabel("project_description", $plan)}
     <div class="controls">
         {CHtml::activeTextBox("project_description", $plan, "project_description")}
         {CHtml::error("project_description", $plan)}
@@ -25,7 +24,6 @@
 <h4>4.4. Расчётно-графическая работа</h4>
 
 <div class="control-group">
-    {CHtml::activeLabel("rgr_description", $plan)}
     <div class="controls">
         {CHtml::activeTextBox("rgr_description", $plan, "rgr_description")}
         {CHtml::error("rgr_description", $plan)}

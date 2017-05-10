@@ -1,7 +1,7 @@
 <a href="#printDialogWorkplans" data-toggle="modal">
     <center>
         <img src="{$web_root}images/{$icon_theme}/32x32/devices/printer.png"><br>
-        Печать по шаблону рабочих программ
+        Документы ОПОП<br>(РП и др.)
     </center>
 </a>
 

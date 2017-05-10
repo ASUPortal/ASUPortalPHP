@@ -1,42 +1,78 @@
-{extends file="_core.3col.tpl"}
+{extends file="_core.component.tpl"}
 
 {block name="asu_center"}
-    <h2>Заголовок страницы списка</h2>
-    {CHtml::helpForCurrentPage()}
-
-    {if ($objects->getCount() == 0)}
-        Нет объектов для отображения
-    {else}
-        <table class="table table-striped table-bordered table-hover table-condensed">
-            <thead>
-                <tr>
-                    <th width="16">&nbsp;</th>
-                    <th width="16">#</th>
-                    <th width="16">&nbsp;</th>
-                    <th>{CHtml::tableOrder("id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("corriculum_id", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("title", $objects->getFirstItem())}</th>
-<th>{CHtml::tableOrder("sectionIndex", $objects->getFirstItem())}</th>
-                </tr>
-            </thead>
-            <tbody>
-            {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
-            {foreach $objects->getItems() as $object}
-                <tr>
-                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить семестр')) { location.href='disciplineSections.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
-                    <td>{counter}</td>
-                    <td><a href="disciplineSections.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    <td>{$object->id}</td>
-<td>{$object->corriculum_id}</td>
-<td>{$object->title}</td>
-<td>{$object->sectionIndex}</td>
-                </tr>
-            {/foreach}
-            </tbody>
-        </table>
-
-        {CHtml::paginator($paginator, "disciplineSections.php?action=index")}
-    {/if}
+	{if ($discipline->labors->getCount() > 0) and ($discipline->labors->getFirstItem()->section_id == 0)}
+	<b>Семестр не указан</b>
+	<table class="table table-striped table-bordered table-hover table-condensed">
+	    <tr>
+	        <th>#</th>
+	        <th>&nbsp;</th>
+	        <th>Вид нагрузки</th>
+	        <th>Величина</th>
+	    </tr>
+	    {counter start=0 print=false}
+	    {foreach $discipline->labors->getItems() as $labor}
+	    <tr>
+	        <td>{counter}</td>
+	        <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить вид занятия {if !is_null($labor->type)}{$labor->type->getValue()}{/if}')) { location.href='labors.php?action=del&id={$labor->id}'; }; return false;"></a></td>
+	        <td>
+	            {if !is_null($labor->type)}
+	                <a href="labors.php?action=edit&id={$labor->getId()}&discipline_id={$labor->discipline_id}">{$labor->type->getValue()}</a>
+	            {/if}
+	        </td>
+	        <td>{$labor->value}</td>
+	    </tr>
+	    {/foreach}
+	</table>
+	{/if}
+	
+	{foreach $discipline->sections->getItems() as $section}
+		<table>
+		    <tr>
+		        <td>
+				    <a href="#"
+				        onclick="if (confirm('Вы действительно хотите удалить семестр?')) { location.href='disciplineSections.php?action=delete&id={$section->getId()}&discipline_id={CRequest::getInt("discipline_id")}'; }">
+				        <i class="icon-trash">&nbsp;</i>
+				    </a>
+		        </td>
+		        <td>
+				    <b>Семестр: {$section->title}</b>
+				    <a href="disciplineSections.php?action=edit&id={$section->getId()}">
+				        <i class="icon-pencil">&nbsp;</i>
+				    </a>
+		        </td>
+		        <td>
+				    <a href="labors.php?action=add&id={$section->getId()}&discipline_id={CRequest::getInt("discipline_id")}">
+				        <i class="icon-plus">&nbsp;</i>
+				    </a>
+		        </td>
+		    </tr>
+		</table>
+	
+	    <table class="table table-striped table-bordered table-hover table-condensed">
+	        <tr>
+	            <th>#</th>
+	            <th>&nbsp;</th>
+	            <th>Вид нагрузки</th>
+	            <th>Величина</th>
+	        </tr>
+	        {counter start=0 print=false}
+	        {foreach $section->labors->getItems() as $labor}
+	            <tr>
+	                <td>{counter}</td>
+	                <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить вид занятия {if !is_null($labor->type)}{$labor->type->getValue()}{/if}')) { location.href='labors.php?action=del&id={$labor->id}'; }; return false;"></a></td>
+	                <td>
+	                    {if !is_null($labor->type)}
+	                        <a href="labors.php?action=edit&id={$labor->getId()}&discipline_id={CRequest::getInt("discipline_id")}">{$labor->type->getValue()}</a>
+	                    {else}
+	                        {$labor->type_id}
+	                    {/if}
+	                </td>
+	                <td>{$labor->value}</td>
+	            </tr>
+	        {/foreach}
+	    </table>
+	{/foreach}
 {/block}
 
 {block name="asu_right"}
