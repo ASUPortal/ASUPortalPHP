@@ -241,9 +241,13 @@ class CGradebookController extends CBaseController {
 
         $activity = new CStudentActivity();
         $groups = array();
-        foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
-            if ($group->getStudents()->getCount() > 0) {
-                $groups[$group->getId()] = $group->getName();
+        if (CSettingsManager::getSettingValue("display_archived_data")) {
+            $groups = CStaffManager::getAllStudentGroupsList();
+        } else {
+            foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
+                if ($group->getStudents()->getCount() > 0) {
+                    $groups[$group->getId()] = $group->getName();
+                }
             }
         }
         $this->setData("students", array());
@@ -256,8 +260,12 @@ class CGradebookController extends CBaseController {
 
         $activity = CStaffManager::getStudentActivity(CRequest::getInt("id"));
         $groups = array();
-        foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
-            $groups[$group->getId()] = $group->getName();
+        if (CSettingsManager::getSettingValue("display_archived_data")) {
+            $groups = CStaffManager::getAllStudentGroupsList();
+        } else {
+            foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
+                $groups[$group->getId()] = $group->getName();
+            }
         }
         $students = array();
         foreach ($activity->student->getGroup()->getStudents()->getItems() as $student) {
@@ -293,9 +301,13 @@ class CGradebookController extends CBaseController {
         $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
         $this->addJSInclude("_core/personTypeFilter.js");
         $groups = array();
-        foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
-            if ($group->getStudents()->getCount() > 0) {
-                $groups[$group->getId()] = $group->getName();
+        if (CSettingsManager::getSettingValue("display_archived_data")) {
+            $groups = CStaffManager::getAllStudentGroupsList();
+        } else {
+            foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
+                if ($group->getStudents()->getCount() > 0) {
+                    $groups[$group->getId()] = $group->getName();
+                }
             }
         }
         $students = array();
@@ -315,9 +327,13 @@ class CGradebookController extends CBaseController {
         $this->addJSInclude("_core/personTypeFilter.js");
         $this->addJSInclude("_modules/_gradebook/script.js");
         $groups = array();
-        foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
-            if ($group->getStudents()->getCount() > 0) {
-                $groups[$group->getId()] = $group->getName();
+        if (CSettingsManager::getSettingValue("display_archived_data")) {
+            $groups = CStaffManager::getAllStudentGroupsList();
+        } else {
+            foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
+                if ($group->getStudents()->getCount() > 0) {
+                    $groups[$group->getId()] = $group->getName();
+                }
             }
         }
         $activity = new CStudentActivitiesList();
@@ -364,9 +380,13 @@ class CGradebookController extends CBaseController {
         $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
         $this->addJSInclude("_core/personTypeFilter.js");
         $groups = array();
-        foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
-            if ($group->getStudents()->getCount() > 0) {
-                $groups[$group->getId()] = $group->getName();
+        if (CSettingsManager::getSettingValue("display_archived_data")) {
+            $groups = CStaffManager::getAllStudentGroupsList();
+        } else {
+            foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
+                if ($group->getStudents()->getCount() > 0) {
+                    $groups[$group->getId()] = $group->getName();
+                }
             }
         }
         $this->setData("groups", $groups);
@@ -384,9 +404,13 @@ class CGradebookController extends CBaseController {
         $this->addJSInclude("_core/personTypeFilter.js");
         $search = new CStudentActivitySearchForm();
         $groups = array();
-        foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
-            if ($group->getStudents()->getCount() > 0) {
-                $groups[$group->getId()] = $group->getName();
+        if (CSettingsManager::getSettingValue("display_archived_data")) {
+            $groups = CStaffManager::getAllStudentGroupsList();
+        } else {
+            foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
+                if ($group->getStudents()->getCount() > 0) {
+                    $groups[$group->getId()] = $group->getName();
+                }
             }
         }
         $this->setData("groups", $groups);
@@ -423,9 +447,13 @@ class CGradebookController extends CBaseController {
         $this->addCSSInclude("_core/jUI/jquery-ui-1.8.2.custom.css");
         $this->addJSInclude("_core/personTypeFilter.js");
         $groups = array();
-        foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
-            if ($group->getStudents()->getCount() > 0) {
-                $groups[$group->getId()] = $group->getName();
+        if (CSettingsManager::getSettingValue("display_archived_data")) {
+            $groups = CStaffManager::getAllStudentGroupsList();
+        } else {
+            foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
+                if ($group->getStudents()->getCount() > 0) {
+                    $groups[$group->getId()] = $group->getName();
+                }
             }
         }
         $this->setData("groups", $groups);

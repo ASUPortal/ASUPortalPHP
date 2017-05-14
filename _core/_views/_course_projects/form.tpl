@@ -12,19 +12,19 @@
 	    </div>
 	</div>
 	
-	{if count($disciplines) != 0}
-		<div class="control-group">
-	        {CHtml::activeLabel("discipline_id", $courseProject)}
-	        <div class="controls">
-	            {CHtml::activeDropDownList("discipline_id", $courseProject, $disciplines, "", "", "", "", true)}
-	            {CHtml::error("discipline_id", $courseProject)}
-	        </div>
-	    </div>
-    {else}
+	{if (CSettingsManager::getSettingValue("display_archived_data"))}
 		<div class="control-group">
 	        {CHtml::activeLabel("discipline_id", $courseProject)}
 	        <div class="controls">
 	            {CHtml::activeLookup("discipline_id", $courseProject, "subjects")}
+	            {CHtml::error("discipline_id", $courseProject)}
+	        </div>
+	    </div>
+    {else}
+	    <div class="control-group">
+	        {CHtml::activeLabel("discipline_id", $courseProject)}
+	        <div class="controls">
+	            {CHtml::activeDropDownList("discipline_id", $courseProject, $disciplines, "", "", "", "", true)}
 	            {CHtml::error("discipline_id", $courseProject)}
 	        </div>
 	    </div>
