@@ -1,6 +1,6 @@
 <?php
 
-class CWorkPlanMethodPracticInstructsNotProvided extends CAbstractPrintClassField {
+class CWorkPlanMethodLaborInstructsNotProvided extends CAbstractPrintClassField {
     public function getFieldName()
     {
         return "Надпись, если нет метод. указаний к лабораторным занятиям - Не предусмотрено";
