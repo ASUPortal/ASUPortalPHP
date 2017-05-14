@@ -1,9 +1,9 @@
 <?php
 
-class CWorkPlanExamQuestionsTitleCriteria extends CAbstractPrintClassField {
+class CWorkPlanCanUseTitle extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Вопросы к экзамену. Заголовок критериев";
+        return "Надпись - Приобрести опыт деятельности";
     }
 
     public function getFieldDescription()
@@ -23,16 +23,10 @@ class CWorkPlanExamQuestionsTitleCriteria extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$result = "";
-    	$items = array();
-    	if (!is_null($contextObject->finalControls)) {
-    		foreach ($contextObject->finalControls->getItems() as $control) {
-    			$items[] = $control->controlType;
-    		}
-    	}
-    	if (in_array("Экзамен", $items)) {
-    		$result = "Критерии оценки";
-    	}
+        $result = "";
+        if (!empty(CWorkPlanCanUse::execute($contextObject))) {
+            $result = "Приобрести опыт деятельности:";
+        }
         return $result;
     }
 }
