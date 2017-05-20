@@ -68,9 +68,9 @@ class CWorkPlanApproverModelOptionalValidator extends IModelValidatorOptional {
 					$sumPractice = 0;
 					$sumSelfWork = 0;
 					$sumRGR = 0;
-					$sumExamen = 0;
-					$sumCredit = 0;
-					$sumCreditWithMark = 0;
+					$sumExamen = CTaxonomyManager::getTaxonomy("corriculum_final_control_hours")->getTerm("examenHours")->getValue();
+					$sumCredit = CTaxonomyManager::getTaxonomy("corriculum_final_control_hours")->getTerm("creditHours")->getValue();
+					$sumCreditWithMark = CTaxonomyManager::getTaxonomy("corriculum_final_control_hours")->getTerm("creditHours")->getValue();
 					foreach ($this->model->categories as $category) {
 						foreach ($category->sections as $section) {
 							foreach ($section->loadsDisplay as $load) {
