@@ -121,7 +121,7 @@ class CStudentGroupsController extends CBaseController {
     public function actionJSONGetStudents() {
         $group = CStaffManager::getStudentGroup(CRequest::getInt("id"));
         $arr = array();
-        foreach ($group->getStudents()->getItems() as $student) {
+        foreach ($group->getStudentsWithChangeGroupsHistory()->getItems() as $student) {
             $arr[$student->getId()] = $student->getName();
         }
         echo json_encode($arr);
