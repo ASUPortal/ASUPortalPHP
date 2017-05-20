@@ -39,6 +39,11 @@ class CUsersController extends CBaseController{
             $user = new CUser($ar);
             $users->add($user->getId(), $user);
         }
+        $this->addActionsMenuItem(array(
+            "title" => "Обновить фото из анкет сотрудников",
+            "link" => "index.php?action=updatePhotosFromPersons",
+            "icon" => "actions/format-indent-more.png"
+        ));
         $this->setData("users", $users);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_users/users/index.tpl");
@@ -85,6 +90,11 @@ class CUsersController extends CBaseController{
                 }
             }
         }
+        $this->addActionsMenuItem(array(
+            "title" => "Обновить фото из анкеты сотрудника",
+            "link" => "index.php?action=updatePhotoFromPerson&id=".CRequest::getInt("id"),
+            "icon" => "actions/format-indent-more.png"
+        ));
         /**
          * Все передаем в представление
          */
@@ -182,5 +192,29 @@ class CUsersController extends CBaseController{
             );
         }
         echo json_encode($res);
+    }
+    public function actionUpdatePhotoFromPerson() {
+        $user = CStaffManager::getUser(CRequest::getInt("id"));
+        if (!is_null($user->getPerson())) {
+            $person = $user->getPerson();
+            if ($person->photo != "") {
+                $user->photo = $person->photo;
+                $user->save();
+            }
+        }
+        $this->redirect("index.php?action=edit&id=".$user->getId());
+    }
+    public function actionUpdatePhotosFromPersons() {
+        $users = CStaffManager::getAllUsers();
+        foreach ($users as $user) {
+            if (!is_null($user->getPerson())) {
+                $person = $user->getPerson();
+                if ($person->photo != "") {
+                    $user->photo = $person->photo;
+                    $user->save();
+                }
+            }
+        }
+        $this->redirect("index.php?action=index");
     }
 }

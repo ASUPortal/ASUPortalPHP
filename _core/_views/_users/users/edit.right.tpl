@@ -11,3 +11,5 @@
             Удалить личные права
         </center></a>
 </p>
+
+{CHtml::displayActionsMenu($_actions_menu)}

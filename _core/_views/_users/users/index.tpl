@@ -11,6 +11,7 @@
         <tr>
             <th></th>
             <th>#</th>
+            <th width="100"><i class="icon-camera"></i></th>
             <th>{CHtml::tableOrder("FIO", $users->getFirstItem())}</th>
             <th>{CHtml::tableOrder("login", $users->getFirstItem())}</th>
             <th>{CHtml::tableOrder("kadri_id", $users->getFirstItem())}</th>
@@ -22,6 +23,9 @@
         <tr>
             <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить пользователя {$user->getName()}')) { location.href='?action=delete&id={$user->getId()}'; }; return false;"></a></td>
             <td>{counter}</td>
+            <td>
+                {CHtml::activeAttachPreview("photo", $user, 100)}
+            </td>
             <td><a href="?action=edit&id={$user->getId()}">{$user->getName()}</a></td>
             <td>{$user->getLogin()}</td>
             <td>
