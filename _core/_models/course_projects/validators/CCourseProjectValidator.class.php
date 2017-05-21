@@ -21,11 +21,13 @@ class CCourseProjectValidator extends IModelValidatorOptional {
 			$group = $this->model->group;
 			
 			$project = $this->model;
-			$date = date("Y-m-d 00:00:00", strtotime($project->issue_date));
 			$years = array();
-			foreach (CActiveRecordProvider::getWithCondition(TABLE_YEARS, 'date_start <= "'.$date.'" and date_end >= "'.$date.'"')->getItems() as $ar) {
-				$term = new CTerm($ar);
-				$years[] = $term->getId();
+			if ($project->issue_date != "") {
+				$date = date("Y-m-d 00:00:00", strtotime($project->issue_date));
+				foreach (CActiveRecordProvider::getWithCondition(TABLE_YEARS, 'date_start <= "'.$date.'" and date_end >= "'.$date.'"')->getItems() as $ar) {
+					$term = new CTerm($ar);
+					$years[] = $term->getId();
+				}
 			}
 			$groupsByYear = array();
 			if (!empty($years)) {
@@ -39,51 +41,52 @@ class CCourseProjectValidator extends IModelValidatorOptional {
 			
 			$groupMismatch = false;
 			$students = new CArrayList();
-			foreach ($project->tasks->getItems() as $task) {
-				$student = CStaffManager::getStudent($task->student_id);
-				if ($student->group_id != $group->getId()) {
-					$groupMismatch = true;
+			if (!is_null($project->tasks)) {
+				foreach ($project->tasks->getItems() as $task) {
+					$student = CStaffManager::getStudent($task->student_id);
+					if ($student->group_id != $group->getId()) {
+						$groupMismatch = true;
+					}
 				}
-			}
-			if (!in_array($group->getId(), $groupsByYear)) {
-				$errors[] = 'Группа <a href="'.WEB_ROOT.'_modules/_student_groups/index.php?action=edit&id='.$group->getId().'" target="_blank">'.
-						$group->getName().'</a> отсутствует в списке групп за указанный год! Обновите значение учебной группы и список заданий!';
-			} elseif ($groupMismatch) {
-				$errors[] = "Студенты, сохранённые в списке заданий, не соответствуют выбранной группе! Обновите список заданий!";
-			} elseif (is_null($corriculum) and !$groupMismatch) {
-				$errors[] = 'В группе <a href="'.WEB_ROOT.'_modules/_student_groups/index.php?action=edit&id='.$group->getId().'" target="_blank">'.
-						$group->getName().'</a> не указан учебный план!';
-			} else {
-				$corriculumDiscipline = ", отсутствует дисциплина ".$this->model->discipline->getValue()."!";
-				$courseProject = "не указана курсовая работа/проект!";
-				foreach ($corriculum->cycles as $cycle) {
-					foreach ($cycle->allDisciplines as $discipline) {
-						if ($this->model->discipline->getId() == $discipline->discipline->getId()) {
-							$corriculumDiscipline = ', в нагрузке дисциплины <a href="'.WEB_ROOT.'_modules/_corriculum/disciplines.php?action=edit&id='.$discipline->getId().'" target="_blank">'.$discipline->discipline->getValue().'</a>';
-							foreach ($discipline->sections->getItems() as $section) {
-								foreach ($section->labors->getItems() as $labor) {
-									if ($labor->type->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_COURSE_WORK) {
-										$courseProject = "указана курсовая работа";
+				if (!in_array($group->getId(), $groupsByYear)) {
+					$errors[] = 'Группа <a href="'.WEB_ROOT.'_modules/_student_groups/index.php?action=edit&id='.$group->getId().'" target="_blank">'.
+							$group->getName().'</a> отсутствует в списке групп за указанный год! Обновите значение учебной группы и список заданий!';
+				} elseif ($groupMismatch) {
+					$errors[] = "Студенты, сохранённые в списке заданий, не соответствуют выбранной группе! Обновите список заданий!";
+				} elseif (is_null($corriculum) and !$groupMismatch) {
+					$errors[] = 'В группе <a href="'.WEB_ROOT.'_modules/_student_groups/index.php?action=edit&id='.$group->getId().'" target="_blank">'.
+							$group->getName().'</a> не указан учебный план!';
+				} else {
+					$corriculumDiscipline = ", отсутствует дисциплина ".$this->model->discipline->getValue()."!";
+					$courseProject = "не указана курсовая работа/проект!";
+					foreach ($corriculum->cycles as $cycle) {
+						foreach ($cycle->allDisciplines as $discipline) {
+							if ($this->model->discipline->getId() == $discipline->discipline->getId()) {
+								$corriculumDiscipline = ', в нагрузке дисциплины <a href="'.WEB_ROOT.'_modules/_corriculum/disciplines.php?action=edit&id='.$discipline->getId().'" target="_blank">'.$discipline->discipline->getValue().'</a>';
+								foreach ($discipline->sections->getItems() as $section) {
+									foreach ($section->labors->getItems() as $labor) {
+										if ($labor->type->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_COURSE_WORK) {
+											$courseProject = "указана курсовая работа";
+										}
+										if ($labor->type->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_COURSE_PROJECT) {
+											$courseProject = "указан курсовой проект";
+										}
 									}
-									if ($labor->type->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_COURSE_PROJECT) {
-										$courseProject = "указан курсовой проект";
-									}
+										
 								}
-									
-							}
-							foreach ($discipline->plans->getItems() as $plan) {
-								foreach ($plan->projectThemes->getItems() as $projectTheme) {
-									$projectThemes[$projectTheme->getId()] = $projectTheme->project_title;
+								foreach ($discipline->plans->getItems() as $plan) {
+									foreach ($plan->projectThemes->getItems() as $projectTheme) {
+										$projectThemes[$projectTheme->getId()] = $projectTheme->project_title;
+									}
 								}
 							}
 						}
 					}
-				}
-				$errors[] = 'В учебном плане <a href="'.WEB_ROOT.'_modules/_corriculum/index.php?action=edit&id='.$corriculum->getId().'" target="_blank">'.$corriculum->title.'</a>,
+					$errors[] = 'В учебном плане <a href="'.WEB_ROOT.'_modules/_corriculum/index.php?action=edit&id='.$corriculum->getId().'" target="_blank">'.$corriculum->title.'</a>,
 					привязанном к группе <a href="'.WEB_ROOT.'_modules/_student_groups/index.php?action=edit&id='.$group->getId().'" target="_blank">'.$group->getName().'</a>'.$corriculumDiscipline.' '.$courseProject;
+				}
 			}
 		}
-
 		return $errors;
 	}
 	

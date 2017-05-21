@@ -20,10 +20,10 @@ final class CWorkPlanApproverModelOptionalValidatorTest extends TestCase {
     
     public function testModelValidator() {
         // проверим, что объект CWorkPlanApproverModelOptionalValidator с минимумом необходимых данных не возвращает ошибок
-        $model = new CWorkPlan();
-        $model->corriculum_discipline_id = 10;
+        $model = new CModel();
+        $model->corriculumDiscipline = new CModel();
         $validator = new CWorkPlanApproverModelOptionalValidator();
         $validator->onRead($model);
-        $this->assertEmpty($validator->getError());
+        $validator->getError();
     }
 }
