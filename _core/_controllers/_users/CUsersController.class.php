@@ -195,6 +195,21 @@ class CUsersController extends CBaseController{
     }
     public function actionUpdatePhotoFromPerson() {
         $user = CStaffManager::getUser(CRequest::getInt("id"));
+        $this->updatePhotosFromPersons($user);
+        $this->redirect("index.php?action=edit&id=".$user->getId());
+    }
+    public function actionUpdatePhotosFromPersons() {
+        $users = CStaffManager::getAllUsers();
+        foreach ($users as $user) {
+            $this->updatePhotosFromPersons($user);
+        }
+        $this->redirect("index.php?action=index");
+    }
+    /**
+     * Обновление фото для пользователей из анкет сотрудников
+     * @param CUser $user
+     */
+    private function updatePhotosFromPersons($user) {
         if (!is_null($user->getPerson())) {
             $person = $user->getPerson();
             if ($person->photo != "") {
@@ -202,19 +217,5 @@ class CUsersController extends CBaseController{
                 $user->save();
             }
         }
-        $this->redirect("index.php?action=edit&id=".$user->getId());
-    }
-    public function actionUpdatePhotosFromPersons() {
-        $users = CStaffManager::getAllUsers();
-        foreach ($users as $user) {
-            if (!is_null($user->getPerson())) {
-                $person = $user->getPerson();
-                if ($person->photo != "") {
-                    $user->photo = $person->photo;
-                    $user->save();
-                }
-            }
-        }
-        $this->redirect("index.php?action=index");
     }
 }
