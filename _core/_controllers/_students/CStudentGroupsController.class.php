@@ -35,6 +35,15 @@ class CStudentGroupsController extends CBaseController {
             $group = new CStudentGroup($item);
             $groups->add($group->getId(), $group);
         }
+        /**
+         * Параметры для групповой печати по шаблону по выбранным группам
+         */
+        $this->setData("template", "formset_students");
+        $this->setData("selectedDoc", false);
+        $this->setData("url", WEB_ROOT."_modules/_student_groups/index.php");
+        $this->setData("action", "JSONGetStudentsFromGroups");
+        $this->setData("id", "selectedInView");
+        
         $this->setData("groups", $groups);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_student_groups/index.tpl");
@@ -123,6 +132,20 @@ class CStudentGroupsController extends CBaseController {
         $arr = array();
         foreach ($group->getStudentsWithChangeGroupsHistory()->getItems() as $student) {
             $arr[$student->getId()] = $student->getName();
+        }
+        echo json_encode($arr);
+    }
+    /**
+     * Получаем список студентов из выбранных групп JSON-ом
+     */
+    public function actionJSONGetStudentsFromGroups() {
+        $groups = explode(":", CRequest::getString("id"));
+        $arr = array();
+        foreach ($groups as $id) {
+            $group = CStaffManager::getStudentGroup($id);
+            foreach ($group->getStudentsWithChangeGroupsHistory()->getItems() as $student) {
+                $arr[$student->getId()] = $student->getName();
+            }
         }
         echo json_encode($arr);
     }
