@@ -49,7 +49,8 @@ class CWorkPlanApproverModelOptionalValidator extends IModelValidatorOptional {
 			if (count($termIds) > 0) {
 				$terms[] = "sum(if(l.term_id in (".join(", ", $termIds)."), l.value, 0)) as t_sum";
 			}
-			$totalHours = CWorkPlanTotalHours::execute($this->model);
+			$workPlanTotalHours = new CWorkPlanTotalHours();
+			$totalHours = $workPlanTotalHours->execute($this->model);
 			$totalCredits = round($totalHours/36, 2);
 			if(intval($totalCredits) != $totalCredits) {
 				$errors[] = "<b>Число зачётных единиц дисциплины (".$totalCredits.") должно быть целым (cумма часов: ".$totalHours.")</b>";
