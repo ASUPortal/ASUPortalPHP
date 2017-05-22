@@ -24,7 +24,7 @@ class CWorkPlanProjectDescriptionNotProvided extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = "";
-        if (empty(CWorkPlanCanUse::execute($contextObject))) {
+        if (empty(CWorkPlanProjectDescription::execute($contextObject))) {
             $result = "не предусмотрено";
         }
         return $result;

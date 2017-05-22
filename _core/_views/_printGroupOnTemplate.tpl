@@ -44,6 +44,14 @@ function printWithTemplate(manager, method, template_id, selectedDoc, url, actio
 	/**
 	 * Получаем список значений
 	*/
+	if (id == "selectedInView") {
+		var values = new Array();
+		jQuery.each(jQuery("input[name='selectedDoc[]']:checked"), function(key, value){
+			values.push(jQuery(value).val());
+		});
+		var id = values.join(':');
+	}
+		
 	var items = new Array();
 
 	if (selectedDoc) {

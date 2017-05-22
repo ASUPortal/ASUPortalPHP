@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `photo` TEXT NOT NULL COMMENT 'Фото' AFTER `id`;
