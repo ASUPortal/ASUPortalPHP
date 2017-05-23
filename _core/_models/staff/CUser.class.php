@@ -23,8 +23,7 @@ class CUser extends CActiveModel {
             "login" => "Логин",
             "kadri_id" => "Сотрудник кафедры",
             "comment" => "Комментарий",
-            "groups" => "Группы",
-            "photo" => "Фотография"
+            "groups" => "Группы"
         );
     }
     public function relations() {
@@ -46,14 +45,6 @@ class CUser extends CActiveModel {
             "required" => array(
                 "FIO",
                 "login"
-            )
-        );
-    }
-    public function fieldsProperty() {
-        return array(
-            "photo" => array(
-                "type"  => FIELD_UPLOADABLE,
-                "upload_dir" => CORE_CWD.CORE_DS."images".CORE_DS."lects".CORE_DS
             )
         );
     }
