@@ -20,13 +20,6 @@
 </div></div>
 
 <div class="control-group">
-    {CHtml::activeLabel("user[photo]", $form)}
-    <div class="controls">
-    {CHtml::activeUpload("user[photo]", $form)}
-    {CHtml::error("user[photo]", $form)}
-</div></div>
-
-<div class="control-group">
     {CHtml::activeLabel("user[login]", $form)}
     <div class="controls">
     {CHtml::activeTextField("user[login]", $form)}
