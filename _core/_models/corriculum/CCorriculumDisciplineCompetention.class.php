@@ -72,9 +72,9 @@ class CCorriculumDisciplineCompetention extends CActiveModel {
     public function attributeLabels() {
     	return array(
     			"level_id" => "Уровень освоения",
-    			"knowledges" => "Знания",
-    			"skills" => "Умения",
-    			"experiences" => "Владения"
+    			"knowledges" => "Знать",
+    			"skills" => "Уметь",
+    			"experiences" => "Владеть"
     	);
     }
     protected function validationRules() {

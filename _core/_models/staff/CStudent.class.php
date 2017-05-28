@@ -154,7 +154,9 @@ class CStudent extends CActiveModel {
     }
 
     public function getName() {
-        return $this->getRecord()->getItemValue("fio");
+        // заменим символы табуляции в строке имени студента на пробелы
+        $name = str_replace(chr(9), " ", $this->getRecord()->getItemValue("fio"));
+        return $name;
     }
     
     /**

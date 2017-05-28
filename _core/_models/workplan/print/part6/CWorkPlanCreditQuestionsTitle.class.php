@@ -24,12 +24,13 @@ class CWorkPlanCreditQuestionsTitle extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
     	$result = "";
+    	$items = array();
     	if (!is_null($contextObject->finalControls)) {
     		foreach ($contextObject->finalControls->getItems() as $control) {
-    			$item = $control->controlType;
+    			$items[] = $control->controlType;
     		}
     	}
-    	if (isset($item) && $item == "Зачет") {
+    	if (in_array("Зачет", $items)) {
     		$result = "Вопросы к зачёту";
     	}
         return $result;

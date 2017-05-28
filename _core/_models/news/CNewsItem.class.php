@@ -81,7 +81,15 @@ class CNewsItem extends CActiveModel{
                  * стандартную
                  */
                 if (is_null($this->author->getPerson())) {
-                    $imgPath = "";
+                    $user = $this->author;
+                    $biography = CBiographyManager::getBiographyByUser($user);
+                    if (!is_null($biography)) {
+                        if ($biography->image == "") {
+                            $imgPath = "";
+                        } else {
+                            $imgPath = "images/lects/".$biography->image;
+                        }
+                    }
                 } else {
                     $person = $this->author->getPerson();
                     if ($person->photo == "") {

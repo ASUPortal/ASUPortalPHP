@@ -1,4 +1,4 @@
-{extends file="_core.3col.tpl"}
+{extends file="_core.component.tpl"}
 
 {block name="asu_center"}
     <h2>Добавление учебника</h2>

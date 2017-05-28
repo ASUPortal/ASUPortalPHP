@@ -7,6 +7,8 @@
  * To change this template use File | Settings | File Templates.
  */
 class CCorriculumLaborsController extends CBaseController {
+	protected $_isComponent = true;
+	
     public function __construct() {
         if (!CSession::isAuth()) {
             $this->redirectNoAccess();
@@ -19,6 +21,11 @@ class CCorriculumLaborsController extends CBaseController {
     }
     public function actionAdd() {
         $labor = new CCorriculumDisciplineLabor();
+        $this->addActionsMenuItem(array(
+        	"title" => "Назад",
+        	"link" => "disciplineSections.php?action=index&discipline_id=".CRequest::getInt("discipline_id"),
+        	"icon" => "actions/edit-undo.png"
+        ));
         $labor->section_id = CRequest::getInt("id");
         $labor->discipline_id = CRequest::getInt("discipline_id");
         $this->setData("labor", $labor);
@@ -27,6 +34,11 @@ class CCorriculumLaborsController extends CBaseController {
     public function actionEdit() {
         $labor = CCorriculumsManager::getLabor(CRequest::getInt("id"));
         $labor->discipline_id = CRequest::getInt("discipline_id");
+        $this->addActionsMenuItem(array(
+        	"title" => "Назад",
+        	"link" => "disciplineSections.php?action=index&discipline_id=".$labor->discipline_id,
+        	"icon" => "actions/edit-undo.png"
+        ));
         $this->setData("labor", $labor);
         $this->renderView("_corriculum/_labors/edit.tpl");
     }
@@ -39,9 +51,9 @@ class CCorriculumLaborsController extends CBaseController {
                 $this->redirect("labors.php?action=edit&id=".$labor->getId()."&discipline_id=".$labor->discipline_id);
             } else {
             	if (is_null($labor->section)) {
-            		$this->redirect("disciplines.php?action=edit&id=".$labor->discipline_id);
+            		$this->redirect("disciplineSections.php?action=index&discipline_id=".$labor->discipline_id);
             	} else {
-            		$this->redirect("disciplines.php?action=edit&id=".$labor->section->discipline_id);
+            		$this->redirect("disciplineSections.php?action=index&discipline_id=".$labor->section->discipline_id);
             	}
                 
             }
@@ -58,6 +70,6 @@ class CCorriculumLaborsController extends CBaseController {
             $id = $labor->section->discipline_id;
         }
         $labor->remove();
-        $this->redirect("disciplines.php?action=edit&id=".$id);
+        $this->redirect("disciplineSections.php?action=index&discipline_id=".$id);
     }
 }

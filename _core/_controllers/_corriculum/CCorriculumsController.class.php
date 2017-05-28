@@ -60,8 +60,22 @@ class CCorriculumsController extends CBaseController {
         				"action" => "delete"
         			)
         		)
-        	)
+        	),
+            array(
+                "title" => "Печать по шаблону",
+                "link" => "#",
+                "icon" => "devices/printer.png",
+                "template" => "formset_corriculums_list"
+            )
         ));
+        /**
+         * Параметры для групповой печати по шаблону
+         */
+        $this->setData("template", "formset_corriculums");
+        $this->setData("selectedDoc", true);
+        $this->setData("url", null);
+        $this->setData("action", null);
+        $this->setData("id", null);
         /**
          * Передаем данные
          */

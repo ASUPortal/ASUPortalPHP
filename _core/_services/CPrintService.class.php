@@ -66,8 +66,20 @@ class CPrintService {
          * @var IPrintTemplateField $templateField
          */
         foreach ($fieldsFromTemplate as $templateField) {
-            $value = $templateField->getEvaluateValue($object);
-            $templateField->setValue($value, $template);
+            /**
+             * Для совместимости с групповыми описателями получим для них объект CArrayList здесь
+             * и установим для него значение без вычисления
+             */
+            if ($templateField->_field->type_id == 0 or $templateField->_field->parent_id != 0) {
+                $managerClass = CRequest::getString("manager");
+                $managerMethod = CRequest::getString("method");
+                $objectId = CRequest::getInt("id");
+                $object = $managerClass::$managerMethod($objectId);
+                $templateField->setValue($object, $template);
+            } else {
+                $value = $templateField->getEvaluateValue($object);
+                $templateField->setValue($value, $template);
+            }
         }
         /**
          * В HTML-шаблонах заменяем изображения на 64-разрядный код

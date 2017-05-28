@@ -37,6 +37,9 @@ class CPrintController extends CFlowController {
     }
 
     public function actionPrint() {
+        if (CRequest::getInt("id") == "") {
+            throw new Exception("Не выбраны объекты для печати!");
+        }
         /**
     	 * Получаем обратно параметры контекста из запроса.
     	 * Мы получаем:

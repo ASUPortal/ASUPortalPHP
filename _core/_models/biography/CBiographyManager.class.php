@@ -22,4 +22,17 @@ class CBiographyManager {
         }
         return self::getCacheBiographys()->getItem($key);
     }
+    /**
+     * 
+     * @param CUser $user
+     * @return CBiography
+     */
+    public static function getBiographyByUser(CUser $user) {
+        $biographies = new CArrayList();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_BIOGRAPHY, "user_id = ".$user->getId())->getItems() as $item) {
+            $biography = new CBiography($item);
+            $biographies->add($biography->getId(), $biography);
+        }
+        return $biographies->getFirstItem();
+    }
 }

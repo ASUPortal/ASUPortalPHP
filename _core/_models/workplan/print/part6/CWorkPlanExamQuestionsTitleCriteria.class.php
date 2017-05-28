@@ -24,12 +24,13 @@ class CWorkPlanExamQuestionsTitleCriteria extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
     	$result = "";
+    	$items = array();
     	if (!is_null($contextObject->finalControls)) {
     		foreach ($contextObject->finalControls->getItems() as $control) {
-    			$item = $control->controlType;
+    			$items[] = $control->controlType;
     		}
     	}
-    	if (isset($item) && $item == "Экзамен") {
+    	if (in_array("Экзамен", $items)) {
     		$result = "Критерии оценки";
     	}
         return $result;

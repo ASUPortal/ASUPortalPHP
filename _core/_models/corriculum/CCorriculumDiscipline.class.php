@@ -27,6 +27,7 @@ class CCorriculumDiscipline extends CActiveModel {
     protected $_plans = null;
     protected $_books = null;
     protected $_department = null;
+    protected $_componentType = null;
 
     /**
      * Разнообразные публичные свойства
@@ -126,6 +127,13 @@ class CCorriculumDiscipline extends CActiveModel {
                 "relationPower" => RELATION_HAS_ONE,
                 "storageProperty" => "_department",
                 "storageField" => "department_id",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getTerm"
+            ),
+            "componentType" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_componentType",
+                "storageField" => "component_type_id",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
             )

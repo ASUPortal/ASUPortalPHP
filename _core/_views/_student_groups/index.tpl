@@ -11,6 +11,7 @@
         <tr>
             <th></th>
             <th>#</th>
+            <th>{CHtml::activeViewGroupSelect("id", $groups->getFirstItem(), true)}</th>
             <th>{CHtml::tableOrder("name", $groups->getFirstItem())}</th>
             <th>{CHtml::tableOrder("students_count", $groups->getFirstItem())}</th>
             <th>{CHtml::tableOrder("speciality_id", $groups->getFirstItem())}</th>
@@ -25,6 +26,7 @@
             <tr>
                 <td><a class="icon-trash" href="#" onclick="if (confirm('Действительно удалить группу {$group->name}')) { location.href='?action=delete&id={$group->id}'; }; return false;"></a></td>
                 <td>{counter}</td>
+                <td>{CHtml::activeViewGroupSelect("id", $group, false, true)}</td>
                 <td><a href="?action=edit&id={$group->getId()}">{$group->name}</a></td>
                 <td>{$group->getStudentsCount()}</td>
                 <td>

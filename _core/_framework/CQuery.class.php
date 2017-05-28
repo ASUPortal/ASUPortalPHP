@@ -202,7 +202,10 @@ class CQuery {
             foreach ($this->_fields as $key=>$value) {
                 if ($key != "id") {
                     $columns[] = "`".$key."`";
-                    $values[":".$key] = addslashes($value);
+                    $value = addslashes($value);
+                    // Заменим символы табуляции на пробелы
+                    $value = str_replace(chr(9), " ", $value);
+                    $values[":".$key] = $value;
                     $placeholders[] = ":".$key;
                 }
             }
@@ -222,7 +225,10 @@ class CQuery {
             foreach ($this->_fields as $key=>$value) {
                 if ($key != "id") {
                     $columns[] = "`".$key."`";
-                    $values[] = "'".addslashes($value)."'";
+                    $value = addslashes($value);
+                    // Заменим символы табуляции на пробелы
+                    $value = str_replace(chr(9), " ", $value);
+                    $values[] = "'".$value."'";
                 }
             }
             $q =
@@ -247,7 +253,10 @@ class CQuery {
             foreach($this->_update as $key=>$value) {
                 if ($key != "id") {
                     $t[] = "`".$key."` = :".$key;
-                    $values[":".$key] = addslashes($value);
+                    $value = addslashes($value);
+                    // Заменим символы табуляции на пробелы
+                    $value = str_replace(chr(9), " ", $value);
+                    $values[":".$key] = $value;
                 }
             }
             $q =
@@ -272,7 +281,10 @@ class CQuery {
                     if (is_int($value)) {
                         $t[] = "`".$key."` = ".addslashes($value);
                     } elseif(is_string($value)) {
-                        $t[] = "`".$key."` = '".addslashes($value)."'";
+                    	$value = addslashes($value);
+                    	// Заменим символы табуляции на пробелы
+                    	$value = str_replace(chr(9), " ", $value);
+                        $t[] = "`".$key."` = '".$value."'";
                     }
                 }
             }

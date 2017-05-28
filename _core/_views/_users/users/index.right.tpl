@@ -14,3 +14,5 @@
         Добавить пользователя
     </center></a>
 </p>
+
+{CHtml::displayActionsMenu($_actions_menu)}

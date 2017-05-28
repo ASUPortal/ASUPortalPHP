@@ -98,6 +98,33 @@ class CStudentGroup extends CActiveModel {
         return $this->_students;
     }
     /**
+     * Студенты группы с учётом истории смены группы.
+     * Отсортированы по ФИО
+     *
+     * @return CArrayList
+     */
+    public function getStudentsWithChangeGroupsHistory() {
+        $groups = new CArrayList();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_STUDENT_GROUP_HISTORY, "source_id=".$this->getId())->getItems() as $item) {
+            $groupHistory = new CStudentGroupChangeHistory($item);
+            $groups->add($groupHistory->getId(), $groupHistory);
+        }
+        $students = new CArrayList();
+        if ($groups->getCount() != 0) {
+            foreach ($groups->getItems() as $group) {
+                $student = CStaffManager::getStudent($group->student_id);
+                if (!is_null($student)) {
+                    $students->add($student->getId(), $student);
+                }
+            }
+        } else {
+            $students = $this->getStudents();
+        }
+        $comparator = new CDefaultComparator("fio");
+        $sorted = CCollectionUtils::sort($students, $comparator);
+        return $sorted;
+    }
+    /**
      * Специальность
      *
      * @return CTerm

@@ -1,10 +1,10 @@
 <tr>
     <td valign="top" width="80%">
         <p align="center">ИНДИВИДУАЛЬНЫЙ УЧЕБНЫЙ ПЛАН</p>
-        <p align="center">подготовки {if $corriculum->qualification !== null}{$corriculum->qualification->getValue()}{/if}</p>
+        <p align="center">подготовки {if $corriculum->qualification !== null}{$corriculum->qualification->getValue()}а{/if}</p>
     </td>
     <td valign="top">
-        <p>УТВЕРЖДАЮ и все такое</p>
+        <p>УТВЕРЖДАЮ</p>
     </td>
 </tr>
 <tr>
