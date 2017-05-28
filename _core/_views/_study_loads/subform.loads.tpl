@@ -4,13 +4,13 @@
             <th></th>
             <th>#</th>
             <th>{CHtml::activeViewGroupSelect("id", $studyLoads->getFirstItem(), true)}</th>
-            <th>{CHtml::tableOrder("subject_id", $studyLoads->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("discipline_id", $studyLoads->getFirstItem())}</th>
             <th>Факультет</th>
-            <th>{CHtml::tableOrder("spec_id", $studyLoads->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("speciality_id", $studyLoads->getFirstItem())}</th>
             <th>{CHtml::tableOrder("level_id", $studyLoads->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("groups_cnt", $studyLoads->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("stud_cnt", $studyLoads->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("hours_kind_type", $studyLoads->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("groups_count", $studyLoads->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("students_count", $studyLoads->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("load_type_id", $studyLoads->getFirstItem())}</th>
             <th>{CHtml::tableOrder("comment", $studyLoads->getFirstItem())}</th>
             <th>{CHtml::tableOrder("lects", $studyLoads->getFirstItem())}</th>
             <th>{CHtml::tableOrder("practs", $studyLoads->getFirstItem())}</th>
@@ -41,27 +41,27 @@
 	            <td>ИРТ</td>
 	            <td>{$studyLoad->direction->getValue()}</td>
 	            <td>{$studyLoad->studyLevel->name}</td>
-	            <td>{$studyLoad->groups_cnt}</td>
-	            <td>{$studyLoad->stud_cnt}</td>
+	            <td>{$studyLoad->groups_count}</td>
+	            <td>{$studyLoad->students_count}</td>
 	            <td>{$studyLoad->studyLoadType->name}</td>
 	            <td>{$studyLoad->comment}</td>
-	            <td>{$studyLoad->lects + $studyLoad->lects_add}</td>
-	            <td>{$studyLoad->practs + $studyLoad->practs_add}</td>
-	            <td>{$studyLoad->labor + $studyLoad->labor_add}</td>
-	            <td>{$studyLoad->rgr + $studyLoad->rgr_add}</td>
-	            <td>{$studyLoad->ksr + $studyLoad->ksr_add}</td>
-	            <td>{$studyLoad->consult + $studyLoad->consult_add}</td>
-	            <td>{$studyLoad->test + $studyLoad->test_add}</td>
-	            <td>{$studyLoad->exams + $studyLoad->exams_add}</td>
-	            <td>{$studyLoad->study_pract + $studyLoad->study_pract_add}</td>
-	            <td>{$studyLoad->work_pract + $studyLoad->work_pract_add}</td>
-	            <td>{$studyLoad->kurs_proj + $studyLoad->kurs_proj_add}</td>
-	            <td>{$studyLoad->consult_dipl + $studyLoad->consult_dipl_add}</td>
-	            <td>{$studyLoad->gek + $studyLoad->gek_add}</td>
-	            <td>{$studyLoad->aspirants + $studyLoad->aspirants_add}</td>
-	            <td>{$studyLoad->aspir_manage + $studyLoad->aspir_manage_add}</td>
-	            <td>{$studyLoad->duty + $studyLoad->duty_add}</td>
-	            <td>{$studyLoad->sum}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_LECTURE)}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_PRACTICE)}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_LAB_WORK)}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_RGR)}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_KSR)}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_CONSULTATION)}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_CREDIT)}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_EXAMEN)}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_STUDY_PRACTICE)}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_WORK_PRACTICE)}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_COURSE_PROJECT)}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_DIPLOM_CONSULTATION)}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_GEK)}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_ASPIRANTS)}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_ASPIRANTS_MANAGEMENT)}</td>
+	            <td>{$studyLoad->getWorksValueByType(CStudyLoadWorkTypeIDConstants::LABOR_ATTENDANCE)}</td>
+	            <td>{$studyLoad->getSumWorksValue()}</td>
 	            <td>{$studyLoad->on_filial}</td>
 	        </tr>
         {/foreach}

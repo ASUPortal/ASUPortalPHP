@@ -5,10 +5,10 @@
     {CHtml::errorSummary($studyLoad)}
 
     <div class="control-group">
-        {CHtml::activeLabel("kadri_id", $studyLoad)}
+        {CHtml::activeLabel("person_id", $studyLoad)}
         <div class="controls">
-            {CHtml::activeLookup("kadri_id", $studyLoad, "staff")}
-            {CHtml::error("kadri_id", $studyLoad)}
+            {CHtml::activeLookup("person_id", $studyLoad, "staff")}
+            {CHtml::error("person_id", $studyLoad)}
         </div>
     </div>
     
@@ -21,26 +21,26 @@
     </div>
     
     <div class="control-group">
-	    {CHtml::activeLabel("part_id", $studyLoad)}
+	    {CHtml::activeLabel("year_part_id", $studyLoad)}
 	    <div class="controls">
-	        {CHtml::activeDropDownList("part_id", $studyLoad, CTaxonomyManager::getYearPartsList())}
-	        {CHtml::error("part_id", $studyLoad)}
+	        {CHtml::activeDropDownList("year_part_id", $studyLoad, CTaxonomyManager::getYearPartsList())}
+	        {CHtml::error("year_part_id", $studyLoad)}
 	    </div>
 	</div>
 	
 	<div class="control-group">
-	    {CHtml::activeLabel("subject_id", $studyLoad)}
+	    {CHtml::activeLabel("discipline_id", $studyLoad)}
 	    <div class="controls">
-	        {CHtml::activeLookup("subject_id", $studyLoad, "subjects")}
-	        {CHtml::error("subject_id", $studyLoad)}
+	        {CHtml::activeLookup("discipline_id", $studyLoad, "subjects")}
+	        {CHtml::error("discipline_id", $studyLoad)}
 	    </div>
 	</div>
 	
 	<div class="control-group">
-	    {CHtml::activeLabel("spec_id", $studyLoad)}
+	    {CHtml::activeLabel("speciality_id", $studyLoad)}
 	    <div class="controls">
-	        {CHtml::activeLookup("spec_id", $studyLoad, "specialities")}
-	        {CHtml::error("spec_id", $studyLoad)}
+	        {CHtml::activeLookup("speciality_id", $studyLoad, "specialities")}
+	        {CHtml::error("speciality_id", $studyLoad)}
 	    </div>
 	</div>
 	
@@ -53,10 +53,10 @@
 	</div>
 	
 	<div class="control-group">
-	    {CHtml::activeLabel("hours_kind_type", $studyLoad)}
+	    {CHtml::activeLabel("load_type_id", $studyLoad)}
 	    <div class="controls">
-	        {CHtml::activeLookup("hours_kind_type", $studyLoad, "hours_kind_type")}
-	        {CHtml::error("hours_kind_type", $studyLoad)}
+	        {CHtml::activeLookup("load_type_id", $studyLoad, "hours_kind_type")}
+	        {CHtml::error("load_type_id", $studyLoad)}
 	    </div>
 	</div>
 	
@@ -77,10 +77,10 @@
 	</div>
 	
 	<div class="control-group">
-        {CHtml::activeLabel("groups_cnt", $studyLoad)}
+        {CHtml::activeLabel("groups_count", $studyLoad)}
         <div class="controls">
-            {CHtml::activeTextField("groups_cnt", $studyLoad)}
-            {CHtml::error("groups_cnt", $studyLoad)}
+            {CHtml::activeTextField("groups_count", $studyLoad)}
+            {CHtml::error("groups_count", $studyLoad)}
         </div>
     </div>
     
@@ -100,205 +100,33 @@
 		</tr>
 		<tr>
 			<td align="right">
-				{CHtml::activeLabel("stud_cnt", $studyLoad)}
+				{CHtml::label("Число студентов", "", "", true)}
 			</td>
 			<td align="center">
-				{CHtml::activeTextField("stud_cnt", $studyLoad)}
+				{CHtml::activeTextField("students_count", $studyLoad)}
 			</td>
 			<td align="center">
-				{CHtml::activeTextField("stud_cnt_add", $studyLoad)}
+				{CHtml::activeTextField("students_contract_count", $studyLoad)}
 			</td>
 		</tr>
 		<tr>
 			<td colspan="3">&nbsp;</td>
 		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("lects", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("lects", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("lects_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("practs", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("practs", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("practs_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("labor", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("labor", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("labor_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("rgr", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("rgr", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("rgr_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("ksr", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("ksr", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("ksr_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("recenz", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("recenz", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("recenz_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("consult", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("consult", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("consult_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("test", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("test", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("test_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("exams", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("exams", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("exams_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("study_pract", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("study_pract", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("study_pract_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("work_pract", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("work_pract", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("work_pract_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("kurs_proj", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("kurs_proj", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("kurs_proj_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("consult_dipl", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("consult_dipl", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("consult_dipl_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("gek", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("gek", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("gek_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("aspirants", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("aspirants", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("aspirants_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("aspir_manage", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("aspir_manage", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("aspir_manage_add", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::activeLabel("duty", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("duty", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("duty_add", $studyLoad)}
-			</td>
-		</tr>
+		{foreach $studyLoad->getStudyLoadTable()->getTable() as $typeId=>$rows}
+            <tr>
+				{foreach $rows as $kindId=>$value}
+					{if in_array($kindId, array(0))}
+						<td align="right">
+							{CHtml::label($value, "", "", true)}
+						</td>
+					{else}
+						<td align="center">
+	                       {CHtml::textField($studyLoad->getStudyLoadTable()->getFieldName($typeId, $kindId), $value)}
+	                    </td>
+					{/if}
+                {/foreach}
+            </tr>
+        {/foreach}
 	</table>
 
     <div class="control-group">

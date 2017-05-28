@@ -73,7 +73,7 @@ class CStudyLoadController extends CBaseController {
     }
     public function actionAdd() {
         $studyLoad = new CStudyLoad();
-        $studyLoad->kadri_id = CRequest::getInt("kadri_id");
+        $studyLoad->person_id = CRequest::getInt("kadri_id");
         $studyLoad->year_id = CRequest::getInt("year_id");
         $this->setData("studyLoad", $studyLoad);
         $this->addActionsMenuItem(array(
@@ -87,7 +87,7 @@ class CStudyLoadController extends CBaseController {
     }
     public function actionEdit() {
         $studyLoad = CStudyLoadService::getStudyLoad(CRequest::getInt("id"));
-        $kadriId = $studyLoad->kadri_id;
+        $kadriId = $studyLoad->person_id;
         $yearId = $studyLoad->year_id;
         $this->setData("studyLoad", $studyLoad);
         $this->addActionsMenuItem(array(
@@ -103,11 +103,12 @@ class CStudyLoadController extends CBaseController {
     	$lecturer = CStaffManager::getPerson(CRequest::getInt("kadri_id"));
     	$year = CTaxonomyManager::getYear(CRequest::getInt("year_id"));
     	
-    	$loads = CStudyLoadService::addTotalLoads($lecturer, $year);
+    	$loads = CStudyLoadService::getStudyLoadsByYear($lecturer, $year);
     	
     	$loadsFall = CStudyLoadService::getStudyLoadsByPart($loads, 1);
     	$loadsSpring = CStudyLoadService::getStudyLoadsByPart($loads, 2);
     	
+    	$this->setData("lecturer", $lecturer);
     	$this->setData("loadsFall", $loadsFall);
     	$this->setData("loadsSpring", $loadsSpring);
     	$this->addActionsMenuItem(array(
@@ -126,7 +127,7 @@ class CStudyLoadController extends CBaseController {
     }
     public function actionDelete() {
     	$studyLoad = CStudyLoadService::getStudyLoad(CRequest::getInt("id"));
-    	$kadriId = $studyLoad->kadri_id;
+    	$kadriId = $studyLoad->person_id;
     	$yearId = $studyLoad->year_id;
     	if (!is_null($studyLoad)) {
     		CStudyLoadService::deleteStudyLoad($studyLoad);
@@ -138,7 +139,12 @@ class CStudyLoadController extends CBaseController {
         $studyLoad->setAttributes(CRequest::getArray($studyLoad::getClassName()));
         if ($studyLoad->validate()) {
             $studyLoad->save();
-            $kadriId = $studyLoad->kadri_id;
+            
+            $object = new CStudyLoadTable($studyLoad);
+            $object->setAttributes(CRequest::getArray($object::getClassName()));
+            $object->save();
+            
+            $kadriId = $studyLoad->person_id;
             $yearId = $studyLoad->year_id;
             if ($this->continueEdit()) {
                 $this->redirect("?action=edit&id=".$studyLoad->getId());

@@ -3,23 +3,23 @@
  * Учебная нагрузка по видам
  */
 
-class CIndPlanPersonWork extends CActiveModel implements IVersionControl {
+class CStudyLoadWork extends CActiveModel implements IVersionControl {
     protected $_table = TABLE_WORKLOAD_WORKS;
     protected $_workload = null;
 
     public function relations() {
         return array(
-            "workload" => array(
+            "studyLoad" => array(
                 "relationPower" => RELATION_HAS_ONE,
                 "storageProperty" => "_workload",
                 "storageField" => "workload_id",
-                "managerClass" => "CIndPlanManager",
-                "managerGetObject" => "getLoad"
+                "managerClass" => "CBaseManager",
+                "managerGetObject" => "getStudyLoad"
             ),
             "type" => array(
                 "relationPower" => RELATION_HAS_ONE,
                 "storageField" => "type_id",
-                "targetClass" => "CIndPlanWorktype"
+                "targetClass" => "CStudyLoadWorkType"
             ),
             "kind" => array(
                 "relationPower" => RELATION_HAS_ONE,

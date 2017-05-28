@@ -168,7 +168,8 @@
     define("TABLE_IND_PLAN_PLANNED", "hours_kind");
     define("TABLE_IND_PLAN_PLANNED_TYPES", "hours_kind_type");
     define("TABLE_WORKLOAD", "pl_corriculum_workload");
-    define("TABLE_WORKLOAD_WORKS", "pl_corriculum_workload_by_type");   
+    define("TABLE_WORKLOAD_WORKS", "pl_corriculum_workload_by_type");
+    define("TABLE_WORKLOAD_WORK_TYPES", "spravochnik_uch_rab");
     define("TABLE_WORKLOAD_STUDY_GROUPS", "pl_corriculum_workload_groups");
     define("TABLE_ACCESS_LEVELS", "task_rights");
     define("TABLE_DOCUMENT_FOLDERS", "files_folders");

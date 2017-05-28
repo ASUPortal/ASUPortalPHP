@@ -2,7 +2,7 @@
 
 {block name="asu_center"}
 
-<h2>План годовой нагрузки</h2>
+<h2>План годовой нагрузки {$lecturer->getName()}</h2>
     {CHtml::helpForCurrentPage()}
 
 	{if $loadsFall->getCount() == 0 and $loadsSpring->getCount() == 0}

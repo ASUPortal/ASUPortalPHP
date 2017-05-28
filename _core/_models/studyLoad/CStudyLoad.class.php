@@ -10,6 +10,8 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
     protected $_discipline = null;
     protected $_lecturer = null;
     protected $_createdBy = null;
+    protected $_works = null;
+    private $_loadTable = null;
     
     protected function relations() {
     	return array(
@@ -63,21 +65,26 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
     			"storageField" => "_created_by",
     			"managerClass" => "CStaffManager",
     			"managerGetObject" => "getPerson"
+    		),
+            "works" => array(
+                "relationPower" => RELATION_COMPUTED,
+                "storageProperty" => "_works",
+                "relationFunction" => "getWorks",
     		)
     	);
     }
     public function attributeLabels() {
     	return array(
-    		"kadri_id" => "ФИО преподавателя",
+    		"person_id" => "ФИО преподавателя",
     		"year_id" => "Учебный год",
-    		"part_id" => "Семестр",
-    		"subject_id" => "Дисциплина",
-    		"spec_id" => "Специальность",
+    		"year_part_id" => "Семестр",
+    		"discipline_id" => "Дисциплина",
+    		"speciality_id" => "Специальность",
     		"level_id" => "Курс",
     		"group_id" => "Учебная группа",
-    		"hours_kind_type" => "Тип нагрузки",
-    		"groups_cnt" => "Число групп",
-    		"stud_cnt" => "Число студентов",
+    		"load_type_id" => "Тип нагрузки",
+    		"groups_count" => "Число групп",
+    		"students_count" => "Число студентов",
     		"comment" => "Комментарий",
     		"lects" => "лекции",
     		"practs" => "практики",
@@ -120,4 +127,110 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
     		"study_groups" => "Студенческие группы"
     	);
     }
+    protected function validationRules() {
+    	return array(
+    		"selected" => array(
+    			"person_id",
+    			"year_id",
+    			"year_part_id",
+    			"discipline_id",
+    			"speciality_id",
+    			"level_id",
+    			"load_type_id"
+    		)
+    	);
+    }
+    
+    /**
+     * Виды работ учебной нагрузки по типу нагрузки (бюджет/контракт)
+     *
+     * @param $kind
+     * @return CArrayList
+     */
+    public function getWorksByKind($kind) {
+    	$result = new CArrayList();
+    	foreach ($this->works->getItems() as $work) {
+    		if ($work->kind_id == $kind) {
+    			$result->add($work->getId(), $work);
+    		}
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Виды работ учебной нагрузки
+     * 
+     * @return CArrayList
+     */
+    public function getWorks() {
+    	if (is_null($this->_works)) {
+    		$this->_works = new CArrayList();
+    		if (!is_null($this->getId())) {
+    			foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD_WORKS, "workload_id=".$this->getId())->getItems() as $ar) {
+    				$work = new CStudyLoadWork($ar);
+    				$this->_works->add($work->getId(), $work);
+    			}
+    		}
+    	}
+    	return $this->_works;
+    }
+    
+    /**
+     * Виды работ учебной нагрузки по типу
+     * 
+     * @param $type
+     * @return CArrayList
+     */
+    public function getWorksByType($type) {
+    	$result = new CArrayList();
+    	foreach ($this->works->getItems() as $work) {
+    		if ($work->type_id == $type) {
+    			$result->add($work->getId(), $work);
+    		}
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Число часов по видам работ учебной нагрузки по типу
+     *
+     * @param $type
+     * @return CArrayList
+     */
+    public function getWorksValueByType($type) {
+    	$value = 0;
+    	foreach ($this->works->getItems() as $work) {
+    		if ($work->type_id == $type) {
+    			$value += $work->workload;
+    		}
+    	}
+    	return $value;
+    }
+    
+    /**
+     * Сумма часов по видам работ учебной нагрузки
+     *
+     * @param $type
+     * @return CArrayList
+     */
+    public function getSumWorksValue() {
+    	$value = 0;
+    	foreach ($this->works->getItems() as $work) {
+    		$value += $work->workload;
+    	}
+    	return $value;
+    }
+    
+    /**
+     * Таблица учебной нагрузки отдельным классом
+     *
+     * @return CStudyLoadTable
+     */
+    public function getStudyLoadTable() {
+    	if (is_null($this->_loadTable)) {
+    		$this->_loadTable = new CStudyLoadTable($this);
+    	}
+    	return $this->_loadTable;
+    }
+    
 }
