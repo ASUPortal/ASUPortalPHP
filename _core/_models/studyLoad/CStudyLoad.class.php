@@ -2,7 +2,7 @@
 /**
  * Учебная нагрузка
  */
-class CStudyLoad extends CActiveModel implements IVersionControl {
+class CStudyLoad extends CActiveModel {
     protected $_table = TABLE_WORKLOAD;
     protected $_direction = null;
     protected $_studyLevel = null;
