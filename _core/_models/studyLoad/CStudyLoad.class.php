@@ -65,12 +65,12 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
     			"storageField" => "_created_by",
     			"managerClass" => "CStaffManager",
     			"managerGetObject" => "getPerson"
-    		),
+            ),
             "works" => array(
                 "relationPower" => RELATION_COMPUTED,
                 "storageProperty" => "_works",
                 "relationFunction" => "getWorks",
-    		)
+            )
     	);
     }
     public function attributeLabels() {
@@ -105,25 +105,7 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
     		"duty" => "посещение зан.",
     		"on_filial" => "Надбавка за филиалы",
     		"sum" => "сумма основной нагрузки",
-    		"sum_add" => "сумма доп. нагрузки",
-    		"lects_add" => "лекции доп.",
-    		"practs_add" => "практики доп.",
-    		"labor_add" => "лаб. занятия доп.",
-    		"rgr_add" => "РГР доп.",
-    		"ksr_add" => "КСР доп.",
-    		"recenz_add" => "реценз. контр. работ доп.",
-    		"kurs_proj_add" => "курс. проекты доп.",
-    		"consult_add" => "консультация доп.",
-    		"test_add" => "зачеты доп.",
-    		"exams_add" => "экзамены доп.",
-    		"study_pract_add" => "уч. практики доп.",
-    		"work_pract_add" => "произ.практика доп.",
-    		"consult_dipl_add" => "консул. дип. проекта доп.",
-    		"gek_add" => "ГЭК доп.",
-    		"aspirants_add" => "занятия с асп. доп.",
-    		"aspir_manage_add" => "рук-во асп. доп.",
-    		"duty_add" => "посещение зан. доп.",
-    		"stud_cnt_add" => "число коммерческих студентов",
+    		"students_count_add" => "число коммерческих студентов",
     		"study_groups" => "Студенческие группы"
     	);
     }
