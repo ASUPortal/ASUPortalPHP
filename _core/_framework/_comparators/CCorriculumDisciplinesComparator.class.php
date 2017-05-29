@@ -1,6 +1,6 @@
 <?php
 /**
- * Сортировка дисциплин учебного плана по названиям
+ * Сортировка дисциплин учебного плана и дисциплин учебной нагрузки по названиям
  *
  */
 class CCorriculumDisciplinesComparator implements CComparator {

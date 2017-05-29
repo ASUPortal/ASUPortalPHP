@@ -28,4 +28,32 @@ class CStudyLoadWork extends CActiveModel {
             )
         );
     }
+    
+    /**
+     * Сумма часов видов учебной нагрузки по типу
+     *
+     * @param $type
+     * @return int
+     */
+    public function getSumWorkHoursByType($type) {
+    	$value = 0;
+    	if ($this->type->name_hours_kind == $type) {
+    		$value = $this->workload;
+    	}
+    	return $value;
+    }
+    
+    /**
+     * Сумма часов по типам учебной нагрузки (основная, дополнительная, надбавка, почасовка)
+     *
+     * @param $type
+     * @return int
+     */
+    public function getSumWorkHoursByLoadType($type) {
+    	$value = 0;
+    	if ($this->studyLoad->load_type_id == $type) {
+    		$value = $this->workload;
+    	}
+    	return $value;
+    }
 }

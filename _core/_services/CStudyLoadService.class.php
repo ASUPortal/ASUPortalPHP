@@ -75,7 +75,7 @@ class CStudyLoadService {
     	// текущая дата для расчета ставки по актуальным приказам ОК
     	$dateFrom = date('Y.m.d', mktime(0, 0, 0, date("m"), date("d"), date("Y")));
     	
-    	if (!(!$isBudget and !$isContract)) {
+    	if ($isBudget or $isContract) {
     		$query = new CQuery();
     		$query->select("kadri.id as kadri_id,
 						loads.year_id as year_id,
@@ -113,7 +113,7 @@ class CStudyLoadService {
     			$hoursSumBase = 0;
     			$hoursSumAdditional = 0;
     			$hoursSumPremium = 0;
-    			$hoursSumHourly = 0;
+    			$hoursSumByTime = 0;
     			$hoursSum = 0;
     			$year = CTaxonomyManager::getYear($selectedYear);
     			$studyLoads = CStudyLoadService::getStudyLoadsByYear(CStaffManager::getPerson($person['kadri_id']), $year);
@@ -121,51 +121,27 @@ class CStudyLoadService {
     				$groupsCountSum += $studyLoad->groups_count;
     				$studentsCountSum += $studyLoad->students_count;
     				if ($isBudget) {
-    					$kind = CTaxonomyManager::getTaxonomy("hours_kind")->getTerm("budgetStudyLoad")->getId();
+    					$kind = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId();
     					foreach ($studyLoad->getWorksByKind($kind) as $work) {
     						$hoursSum += $work->workload;
-    						if ($work->type_id == CStudyLoadWorkTypeIDConstants::LABOR_LECTURE) {
-    							$lectsSum += $work->workload;
-    						}
-    						if ($work->type_id == CStudyLoadWorkTypeIDConstants::LABOR_DIPLOM_CONSULTATION) {
-    							$diplSum += $work->workload;
-    						}
-    						if ($work->studyLoad->load_type_id == CStudyLoadTypeIDConstants::MAIN) {
-    							$hoursSumBase += $work->workload;
-    						}
-    						if ($work->studyLoad->load_type_id == CStudyLoadTypeIDConstants::ADDITIONAL) {
-    							$hoursSumAdditional += $work->workload;
-    						}
-    						if ($work->studyLoad->load_type_id == CStudyLoadTypeIDConstants::PREMIUM) {
-    							$hoursSumPremium += $work->workload;
-    						}
-    						if ($work->studyLoad->load_type_id == CStudyLoadTypeIDConstants::BY_TIME) {
-    							$hoursSumHourly += $work->workload;
-    						}
+    						$lectsSum += $work->getSumWorkHoursByType(CStudyLoadWorkTypeConstants::LABOR_LECTURE);
+    						$diplSum += $work->getSumWorkHoursByType(CStudyLoadWorkTypeConstants::LABOR_DIPLOM_CONSULTATION);
+    						$hoursSumBase += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::MAIN);
+    						$hoursSumAdditional += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::ADDITIONAL);
+    						$hoursSumPremium += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::PREMIUM);
+    						$hoursSumByTime += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::BY_TIME);
     					}
     				}
     				if ($isContract) {
-    					$kind = CTaxonomyManager::getTaxonomy("hours_kind")->getTerm("contractStudyLoad")->getId();
+    					$kind = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId();
     					foreach ($studyLoad->getWorksByKind($kind) as $work) {
     						$hoursSum += $work->workload;
-    						if ($work->type_id == CStudyLoadWorkTypeIDConstants::LABOR_LECTURE) {
-    							$lectsSum += $work->workload;
-    						}
-    						if ($work->type_id == CStudyLoadWorkTypeIDConstants::LABOR_DIPLOM_CONSULTATION) {
-    							$diplSum += $work->workload;
-    						}
-    						if ($work->studyLoad->load_type_id == CStudyLoadTypeIDConstants::MAIN) {
-    							$hoursSumBase += $work->workload;
-    						}
-    						if ($work->studyLoad->load_type_id == CStudyLoadTypeIDConstants::ADDITIONAL) {
-    							$hoursSumAdditional += $work->workload;
-    						}
-    						if ($work->studyLoad->load_type_id == CStudyLoadTypeIDConstants::PREMIUM) {
-    							$hoursSumPremium += $work->workload;
-    						}
-    						if ($work->studyLoad->load_type_id == CStudyLoadTypeIDConstants::BY_TIME) {
-    							$hoursSumHourly += $work->workload;
-    						}
+    						$lectsSum += $work->getSumWorkHoursByType(CStudyLoadWorkTypeConstants::LABOR_LECTURE);
+    						$diplSum += $work->getSumWorkHoursByType(CStudyLoadWorkTypeConstants::LABOR_DIPLOM_CONSULTATION);
+    						$hoursSumBase += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::MAIN);
+    						$hoursSumAdditional += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::ADDITIONAL);
+    						$hoursSumPremium += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::PREMIUM);
+    						$hoursSumByTime += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::BY_TIME);
     					}
     				}
     			}
@@ -174,10 +150,10 @@ class CStudyLoadService {
     			$personsWithLoad[$i]['stud_cnt_sum_'] = $studentsCountSum;
     			$personsWithLoad[$i]['lects_sum_'] = $lectsSum;
     			$personsWithLoad[$i]['dipl_sum_'] = $diplSum;
-    			$personsWithLoad[$i]['hours_sum1_'] = $hoursSumBase;
-    			$personsWithLoad[$i]['hours_sum2_'] = $hoursSumAdditional;
-    			$personsWithLoad[$i]['hours_sum3_'] = $hoursSumPremium;
-    			$personsWithLoad[$i]['hours_sum4_'] = $hoursSumHourly;
+    			$personsWithLoad[$i]['hours_sum_base'] = $hoursSumBase;
+    			$personsWithLoad[$i]['hours_sum_additional'] = $hoursSumAdditional;
+    			$personsWithLoad[$i]['hours_sum_premium'] = $hoursSumPremium;
+    			$personsWithLoad[$i]['hours_sum_by_time'] = $hoursSumByTime;
     			$personsWithLoad[$i]['hours_sum'] = $hoursSum;
     			
     			$i++;
@@ -197,16 +173,16 @@ class CStudyLoadService {
     	$query = new CQuery();
     	$query->select("person.*")
 	    	->from(TABLE_PERSON." as person")
-	    	->innerJoin(TABLE_PERSON_BY_TYPES." as types", "types.kadri_id = person.id")
-	    	->innerJoin(TABLE_TYPES." as person_types", "person_types.id = types.person_type_id")
-	    	->condition("person_types.name_short like '%ППС%' and person.id NOT IN (SELECT person_id from ".TABLE_WORKLOAD." WHERE year_id='".$selectedYear."')")
+	    	->condition("person.id NOT IN (SELECT person_id from ".TABLE_WORKLOAD." WHERE year_id='".$selectedYear."')")
 	    	->order("person.fio_short asc");
     	
     	$set = new CRecordSet(false);
     	$set->setQuery($query);
     	foreach ($set->getItems() as $item) {
     		$person = new CPerson($item);
-    		$personsWithoutLoad->add($person->getId(), $person);
+    		if ($person->hasPersonType(TYPE_PPS)) {
+    			$personsWithoutLoad->add($person->getId(), $person);
+    		}
     	}
     	
     	return $personsWithoutLoad;
@@ -228,6 +204,9 @@ class CStudyLoadService {
     			$result->add($study->getId(), $study);
     		}
     	}
-    	return $result;
+    	// сортируем нагрузки по названию дисциплин
+    	$comparator = new CCorriculumDisciplinesComparator();
+    	$sorted = CCollectionUtils::sort($result, $comparator);
+    	return $sorted;
     }
 }

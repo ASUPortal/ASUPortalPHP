@@ -53,6 +53,8 @@ class CStudyLoadTable extends CFormModel {
     }
 
     /**
+     * Таблица для редактирования нагрузки (бюджет и контракт раздельно)
+     * 
      * @return array
      */
     public function getTable() {
@@ -64,14 +66,35 @@ class CStudyLoadTable extends CFormModel {
         	$row[0] = $type;
         	
         	// бюджет
-        	$row[CTaxonomyManager::getTaxonomy("hours_kind")->getTerm("budgetStudyLoad")->getId()] = $this->getLoadByType(CTaxonomyManager::getTaxonomy("hours_kind")->getTerm("budgetStudyLoad")->getId(), $key);
+        	$row[CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId()] = $this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId(), $key);
         	
         	// коммерция
-        	$row[CTaxonomyManager::getTaxonomy("hours_kind")->getTerm("contractStudyLoad")->getId()] = $this->getLoadByType(CTaxonomyManager::getTaxonomy("hours_kind")->getTerm("contractStudyLoad")->getId(), $key);
+        	$row[CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId()] = $this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId(), $key);
         	
         	$result[$key] = $row;
         } 
         return $result;
+    }
+    
+    /**
+     * Таблица для просмотра нагрузки (бюджет и контракт вместе)
+     * 
+     * @return array
+     */
+    public function getTableTotal() {
+    	$result = array();
+    	foreach ($this->getWorktypes() as $key=>$type) {
+    		$row = array();
+    		 
+    		// тип работы
+    		$row[0] = $type;
+    		 
+    		// бюджет и коммерция
+    		$row[1] = $this->getLoadByType($key);
+    		
+    		$result[$key] = $row;
+    	}
+    	return $result;
     }
 
     /**
@@ -82,7 +105,7 @@ class CStudyLoadTable extends CFormModel {
      * @param $type
      * @return int
      */
-    private function getLoadByType($kind, $type) {
+    private function getLoadByKindAndType($kind, $type) {
         $result = 0;
         foreach ($this->getLoad()->getWorksByType($type)->getItems() as $work) {
         	if ($work->kind_id == $kind ) {
@@ -90,6 +113,20 @@ class CStudyLoadTable extends CFormModel {
         	}
         }
         return $result;
+    }
+    
+    /**
+     * Нагрузка по типу (лекция, практика, ргр)
+     *
+     * @param $type
+     * @return int
+     */
+    private function getLoadByType($type) {
+    	$result = 0;
+    	foreach ($this->getLoad()->getWorksByType($type)->getItems() as $work) {
+    		$result += $work->workload;
+    	}
+    	return $result;
     }
     
     public function getFieldName($typeId, $kindId) {

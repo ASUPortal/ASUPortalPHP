@@ -41,14 +41,14 @@ class CStudyLoadController extends CBaseController {
     	$byTimeTotal = 0;
     	$sumTotal = 0;
     	if (count($personsWithLoad) != 0) {
-    		if (!(!$isBudget and !$isContract)) {
+    		if ($isBudget or $isContract) {
     			foreach ($personsWithLoad as $person) {
     				$lectsTotal += $person['lects_sum_'];
     				$diplTotal += $person['dipl_sum_'];
-    				$mainTotal += $person['hours_sum1_'];
-    				$additionalTotal += $person['hours_sum2_'];
-    				$premiumTotal += $person['hours_sum3_'];
-    				$byTimeTotal += $person['hours_sum4_'];
+    				$mainTotal += $person['hours_sum_base'];
+    				$additionalTotal += $person['hours_sum_additional'];
+    				$premiumTotal += $person['hours_sum_premium'];
+    				$byTimeTotal += $person['hours_sum_by_time'];
     				$sumTotal += $person['hours_sum'];
     			}
     		}
@@ -105,8 +105,8 @@ class CStudyLoadController extends CBaseController {
     	
     	$loads = CStudyLoadService::getStudyLoadsByYear($lecturer, $year);
     	
-    	$loadsFall = CStudyLoadService::getStudyLoadsByPart($loads, 1);
-    	$loadsSpring = CStudyLoadService::getStudyLoadsByPart($loads, 2);
+    	$loadsFall = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadYearPartsConstants::FALL);
+    	$loadsSpring = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadYearPartsConstants::SPRING);
     	
     	$this->setData("lecturer", $lecturer);
     	$this->setData("loadsFall", $loadsFall);

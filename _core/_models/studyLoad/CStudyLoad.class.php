@@ -67,9 +67,11 @@ class CStudyLoad extends CActiveModel {
     			"managerGetObject" => "getPerson"
             ),
             "works" => array(
-                "relationPower" => RELATION_COMPUTED,
+                "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_works",
-                "relationFunction" => "getWorks",
+                "storageTable" => TABLE_WORKLOAD_WORKS,
+                "storageCondition" => "workload_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CStudyLoadWork"
             )
     	);
     }
@@ -86,25 +88,7 @@ class CStudyLoad extends CActiveModel {
     		"groups_count" => "Число групп",
     		"students_count" => "Число студентов",
     		"comment" => "Комментарий",
-    		"lects" => "лекции",
-    		"practs" => "практики",
-    		"labor" => "лаб. занятия",
-    		"rgr" => "РГР",
-    		"ksr" => "КСР",
-    		"recenz" => "реценз. контр. работ",
-    		"kurs_proj" => "курс. проекты",
-    		"consult" => "консультация",
-    		"test" => "зачеты",
-    		"exams" => "экзамены",
-    		"study_pract" => "уч. практики",
-    		"work_pract" => "произ. практика",
-    		"consult_dipl" => "консул. дип. проекта",
-    		"gek" => "ГЭК",
-    		"aspirants" => "занятия с асп.",
-    		"aspir_manage" => "рук-во асп.",
-    		"duty" => "посещение зан.",
     		"on_filial" => "Надбавка за филиалы",
-    		"sum" => "сумма основной нагрузки",
     		"students_count_add" => "число коммерческих студентов",
     		"study_groups" => "Студенческие группы"
     	);
@@ -137,24 +121,6 @@ class CStudyLoad extends CActiveModel {
     		}
     	}
     	return $result;
-    }
-    
-    /**
-     * Виды работ учебной нагрузки
-     * 
-     * @return CArrayList
-     */
-    public function getWorks() {
-    	if (is_null($this->_works)) {
-    		$this->_works = new CArrayList();
-    		if (!is_null($this->getId())) {
-    			foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD_WORKS, "workload_id=".$this->getId())->getItems() as $ar) {
-    				$work = new CStudyLoadWork($ar);
-    				$this->_works->add($work->getId(), $work);
-    			}
-    		}
-    	}
-    	return $this->_works;
     }
     
     /**

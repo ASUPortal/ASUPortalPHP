@@ -38,10 +38,10 @@
 	            <td>{$person['stud_cnt_sum_']}</td>
 	            <td>{number_format($person['lects_sum_'],1,',','')}</td>
 	            <td>{number_format($person['dipl_sum_'],1,',','')}</td>
-	            <td>{number_format($person['hours_sum1_'],1,',','')}</td>
-	            <td>{number_format($person['hours_sum2_'],1,',','')}</td>
-	            <td>{number_format($person['hours_sum3_'],1,',','')}</td>
-	            <td>{number_format($person['hours_sum4_'],1,',','')}</td>
+	            <td>{number_format($person['hours_sum_base'],1,',','')}</td>
+	            <td>{number_format($person['hours_sum_additional'],1,',','')}</td>
+	            <td>{number_format($person['hours_sum_premium'],1,',','')}</td>
+	            <td>{number_format($person['hours_sum_by_time'],1,',','')}</td>
 	            <td>{number_format($person['hours_sum'],1,',','')}</td>
 	        </tr>
         {/foreach}
