@@ -140,6 +140,38 @@ class CStudyLoad extends CActiveModel {
     }
     
     /**
+     * Нагрузка по виду (бюджет/контракт)
+     * и типу (лекция, практика, ргр)
+     *
+     * @param $kind
+     * @param $type
+     * @return int
+     */
+    public function getLoadByKindAndType($kind, $type) {
+    	$result = 0;
+    	foreach ($this->getWorksByType($type)->getItems() as $work) {
+    		if ($work->kind_id == $kind) {
+    			$result += $work->workload;
+    		}
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Нагрузка по типу (лекция, практика, ргр)
+     *
+     * @param $type
+     * @return int
+     */
+    public function getLoadByType($type) {
+    	$result = 0;
+    	foreach ($this->getWorksByType($type)->getItems() as $work) {
+    		$result += $work->workload;
+    	}
+    	return $result;
+    }
+    
+    /**
      * Число часов по видам работ учебной нагрузки по типу
      *
      * @param $type

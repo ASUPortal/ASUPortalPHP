@@ -160,7 +160,7 @@ class CStudyLoadTable extends CFormModel {
     private function getLoadByKindAndType($kind, $type) {
         $result = 0;
         foreach ($this->getLoad()->getWorksByType($type)->getItems() as $work) {
-        	if ($work->kind_id == $kind ) {
+        	if ($work->kind_id == $kind) {
         		$result += $work->workload;
         	}
         }

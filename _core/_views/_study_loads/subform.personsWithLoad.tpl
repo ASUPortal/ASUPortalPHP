@@ -9,7 +9,7 @@
             <th>ставка план</th>
             <th>число групп</th>
             <th>число студ.</th>
-			{foreach CStudyLoadService::getStudyWorksTotalTitles($persons[0]['kadri_id'], $persons[0]['year_id'], $isBudget, $isContract) as $value}
+			{foreach CStudyLoadService::getStudyWorksTotalTitles() as $value}
 				<th>{$value}</th>
 			{/foreach}
             <th>осн.</th>
@@ -37,9 +37,13 @@
 		        {/if}
 	            <td>{$person['groups_cnt_sum_']}</td>
 	            <td>{$person['stud_cnt_sum_']}</td>
-				{foreach CStudyLoadService::getStudyWorksTotalValues($person['kadri_id'], $person['year_id'], $isBudget, $isContract) as $value}
-					<td>{$value}</td>
-				{/foreach}
+	            {foreach CStudyLoadService::getStudyWorksTotalValues($person['kadri_id'], $person['year_id'], $isBudget, $isContract) as $typeId=>$rows}
+					{foreach $rows as $kindId=>$value}
+						{if !in_array($kindId, array(0))}
+							<td>{number_format($value,1,',','')}</td>
+						{/if}
+	                {/foreach}
+	            {/foreach}
 	            <td>{number_format($person['hours_sum_base'],1,',','')}</td>
 	            <td>{number_format($person['hours_sum_additional'],1,',','')}</td>
 	            <td>{number_format($person['hours_sum_premium'],1,',','')}</td>
@@ -56,8 +60,13 @@
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
-			<td><b>{$lectsTotal}</b></td>
-			<td><b>{$diplTotal}</b></td>
+	            {foreach CStudyLoadService::getAllStudyWorksTotalValues($person['year_id'], $isBudget, $isContract) as $typeId=>$rows}
+					{foreach $rows as $kindId=>$value}
+						{if !in_array($kindId, array(0))}
+							<td><b>{number_format($value,1,',','')}</b></td>
+						{/if}
+	                {/foreach}
+	            {/foreach}
 			<td><b>{number_format($mainTotal,1,',','')}</b></td>
 			<td><b>{number_format($additionalTotal,1,',','')}</b></td>
 			<td><b>{number_format($premiumTotal,1,',','')}</b></td>

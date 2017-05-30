@@ -34,7 +34,6 @@ class CStudyLoadService {
      *
      * @param CPerson $person
      * @param CTerm $year
-     *
      * @return CArrayList
      */
     public static function getStudyLoadsByYear(CPerson $person, CTerm $year) {
@@ -44,6 +43,21 @@ class CStudyLoadService {
             $loads->add($study->getId(), $study);
         }
         return $loads;
+    }
+    
+    /**
+     * Лист нагрузок всех преподавателей по году
+     *
+     * @param CTerm $year
+     * @return CArrayList
+     */
+    public static function getAllStudyLoadsByYear(CTerm $year) {
+    	$loads = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "year_id = ".$year->getId())->getItems() as $item) {
+    		$study = new CStudyLoad($item);
+    		$loads->add($study->getId(), $study);
+    	}
+    	return $loads;
     }
     
     /**
@@ -108,8 +122,6 @@ class CStudyLoadService {
     		foreach ($personsWithLoad as $person) {
     			$groupsCountSum = 0;
     			$studentsCountSum = 0;
-    			$lectsSum = 0;
-    			$diplSum = 0;
     			$hoursSumBase = 0;
     			$hoursSumAdditional = 0;
     			$hoursSumPremium = 0;
@@ -119,8 +131,8 @@ class CStudyLoadService {
     			$studyLoads = CStudyLoadService::getStudyLoadsByYear(CStaffManager::getPerson($person['kadri_id']), $year);
     			foreach ($studyLoads->getItems() as $studyLoad) {
     				$groupsCountSum += $studyLoad->groups_count;
-    				$studentsCountSum += $studyLoad->students_count;
     				if ($isBudget) {
+    					$studentsCountSum += $studyLoad->students_count;
     					$kind = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId();
     					foreach ($studyLoad->getWorksByKind($kind) as $work) {
     						$hoursSum += $work->workload;
@@ -131,6 +143,7 @@ class CStudyLoadService {
     					}
     				}
     				if ($isContract) {
+    					$studentsCountSum += $studyLoad->students_contract_count;
     					$kind = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId();
     					foreach ($studyLoad->getWorksByKind($kind) as $work) {
     						$hoursSum += $work->workload;
@@ -157,7 +170,7 @@ class CStudyLoadService {
     }
     
     /**
-     * Значения для общей суммы по типам нагрузки
+     * Значения для общей суммы по типам нагрузки по преподавателю
      * 
      * @param $kadriId
      * @param $yearId
@@ -167,48 +180,106 @@ class CStudyLoadService {
      */
     public static function getStudyWorksTotalValues($kadriId, $yearId, $isBudget, $isContract) {
     	$result = array();
-    	$person = CStaffManager::getPerson($kadriId);
-    	$year = CTaxonomyManager::getYear($yearId);
-    	foreach (CStudyLoadService::getStudyLoadsByYear($person, $year)->getItems() as $studyLoad) {
-    		$dataRow = array();
-    		$sum = 0;
-    		foreach ($studyLoad->getStudyLoadTable()->getTableShowTotalByKind($isBudget, $isContract) as $typeId=>$rows) {
-    			foreach ($rows as $kindId=>$value) {
-    				if (!in_array($kindId, array(0))) {
-    					$sum += $value;
-    					$dataRow[] = $sum;
+    	foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
+    		if ($term->is_total) {
+    			$row = array();
+    			
+    			// тип работы
+    			$row[0] = $term->getValue();
+    			
+    			$person = CStaffManager::getPerson($kadriId);
+    			$year = CTaxonomyManager::getYear($yearId);
+    			$sum = 0;
+    			
+    			// бюджет
+    			if ($isBudget and !$isContract) {
+    				foreach (CStudyLoadService::getStudyLoadsByYear($person, $year)->getItems() as $studyLoad) {
+    					$sum += $studyLoad->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId(), $term->getId());
     				}
     			}
+    			 
+    			// коммерция
+    			if ($isContract and !$isBudget) {
+    				foreach (CStudyLoadService::getStudyLoadsByYear($person, $year)->getItems() as $studyLoad) {
+    					$sum += $studyLoad->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId(), $term->getId());
+    				}
+    			}
+    			 
+    			// бюджет и коммерция
+    			if ($isContract and $isBudget) {
+    				foreach (CStudyLoadService::getStudyLoadsByYear($person, $year)->getItems() as $studyLoad) {
+    					$sum += $studyLoad->getLoadByType($term->getId());
+    				}
+    			}
+    			
+    			$row[1] = $sum;
+    			 
+    			$result[$term->getId()] = $row;
     		}
     	}
-    	$result = $dataRow;
+    	return $result;
+    }
+    
+    /**
+     * Значения для общей суммы по типам нагрузки по всем преподавателям
+     *
+     * @param $yearId
+     * @param $isBudget
+     * @param $isContract
+     * @return array
+     */
+    public static function getAllStudyWorksTotalValues($yearId, $isBudget, $isContract) {
+    	$result = array();
+    	foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
+    		if ($term->is_total) {
+    			$row = array();
+    			 
+    			// тип работы
+    			$row[0] = $term->getValue();
+    			
+    			$year = CTaxonomyManager::getYear($yearId);
+    			$sum = 0;
+    			 
+    			// бюджет
+    			if ($isBudget and !$isContract) {
+    				foreach (CStudyLoadService::getAllStudyLoadsByYear($year)->getItems() as $studyLoad) {
+    					$sum += $studyLoad->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId(), $term->getId());
+    				}
+    			}
+    	
+    			// коммерция
+    			if ($isContract and !$isBudget) {
+    				foreach (CStudyLoadService::getAllStudyLoadsByYear($year)->getItems() as $studyLoad) {
+    					$sum += $studyLoad->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId(), $term->getId());
+    				}
+    			}
+    			
+    			// бюджет и коммерция
+    			if ($isContract and $isBudget) {
+    				foreach (CStudyLoadService::getAllStudyLoadsByYear($year)->getItems() as $studyLoad) {
+    					$sum += $studyLoad->getLoadByType($term->getId());
+    				}
+    			}
+    			$row[1] = $sum;
+    	
+    			$result[$term->getId()] = $row;
+    		}
+    	}
     	return $result;
     }
     
     /**
      * Заголовки для общей суммы по типам нагрузки
      * 
-     * @param $kadriId
-     * @param $yearId
-     * @param $isBudget
-     * @param $isContract
      * @return array
      */
-    public static function getStudyWorksTotalTitles($kadriId, $yearId, $isBudget, $isContract) {
+    public static function getStudyWorksTotalTitles() {
     	$result = array();
-    	$person = CStaffManager::getPerson($kadriId);
-    	$year = CTaxonomyManager::getYear($yearId);
-    	foreach (CStudyLoadService::getStudyLoadsByYear($person, $year)->getItems() as $studyLoad) {
-    		$dataRow = array();
-    		foreach ($studyLoad->getStudyLoadTable()->getTableShowTotalByKind($isBudget, $isContract) as $typeId=>$rows) {
-    			foreach ($rows as $kindId=>$value) {
-    				if (in_array($kindId, array(0))) {
-    					$dataRow[] = $value;
-    				}
-    			}
+    	foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
+    		if ($term->is_total) {
+    			$result[$term->getId()] = $term->getValue();
     		}
     	}
-    	$result = $dataRow;
     	return $result;
     }
     
