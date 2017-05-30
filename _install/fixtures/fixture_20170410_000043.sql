@@ -69,9 +69,9 @@ ALTER TABLE `pl_corriculum_workload_by_type`
 ALTER TABLE `spravochnik_uch_rab` ENGINE = InnoDB;
 
 ALTER TABLE `pl_corriculum_workload_by_type`
- ADD CONSTRAINT `pl_corriculum_workload_by_type_ibfk_1` FOREIGN KEY (`workload_id`) REFERENCES `pl_corriculum_workload` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
- ADD CONSTRAINT `pl_corriculum_workload_by_type_ibfk_2` FOREIGN KEY (`type_id`) REFERENCES `spravochnik_uch_rab` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
- ADD CONSTRAINT `pl_corriculum_workload_by_type_ibfk_3` FOREIGN KEY (`kind_id`) REFERENCES `taxonomy_terms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ ADD CONSTRAINT `pl_corriculum_workload_by_type_ibfk_1` FOREIGN KEY (`workload_id`) REFERENCES `pl_corriculum_workload` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+ ADD CONSTRAINT `pl_corriculum_workload_by_type_ibfk_2` FOREIGN KEY (`type_id`) REFERENCES `spravochnik_uch_rab` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+ ADD CONSTRAINT `pl_corriculum_workload_by_type_ibfk_3` FOREIGN KEY (`kind_id`) REFERENCES `taxonomy_terms` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
  ADD CONSTRAINT `pl_corriculum_workload_by_type_ibfk_4` FOREIGN KEY (`_created_by`) REFERENCES `kadri` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 
@@ -93,3 +93,5 @@ ALTER TABLE `pl_corriculum_workload_groups`
  ADD CONSTRAINT `pl_corriculum_workload_groups_ibfk_1` FOREIGN KEY (`workload_id`) REFERENCES `pl_corriculum_workload` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
  ADD CONSTRAINT `pl_corriculum_workload_groups_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `study_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
  ADD CONSTRAINT `pl_corriculum_workload_groups_ibfk_3` FOREIGN KEY (`_created_by`) REFERENCES `kadri` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `spravochnik_uch_rab` ADD `is_total` INT NOT NULL COMMENT 'Учитывать в итогах' ;

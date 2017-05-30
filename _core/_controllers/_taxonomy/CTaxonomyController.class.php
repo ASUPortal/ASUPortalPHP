@@ -165,15 +165,32 @@ class CTaxonomyController extends CBaseController {
     }
     public function actionEditLegacyTerm() {
         $term = CTaxonomyManager::getLegacyTerm(CRequest::getInt("id"), CRequest::getInt("taxonomy_id"));
+        $taxonomy = CTaxonomyManager::getLegacyTaxonomy(CRequest::getInt("taxonomy_id"));
+        $this->addActionsMenuItem(array(
+        	array(
+        		"title" => "Назад",
+        		"link" => "index.php?action=legacy&id=".$taxonomy->getId(),
+        		"icon" => "actions/edit-undo.png"
+        	)
+        ));
         $this->setData("term", $term);
+        $this->setData("taxonomy", $taxonomy);
         $this->renderView("_taxonomy/legacyEdit.tpl");
     }
     public function actionAddLegacyTerm() {
         $term = new CTerm();
         $taxonomy = CTaxonomyManager::getLegacyTaxonomy(CRequest::getInt("taxonomy_id"));
+        $this->addActionsMenuItem(array(
+        	array(
+        		"title" => "Назад",
+        		"link" => "index.php?action=legacy&id=".$taxonomy->getId(),
+        		"icon" => "actions/edit-undo.png"
+        	)
+        ));
         $term->taxonomy_id = $taxonomy->getId();
         $term->setTable($taxonomy->getTableName());
         $this->setData("term", $term);
+        $this->setData("taxonomy", $taxonomy);
         $this->renderView("_taxonomy/legacyAdd.tpl");
     }
     public function actionDeleteLegacyTerm() {
