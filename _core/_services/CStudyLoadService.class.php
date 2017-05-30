@@ -117,15 +117,13 @@ class CStudyLoadService {
     			$hoursSum = 0;
     			$year = CTaxonomyManager::getYear($selectedYear);
     			$studyLoads = CStudyLoadService::getStudyLoadsByYear(CStaffManager::getPerson($person['kadri_id']), $year);
-    			foreach ($studyLoads as $studyLoad) {
+    			foreach ($studyLoads->getItems() as $studyLoad) {
     				$groupsCountSum += $studyLoad->groups_count;
     				$studentsCountSum += $studyLoad->students_count;
     				if ($isBudget) {
     					$kind = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId();
     					foreach ($studyLoad->getWorksByKind($kind) as $work) {
     						$hoursSum += $work->workload;
-    						$lectsSum += $work->getSumWorkHoursByType(CStudyLoadWorkTypeConstants::LABOR_LECTURE);
-    						$diplSum += $work->getSumWorkHoursByType(CStudyLoadWorkTypeConstants::LABOR_DIPLOM_CONSULTATION);
     						$hoursSumBase += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::MAIN);
     						$hoursSumAdditional += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::ADDITIONAL);
     						$hoursSumPremium += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::PREMIUM);
@@ -136,8 +134,6 @@ class CStudyLoadService {
     					$kind = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId();
     					foreach ($studyLoad->getWorksByKind($kind) as $work) {
     						$hoursSum += $work->workload;
-    						$lectsSum += $work->getSumWorkHoursByType(CStudyLoadWorkTypeConstants::LABOR_LECTURE);
-    						$diplSum += $work->getSumWorkHoursByType(CStudyLoadWorkTypeConstants::LABOR_DIPLOM_CONSULTATION);
     						$hoursSumBase += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::MAIN);
     						$hoursSumAdditional += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::ADDITIONAL);
     						$hoursSumPremium += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::PREMIUM);
@@ -148,8 +144,6 @@ class CStudyLoadService {
     			
     			$personsWithLoad[$i]['groups_cnt_sum_'] = $groupsCountSum;
     			$personsWithLoad[$i]['stud_cnt_sum_'] = $studentsCountSum;
-    			$personsWithLoad[$i]['lects_sum_'] = $lectsSum;
-    			$personsWithLoad[$i]['dipl_sum_'] = $diplSum;
     			$personsWithLoad[$i]['hours_sum_base'] = $hoursSumBase;
     			$personsWithLoad[$i]['hours_sum_additional'] = $hoursSumAdditional;
     			$personsWithLoad[$i]['hours_sum_premium'] = $hoursSumPremium;
@@ -160,6 +154,62 @@ class CStudyLoadService {
     		}
     	}
     	return $personsWithLoad;
+    }
+    
+    /**
+     * Значения для общей суммы по типам нагрузки
+     * 
+     * @param $kadriId
+     * @param $yearId
+     * @param $isBudget
+     * @param $isContract
+     * @return array
+     */
+    public static function getStudyWorksTotalValues($kadriId, $yearId, $isBudget, $isContract) {
+    	$result = array();
+    	$person = CStaffManager::getPerson($kadriId);
+    	$year = CTaxonomyManager::getYear($yearId);
+    	foreach (CStudyLoadService::getStudyLoadsByYear($person, $year)->getItems() as $studyLoad) {
+    		$dataRow = array();
+    		$sum = 0;
+    		foreach ($studyLoad->getStudyLoadTable()->getTableShowTotalByKind($isBudget, $isContract) as $typeId=>$rows) {
+    			foreach ($rows as $kindId=>$value) {
+    				if (!in_array($kindId, array(0))) {
+    					$sum += $value;
+    					$dataRow[] = $sum;
+    				}
+    			}
+    		}
+    	}
+    	$result = $dataRow;
+    	return $result;
+    }
+    
+    /**
+     * Заголовки для общей суммы по типам нагрузки
+     * 
+     * @param $kadriId
+     * @param $yearId
+     * @param $isBudget
+     * @param $isContract
+     * @return array
+     */
+    public static function getStudyWorksTotalTitles($kadriId, $yearId, $isBudget, $isContract) {
+    	$result = array();
+    	$person = CStaffManager::getPerson($kadriId);
+    	$year = CTaxonomyManager::getYear($yearId);
+    	foreach (CStudyLoadService::getStudyLoadsByYear($person, $year)->getItems() as $studyLoad) {
+    		$dataRow = array();
+    		foreach ($studyLoad->getStudyLoadTable()->getTableShowTotalByKind($isBudget, $isContract) as $typeId=>$rows) {
+    			foreach ($rows as $kindId=>$value) {
+    				if (in_array($kindId, array(0))) {
+    					$dataRow[] = $value;
+    				}
+    			}
+    		}
+    	}
+    	$result = $dataRow;
+    	return $result;
     }
     
     /**

@@ -6,6 +6,7 @@
 class CStudyLoadTable extends CFormModel {
     private $_load = null;
     private $_workTypes = null;
+    private $_workTypesIsTotal = null;
     private $_workTypesAlias = null;
     public $load_id;
 
@@ -30,6 +31,21 @@ class CStudyLoadTable extends CFormModel {
             }
         }
         return $this->_workTypes;
+    }
+    
+    /**
+     * @return array
+     */
+    private function getWorktypesIsTotal() {
+    	if (is_null($this->_workTypesIsTotal)) {
+    		$this->_workTypesIsTotal = array();
+    		foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
+    			if ($term->is_total) {
+    				$this->_workTypesIsTotal[$term->getId()] = $term->getValue();
+    			}
+    		}
+    	}
+    	return $this->_workTypesIsTotal;
     }
 
     /**
@@ -91,6 +107,42 @@ class CStudyLoadTable extends CFormModel {
     		 
     		// бюджет и коммерция
     		$row[1] = $this->getLoadByType($key);
+    		
+    		$result[$key] = $row;
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Таблица для просмотра нагрузки (бюджет/контракт)
+     * 
+     * @param $isBudget
+     * @param $isContract
+     * @return array
+     */
+    public function getTableShowTotalByKind($isBudget = false, $isContract = false) {
+    	$result = array();
+    	foreach ($this->getWorktypesIsTotal() as $key=>$type) {
+    		$row = array();
+    		 
+    		// тип работы
+    		$row[0] = $type;
+    		$row[1] = 0;
+    		
+    		// бюджет
+    		if ($isBudget and !$isContract) {
+    			$row[1] = $this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId(), $key);
+    		}
+    		
+    		// коммерция
+    		if ($isContract and !$isBudget) {
+    			$row[1] = $this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId(), $key);
+    		}
+    		
+    		// бюджет и коммерция
+    		if ($isContract and $isBudget) {
+    			$row[1] = $this->getLoadByType($key);
+    		}
     		
     		$result[$key] = $row;
     	}

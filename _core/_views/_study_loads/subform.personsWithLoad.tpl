@@ -9,8 +9,9 @@
             <th>ставка план</th>
             <th>число групп</th>
             <th>число студ.</th>
-            <th>лек.</th>
-            <th>дип.</th>
+			{foreach CStudyLoadService::getStudyWorksTotalTitles($persons[0]['kadri_id'], $persons[0]['year_id'], $isBudget, $isContract) as $value}
+				<th>{$value}</th>
+			{/foreach}
             <th>осн.</th>
             <th>доп.</th>
             <th>надбавка</th>
@@ -36,8 +37,9 @@
 		        {/if}
 	            <td>{$person['groups_cnt_sum_']}</td>
 	            <td>{$person['stud_cnt_sum_']}</td>
-	            <td>{number_format($person['lects_sum_'],1,',','')}</td>
-	            <td>{number_format($person['dipl_sum_'],1,',','')}</td>
+				{foreach CStudyLoadService::getStudyWorksTotalValues($person['kadri_id'], $person['year_id'], $isBudget, $isContract) as $value}
+					<td>{$value}</td>
+				{/foreach}
 	            <td>{number_format($person['hours_sum_base'],1,',','')}</td>
 	            <td>{number_format($person['hours_sum_additional'],1,',','')}</td>
 	            <td>{number_format($person['hours_sum_premium'],1,',','')}</td>

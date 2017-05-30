@@ -43,8 +43,6 @@ class CStudyLoadController extends CBaseController {
     	if (count($personsWithLoad) != 0) {
     		if ($isBudget or $isContract) {
     			foreach ($personsWithLoad as $person) {
-    				$lectsTotal += $person['lects_sum_'];
-    				$diplTotal += $person['dipl_sum_'];
     				$mainTotal += $person['hours_sum_base'];
     				$additionalTotal += $person['hours_sum_additional'];
     				$premiumTotal += $person['hours_sum_premium'];
