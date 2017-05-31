@@ -112,7 +112,11 @@ class CTerm extends CActiveModel{
     public function attributeLabels() {
         return array(
             "name" => "Значение",
-            "alias" => "Псевдоним"
+            "alias" => "Псевдоним",
+            "name_short" => "Псевдоним",
+            "name_hours_kind" => "Псевдоним",
+            "comment" => "Комментарий",
+            "is_total" => "Учитывать в итогах"
         );
     }
     public function validationRules() {

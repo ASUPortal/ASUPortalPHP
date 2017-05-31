@@ -155,6 +155,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
             $currentAr->setItemValue("_version_of", $this->getId());
             $currentAr->setItemValue("_created_at", date('Y-m-d G:i:s'));
             $currentAr->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
+            $currentAr->setItemValue("_is_last_version", 1);
             $currentAr->insert();
         }
         $this->getRecord()->update();

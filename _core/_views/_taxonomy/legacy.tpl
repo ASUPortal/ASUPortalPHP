@@ -18,23 +18,11 @@
         <li><a href="#tab-common">Общая информация</a></li>
     </ul>
     <div id="tab-list">
-        <table cellpadding="0" cellspacing="0" border="1" width="99%">
-            <tr class="text">
-                <th align="center"></th>
-                <th align="center">№</th>
-                <th align="center">Значение</th>
-                <th align="center">Псевдоним</th>
-            </tr>
-
-            {foreach $taxonomy->getTerms()->getItems() as $item}
-                <tr class="text" bgcolor="#DFEFFF">
-                    <td><a class="icon-trash" href="?action=deleteLegacyTerm&id={$item->id}&taxonomy_id={$taxonomy->getId()}" onclick="if (!confirm('Вы действительно хотите удалить термин {$item->getValue()}?')){ return false }"></a></td>
-                    <td>{counter}</td>
-                    <td><a href="?action=editLegacyTerm&id={$item->id}&taxonomy_id={$taxonomy->getId()}">{$item->getValue()}</a></td>
-                    <td>{$item->getAlias()}</td>
-                </tr>
-            {/foreach}
-        </table>
+        {if $taxonomy->getTableName() == "spravochnik_uch_rab"}
+            {include file="_taxonomy/subform.termsLegacy.workTypes.tpl"}
+        {else}
+            {include file="_taxonomy/subform.termsLegacy.tpl"}
+        {/if}
     </div>
     <div id="tab-common">
         {include file="_taxonomy/form.legacy.tpl"}

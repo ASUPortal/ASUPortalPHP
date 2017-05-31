@@ -1,7 +1,6 @@
 <?php
     // <abarmin date="04.05.2012">
     // будьте прокляты все, кто писал этот портал до меня
-
     // соединялка с базой
     require_once("sql_connect_credentials.php");
     require_once("core_classloader.php");
@@ -78,7 +77,6 @@
     define("PRINT_DOCUMENTS_URL", WEB_ROOT."/tmp/print/");
     define("ZIP_DOCUMENTS_URL", WEB_ROOT."/tmp/zip/");
     define("ADMIN_EMAIL", CSettingsManager::getSettingValue("admin_email"));
-
     define("APP_DEBUG", true);
     /**
      * Путь к библиотекам jQuery на сервере
@@ -124,7 +122,6 @@
             // Этот код ошибки не включен в error_reporting
             return;
         }
-
         switch ($errno) {
             case E_USER_ERROR:
                 echo "<b>My ERROR</b> [$errno] $errstr<br />\n";
@@ -133,20 +130,16 @@
                 echo "Завершение работы...<br />\n";
                 exit(1);
                 break;
-
             case E_USER_WARNING:
                 echo "<b>My WARNING</b> [$errno] $errstr<br />\n";
                 break;
-
             case E_USER_NOTICE:
                 echo "<b>My NOTICE</b> [$errno] $errstr<br />\n";
                 break;
-
             default:
                 echo "Неизвестная ошибка: [$errno] $errstr<br />\n";
                 break;
         }
-
         echo '<table border="1" cellpadding="0" cellspacing="0" style="font-size: 12px; font-family: verdana; ">';
         foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $arr) {
             echo '<tr>';
