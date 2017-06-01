@@ -24,8 +24,8 @@ class CWorkPlanSelfEduTotal extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = 0;
-        foreach ($contextObject->selfEducations->getItems() as $row) {
-        	$result += $row->question_hours;
+        foreach ($contextObject->getSelfWorkQuestions()->getItems() as $row) {
+        	$result += $row->value;
         }
         return $result;
     }

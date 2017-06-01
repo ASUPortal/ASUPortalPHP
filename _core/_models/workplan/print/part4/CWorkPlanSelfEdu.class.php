@@ -24,11 +24,11 @@ class CWorkPlanSelfEdu extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = array();
-        foreach ($contextObject->selfEducations->getItems() as $row) {
+        foreach ($contextObject->getSelfWorkQuestions()->getItems() as $row) {
         	$dataRow = array();
         	$dataRow[0] = $row->load->section->sectionIndex;
-        	$dataRow[1] = $row->question_title;
-        	$dataRow[2] = $row->question_hours;
+        	$dataRow[1] = $row->title;
+        	$dataRow[2] = $row->value;
         	$result[] = $dataRow;
         }
         return $result;
