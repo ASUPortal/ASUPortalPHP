@@ -69,9 +69,11 @@ class CPrintField extends CActiveModel {
     }
 
     /**
-     * Вычислить значение описателя поля на основе переданного объекта
+     * Вычислить значение описателя поля на основе переданного объекта;
+     * Параметр $stripTags: уберём HTML-теги и преобразуем HTML-сущности в соответствующие символы
      *
      * @param $object
+     * @param $stripTags
      * @return string|array|CArrayList
      */
     public function evaluateValue($object, $stripTags = false) {
@@ -99,7 +101,7 @@ class CPrintField extends CActiveModel {
                 if (!$stripTags) {
                 	return $value;
                 } else {
-                	return strip_tags($value);
+                	return html_entity_decode(strip_tags($value));
                 }
             }
         } elseif ($this->type_id == "2") {
