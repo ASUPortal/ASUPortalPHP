@@ -25,4 +25,15 @@ class CStringUtils {
     public static function isBlank($string) {
         return mb_strlen(trim($string)) == 0;
     }
+    
+    /**
+     * Пустая ли строка с html-тегами
+     *
+     * @param $string
+     * @return bool
+     */
+    public static function isEmptyWithTags($string){
+        $value = html_entity_decode(strip_tags($string));
+        return empty($value) or $value == "";
+    }
 }

@@ -24,7 +24,8 @@ class CWorkPlanEducationTechnologiesDescriptionNotProvided extends CAbstractPrin
     public function execute($contextObject)
     {
         $result = "";
-        if (CWorkPlanEducationTechnologiesDescription::execute($contextObject) == "") {
+        $string = CWorkPlanEducationTechnologiesDescription::execute($contextObject);
+        if (CStringUtils::isEmptyWithTags($string)) {
             $result = "не предусмотрено";
         }
         return $result;
