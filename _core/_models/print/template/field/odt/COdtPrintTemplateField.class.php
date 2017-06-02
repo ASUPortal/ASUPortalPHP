@@ -35,8 +35,8 @@ class COdtPrintTemplateField implements IPrintTemplateField {
     }
     
     /**
-     * Вычислить значение поля
-     * (для ODT-шаблонов уберём HTML-теги из текстовых описателей)
+     * Вычислить значение поля;
+     * Для ODT-шаблонов уберём HTML-теги и преобразуем HTML-сущности в соответствующие символы для текстовых описателей
      * 
      * @param CModel $object
      * @return String/Array
@@ -254,7 +254,10 @@ class COdtPrintTemplateField implements IPrintTemplateField {
                          */
                         $cellValue = "";
                         if (array_key_exists($i, $data_row)) {
-                            $cellValue = $data_row[$i];
+                        	/**
+                        	 * Для ODT-шаблонов уберём HTML-теги и преобразуем HTML-сущности в соответствующие символы
+                        	 */
+                            $cellValue = html_entity_decode(strip_tags($data_row[$i]));
                         }
                         /**
                          * В ячейке таблице получем элемент с локальным именем p -
