@@ -22,21 +22,13 @@ class CWorkPlanFilenameGenerationStrategy implements IPrintFilenameGenerationStr
      */
     public function getFilename() {
         $object = $this->object;
-        $discipline = "";
-        $authors = array();
-        if (!is_null($object->authors)) {
-            foreach ($object->authors->getItems() as $author) {
-                $authors[] = $author->getNameShort();
-            }
-        }
         if (!CSettingsManager::getSettingValue("template_filename_translit")) {
-            $author = implode(", ", $authors);
-            $discipline = $object->discipline->getValue();
+            eval(CSettingsManager::getSettingValue("codeForWorkPlanFilenameGeneration"));
+            $filename = $value.".odt";
         } else {
-            $author = CUtils::toTranslit(implode(", ", $authors));
-            $discipline = CUtils::toTranslit($object->discipline->getValue());
+            eval(CSettingsManager::getSettingValue("codeForWorkPlanFilenameGeneration"));
+            $filename = CUtils::toTranslit($value).".odt";
         }
-        $filename = $author." - ".$discipline.".odt";
         return $filename;
     }
 
