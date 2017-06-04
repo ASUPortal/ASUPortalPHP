@@ -4,6 +4,36 @@
 <h2>Шаблоны документов</h2>
 {CHtml::helpForCurrentPage()}
 
+    <script>
+	    function removeFilter() {
+	        var action = "?action=index";
+	        window.location.href = action;
+	    }
+        jQuery(document).ready(function(){
+            jQuery("#formset").on("change", function(){
+                window.location.href="form.php?action=index&filter=formset:" + this.value;
+            });
+        });
+    </script>
+
+    <table border="0" width="100%" class="tableBlank">
+        <tr>
+            <td valign="top">
+                <form id="filters">
+                    <p>
+                        <label for="formset">Набор шаблонов</label>
+                        {CHtml::dropDownList("formsets", $formsets, $selectedFormset, "formset")}
+                        {if !is_null($selectedFormset)}
+                            <span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter(); return false; "/></span>
+                        {/if}
+                    </p>
+                </form>
+            </td>
+            <td valign="top" width="200px">
+            </td>
+        </tr>
+    </table>
+
     <table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
         <th>&nbsp;</th>
