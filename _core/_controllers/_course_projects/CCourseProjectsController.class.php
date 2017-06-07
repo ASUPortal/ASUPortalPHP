@@ -64,10 +64,14 @@ class CCourseProjectsController extends CBaseController {
     public function actionAdd() {
         $courseProject = new CCourseProject();
         $groups = array();
-        foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
-        	if ($group->getStudentsWithChangeGroupsHistory()->getCount() > 0) {
-        		$groups[$group->getId()] = $group->getName();
-        	}
+        if (CSettingsManager::getSettingValue("display_archived_data")) {
+            $groups = CStaffManager::getAllStudentGroupsList();
+        } else {
+            foreach (CStaffManager::getStudentGroupsByYear(CUtils::getCurrentYear())->getItems() as $group) {
+                if ($group->getStudentsWithChangeGroupsHistory()->getCount() > 0) {
+        			$groups[$group->getId()] = $group->getName();
+                }
+            }
         }
         $courseProject->lecturer_id = CSession::getCurrentPerson()->getId();
         $disciplines = array();
