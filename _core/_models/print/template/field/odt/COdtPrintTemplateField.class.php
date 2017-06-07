@@ -240,7 +240,14 @@ class COdtPrintTemplateField implements IPrintTemplateField {
                  * Теперь ищем все ячейке в выбранной строке. Мы будем их клонировать
                  * и заполнять данными из результирующего массива
                  */
-                $arr = $value;
+                /**
+                 * Для совместимости с групповыми описателями вычислим для них объект $value здесь
+                 */
+                if ($field->type_id == 0 or $field->parent_id != 0) {
+                    $arr = $field->evaluateValue($value);
+                } else {
+                    $arr = $value;
+                }
                 foreach ($arr as $data_row) {
                     $i = 0;
                     /**
