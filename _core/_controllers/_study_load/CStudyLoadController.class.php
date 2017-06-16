@@ -71,6 +71,9 @@ class CStudyLoadController extends CBaseController {
             "icon" => "actions/view-refresh.png"
         ));
     	
+        $this->setTableFilter("dataTable");
+        $this->setTableSort("dataTable");
+        
         $this->setData("personsWithLoad", $personsWithLoad);
         $this->setData("personsWithoutLoad", $personsWithoutLoad);
         $this->setData("selectedYear", $selectedYear);
