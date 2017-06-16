@@ -32,7 +32,11 @@ class CStudyLoadController extends CBaseController {
     	}
     	
     	// сотрудники с нагрузкой в указанном году
-    	$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear);
+    	if (CRequest::getInt("updateCache") == 1) {
+    		$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear, true);
+    	} else {
+    		$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear);
+    	}
     	$lectsTotal = 0;
     	$diplTotal = 0;
     	$mainTotal = 0;
@@ -54,7 +58,19 @@ class CStudyLoadController extends CBaseController {
 
     	// сотрудники без нагрузки в указанном году
     	$personsWithoutLoad = CStudyLoadService::getPersonsWithoutLoadByYear($selectedYear);
-		
+    	
+        $requestParams = array();
+        foreach (CRequest::getGlobalRequestVariables()->getItems() as $key=>$value) {
+    		if ($key != "updateCache") {
+    			$requestParams[] = $key."=".$value;
+    		}
+        }
+        $this->addActionsMenuItem(array(
+            "title" => "Обновить кэш",
+            "link" => "?".implode("&", $requestParams)."&updateCache=1",
+            "icon" => "actions/view-refresh.png"
+        ));
+    	
         $this->setData("personsWithLoad", $personsWithLoad);
         $this->setData("personsWithoutLoad", $personsWithoutLoad);
         $this->setData("selectedYear", $selectedYear);
@@ -80,7 +96,7 @@ class CStudyLoadController extends CBaseController {
                 "link" => WEB_ROOT."_modules/_study_loads/index.php",
                 "icon" => "actions/edit-undo.png"
             )
-        ));		
+        ));
         $this->renderView("_study_loads/add.tpl");
     }
     public function actionEdit() {
