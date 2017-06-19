@@ -33,6 +33,7 @@ class CStudyLoadController extends CBaseController {
     	
     	// сотрудники с нагрузкой в указанном году
     	$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear);
+    	
     	$lectsTotal = 0;
     	$diplTotal = 0;
     	$mainTotal = 0;
@@ -54,7 +55,10 @@ class CStudyLoadController extends CBaseController {
 
     	// сотрудники без нагрузки в указанном году
     	$personsWithoutLoad = CStudyLoadService::getPersonsWithoutLoadByYear($selectedYear);
-		
+    	
+        $this->setTableFilter("dataTable");
+        $this->setTableSort("dataTable");
+        
         $this->setData("personsWithLoad", $personsWithLoad);
         $this->setData("personsWithoutLoad", $personsWithoutLoad);
         $this->setData("selectedYear", $selectedYear);
@@ -80,7 +84,7 @@ class CStudyLoadController extends CBaseController {
                 "link" => WEB_ROOT."_modules/_study_loads/index.php",
                 "icon" => "actions/edit-undo.png"
             )
-        ));		
+        ));
         $this->renderView("_study_loads/add.tpl");
     }
     public function actionEdit() {
@@ -137,6 +141,12 @@ class CStudyLoadController extends CBaseController {
         $studyLoad->setAttributes(CRequest::getArray($studyLoad::getClassName()));
         if ($studyLoad->validate()) {
             $studyLoad->save();
+            
+            // очистка кэша
+            CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_isContract_".$studyLoad->year_id);
+            CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_isContract_".$studyLoad->year_id);
+            CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_notContract_".$studyLoad->year_id);
+            CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_notContract_".$studyLoad->year_id);
             
             $object = new CStudyLoadTable($studyLoad);
             $object->setAttributes(CRequest::getArray($object::getClassName()));

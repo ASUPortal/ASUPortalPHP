@@ -194,6 +194,7 @@ class CStudyLoadTable extends CFormModel {
     	foreach ($this->data as $typeId=>$works) {
     		foreach ($works as $kindId=>$value) {
     			$obj = new CStudyLoadWork();
+    			
     			$obj->workload_id = $this->getLoad()->getId();
     			$obj->type_id = $typeId;
     			$obj->kind_id = $kindId;

@@ -24,4 +24,7 @@ class CCacheDummy extends CCache{
     public function hasCache($key) {
         return $this->getCache()->hasElement($key);
     }
+    public function delete($key) {
+        $this->getCache()->remove($key);
+    }
 }

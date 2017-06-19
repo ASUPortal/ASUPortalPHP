@@ -1,21 +1,15 @@
 <style>
 	.vert-text {
-		-ms-transform: rotate(90deg);
-		-moz-transform: rotate(90deg);
-		-webkit-transform: rotate(90deg);
-		transform: rotate(90deg);
+		-webkit-transform: rotate(180deg); 
+		-moz-transform: rotate(180deg);
+		-ms-transform: rotate(180deg);
+		-o-transform: rotate(180deg);
+		transform: rotate(180deg)
 		
-		-ms-transform-origin: left top 0;
-		-moz-transform-origin: left top 0;
-		-webkit-transform-origin: left top 0;
-		transform-origin: left top 0;
-		
-		margin-left: 30px;
-		padding: 0;
-		float: left;
-		height: 350px;
 		width: 5px;
-		white-space: nowrap;
+		writing-mode:tb-rl;
+		filter:flipH flipV;
+		height:350px;
 	}
 </style>
 

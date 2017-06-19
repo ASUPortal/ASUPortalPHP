@@ -17,7 +17,7 @@
         <th>{CHtml::tableOrder("is_visited", $members->getFirstItem())}</th>
         <th>{CHtml::tableOrder("not_visited_reason", $members->getFirstItem())}</th>
     </tr>
-    {counter start=0 print=false}
+    {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
     {foreach $members->getItems() as $member}
         {if ($member->person_id != 0)}
         <tr>
@@ -42,7 +42,7 @@
     {/foreach}
 </table>
 {/if}
-    {CHtml::paginator($paginator, "?action=index")}
+    {CHtml::paginator($paginator, "members.php?action=index")}
 {/block}
 
 {block name="asu_right"}

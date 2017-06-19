@@ -42,5 +42,10 @@ class CCacheMemcache extends CCache{
     {
         return ($this->_memcache->get($key) !== false);
     }
+    
+    public function delete($key)
+    {
+        $this->_memcache->delete($key);
+    }
 
 }

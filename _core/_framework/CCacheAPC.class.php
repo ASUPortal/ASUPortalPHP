@@ -26,5 +26,9 @@ class CCacheAPC extends CCache{
     public function hasCache($key) {
         return apc_exists($key);
     }
+    
+    public function delete($key) {
+        return apc_delete($key);
+    }
 
 }

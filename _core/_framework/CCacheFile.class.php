@@ -45,4 +45,10 @@ class CCacheFile extends CCache {
         fwrite($fHandler, $str);
         fclose($fHandler);
     }
+    public function delete($key) {
+        $filename = md5($key);
+        if ($this->hasCache($key)) {
+            unlink($this->cacheDir.$filename.".cache");
+        }
+    }
 }

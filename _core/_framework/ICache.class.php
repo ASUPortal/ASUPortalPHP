@@ -10,4 +10,5 @@ interface ICache {
     public function get($id);
     public function set($id, $value, $expire = 0);
     public function hasCache($key);
+    public function delete($key);
 }
