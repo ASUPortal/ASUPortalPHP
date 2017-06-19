@@ -32,11 +32,8 @@ class CStudyLoadController extends CBaseController {
     	}
     	
     	// сотрудники с нагрузкой в указанном году
-    	if (CRequest::getInt("updateCache") == 1) {
-    		$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear, true);
-    	} else {
-    		$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear);
-    	}
+    	$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear);
+    	
     	$lectsTotal = 0;
     	$diplTotal = 0;
     	$mainTotal = 0;
