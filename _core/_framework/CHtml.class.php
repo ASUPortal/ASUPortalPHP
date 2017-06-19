@@ -929,7 +929,7 @@ class CHtml {
         echo '<span>Отображать: ';
         $sizes = $paginator->getPageSizes();
         echo '<div class="btn-group">';
-        echo '<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">';
+        echo '<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" data-target="#">';
         echo $sizes[$paginator->getCurrentPageSize()];
         echo '<span class="caret"></span>';
         echo '</a>';
