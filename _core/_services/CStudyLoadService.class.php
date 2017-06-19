@@ -81,10 +81,9 @@ class CStudyLoadService {
      * @param int $isBudget
      * @param int $isContract
      * @param int $selectedYear
-     * @param bool $updateCache
      * @return array
      */
-    public static function getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear, $updateCache = false) {
+    public static function getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear) {
     	if ($isBudget) {
     		$cacheBudget = "isBudget";
     	} else {
@@ -96,7 +95,7 @@ class CStudyLoadService {
     		$cacheContract = "notContract";
     	}
     	$cacheKey = "cachePersonsWithLoadByYear_".$cacheBudget."_".$cacheContract."_".$selectedYear;
-    	if (CApp::getApp()->cache->hasCache($cacheKey) and !$updateCache) {
+    	if (CApp::getApp()->cache->hasCache($cacheKey)) {
     		return CApp::getApp()->cache->get($cacheKey);
     	} else {
     		$personsWithLoad = array();

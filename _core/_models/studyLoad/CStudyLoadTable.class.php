@@ -194,6 +194,23 @@ class CStudyLoadTable extends CFormModel {
     	foreach ($this->data as $typeId=>$works) {
     		foreach ($works as $kindId=>$value) {
     			$obj = new CStudyLoadWork();
+    			
+    			// очистка кэша
+    			if ($kindId == CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId() 
+    					and $kindId != CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId()) {
+    				$cacheBudget = "isBudget";
+    			} else {
+    				$cacheBudget = "notBudget";
+    			}
+    			if ($kindId == CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId() 
+    					and $kindId != CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId()) {
+    				$cacheContract = "isContract";
+    			} else {
+    				$cacheContract = "notContract";
+    			}
+    			$cacheKey = "cachePersonsWithLoadByYear_".$cacheBudget."_".$cacheContract."_".$this->getLoad()->year_id;
+    			CApp::getApp()->cache->delete($cacheKey);
+    			
     			$obj->workload_id = $this->getLoad()->getId();
     			$obj->type_id = $typeId;
     			$obj->kind_id = $kindId;

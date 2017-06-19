@@ -59,18 +59,6 @@ class CStudyLoadController extends CBaseController {
     	// сотрудники без нагрузки в указанном году
     	$personsWithoutLoad = CStudyLoadService::getPersonsWithoutLoadByYear($selectedYear);
     	
-        $requestParams = array();
-        foreach (CRequest::getGlobalRequestVariables()->getItems() as $key=>$value) {
-    		if ($key != "updateCache") {
-    			$requestParams[] = $key."=".$value;
-    		}
-        }
-        $this->addActionsMenuItem(array(
-            "title" => "Обновить кэш",
-            "link" => "?".implode("&", $requestParams)."&updateCache=1",
-            "icon" => "actions/view-refresh.png"
-        ));
-    	
         $this->setTableFilter("dataTable");
         $this->setTableSort("dataTable");
         
