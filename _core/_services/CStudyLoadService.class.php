@@ -61,6 +61,22 @@ class CStudyLoadService {
     }
     
     /**
+     * Список преподавателей, у которых есть нагрузка по дисциплине
+     *
+     * @param CTerm $discipline
+     * @return CArrayList
+     */
+    public static function getLecturersNameByDiscipline(CTerm $discipline) {
+    	$lecturers = array();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "discipline_id = ".$discipline->getId())->getItems() as $item) {
+    		$study = new CStudyLoad($item);
+    		$lecturers[$study->lecturer->getId()] = $study->lecturer->getNameShort();
+    	}
+    	asort($lecturers);
+    	return $lecturers;
+    }
+    
+    /**
      * Тип нагрузки из справочника учебных работ по названию
      * 
      * @param $nameHours

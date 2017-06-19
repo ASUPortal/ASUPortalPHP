@@ -41,7 +41,7 @@
 	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузку')) { location.href='?action=delete&id={$studyLoad->getId()}'; }; return false;"></a></td>
 	            <td>{counter}</td>
 	            <td>{CHtml::activeViewGroupSelect("id", $studyLoad, false, true)}</td>
-	            <td><a href="?action=edit&id={$studyLoad->getId()}">{$studyLoad->discipline->getValue()}</a></td>
+	            <td><a href="?action=edit&id={$studyLoad->getId()}" title="{", "|join:CStudyLoadService::getLecturersNameByDiscipline($studyLoad->discipline)}">{$studyLoad->discipline->getValue()}</a></td>
 	            <td>ИРТ</td>
 	            <td>{$studyLoad->direction->getValue()}</td>
 	            <td>{$studyLoad->studyLevel->name}</td>
