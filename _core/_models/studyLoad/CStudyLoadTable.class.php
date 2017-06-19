@@ -195,12 +195,6 @@ class CStudyLoadTable extends CFormModel {
     		foreach ($works as $kindId=>$value) {
     			$obj = new CStudyLoadWork();
     			
-    			// очистка кэша
-    			CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_isContract_".$this->getLoad()->year_id);
-    			CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_isContract_".$this->getLoad()->year_id);
-    			CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_notContract_".$this->getLoad()->year_id);
-    			CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_notContract_".$this->getLoad()->year_id);
-    			
     			$obj->workload_id = $this->getLoad()->getId();
     			$obj->type_id = $typeId;
     			$obj->kind_id = $kindId;

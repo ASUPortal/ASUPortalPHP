@@ -142,6 +142,12 @@ class CStudyLoadController extends CBaseController {
         if ($studyLoad->validate()) {
             $studyLoad->save();
             
+            // очистка кэша
+            CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_isContract_".$studyLoad->year_id);
+            CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_isContract_".$studyLoad->year_id);
+            CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_notContract_".$studyLoad->year_id);
+            CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_notContract_".$studyLoad->year_id);
+            
             $object = new CStudyLoadTable($studyLoad);
             $object->setAttributes(CRequest::getArray($object::getClassName()));
             $object->save();
