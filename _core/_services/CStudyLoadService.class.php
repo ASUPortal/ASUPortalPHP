@@ -237,6 +237,56 @@ class CStudyLoadService {
     }
     
     /**
+     * Значения для общей суммы по преподавателю
+     *
+     * @param CPerson $lecturer
+     * @param CTerm $year
+     * @param int $part
+     * 
+     * @return array
+     */
+    public static function getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part) {
+    	$result = array();
+    	foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
+    		$row = array();
+    		
+    		// тип работы
+    		$row[0] = $term->getValue();
+    		
+    		$sum = 0;
+    		foreach (CStudyLoadService::getStudyLoadsByYear($lecturer, $year)->getItems() as $studyLoad) {
+    			if ($studyLoad->year_part_id == $part) {
+    				$sum += $studyLoad->getLoadByType($term->getId());
+    			}
+    		}
+    		
+    		$row[1] = $sum;
+    		
+    		$result[$term->getId()] = $row;
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Значения для столбца Всего по преподавателю
+     *
+     * @param CPerson $lecturer
+     * @param CTerm $year
+     * @param int $part
+     *
+     * @return array
+     */
+    public static function getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part) {
+    	$sum = 0;
+    	foreach (CStudyLoadService::getStudyLoadsByYear($lecturer, $year)->getItems() as $studyLoad) {
+    		if ($studyLoad->year_part_id == $part) {
+    			$sum += $studyLoad->getSumWorksValue();
+    		}
+    	}
+    	return $sum;
+    }
+    
+    /**
      * Значения для общей суммы по типам нагрузки по всем преподавателям
      *
      * @param $yearId

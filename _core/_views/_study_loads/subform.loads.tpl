@@ -4,22 +4,20 @@
 		-moz-transform: rotate(180deg);
 		-ms-transform: rotate(180deg);
 		-o-transform: rotate(180deg);
-		transform: rotate(180deg)
+		transform: rotate(180deg);
 		
-		width: 5px;
 		writing-mode:tb-rl;
-		filter:flipH flipV;
 		height:350px;
 	}
 </style>
 
-<form action="index.php" method="post" id="loadsFall">
-    <table class="table table-striped table-bordered table-hover table-condensed">
+<form action="index.php" method="post" id={$loadsId}>
+    <table class="table table-bordered table-hover table-condensed">
         <tr>
             <th></th>
             <th>#</th>
             <th>{CHtml::activeViewGroupSelect("id", $studyLoads->getFirstItem(), true)}</th>
-            <th>{CHtml::tableOrder("discipline_id", $studyLoads->getFirstItem())}</th>
+            <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("discipline_id", $studyLoads->getFirstItem())}</th>
             <th><div class="vert-text">Факультет</div></th>
             <th><div class="vert-text">{CHtml::tableOrder("speciality_id", $studyLoads->getFirstItem())}</div></th>
             <th><div class="vert-text">{CHtml::tableOrder("level_id", $studyLoads->getFirstItem())}</div></th>
@@ -62,5 +60,27 @@
 	            <td>{$studyLoad->on_filial}</td>
 	        </tr>
         {/foreach}
+        <tr bgcolor="#ff9966">
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td><b>Итого</b></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+	            {foreach CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part) as $typeId=>$rows}
+					{foreach $rows as $kindId=>$value}
+						{if !in_array($kindId, array(0))}
+							<td><b>{number_format($value,1,',','')}</b></td>
+						{/if}
+	                {/foreach}
+	            {/foreach}
+			<td><b>{number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part),1,',','')}</b></td>
+			<td>&nbsp;</td>
+		</tr>
     </table>
 </form>
