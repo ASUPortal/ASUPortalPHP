@@ -1459,7 +1459,7 @@ class CHtml {
                     jQuery(document).ready(function(){
                         jQuery("._viewGroupSelector").on("change", function(){
                             var index = jQuery(this).attr("asu-index");
-                            var items = jQuery("._viewGroupSelectorItem,[asu-index=" + index + "]");
+                            var items = jQuery("._viewGroupSelectorItem[asu-index=" + index + "]");
                             if (jQuery(this).is(":checked")) {
                                 for (var i = 0; i < items.length; i++) {
                                     jQuery(items[i]).attr("checked", true);
