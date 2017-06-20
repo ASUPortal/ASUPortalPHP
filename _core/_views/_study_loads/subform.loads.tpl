@@ -11,12 +11,12 @@
 	}
 </style>
 
-<form action="index.php" method="post" id={$loadsId}>
+<form action="index.php" method="post" id="{$loadsId}">
     <table class="table table-bordered table-hover table-condensed">
         <tr>
             <th></th>
-            <th>#</th>
-            <th>{CHtml::activeViewGroupSelect("id", $studyLoads->getFirstItem(), true)}</th>
+            <th style="vertical-align:middle; text-align:center;">#</th>
+            <th style="vertical-align:middle; text-align:center;">{CHtml::activeViewGroupSelect("id", $studyLoads->getFirstItem(), true)}</th>
             <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("discipline_id", $studyLoads->getFirstItem())}</th>
             <th><div class="vert-text">Факультет</div></th>
             <th><div class="vert-text">{CHtml::tableOrder("speciality_id", $studyLoads->getFirstItem())}</div></th>
@@ -52,12 +52,12 @@
 		            {foreach $studyLoad->getStudyLoadTable()->getTableTotal() as $typeId=>$rows}
 						{foreach $rows as $kindId=>$value}
 							{if !in_array($kindId, array(0))}
-								<td>{$value}</td>
+								<td>{CStringUtils::numLocal($value)}</td>
 							{/if}
 		                {/foreach}
 		            {/foreach}
-	            <td>{$studyLoad->getSumWorksValue()}</td>
-	            <td>{$studyLoad->on_filial}</td>
+	            <td>{CStringUtils::numLocal($studyLoad->getSumWorksValue())}</td>
+	            <td>{CStringUtils::numLocal($studyLoad->on_filial)}</td>
 	        </tr>
         {/foreach}
         <tr bgcolor="#ff9966">
@@ -75,11 +75,11 @@
 	            {foreach CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part) as $typeId=>$rows}
 					{foreach $rows as $kindId=>$value}
 						{if !in_array($kindId, array(0))}
-							<td><b>{number_format($value,1,',','')}</b></td>
+							<td><b>{CStringUtils::numLocal(number_format($value,1,',',''))}</b></td>
 						{/if}
 	                {/foreach}
 	            {/foreach}
-			<td><b>{number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part),1,',','')}</b></td>
+			<td><b>{CStringUtils::numLocal(number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part),1,',',''))}</b></td>
 			<td>&nbsp;</td>
 		</tr>
     </table>

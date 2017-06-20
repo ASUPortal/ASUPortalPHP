@@ -412,4 +412,16 @@ class CStudyLoadService {
     	$sorted = CCollectionUtils::sort($result, $comparator);
     	return $sorted;
     }
+    
+    /**
+     * Очистка кэша учебной нагрузки
+     * 
+     * @param CStudyLoad $studyLoad
+     */
+    public static function clearCache(CStudyLoad $studyLoad) {
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_isContract_".$studyLoad->year_id);
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_isContract_".$studyLoad->year_id);
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_notContract_".$studyLoad->year_id);
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_notContract_".$studyLoad->year_id);
+    }
 }
