@@ -10,12 +10,20 @@
 	{else}
 		{if $loadsFall->getCount() != 0}
 			<div class="alert alert-info">Осенний семестр</div>
+			
 			{$studyLoads = $loadsFall}
+			{$loadsId = "loadsFall"}
+			{$part = CStudyLoadYearPartsConstants::FALL}
+			
 			{include file="_study_loads/subform.loads.tpl"}
 		{/if}
 		{if $loadsSpring->getCount() != 0}
 			<div class="alert alert-info">Весенний семестр</div>
+			
 			{$studyLoads = $loadsSpring}
+			{$loadsId = "loadsSpring"}
+			{$part = CStudyLoadYearPartsConstants::SPRING}
+			
 			{include file="_study_loads/subform.loads.tpl"}
 		{/if}
     {/if}

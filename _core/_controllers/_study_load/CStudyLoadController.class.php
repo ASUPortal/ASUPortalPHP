@@ -77,6 +77,7 @@ class CStudyLoadController extends CBaseController {
         $studyLoad = new CStudyLoad();
         $studyLoad->person_id = CRequest::getInt("kadri_id");
         $studyLoad->year_id = CRequest::getInt("year_id");
+        $studyLoad->_created_by = CSession::getCurrentUser()->getId();
         $this->setData("studyLoad", $studyLoad);
         $this->addActionsMenuItem(array(
             array(
@@ -91,6 +92,7 @@ class CStudyLoadController extends CBaseController {
         $studyLoad = CStudyLoadService::getStudyLoad(CRequest::getInt("id"));
         $kadriId = $studyLoad->person_id;
         $yearId = $studyLoad->year_id;
+        $studyLoad->_created_by = CSession::getCurrentUser()->getId();
         $this->setData("studyLoad", $studyLoad);
         $this->addActionsMenuItem(array(
             array(
@@ -111,6 +113,7 @@ class CStudyLoadController extends CBaseController {
     	$loadsSpring = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadYearPartsConstants::SPRING);
     	
     	$this->setData("lecturer", $lecturer);
+    	$this->setData("year", $year);
     	$this->setData("loadsFall", $loadsFall);
     	$this->setData("loadsSpring", $loadsSpring);
     	$this->addActionsMenuItem(array(
@@ -129,6 +132,10 @@ class CStudyLoadController extends CBaseController {
     }
     public function actionDelete() {
     	$studyLoad = CStudyLoadService::getStudyLoad(CRequest::getInt("id"));
+    	
+    	// очистка кэша
+    	CStudyLoadService::clearCache($studyLoad);
+    	
     	$kadriId = $studyLoad->person_id;
     	$yearId = $studyLoad->year_id;
     	if (!is_null($studyLoad)) {
@@ -143,10 +150,7 @@ class CStudyLoadController extends CBaseController {
             $studyLoad->save();
             
             // очистка кэша
-            CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_isContract_".$studyLoad->year_id);
-            CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_isContract_".$studyLoad->year_id);
-            CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_notContract_".$studyLoad->year_id);
-            CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_notContract_".$studyLoad->year_id);
+            CStudyLoadService::clearCache($studyLoad);
             
             $object = new CStudyLoadTable($studyLoad);
             $object->setAttributes(CRequest::getArray($object::getClassName()));

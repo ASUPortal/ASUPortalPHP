@@ -4,22 +4,28 @@
 		-moz-transform: rotate(180deg);
 		-ms-transform: rotate(180deg);
 		-o-transform: rotate(180deg);
-		transform: rotate(180deg)
+		transform: rotate(180deg);
 		
-		width: 5px;
 		writing-mode:tb-rl;
-		filter:flipH flipV;
 		height:350px;
 	}
 </style>
 
-<form action="index.php" method="post" id="loadsFall">
-    <table class="table table-striped table-bordered table-hover table-condensed">
+{function name=clearNullValues level=0}
+  {if (floatval(str_replace(',','.',$number)) == 0 or $number == 0)}
+     &nbsp;
+  {else}
+     {$number}
+  {/if}
+{/function}
+    
+<form action="index.php" method="post" id="{$loadsId}">
+    <table class="table table-bordered table-hover table-condensed">
         <tr>
             <th></th>
-            <th>#</th>
-            <th>{CHtml::activeViewGroupSelect("id", $studyLoads->getFirstItem(), true)}</th>
-            <th>{CHtml::tableOrder("discipline_id", $studyLoads->getFirstItem())}</th>
+            <th style="vertical-align:middle; text-align:center;">#</th>
+            <th style="vertical-align:middle; text-align:center;">{CHtml::activeViewGroupSelect("id", $studyLoads->getFirstItem(), true)}</th>
+            <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("discipline_id", $studyLoads->getFirstItem())}</th>
             <th><div class="vert-text">Факультет</div></th>
             <th><div class="vert-text">{CHtml::tableOrder("speciality_id", $studyLoads->getFirstItem())}</div></th>
             <th><div class="vert-text">{CHtml::tableOrder("level_id", $studyLoads->getFirstItem())}</div></th>
@@ -43,7 +49,7 @@
 	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузку')) { location.href='?action=delete&id={$studyLoad->getId()}'; }; return false;"></a></td>
 	            <td>{counter}</td>
 	            <td>{CHtml::activeViewGroupSelect("id", $studyLoad, false, true)}</td>
-	            <td><a href="?action=edit&id={$studyLoad->getId()}">{$studyLoad->discipline->getValue()}</a></td>
+	            <td><a href="?action=edit&id={$studyLoad->getId()}" title="{", "|join:CStudyLoadService::getLecturersNameByDiscipline($studyLoad->discipline)->getItems()}">{$studyLoad->discipline->getValue()}</a></td>
 	            <td>ИРТ</td>
 	            <td>{$studyLoad->direction->getValue()}</td>
 	            <td>{$studyLoad->studyLevel->name}</td>
@@ -54,13 +60,35 @@
 		            {foreach $studyLoad->getStudyLoadTable()->getTableTotal() as $typeId=>$rows}
 						{foreach $rows as $kindId=>$value}
 							{if !in_array($kindId, array(0))}
-								<td>{$value}</td>
+								<td>{clearNullValues number=number_format($value,1,',','') level=0}</td>
 							{/if}
 		                {/foreach}
 		            {/foreach}
-	            <td>{$studyLoad->getSumWorksValue()}</td>
-	            <td>{$studyLoad->on_filial}</td>
+	            <td>{clearNullValues number=number_format($studyLoad->getSumWorksValue(),1,',','') level=0}</td>
+	            <td>{clearNullValues number=$studyLoad->on_filial level=0}</td>
 	        </tr>
         {/foreach}
+        <tr bgcolor="#ff9966">
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td><b>Итого</b></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+	            {foreach CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part)->getItems() as $typeId=>$rows}
+					{foreach $rows as $kindId=>$value}
+						{if !in_array($kindId, array(0))}
+							<td><b>{clearNullValues number=number_format($value,1,',','') level=0}</b></td>
+						{/if}
+	                {/foreach}
+	            {/foreach}
+			<td><b>{clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part),1,',','') level=0}</b></td>
+			<td>&nbsp;</td>
+		</tr>
     </table>
 </form>

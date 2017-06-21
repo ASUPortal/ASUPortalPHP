@@ -61,6 +61,23 @@ class CStudyLoadService {
     }
     
     /**
+     * Список преподавателей, у которых есть нагрузка по дисциплине
+     *
+     * @param CTerm $discipline
+     * @return CArrayList
+     */
+    public static function getLecturersNameByDiscipline(CTerm $discipline) {
+    	$lecturers = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "discipline_id = ".$discipline->getId())->getItems() as $item) {
+    		$study = new CStudyLoad($item);
+    		$lecturers->add($study->lecturer->getId(), $study->lecturer);
+    	}
+    	$comparator = new CDefaultComparator("fio");
+    	$sorted = CCollectionUtils::sort($lecturers, $comparator);
+    	return $sorted;
+    }
+    
+    /**
      * Тип нагрузки из справочника учебных работ по названию
      * 
      * @param $nameHours
@@ -237,6 +254,56 @@ class CStudyLoadService {
     }
     
     /**
+     * Значения для общей суммы по преподавателю
+     *
+     * @param CPerson $lecturer
+     * @param CTerm $year
+     * @param int $part
+     * 
+     * @return CArrayList
+     */
+    public static function getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part) {
+    	$result = new CArrayList();
+    	foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
+    		$row = array();
+    		
+    		// тип работы
+    		$row[0] = $term->getValue();
+    		
+    		$sum = 0;
+    		foreach (CStudyLoadService::getStudyLoadsByYear($lecturer, $year)->getItems() as $studyLoad) {
+    			if ($studyLoad->year_part_id == $part) {
+    				$sum += $studyLoad->getLoadByType($term->getId());
+    			}
+    		}
+    		
+    		$row[1] = $sum;
+    		
+    		$result->add($term->getId(), $row);
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Значения для столбца Всего по преподавателю
+     *
+     * @param CPerson $lecturer
+     * @param CTerm $year
+     * @param int $part
+     *
+     * @return array
+     */
+    public static function getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part) {
+    	$sum = 0;
+    	foreach (CStudyLoadService::getStudyLoadsByYear($lecturer, $year)->getItems() as $studyLoad) {
+    		if ($studyLoad->year_part_id == $part) {
+    			$sum += $studyLoad->getSumWorksValue();
+    		}
+    	}
+    	return $sum;
+    }
+    
+    /**
      * Значения для общей суммы по типам нагрузки по всем преподавателям
      *
      * @param $yearId
@@ -345,5 +412,17 @@ class CStudyLoadService {
     	$comparator = new CCorriculumDisciplinesComparator();
     	$sorted = CCollectionUtils::sort($result, $comparator);
     	return $sorted;
+    }
+    
+    /**
+     * Очистка кэша учебной нагрузки
+     * 
+     * @param CStudyLoad $studyLoad
+     */
+    public static function clearCache(CStudyLoad $studyLoad) {
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_isContract_".$studyLoad->year_id);
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_isContract_".$studyLoad->year_id);
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_notContract_".$studyLoad->year_id);
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_notContract_".$studyLoad->year_id);
     }
 }

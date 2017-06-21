@@ -1,6 +1,7 @@
 <form action="index.php" method="post" class="form-horizontal">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $studyLoad)}
+    {CHtml::activeHiddenField("_created_by", $studyLoad)}
 
     {CHtml::errorSummary($studyLoad)}
 
@@ -91,43 +92,45 @@
             {CHtml::error("comment", $studyLoad)}
         </div>
     </div>
-	
-	<table border="0" width="60%" class="tableBlank">
-		<tr>
-			<th>&nbsp;</th>
-			<th align="center">Бюджет</th>
-			<th align="center">Коммерция</th>
-		</tr>
-		<tr>
-			<td align="right">
-				{CHtml::label("Число студентов", "", "", true)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("students_count", $studyLoad)}
-			</td>
-			<td align="center">
-				{CHtml::activeTextField("students_contract_count", $studyLoad)}
-			</td>
-		</tr>
-		<tr>
-			<td colspan="3">&nbsp;</td>
-		</tr>
-		{foreach $studyLoad->getStudyLoadTable()->getTable() as $typeId=>$rows}
-            <tr>
-				{foreach $rows as $kindId=>$value}
-					{if in_array($kindId, array(0))}
-						<td align="right">
-							{CHtml::label($value, "", "", true)}
-						</td>
-					{else}
-						<td align="center">
-	                       {CHtml::textField($studyLoad->getStudyLoadTable()->getFieldName($typeId, $kindId), $value)}
-	                    </td>
-					{/if}
-                {/foreach}
-            </tr>
-        {/foreach}
-	</table>
+    
+	{if ($studyLoad->id != "")}
+		<table border="0" width="60%" class="tableBlank">
+			<tr>
+				<th>&nbsp;</th>
+				<th align="center">Бюджет</th>
+				<th align="center">Коммерция</th>
+			</tr>
+			<tr>
+				<td align="right">
+					{CHtml::label("Число студентов", "", "", true)}
+				</td>
+				<td align="center">
+					{CHtml::activeTextField("students_count", $studyLoad)}
+				</td>
+				<td align="center">
+					{CHtml::activeTextField("students_contract_count", $studyLoad)}
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">&nbsp;</td>
+			</tr>
+			{foreach $studyLoad->getStudyLoadTable()->getTable() as $typeId=>$rows}
+	            <tr>
+					{foreach $rows as $kindId=>$value}
+						{if in_array($kindId, array(0))}
+							<td align="right">
+								{CHtml::label($value, "", "", true)}
+							</td>
+						{else}
+							<td align="center">
+		                       {CHtml::textField($studyLoad->getStudyLoadTable()->getFieldName($typeId, $kindId), $value)}
+		                    </td>
+						{/if}
+	                {/foreach}
+	            </tr>
+	        {/foreach}
+		</table>
+	{/if}
 
     <div class="control-group">
         <div class="controls">
