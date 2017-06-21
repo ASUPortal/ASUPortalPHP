@@ -11,6 +11,14 @@
 	}
 </style>
 
+{function name=clearNullValues level=0}
+  {if (floatval(str_replace(',','.',$number)) == 0 or $number == 0)}
+     &nbsp;
+  {else}
+     {$number}
+  {/if}
+{/function}
+    
 <form action="index.php" method="post" id="{$loadsId}">
     <table class="table table-bordered table-hover table-condensed">
         <tr>
@@ -52,12 +60,12 @@
 		            {foreach $studyLoad->getStudyLoadTable()->getTableTotal() as $typeId=>$rows}
 						{foreach $rows as $kindId=>$value}
 							{if !in_array($kindId, array(0))}
-								<td>{CStringUtils::clearNullValues(number_format($value,1,',',''))}</td>
+								<td>{clearNullValues number=number_format($value,1,',','') level=0}</td>
 							{/if}
 		                {/foreach}
 		            {/foreach}
-	            <td>{CStringUtils::clearNullValues(number_format($studyLoad->getSumWorksValue(),1,',',''))}</td>
-	            <td>{CStringUtils::clearNullValues($studyLoad->on_filial)}</td>
+	            <td>{clearNullValues number=number_format($studyLoad->getSumWorksValue(),1,',','') level=0}</td>
+	            <td>{clearNullValues number=$studyLoad->on_filial level=0}</td>
 	        </tr>
         {/foreach}
         <tr bgcolor="#ff9966">
@@ -75,11 +83,11 @@
 	            {foreach CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part)->getItems() as $typeId=>$rows}
 					{foreach $rows as $kindId=>$value}
 						{if !in_array($kindId, array(0))}
-							<td><b>{CStringUtils::clearNullValues(number_format($value,1,',',''))}</b></td>
+							<td><b>{clearNullValues number=number_format($value,1,',','') level=0}</b></td>
 						{/if}
 	                {/foreach}
 	            {/foreach}
-			<td><b>{CStringUtils::clearNullValues(number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part),1,',',''))}</b></td>
+			<td><b>{clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part),1,',','') level=0}</b></td>
 			<td>&nbsp;</td>
 		</tr>
     </table>

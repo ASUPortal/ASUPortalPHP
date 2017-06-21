@@ -36,14 +36,4 @@ class CStringUtils {
         $value = html_entity_decode(strip_tags($string));
         return empty($value) or $value == "";
     }
-    
-    /**
-     * Очистить нулевые значения
-     */
-    public static function clearNullValues($number) {
-        if (floatval(str_replace(',','.',$number)) == 0 or $number == 0) {
-            $number = "";	
-        }
-        return $number;
-    }
 }
