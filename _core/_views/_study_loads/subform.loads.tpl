@@ -41,7 +41,7 @@
 	            <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузку')) { location.href='?action=delete&id={$studyLoad->getId()}'; }; return false;"></a></td>
 	            <td>{counter}</td>
 	            <td>{CHtml::activeViewGroupSelect("id", $studyLoad, false, true)}</td>
-	            <td><a href="?action=edit&id={$studyLoad->getId()}" title="{", "|join:CStudyLoadService::getLecturersNameByDiscipline($studyLoad->discipline)}">{$studyLoad->discipline->getValue()}</a></td>
+	            <td><a href="?action=edit&id={$studyLoad->getId()}" title="{", "|join:CStudyLoadService::getLecturersNameByDiscipline($studyLoad->discipline)->getItems()}">{$studyLoad->discipline->getValue()}</a></td>
 	            <td>ИРТ</td>
 	            <td>{$studyLoad->direction->getValue()}</td>
 	            <td>{$studyLoad->studyLevel->name}</td>
@@ -52,12 +52,12 @@
 		            {foreach $studyLoad->getStudyLoadTable()->getTableTotal() as $typeId=>$rows}
 						{foreach $rows as $kindId=>$value}
 							{if !in_array($kindId, array(0))}
-								<td>{CStringUtils::numLocal($value)}</td>
+								<td>{CStringUtils::clearNullValues(number_format($value,1,',',''))}</td>
 							{/if}
 		                {/foreach}
 		            {/foreach}
-	            <td>{CStringUtils::numLocal($studyLoad->getSumWorksValue())}</td>
-	            <td>{CStringUtils::numLocal($studyLoad->on_filial)}</td>
+	            <td>{CStringUtils::clearNullValues(number_format($studyLoad->getSumWorksValue(),1,',',''))}</td>
+	            <td>{CStringUtils::clearNullValues($studyLoad->on_filial)}</td>
 	        </tr>
         {/foreach}
         <tr bgcolor="#ff9966">
@@ -72,14 +72,14 @@
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
-	            {foreach CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part) as $typeId=>$rows}
+	            {foreach CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part)->getItems() as $typeId=>$rows}
 					{foreach $rows as $kindId=>$value}
 						{if !in_array($kindId, array(0))}
-							<td><b>{CStringUtils::numLocal(number_format($value,1,',',''))}</b></td>
+							<td><b>{CStringUtils::clearNullValues(number_format($value,1,',',''))}</b></td>
 						{/if}
 	                {/foreach}
 	            {/foreach}
-			<td><b>{CStringUtils::numLocal(number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part),1,',',''))}</b></td>
+			<td><b>{CStringUtils::clearNullValues(number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part),1,',',''))}</b></td>
 			<td>&nbsp;</td>
 		</tr>
     </table>

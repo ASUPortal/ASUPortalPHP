@@ -67,13 +67,14 @@ class CStudyLoadService {
      * @return CArrayList
      */
     public static function getLecturersNameByDiscipline(CTerm $discipline) {
-    	$lecturers = array();
+    	$lecturers = new CArrayList();
     	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "discipline_id = ".$discipline->getId())->getItems() as $item) {
     		$study = new CStudyLoad($item);
-    		$lecturers[$study->lecturer->getId()] = $study->lecturer->getNameShort();
+    		$lecturers->add($study->lecturer->getId(), $study->lecturer);
     	}
-    	asort($lecturers);
-    	return $lecturers;
+    	$comparator = new CDefaultComparator("fio");
+    	$sorted = CCollectionUtils::sort($lecturers, $comparator);
+    	return $sorted;
     }
     
     /**
@@ -259,10 +260,10 @@ class CStudyLoadService {
      * @param CTerm $year
      * @param int $part
      * 
-     * @return array
+     * @return CArrayList
      */
     public static function getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part) {
-    	$result = array();
+    	$result = new CArrayList();
     	foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
     		$row = array();
     		
@@ -278,7 +279,7 @@ class CStudyLoadService {
     		
     		$row[1] = $sum;
     		
-    		$result[$term->getId()] = $row;
+    		$result->add($term->getId(), $row);
     	}
     	return $result;
     }
