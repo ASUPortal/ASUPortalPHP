@@ -38,26 +38,12 @@ class CStringUtils {
     }
     
     /**
-     * Преобразовать дробное число с учетом направления отображения (browse, [mysql, php, ...])
-     * $number - число для преобразования
-     * $direction - направление преобразования
-     * пример: numLocal('12.51','browse') -> '12,51'
-     * пример: numLocal('12,51','sql') -> '12.51'
+     * Очистить нулевые значения
      */
-    public static function numLocal($number, $direction='browse') {
-        $localnum = '';
-        
-        // очистить нулевые значения
-        if (floatval(str_replace(',','.',$number)) == 0) {
-            $number = '';	
+    public static function clearNullValues($number) {
+        if (floatval(str_replace(',','.',$number)) == 0 or $number == 0) {
+            $number = "";	
         }
-        if ($number!='') {
-            if ($direction == 'browse') {
-                $localnum = str_replace('.',',',$number);
-            } else {
-                $localnum = str_replace(',','.',$number);
-            }
-        }
-        return $localnum;
+        return $number;
     }
 }
