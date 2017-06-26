@@ -213,4 +213,21 @@ class CStudyLoad extends CActiveModel {
     	return $this->_loadTable;
     }
     
+    public function copy() {
+    	/**
+    	 * Копируем саму нагрузку
+    	 */
+    	$newLoad = parent::copy();
+    	$newLoad->save();
+    	/**
+    	 * Копируем значения по видам работ нагрузки
+    	 * @var CStudyLoadWork $work
+    	 */
+    	foreach ($this->works->getItems() as $work) {
+    		$newWork = $work->copy();
+    		$newWork->workload_id = $newLoad->getId();
+    		$newWork->save();
+    	}
+    	return $newLoad;
+    }
 }

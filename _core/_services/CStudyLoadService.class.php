@@ -26,6 +26,11 @@ class CStudyLoadService {
      * @param CStudyLoad $studyLoad
      */
     public static function deleteStudyLoad($studyLoad) {
+    	// удаляем данные по значениям видов работ нагрузки
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD_WORKS, "workload_id=".$studyLoad->getId())->getItems() as $ar) {
+    		$ar->remove();
+    	}
+    	// удаляем саму нагрузку
     	$studyLoad->remove();
     }
     
@@ -54,6 +59,23 @@ class CStudyLoadService {
     public static function getAllStudyLoadsByYear(CTerm $year) {
     	$loads = new CArrayList();
     	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "year_id = ".$year->getId())->getItems() as $item) {
+    		$study = new CStudyLoad($item);
+    		$loads->add($study->getId(), $study);
+    	}
+    	return $loads;
+    }
+    
+    /**
+     * Лист нагрузок преподавателя по году и типу нагрузки
+     *
+     * @param CPerson $person
+     * @param CTerm $year
+     * @param string $loadTypes
+     * @return CArrayList
+     */
+    public static function getStudyLoadsByYearAndLoadType(CPerson $person, CTerm $year, $loadTypes) {
+    	$loads = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId()." AND load_type_id IN (".$loadTypes.")")->getItems() as $item) {
     		$study = new CStudyLoad($item);
     		$loads->add($study->getId(), $study);
     	}

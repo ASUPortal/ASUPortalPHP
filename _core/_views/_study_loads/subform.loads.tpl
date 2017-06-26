@@ -91,4 +91,37 @@
 			<td>&nbsp;</td>
 		</tr>
     </table>
+    
+	{CHtml::hiddenField("action", "copy")}
+	{CHtml::hiddenField("kadri_id", $lecturer->getId())}
+	{CHtml::hiddenField("year_id", $year->getId())}
+    <table border="0" width="100%" class="tableBlank">
+		<tr>
+			<td valign="top" width="500">
+				<div class="controls">
+					{CHtml::dropDownList("choice", $items, "", null, "span12")}
+				</div>
+			</td>
+		    <td valign="top">
+				<div class="controls">
+					{CHtml::dropDownList("lecturer", CStaffManager::getPersonsListWithType("профессорско-преподавательский состав"), $lecturer->getId(), null, "span12")}
+				</div>
+			</td>
+		    <td valign="top">
+				<div class="controls">
+					{CHtml::dropDownList("year", CTaxonomyManager::getYearsList(), $year->getId(), null, "span12")}
+				</div>
+			</td>
+		    <td valign="top">
+				<div class="controls">
+					{CHtml::dropDownList("part", CTaxonomyManager::getYearPartsList(), "", null, "span12")}
+				</div>
+			</td>
+		    <td valign="top">
+		    	<div class="controls">
+					<input name="" type="submit" class="btn" value="ok">
+				</div>	
+			</td>
+		</tr>
+	</table>
 </form>
