@@ -168,13 +168,16 @@ class CStudyLoadController extends CBaseController {
             )
     	));
     	
-    	$items = array();
-    	$items[0] = "копировать с перемещением (удаляем у одного - добавляем другому)";
-    	$items[1] = "только копирование (сохраняем у одного и добавляем другому)";
-    	$this->setData("items", $items);
+    	$copyWays = array();
+    	$copyWays[0] = "копировать с перемещением (удаляем у одного - добавляем другому)";
+    	$copyWays[1] = "только копирование (сохраняем у одного и добавляем другому)";
+    	$this->setData("copyWays", $copyWays);
     	$this->renderView("_study_loads/editLoads.tpl");
     }
-    public function actionViewEditLoads() {
+    /**
+     * Показать выбранные типы нагрузки (основная, дополнительная, надбавка, почасовка)
+     */
+    public function actionShowLoadTypes() {
         $kadriId = CRequest::getInt("kadri_id");
         $yearId = CRequest::getInt("year_id");
         $base = CRequest::getInt("base");
@@ -193,35 +196,7 @@ class CStudyLoadController extends CBaseController {
     	$part = CRequest::getInt("part");
     	
     	if ($lecturer != 0 and $year != 0 and $part != 0) {
-    		$items = CRequest::getArray("selectedDoc");
-    		foreach ($items as $id) {
-    			$studyLoad = CStudyLoadService::getStudyLoad($id);
-
-    			// очистка кэша
-    			CStudyLoadService::clearCache($studyLoad);
-    			
-    			if ($choice == 0) {
-    				// копирование с перемещением
-    				$newLoad = $studyLoad->copy();
-    				$newLoad->person_id = $lecturer;
-    				$newLoad->year_id = $year;
-    				$newLoad->year_part_id = $part;
-    				$newLoad->comment = $newLoad->comment." копия от ".CStaffManager::getPerson($lecturer)->getNameShort().", ".CTaxonomyManager::getYear($year)->getValue().", ".CTaxonomyManager::getYearPart($part)->getValue();
-    				$newLoad->save();
-    				
-    				// удаляем оригинал нагрузки
-    				CStudyLoadService::deleteStudyLoad($studyLoad);
-    				
-    			} elseif ($choice == 1) {
-    				// только копирование
-    				$newLoad = $studyLoad->copy();
-    				$newLoad->person_id = $lecturer;
-    				$newLoad->year_id = $year;
-    				$newLoad->year_part_id = $part;
-    				$newLoad->comment = $newLoad->comment." копия от ".CStaffManager::getPerson($lecturer)->getNameShort().", ".CTaxonomyManager::getYear($year)->getValue().", ".CTaxonomyManager::getYearPart($part)->getValue();
-    				$newLoad->save();
-    			}
-    		}
+    		CStudyLoadService::copySelectedLoads($choice, $lecturer, $year, $part);
     	}
     	
     	$this->redirect("?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId."&base=1&additional=1&premium=1&byTime=1");

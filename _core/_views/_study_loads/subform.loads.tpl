@@ -99,7 +99,7 @@
 		<tr>
 			<td valign="top" width="500">
 				<div class="controls">
-					{CHtml::dropDownList("choice", $items, "", null, "span12")}
+					{CHtml::dropDownList("choice", $copyWays, "", null, "span12")}
 				</div>
 			</td>
 		    <td valign="top">

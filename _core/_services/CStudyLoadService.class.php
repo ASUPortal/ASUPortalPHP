@@ -447,4 +447,44 @@ class CStudyLoadService {
         CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_notContract_".$studyLoad->year_id);
         CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_notContract_".$studyLoad->year_id);
     }
+    
+    /**
+     * Копировать выбранные нагрузки
+     * 
+     * @param int $choice
+     * @param int $lecturer
+     * @param int $year
+     * @param int $part
+     */
+    public static function copySelectedLoads($choice, $lecturer, $year, $part) {
+    	$items = CRequest::getArray("selectedDoc");
+    	foreach ($items as $id) {
+    		$studyLoad = CStudyLoadService::getStudyLoad($id);
+    	
+    		// очистка кэша
+    		CStudyLoadService::clearCache($studyLoad);
+    	
+    		if ($choice == 0) {
+    			// копирование с перемещением
+    			$newLoad = $studyLoad->copy();
+    			$newLoad->person_id = $lecturer;
+    			$newLoad->year_id = $year;
+    			$newLoad->year_part_id = $part;
+    			$newLoad->comment = $newLoad->comment." копия от ".CStaffManager::getPerson($lecturer)->getNameShort().", ".CTaxonomyManager::getYear($year)->getValue().", ".CTaxonomyManager::getYearPart($part)->getValue();
+    			$newLoad->save();
+    	
+    			// удаляем оригинал нагрузки
+    			CStudyLoadService::deleteStudyLoad($studyLoad);
+    	
+    		} elseif ($choice == 1) {
+    			// только копирование
+    			$newLoad = $studyLoad->copy();
+    			$newLoad->person_id = $lecturer;
+    			$newLoad->year_id = $year;
+    			$newLoad->year_part_id = $part;
+    			$newLoad->comment = $newLoad->comment." копия от ".CStaffManager::getPerson($lecturer)->getNameShort().", ".CTaxonomyManager::getYear($year)->getValue().", ".CTaxonomyManager::getYearPart($part)->getValue();
+    			$newLoad->save();
+    		}
+    	}
+    }
 }

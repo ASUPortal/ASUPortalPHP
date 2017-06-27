@@ -7,7 +7,7 @@
     {CHtml::helpForCurrentPage()}
 
     <form action="index.php" method="post">
-		{CHtml::hiddenField("action", "viewEditLoads")}
+		{CHtml::hiddenField("action", "showLoadTypes")}
 		{CHtml::hiddenField("kadri_id", $lecturer->getId())}
 		{CHtml::hiddenField("year_id", $year->getId())}
 	    <table border="0" width="50%" class="tableBlank">
