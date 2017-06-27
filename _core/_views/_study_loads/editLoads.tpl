@@ -31,6 +31,16 @@
 		{CHtml::hiddenField("action", "showLoadTypes")}
 		{CHtml::hiddenField("kadri_id", $lecturer->getId())}
 		{CHtml::hiddenField("year_id", $year->getId())}
+		
+		<div class="form-horizontal">
+	        <div class="control-group">
+	            <label class="control-label" for="year_id">Учебный год</label>
+	            <div class="controls">
+	            	{CHtml::dropDownList("year_id", CTaxonomyManager::getYearsList(), $selectedYear, "year_selector", "span12")}
+	            </div>
+	        </div>
+	    </div>
+	    
 	    <table border="0" width="50%" class="tableBlank">
 			<tr>
 				<td valign="top">
@@ -69,6 +79,7 @@
 	{if $loadsFall->getCount() == 0 and $loadsSpring->getCount() == 0}
 		Нет объектов для отображения
 	{else}
+		<div class="alert alert-info"><b>Всего за год: {clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturer($lecturer, $year, $loadTypes),1,',','') level=0}</b></div>
 		{if $loadsFall->getCount() != 0}
 			<div class="alert alert-info">Осенний семестр</div>
 			
@@ -87,30 +98,7 @@
 			
 			{include file="_study_loads/subform.loads.tpl"}
 		{/if}
-		<table class="table table-bordered table-hover table-condensed">
-	        <tr>
-	            <th></th>
-	            {foreach $studyLoads->getFirstItem()->getStudyLoadTable()->getTableTotal() as $typeId=>$rows}
-					{foreach $rows as $kindId=>$value}
-						{if in_array($kindId, array(0))}
-							<th><div class="vert-text">{$value}</div></th>
-						{/if}
-	                {/foreach}
-	            {/foreach}
-	            <th style="vertical-align:bottom; text-align:center;">Всего</th>
-	        </tr>
-			<tr bgcolor="#ff9966">
-				<td><b>Итого за два семестра</b></td>
-		            {foreach CStudyLoadService::getStudyWorksTotalValuesByLecturer($lecturer, $year, $loadTypes)->getItems() as $typeId=>$rows}
-						{foreach $rows as $kindId=>$value}
-							{if !in_array($kindId, array(0))}
-								<td><b>{clearNullValues number=number_format($value,1,',','') level=0}</b></td>
-							{/if}
-		                {/foreach}
-		            {/foreach}
-				<td><b>{clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturer($lecturer, $year, $loadTypes),1,',','') level=0}</b></td>
-			</tr>
-		</table>
+		<div class="alert alert-info"><b>Всего за год: {clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturer($lecturer, $year, $loadTypes),1,',','') level=0}</b></div>
     {/if}
 {else}
     <div class="alert">Не выбран преподаватель!</div>
