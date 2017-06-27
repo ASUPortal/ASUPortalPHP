@@ -516,10 +516,10 @@ class CStudyLoadService {
     		if ($choice == 0) {
     			// копирование с перемещением
     			$newLoad = $studyLoad->copy();
-    			$newLoad->person_id = $lecturer;
-    			$newLoad->year_id = $year;
-    			$newLoad->year_part_id = $part;
-    			$newLoad->comment = $newLoad->comment." копия от ".CStaffManager::getPerson($lecturer)->getNameShort().", ".CTaxonomyManager::getYear($year)->getValue().", ".CTaxonomyManager::getYearPart($part)->getValue();
+    			$newLoad->person_id = $lecturerId;
+    			$newLoad->year_id = $yearId;
+    			$newLoad->year_part_id = $partId;
+    			$newLoad->comment = $newLoad->comment." копия от ".CStaffManager::getPerson($lecturerId)->getNameShort().", ".CTaxonomyManager::getYear($yearId)->getValue().", ".CTaxonomyManager::getYearPart($partId)->getValue();
     			$newLoad->save();
     	
     			// удаляем оригинал нагрузки
@@ -528,10 +528,10 @@ class CStudyLoadService {
     		} elseif ($choice == 1) {
     			// только копирование
     			$newLoad = $studyLoad->copy();
-    			$newLoad->person_id = $lecturer;
-    			$newLoad->year_id = $year;
-    			$newLoad->year_part_id = $part;
-    			$newLoad->comment = $newLoad->comment." копия от ".CStaffManager::getPerson($lecturer)->getNameShort().", ".CTaxonomyManager::getYear($year)->getValue().", ".CTaxonomyManager::getYearPart($part)->getValue();
+    			$newLoad->person_id = $lecturerId;
+    			$newLoad->year_id = $yearId;
+    			$newLoad->year_part_id = $partId;
+    			$newLoad->comment = $newLoad->comment." копия от ".CStaffManager::getPerson($lecturerId)->getNameShort().", ".CTaxonomyManager::getYear($yearId)->getValue().", ".CTaxonomyManager::getYearPart($partId)->getValue();
     			$newLoad->save();
     		}
     	}
