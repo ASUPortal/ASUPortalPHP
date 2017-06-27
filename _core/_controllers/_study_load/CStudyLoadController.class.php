@@ -133,7 +133,7 @@ class CStudyLoadController extends CBaseController {
     		$loadTypes[] = CStudyLoadTypeIDConstants::BY_TIME;
     	}
     	if (!is_null($lecturer) and !is_null($year) and !empty($loadTypes)) {
-    		$loads = CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, implode($loadTypes, ", "));
+    		$loads = CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes);
     	} else {
     		$loads = new CArrayList();
     	}
@@ -149,7 +149,7 @@ class CStudyLoadController extends CBaseController {
     	$this->setData("year", $year);
     	$this->setData("loadsFall", $loadsFall);
     	$this->setData("loadsSpring", $loadsSpring);
-    	$this->setData("loadTypes", implode($loadTypes, ", "));
+    	$this->setData("loadTypes", $loadTypes);
     	$this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",

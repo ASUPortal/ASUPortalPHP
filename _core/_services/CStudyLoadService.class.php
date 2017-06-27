@@ -70,12 +70,12 @@ class CStudyLoadService {
      *
      * @param CPerson $person - преподаватель
      * @param CTerm $year - учебный год
-     * @param string $loadTypes - типы нагрузок через запятую
+     * @param array $loadTypes - типы нагрузок
      * @return CArrayList
      */
     public static function getStudyLoadsByYearAndLoadType(CPerson $person, CTerm $year, $loadTypes) {
     	$loads = new CArrayList();
-    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId()." AND load_type_id IN (".$loadTypes.")")->getItems() as $item) {
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId()." AND load_type_id IN (".implode($loadTypes, ", ").")")->getItems() as $item) {
     		$study = new CStudyLoad($item);
     		$loads->add($study->getId(), $study);
     	}
@@ -281,7 +281,7 @@ class CStudyLoadService {
      * @param CPerson $lecturer - преподаватель
      * @param CTerm $year - учебный год
      * @param int $part - id семестра
-     * @param string $loadTypes - типы нагрузок через запятую
+     * @param array $loadTypes - типы нагрузок
      * 
      * @return CArrayList
      */
@@ -313,7 +313,7 @@ class CStudyLoadService {
      *
      * @param CPerson $lecturer - преподаватель
      * @param CTerm $year - учебный год
-     * @param string $loadTypes - типы нагрузок через запятую
+     * @param array $loadTypes - типы нагрузок
      *
      * @return CArrayList
      */
@@ -343,7 +343,7 @@ class CStudyLoadService {
      * @param CPerson $lecturer
      * @param CTerm $year
      * @param int $part
-     * @param string $loadTypes - типы нагрузок через запятую
+     * @param array $loadTypes - типы нагрузок
      *
      * @return int
      */
@@ -362,7 +362,7 @@ class CStudyLoadService {
      *
      * @param CPerson $lecturer
      * @param CTerm $year
-     * @param string $loadTypes - типы нагрузок через запятую
+     * @param array $loadTypes - типы нагрузок
      *
      * @return int
      */
