@@ -455,11 +455,11 @@ class CStudyLoadService {
      * @param int $lecturer
      * @param int $year
      * @param int $part
+     * @param array $selectedLoads
      */
-    public static function copySelectedLoads($choice, $lecturer, $year, $part) {
-    	$items = CRequest::getArray("selectedDoc");
-    	foreach ($items as $id) {
-    		$studyLoad = CStudyLoadService::getStudyLoad($id);
+    public static function copySelectedLoads($choice, $lecturer, $year, $part, $selectedLoads) {
+    	foreach ($selectedLoads as $load) {
+    		$studyLoad = CStudyLoadService::getStudyLoad($load);
     	
     		// очистка кэша
     		CStudyLoadService::clearCache($studyLoad);

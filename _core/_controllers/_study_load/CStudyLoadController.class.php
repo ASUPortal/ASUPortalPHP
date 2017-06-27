@@ -111,30 +111,25 @@ class CStudyLoadController extends CBaseController {
     	$base = true;
     	if (CRequest::getInt("base") == 0) {
     		$base = false;
+    	} else {
+    		$loadTypes[] = CStudyLoadTypeIDConstants::MAIN;
     	}
     	$additional = true;
     	if (CRequest::getInt("additional") == 0) {
     		$additional = false;
+    	} else {
+    		$loadTypes[] = CStudyLoadTypeIDConstants::ADDITIONAL;
     	}
     	$premium = true;
     	if (CRequest::getInt("premium") == 0) {
     		$premium = false;
+    	} else {
+    		$loadTypes[] = CStudyLoadTypeIDConstants::PREMIUM;
     	}
     	$byTime = true;
     	if (CRequest::getInt("byTime") == 0) {
     		$byTime = false;
-    	}
-    	
-    	if ($base) {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::MAIN;
-    	}
-    	if ($additional) {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::ADDITIONAL;
-    	}
-    	if ($premium) {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::PREMIUM;
-    	}
-    	if ($byTime) {
+    	} else {
     		$loadTypes[] = CStudyLoadTypeIDConstants::BY_TIME;
     	}
     	if (!is_null($lecturer) and !is_null($year) and !empty($loadTypes)) {
@@ -194,9 +189,10 @@ class CStudyLoadController extends CBaseController {
     	$lecturer = CRequest::getInt("lecturer");
     	$year = CRequest::getInt("year");
     	$part = CRequest::getInt("part");
+    	$selectedLoads = CRequest::getArray("selectedDoc");
     	
     	if ($lecturer != 0 and $year != 0 and $part != 0) {
-    		CStudyLoadService::copySelectedLoads($choice, $lecturer, $year, $part);
+    		CStudyLoadService::copySelectedLoads($choice, $lecturer, $year, $part, $selectedLoads);
     	}
     	
     	$this->redirect("?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId."&base=1&additional=1&premium=1&byTime=1");
