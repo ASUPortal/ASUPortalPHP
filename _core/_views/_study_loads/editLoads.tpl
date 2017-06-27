@@ -108,7 +108,7 @@
 							{/if}
 		                {/foreach}
 		            {/foreach}
-				<td><b>{clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturer($lecturer, $year),1,',','') level=0}</b></td>
+				<td><b>{clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturer($lecturer, $year, $loadTypes),1,',','') level=0}</b></td>
 			</tr>
 		</table>
     {/if}

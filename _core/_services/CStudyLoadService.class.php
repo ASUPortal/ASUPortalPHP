@@ -343,12 +343,13 @@ class CStudyLoadService {
      * @param CPerson $lecturer
      * @param CTerm $year
      * @param int $part
+     * @param string $loadTypes - типы нагрузок через запятую
      *
-     * @return array
+     * @return int
      */
-    public static function getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part) {
+    public static function getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes) {
     	$sum = 0;
-    	foreach (CStudyLoadService::getStudyLoadsByYear($lecturer, $year)->getItems() as $studyLoad) {
+    	foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
     		if ($studyLoad->year_part_id == $part) {
     			$sum += $studyLoad->getSumWorksValue();
     		}
@@ -361,12 +362,13 @@ class CStudyLoadService {
      *
      * @param CPerson $lecturer
      * @param CTerm $year
+     * @param string $loadTypes - типы нагрузок через запятую
      *
-     * @return array
+     * @return int
      */
-    public static function getAllStudyWorksTotalValuesByLecturer($lecturer, $year) {
+    public static function getAllStudyWorksTotalValuesByLecturer($lecturer, $year, $loadTypes) {
     	$sum = 0;
-    	foreach (CStudyLoadService::getStudyLoadsByYear($lecturer, $year)->getItems() as $studyLoad) {
+    	foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
     		$sum += $studyLoad->getSumWorksValue();
     	}
     	return $sum;
