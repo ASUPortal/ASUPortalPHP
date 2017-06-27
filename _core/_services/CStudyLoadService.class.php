@@ -284,7 +284,7 @@ class CStudyLoadService {
      * 
      * @return CArrayList
      */
-    public static function getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part) {
+    public static function getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes) {
     	$result = new CArrayList();
     	foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
     		$row = array();
@@ -293,7 +293,7 @@ class CStudyLoadService {
     		$row[0] = $term->getValue();
     		
     		$sum = 0;
-    		foreach (CStudyLoadService::getStudyLoadsByYear($lecturer, $year)->getItems() as $studyLoad) {
+    		foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
     			if ($studyLoad->year_part_id == $part) {
     				$sum += $studyLoad->getLoadByType($term->getId());
     			}
