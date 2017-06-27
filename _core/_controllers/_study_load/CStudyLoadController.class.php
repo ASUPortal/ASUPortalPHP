@@ -188,7 +188,7 @@ class CStudyLoadController extends CBaseController {
     	$partId = CRequest::getInt("part");
     	$loadsToCopy = CRequest::getArray("selectedDoc");
     	
-    	if ($lecturer != 0 and $year != 0 and $part != 0) {
+    	if ($lecturerId != 0 and $yearId != 0 and $partId != 0) {
     		CStudyLoadService::copySelectedLoads($choice, $lecturerId, $yearId, $partId, $loadsToCopy);
     	}
     	
