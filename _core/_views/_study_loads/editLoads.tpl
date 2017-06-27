@@ -2,6 +2,27 @@
 
 {block name="asu_center"}
 
+<style>
+	.vert-text {
+		-webkit-transform: rotate(180deg); 
+		-moz-transform: rotate(180deg);
+		-ms-transform: rotate(180deg);
+		-o-transform: rotate(180deg);
+		transform: rotate(180deg);
+		
+		writing-mode:tb-rl;
+		height:350px;
+	}
+</style>
+
+{function name=clearNullValues level=0}
+  {if (floatval(str_replace(',','.',$number)) == 0 or $number == 0)}
+     &nbsp;
+  {else}
+     {$number}
+  {/if}
+{/function}
+
 {if (!is_null($lecturer))}
 <h2>План годовой нагрузки {$lecturer->getName()}</h2>
     {CHtml::helpForCurrentPage()}
@@ -66,6 +87,30 @@
 			
 			{include file="_study_loads/subform.loads.tpl"}
 		{/if}
+		<table class="table table-bordered table-hover table-condensed">
+	        <tr>
+	            <th></th>
+	            {foreach $studyLoads->getFirstItem()->getStudyLoadTable()->getTableTotal() as $typeId=>$rows}
+					{foreach $rows as $kindId=>$value}
+						{if in_array($kindId, array(0))}
+							<th><div class="vert-text">{$value}</div></th>
+						{/if}
+	                {/foreach}
+	            {/foreach}
+	            <th style="vertical-align:bottom; text-align:center;">Всего</th>
+	        </tr>
+			<tr bgcolor="#ff9966">
+				<td><b>Итого за два семестра</b></td>
+		            {foreach CStudyLoadService::getStudyWorksTotalValuesByLecturer($lecturer, $year, $loadTypes)->getItems() as $typeId=>$rows}
+						{foreach $rows as $kindId=>$value}
+							{if !in_array($kindId, array(0))}
+								<td><b>{clearNullValues number=number_format($value,1,',','') level=0}</b></td>
+							{/if}
+		                {/foreach}
+		            {/foreach}
+				<td><b>{clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturer($lecturer, $year),1,',','') level=0}</b></td>
+			</tr>
+		</table>
     {/if}
 {else}
     <div class="alert">Не выбран преподаватель!</div>

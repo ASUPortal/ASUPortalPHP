@@ -1,24 +1,3 @@
-<style>
-	.vert-text {
-		-webkit-transform: rotate(180deg); 
-		-moz-transform: rotate(180deg);
-		-ms-transform: rotate(180deg);
-		-o-transform: rotate(180deg);
-		transform: rotate(180deg);
-		
-		writing-mode:tb-rl;
-		height:350px;
-	}
-</style>
-
-{function name=clearNullValues level=0}
-  {if (floatval(str_replace(',','.',$number)) == 0 or $number == 0)}
-     &nbsp;
-  {else}
-     {$number}
-  {/if}
-{/function}
-    
 <form action="index.php" method="post" id="{$loadsId}">
     <table class="table table-bordered table-hover table-condensed">
         <tr>
