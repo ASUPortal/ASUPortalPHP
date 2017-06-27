@@ -199,6 +199,7 @@ class CStudyLoadTable extends CFormModel {
     			$obj->type_id = $typeId;
     			$obj->kind_id = $kindId;
     			$obj->workload = $value;
+    			$obj->_created_by = $this->getLoad()->_created_by;
     			$obj->save();
     		}
     	}

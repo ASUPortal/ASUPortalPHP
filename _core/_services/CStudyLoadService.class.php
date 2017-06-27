@@ -25,7 +25,12 @@ class CStudyLoadService {
      *
      * @param CStudyLoad $studyLoad
      */
-    public static function deleteStudyLoad($studyLoad) {
+    public static function deleteStudyLoad(CStudyLoad $studyLoad) {
+    	// удаляем данные по значениям видов работ нагрузки
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD_WORKS, "workload_id=".$studyLoad->getId())->getItems() as $ar) {
+    		$ar->remove();
+    	}
+    	// удаляем саму нагрузку
     	$studyLoad->remove();
     }
     
@@ -54,6 +59,23 @@ class CStudyLoadService {
     public static function getAllStudyLoadsByYear(CTerm $year) {
     	$loads = new CArrayList();
     	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "year_id = ".$year->getId())->getItems() as $item) {
+    		$study = new CStudyLoad($item);
+    		$loads->add($study->getId(), $study);
+    	}
+    	return $loads;
+    }
+    
+    /**
+     * Лист нагрузок преподавателя по году и типу нагрузки
+     *
+     * @param CPerson $person - преподаватель
+     * @param CTerm $year - учебный год
+     * @param array $loadTypes - типы нагрузок
+     * @return CArrayList
+     */
+    public static function getStudyLoadsByYearAndLoadType(CPerson $person, CTerm $year, $loadTypes) {
+    	$loads = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId()." AND load_type_id IN (".implode($loadTypes, ", ").")")->getItems() as $item) {
     		$study = new CStudyLoad($item);
     		$loads->add($study->getId(), $study);
     	}
@@ -254,15 +276,16 @@ class CStudyLoadService {
     }
     
     /**
-     * Значения для общей суммы по преподавателю
+     * Значения для общей суммы по преподавателю и семестру
      *
-     * @param CPerson $lecturer
-     * @param CTerm $year
-     * @param int $part
+     * @param CPerson $lecturer - преподаватель
+     * @param CTerm $year - учебный год
+     * @param int $part - id семестра
+     * @param array $loadTypes - типы нагрузок
      * 
      * @return CArrayList
      */
-    public static function getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part) {
+    public static function getStudyWorksTotalValuesByLecturerAndPart(CPerson $lecturer, CTerm $year, $part, $loadTypes) {
     	$result = new CArrayList();
     	foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
     		$row = array();
@@ -271,7 +294,7 @@ class CStudyLoadService {
     		$row[0] = $term->getValue();
     		
     		$sum = 0;
-    		foreach (CStudyLoadService::getStudyLoadsByYear($lecturer, $year)->getItems() as $studyLoad) {
+    		foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
     			if ($studyLoad->year_part_id == $part) {
     				$sum += $studyLoad->getLoadByType($term->getId());
     			}
@@ -284,21 +307,69 @@ class CStudyLoadService {
     	return $result;
     }
     
+
     /**
-     * Значения для столбца Всего по преподавателю
+     * Значения для общей суммы по преподавателю за оба семестра
+     *
+     * @param CPerson $lecturer - преподаватель
+     * @param CTerm $year - учебный год
+     * @param array $loadTypes - типы нагрузок
+     *
+     * @return CArrayList
+     */
+    public static function getStudyWorksTotalValuesByLecturer(CPerson $lecturer, CTerm $year, $loadTypes) {
+    	$result = new CArrayList();
+    	foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
+    		$row = array();
+    
+    		// тип работы
+    		$row[0] = $term->getValue();
+    
+    		$sum = 0;
+    		foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
+    			$sum += $studyLoad->getLoadByType($term->getId());
+    		}
+    
+    		$row[1] = $sum;
+    
+    		$result->add($term->getId(), $row);
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Значения для столбца Всего по преподавателю, году и семестру
      *
      * @param CPerson $lecturer
      * @param CTerm $year
      * @param int $part
+     * @param array $loadTypes - типы нагрузок
      *
-     * @return array
+     * @return int
      */
-    public static function getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part) {
+    public static function getAllStudyWorksTotalValuesByLecturerAndPart(CPerson $lecturer, CTerm $year, $part, $loadTypes) {
     	$sum = 0;
-    	foreach (CStudyLoadService::getStudyLoadsByYear($lecturer, $year)->getItems() as $studyLoad) {
+    	foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
     		if ($studyLoad->year_part_id == $part) {
     			$sum += $studyLoad->getSumWorksValue();
     		}
+    	}
+    	return $sum;
+    }
+    
+    /**
+     * Значения для столбца Всего по преподавателю и году
+     *
+     * @param CPerson $lecturer
+     * @param CTerm $year
+     * @param array $loadTypes - типы нагрузок
+     *
+     * @return int
+     */
+    public static function getAllStudyWorksTotalValuesByLecturer(CPerson $lecturer, CTerm $year, $loadTypes) {
+    	$sum = 0;
+    	foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
+    		$sum += $studyLoad->getSumWorksValue();
     	}
     	return $sum;
     }
@@ -424,5 +495,45 @@ class CStudyLoadService {
         CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_isContract_".$studyLoad->year_id);
         CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_notContract_".$studyLoad->year_id);
         CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_notContract_".$studyLoad->year_id);
+    }
+    
+    /**
+     * Копировать выбранные нагрузки
+     * 
+     * @param int $choice - способ копирования (0 - копирование с перемещением, 1 - только копирование)
+     * @param int $lecturerId - id преподавателя, которому копируем нагрузку
+     * @param int $yearId - id года, в который копируем
+     * @param int $partId - id семестра, в который копируем
+     * @param array $loadsToCopy - массив из id нагрузок, выбранных для копирования 
+     */
+    public static function copySelectedLoads($choice, $lecturerId, $yearId, $partId, $loadsToCopy) {
+    	foreach ($loadsToCopy as $loadId) {
+    		$studyLoad = CStudyLoadService::getStudyLoad($loadId);
+    	
+    		// очистка кэша
+    		CStudyLoadService::clearCache($studyLoad);
+    	
+    		if ($choice == 0) {
+    			// копирование с перемещением
+    			$newLoad = $studyLoad->copy();
+    			$newLoad->person_id = $lecturer;
+    			$newLoad->year_id = $year;
+    			$newLoad->year_part_id = $part;
+    			$newLoad->comment = $newLoad->comment." копия от ".CStaffManager::getPerson($lecturer)->getNameShort().", ".CTaxonomyManager::getYear($year)->getValue().", ".CTaxonomyManager::getYearPart($part)->getValue();
+    			$newLoad->save();
+    	
+    			// удаляем оригинал нагрузки
+    			CStudyLoadService::deleteStudyLoad($studyLoad);
+    	
+    		} elseif ($choice == 1) {
+    			// только копирование
+    			$newLoad = $studyLoad->copy();
+    			$newLoad->person_id = $lecturer;
+    			$newLoad->year_id = $year;
+    			$newLoad->year_part_id = $part;
+    			$newLoad->comment = $newLoad->comment." копия от ".CStaffManager::getPerson($lecturer)->getNameShort().", ".CTaxonomyManager::getYear($year)->getValue().", ".CTaxonomyManager::getYearPart($part)->getValue();
+    			$newLoad->save();
+    		}
+    	}
     }
 }

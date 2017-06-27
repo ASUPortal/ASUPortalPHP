@@ -97,7 +97,7 @@ class CStudyLoadController extends CBaseController {
         $this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
-                "link" => "index.php?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId,
+                "link" => "index.php?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId."&base=1&additional=1&premium=1&byTime=1",
                 "icon" => "actions/edit-undo.png"
             )
         ));
@@ -107,7 +107,40 @@ class CStudyLoadController extends CBaseController {
     	$lecturer = CStaffManager::getPerson(CRequest::getInt("kadri_id"));
     	$year = CTaxonomyManager::getYear(CRequest::getInt("year_id"));
     	
-    	$loads = CStudyLoadService::getStudyLoadsByYear($lecturer, $year);
+    	$loadTypes = array();
+    	$base = true;
+    	if (CRequest::getInt("base") == 0) {
+    		$base = false;
+    	} else {
+    		$loadTypes[] = CStudyLoadTypeIDConstants::MAIN;
+    	}
+    	$additional = true;
+    	if (CRequest::getInt("additional") == 0) {
+    		$additional = false;
+    	} else {
+    		$loadTypes[] = CStudyLoadTypeIDConstants::ADDITIONAL;
+    	}
+    	$premium = true;
+    	if (CRequest::getInt("premium") == 0) {
+    		$premium = false;
+    	} else {
+    		$loadTypes[] = CStudyLoadTypeIDConstants::PREMIUM;
+    	}
+    	$byTime = true;
+    	if (CRequest::getInt("byTime") == 0) {
+    		$byTime = false;
+    	} else {
+    		$loadTypes[] = CStudyLoadTypeIDConstants::BY_TIME;
+    	}
+    	if (!is_null($lecturer) and !is_null($year) and !empty($loadTypes)) {
+    		$loads = CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes);
+    	} else {
+    		$loads = new CArrayList();
+    	}
+    	$this->setData("base", $base);
+    	$this->setData("additional", $additional);
+    	$this->setData("premium", $premium);
+    	$this->setData("byTime", $byTime);
     	
     	$loadsFall = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadYearPartsConstants::FALL);
     	$loadsSpring = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadYearPartsConstants::SPRING);
@@ -116,6 +149,7 @@ class CStudyLoadController extends CBaseController {
     	$this->setData("year", $year);
     	$this->setData("loadsFall", $loadsFall);
     	$this->setData("loadsSpring", $loadsSpring);
+    	$this->setData("loadTypes", $loadTypes);
     	$this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
@@ -128,7 +162,37 @@ class CStudyLoadController extends CBaseController {
                 "icon" => "actions/list-add.png"
             )
     	));
+    	
+    	$copyWays = array();
+    	$copyWays[0] = "копировать с перемещением (удаляем у одного - добавляем другому)";
+    	$copyWays[1] = "только копирование (сохраняем у одного и добавляем другому)";
+    	$this->setData("copyWays", $copyWays);
     	$this->renderView("_study_loads/editLoads.tpl");
+    }
+    /**
+     * Показать выбранные типы нагрузки (основная, дополнительная, надбавка, почасовка)
+     */
+    public function actionShowLoadTypes() {
+        $kadriId = CRequest::getInt("kadri_id");
+        $yearId = CRequest::getInt("year_id");
+        $base = CRequest::getInt("base");
+        $additional = CRequest::getInt("additional");
+        $premium = CRequest::getInt("premium");
+        $byTime = CRequest::getInt("byTime");
+        $this->redirect("?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId."&base=".$base."&additional=".$additional."&premium=".$premium."&byTime=".$byTime);
+    }
+    public function actionCopy() {
+    	$choice = CRequest::getInt("choice");
+    	$lecturerId = CRequest::getInt("lecturer");
+    	$yearId = CRequest::getInt("year");
+    	$partId = CRequest::getInt("part");
+    	$loadsToCopy = CRequest::getArray("selectedDoc");
+    	
+    	if ($lecturerId != 0 and $yearId != 0 and $partId != 0) {
+    		CStudyLoadService::copySelectedLoads($choice, $lecturerId, $yearId, $partId, $loadsToCopy);
+    	}
+    	
+    	$this->redirect("?action=editLoads&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1");
     }
     public function actionDelete() {
     	$studyLoad = CStudyLoadService::getStudyLoad(CRequest::getInt("id"));
@@ -141,7 +205,7 @@ class CStudyLoadController extends CBaseController {
     	if (!is_null($studyLoad)) {
     		CStudyLoadService::deleteStudyLoad($studyLoad);
     	}
-    	$this->redirect("?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId);
+    	$this->redirect("?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId."&base=1&additional=1&premium=1&byTime=1");
     }
     public function actionSave() {
         $studyLoad = new CStudyLoad();
@@ -161,7 +225,7 @@ class CStudyLoadController extends CBaseController {
             if ($this->continueEdit()) {
                 $this->redirect("?action=edit&id=".$studyLoad->getId());
             } else {
-                $this->redirect("?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId);
+                $this->redirect("?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId."&base=1&additional=1&premium=1&byTime=1");
             }
             return true;
         }
