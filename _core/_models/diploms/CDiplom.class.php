@@ -153,7 +153,8 @@ class CDiplom extends CActiveModel {
             "antiplagiat_originality_percent" => "Антиплагиат (процент оригинальности)",
             "magistr_recomendation" => "Рекомендован в магистратуру",
             "patent_research" => "Выполнено с патентным исследованием",
-            "level_invention" => "Выполнено на уровне подачи заявки на изобретение"
+            "level_invention" => "Выполнено на уровне подачи заявки на изобретение",
+            "with_honours" => "С отличием"
         );
     }
     /**

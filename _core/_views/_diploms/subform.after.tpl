@@ -87,6 +87,14 @@
 </div>
 
 <div class="control-group">
+    {CHtml::activeLabel("with_honours", $diplom)}
+    <div class="controls">
+        {CHtml::activeCheckBox("with_honours", $diplom)}
+        {CHtml::error("with_honours", $diplom)}
+    </div>
+</div>
+
+<div class="control-group">
     {CHtml::activeLabel("protocol_2aspir_id", $diplom)}
     <div class="controls">
         {CHtml::activeDropDownList("protocol_2aspir_id", $diplom, CProtocolManager::getAllDepProtocolsList())}

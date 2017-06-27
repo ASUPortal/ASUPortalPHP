@@ -1,0 +1,1 @@
+ALTER TABLE `diploms` ADD `with_honours` INT NOT NULL DEFAULT '0' COMMENT 'С отличием' AFTER `level_invention`;
