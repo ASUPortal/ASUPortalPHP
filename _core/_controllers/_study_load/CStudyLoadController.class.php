@@ -182,20 +182,17 @@ class CStudyLoadController extends CBaseController {
         $this->redirect("?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId."&base=".$base."&additional=".$additional."&premium=".$premium."&byTime=".$byTime);
     }
     public function actionCopy() {
-    	$kadriId = CRequest::getInt("kadri_id");
-    	$yearId = CRequest::getInt("year_id");
-    	
     	$choice = CRequest::getInt("choice");
-    	$lecturer = CRequest::getInt("lecturer");
-    	$year = CRequest::getInt("year");
-    	$part = CRequest::getInt("part");
-    	$selectedLoads = CRequest::getArray("selectedDoc");
+    	$lecturerId = CRequest::getInt("lecturer");
+    	$yearId = CRequest::getInt("year");
+    	$partId = CRequest::getInt("part");
+    	$loadsToCopy = CRequest::getArray("selectedDoc");
     	
     	if ($lecturer != 0 and $year != 0 and $part != 0) {
-    		CStudyLoadService::copySelectedLoads($choice, $lecturer, $year, $part, $selectedLoads);
+    		CStudyLoadService::copySelectedLoads($choice, $lecturerId, $yearId, $partId, $loadsToCopy);
     	}
     	
-    	$this->redirect("?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId."&base=1&additional=1&premium=1&byTime=1");
+    	$this->redirect("?action=editLoads&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1");
     }
     public function actionDelete() {
     	$studyLoad = CStudyLoadService::getStudyLoad(CRequest::getInt("id"));

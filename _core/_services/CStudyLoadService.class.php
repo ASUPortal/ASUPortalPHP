@@ -451,15 +451,15 @@ class CStudyLoadService {
     /**
      * Копировать выбранные нагрузки
      * 
-     * @param int $choice
-     * @param int $lecturer
-     * @param int $year
-     * @param int $part
-     * @param array $selectedLoads
+     * @param int $choice - способ копирования (0 - копирование с перемещением, 1 - только копирование)
+     * @param int $lecturerId - id преподавателя, которому копируем нагрузку
+     * @param int $yearId - id года, в который копируем
+     * @param int $partId - id семестра, в который копируем
+     * @param array $loadsToCopy - массив из id нагрузок, выбранных для копирования 
      */
-    public static function copySelectedLoads($choice, $lecturer, $year, $part, $selectedLoads) {
-    	foreach ($selectedLoads as $load) {
-    		$studyLoad = CStudyLoadService::getStudyLoad($load);
+    public static function copySelectedLoads($choice, $lecturerId, $yearId, $partId, $loadsToCopy) {
+    	foreach ($loadsToCopy as $loadId) {
+    		$studyLoad = CStudyLoadService::getStudyLoad($loadId);
     	
     		// очистка кэша
     		CStudyLoadService::clearCache($studyLoad);
