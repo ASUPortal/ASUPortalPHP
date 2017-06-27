@@ -25,7 +25,7 @@ class CStudyLoadService {
      *
      * @param CStudyLoad $studyLoad
      */
-    public static function deleteStudyLoad($studyLoad) {
+    public static function deleteStudyLoad(CStudyLoad $studyLoad) {
     	// удаляем данные по значениям видов работ нагрузки
     	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD_WORKS, "workload_id=".$studyLoad->getId())->getItems() as $ar) {
     		$ar->remove();
@@ -285,7 +285,7 @@ class CStudyLoadService {
      * 
      * @return CArrayList
      */
-    public static function getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes) {
+    public static function getStudyWorksTotalValuesByLecturerAndPart(CPerson $lecturer, CTerm $year, $part, $loadTypes) {
     	$result = new CArrayList();
     	foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
     		$row = array();
@@ -317,7 +317,7 @@ class CStudyLoadService {
      *
      * @return CArrayList
      */
-    public static function getStudyWorksTotalValuesByLecturer($lecturer, $year, $loadTypes) {
+    public static function getStudyWorksTotalValuesByLecturer(CPerson $lecturer, CTerm $year, $loadTypes) {
     	$result = new CArrayList();
     	foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
     		$row = array();
@@ -347,7 +347,7 @@ class CStudyLoadService {
      *
      * @return int
      */
-    public static function getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes) {
+    public static function getAllStudyWorksTotalValuesByLecturerAndPart(CPerson $lecturer, CTerm $year, $part, $loadTypes) {
     	$sum = 0;
     	foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
     		if ($studyLoad->year_part_id == $part) {
@@ -366,7 +366,7 @@ class CStudyLoadService {
      *
      * @return int
      */
-    public static function getAllStudyWorksTotalValuesByLecturer($lecturer, $year, $loadTypes) {
+    public static function getAllStudyWorksTotalValuesByLecturer(CPerson $lecturer, CTerm $year, $loadTypes) {
     	$sum = 0;
     	foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
     		$sum += $studyLoad->getSumWorksValue();
