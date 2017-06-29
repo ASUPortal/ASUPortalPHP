@@ -10,8 +10,8 @@
 		-o-transform: rotate(180deg);
 		transform: rotate(180deg);
 		
-		writing-mode:tb-rl;
-		height:350px;
+		-webkit-writing-mode: vertical-rl;
+		min-width: 30px;
 	}
 </style>
 
@@ -32,45 +32,48 @@
 		{CHtml::hiddenField("kadri_id", $lecturer->getId())}
 		{CHtml::hiddenField("year_id", $year->getId())}
 		
-		<div class="form-horizontal">
-	        <div class="control-group">
-	            <label class="control-label" for="year_id">Учебный год</label>
-	            <div class="controls">
-	            	{CHtml::dropDownList("year_id", CTaxonomyManager::getYearsList(), $selectedYear, "year_selector", "span12")}
-	            </div>
-	        </div>
-	    </div>
-	    
-	    <table border="0" width="50%" class="tableBlank">
+	    <table border="0" class="tableBlank">
 			<tr>
 				<td valign="top">
-					<div class="controls">
-						{CHtml::checkBox("base", "1", $base, "base")}
-					</div>
-					<label for="base">Основная</label>
+					<label for="base">{CHtml::checkBox("base", "1", $base, "base")}&nbsp;Основная</label>
 				</td>
+				<td>&nbsp;</td>
 			    <td valign="top">
-					<div class="controls">
-						{CHtml::checkBox("additional", "1", $additional, "additional")}
-					</div>
-					<label for="additional">Дополнительная</label>
+					<label for="additional">{CHtml::checkBox("additional", "1", $additional, "additional")}&nbsp;Дополнительная</label>
 				</td>
+				<td>&nbsp;</td>
 			    <td valign="top">
-					<div class="controls">
-						{CHtml::checkBox("premium", "1", $premium, "premium")}
-					</div>
-					<label for="premium">Надбавка</label>
+					<label for="premium">{CHtml::checkBox("premium", "1", $premium, "premium")}&nbsp;Надбавка</label>
 				</td>
+				<td>&nbsp;</td>
 			    <td valign="top">
-					<div class="controls">
-						{CHtml::checkBox("byTime", "1", $byTime, "byTime")}
-					</div>
-					<label for="byTime">Почасовка</label>
+					<label for="byTime">{CHtml::checkBox("byTime", "1", $byTime, "byTime")}&nbsp;Почасовка</label>
 				</td>
+				<td>&nbsp;&nbsp;&nbsp;</td>
 			    <td valign="top">
 			    	<div class="controls">
 						<input name="" type="submit" class="btn" value="ok">
 					</div>	
+				</td>
+				<td valign="top">
+					<div class="form-horizontal">
+				    	<div class="control-group">
+				            <label class="control-label" for="year_id">Учебный год</label>
+				            <div class="controls">
+				            	{CHtml::dropDownList("year_id", CTaxonomyManager::getYearsList(), $selectedYear, "year_selector", "span12")}
+				            </div>
+				        </div>
+				    </div>
+				</td>
+				<td valign="top">
+					<div class="form-horizontal">
+				    	<div class="control-group">
+				            <label class="control-label" for="kadri_id">ФИО преподавателя</label>
+				            <div class="controls">
+				            	{CHtml::dropDownList("kadri_id", CStaffManager::getPersonsListWithType("профессорско-преподавательский состав"), $selectedPerson, "kadri_id", "span12")}
+				            </div>
+				        </div>
+				    </div>
 				</td>
 			</tr>
 		</table>

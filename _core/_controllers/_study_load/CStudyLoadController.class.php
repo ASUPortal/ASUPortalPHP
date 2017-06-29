@@ -107,6 +107,9 @@ class CStudyLoadController extends CBaseController {
     	// фильтр по году
     	$selectedYear = CRequest::getInt("year_id");
     	
+    	// фильтр по преподавателю
+    	$selectedPerson = CRequest::getInt("kadri_id");
+    	
     	$lecturer = CStaffManager::getPerson(CRequest::getInt("kadri_id"));
     	$year = CTaxonomyManager::getYear(CRequest::getInt("year_id"));
     	
@@ -151,6 +154,7 @@ class CStudyLoadController extends CBaseController {
     	$this->setData("lecturer", $lecturer);
     	$this->setData("year", $year);
     	$this->setData("selectedYear", $selectedYear);
+    	$this->setData("selectedPerson", $selectedPerson);
     	$this->setData("loadsFall", $loadsFall);
     	$this->setData("loadsSpring", $loadsSpring);
     	$this->setData("loadTypes", $loadTypes);
