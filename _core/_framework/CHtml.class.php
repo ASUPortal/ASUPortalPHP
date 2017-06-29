@@ -1203,7 +1203,7 @@ class CHtml {
             echo "</ul>";
         }
     }
-    public static function tableOrder($field, CModel $model = null, $manualSort = false) {
+    public static function tableOrder($field, CModel $model = null, $manualSort = false, $allowSort = true) {
         if (is_null($model)) {
             return "";
         }
@@ -1248,7 +1248,7 @@ class CHtml {
     	} else {
     		$actions[] = "direction=desc";
     	}
-        if ($showLink) {
+        if ($showLink and $allowSort) {
             $label = '<a href="'.CUtils::getScriptName().'?'.implode($actions, "&").'">'.$label.'</a>';
         }
     	echo $label;
