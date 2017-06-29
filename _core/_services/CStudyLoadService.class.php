@@ -66,6 +66,22 @@ class CStudyLoadService {
     }
     
     /**
+     * Лист нагрузок преподавателя по году
+     *
+     * @param CPerson $person
+     * @param CTerm $year
+     * @return CArrayList
+     */
+    public static function getAllStudyLoadsByYearAndPerson(CPerson $person, CTerm $year) {
+    	$loads = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId())->getItems() as $item) {
+    		$study = new CStudyLoad($item);
+    		$loads->add($study->getId(), $study);
+    	}
+    	return $loads;
+    }
+    
+    /**
      * Лист нагрузок преподавателя по году и типу нагрузки
      *
      * @param CPerson $person - преподаватель
@@ -122,7 +138,7 @@ class CStudyLoadService {
      * @param int $selectedYear
      * @return array
      */
-    public static function getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear) {
+    public static function getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear, $person = null, $withoutCache = false) {
     	if ($isBudget) {
     		$cacheBudget = "isBudget";
     	} else {
@@ -134,7 +150,7 @@ class CStudyLoadService {
     		$cacheContract = "notContract";
     	}
     	$cacheKey = "cachePersonsWithLoadByYear_".$cacheBudget."_".$cacheContract."_".$selectedYear;
-    	if (CApp::getApp()->cache->hasCache($cacheKey)) {
+    	if (CApp::getApp()->cache->hasCache($cacheKey) and !$withoutCache) {
     		return CApp::getApp()->cache->get($cacheKey);
     	} else {
     		$personsWithLoad = array();
@@ -149,15 +165,19 @@ class CStudyLoadService {
 						kadri.fio as fio,
 						kadri.fio_short,
 						dolgnost.name_short as dolgnost,
-						hr.rate")
-    								->from(TABLE_PERSON." as kadri")
-    								->leftJoin(TABLE_WORKLOAD." as loads", "loads.person_id = kadri.id")
-    								->leftJoin(TABLE_WORKLOAD_WORKS." as hours", "hours.workload_id = loads.id")
-    								->leftJoin(TABLE_POSTS." as dolgnost", "dolgnost.id = kadri.dolgnost")
-    								->leftJoin(TABLE_HOURS_RATE." as hr", "hr.dolgnost_id = kadri.dolgnost")
-    								->condition("loads.year_id = ".$selectedYear)
-    								->group("kadri.id")
-    								->order("kadri.fio_short asc");
+						hr.rate");
+    			$query->from(TABLE_PERSON." as kadri");
+    			$query->leftJoin(TABLE_WORKLOAD." as loads", "loads.person_id = kadri.id");
+    			$query->leftJoin(TABLE_WORKLOAD_WORKS." as hours", "hours.workload_id = loads.id");
+    			$query->leftJoin(TABLE_POSTS." as dolgnost", "dolgnost.id = kadri.dolgnost");
+    			$query->leftJoin(TABLE_HOURS_RATE." as hr", "hr.dolgnost_id = kadri.dolgnost");
+    			if (!is_null($person)) {
+    				$query->condition("loads.year_id = ".$selectedYear." and loads.person_id = ".$person->getId());
+    			} else {
+    				$query->condition("loads.year_id = ".$selectedYear);
+    			}
+    			$query->group("kadri.id");
+    			$query->order("kadri.fio_short asc");
     			$personsWithLoad = $query->execute()->getItems();
     			$i = 0;
     			foreach ($personsWithLoad as $person) {
@@ -219,18 +239,22 @@ class CStudyLoadService {
     				$i++;
     			}
     		}
-    		CApp::getApp()->cache->set($cacheKey, $personsWithLoad);
-    		return CApp::getApp()->cache->get($cacheKey);
+    		if ($withoutCache) {
+    			return $personsWithLoad;
+    		} else {
+    			CApp::getApp()->cache->set($cacheKey, $personsWithLoad);
+    			return CApp::getApp()->cache->get($cacheKey);
+    		}
     	}
     }
     
     /**
      * Значения для общей суммы по типам нагрузки по преподавателю
      * 
-     * @param $kadriId
-     * @param $yearId
-     * @param $isBudget
-     * @param $isContract
+     * @param int $kadriId
+     * @param int $yearId
+     * @param int $isBudget
+     * @param int $isContract
      * @return array
      */
     public static function getStudyWorksTotalValues($kadriId, $yearId, $isBudget, $isContract) {
@@ -377,9 +401,9 @@ class CStudyLoadService {
     /**
      * Значения для общей суммы по типам нагрузки по всем преподавателям
      *
-     * @param $yearId
-     * @param $isBudget
-     * @param $isContract
+     * @param int $yearId
+     * @param int $isBudget
+     * @param int $isContract
      * @return array
      */
     public static function getAllStudyWorksTotalValues($yearId, $isBudget, $isContract) {
@@ -416,6 +440,56 @@ class CStudyLoadService {
     			}
     			$row[1] = $sum;
     	
+    			$result[$term->getId()] = $row;
+    		}
+    	}
+    	return $result;
+    }
+    
+    /**
+     * Значения для общей суммы по типам нагрузки по одному преподавателю
+     *
+     * @param $personId
+     * @param $yearId
+     * @param $isBudget
+     * @param $isContract
+     * @return array
+     */
+    public static function getAllStudyWorksTotalValuesByPerson($personId, $yearId, $isBudget, $isContract) {
+    	$result = array();
+    	foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
+    		if ($term->is_total) {
+    			$row = array();
+    
+    			// тип работы
+    			$row[0] = $term->getValue();
+    			 
+    			$person = CStaffManager::getPerson($personId);
+    			$year = CTaxonomyManager::getYear($yearId);
+    			$sum = 0;
+    
+    			// бюджет
+    			if ($isBudget and !$isContract) {
+    				foreach (CStudyLoadService::getAllStudyLoadsByYearAndPerson($person, $year)->getItems() as $studyLoad) {
+    					$sum += $studyLoad->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId(), $term->getId());
+    				}
+    			}
+    			 
+    			// коммерция
+    			if ($isContract and !$isBudget) {
+    				foreach (CStudyLoadService::getAllStudyLoadsByYearAndPerson($person, $year)->getItems() as $studyLoad) {
+    					$sum += $studyLoad->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId(), $term->getId());
+    				}
+    			}
+    			 
+    			// бюджет и коммерция
+    			if ($isContract and $isBudget) {
+    				foreach (CStudyLoadService::getAllStudyLoadsByYearAndPerson($person, $year)->getItems() as $studyLoad) {
+    					$sum += $studyLoad->getLoadByType($term->getId());
+    				}
+    			}
+    			$row[1] = $sum;
+    			 
     			$result[$term->getId()] = $row;
     		}
     	}

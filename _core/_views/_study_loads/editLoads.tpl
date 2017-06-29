@@ -30,7 +30,7 @@
     <form action="index.php" method="post">
 		{CHtml::hiddenField("action", "showLoadTypes")}
 		{CHtml::hiddenField("kadri_id", $lecturer->getId())}
-		{CHtml::hiddenField("year_id", $year->getId())}
+		{CHtml::hiddenField("year_id", CRequest::getInt("year_id"))}
 		
 	    <table border="0" class="tableBlank">
 			<tr>
@@ -65,16 +65,18 @@
 				        </div>
 				    </div>
 				</td>
-				<td valign="top">
-					<div class="form-horizontal">
-				    	<div class="control-group">
-				            <label class="control-label" for="kadri_id">ФИО преподавателя</label>
-				            <div class="controls">
-				            	{CHtml::dropDownList("kadri_id", CStaffManager::getPersonsListWithType("профессорско-преподавательский состав"), $selectedPerson, "kadri_id", "span12")}
-				            </div>
-				        </div>
-				    </div>
-				</td>
+				{if (CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_READ_ALL} or CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_WRITE_ALL})}
+					<td valign="top">
+						<div class="form-horizontal">
+					    	<div class="control-group">
+					            <label class="control-label" for="kadri_id">ФИО преподавателя</label>
+					            <div class="controls">
+					            	{CHtml::dropDownList("kadri_id", CStaffManager::getPersonsListWithType("профессорско-преподавательский состав"), $selectedPerson, "kadri_id", "span12")}
+					            </div>
+					        </div>
+					    </div>
+					</td>
+				{/if}
 			</tr>
 		</table>
 	</form>

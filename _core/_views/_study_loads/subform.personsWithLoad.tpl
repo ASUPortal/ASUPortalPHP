@@ -72,6 +72,15 @@
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
+			{if (CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_READ_OWN_ONLY} or CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_WRITE_OWN_ONLY})}
+	            {foreach CStudyLoadService::getAllStudyWorksTotalValuesByPerson($person['kadri_id'], $person['year_id'], $isBudget, $isContract) as $typeId=>$rows}
+					{foreach $rows as $kindId=>$value}
+						{if !in_array($kindId, array(0))}
+							<td><b>{clearNullValues number=number_format($value,1,',','') level=0}</b></td>
+						{/if}
+	                {/foreach}
+	            {/foreach}
+	        {else}
 	            {foreach CStudyLoadService::getAllStudyWorksTotalValues($person['year_id'], $isBudget, $isContract) as $typeId=>$rows}
 					{foreach $rows as $kindId=>$value}
 						{if !in_array($kindId, array(0))}
@@ -79,6 +88,7 @@
 						{/if}
 	                {/foreach}
 	            {/foreach}
+	        {/if}
 			<td><b>{clearNullValues number=number_format($mainTotal,1,',','') level=0}</b></td>
 			<td><b>{clearNullValues number=number_format($additionalTotal,1,',','') level=0}</b></td>
 			<td><b>{clearNullValues number=number_format($premiumTotal,1,',','') level=0}</b></td>

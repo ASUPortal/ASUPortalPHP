@@ -93,11 +93,13 @@
 			{$persons = $personsWithLoad}
 			{include file="_study_loads/subform.personsWithLoad.tpl"}
 		{/if}
-		{if $personsWithoutLoad->getCount() != 0}
-			<div class="alert alert-info">Сотрудники ППС, у которых нет нагрузки в выбранном учебном году</div>
-			{$persons = $personsWithoutLoad}
-			{include file="_study_loads/subform.personsWithoutLoad.tpl"}
-		{/if}
+		{if (CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_READ_ALL} or CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_WRITE_ALL})}
+	         {if $personsWithoutLoad->getCount() != 0}
+				<div class="alert alert-info">Сотрудники ППС, у которых нет нагрузки в выбранном учебном году</div>
+				{$persons = $personsWithoutLoad}
+				{include file="_study_loads/subform.personsWithoutLoad.tpl"}
+			{/if}
+	    {/if}
     {/if}
 {/block}
 
