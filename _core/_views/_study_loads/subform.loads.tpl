@@ -1,7 +1,7 @@
 <form action="index.php" method="post" id="{$loadsId}">
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
-            {if (CSessionService::hasRoleReadAndWriteAll())}
+            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
             	<th></th>
             {/if}
             <th style="vertical-align:middle; text-align:center;">#</th>
@@ -27,12 +27,12 @@
         {counter start=0 print=false}
         {foreach $studyLoads->getItems() as $studyLoad}
 	        <tr>
-	            {if (CSessionService::hasRoleReadAndWriteAll())}
+	            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
 	            	<td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузку')) { location.href='?action=delete&id={$studyLoad->getId()}'; }; return false;"></a></td>
 	            {/if}
 	            <td>{counter}</td>
 	            <td>{CHtml::activeViewGroupSelect("id", $studyLoad, false, true)}</td>
-	            {if (CSessionService::hasRoleReadAndWriteAll())}
+	            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
 	            	<td><a href="?action=edit&id={$studyLoad->getId()}" title="{", "|join:CStudyLoadService::getLecturersNameByDiscipline($studyLoad->discipline)->getItems()}">{$studyLoad->discipline->getValue()}</a></td>
 	            {else}
 	            	<td>{$studyLoad->discipline->getValue()}</td>
@@ -56,7 +56,7 @@
 	        </tr>
         {/foreach}
         <tr>
-			{if (CSessionService::hasRoleReadAndWriteAll())}
+			{if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
             	<td>&nbsp;</td>
             {/if}
 			<td>&nbsp;</td>
@@ -80,7 +80,7 @@
 			<td>&nbsp;</td>
 		</tr>
     </table>
-    {if (CSessionService::hasRoleReadAndWriteAll())}
+    {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
     	{CHtml::hiddenField("action", "copy")}
 		{CHtml::hiddenField("kadri_id", $lecturer->getId())}
 		{CHtml::hiddenField("year_id", $year->getId())}

@@ -93,7 +93,7 @@
 			{$persons = $personsWithLoad}
 			{include file="_study_loads/subform.personsWithLoad.tpl"}
 		{/if}
-		{if (CSessionService::hasRoleReadAndWriteAll())}
+		{if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
 	         {if $personsWithoutLoad->getCount() != 0}
 				<div class="alert alert-info">Сотрудники ППС, у которых нет нагрузки в выбранном учебном году</div>
 				{$persons = $personsWithoutLoad}

@@ -72,7 +72,7 @@
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
-			{if (CSessionService::hasRoleReadAndWriteOwnOnly())}
+			{if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_OWN_ONLY, $ACCESS_LEVEL_WRITE_OWN_ONLY]))}
 	            {foreach CStudyLoadService::getAllStudyWorksTotalValuesByPerson($person['kadri_id'], $person['year_id'], $isBudget, $isContract)->getItems() as $typeId=>$rows}
 					{foreach $rows as $kindId=>$value}
 						{if !in_array($kindId, array(0))}

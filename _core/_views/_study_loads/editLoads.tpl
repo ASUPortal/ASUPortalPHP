@@ -65,7 +65,7 @@
 				        </div>
 				    </div>
 				</td>
-				{if (CSessionService::hasRoleReadAndWriteAll())}
+				{if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
 					<td valign="top">
 						<div class="form-horizontal">
 					    	<div class="control-group">

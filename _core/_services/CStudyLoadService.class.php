@@ -139,7 +139,7 @@ class CStudyLoadService {
      * @return array
      */
     public static function getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear, $person = null) {
-    	$withoutCache = CSessionService::hasRoleReadAndWriteOwnOnly();
+    	$withoutCache = CSessionService::hasAnyRole([ACCESS_LEVEL_READ_OWN_ONLY, ACCESS_LEVEL_WRITE_OWN_ONLY]);
     	if ($isBudget) {
     		$cacheBudget = "isBudget";
     	} else {
