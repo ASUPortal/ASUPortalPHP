@@ -68,8 +68,8 @@ class CStudyLoadService {
     /**
      * Лист нагрузок преподавателя по году
      *
-     * @param CPerson $person
-     * @param CTerm $year
+     * @param CPerson $person - преподаватель
+     * @param CTerm $year - учебный год
      * @return CArrayList
      */
     public static function getAllStudyLoadsByYearAndPerson(CPerson $person, CTerm $year) {
@@ -133,12 +133,13 @@ class CStudyLoadService {
     /**
      * Сотрудники с нагрузкой в указанном году
      *
-     * @param int $isBudget
-     * @param int $isContract
-     * @param int $selectedYear
+     * @param int $isBudget - вид работы нагрузки: бюджет
+     * @param int $isContract - вид работы нагрузки: контракт
+     * @param int $selectedYear - выбранный учебный год
      * @return array
      */
-    public static function getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear, $person = null, $withoutCache = false) {
+    public static function getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear, $person = null) {
+    	$withoutCache = CSessionService::hasRoleReadAndWriteOwnOnly();
     	if ($isBudget) {
     		$cacheBudget = "isBudget";
     	} else {
@@ -251,10 +252,10 @@ class CStudyLoadService {
     /**
      * Значения для общей суммы по типам нагрузки по преподавателю
      * 
-     * @param int $kadriId
-     * @param int $yearId
-     * @param int $isBudget
-     * @param int $isContract
+     * @param int $kadriId - id преподавателя
+     * @param int $yearId - id года
+     * @param int $isBudget - вид работы нагрузки: бюджет
+     * @param int $isContract - вид работы нагрузки: контракт
      * @return array
      */
     public static function getStudyWorksTotalValues($kadriId, $yearId, $isBudget, $isContract) {
@@ -401,13 +402,13 @@ class CStudyLoadService {
     /**
      * Значения для общей суммы по типам нагрузки по всем преподавателям
      *
-     * @param int $yearId
-     * @param int $isBudget
-     * @param int $isContract
-     * @return array
+     * @param $yearId - id года
+     * @param int $isBudget - вид работы нагрузки: бюджет
+     * @param int $isContract - вид работы нагрузки: контракт
+     * @return CArrayList
      */
     public static function getAllStudyWorksTotalValues($yearId, $isBudget, $isContract) {
-    	$result = array();
+    	$result = new CArrayList();
     	foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
     		if ($term->is_total) {
     			$row = array();
@@ -440,7 +441,7 @@ class CStudyLoadService {
     			}
     			$row[1] = $sum;
     	
-    			$result[$term->getId()] = $row;
+    			$result->add($term->getId(), $row);
     		}
     	}
     	return $result;
@@ -449,14 +450,14 @@ class CStudyLoadService {
     /**
      * Значения для общей суммы по типам нагрузки по одному преподавателю
      *
-     * @param $personId
-     * @param $yearId
-     * @param $isBudget
-     * @param $isContract
-     * @return array
+     * @param $personId - id преподавателя
+     * @param $yearId - id года
+     * @param int $isBudget - вид работы нагрузки: бюджет
+     * @param int $isContract - вид работы нагрузки: контракт
+     * @return CArrayList
      */
     public static function getAllStudyWorksTotalValuesByPerson($personId, $yearId, $isBudget, $isContract) {
-    	$result = array();
+    	$result = new CArrayList();
     	foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
     		if ($term->is_total) {
     			$row = array();
@@ -490,7 +491,7 @@ class CStudyLoadService {
     			}
     			$row[1] = $sum;
     			 
-    			$result[$term->getId()] = $row;
+    			$result->add($term->getId(), $row);
     		}
     	}
     	return $result;
