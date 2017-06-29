@@ -57,7 +57,8 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
                 "leftCondition" => "workload_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
                 "rightKey" => "group_id",
                 "managerClass" => "CStaffManager",
-                "managerGetObject" => "getStudentGroup"
+                "managerGetObject" => "getStudentGroup",
+                "target" => "CStudyLoadStudentGroup"
             ),
     		"createdBy" => array(
     			"relationPower" => RELATION_HAS_ONE,
