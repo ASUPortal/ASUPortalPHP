@@ -149,10 +149,9 @@
                 </td>
                 <td valign="top">
                     <ul>
-                    {foreach $commission->members->getItems() as $member}
-                    	{if ($member->person_id != 0)}
-	                        <li>{$member->person->getName()}</li>
-	                    {/if}
+                    {counter name=members start=0 print=false}
+                    {foreach $commission->getMembers()->getItems() as $member}
+                    	<li>{counter name=members}. {$member->getName()}</li>
                     {/foreach}
                     </ul>
                 </td>
