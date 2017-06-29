@@ -56,6 +56,7 @@ class CStudyLoad extends CActiveModel {
                 "joinTable" => TABLE_WORKLOAD_STUDY_GROUPS,
                 "leftCondition" => "workload_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
                 "rightKey" => "group_id",
+                "interface" => "IVersionControl",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getStudentGroup"
             ),
