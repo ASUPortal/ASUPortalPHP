@@ -122,10 +122,8 @@ class CActiveModel extends CModel implements IJSONSerializable{
                         if (array_key_exists("targetClass", $relation)) {
                         	$targetClass = new $relation["targetClass"];
                         	if (is_a($targetClass, "IVersionControl")) {
-                        		$ar->setItemValue("_version_of", $targetClass->getId());
                         		$ar->setItemValue("_created_at", date('Y-m-d G:i:s'));
                         		$ar->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
-                        		$ar->setItemValue("_is_last_version", 1);
                         	}
                         }
                         $ar->setTable($relation['joinTable']);
@@ -165,7 +163,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
             $currentAr->setItemValue("_created_at", date('Y-m-d G:i:s'));
             $currentAr->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
             $currentAr->setItemValue("_is_last_version", 1);
-            $currentAr->insert();
+            $currentAr->update();
         }
         $this->getRecord()->update();
     }
