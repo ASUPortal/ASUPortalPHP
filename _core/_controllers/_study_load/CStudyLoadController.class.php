@@ -32,9 +32,8 @@ class CStudyLoadController extends CBaseController {
     	}
     	
     	// сотрудники с нагрузкой в указанном году
-    	if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY or
-    		CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
-    			$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear, CSession::getCurrentPerson(), true);
+    	if (CSessionService::hasRoleReadAndWriteOwnOnly()) {
+    		$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear, CSession::getCurrentPerson());
     	} else {
     		$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear);
     	}
@@ -115,8 +114,7 @@ class CStudyLoadController extends CBaseController {
     	// фильтр по преподавателю
     	$selectedPerson = CRequest::getInt("kadri_id");
     	
-    	if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_READ_OWN_ONLY or
-    			CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_WRITE_OWN_ONLY) {
+    	if (CSessionService::hasRoleReadAndWriteOwnOnly()) {
     		$lecturer = CSession::getCurrentPerson();
     	} else {
     		$lecturer = CStaffManager::getPerson(CRequest::getInt("kadri_id"));

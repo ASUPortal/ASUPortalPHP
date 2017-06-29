@@ -1,7 +1,7 @@
 <form action="index.php" method="post" id="{$loadsId}">
     <table class="table table-striped table-bordered table-hover table-condensed">
         <tr>
-            {if (CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_READ_ALL} or CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_WRITE_ALL})}
+            {if (CSessionService::hasRoleReadAndWriteAll())}
             	<th></th>
             {/if}
             <th style="vertical-align:middle; text-align:center;">#</th>
@@ -27,12 +27,12 @@
         {counter start=0 print=false}
         {foreach $studyLoads->getItems() as $studyLoad}
 	        <tr>
-	            {if (CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_READ_ALL} or CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_WRITE_ALL})}
+	            {if (CSessionService::hasRoleReadAndWriteAll())}
 	            	<td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузку')) { location.href='?action=delete&id={$studyLoad->getId()}'; }; return false;"></a></td>
 	            {/if}
 	            <td>{counter}</td>
 	            <td>{CHtml::activeViewGroupSelect("id", $studyLoad, false, true)}</td>
-	            {if (CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_READ_ALL} or CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_WRITE_ALL})}
+	            {if (CSessionService::hasRoleReadAndWriteAll())}
 	            	<td><a href="?action=edit&id={$studyLoad->getId()}" title="{", "|join:CStudyLoadService::getLecturersNameByDiscipline($studyLoad->discipline)->getItems()}">{$studyLoad->discipline->getValue()}</a></td>
 	            {else}
 	            	<td>{$studyLoad->discipline->getValue()}</td>
@@ -56,7 +56,9 @@
 	        </tr>
         {/foreach}
         <tr>
-			<td>&nbsp;</td>
+			{if (CSessionService::hasRoleReadAndWriteAll())}
+            	<td>&nbsp;</td>
+            {/if}
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td><b>Итого</b></td>
@@ -78,7 +80,7 @@
 			<td>&nbsp;</td>
 		</tr>
     </table>
-    {if (CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_READ_ALL} or CSession::getCurrentUser()->getLevelForCurrentTask() == {$ACCESS_LEVEL_WRITE_ALL})}
+    {if (CSessionService::hasRoleReadAndWriteAll())}
     	{CHtml::hiddenField("action", "copy")}
 		{CHtml::hiddenField("kadri_id", $lecturer->getId())}
 		{CHtml::hiddenField("year_id", $year->getId())}
