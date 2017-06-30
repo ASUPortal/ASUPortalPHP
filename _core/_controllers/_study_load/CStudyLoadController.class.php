@@ -116,6 +116,7 @@ class CStudyLoadController extends CBaseController {
     	
     	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_OWN_ONLY, ACCESS_LEVEL_WRITE_OWN_ONLY])) {
     		$lecturer = CSession::getCurrentPerson();
+    		$selectedPerson = $lecturer->getId();
     	} else {
     		$lecturer = CStaffManager::getPerson(CRequest::getInt("kadri_id"));
     	}
