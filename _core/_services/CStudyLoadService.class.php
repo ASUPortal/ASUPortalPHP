@@ -150,8 +150,13 @@ class CStudyLoadService {
     	} else {
     		$cacheContract = "notContract";
     	}
-    	$cacheKey = "cachePersonsWithLoadByYear_".$cacheBudget."_".$cacheContract."_".$selectedYear;
-    	if (CApp::getApp()->cache->hasCache($cacheKey) and !$withoutCache) {
+    	if (is_null($person)) {
+    		$cachePerson = "null";
+    	} else {
+    		$cachePerson = $person->getId();
+    	}
+    	$cacheKey = "cachePersonsWithLoadByYear_".$cacheBudget."_".$cacheContract."_".$selectedYear."_".$cachePerson;
+    	if (CApp::getApp()->cache->hasCache($cacheKey)) {
     		return CApp::getApp()->cache->get($cacheKey);
     	} else {
     		$personsWithLoad = array();
@@ -240,12 +245,8 @@ class CStudyLoadService {
     				$i++;
     			}
     		}
-    		if ($withoutCache) {
-    			return $personsWithLoad;
-    		} else {
-    			CApp::getApp()->cache->set($cacheKey, $personsWithLoad);
-    			return CApp::getApp()->cache->get($cacheKey);
-    		}
+    		CApp::getApp()->cache->set($cacheKey, $personsWithLoad);
+    		return CApp::getApp()->cache->get($cacheKey);
     	}
     }
     
@@ -566,10 +567,15 @@ class CStudyLoadService {
      * @param CStudyLoad $studyLoad
      */
     public static function clearCache(CStudyLoad $studyLoad) {
-        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_isContract_".$studyLoad->year_id);
-        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_isContract_".$studyLoad->year_id);
-        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_notContract_".$studyLoad->year_id);
-        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_notContract_".$studyLoad->year_id);
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_isContract_".$studyLoad->year_id."_null");
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_isContract_".$studyLoad->year_id."_null");
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_notContract_".$studyLoad->year_id."_null");
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_notContract_".$studyLoad->year_id."_null");
+        
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_isContract_".$studyLoad->year_id."_".$studyLoad->person_id);
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_isContract_".$studyLoad->year_id."_".$studyLoad->person_id);
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_isBudget_notContract_".$studyLoad->year_id."_".$studyLoad->person_id);
+        CApp::getApp()->cache->delete("cachePersonsWithLoadByYear_notBudget_notContract_".$studyLoad->year_id."_".$studyLoad->person_id);
     }
     
     /**
