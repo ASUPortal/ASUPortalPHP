@@ -34,11 +34,11 @@ class CActiveModel extends CModel implements IJSONSerializable{
         }
         // если модель реализует интерфейс контроля версий, то
         // сразу заполняем ей некоторые поля
-        if (is_a($this, "IVersionControl")) {
+        /*if (is_a($this, "IVersionControl")) {
             $aRecord->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
             $aRecord->setItemValue("_created_at", date('Y-m-d G:i:s'));
             $aRecord->setItemValue("_version_of", 0);
-        }
+        }*/
         $this->_aRecord = $aRecord;
     }
 
