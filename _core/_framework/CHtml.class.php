@@ -1203,7 +1203,16 @@ class CHtml {
             echo "</ul>";
         }
     }
-    public static function tableOrder($field, CModel $model = null, $manualSort = false) {
+    /**
+     * Заголовок таблицы с возможностью сортировки
+     * 
+     * @param $field - название поля модели
+     * @param CModel $model - модель
+     * @param string $manualSort - возможность ручной сортировки при отключении глобального поиска и глобальных сортировок в CRecordSet
+     * @param string $allowSort - позволять сортировку поля, false - если не нужна ссылка для сортировки в заголовке
+     * @return string
+     */
+    public static function tableOrder($field, CModel $model = null, $manualSort = false, $allowSort = true) {
         if (is_null($model)) {
             return "";
         }
@@ -1248,7 +1257,7 @@ class CHtml {
     	} else {
     		$actions[] = "direction=desc";
     	}
-        if ($showLink) {
+        if ($showLink and $allowSort) {
             $label = '<a href="'.CUtils::getScriptName().'?'.implode($actions, "&").'">'.$label.'</a>';
         }
     	echo $label;

@@ -1,0 +1,1 @@
+ALTER TABLE `pl_corriculum_workload_groups` CHANGE `_created_at` `_created_at` DATETIME NOT NULL COMMENT 'Дата создания записи';

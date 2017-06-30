@@ -32,7 +32,11 @@ class CStudyLoadController extends CBaseController {
     	}
     	
     	// сотрудники с нагрузкой в указанном году
-    	$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear);
+    	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_OWN_ONLY, ACCESS_LEVEL_WRITE_OWN_ONLY])) {
+    		$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear, CSession::getCurrentPerson());
+    	} else {
+    		$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear);
+    	}
     	
     	$lectsTotal = 0;
     	$diplTotal = 0;
@@ -107,7 +111,15 @@ class CStudyLoadController extends CBaseController {
     	// фильтр по году
     	$selectedYear = CRequest::getInt("year_id");
     	
-    	$lecturer = CStaffManager::getPerson(CRequest::getInt("kadri_id"));
+    	// фильтр по преподавателю
+    	$selectedPerson = CRequest::getInt("kadri_id");
+    	
+    	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_OWN_ONLY, ACCESS_LEVEL_WRITE_OWN_ONLY])) {
+    		$lecturer = CSession::getCurrentPerson();
+    		$selectedPerson = $lecturer->getId();
+    	} else {
+    		$lecturer = CStaffManager::getPerson(CRequest::getInt("kadri_id"));
+    	}
     	$year = CTaxonomyManager::getYear(CRequest::getInt("year_id"));
     	
     	$loadTypes = array();
@@ -151,6 +163,7 @@ class CStudyLoadController extends CBaseController {
     	$this->setData("lecturer", $lecturer);
     	$this->setData("year", $year);
     	$this->setData("selectedYear", $selectedYear);
+    	$this->setData("selectedPerson", $selectedPerson);
     	$this->setData("loadsFall", $loadsFall);
     	$this->setData("loadsSpring", $loadsSpring);
     	$this->setData("loadTypes", $loadTypes);

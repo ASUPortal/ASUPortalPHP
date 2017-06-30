@@ -119,6 +119,16 @@ class CActiveModel extends CModel implements IJSONSerializable{
                             $relation['rightKey'] => $key,
                             "id" => null
                         ));
+                        // @todo доделать
+                        if (array_key_exists("targetClass", $relation)) {
+                        	$targetClass = new $relation["targetClass"];
+                        	if (is_a($targetClass, "IVersionControl")) {
+                        		$currentAr->setItemValue("_version_of", $this->getId());
+                        		$currentAr->setItemValue("_created_at", date('Y-m-d G:i:s'));
+                        		$currentAr->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
+                        		$currentAr->setItemValue("_is_last_version", 1);
+                        	}
+                        }
                         $ar->setTable($relation['joinTable']);
                         $ar->insert();
                     }

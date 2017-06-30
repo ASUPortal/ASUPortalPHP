@@ -151,4 +151,19 @@ class CSABCommission extends CActiveModel {
         }
         return $result;
     }
+    /**
+     * Члены комиссии
+     * 
+     * @return CArrayList
+     */
+    public function getMembers() {
+    	$persons = new CArrayList();
+    	foreach ($this->members->getItems() as $member) {
+    		if ($member->person_id != 0) {
+    			$person = $member->person;
+    			$persons->add($person->getId(), $person);
+    		}
+    	}
+    	return $persons;
+    }
 }
