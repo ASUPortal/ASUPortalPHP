@@ -61,6 +61,27 @@ class CCourseProject extends CActiveModel {
                 "storageField" => "protocol_id",
                 "managerClass" => "CProtocolManager",
                 "managerGetObject" => "getDepProtocol"
+            ),
+            "issuing_themes" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_protocol",
+                "storageField" => "protocol_id",
+                "managerClass" => "CProtocolManager",
+                "managerGetObject" => "getDepProtocol"
+            ),
+            "progress" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_protocol",
+                "storageField" => "protocol_id",
+                "managerClass" => "CProtocolManager",
+                "managerGetObject" => "getDepProtocol"
+            ),
+            "results" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_protocol",
+                "storageField" => "protocol_id",
+                "managerClass" => "CProtocolManager",
+                "managerGetObject" => "getDepProtocol"
             )
         );
     }
@@ -114,7 +135,10 @@ class CCourseProject extends CActiveModel {
             "graduation_time" => "Время защит",
             "auditorium" => "Аудитория",
             "protocol_id" => "Протокол заседания кафедры",
-            "requirements_for_registration" => "Требования к оформлению"
+            "requirements_for_registration" => "Требования к оформлению",
+            "issuing_themes" => "Выдача тем",
+            "progress" => "Ход работы",
+            "results" => "Результаты"
         );
     }
     
