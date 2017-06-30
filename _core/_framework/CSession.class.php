@@ -89,7 +89,7 @@ class CSession {
      * @static
      */
     private static function initSession() {
-        if (!isset($_SESSION)) {
+        if (!isset($_SESSION) and session_status() == PHP_SESSION_ACTIVE) {
             session_start();
         }
     }
