@@ -2,7 +2,7 @@
 /**
  * Учебная нагрузка
  */
-class CStudyLoad extends CActiveModel implements IVersionControl {
+class CStudyLoad extends CActiveModel {
     protected $_table = TABLE_WORKLOAD;
     protected $_direction = null;
     protected $_studyLevel = null;
@@ -56,7 +56,8 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
                 "joinTable" => TABLE_WORKLOAD_STUDY_GROUPS,
                 "leftCondition" => "workload_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
                 "rightKey" => "group_id",
-                "targetClass" => "CStudentGroup"
+                "targetClass" => "CStudentGroup",
+                "interface" => "IVersionControl"
             ),
     		"createdBy" => array(
     			"relationPower" => RELATION_HAS_ONE,

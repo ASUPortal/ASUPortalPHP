@@ -34,11 +34,11 @@ class CActiveModel extends CModel implements IJSONSerializable{
         }
         // если модель реализует интерфейс контроля версий, то
         // сразу заполняем ей некоторые поля
-        /*if (is_a($this, "IVersionControl")) {
+        if (is_a($this, "IVersionControl")) {
             $aRecord->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
             $aRecord->setItemValue("_created_at", date('Y-m-d G:i:s'));
             $aRecord->setItemValue("_version_of", 0);
-        }*/
+        }
         $this->_aRecord = $aRecord;
     }
 
@@ -119,9 +119,15 @@ class CActiveModel extends CModel implements IJSONSerializable{
                             $relation['rightKey'] => $key,
                             "id" => null
                         ));
-                        if (array_key_exists("targetClass", $relation)) {
+                        /*if (array_key_exists("targetClass", $relation)) {
                         	$targetClass = new $relation["targetClass"];
                         	if (is_a($targetClass, "IVersionControl")) {
+                        		$ar->setItemValue("_created_at", date('Y-m-d G:i:s'));
+                        		$ar->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
+                        	}
+                        }*/
+                        if (array_key_exists("interface", $relation)) {
+                        	if ($relation["interface"] == "IVersionControl") {
                         		$ar->setItemValue("_created_at", date('Y-m-d G:i:s'));
                         		$ar->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
                         	}
@@ -163,7 +169,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
             $currentAr->setItemValue("_created_at", date('Y-m-d G:i:s'));
             $currentAr->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
             $currentAr->setItemValue("_is_last_version", 1);
-            $currentAr->update();
+            $currentAr->insert();
         }
         $this->getRecord()->update();
     }

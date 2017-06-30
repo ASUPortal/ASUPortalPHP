@@ -6,7 +6,7 @@
  * Time: 20:50
  * To change this template use File | Settings | File Templates.
  */
-class CStudentGroup extends CActiveModel implements IVersionControl {
+class CStudentGroup extends CActiveModel {
     protected $_table = TABLE_STUDENT_GROUPS;
     private $_students = null;
     private $_year = null;
