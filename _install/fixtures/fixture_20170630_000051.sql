@@ -1,0 +1,1 @@
+ALTER TABLE `pl_corriculum_workload_groups` CHANGE `_created_by` `_created_by` INT(11) NOT NULL DEFAULT '67' COMMENT 'Идентификатор сотрудника, кем запись была создана';
