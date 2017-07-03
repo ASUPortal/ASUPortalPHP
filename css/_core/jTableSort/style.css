@@ -5,7 +5,7 @@ table.tablesorter {
 	text-align: left;
 }
 table.tablesorter thead tr th, table.tablesorter tfoot tr th {
-	background-color: #ffffff;
+	background-color: #E6E6FF;
 	padding: 5px;
 }
 table.tablesorter tr:nth-child(2n+1) {
