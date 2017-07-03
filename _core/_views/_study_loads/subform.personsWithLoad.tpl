@@ -33,7 +33,7 @@
 	        {foreach $persons as $person}
 		        <tr>
 		            <td><a href="#"><i title="Добавить" class="icon-plus" onclick="window.open('{$web_root}_modules/_study_loads/index.php?action=add&kadri_id={$person["kadri_id"]}&year_id={$person["year_id"]}')"></i></a></td>
-		            <td>{counter}</td>
+		            <td class="count">{counter}</td>
 		            <td><a href="?action=editLoads&kadri_id={$person['kadri_id']}&year_id={$person['year_id']}&base=1&additional=1&premium=1&byTime=1" title="{$person['fio']}">{$person['fio_short']}</a></td>
 		            <td>{$person['dolgnost']}</td>
 		            {if ($person['rate'] != 0)}
@@ -63,7 +63,7 @@
 		        </tr>
 	        {/foreach}
         </tbody>
-        <tr bgcolor="#ff9966">
+        <tr>
         	<td>&nbsp;</td>
         	<td>&nbsp;</td>
             <td><b>Итого</b></td>
@@ -97,3 +97,20 @@
 		</tr>
     </table>
 </form>
+
+<script>
+	jQuery(document).ready(function(){
+		jQuery("input").on("change", function(){
+			$.ajax({
+				success: function(data) {
+					updateTableNumeration();
+				}
+			});
+		});
+    });
+	function updateTableNumeration() {
+		$('.table tbody tr:not([style="display: none;"])').each(function(i) {
+			$(this).find('.count').text(i+1);
+		});
+	}
+</script>
