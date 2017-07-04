@@ -1,8 +1,8 @@
 <form action="index.php" method="post" id="{$loadsId}">
-    <table class="table table-striped table-bordered table-hover table-condensed">
+    <table class="table table-striped table-bordered table-hover table-condensed" border="1">
         <tr>
             {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
-            	<th></th>
+            	<th>&nbsp;</th>
             {/if}
             <th style="vertical-align:middle; text-align:center;">#</th>
             <th style="vertical-align:middle; text-align:center;">{CHtml::activeViewGroupSelect("id", $studyLoads->getFirstItem(), true)}</th>
@@ -23,6 +23,16 @@
 	            {/foreach}
             <th style="vertical-align:bottom;"><div class="vert-text">Всего</div></th>
             <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("on_filial", $studyLoads->getFirstItem(), false, false)}</div></th>
+        </tr>
+        <tr>
+	        {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+	            {$ths = 13}
+	        {else}
+	            {$ths = 12}
+	        {/if}
+	        {for $i=1 to $ths + count($studyLoads->getFirstItem()->getStudyLoadTable()->getTableTotal())}
+	            <th style="text-align:center; background-color: #E6E6FF;">{$i}</th>
+	        {/for}
         </tr>
         {counter start=0 print=false}
         {foreach $studyLoads->getItems() as $studyLoad}
@@ -115,3 +125,18 @@
 		</table>
     {/if}
 </form>
+
+<script>
+	$(window).load(function() {
+		updateTableNumeration();		 
+	});
+	function updateTableNumeration() {
+		$('.table tr').each(function(i) {
+			if (i % 2 === 0) {
+				$(this).find("td").css('background', '#c5d0e6');
+			} else {
+				$(this).find("td").css('background', '#DFEFFF');
+			}
+		});
+	}
+</script>

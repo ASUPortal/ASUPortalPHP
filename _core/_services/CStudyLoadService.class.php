@@ -99,6 +99,37 @@ class CStudyLoadService {
     }
     
     /**
+     * Лист нагрузок преподавателя по году и типу нагрузки, переданным через глобальные переменные запроса
+     *
+     * @param string $globalRequestVariables - значения глобальных переменных запроса
+     * @return CArrayList
+     */
+    public static function getStudyLoadsByYearAndLoadTypeByGlobalRequestVariables($globalRequestVariables) {
+    	$requestVariables = unserialize(urldecode($globalRequestVariables));
+    	$person = CStaffManager::getPerson($requestVariables["kadri_id"]);
+    	$year = CTaxonomyManager::getYear($requestVariables["year_id"]);
+    	$loadTypes = array();
+    	if ($requestVariables["base"] != 0) {
+    		$loadTypes[] = CStudyLoadTypeIDConstants::MAIN;
+    	}
+    	if (CRequest::getInt("additional") != 0) {
+    		$loadTypes[] = CStudyLoadTypeIDConstants::ADDITIONAL;
+    	}
+    	if (CRequest::getInt("premium") != 0) {
+    		$loadTypes[] = CStudyLoadTypeIDConstants::PREMIUM;
+    	}
+    	if (CRequest::getInt("byTime") != 0) {
+    		$loadTypes[] = CStudyLoadTypeIDConstants::BY_TIME;
+    	}
+    	$loads = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId()." AND load_type_id IN (".implode($loadTypes, ", ").")")->getItems() as $item) {
+    		$study = new CStudyLoad($item);
+    		$loads->add($study->getId(), $study);
+    	}
+    	return $loads;
+    }
+    
+    /**
      * Список преподавателей, у которых есть нагрузка по дисциплине
      *
      * @param CTerm $discipline

@@ -177,6 +177,12 @@ class CStudyLoadController extends CBaseController {
                 "title" => "Добавить",
                 "link" => "index.php?action=add&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id"),
                 "icon" => "actions/list-add.png"
+            ),
+            array(
+                "title" => "Печать по шаблону",
+                "link" => "#",
+                "icon" => "devices/printer.png",
+                "template" => "formset_study_loads"
             )
     	));
     	
