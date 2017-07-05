@@ -53,10 +53,10 @@ class CStudyLoadFallPart extends CAbstractPrintClassField {
     		}
     		$k = count($studyLoad->getStudyLoadTable()->getTableTotal())+7;
     		$dataRow[$k] = number_format($studyLoad->getSumWorksValue(),1,',','');
-    		if ($studyLoad->on_filial == 0) {
-    			$dataRow[$k+1] = "";
+    		if ($studyLoad->on_filial) {
+    			$dataRow[$k+1] = number_format($studyLoad->getSumWorksValueWithFilials(),1,',','');
     		} else {
-    			$dataRow[$k+1] = $studyLoad->on_filial;
+    			$dataRow[$k+1] = "";
     		}
     		$result[] = $dataRow;
     	}
