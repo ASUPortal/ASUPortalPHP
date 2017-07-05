@@ -128,9 +128,9 @@
 
 <script>
 	$(window).load(function() {
-		updateTableNumeration();		 
+		updateTableStripe();		 
 	});
-	function updateTableNumeration() {
+	function updateTableStripe() {
 		$('.table tr').each(function(i) {
 			if (i % 2 === 0) {
 				$(this).find("td").css('background', '#c5d0e6');

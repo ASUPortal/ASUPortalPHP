@@ -122,7 +122,7 @@ class CStudyLoadTable extends CFormModel {
      */
     public function getTableShowTotalByKind($isBudget = false, $isContract = false) {
     	$result = array();
-    	foreach ($this->getWorktypesIsTotal() as $key=>$type) {
+    	foreach ($this->getWorktypes() as $key=>$type) {
     		$row = array();
     		 
     		// тип работы

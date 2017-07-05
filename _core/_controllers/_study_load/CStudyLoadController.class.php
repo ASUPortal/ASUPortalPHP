@@ -183,6 +183,16 @@ class CStudyLoadController extends CBaseController {
                 "link" => "#",
                 "icon" => "devices/printer.png",
                 "template" => "formset_study_loads"
+            ),
+            array(
+                "title" => "Редактировать нагрузку по бюджету",
+                "link" => "index.php?action=editLoadsByType&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1&isBudget=1&isContract=0",
+                "icon" => "apps/accessories-text-editor.png"
+            ),
+            array(
+                "title" => "Редактировать нагрузку по контракту",
+                "link" => "index.php?action=editLoadsByType&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1&isBudget=0&isContract=1",
+                "icon" => "apps/accessories-text-editor.png"
             )
     	));
     	
@@ -191,6 +201,36 @@ class CStudyLoadController extends CBaseController {
     	$copyWays[1] = "только копирование (сохраняем у одного и добавляем другому)";
     	$this->setData("copyWays", $copyWays);
     	$this->renderView("_study_loads/editLoads.tpl");
+    }
+    public function actionEditLoadsByType() {
+    	$lecturer = CStaffManager::getPerson(CRequest::getInt("kadri_id"));
+    	$year = CTaxonomyManager::getYear(CRequest::getInt("year_id"));
+    	
+    	$requestVariables = CRequest::getGlobalRequestVariables()->getItems();
+    	$loadTypes = CStudyLoadService::getLoadTypesByGlobalRequestVariables($requestVariables);
+    	
+    	$loads = CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes);
+    	$loadsFall = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadYearPartsConstants::FALL);
+    	$loadsSpring = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadYearPartsConstants::SPRING);
+    	
+    	$this->setData("loadsFall", $loadsFall);
+    	$this->setData("loadsSpring", $loadsSpring);
+    	$this->setData("loadTypes", $loadTypes);
+    	$this->setData("isBudget", CRequest::getInt("isBudget"));
+    	$this->setData("isContract", CRequest::getInt("isContract"));
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => "index.php?action=editLoads&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1",
+    			"icon" => "actions/edit-undo.png"
+    		),
+            array(
+                "title" => "Добавить",
+                "link" => "index.php?action=add&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id"),
+                "icon" => "actions/list-add.png"
+            )
+    	));
+    	$this->renderView("_study_loads/form.editLoads.tpl");
     }
     /**
      * Показать выбранные типы нагрузки (основная, дополнительная, надбавка, почасовка)
