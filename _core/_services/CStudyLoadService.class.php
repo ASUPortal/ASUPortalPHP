@@ -108,25 +108,37 @@ class CStudyLoadService {
     	$requestVariables = unserialize(urldecode($globalRequestVariables));
     	$person = CStaffManager::getPerson($requestVariables["kadri_id"]);
     	$year = CTaxonomyManager::getYear($requestVariables["year_id"]);
-    	$loadTypes = array();
-    	if ($requestVariables["base"] != 0) {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::MAIN;
-    	}
-    	if (CRequest::getInt("additional") != 0) {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::ADDITIONAL;
-    	}
-    	if (CRequest::getInt("premium") != 0) {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::PREMIUM;
-    	}
-    	if (CRequest::getInt("byTime") != 0) {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::BY_TIME;
-    	}
+    	$loadTypes = CStudyLoadService::getLoadTypesByGlobalRequestVariables($requestVariables);
+    	
     	$loads = new CArrayList();
     	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId()." AND load_type_id IN (".implode($loadTypes, ", ").")")->getItems() as $item) {
     		$study = new CStudyLoad($item);
     		$loads->add($study->getId(), $study);
     	}
     	return $loads;
+    }
+    
+    /**
+     * Типы нагрузок, переданные через глобальные переменные запроса
+     *
+     * @param array $requestVariables - массив значений глобальных переменных запроса
+     * @return array
+     */
+    public static function getLoadTypesByGlobalRequestVariables($requestVariables) {
+    	$loadTypes = array();
+    	if ($requestVariables["base"] != 0) {
+    		$loadTypes[] = CStudyLoadTypeIDConstants::MAIN;
+    	}
+    	if ($requestVariables["additional"] != 0) {
+    		$loadTypes[] = CStudyLoadTypeIDConstants::ADDITIONAL;
+    	}
+    	if ($requestVariables["premium"] != 0) {
+    		$loadTypes[] = CStudyLoadTypeIDConstants::PREMIUM;
+    	}
+    	if ($requestVariables["byTime"] != 0) {
+    		$loadTypes[] = CStudyLoadTypeIDConstants::BY_TIME;
+    	}
+    	return $loadTypes;
     }
     
     /**
@@ -394,11 +406,11 @@ class CStudyLoadService {
     }
     
     /**
-     * Значения для столбца Всего по преподавателю, году и семестру
+     * Значения для столбца "Всего" по преподавателю, году, семестру и типам нагрузок
      *
-     * @param CPerson $lecturer
-     * @param CTerm $year
-     * @param int $part
+     * @param CPerson $lecturer - преподаватель
+     * @param CTerm $year - учебный год
+     * @param int $part - id семестра
      * @param array $loadTypes - типы нагрузок
      *
      * @return int
@@ -414,10 +426,30 @@ class CStudyLoadService {
     }
     
     /**
-     * Значения для столбца Всего по преподавателю и году
+     * Значения для столбца "Надбавка за филиалы" по преподавателю, году, семестру и типам нагрузок
      *
-     * @param CPerson $lecturer
-     * @param CTerm $year
+     * @param CPerson $lecturer - преподаватель
+     * @param CTerm $year - учебный год
+     * @param int $part - id семестра
+     * @param array $loadTypes - типы нагрузок
+     *
+     * @return int
+     */
+    public static function getAllStudyWorksTotalValuesByLecturerAndPartWithFilials(CPerson $lecturer, CTerm $year, $part, $loadTypes) {
+    	$sum = 0;
+    	foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
+    		if ($studyLoad->year_part_id == $part) {
+    			$sum += $studyLoad->getSumWorksValueWithFilials();
+    		}
+    	}
+    	return $sum;
+    }
+    
+    /**
+     * Значение "Всего за год" (без учёта филиалов) по преподавателю, году и типам нагрузок
+     *
+     * @param CPerson $lecturer - преподаватель
+     * @param CTerm $year - учебный год
      * @param array $loadTypes - типы нагрузок
      *
      * @return int
@@ -426,6 +458,24 @@ class CStudyLoadService {
     	$sum = 0;
     	foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
     		$sum += $studyLoad->getSumWorksValue();
+    	}
+    	return $sum;
+    }
+    
+    /**
+     * Значение "Всего за год" (с учётом филиалов) по преподавателю, году и типам нагрузок
+     *
+     * @param CPerson $lecturer - преподаватель
+     * @param CTerm $year - учебный год
+     * @param array $loadTypes - типы нагрузок
+     *
+     * @return int
+     */
+    public static function getAllStudyWorksTotalValuesByLecturerWithFilials(CPerson $lecturer, CTerm $year, $loadTypes) {
+    	$sum = 0;
+    	foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
+    		$sum += $studyLoad->getSumWorksValue();
+    		$sum += $studyLoad->getSumWorksValueWithFilials();
     	}
     	return $sum;
     }

@@ -62,7 +62,7 @@
 		                {/foreach}
 		            {/foreach}
 	            <td>{clearNullValues number=number_format($studyLoad->getSumWorksValue(),1,',','') level=0}</td>
-	            <td>{clearNullValues number=$studyLoad->on_filial level=0}</td>
+	            <td>{clearNullValues number=number_format($studyLoad->getSumWorksValueWithFilials(),1,',','') level=0}</td>
 	        </tr>
         {/foreach}
         <tr>
@@ -87,7 +87,7 @@
 	                {/foreach}
 	            {/foreach}
 			<td><b>{clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes),1,',','') level=0}</b></td>
-			<td>&nbsp;</td>
+			<td><b>{clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPartWithFilials($lecturer, $year, $part, $loadTypes),1,',','') level=0}</b></td>
 		</tr>
     </table>
     {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}

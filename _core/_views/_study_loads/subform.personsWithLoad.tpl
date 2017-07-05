@@ -10,7 +10,9 @@
     <table class="table table-striped table-bordered table-hover" border="1" id="dataTable">
         <thead>
 	        <tr>
-	            <th></th>
+	            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+					<th>&nbsp;</th>
+	            {/if}
 	            <th>#</th>
 	            <th>ФИО преподавателя</th>
 	            <th>долж.</th>
@@ -32,7 +34,9 @@
 	        {counter start=0 print=false}
 	        {foreach $persons as $person}
 		        <tr>
-		            <td rel="stripe"><a href="#"><i title="Добавить" class="icon-plus" onclick="window.open('{$web_root}_modules/_study_loads/index.php?action=add&kadri_id={$person["kadri_id"]}&year_id={$person["year_id"]}')"></i></a></td>
+		            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+			            <td rel="stripe"><a href="#"><i title="Добавить" class="icon-plus" onclick="window.open('{$web_root}_modules/_study_loads/index.php?action=add&kadri_id={$person["kadri_id"]}&year_id={$person["year_id"]}')"></i></a></td>
+		            {/if}
 		            <td class="count" rel="stripe">{counter}</td>
 		            <td rel="stripe"><a href="?action=editLoads&kadri_id={$person['kadri_id']}&year_id={$person['year_id']}&base=1&additional=1&premium=1&byTime=1" title="{$person['fio']}">{$person['fio_short']}</a></td>
 		            <td rel="stripe">{$person['dolgnost']}</td>
@@ -64,7 +68,9 @@
 	        {/foreach}
         </tbody>
         <tr>
-        	<td>&nbsp;</td>
+        	{if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+            	<td>&nbsp;</td>
+        	{/if}
         	<td>&nbsp;</td>
             <td><b>Итого</b></td>
 			<td>&nbsp;</td>
@@ -104,6 +110,13 @@
 	});
 	jQuery(document).ready(function(){
 		jQuery("input").on("change", function(){
+			$.ajax({
+				success: function(data) {
+					updateTableNumeration();
+				}
+			});
+		});
+		jQuery(".header").on("click", function(){
 			$.ajax({
 				success: function(data) {
 					updateTableNumeration();

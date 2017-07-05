@@ -202,6 +202,23 @@ class CStudyLoad extends CActiveModel {
     }
     
     /**
+     * Сумма часов по видам работ учебной нагрузки для выездов в филиалы
+     *
+     * @param $type
+     * @return CArrayList
+     */
+    public function getSumWorksValueWithFilials() {
+    	$value = 0;
+    	if ($this->on_filial) {
+    		foreach ($this->works->getItems() as $work) {
+    			$value += $work->workload;
+    		}
+    		$value = $value*0.5;
+    	}
+    	return $value;
+    }
+    
+    /**
      * Таблица учебной нагрузки отдельным классом
      *
      * @return CStudyLoadTable

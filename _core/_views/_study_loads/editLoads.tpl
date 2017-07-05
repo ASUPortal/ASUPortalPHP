@@ -84,9 +84,10 @@
 	{if $loadsFall->getCount() == 0 and $loadsSpring->getCount() == 0}
 		Нет объектов для отображения
 	{else}
-		<div class="alert alert-info"><b>Всего за год: {clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturer($lecturer, $year, $loadTypes),1,',','') level=0}</b></div>
+		<div class="alert alert-info"><b>Всего за год: {clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturer($lecturer, $year, $loadTypes),1,',','') level=0}
+						( с учётом филиалов: {clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerWithFilials($lecturer, $year, $loadTypes),1,',','') level=0})</b></div>
 		{if $loadsFall->getCount() != 0}
-			<div class="alert alert-info">Осенний семестр</div>
+			<div class="alert alert-info" style="text-align:center;">Осенний семестр</div>
 			
 			{$studyLoads = $loadsFall}
 			{$loadsId = "loadsFall"}
@@ -95,7 +96,7 @@
 			{include file="_study_loads/subform.loads.tpl"}
 		{/if}
 		{if $loadsSpring->getCount() != 0}
-			<div class="alert alert-info">Весенний семестр</div>
+			<div class="alert alert-info" style="text-align:center;">Весенний семестр</div>
 			
 			{$studyLoads = $loadsSpring}
 			{$loadsId = "loadsSpring"}
@@ -103,7 +104,8 @@
 			
 			{include file="_study_loads/subform.loads.tpl"}
 		{/if}
-		<div class="alert alert-info"><b>Всего за год: {clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturer($lecturer, $year, $loadTypes),1,',','') level=0}</b></div>
+		<div class="alert alert-info"><b>Всего за год: {clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturer($lecturer, $year, $loadTypes),1,',','') level=0}
+						( с учётом филиалов: {clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerWithFilials($lecturer, $year, $loadTypes),1,',','') level=0})</b></div>
     {/if}
 {else}
     <div class="alert">Не выбран преподаватель!</div>
