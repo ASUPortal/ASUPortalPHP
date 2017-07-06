@@ -213,6 +213,8 @@ class CStudyLoadController extends CBaseController {
     	$loadsFall = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadYearPartsConstants::FALL);
     	$loadsSpring = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadYearPartsConstants::SPRING);
     	
+    	$this->setData("lecturer", $lecturer);
+    	$this->setData("year", $year);
     	$this->setData("loadsFall", $loadsFall);
     	$this->setData("loadsSpring", $loadsSpring);
     	$this->setData("loadTypes", $loadTypes);
@@ -294,5 +296,42 @@ class CStudyLoadController extends CBaseController {
         }
         $this->setData("studyLoad", $studyLoad);
         $this->renderView("_study_loads/edit.tpl");
+    }
+    /**
+     * Сохранение значений для редактирования всех нагрузок преподавателя
+     */
+    public function actionSaveAll() {
+    	$data = CRequest::getArray("data");
+    	foreach ($data as $studyLoadId=>$types) {
+    		$studyLoad = CStudyLoadService::getStudyLoad($studyLoadId);
+    		if (CRequest::getInt("isBudget")) {
+    			$kindId = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId();
+    		}
+    		if (CRequest::getInt("isContract")) {
+    			$kindId = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId();
+    		}
+    		// удаляем старые данные
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD_WORKS, "workload_id=".$studyLoad->getId()." and kind_id=".$kindId)->getItems() as $ar) {
+    			$ar->remove();
+    		}
+    
+    		// добавляем новые
+    		foreach ($types as $typeId=>$works) {
+    			foreach ($works as $kindId=>$value) {
+    				$obj = new CStudyLoadWork();
+    				$obj->workload_id = $studyLoadId;
+    				$obj->type_id = $typeId;
+    				$obj->kind_id = $kindId;
+    				$obj->workload = $value;
+    				$obj->_created_by = $studyLoad->_created_by;
+    				$obj->save();
+    			}
+    		}
+    	}
+    	if ($this->continueEdit()) {
+    		$this->redirect("?action=editLoadsByType&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1&isBudget=".CRequest::getInt("isBudget")."&isContract=".CRequest::getInt("isContract"));
+    	} else {
+    		$this->redirect("?action=editLoads&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1");
+    	}
     }
 }

@@ -69,7 +69,7 @@ class CStudyLoadTable extends CFormModel {
     }
 
     /**
-     * Таблица для редактирования нагрузки (бюджет и контракт раздельно)
+     * Таблица для редактирования нагрузки (бюджет и контракт)
      * 
      * @return array
      */
@@ -114,34 +114,28 @@ class CStudyLoadTable extends CFormModel {
     }
     
     /**
-     * Таблица для просмотра нагрузки (бюджет/контракт)
+     * Таблица для редактирования нагрузки по типу (бюджет или контракт)
      * 
-     * @param $isBudget
-     * @param $isContract
+     * @param boolean $isBudget
+     * @param boolean $isContract
      * @return array
      */
-    public function getTableShowTotalByKind($isBudget = false, $isContract = false) {
+    public function getTableByKind($isBudget = false, $isContract = false) {
     	$result = array();
     	foreach ($this->getWorktypes() as $key=>$type) {
     		$row = array();
     		 
     		// тип работы
     		$row[0] = $type;
-    		$row[1] = 0;
     		
     		// бюджет
-    		if ($isBudget and !$isContract) {
-    			$row[1] = $this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId(), $key);
+    		if ($isBudget) {
+    			$row[CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId()] = $this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId(), $key);
     		}
     		
     		// коммерция
-    		if ($isContract and !$isBudget) {
-    			$row[1] = $this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId(), $key);
-    		}
-    		
-    		// бюджет и коммерция
-    		if ($isContract and $isBudget) {
-    			$row[1] = $this->getLoadByType($key);
+    		if ($isContract) {
+    			$row[CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId()] = $this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId(), $key);
     		}
     		
     		$result[$key] = $row;
@@ -181,10 +175,32 @@ class CStudyLoadTable extends CFormModel {
     	return $result;
     }
     
+    /**
+     * Поле для ввода значений для редактирования одной нагрузки
+     * 
+     * @param int $typeId - идентификатор вида нагрузки
+     * @param int $kindId - идентификатор типа нагруки (бюджет/контракт)
+     * @return string
+     */
     public function getFieldName($typeId, $kindId) {
         return "CModel[data][".$typeId."][".$kindId."]";
     }
     
+    /**
+     * Поле для ввода значений для редактирования всех нагрузок преподавателя
+     * 
+     * @param int $studyLoadId - идентификатор нагрузки
+     * @param int $typeId - идентификатор вида нагрузки
+     * @param int $kindId - идентификатор типа нагруки (бюджет/контракт)
+     * @return string
+     */
+    public function getFieldNameAllLoads($studyLoadId, $typeId, $kindId) {
+        return "data[".$studyLoadId."][".$typeId."][".$kindId."]";
+    }
+    
+    /**
+     * Сохранение значений для редактирования одной нагрузки
+     */
     public function save() {
     	// удаляем старые данные
     	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD_WORKS, "workload_id=".$this->getLoad()->getId())->getItems() as $ar) {
