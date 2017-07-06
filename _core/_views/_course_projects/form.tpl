@@ -137,7 +137,7 @@
 	<div class="control-group">
 	    {CHtml::activeLabel("results", $courseProject)}
 	    <div class="controls">
-	        {CHtml::activeDropDownList("results", $courseProject, CProtocolService::getDepProtocolsListForIssuingThemesCourseProjects($courseProject), "", "", "", "", true)}
+	        {CHtml::activeDropDownList("results", $courseProject, CProtocolService::getDepProtocolsListForResultsCourseProjects($courseProject), "", "", "", "", true)}
 	        {CHtml::error("results", $courseProject)}
 	    </div>
 	</div>
