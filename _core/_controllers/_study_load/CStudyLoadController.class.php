@@ -60,8 +60,21 @@ class CStudyLoadController extends CBaseController {
     	// сотрудники без нагрузки в указанном году
     	$personsWithoutLoad = CStudyLoadService::getPersonsWithoutLoadByYear($selectedYear);
     	
-        $this->setTableFilter("dataTable");
+        if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+            $this->setTableFilter("dataTable");
+        }
         $this->setTableSort("dataTable");
+        
+        /**
+         * Параметры для групповой печати по шаблону
+         */
+        $parameters = array("year_id" => $selectedYear, "base" => 1, "additional" => 1, "premium" => 1, "byTime" => 1);
+        $this->setData("parameters", $parameters);
+        $this->setData("template", "formset_study_loads");
+        $this->setData("selectedDoc", true);
+        $this->setData("url", null);
+        $this->setData("action", null);
+        $this->setData("id", null);
         
         $this->setData("personsWithLoad", $personsWithLoad);
         $this->setData("personsWithoutLoad", $personsWithoutLoad);
@@ -81,7 +94,7 @@ class CStudyLoadController extends CBaseController {
         $studyLoad = new CStudyLoad();
         $studyLoad->person_id = CRequest::getInt("kadri_id");
         $studyLoad->year_id = CRequest::getInt("year_id");
-        $studyLoad->_created_by = CSession::getCurrentUser()->getId();
+        $studyLoad->_created_by = CSession::getCurrentPerson()->getId();
         $this->setData("studyLoad", $studyLoad);
         $this->addActionsMenuItem(array(
             array(
@@ -96,7 +109,7 @@ class CStudyLoadController extends CBaseController {
         $studyLoad = CStudyLoadService::getStudyLoad(CRequest::getInt("id"));
         $kadriId = $studyLoad->person_id;
         $yearId = $studyLoad->year_id;
-        $studyLoad->_created_by = CSession::getCurrentUser()->getId();
+        $studyLoad->_created_by = CSession::getCurrentPerson()->getId();
         $this->setData("studyLoad", $studyLoad);
         $this->addActionsMenuItem(array(
             array(
@@ -174,27 +187,31 @@ class CStudyLoadController extends CBaseController {
                 "icon" => "actions/edit-undo.png"
             ),
             array(
-                "title" => "Добавить",
-                "link" => "index.php?action=add&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id"),
-                "icon" => "actions/list-add.png"
-            ),
-            array(
                 "title" => "Печать по шаблону",
                 "link" => "#",
                 "icon" => "devices/printer.png",
                 "template" => "formset_study_loads"
-            ),
-            array(
-                "title" => "Редактировать нагрузку по бюджету",
-                "link" => "index.php?action=editLoadsByType&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1&isBudget=1&isContract=0",
-                "icon" => "apps/accessories-text-editor.png"
-            ),
-            array(
-                "title" => "Редактировать нагрузку по контракту",
-                "link" => "index.php?action=editLoadsByType&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1&isBudget=0&isContract=1",
-                "icon" => "apps/accessories-text-editor.png"
             )
     	));
+    	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+    		$this->addActionsMenuItem(array(
+    			array(
+    				"title" => "Добавить",
+    				"link" => "index.php?action=add&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id"),
+    				"icon" => "actions/list-add.png"
+    			),
+    			array(
+    				"title" => "Редактировать нагрузку по бюджету",
+    				"link" => "index.php?action=editLoadsByType&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1&isBudget=1&isContract=0",
+    				"icon" => "apps/accessories-text-editor.png"
+    			),
+    			array(
+    				"title" => "Редактировать нагрузку по контракту",
+    				"link" => "index.php?action=editLoadsByType&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1&isBudget=0&isContract=1",
+    				"icon" => "apps/accessories-text-editor.png"
+    			)
+    		));
+    	}
     	
     	$copyWays = array();
     	$copyWays[0] = "копировать с перемещением (удаляем у одного - добавляем другому)";
