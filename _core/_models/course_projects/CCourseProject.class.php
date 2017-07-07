@@ -8,6 +8,11 @@ class CCourseProject extends CActiveModel {
     protected $_group = null;
     protected $_discipline = null;
     protected $_lecturer = null;
+    protected $_chairman_of_commission = null;
+    protected $_protocol = null;
+    protected $_protocolIssuingThemes = null;
+    protected $_protocolProgress = null;
+    protected $_protocolResults = null;
     
     protected function relations() {
         return array(
@@ -62,24 +67,24 @@ class CCourseProject extends CActiveModel {
                 "managerClass" => "CProtocolManager",
                 "managerGetObject" => "getDepProtocol"
             ),
-            "issuing_themes" => array(
+            "protocolIssuingThemes" => array(
                 "relationPower" => RELATION_HAS_ONE,
-                "storageProperty" => "_protocol",
-                "storageField" => "protocol_id",
+                "storageProperty" => "_protocolIssuingThemes",
+                "storageField" => "issuing_themes",
                 "managerClass" => "CProtocolManager",
                 "managerGetObject" => "getDepProtocol"
             ),
-            "progress" => array(
+            "protocolProgress" => array(
                 "relationPower" => RELATION_HAS_ONE,
-                "storageProperty" => "_protocol",
-                "storageField" => "protocol_id",
+                "storageProperty" => "_protocolProgress",
+                "storageField" => "progress",
                 "managerClass" => "CProtocolManager",
                 "managerGetObject" => "getDepProtocol"
             ),
-            "results" => array(
+            "protocolResults" => array(
                 "relationPower" => RELATION_HAS_ONE,
-                "storageProperty" => "_protocol",
-                "storageField" => "protocol_id",
+                "storageProperty" => "_protocolResults",
+                "storageField" => "results",
                 "managerClass" => "CProtocolManager",
                 "managerGetObject" => "getDepProtocol"
             )
