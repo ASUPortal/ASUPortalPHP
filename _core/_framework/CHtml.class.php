@@ -1493,6 +1493,43 @@ class CHtml {
             echo '<input type="checkbox" name="selectedInView[]" value="'.$data.'" class="_viewGroupSelectorItem" asu-index="'.(self::$_widgetsIndex).'" />';
         }
     }
+    /**
+     * Групповое выделение чекбоксов с произвольными значениями $value
+     * 
+     * @param string $value
+     * @param boolean $isHeader
+     */
+    public static function checkboxGroupSelect($value, $isHeader = false) {
+    	if ($isHeader) {
+    		// это в шапке таблицы, тут нужно показать групповую скрывалку/показывалку
+            if (!self::$_viewGroupSelectInit) {
+    			self::$_viewGroupSelectInit = true;
+    			?>
+                    <script>
+                        jQuery(document).ready(function(){
+                            jQuery("._checkboxGroupSelector").on("change", function(){
+                                var index = jQuery(this).attr("asu-index");
+                                var items = jQuery("._checkboxGroupSelectorItem[asu-index=" + index + "]");
+                                if (jQuery(this).is(":checked")) {
+                                    for (var i = 0; i < items.length; i++) {
+                                        jQuery(items[i]).attr("checked", true);
+                                    }
+                                } else {
+                                    for (var i = 0; i < items.length; i++) {
+                                        jQuery(items[i]).attr("checked", false);
+                                    }
+                                }
+                            });
+                        });
+                    </script>
+                    <?php
+            }
+            self::$_widgetsIndex++;
+            echo '<input type="checkbox" value="1" class="_checkboxGroupSelector" asu-index="'.(self::$_widgetsIndex).'" />';
+        } else {
+            echo '<input type="checkbox" name="selectedDoc[]" value="'.$value.'" class="_checkboxGroupSelectorItem" asu-index="'.(self::$_widgetsIndex).'" />';
+        }
+    }
 
     /**
      * Самодостаточный аяксовый компонент
