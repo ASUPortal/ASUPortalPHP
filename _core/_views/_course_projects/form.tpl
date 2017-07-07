@@ -46,14 +46,24 @@
         </div>
     </div>
     
-    <div class="control-group">
-	    {CHtml::activeLabel("commision_members", $courseProject)}
-	    <div class="controls">
-	        {CHtml::activeLookup("commision_members", $courseProject, "staff", true)}
-	        {CHtml::error("commision_members", $courseProject)}
-	    </div>
-	</div>
-	
+    {if ($disciplineId != 0)}
+	    <div class="control-group">
+		    {CHtml::activeLabel("commision_members", $courseProject)}
+		    <div class="controls">
+		        {CHtml::activeLookup("commision_members", $courseProject, "class.CSearchCatalogLecturersWithLoadByDiscipline", true, ["discipline_id" => $disciplineId])}
+		        {CHtml::error("commision_members", $courseProject)}
+		    </div>
+		</div>
+	{else}
+	    <div class="control-group">
+		    {CHtml::activeLabel("commision_members", $courseProject)}
+		    <div class="controls">
+		        {CHtml::activeLookup("commision_members", $courseProject, "staff", true)}
+		        {CHtml::error("commision_members", $courseProject)}
+		    </div>
+		</div>
+	{/if}
+		
 	<div class="control-group">
 	    {CHtml::activeLabel("issue_date", $courseProject)}
 	    <div class="controls">

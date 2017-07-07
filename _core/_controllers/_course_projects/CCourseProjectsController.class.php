@@ -81,6 +81,7 @@ class CCourseProjectsController extends CBaseController {
         $this->setData("groups", $groups);
         $this->setData("disciplines", $disciplines);
         $this->setData("courseProject", $courseProject);
+        $this->setData("disciplineId", 0);
         $this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
@@ -114,6 +115,7 @@ class CCourseProjectsController extends CBaseController {
         $this->setData("groups", $groups);
         $this->setData("disciplines", $disciplines);
         $this->setData("courseProject", $courseProject);
+        $this->setData("disciplineId", $courseProject->discipline_id);
         $this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
@@ -185,6 +187,7 @@ class CCourseProjectsController extends CBaseController {
         $this->setData("groups", $groups);
         $this->setData("disciplines", $disciplines);
         $this->setData("courseProject", $courseProject);
+        $this->setData("disciplineId", $courseProject->discipline_id);
         $this->renderView("_course_projects/add.tpl");
     }
 }
