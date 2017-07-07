@@ -547,7 +547,8 @@ class CBaseController {
         $this->addCSSInclude("_core/jTableSort/style.css");
         $this->addJQInlineInclude('$("#'.$id.'").addClass("tablesorter");');
         $this->addJQInlineInclude('$("#'.$id.'").tablesorter({
-            widthFixed: true
+            widthFixed: true,
+            headers: { 0: { sorter: false}, 1: {sorter: false}, 2: {sorter: false} }
         });');
     }
     public function setTablePager($id) {
