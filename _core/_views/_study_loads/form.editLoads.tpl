@@ -8,16 +8,15 @@
 <style>
 	.vert-text {
 		-webkit-transform: rotate(180deg); 
-		-moz-transform: rotate(180deg);
-		-ms-transform: rotate(180deg);
+		-moz-transform: rotate(270deg);
+		-ms-transform: rotate(270deg);
 		-o-transform: rotate(180deg);
-		transform: rotate(180deg);
 		
 		-webkit-writing-mode: vertical-rl;
-		min-width: 30px;
+		max-width: 30px;
 	}
 	.input-load {
-        width: 50px;
+        width: 40px;
         padding: 1px !important;
         margin: 0px !important;
         border-radius: 0px !important;
@@ -37,6 +36,8 @@
      {$number}
   {/if}
 {/function}
+
+	{include file="_study_loads/subform.showLoads.tpl"}
 
 	{if $loadsFall->getCount() == 0 and $loadsSpring->getCount() == 0}
 		Нет объектов для отображения
