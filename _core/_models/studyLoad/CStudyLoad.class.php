@@ -2,7 +2,7 @@
 /**
  * Учебная нагрузка
  */
-class CStudyLoad extends CActiveModel {
+class CStudyLoad extends CActiveModel implements IVersionControl {
     protected $_table = TABLE_WORKLOAD;
     protected $_direction = null;
     protected $_studyLevel = null;
@@ -56,8 +56,7 @@ class CStudyLoad extends CActiveModel {
                 "joinTable" => TABLE_WORKLOAD_STUDY_GROUPS,
                 "leftCondition" => "workload_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
                 "rightKey" => "group_id",
-                "managerClass" => "CStaffManager",
-                "managerGetObject" => "getStudentGroup"
+                "targetClass" => "CStudentGroup"
             ),
     		"createdBy" => array(
     			"relationPower" => RELATION_HAS_ONE,
@@ -85,10 +84,10 @@ class CStudyLoad extends CActiveModel {
     		"level_id" => "Курс",
     		"group_id" => "Учебная группа",
     		"load_type_id" => "Тип нагрузки",
-    		"groups_count" => "Число групп",
-    		"students_count" => "Число студентов",
+    		"groups_count" => "Число&nbsp;групп", // &nbsp; - для написания без переноса в заголовке таблицы
+    		"students_count" => "Число&nbsp;студентов",
     		"comment" => "Комментарий",
-    		"on_filial" => "Надбавка за филиалы",
+    		"on_filial" => "Надбавка&nbsp;за филиалы",
     		"students_count_add" => "число коммерческих студентов",
     		"study_groups" => "Студенческие группы"
     	);

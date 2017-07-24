@@ -200,22 +200,32 @@ class CStudyLoadTable extends CFormModel {
     
     /**
      * Сохранение значений для редактирования одной нагрузки
+     * 
+     * @param int $lastId - идентификатор последней сохранённой записи
      */
-    public function save() {
-    	// удаляем старые данные
+    public function save($lastId) {
+    	// архивируем старые данные
     	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD_WORKS, "workload_id=".$this->getLoad()->getId())->getItems() as $ar) {
-    		$ar->remove();
+    		$ar->setItemValue("_version_of", $this->getLoad()->getId());
+    		$ar->setItemValue("_created_at", date('Y-m-d G:i:s'));
+    		$ar->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
+    		$ar->setItemValue("_is_last_version", 0);
+    		$ar->setTable(TABLE_WORKLOAD_WORKS);
+    		$ar->update();
     	}
     	// добавляем новые
     	foreach ($this->data as $typeId=>$works) {
     		foreach ($works as $kindId=>$value) {
     			$obj = new CStudyLoadWork();
     			
-    			$obj->workload_id = $this->getLoad()->getId();
+    			$obj->workload_id = $lastId;
     			$obj->type_id = $typeId;
     			$obj->kind_id = $kindId;
     			$obj->workload = $value;
-    			$obj->_created_by = $this->getLoad()->_created_by;
+    			$obj->_version_of = $this->getLoad()->getId();
+    			$obj->_created_at = date('Y-m-d G:i:s');
+    			$obj->_created_by = CSession::getCurrentPerson()->getId();
+    			$obj->_is_last_version = 1;
     			$obj->save();
     		}
     	}

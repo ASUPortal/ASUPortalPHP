@@ -349,19 +349,19 @@ class CStudyLoadController extends CBaseController {
         $studyLoad = new CStudyLoad();
         $studyLoad->setAttributes(CRequest::getArray($studyLoad::getClassName()));
         if ($studyLoad->validate()) {
-            $studyLoad->save();
+            $lastId = $studyLoad->save();
             
             // очистка кэша
             CStudyLoadService::clearCache($studyLoad);
             
             $object = new CStudyLoadTable($studyLoad);
             $object->setAttributes(CRequest::getArray($object::getClassName()));
-            $object->save();
+            $object->save($lastId);
             
             $kadriId = $studyLoad->person_id;
             $yearId = $studyLoad->year_id;
             if ($this->continueEdit()) {
-                $this->redirect("?action=edit&id=".$studyLoad->getId());
+                $this->redirect("?action=edit&id=".$lastId);
             } else {
                 $this->redirect("?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId."&base=1&additional=1&premium=1&byTime=1");
             }
@@ -396,7 +396,10 @@ class CStudyLoadController extends CBaseController {
     				$obj->type_id = $typeId;
     				$obj->kind_id = $kindId;
     				$obj->workload = $value;
-    				$obj->_created_by = $studyLoad->_created_by;
+    				$obj->_version_of = $studyLoad->getId();
+    				$obj->_created_at = date('Y-m-d G:i:s');
+    				$obj->_created_by = CSession::getCurrentPerson()->getId();
+    				$obj->_is_last_version = 1;
     				$obj->save();
     			}
     		}

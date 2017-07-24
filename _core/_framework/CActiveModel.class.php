@@ -37,7 +37,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
         if (is_a($this, "IVersionControl")) {
             $aRecord->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
             $aRecord->setItemValue("_created_at", date('Y-m-d G:i:s'));
-            $aRecord->setItemValue("_version_of", 0);
+            $aRecord->setItemValue("_is_last_version", 0);
         }
         $this->_aRecord = $aRecord;
     }
@@ -76,6 +76,8 @@ class CActiveModel extends CModel implements IJSONSerializable{
     }
     /**
      * Сохранение или обновление данных модели
+     * 
+     * @return int $lastId - идентификатор последней сохранённой записи
      */
     public function save() {
         /**
@@ -100,38 +102,60 @@ class CActiveModel extends CModel implements IJSONSerializable{
                 } else {
                     $this->setId(mysql_insert_id());
                 }
+                $lastId = mysql_insert_id();
+                // для первого сохранения попытаемся сразу сохранить многие-ко-многим отношения, не учитывая версионирование
+                foreach ($this->relations() as $field=>$relation) {
+                	if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
+                		// сохраним старое значение на всякий случай
+                		$currentValue = $this->$field;
+                		// удалим все старые
+                		foreach (CActiveRecordProvider::getWithCondition($relation['joinTable'], $relation['leftCondition'])->getItems() as $ar) {
+                			$ar->remove();
+                		}
+                		// теперь сохраним новые
+                		foreach ($currentValue->getItems() as $key=>$value) {
+                			$ar = new CActiveRecord(array(
+                				CUtils::strLeft($relation['leftCondition'], " ") => $this->getId(),
+                				$relation['rightKey'] => $key,
+                				"id" => null
+                			));
+                			$ar->setTable($relation['joinTable']);
+                			$ar->insert();
+                		}
+                	}
+                }
             } else {
-                $this->updateModel();
-            }
-            // попытаемся сразу сохранить многие-ко-многим отношения
-            foreach ($this->relations() as $field=>$relation) {
-                if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
-                    // сохраним старое значение на всякий случай
-                    $currentValue = $this->$field;
-                    // удалим все старые
-                    foreach (CActiveRecordProvider::getWithCondition($relation['joinTable'], $relation['leftCondition'])->getItems() as $ar) {
-                        $ar->remove();
-                    }
-                    // теперь сохраним новые
-                    foreach ($currentValue->getItems() as $key=>$value) {
-                        $ar = new CActiveRecord(array(
-                            CUtils::strLeft($relation['leftCondition'], " ") => $this->getId(),
-                            $relation['rightKey'] => $key,
-                            "id" => null
-                        ));
-                        // @todo доделать
-                        if (array_key_exists("targetClass", $relation)) {
-                        	$targetClass = new $relation["targetClass"];
-                        	if (is_a($targetClass, "IVersionControl")) {
-                        		$currentAr->setItemValue("_version_of", $this->getId());
-                        		$currentAr->setItemValue("_created_at", date('Y-m-d G:i:s'));
-                        		$currentAr->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
-                        		$currentAr->setItemValue("_is_last_version", 1);
-                        	}
-                        }
-                        $ar->setTable($relation['joinTable']);
-                        $ar->insert();
-                    }
+                $lastId = $this->updateModel();
+                // при обновлении записи учитываем версионность
+                foreach ($this->relations() as $field=>$relation) {
+                	if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
+                		// сохраним старое значение на всякий случай
+                		$currentValue = $this->$field;
+                		// удалим все старые
+                		foreach (CActiveRecordProvider::getWithCondition($relation['joinTable'], $relation['leftCondition'])->getItems() as $ar) {
+                			$ar->remove();
+                		}
+                		// теперь сохраним новые
+                		foreach ($currentValue->getItems() as $key=>$value) {
+                			$ar = new CActiveRecord(array(
+                					CUtils::strLeft($relation['leftCondition'], " ") => $this->getId(),
+                					$relation['rightKey'] => $key,
+                					"id" => null
+                			));
+                			// если модель поддерживает версионирование, текущая запись становится архивной
+                			if (array_key_exists("targetClass", $relation)) {
+                				$targetClass = new $relation["targetClass"];
+                				if (is_a($targetClass, "IVersionControl")) {
+                					$ar->setItemValue("_version_of", $this->getId());
+                					$ar->setItemValue("_created_at", date('Y-m-d G:i:s'));
+                					$ar->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
+                					$ar->setItemValue("_is_last_version", 0);
+                				}
+                			}
+                			$ar->setTable($relation['joinTable']);
+                			$ar->insert();
+                		}
+                	}
                 }
             }
         } catch (Exception $e) {
@@ -146,6 +170,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
         if (CApp::getApp()->cache->hasCache($keySeek)) {
             CApp::getApp()->cache->set($keySeek, $this);
         }
+        return $lastId;
     }
     /**
      * Сохранение новой модели
@@ -155,6 +180,8 @@ class CActiveModel extends CModel implements IJSONSerializable{
     }
     /**
      * Обновление существующей модели
+     * 
+     * @return int $lastId - идентификатор последней сохранённой записи
      */
     private function updateModel() {
         // если эта модель поддерживает версионирование,
@@ -167,8 +194,38 @@ class CActiveModel extends CModel implements IJSONSerializable{
             $currentAr->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
             $currentAr->setItemValue("_is_last_version", 1);
             $currentAr->insert();
+            // получим идентификатор, сгенерированный при последнем INSERT-запросе
+            $lastId = mysql_insert_id();
+            foreach ($this->relations() as $field=>$relation) {
+            	if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
+            		$currentValue = $this->$field;
+            		foreach ($currentValue->getItems() as $key=>$value) {
+            			$ar = new CActiveRecord(array(
+            					CUtils::strLeft($relation['leftCondition'], " ") => $lastId,
+            					$relation['rightKey'] => $key,
+            					"id" => null
+            			));
+            			if (array_key_exists("targetClass", $relation)) {
+            				$targetClass = new $relation["targetClass"];
+            				if (is_a($targetClass, "IVersionControl")) {
+            					$ar->setItemValue("_version_of", $this->getId());
+            					$ar->setItemValue("_created_at", date('Y-m-d G:i:s'));
+            					$ar->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
+            					$ar->setItemValue("_is_last_version", 1);
+            				}
+            			}
+            			$ar->setTable($relation['joinTable']);
+            			$ar->insert();
+            		}
+            	}
+            }
+        }
+        // если модель поддерживает версионирование, текущая запись становится архивной
+        if (array_key_exists("targetClass", $relation)) {
+        	$this->getRecord()->setItemValue("_is_last_version", 0);
         }
         $this->getRecord()->update();
+        return $lastId;
     }
     /**
      * Установить значение id
