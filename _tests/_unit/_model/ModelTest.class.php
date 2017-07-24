@@ -11,6 +11,7 @@ $config = array(
         )
     )
 );
+ob_start();
 CApp::createApplication($config);
 CApp::getApp()->cache->set('application_settings_SYSTEM_LANGUAGE_DEFAULT', new CSetting(new CActiveRecord(array(
     'value' => 'ru'

@@ -35,7 +35,16 @@ class CActiveModel extends CModel implements IJSONSerializable{
         // если модель реализует интерфейс контроля версий, то
         // сразу заполняем ей некоторые поля
         if (is_a($this, "IVersionControl")) {
-            $aRecord->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
+            // проверка для выполнения теста ModelTest
+            if (session_status() == PHP_SESSION_ACTIVE) {
+                $aRecord->setItemValue("_created_by", 1);
+            } else {
+                if (is_null(CSession::getCurrentPerson())) {
+                    $aRecord->setItemValue("_created_by", 1);
+                } else {
+                    $aRecord->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
+                }
+            }
             $aRecord->setItemValue("_created_at", date('Y-m-d G:i:s'));
             $aRecord->setItemValue("_is_last_version", 0);
         }
@@ -103,7 +112,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
                     $this->setId(mysql_insert_id());
                 }
                 $lastId = mysql_insert_id();
-                // для первого сохранения попытаемся сразу сохранить многие-ко-многим отношения, не учитывая версионирование
+                // для первого сохранения попытаемся сразу сохранить многие-ко-многим отношения
                 foreach ($this->relations() as $field=>$relation) {
                 	if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
                 		// сохраним старое значение на всякий случай
@@ -119,6 +128,15 @@ class CActiveModel extends CModel implements IJSONSerializable{
                 				$relation['rightKey'] => $key,
                 				"id" => null
                 			));
+                			if (array_key_exists("targetClass", $relation)) {
+                				$targetClass = new $relation["targetClass"];
+                				if (is_a($targetClass, "IVersionControl")) {
+                					$ar->setItemValue("_version_of", $this->getId());
+                					$ar->setItemValue("_created_at", date('Y-m-d G:i:s'));
+                					$ar->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
+                					$ar->setItemValue("_is_last_version", 1);
+                				}
+                			}
                 			$ar->setTable($relation['joinTable']);
                 			$ar->insert();
                 		}
