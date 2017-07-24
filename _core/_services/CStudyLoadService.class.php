@@ -43,7 +43,7 @@ class CStudyLoadService {
      */
     public static function getStudyLoadsByYear(CPerson $person, CTerm $year) {
         $loads = new CArrayList();
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId())->getItems() as $item) {
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId()." AND _is_last_version = 1")->getItems() as $item) {
             $study = new CStudyLoad($item);
             $loads->add($study->getId(), $study);
         }
@@ -58,7 +58,7 @@ class CStudyLoadService {
      */
     public static function getAllStudyLoadsByYear(CTerm $year) {
     	$loads = new CArrayList();
-    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "year_id = ".$year->getId())->getItems() as $item) {
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "year_id = ".$year->getId()." AND _is_last_version = 1")->getItems() as $item) {
     		$study = new CStudyLoad($item);
     		$loads->add($study->getId(), $study);
     	}
@@ -74,7 +74,7 @@ class CStudyLoadService {
      */
     public static function getAllStudyLoadsByYearAndPerson(CPerson $person, CTerm $year) {
     	$loads = new CArrayList();
-    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId())->getItems() as $item) {
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId()." AND _is_last_version = 1")->getItems() as $item) {
     		$study = new CStudyLoad($item);
     		$loads->add($study->getId(), $study);
     	}
@@ -91,7 +91,7 @@ class CStudyLoadService {
      */
     public static function getStudyLoadsByYearAndLoadType(CPerson $person, CTerm $year, $loadTypes) {
     	$loads = new CArrayList();
-    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId()." AND load_type_id IN (".implode($loadTypes, ", ").")")->getItems() as $item) {
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId()." AND load_type_id IN (".implode($loadTypes, ", ").") AND _is_last_version = 1")->getItems() as $item) {
     		$study = new CStudyLoad($item);
     		$loads->add($study->getId(), $study);
     	}
@@ -111,7 +111,7 @@ class CStudyLoadService {
     	$loadTypes = CStudyLoadService::getLoadTypesByGlobalRequestVariables($requestVariables);
     	
     	$loads = new CArrayList();
-    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId()." AND load_type_id IN (".implode($loadTypes, ", ").")")->getItems() as $item) {
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId()." AND load_type_id IN (".implode($loadTypes, ", ").") AND _is_last_version = 1")->getItems() as $item) {
     		$study = new CStudyLoad($item);
     		$loads->add($study->getId(), $study);
     	}
@@ -149,7 +149,7 @@ class CStudyLoadService {
      */
     public static function getLecturersNameByDiscipline(CTerm $discipline) {
     	$lecturers = new CArrayList();
-    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "discipline_id = ".$discipline->getId())->getItems() as $item) {
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "discipline_id = ".$discipline->getId()." AND _is_last_version = 1")->getItems() as $item) {
     		$study = new CStudyLoad($item);
     		$lecturers->add($study->lecturer->getId(), $study->lecturer);
     	}
@@ -220,9 +220,9 @@ class CStudyLoadService {
     			$query->leftJoin(TABLE_POSTS." as dolgnost", "dolgnost.id = kadri.dolgnost");
     			$query->leftJoin(TABLE_HOURS_RATE." as hr", "hr.dolgnost_id = kadri.dolgnost");
     			if (!is_null($person)) {
-    				$query->condition("loads.year_id = ".$selectedYear." and loads.person_id = ".$person->getId());
+    				$query->condition("loads.year_id = ".$selectedYear." and loads.person_id = ".$person->getId()." AND loads._is_last_version = 1");
     			} else {
-    				$query->condition("loads.year_id = ".$selectedYear);
+    				$query->condition("loads.year_id = ".$selectedYear." AND loads._is_last_version = 1");
     			}
     			$query->group("kadri.id");
     			$query->order("kadri.fio_short asc");

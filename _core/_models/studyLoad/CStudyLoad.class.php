@@ -54,7 +54,7 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
                 "relationPower" => RELATION_MANY_TO_MANY,
                 "storageProperty" => "_study_groups",
                 "joinTable" => TABLE_WORKLOAD_STUDY_GROUPS,
-                "leftCondition" => "workload_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "leftCondition" => "workload_id = ". (is_null($this->getId()) ? 0 : $this->getId()) . " AND _is_last_version = 1",
                 "rightKey" => "group_id",
                 "targetClass" => "CStudentGroup"
             ),
@@ -69,7 +69,7 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_works",
                 "storageTable" => TABLE_WORKLOAD_WORKS,
-                "storageCondition" => "workload_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "storageCondition" => "workload_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " AND _is_last_version = 1",
                 "targetClass" => "CStudyLoadWork"
             )
     	);
