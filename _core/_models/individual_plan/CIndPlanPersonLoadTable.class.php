@@ -236,10 +236,10 @@ class CIndPlanPersonLoadTable extends CFormModel{
      *      1 - только контракт
      *      2 - сумма бюджета и контракта
      *
-     * @param int $typeId
-     * @param array $params
-     * @param int $period
-     * @param int $dataType
+     * @param int $typeId - id типов нагрузок (лекция, практика, т.п.) из справочника учебных работ
+     * @param array $params - параметры
+     * @param int $period - семестр
+     * @param int $dataType - тип данных
      * @return array
      */
     private function getLoadPlanByType($typeId, $params = array(), $period = 1, $dataType = 2) {

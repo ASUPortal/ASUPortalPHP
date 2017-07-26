@@ -54,9 +54,9 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
                 "relationPower" => RELATION_MANY_TO_MANY,
                 "storageProperty" => "_study_groups",
                 "joinTable" => TABLE_WORKLOAD_STUDY_GROUPS,
-                "leftCondition" => "workload_id = ". (is_null($this->getId()) ? 0 : $this->getId()) . " AND _is_last_version = 1",
+                "leftCondition" => "workload_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
                 "rightKey" => "group_id",
-                "targetClass" => "CStudentGroup"
+                "targetClass" => "CStudentGroupVersionControl"
             ),
     		"createdBy" => array(
     			"relationPower" => RELATION_HAS_ONE,
@@ -69,7 +69,7 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_works",
                 "storageTable" => TABLE_WORKLOAD_WORKS,
-                "storageCondition" => "workload_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " AND _is_last_version = 1",
+                "storageCondition" => "workload_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CStudyLoadWork"
             )
     	);
@@ -202,9 +202,8 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
     
     /**
      * Сумма часов по видам работ учебной нагрузки для выездов в филиалы
-     *
-     * @param $type
-     * @return CArrayList
+     * 
+     * @return float
      */
     public function getSumWorksValueWithFilials() {
     	$value = 0;

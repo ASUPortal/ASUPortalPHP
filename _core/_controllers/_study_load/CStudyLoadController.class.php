@@ -94,7 +94,6 @@ class CStudyLoadController extends CBaseController {
         $studyLoad = new CStudyLoad();
         $studyLoad->person_id = CRequest::getInt("kadri_id");
         $studyLoad->year_id = CRequest::getInt("year_id");
-        $studyLoad->_created_by = CSession::getCurrentPerson()->getId();
         $this->setData("studyLoad", $studyLoad);
         $this->addActionsMenuItem(array(
             array(
@@ -109,7 +108,6 @@ class CStudyLoadController extends CBaseController {
         $studyLoad = CStudyLoadService::getStudyLoad(CRequest::getInt("id"));
         $kadriId = $studyLoad->person_id;
         $yearId = $studyLoad->year_id;
-        $studyLoad->_created_by = CSession::getCurrentPerson()->getId();
         $this->setData("studyLoad", $studyLoad);
         $this->addActionsMenuItem(array(
             array(
@@ -396,10 +394,6 @@ class CStudyLoadController extends CBaseController {
     				$obj->type_id = $typeId;
     				$obj->kind_id = $kindId;
     				$obj->workload = $value;
-    				$obj->_version_of = $studyLoad->getId();
-    				$obj->_created_at = date('Y-m-d G:i:s');
-    				$obj->_created_by = CSession::getCurrentPerson()->getId();
-    				$obj->_is_last_version = 1;
     				$obj->save();
     			}
     		}

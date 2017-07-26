@@ -109,33 +109,35 @@
 </form>
 
 <script>
-	$(window).load(function() {
-		updateTableNumeration();		 
-	});
-	jQuery(document).ready(function(){
-		jQuery("input").on("change", function(){
-			$.ajax({
-				success: function(data) {
-					updateTableNumeration();
-				}
+	$(document).ready(function() {
+		$(window).load(function() {
+			updateTableNumeration();		 
+		});
+		jQuery(document).ready(function(){
+			jQuery("input").on("change", function(){
+				$.ajax({
+					success: function(data) {
+						updateTableNumeration();
+					}
+				});
+			});
+			jQuery(".header").on("click", function(){
+				$.ajax({
+					success: function(data) {
+						updateTableNumeration();
+					}
+				});
 			});
 		});
-		jQuery(".header").on("click", function(){
-			$.ajax({
-				success: function(data) {
-					updateTableNumeration();
+		function updateTableNumeration() {
+			$('.table tbody tr:not([style="display: none;"])').each(function(i) {
+				$(this).find('.count').text(i+1);
+				if (i % 2 === 0) {
+					$(this).find("td[rel='stripe']").css('background', '#c5d0e6');
+				} else {
+					$(this).find("td[rel='stripe']").css('background', '#DFEFFF');
 				}
 			});
-		});
+		}
 	});
-	function updateTableNumeration() {
-		$('.table tbody tr:not([style="display: none;"])').each(function(i) {
-			$(this).find('.count').text(i+1);
-			if (i % 2 === 0) {
-				$(this).find("td[rel='stripe']").css('background', '#c5d0e6');
-			} else {
-				$(this).find("td[rel='stripe']").css('background', '#DFEFFF');
-			}
-		});
-	}
 </script>
