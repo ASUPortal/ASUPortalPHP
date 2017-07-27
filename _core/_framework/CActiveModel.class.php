@@ -138,12 +138,9 @@ class CActiveModel extends CModel implements IJSONSerializable{
     	// сохраним старое значение на всякий случай
     	$currentValue = $this->$field;
     	// если модель не поддерживает версионирование, удалим все старые
-    	if (array_key_exists("targetClass", $relation)) {
-    		$targetClass = new $relation["targetClass"];
-    		if (!is_a($targetClass, "IVersionControl")) {
-    			foreach (CActiveRecordProvider::getWithCondition($relation['joinTable'], $relation['leftCondition'])->getItems() as $ar) {
-    				$ar->remove();
-    			}
+    	if (!is_a($this, "IVersionControl")) {
+    		foreach (CActiveRecordProvider::getWithCondition($relation['joinTable'], $relation['leftCondition'])->getItems() as $ar) {
+    			$ar->remove();
     		}
     	}
     	// теперь сохраним новые
@@ -192,6 +189,12 @@ class CActiveModel extends CModel implements IJSONSerializable{
      * @return int $lastId - идентификатор последней сохранённой записи
      */
     private function updateModel() {
+        // получим идентификатор, сгенерированный при последнем INSERT-запросе
+        if (is_object(CApp::getApp()->getDbConnection())) {
+            $lastId = CApp::getApp()->getDbConnection()->lastInsertId();
+        } else {
+            $lastId = mysql_insert_id();
+        }
         // если эта модель поддерживает версионирование,
         // то сначала делаем копию текущей записи, а затем
         // сохраняем данные

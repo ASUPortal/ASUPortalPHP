@@ -63,18 +63,20 @@
     {/if}
 
 <script>
-	$(window).load(function() {
-		updateTableStripe();		 
-	});
-	function updateTableStripe() {
-		$('.table tr').each(function(i) {
-			if (i % 2 === 0) {
-				$(this).find("td").css('background', '#c5d0e6');
-			} else {
-				$(this).find("td").css('background', '#DFEFFF');
-			}
+	$(document).ready(function() {
+		$(window).load(function() {
+			updateTableStripe();		 
 		});
-	}
+		function updateTableStripe() {
+			$('.table tr').each(function(i) {
+				if (i % 2 === 0) {
+					$(this).find("td").css('background', '#c5d0e6');
+				} else {
+					$(this).find("td").css('background', '#DFEFFF');
+				}
+			});
+		}
+	});
 </script>
 {/block}
 
