@@ -10,15 +10,22 @@ class CVersionControlService {
 	/**
 	 * Получить все версии записи по id и классу
 	 * 
-	 * @param int $id
+	 * @param int $id - идентификатор последней записи
+	 * @param string $table - таблица, из которой берём значения
 	 * @return array
 	 */
-	public function getVersions($id, $class, $table) {
-		return $this->tree($id, $class, $table);
+	public function getVersions($id, $table) {
+		return $this->tree($id, $table);
 	}
 	
-	function tree($id, $class, $table) {
-		
+	/**
+	 * Рекурсивное получение записей по id версий
+	 * 
+	 * @param int $id - идентификатор последней записи
+	 * @param string $table - таблица, из которой берём значения
+	 * @return array
+	 */
+	function tree($id, $table) {
 		$query = new CQuery();
 		$query->select("t.*")
 			->from($table." as t")
@@ -26,7 +33,7 @@ class CVersionControlService {
 		$item = $query->execute()->getFirstItem();
 		array_push($this->items, $item);
 		if ($item["_version_of"] != 0) {
-			$this->tree($item["_version_of"], $class, $table);
+			$this->tree($item["_version_of"], $table);
 		}
 		return $this->items;
 	}

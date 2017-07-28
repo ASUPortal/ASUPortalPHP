@@ -22,7 +22,7 @@ class CVersionControlsController extends CBaseController {
     	
     	$items = new CArrayList();
     	$version = new CVersionControlService();
-    	foreach ($version->getVersions(CRequest::getInt("id"), $class, $table) as $item) {
+    	foreach ($version->getVersions(CRequest::getInt("id"), $table) as $item) {
     		if (!is_null($item)) {
     			$item = new $class(new CActiveRecord($item));
     			$items->add($item->id, $item);
