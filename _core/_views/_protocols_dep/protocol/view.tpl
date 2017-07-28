@@ -5,7 +5,7 @@
 	
 	<h4><div align=center><b>ПОВЕСТКА ДНЯ</b></div></h4>
 	
-	<br><pre><big>{$protocol->program_content}</big></pre><br>
+	<br>{str_replace("\r\n", "<br>", $protocol->program_content)}<br>
 	
 	<h4><div align=center>Пункты повестки</div></h4>
     {include file="_protocols_dep/protocol/subform.points.tpl"}
