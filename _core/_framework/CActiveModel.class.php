@@ -105,10 +105,12 @@ class CActiveModel extends CModel implements IJSONSerializable{
                 }
             } else {
                 $lastId = $this->updateModel();
-                // при обновлении записи учитываем версионность
-                foreach ($this->relations() as $field=>$relation) {
-                	if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
-                		$this->saveRelationManyToMany($field, $relation, $this->getId(), 0);
+                // обновляем многие-ко-многим отношения только если модель не поддерживает версионирование
+                if (!is_a($this, "IVersionControl")) {
+                	foreach ($this->relations() as $field=>$relation) {
+                		if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
+                			$this->saveRelationManyToMany($field, $relation, $this->getId(), 0);
+                		}
                 	}
                 }
             }
@@ -219,7 +221,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
         }
         // если модель поддерживает версионирование, текущая запись становится архивной
         if (is_a($this, "IVersionControl")) {
-        	$this->getRecord()->setItemValue("_version_of", $this->getId());
+        	// не меняем версию текущей записи
         	$this->getRecord()->setItemValue("_created_at", date('Y-m-d G:i:s'));
         	$this->getRecord()->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
         	$this->getRecord()->setItemValue("_is_last_version", 0);

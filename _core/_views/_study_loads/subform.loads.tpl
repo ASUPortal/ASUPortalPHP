@@ -3,6 +3,7 @@
         <tr>
             {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
             	<th>&nbsp;</th>
+            	<th>&nbsp;</th>
             {/if}
             <th style="vertical-align:middle; text-align:center;">#</th>
             <th style="vertical-align:middle; text-align:center;">{CHtml::activeViewGroupSelect("id", $studyLoads->getFirstItem(), true)}</th>
@@ -26,7 +27,7 @@
         </tr>
         <tr>
 	        {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
-	            {$ths = 13}
+	            {$ths = 14}
 	        {else}
 	            {$ths = 12}
 	        {/if}
@@ -38,7 +39,8 @@
         {foreach $studyLoads->getItems() as $studyLoad}
 	        <tr>
 	            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
-	            	<td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузку')) { location.href='?action=delete&id={$studyLoad->getId()}'; }; return false;"></a></td>
+	            	<td><a href="#" class="icon-trash"  title="Удалить" onclick="if (confirm('Действительно удалить нагрузку')) { location.href='?action=delete&id={$studyLoad->getId()}'; }; return false;"></a></td>
+	            	<td><a href="../../_modules/_version_controls/index.php?action=index&id={$studyLoad->getId()}&module=_study_loads&class=CStudyLoad" class="icon-list-alt" title="Посмотреть версии" target="_blank"></a></td>
 	            {/if}
 	            <td>{counter}</td>
 	            <td>{CHtml::activeViewGroupSelect("id", $studyLoad, false, true)}</td>
@@ -67,6 +69,7 @@
         {/foreach}
         <tr>
 			{if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+            	<td>&nbsp;</td>
             	<td>&nbsp;</td>
             {/if}
 			<td>&nbsp;</td>
