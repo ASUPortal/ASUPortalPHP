@@ -8,7 +8,7 @@ class CVersionControlService {
 	protected $items = array();
 	
 	/**
-	 * Получить все версии записи по id и классу
+	 * Получить все версии записи по id и таблице
 	 * 
 	 * @param int $id - идентификатор последней записи
 	 * @param string $table - таблица, из которой берём значения
