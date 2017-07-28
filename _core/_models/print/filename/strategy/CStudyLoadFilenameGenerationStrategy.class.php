@@ -3,9 +3,9 @@
 /**
  * Стратегия генерации имён файлов для учебных нагрузок
  *
- * Class CStudentFilenameGenerationStrategy
+ * Class CStudyLoadFilenameGenerationStrategy
  */
-class CStudyLoadGenerationStrategy implements IPrintFilenameGenerationStrategy {
+class CStudyLoadFilenameGenerationStrategy implements IPrintFilenameGenerationStrategy {
     private $form;
     private $object;
 
