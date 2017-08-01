@@ -8,12 +8,17 @@ class CStudyLoadFallPartTotal extends CAbstractPrintClassField {
 
     public function getFieldDescription()
     {
-        return "Используется при печати учебной нагрузки, принимает параметр globalRequestVariables (значения глобальных переменных запроса) учебной нагрузки";
+        return "Используется при печати учебной нагрузки, принимает параметр url (значения параметров) учебной нагрузки";
     }
 
     public function getParentClassField()
     {
 
+    }
+    
+    public function getYearPart()
+    {
+    	return CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::FALL);
     }
 
     public function getFieldType()
@@ -23,13 +28,12 @@ class CStudyLoadFallPartTotal extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$globalRequestVariables = CRequest::getString("id");
-    	$requestVariables = unserialize(urldecode($globalRequestVariables));
+    	$url = CRequest::getString("id");
     	 
-    	$lecturer = CStaffManager::getPerson($requestVariables["kadri_id"]);
-    	$year = CTaxonomyManager::getYear($requestVariables["year_id"]);
-    	$part = CStudyLoadYearPartsConstants::FALL;
-    	$loadTypes = CStudyLoadService::getLoadTypesByGlobalRequestVariables($requestVariables);
+    	$lecturer = CStaffManager::getPerson(UrlBuilder::getValueByParam($url, "kadri_id"));
+    	$year = CTaxonomyManager::getYear(UrlBuilder::getValueByParam($url, "year_id"));
+    	$part = $this->getYearPart();
+    	$loadTypes = CStudyLoadService::getLoadTypesByUrl($url);
     	
     	$result = array();
     	$dataRow = array();
@@ -40,26 +44,26 @@ class CStudyLoadFallPartTotal extends CAbstractPrintClassField {
     	$dataRow[4] = "";
     	$dataRow[5] = "";
     	$dataRow[6] = "";
-    	$i = 7;
+    	$row = 7;
     	foreach (CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes)->getItems() as $typeId=>$rows) {
     		foreach ($rows as $kindId=>$value) {
     			if (!in_array($kindId, array(0))) {
     				if ($value == 0) {
-    					$dataRow[$i] = "";
+    					$dataRow[$row] = "";
     				} else {
-    					$dataRow[$i] = number_format($value,1,',','');
+    					$dataRow[$row] = number_format($value,1,',','');
     				}
     			}
     		}
     		$i++;
     	}
-    	$k = CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes)->getCount()+7;
-    	$dataRow[$k] = number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes),1,',','');
+    	$rowTotal = CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes)->getCount()+7;
+    	$dataRow[$rowTotal] = number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes),1,',','');
     	$onFilial = CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPartWithFilials($lecturer, $year, $part, $loadTypes);
     	if ($onFilial != 0) {
-    		$dataRow[$k+1] = number_format($onFilial,1,',','');
+    		$dataRow[$rowTotal+1] = number_format($onFilial,1,',','');
     	} else {
-    		$dataRow[$k+1] = "";
+    		$dataRow[$rowTotal+1] = "";
     	}
     	$result[] = $dataRow;
     	

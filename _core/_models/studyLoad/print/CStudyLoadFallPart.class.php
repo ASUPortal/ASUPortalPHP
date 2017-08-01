@@ -8,12 +8,17 @@ class CStudyLoadFallPart extends CAbstractPrintClassField {
 
     public function getFieldDescription()
     {
-        return "Используется при печати учебной нагрузки, принимает параметр globalRequestVariables (значения глобальных переменных запроса) учебной нагрузки";
+        return "Используется при печати учебной нагрузки, принимает параметр url (значения параметров) учебной нагрузки";
     }
 
     public function getParentClassField()
     {
 
+    }
+    
+    public function getYearPart()
+    {
+    	return CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::FALL);
     }
 
     public function getFieldType()
@@ -23,10 +28,10 @@ class CStudyLoadFallPart extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$globalRequestVariables = CRequest::getString("id");
-    	$loads = CStudyLoadService::getStudyLoadsByYearAndLoadTypeByGlobalRequestVariables($globalRequestVariables);
+    	$url = CRequest::getString("id");
+    	$loads = CStudyLoadService::getStudyLoadsByYearAndLoadTypeByUrl($url);
     	
-    	$studyLoads = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadYearPartsConstants::FALL);
+    	$studyLoads = CStudyLoadService::getStudyLoadsByPart($loads, $this->getYearPart());
     	 
     	$result = array();
     	foreach ($studyLoads->getItems() as $studyLoad) {
@@ -38,25 +43,25 @@ class CStudyLoadFallPart extends CAbstractPrintClassField {
     		$dataRow[4] = $studyLoad->studyLevel->name;
     		$dataRow[5] = $studyLoad->groups_count;
     		$dataRow[6] = $studyLoad->students_count + $studyLoad->students_contract_count;
-    		$i = 7;
+    		$row = 7;
     		foreach ($studyLoad->getStudyLoadTable()->getTableTotal() as $typeId=>$rows) {
     			foreach ($rows as $kindId=>$value) {
     				if (!in_array($kindId, array(0))) {
     					if ($value == 0) {
-    						$dataRow[$i] = "";
+    						$dataRow[$row] = "";
     					} else {
-    						$dataRow[$i] = number_format($value,1,',','');
+    						$dataRow[$row] = number_format($value,1,',','');
     					}
     				}
     			}
-    			$i++;
+    			$row++;
     		}
-    		$k = count($studyLoad->getStudyLoadTable()->getTableTotal())+7;
-    		$dataRow[$k] = number_format($studyLoad->getSumWorksValue(),1,',','');
+    		$rowTotal = count($studyLoad->getStudyLoadTable()->getTableTotal())+7;
+    		$dataRow[$rowTotal] = number_format($studyLoad->getSumWorksValue(),1,',','');
     		if ($studyLoad->on_filial) {
-    			$dataRow[$k+1] = number_format($studyLoad->getSumWorksValueWithFilials(),1,',','');
+    			$dataRow[$rowTotal+1] = number_format($studyLoad->getWorkWithFilialsTotals(),1,',','');
     		} else {
-    			$dataRow[$k+1] = "";
+    			$dataRow[$rowTotal+1] = "";
     		}
     		$result[] = $dataRow;
     	}

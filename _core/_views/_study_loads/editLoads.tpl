@@ -38,7 +38,7 @@
 			
 			{$studyLoads = $loadsFall}
 			{$loadsId = "loadsFall"}
-			{$part = CStudyLoadYearPartsConstants::FALL}
+			{$part = CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::FALL)}
 			
 			{include file="_study_loads/subform.loads.tpl"}
 		{/if}
@@ -47,7 +47,7 @@
 			
 			{$studyLoads = $loadsSpring}
 			{$loadsId = "loadsSpring"}
-			{$part = CStudyLoadYearPartsConstants::SPRING}
+			{$part = CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::SPRING)}
 			
 			{include file="_study_loads/subform.loads.tpl"}
 		{/if}

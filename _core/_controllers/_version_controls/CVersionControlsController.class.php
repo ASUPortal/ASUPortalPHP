@@ -17,12 +17,9 @@ class CVersionControlsController extends CBaseController {
     public function actionIndex() {
     	$module = CRequest::getString("module");
     	$class = CRequest::getString("class");
-    	$simpleClass = new $class();
-    	$table = $simpleClass->getRecord()->getTable();
     	
     	$items = new CArrayList();
-    	$version = new CVersionControlService();
-    	foreach ($version->getVersions(CRequest::getInt("id"), $table) as $item) {
+    	foreach (CVersionControlService::getVersions(CRequest::getInt("id"), $class) as $item) {
     		if (!is_null($item)) {
     			$item = new $class(new CActiveRecord($item));
     			$items->add($item->id, $item);
@@ -47,15 +44,8 @@ class CVersionControlsController extends CBaseController {
     	$itemId = CRequest::getInt("itemId");
     	$module = CRequest::getString("module");
     	$class = CRequest::getString("class");
-    	$simpleClass = new $class();
-    	$table = $simpleClass->getRecord()->getTable();
     	
-    	$ar = CActiveRecordProvider::getById($table, CRequest::getInt("id"));
-    	if (!is_null($ar)) {
-    		$item = new $class($ar);
-    		$item->remove();
-    	}
-    	
+    	CVersionControlService::delete(CRequest::getInt("id"), $class);
         $this->redirect("?action=index&id=".$itemId."&module=".$module."&class=".$class);
     }
 }

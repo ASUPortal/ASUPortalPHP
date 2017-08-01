@@ -21,11 +21,10 @@ class CStudyLoadFilenameGenerationStrategy implements IPrintFilenameGenerationSt
      * @return String
      */
     public function getFilename() {
-        $globalRequestVariables = CRequest::getString("id");
-        $requestVariables = unserialize(urldecode($globalRequestVariables));
+        $url = CRequest::getString("id");
          
-        $lecturer = CStaffManager::getPerson($requestVariables["kadri_id"]);
-        $year = CTaxonomyManager::getYear($requestVariables["year_id"]);
+        $lecturer = CStaffManager::getPerson(UrlBuilder::getValueByParam($url, "kadri_id"));
+        $year = CTaxonomyManager::getYear(UrlBuilder::getValueByParam($url, "year_id"));
         
         if (!CSettingsManager::getSettingValue("template_filename_translit")) {
             $lecturer = $lecturer->getNameShort();

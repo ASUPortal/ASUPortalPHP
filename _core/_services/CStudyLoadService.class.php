@@ -99,16 +99,15 @@ class CStudyLoadService {
     }
     
     /**
-     * Лист нагрузок преподавателя по году и типу нагрузки, переданным через глобальные переменные запроса
+     * Лист нагрузок преподавателя по году и типу нагрузки, переданным через строку url с необходимыми параметрами
      *
-     * @param string $globalRequestVariables - значения глобальных переменных запроса
+     * @param string $url - строка с необходимыми параметрами
      * @return CArrayList
      */
-    public static function getStudyLoadsByYearAndLoadTypeByGlobalRequestVariables($globalRequestVariables) {
-    	$requestVariables = unserialize(urldecode($globalRequestVariables));
-    	$person = CStaffManager::getPerson($requestVariables["kadri_id"]);
-    	$year = CTaxonomyManager::getYear($requestVariables["year_id"]);
-    	$loadTypes = CStudyLoadService::getLoadTypesByGlobalRequestVariables($requestVariables);
+    public static function getStudyLoadsByYearAndLoadTypeByUrl($url) {
+    	$person = CStaffManager::getPerson(UrlBuilder::getValueByParam($url, "kadri_id"));
+    	$year = CTaxonomyManager::getYear(UrlBuilder::getValueByParam($url, "year_id"));
+    	$loadTypes = CStudyLoadService::getLoadTypesByUrl($url);
     	
     	$loads = new CArrayList();
     	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId()." AND load_type_id IN (".implode($loadTypes, ", ").") AND _is_last_version = 1")->getItems() as $item) {
@@ -119,24 +118,24 @@ class CStudyLoadService {
     }
     
     /**
-     * Типы нагрузок, переданные через глобальные переменные запроса
+     * Типы нагрузок, переданные через строку url с необходимыми параметрами
      *
-     * @param array $requestVariables - массив значений глобальных переменных запроса
+     * @param string $url - строка с необходимыми параметрами
      * @return array
      */
-    public static function getLoadTypesByGlobalRequestVariables($requestVariables) {
+    public static function getLoadTypesByUrl($url) {
     	$loadTypes = array();
-    	if ($requestVariables["base"] != 0) {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::MAIN;
+    	if (UrlBuilder::getValueByParam($url, "base") != 0) {
+    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::BASE)->getId();
     	}
-    	if ($requestVariables["additional"] != 0) {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::ADDITIONAL;
+    	if (UrlBuilder::getValueByParam($url, "additional") != 0) {
+    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::ADDITIONAL)->getId();
     	}
-    	if ($requestVariables["premium"] != 0) {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::PREMIUM;
+    	if (UrlBuilder::getValueByParam($url, "premium") != 0) {
+    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::PREMIUM)->getId();
     	}
-    	if ($requestVariables["byTime"] != 0) {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::BY_TIME;
+    	if (UrlBuilder::getValueByParam($url, "byTime") != 0) {
+    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::BY_TIME)->getId();
     	}
     	return $loadTypes;
     }
@@ -257,10 +256,10 @@ class CStudyLoadService {
     						$kind = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId();
     						foreach ($studyLoad->getWorksByKind($kind) as $work) {
     							$hoursSum += $work->workload;
-    							$hoursSumBase += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::MAIN);
-    							$hoursSumAdditional += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::ADDITIONAL);
-    							$hoursSumPremium += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::PREMIUM);
-    							$hoursSumByTime += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::BY_TIME);
+    							$hoursSumBase += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::BASE);
+    							$hoursSumAdditional += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::ADDITIONAL);
+    							$hoursSumPremium += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::PREMIUM);
+    							$hoursSumByTime += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::BY_TIME);
     						}
     					}
     					if ($isContract) {
@@ -268,10 +267,10 @@ class CStudyLoadService {
     						$kind = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId();
     						foreach ($studyLoad->getWorksByKind($kind) as $work) {
     							$hoursSum += $work->workload;
-    							$hoursSumBase += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::MAIN);
-    							$hoursSumAdditional += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::ADDITIONAL);
-    							$hoursSumPremium += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::PREMIUM);
-    							$hoursSumByTime += $work->getSumWorkHoursByLoadType(CStudyLoadTypeIDConstants::BY_TIME);
+    							$hoursSumBase += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::BASE);
+    							$hoursSumAdditional += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::ADDITIONAL);
+    							$hoursSumPremium += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::PREMIUM);
+    							$hoursSumByTime += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::BY_TIME);
     						}
     					}
     				}
@@ -348,12 +347,12 @@ class CStudyLoadService {
      *
      * @param CPerson $lecturer - преподаватель
      * @param CTerm $year - учебный год
-     * @param int $part - id семестра
+     * @param CYearPart $part - семестр
      * @param array $loadTypes - типы нагрузок
      * 
      * @return CArrayList
      */
-    public static function getStudyWorksTotalValuesByLecturerAndPart(CPerson $lecturer, CTerm $year, $part, $loadTypes) {
+    public static function getStudyWorksTotalValuesByLecturerAndPart(CPerson $lecturer, CTerm $year, CYearPart $part, $loadTypes) {
     	$result = new CArrayList();
     	foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
     		$row = array();
@@ -363,7 +362,7 @@ class CStudyLoadService {
     		
     		$sum = 0;
     		foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
-    			if ($studyLoad->year_part_id == $part) {
+    			if ($studyLoad->year_part_id == $part->getId()) {
     				$sum += $studyLoad->getLoadByType($term->getId());
     			}
     		}
@@ -410,12 +409,12 @@ class CStudyLoadService {
      *
      * @param CPerson $lecturer - преподаватель
      * @param CTerm $year - учебный год
-     * @param int $part - id семестра
+     * @param CYearPart $part - семестр
      * @param array $loadTypes - типы нагрузок
      *
      * @return int
      */
-    public static function getAllStudyWorksTotalValuesByLecturerAndPart(CPerson $lecturer, CTerm $year, $part, $loadTypes) {
+    public static function getAllStudyWorksTotalValuesByLecturerAndPart(CPerson $lecturer, CTerm $year, CYearPart $part, $loadTypes) {
     	$sum = 0;
     	foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
     		if ($studyLoad->year_part_id == $part) {
@@ -430,16 +429,16 @@ class CStudyLoadService {
      *
      * @param CPerson $lecturer - преподаватель
      * @param CTerm $year - учебный год
-     * @param int $part - id семестра
+     * @param CYearPart $part - семестр
      * @param array $loadTypes - типы нагрузок
      *
      * @return int
      */
-    public static function getAllStudyWorksTotalValuesByLecturerAndPartWithFilials(CPerson $lecturer, CTerm $year, $part, $loadTypes) {
+    public static function getAllStudyWorksTotalValuesByLecturerAndPartWithFilials(CPerson $lecturer, CTerm $year, CYearPart $part, $loadTypes) {
     	$sum = 0;
     	foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
     		if ($studyLoad->year_part_id == $part) {
-    			$sum += $studyLoad->getSumWorksValueWithFilials();
+    			$sum += $studyLoad->getWorkWithFilialsTotals();
     		}
     	}
     	return $sum;
@@ -475,7 +474,7 @@ class CStudyLoadService {
     	$sum = 0;
     	foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
     		$sum += $studyLoad->getSumWorksValue();
-    		$sum += $studyLoad->getSumWorksValueWithFilials();
+    		$sum += $studyLoad->getWorkWithFilialsTotals();
     	}
     	return $sum;
     }
@@ -621,17 +620,16 @@ class CStudyLoadService {
     
     /**
      * Лист нагрузок преподавателя по году и семестру
-     * (1 - осенний, 2 - весенний)
      *
-     * @param CArrayList $loads
-     * @param int $part
+     * @param CArrayList $loads - лист нагрузок
+     * @param CYearPart $part - семестр
      *
      * @return CArrayList
      */
-    public static function getStudyLoadsByPart($loads, $part) {
+    public static function getStudyLoadsByPart($loads, CYearPart $part) {
     	$result = new CArrayList();
     	foreach ($loads as $study) {
-    		if ($study->year_part_id == $part) {
+    		if ($study->year_part_id == $part->getId()) {
     			$result->add($study->getId(), $study);
     		}
     	}
@@ -680,8 +678,20 @@ class CStudyLoadService {
     			$newLoad->person_id = $lecturerId;
     			$newLoad->year_id = $yearId;
     			$newLoad->year_part_id = $partId;
-    			$newLoad->comment = $newLoad->comment." копия от ".CStaffManager::getPerson($lecturerId)->getNameShort().", ".CTaxonomyManager::getYear($yearId)->getValue().", ".CTaxonomyManager::getYearPart($partId)->getValue();
+    			$newLoad->comment = $newLoad->comment." копия от ".
+    						CStaffManager::getPerson($lecturerId)->getNameShort().", ".
+    						CTaxonomyManager::getYear($yearId)->getValue().", ".
+    						CTaxonomyManager::getYearPart($partId)->getValue();
     			$newLoad->save();
+    			/**
+    			 * Копируем значения по видам работ нагрузки
+    			 * @var CStudyLoadWork $work
+    			 */
+    			foreach ($studyLoad->works->getItems() as $work) {
+    				$newWork = $work->copy();
+    				$newWork->workload_id = $newLoad->getId();
+    				$newWork->save();
+    			}
     	
     			// удаляем оригинал нагрузки
     			CStudyLoadService::deleteStudyLoad($studyLoad);
@@ -692,9 +702,66 @@ class CStudyLoadService {
     			$newLoad->person_id = $lecturerId;
     			$newLoad->year_id = $yearId;
     			$newLoad->year_part_id = $partId;
-    			$newLoad->comment = $newLoad->comment." копия от ".CStaffManager::getPerson($lecturerId)->getNameShort().", ".CTaxonomyManager::getYear($yearId)->getValue().", ".CTaxonomyManager::getYearPart($partId)->getValue();
+    			$newLoad->comment = $newLoad->comment." копия от ".
+    						CStaffManager::getPerson($lecturerId)->getNameShort().", ".
+    						CTaxonomyManager::getYear($yearId)->getValue().", ".
+    						CTaxonomyManager::getYearPart($partId)->getValue();
     			$newLoad->save();
+    			/**
+    			 * Копируем значения по видам работ нагрузки
+    			 * @var CStudyLoadWork $work
+    			 */
+    			foreach ($studyLoad->works->getItems() as $work) {
+    				$newWork = $work->copy();
+    				$newWork->workload_id = $newLoad->getId();
+    				$newWork->save();
+    			}
     		}
     	}
+    }
+    
+    /**
+     * Тип нагрузки (лекция, практика и др.) из справочника учебных работ по псевдониму
+     * 
+     * @param string $alias
+     * @return CStudyLoadWork
+     */
+    public static function getWorktypeByAlias($alias) {
+    	$works = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD_WORK_TYPES, "name_hours_kind = '".$alias."'")->getItems() as $item) {
+    		$work = new CStudyLoadWork($item);
+    		$works->add($work->getId(), $work);
+    	}
+    	return $works->getFirstItem();
+    }
+    
+    /**
+     * Вид нагрузки (основная, дополнительная, надбавка, почасовка) по псевдониму
+     *
+     * @param string $alias
+     * @return CStudyLoadType
+     */
+    public static function getStudyLoadTypeByAlias($alias) {
+    	$types = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_PLANNED_TYPES, "comment = '".$alias."'")->getItems() as $item) {
+    		$type = new CStudyLoadType($item);
+    		$types->add($type->getId(), $type);
+    	}
+    	return $types->getFirstItem();
+    }
+    
+    /**
+     * Учебный семестр по псевдониму
+     *
+     * @param string $alias
+     * @return CYearPart
+     */
+    public static function getYearPartByAlias($alias) {
+    	$parts = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_YEAR_PARTS, "comment = '".$alias."'")->getItems() as $item) {
+    		$part = new CYearPart($item);
+    		$parts->add($part->getId(), $part);
+    	}
+    	return $parts->getFirstItem();
     }
 }

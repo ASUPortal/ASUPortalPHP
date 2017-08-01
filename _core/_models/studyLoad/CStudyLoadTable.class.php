@@ -82,10 +82,16 @@ class CStudyLoadTable extends CFormModel {
         	$row[0] = $type;
         	
         	// бюджет
-        	$row[CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId()] = $this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId(), $key);
+        	$row[CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->
+        			getTerm(CStudyLoadKindsConstants::BUDGET)->getId()] = 
+        				$this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->
+        						getTerm(CStudyLoadKindsConstants::BUDGET)->getId(), $key);
         	
         	// коммерция
-        	$row[CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId()] = $this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId(), $key);
+        	$row[CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->
+        			getTerm(CStudyLoadKindsConstants::CONTRACT)->getId()] = 
+        				$this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->
+        						getTerm(CStudyLoadKindsConstants::CONTRACT)->getId(), $key);
         	
         	$result[$key] = $row;
         } 
@@ -130,12 +136,18 @@ class CStudyLoadTable extends CFormModel {
     		
     		// бюджет
     		if ($isBudget) {
-    			$row[CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId()] = $this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId(), $key);
+    			$row[CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->
+    					getTerm(CStudyLoadKindsConstants::BUDGET)->getId()] = 
+    						$this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->
+    								getTerm(CStudyLoadKindsConstants::BUDGET)->getId(), $key);
     		}
     		
     		// коммерция
     		if ($isContract) {
-    			$row[CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId()] = $this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId(), $key);
+    			$row[CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->
+    					getTerm(CStudyLoadKindsConstants::CONTRACT)->getId()] = 
+    						$this->getLoadByKindAndType(CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->
+    								getTerm(CStudyLoadKindsConstants::CONTRACT)->getId(), $key);
     		}
     		
     		$result[$key] = $row;

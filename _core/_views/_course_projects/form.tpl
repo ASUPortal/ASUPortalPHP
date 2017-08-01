@@ -131,7 +131,7 @@
 	<div class="control-group">
 	    {CHtml::activeLabel("issuing_themes", $courseProject)}
 	    <div class="controls">
-	        {CHtml::activeDropDownList("issuing_themes", $courseProject, CProtocolService::getDepProtocolsListForIssuingThemesCourseProjects($courseProject), "", "", "", "", true)}
+	        {CHtml::activeDropDownList("issuing_themes", $courseProject, CProtocolService::getIssueProtocols($courseProject), "", "", "", "", true)}
 	        {CHtml::error("issuing_themes", $courseProject)}
 	    </div>
 	</div>
@@ -139,7 +139,7 @@
 	<div class="control-group">
 	    {CHtml::activeLabel("progress", $courseProject)}
 	    <div class="controls">
-	        {CHtml::activeDropDownList("progress", $courseProject, CProtocolService::getDepProtocolsListForProgressCourseProjects($courseProject), "", "", "", "", true)}
+	        {CHtml::activeDropDownList("progress", $courseProject, CProtocolService::getProgressProtocols($courseProject), "", "", "", "", true)}
 	        {CHtml::error("progress", $courseProject)}
 	    </div>
 	</div>
@@ -147,7 +147,7 @@
 	<div class="control-group">
 	    {CHtml::activeLabel("results", $courseProject)}
 	    <div class="controls">
-	        {CHtml::activeDropDownList("results", $courseProject, CProtocolService::getDepProtocolsListForResultsCourseProjects($courseProject), "", "", "", "", true)}
+	        {CHtml::activeDropDownList("results", $courseProject, CProtocolService::getResultsProtocols($courseProject), "", "", "", "", true)}
 	        {CHtml::error("results", $courseProject)}
 	    </div>
 	</div>

@@ -1,5 +1,5 @@
 <form action="index.php" method="post" id="{$loadsId}">
-    <table class="table table-striped table-bordered table-hover table-condensed" border="1">
+    <table rel="stripe" class="table table-striped table-bordered table-hover table-condensed" border="1">
         <tr>
             {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
             	<th>&nbsp;</th>
@@ -64,7 +64,7 @@
 		                {/foreach}
 		            {/foreach}
 	            <td>{clearNullValues number=number_format($studyLoad->getSumWorksValue(),1,',','') level=0}</td>
-	            <td>{clearNullValues number=number_format($studyLoad->getSumWorksValueWithFilials(),1,',','') level=0}</td>
+	            <td>{clearNullValues number=number_format($studyLoad->getWorkWithFilialsTotals(),1,',','') level=0}</td>
 	        </tr>
         {/foreach}
         <tr>
@@ -131,11 +131,9 @@
 
 <script>
 	$(document).ready(function() {
-		$(window).load(function() {
-			updateTableStripe();		 
-		});
+		updateTableStripe();
 		function updateTableStripe() {
-			$('.table tr').each(function(i) {
+			$('.table[rel="stripe"] tr').each(function(i) {
 				if (i % 2 === 0) {
 					$(this).find("td").css('background', '#c5d0e6');
 				} else {

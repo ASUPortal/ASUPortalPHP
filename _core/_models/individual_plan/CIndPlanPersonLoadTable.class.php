@@ -30,7 +30,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
     private function getWorktypes() {
         if (is_null($this->_workTypes)) {
             $this->_workTypes = array();
-            foreach (CTaxonomyManager::getLegacyTaxonomy("spravochnik_uch_rab")->getTerms()->getItems() as $term) {
+            foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
                 $this->_workTypes[$term->getId()] = $term->getValue();
             }
         }
@@ -43,7 +43,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
     private function getWorktypesAlias() {
         if (is_null($this->_workTypesAlias)) {
             $this->_workTypesAlias = array();
-            foreach (CTaxonomyManager::getLegacyTaxonomy("spravochnik_uch_rab")->getTerms()->getItems() as $term) {
+            foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
                 $this->_workTypesAlias[$term->getId()] = $term->name_hours_kind;
             }
         }
@@ -236,13 +236,13 @@ class CIndPlanPersonLoadTable extends CFormModel{
      *      1 - только контракт
      *      2 - сумма бюджета и контракта
      *
-     * @param int $typeId - id типов нагрузок (лекция, практика, т.п.) из справочника учебных работ
+     * @param string $typeAlias - псевдоним типов нагрузок (лекция, практика, т.п.) из справочника учебных работ
      * @param array $params - параметры
      * @param int $period - семестр
      * @param int $dataType - тип данных
      * @return array
      */
-    private function getLoadPlanByType($typeId, $params = array(), $period = 1, $dataType = 2) {
+    private function getLoadPlanByType($typeAlias, $params = array(), $period = 1, $dataType = 2) {
         $result = 0;
         $defaulParams = array(
             "type_1" => false,
@@ -252,6 +252,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
             "filials" => false
         );
         $params = array_merge($defaulParams, $params);
+        $typeId = CStudyLoadService::getWorktypeByAlias($typeAlias)->getId();
         // общие условия
         $condition = array(
             "loads.person_id = ".$this->getLoad()->person_id,
@@ -384,14 +385,14 @@ class CIndPlanPersonLoadTable extends CFormModel{
         if ($this->getLoad()->isSeparateContract()) {
             foreach ($this->getWorktypesAlias() as $typeId=>$typeAlias) {
                 $dataRow = array(
-                    "20" => $this->getLoadPlanByType($typeId, array(
+                    "20" => $this->getLoadPlanByType($typeAlias, array(
                         "type_1" => $type_1,
                         "type_2" => $type_2,
                         "type_3" => $type_3,
                         "type_4" => $type_4,
                         "filials" => $filias
                     ), 1, 0),
-                    "21" => $this->getLoadPlanByType($typeId, array(
+                    "21" => $this->getLoadPlanByType($typeAlias, array(
                         "type_1" => $type_1,
                         "type_2" => $type_2,
                         "type_3" => $type_3,
@@ -401,14 +402,14 @@ class CIndPlanPersonLoadTable extends CFormModel{
                 );
                 $result[0][$typeId] = $dataRow;
                 $dataRow = array(
-                    "20" => $this->getLoadPlanByType($typeId, array(
+                    "20" => $this->getLoadPlanByType($typeAlias, array(
                         "type_1" => $type_1,
                         "type_2" => $type_2,
                         "type_3" => $type_3,
                         "type_4" => $type_4,
                         "filials" => $filias
                     ), 1, 1),
-                    "21" => $this->getLoadPlanByType($typeId, array(
+                    "21" => $this->getLoadPlanByType($typeAlias, array(
                         "type_1" => $type_1,
                         "type_2" => $type_2,
                         "type_3" => $type_3,
@@ -421,14 +422,14 @@ class CIndPlanPersonLoadTable extends CFormModel{
         } else {
             foreach ($this->getWorktypesAlias() as $typeId=>$typeAlias) {
                 $dataRow = array(
-                    "20" => $this->getLoadPlanByType($typeId, array(
+                    "20" => $this->getLoadPlanByType($typeAlias, array(
                         "type_1" => $type_1,
                         "type_2" => $type_2,
                         "type_3" => $type_3,
                         "type_4" => $type_4,
                         "filials" => $filias
                     ), 1),
-                    "21" => $this->getLoadPlanByType($typeId, array(
+                    "21" => $this->getLoadPlanByType($typeAlias, array(
                         "type_1" => $type_1,
                         "type_2" => $type_2,
                         "type_3" => $type_3,

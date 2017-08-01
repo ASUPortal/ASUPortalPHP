@@ -68,7 +68,7 @@ class CStudyLoadController extends CBaseController {
         /**
          * Параметры для групповой печати по шаблону
          */
-        $parameters = array("year_id" => $selectedYear, "base" => 1, "additional" => 1, "premium" => 1, "byTime" => 1);
+        $parameters = "year_id=".$selectedYear."&base=1&additional=1&premium=1&byTime=1&kadri_id=";
         $this->setData("parameters", $parameters);
         $this->setData("template", "formset_study_loads");
         $this->setData("selectedDoc", true);
@@ -119,44 +119,40 @@ class CStudyLoadController extends CBaseController {
         $this->renderView("_study_loads/edit.tpl");
     }
     public function actionEditLoads() {
-    	// фильтр по году
-    	$selectedYear = CRequest::getInt("year_id");
-    	
-    	// фильтр по преподавателю
-    	$selectedPerson = CRequest::getInt("kadri_id");
-    	
     	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_OWN_ONLY, ACCESS_LEVEL_WRITE_OWN_ONLY])) {
     		$lecturer = CSession::getCurrentPerson();
     		$selectedPerson = $lecturer->getId();
     	} else {
     		$lecturer = CStaffManager::getPerson(CRequest::getInt("kadri_id"));
+    		$selectedPerson = $lecturer->getId();
     	}
     	$year = CTaxonomyManager::getYear(CRequest::getInt("year_id"));
+    	$selectedYear = $year->getId();
     	
     	$loadTypes = array();
     	$base = true;
     	if (CRequest::getInt("base") == 0) {
     		$base = false;
     	} else {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::MAIN;
+    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::BASE)->getId();
     	}
     	$additional = true;
     	if (CRequest::getInt("additional") == 0) {
     		$additional = false;
     	} else {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::ADDITIONAL;
+    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::ADDITIONAL)->getId();
     	}
     	$premium = true;
     	if (CRequest::getInt("premium") == 0) {
     		$premium = false;
     	} else {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::PREMIUM;
+    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::PREMIUM)->getId();
     	}
     	$byTime = true;
     	if (CRequest::getInt("byTime") == 0) {
     		$byTime = false;
     	} else {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::BY_TIME;
+    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::BY_TIME)->getId();
     	}
     	if (!is_null($lecturer) and !is_null($year) and !empty($loadTypes)) {
     		$loads = CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes);
@@ -170,8 +166,8 @@ class CStudyLoadController extends CBaseController {
     	$this->setData("isBudget", 1);
     	$this->setData("isContract", 1);
     	
-    	$loadsFall = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadYearPartsConstants::FALL);
-    	$loadsSpring = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadYearPartsConstants::SPRING);
+    	$loadsFall = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::FALL));
+    	$loadsSpring = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::SPRING));
     	
     	$this->setData("lecturer", $lecturer);
     	$this->setData("year", $year);
@@ -197,17 +193,37 @@ class CStudyLoadController extends CBaseController {
     		$this->addActionsMenuItem(array(
     			array(
     				"title" => "Добавить",
-    				"link" => "index.php?action=add&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id"),
+    				"link" => "index.php?action=add&kadri_id=".$selectedPerson."&year_id=".$selectedYear,
     				"icon" => "actions/list-add.png"
     			),
     			array(
     				"title" => "Редактировать нагрузку по бюджету",
-    				"link" => "index.php?action=editLoadsByType&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1&isBudget=1&isContract=0",
+    				"link" => UrlBuilder::newBuilder("index.php")
+							->addParameter("action", "editLoadsByType")
+							->addParameter("kadri_id", $selectedPerson)
+							->addParameter("year_id", $selectedYear)
+							->addParameter("base", 1)
+							->addParameter("additional", 1)
+							->addParameter("premium", 1)
+							->addParameter("byTime", 1)
+							->addParameter("isBudget", 1)
+							->addParameter("isContract", 0)
+							->build(),
     				"icon" => "apps/accessories-text-editor.png"
     			),
     			array(
     				"title" => "Редактировать нагрузку по контракту",
-    				"link" => "index.php?action=editLoadsByType&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1&isBudget=0&isContract=1",
+    				"link" => UrlBuilder::newBuilder("index.php")
+							->addParameter("action", "editLoadsByType")
+							->addParameter("kadri_id", $selectedPerson)
+							->addParameter("year_id", $selectedYear)
+							->addParameter("base", 1)
+							->addParameter("additional", 1)
+							->addParameter("premium", 1)
+							->addParameter("byTime", 1)
+							->addParameter("isBudget", 0)
+							->addParameter("isContract", 1)
+							->build(),
     				"icon" => "apps/accessories-text-editor.png"
     			)
     		));
@@ -220,49 +236,40 @@ class CStudyLoadController extends CBaseController {
     	$this->renderView("_study_loads/editLoads.tpl");
     }
     public function actionEditLoadsByType() {
-    	// фильтр по году
-    	$selectedYear = CRequest::getInt("year_id");
-    	 
-    	// фильтр по преподавателю
-    	$selectedPerson = CRequest::getInt("kadri_id");
-    	 
     	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_OWN_ONLY, ACCESS_LEVEL_WRITE_OWN_ONLY])) {
     		$lecturer = CSession::getCurrentPerson();
     		$selectedPerson = $lecturer->getId();
     	} else {
     		$lecturer = CStaffManager::getPerson(CRequest::getInt("kadri_id"));
+    		$selectedPerson = $lecturer->getId();
     	}
     	$year = CTaxonomyManager::getYear(CRequest::getInt("year_id"));
+    	$selectedYear = $year->getId();
     	 
     	$loadTypes = array();
     	$base = true;
     	if (CRequest::getInt("base") == 0) {
     		$base = false;
     	} else {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::MAIN;
+    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::BASE)->getId();
     	}
     	$additional = true;
     	if (CRequest::getInt("additional") == 0) {
     		$additional = false;
     	} else {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::ADDITIONAL;
+    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::ADDITIONAL)->getId();
     	}
     	$premium = true;
     	if (CRequest::getInt("premium") == 0) {
     		$premium = false;
     	} else {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::PREMIUM;
+    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::PREMIUM)->getId();
     	}
     	$byTime = true;
     	if (CRequest::getInt("byTime") == 0) {
     		$byTime = false;
     	} else {
-    		$loadTypes[] = CStudyLoadTypeIDConstants::BY_TIME;
-    	}
-    	if (!is_null($lecturer) and !is_null($year) and !empty($loadTypes)) {
-    		$loads = CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes);
-    	} else {
-    		$loads = new CArrayList();
+    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::BY_TIME)->getId();
     	}
     	$this->setData("base", $base);
     	$this->setData("additional", $additional);
@@ -270,13 +277,14 @@ class CStudyLoadController extends CBaseController {
     	$this->setData("byTime", $byTime);
     	$this->setData("selectedYear", $selectedYear);
     	$this->setData("selectedPerson", $selectedPerson);
-    	
-    	$requestVariables = CRequest::getGlobalRequestVariables()->getItems();
-    	$loadTypes = CStudyLoadService::getLoadTypesByGlobalRequestVariables($requestVariables);
-    	
-    	$loads = CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes);
-    	$loadsFall = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadYearPartsConstants::FALL);
-    	$loadsSpring = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadYearPartsConstants::SPRING);
+
+    	if (!is_null($lecturer) and !is_null($year) and !empty($loadTypes)) {
+    		$loads = CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes);
+    	} else {
+    		$loads = new CArrayList();
+    	}
+    	$loadsFall = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::FALL));
+    	$loadsSpring = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::SPRING));
     	
     	$this->setData("lecturer", $lecturer);
     	$this->setData("year", $year);
@@ -288,12 +296,20 @@ class CStudyLoadController extends CBaseController {
     	$this->addActionsMenuItem(array(
     		array(
     			"title" => "Назад",
-    			"link" => "index.php?action=editLoads&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1",
+    			"link" => UrlBuilder::newBuilder("index.php")
+						->addParameter("action", "editLoads")
+						->addParameter("kadri_id", $selectedPerson)
+						->addParameter("year_id", $selectedYear)
+						->addParameter("base", 1)
+						->addParameter("additional", 1)
+						->addParameter("premium", 1)
+						->addParameter("byTime", 1)
+						->build(),
     			"icon" => "actions/edit-undo.png"
     		),
             array(
                 "title" => "Добавить",
-                "link" => "index.php?action=add&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id"),
+                "link" => "index.php?action=add&kadri_id=".$selectedPerson."&year_id=".$selectedYear,
                 "icon" => "actions/list-add.png"
             )
     	));
@@ -311,11 +327,18 @@ class CStudyLoadController extends CBaseController {
         $byTime = CRequest::getInt("byTime");
         $isBudget = CRequest::getInt("isBudget");
         $isContract = CRequest::getInt("isContract");
-        if (CRequest::getString("redirect") == "editLoadsByType") {
-        	$this->redirect("?action=editLoadsByType&kadri_id=".$kadriId."&year_id=".$yearId."&base=".$base."&additional=".$additional."&premium=".$premium."&byTime=".$byTime."&isBudget=".$isBudget."&isContract=".$isContract);
-        } else {
-        	$this->redirect("?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId."&base=".$base."&additional=".$additional."&premium=".$premium."&byTime=".$byTime);
-        }
+        
+        $this->redirect(UrlBuilder::newBuilder("index.php")
+        		->addParameter("action", CRequest::getString("redirect"))
+        		->addParameter("kadri_id", $kadriId)
+        		->addParameter("year_id", $yearId)
+        		->addParameter("base", $base)
+        		->addParameter("additional", $additional)
+        		->addParameter("premium", $premium)
+        		->addParameter("byTime", $byTime)
+        		->addParameter("isBudget", $isBudget)
+        		->addParameter("isContract", $isContract)
+        		->build());
     }
     public function actionCopy() {
     	$choice = CRequest::getInt("choice");
@@ -328,7 +351,15 @@ class CStudyLoadController extends CBaseController {
     		CStudyLoadService::copySelectedLoads($choice, $lecturerId, $yearId, $partId, $loadsToCopy);
     	}
     	
-    	$this->redirect("?action=editLoads&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1");
+    	$this->redirect(UrlBuilder::newBuilder("index.php")
+				->addParameter("action", "editLoads")
+				->addParameter("kadri_id", CRequest::getInt("kadri_id"))
+				->addParameter("year_id", CRequest::getInt("year_id"))
+				->addParameter("base", 1)
+				->addParameter("additional", 1)
+				->addParameter("premium", 1)
+				->addParameter("byTime", 1)
+				->build());
     }
     public function actionDelete() {
     	$studyLoad = CStudyLoadService::getStudyLoad(CRequest::getInt("id"));
@@ -341,7 +372,15 @@ class CStudyLoadController extends CBaseController {
     	if (!is_null($studyLoad)) {
     		CStudyLoadService::deleteStudyLoad($studyLoad);
     	}
-    	$this->redirect("?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId."&base=1&additional=1&premium=1&byTime=1");
+    	$this->redirect(UrlBuilder::newBuilder("index.php")
+				->addParameter("action", "editLoads")
+				->addParameter("kadri_id", $kadriId)
+				->addParameter("year_id", $yearId)
+				->addParameter("base", 1)
+				->addParameter("additional", 1)
+				->addParameter("premium", 1)
+				->addParameter("byTime", 1)
+				->build());
     }
     public function actionSave() {
         $studyLoad = new CStudyLoad();
@@ -361,7 +400,15 @@ class CStudyLoadController extends CBaseController {
             if ($this->continueEdit()) {
                 $this->redirect("?action=edit&id=".$lastId);
             } else {
-                $this->redirect("?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId."&base=1&additional=1&premium=1&byTime=1");
+                $this->redirect(UrlBuilder::newBuilder("index.php")
+						->addParameter("action", "editLoads")
+						->addParameter("kadri_id", $kadriId)
+						->addParameter("year_id", $yearId)
+						->addParameter("base", 1)
+						->addParameter("additional", 1)
+						->addParameter("premium", 1)
+						->addParameter("byTime", 1)
+						->build());
             }
             return true;
         }
@@ -375,10 +422,10 @@ class CStudyLoadController extends CBaseController {
     	$data = CRequest::getArray("data");
     	foreach ($data as $studyLoadId=>$types) {
     		$studyLoad = CStudyLoadService::getStudyLoad($studyLoadId);
-    		if (CRequest::getInt("isBudget")) {
+    		if (CRequest::getInt("isBudget") == 1) {
     			$kindId = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId();
     		}
-    		if (CRequest::getInt("isContract")) {
+    		if (CRequest::getInt("isContract") == 1) {
     			$kindId = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId();
     		}
     		// удаляем старые данные
@@ -399,9 +446,27 @@ class CStudyLoadController extends CBaseController {
     		}
     	}
     	if ($this->continueEdit()) {
-    		$this->redirect("?action=editLoadsByType&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1&isBudget=".CRequest::getInt("isBudget")."&isContract=".CRequest::getInt("isContract"));
+    		$this->redirect(UrlBuilder::newBuilder("index.php")
+					->addParameter("action", "editLoadsByType")
+					->addParameter("kadri_id", CRequest::getInt("kadri_id"))
+					->addParameter("year_id", CRequest::getInt("year_id"))
+					->addParameter("base", 1)
+					->addParameter("additional", 1)
+					->addParameter("premium", 1)
+					->addParameter("byTime", 1)
+					->addParameter("isBudget", CRequest::getInt("isBudget"))
+					->addParameter("isContract", CRequest::getInt("isContract"))
+					->build());
     	} else {
-    		$this->redirect("?action=editLoads&kadri_id=".CRequest::getInt("kadri_id")."&year_id=".CRequest::getInt("year_id")."&base=1&additional=1&premium=1&byTime=1");
+    		$this->redirect(UrlBuilder::newBuilder("index.php")
+					->addParameter("action", "editLoads")
+					->addParameter("kadri_id", CRequest::getInt("kadri_id"))
+					->addParameter("year_id", CRequest::getInt("year_id"))
+					->addParameter("base", 1)
+					->addParameter("additional", 1)
+					->addParameter("premium", 1)
+					->addParameter("byTime", 1)
+					->build());
     	}
     }
 }

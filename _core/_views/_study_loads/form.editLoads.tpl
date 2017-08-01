@@ -43,7 +43,7 @@
 		Нет объектов для отображения
 	{else}
 		{if $loadsFall->getCount() != 0}
-			<div class="alert alert-info" style="text-align:center;">Осенний семестр</div>
+			<div class="alert alert-info" style="text-align:center;">ОСЕННИЙ семестр</div>
 			
 			{$studyLoads = $loadsFall}
 			{$loadsId = "loadsFall"}
@@ -64,11 +64,9 @@
 
 <script>
 	$(document).ready(function() {
-		$(window).load(function() {
-			updateTableStripe();		 
-		});
+		updateTableStripe();
 		function updateTableStripe() {
-			$('.table tr').each(function(i) {
+			$('.table[rel="stripe"] tr').each(function(i) {
 				if (i % 2 === 0) {
 					$(this).find("td").css('background', '#c5d0e6');
 				} else {

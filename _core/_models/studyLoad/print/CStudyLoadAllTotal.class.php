@@ -8,7 +8,7 @@ class CStudyLoadAllTotal extends CAbstractPrintClassField {
 
     public function getFieldDescription()
     {
-        return "Используется при печати учебной нагрузки, принимает параметр globalRequestVariables (значения глобальных переменных запроса) учебной нагрузки";
+        return "Используется при печати учебной нагрузки, принимает параметр url (значения параметров) учебной нагрузки";
     }
 
     public function getParentClassField()
@@ -23,13 +23,12 @@ class CStudyLoadAllTotal extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$globalRequestVariables = CRequest::getString("id");
-    	$requestVariables = unserialize(urldecode($globalRequestVariables));
+    	$url = CRequest::getString("id");
     	
-    	$lecturer = CStaffManager::getPerson($requestVariables["kadri_id"]);
-    	$year = CTaxonomyManager::getYear($requestVariables["year_id"]);
+    	$lecturer = CStaffManager::getPerson(UrlBuilder::getValueByParam($url, "kadri_id"));
+    	$year = CTaxonomyManager::getYear(UrlBuilder::getValueByParam($url, "year_id"));
     	$part = CStudyLoadYearPartsConstants::SPRING;
-    	$loadTypes = CStudyLoadService::getLoadTypesByGlobalRequestVariables($requestVariables);
+    	$loadTypes = CStudyLoadService::getLoadTypesByUrl($url);
     	
     	$value = CStudyLoadService::getAllStudyWorksTotalValuesByLecturer($lecturer, $year, $loadTypes);
     	

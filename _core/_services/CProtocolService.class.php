@@ -11,7 +11,7 @@ class CProtocolService {
 	 * @param CCourseProject $courseProject
 	 * @return array
 	 */
-    public static function getDepProtocolsListForIssuingThemesCourseProjects(CCourseProject $courseProject) {
+    public static function getIssueProtocols(CCourseProject $courseProject) {
     	$res = array();
     	if (!is_null($courseProject->getId())) {
     		$arr = array();
@@ -59,7 +59,7 @@ class CProtocolService {
      * @param CCourseProject $courseProject
      * @return array
      */
-    public static function getDepProtocolsListForProgressCourseProjects(CCourseProject $courseProject) {
+    public static function getProgressProtocols(CCourseProject $courseProject) {
     	$res = array();
     	if (!is_null($courseProject->getId())) {
     		$arr = array();
@@ -107,7 +107,7 @@ class CProtocolService {
      * @param CCourseProject $courseProject
      * @return array
      */
-    public static function getDepProtocolsListForResultsCourseProjects(CCourseProject $courseProject) {
+    public static function getResultsProtocols(CCourseProject $courseProject) {
     	$res = array();
     	if (!is_null($courseProject->getId())) {
     		$arr = array();

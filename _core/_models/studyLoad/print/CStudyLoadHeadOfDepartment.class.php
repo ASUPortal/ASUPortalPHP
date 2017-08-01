@@ -8,7 +8,7 @@ class CStudyLoadHeadOfDepartment extends CAbstractPrintClassField {
 
     public function getFieldDescription()
     {
-        return "Используется при печати учебной нагрузки, принимает параметр globalRequestVariables (значения глобальных переменных запроса) учебной нагрузки";
+        return "Используется при печати учебной нагрузки, принимает параметр url (значения параметров) учебной нагрузки";
     }
 
     public function getParentClassField()

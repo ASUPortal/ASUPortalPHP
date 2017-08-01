@@ -1,7 +1,7 @@
 <form action="index.php" method="post">
 	{CHtml::hiddenField("action", "showLoadTypes")}
-	{CHtml::hiddenField("kadri_id", $lecturer->getId())}
-	{CHtml::hiddenField("year_id", CRequest::getInt("year_id"))}
+	{CHtml::hiddenField("kadri_id", $selectedPerson)}
+	{CHtml::hiddenField("year_id", $selectedYear)}
 	{CHtml::hiddenField("redirect", CRequest::getString("action"))}
 	{CHtml::hiddenField("isBudget", $isBudget)}
 	{CHtml::hiddenField("isContract", $isContract)}

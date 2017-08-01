@@ -5,7 +5,7 @@
 	{CHtml::hiddenField("isBudget", $isBudget)}
 	{CHtml::hiddenField("isContract", $isContract)}
 	
-    <table class="table table-striped table-bordered table-hover table-condensed table-load" border="1">
+    <table rel="stripe" class="table table-striped table-bordered table-hover table-condensed table-load" border="1">
         <tr>
             <th>&nbsp;</th>
             <th style="vertical-align:middle; text-align:center;">#</th>
