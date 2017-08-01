@@ -156,10 +156,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
     		if (array_key_exists("targetClass", $relation)) {
     			$targetClass = new $relation["targetClass"];
     			if (is_a($targetClass, "IVersionControl")) {
-    				$ar->setItemValue("_version_of", $this->getId());
-    				$ar->setItemValue("_created_at", date('Y-m-d G:i:s'));
-    				$ar->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
-    				$ar->setItemValue("_is_last_version", $lastVersion);
+    				$this->fillVersionControlFields($ar, $this->getId(), $lastVersion);
     			}
     		}
     		$ar->setTable($relation['joinTable']);
@@ -178,10 +175,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
     	}
     	// если модель поддерживает версионирование, заполняем ей необходимые поля
     	if (is_a($this, "IVersionControl")) {
-    		$this->getRecord()->setItemValue("_version_of", $lastId);
-    		$this->getRecord()->setItemValue("_created_at", date('Y-m-d G:i:s'));
-    		$this->getRecord()->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
-    		$this->getRecord()->setItemValue("_is_last_version", 1);
+    		$this->fillVersionControlFields($this->getRecord(), $lastId, 1);
     	}
         $this->getRecord()->insert();
     }
@@ -198,15 +192,10 @@ class CActiveModel extends CModel implements IJSONSerializable{
             $lastId = mysql_insert_id();
         }
         // если эта модель поддерживает версионирование,
-        // то сначала делаем копию текущей записи, а затем
-        // сохраняем данные
+        // то делаем копию текущей записи, при этом текущую запись не обновляем
         if (is_a($this, "IVersionControl")) {
-            $currentAr = CActiveRecordProvider::getById($this->getTable(), $this->getId());
-            $currentAr->setItemValue("_version_of", $this->getId());
-            $currentAr->setItemValue("_created_at", date('Y-m-d G:i:s'));
-            $currentAr->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
-            $currentAr->setItemValue("_is_last_version", 1);
-            $currentAr->insert();
+            $this->fillVersionControlFields($this->getRecord(), $this->getId(), 1);
+            $this->getRecord()->insert();
             // получим идентификатор, сгенерированный при последнем INSERT-запросе
             if (is_object(CApp::getApp()->getDbConnection())) {
             	$lastId = CApp::getApp()->getDbConnection()->lastInsertId();
@@ -218,16 +207,28 @@ class CActiveModel extends CModel implements IJSONSerializable{
             		$this->saveRelationManyToMany($field, $relation, $lastId, 1);
             	}
             }
+            // для текущей записи меняем признак последней версии
+            $currentAr = CActiveRecordProvider::getById($this->getTable(), $this->getId());
+            $currentAr->setItemValue("_is_last_version", 0);
+            $currentAr->update();
+        } else {
+            $this->getRecord()->update();
         }
-        // если модель поддерживает версионирование, текущая запись становится архивной
-        if (is_a($this, "IVersionControl")) {
-        	// не меняем версию текущей записи
-        	$this->getRecord()->setItemValue("_created_at", date('Y-m-d G:i:s'));
-        	$this->getRecord()->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
-        	$this->getRecord()->setItemValue("_is_last_version", 0);
-        }
-        $this->getRecord()->update();
         return $lastId;
+    }
+    /**
+     * Заполнить поля для версионирования
+     * 
+     * @param CActiveRecord $record
+     * @param int $version
+     * @param int $lastVersion
+     * @param bool $current
+     */
+    private function fillVersionControlFields(CActiveRecord $record, $version, $lastVersion) {
+        $record->setItemValue("_version_of", $version);
+        $record->setItemValue("_created_at", date('Y-m-d G:i:s'));
+        $record->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
+        $record->setItemValue("_is_last_version", $lastVersion);
     }
     /**
      * Установить значение id

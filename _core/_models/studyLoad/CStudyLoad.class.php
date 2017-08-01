@@ -56,7 +56,7 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
                 "joinTable" => TABLE_WORKLOAD_STUDY_GROUPS,
                 "leftCondition" => "workload_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
                 "rightKey" => "group_id",
-                "targetClass" => "CStudentGroupVersionControl"
+                "targetClass" => "CStudentGroupVersionControllable"
             ),
     		"createdBy" => array(
     			"relationPower" => RELATION_HAS_ONE,
@@ -205,7 +205,7 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
      * 
      * @return float
      */
-    public function getSumWorksValueWithFilials() {
+    public function getWorkWithFilialsTotals() {
     	$value = 0;
     	if ($this->on_filial) {
     		foreach ($this->works->getItems() as $work) {
@@ -226,23 +226,5 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
     		$this->_loadTable = new CStudyLoadTable($this);
     	}
     	return $this->_loadTable;
-    }
-    
-    public function copy() {
-    	/**
-    	 * Копируем саму нагрузку
-    	 */
-    	$newLoad = parent::copy();
-    	$newLoad->save();
-    	/**
-    	 * Копируем значения по видам работ нагрузки
-    	 * @var CStudyLoadWork $work
-    	 */
-    	foreach ($this->works->getItems() as $work) {
-    		$newWork = $work->copy();
-    		$newWork->workload_id = $newLoad->getId();
-    		$newWork->save();
-    	}
-    	return $newLoad;
     }
 }
