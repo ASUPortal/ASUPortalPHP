@@ -8,23 +8,15 @@ class CVersionControlService {
 	protected $items = array();
 	
 	/**
-	 * @param int $id - идентификатор последней записи
-	 * @param string $class - модельный класс записи
-	 * @return array
-	 */
-	public function __construct($id, $class) {
-		return $this->tree($id, $class);
-	}
-	
-	/**
 	 * Получить все версии записи по id и классу
 	 * 
 	 * @param int $id - идентификатор последней записи
 	 * @param string $class - модельный класс записи
 	 * @return CVersionControlService
 	 */
-	public function getVersions($id, $class) {
-		$version = new CVersionControlService($id, $class);
+	public static function getVersions($id, $class) {
+		$version = new CVersionControlService();
+		$version->tree($id, $class);
 		return $version->items;
 	}
 	

@@ -68,6 +68,19 @@ class CActiveModel extends CModel implements IJSONSerializable{
         return $this->_aRecord;
     }
     /**
+     * Получить идентификатор последней сохранённой записи
+     * 
+     * @return int $lastId - идентификатор последней сохранённой записи
+     */
+    public function getLastInsertId() {
+        if (is_object(CApp::getApp()->getDbConnection())) {
+            $lastId = CApp::getApp()->getDbConnection()->lastInsertId();
+        } else {
+            $lastId = mysql_insert_id();
+        }
+        return $lastId;
+    }
+    /**
      * Сохранение или обновление данных модели
      * 
      * @return int $lastId - идентификатор последней сохранённой записи
@@ -91,12 +104,11 @@ class CActiveModel extends CModel implements IJSONSerializable{
             if (is_null($this->getId()) | $this->getId() == "") {
                 $this->saveModel();
                 if (is_object(CApp::getApp()->getDbConnection())) {
-                    $lastId = CApp::getApp()->getDbConnection()->lastInsertId();
                     $this->setId(CApp::getApp()->getDbConnection()->lastInsertId());
                 } else {
-                    $lastId = mysql_insert_id();
                     $this->setId(mysql_insert_id());
                 }
+                $lastId = $this->getLastInsertId();
                 // для первого сохранения попытаемся сразу сохранить многие-ко-многим отношения
                 foreach ($this->relations() as $field=>$relation) {
                 	if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
@@ -167,17 +179,20 @@ class CActiveModel extends CModel implements IJSONSerializable{
      * Сохранение новой модели
      */
     private function saveModel() {
-    	// получим идентификатор, сгенерированный при последнем INSERT-запросе
-    	if (is_object(CApp::getApp()->getDbConnection())) {
-    		$lastId = CApp::getApp()->getDbConnection()->lastInsertId();
-    	} else {
-    		$lastId = mysql_insert_id();
-    	}
     	// если модель поддерживает версионирование, заполняем ей необходимые поля
     	if (is_a($this, "IVersionControl")) {
-    		$this->fillVersionControlFields($this->getRecord(), $lastId, 1);
+    		// новую запись сохраним с версией 0
+    		$this->fillVersionControlFields($this->getRecord(), 0, 1);
+    		$this->getRecord()->insert();
+    		// получим идентификатор, сгенерированный при последнем INSERT-запросе
+    		$lastId = $this->getLastInsertId();
+    		// обновим запись с версией $lastId
+    		$currentAr = CActiveRecordProvider::getById($this->getTable(), $lastId);
+    		$this->fillVersionControlFields($currentAr, $lastId, 1);
+    		$currentAr->update();
+    	} else {
+    		$this->getRecord()->insert();
     	}
-        $this->getRecord()->insert();
     }
     /**
      * Обновление существующей модели
@@ -186,22 +201,14 @@ class CActiveModel extends CModel implements IJSONSerializable{
      */
     private function updateModel() {
         // получим идентификатор, сгенерированный при последнем INSERT-запросе
-        if (is_object(CApp::getApp()->getDbConnection())) {
-            $lastId = CApp::getApp()->getDbConnection()->lastInsertId();
-        } else {
-            $lastId = mysql_insert_id();
-        }
+        $lastId = $this->getLastInsertId();
         // если эта модель поддерживает версионирование,
         // то делаем копию текущей записи, при этом текущую запись не обновляем
         if (is_a($this, "IVersionControl")) {
             $this->fillVersionControlFields($this->getRecord(), $this->getId(), 1);
             $this->getRecord()->insert();
             // получим идентификатор, сгенерированный при последнем INSERT-запросе
-            if (is_object(CApp::getApp()->getDbConnection())) {
-            	$lastId = CApp::getApp()->getDbConnection()->lastInsertId();
-            } else {
-            	$lastId = mysql_insert_id();
-            }
+            $lastId = $this->getLastInsertId();
             foreach ($this->relations() as $field=>$relation) {
             	if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
             		$this->saveRelationManyToMany($field, $relation, $lastId, 1);
@@ -209,7 +216,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
             }
             // для текущей записи меняем признак последней версии
             $currentAr = CActiveRecordProvider::getById($this->getTable(), $this->getId());
-            $currentAr->setItemValue("_is_last_version", 0);
+            $this->setIsLastVersion($currentAr, 0);
             $currentAr->update();
         } else {
             $this->getRecord()->update();
@@ -219,16 +226,24 @@ class CActiveModel extends CModel implements IJSONSerializable{
     /**
      * Заполнить поля для версионирования
      * 
-     * @param CActiveRecord $record
-     * @param int $version
-     * @param int $lastVersion
-     * @param bool $current
+     * @param CActiveRecord $record - изменяемая запись
+     * @param int $version - id версии записи
+     * @param int $lastVersion - признак последней версии
      */
     private function fillVersionControlFields(CActiveRecord $record, $version, $lastVersion) {
         $record->setItemValue("_version_of", $version);
         $record->setItemValue("_created_at", date('Y-m-d G:i:s'));
         $record->setItemValue("_created_by", CSession::getCurrentPerson()->getId());
-        $record->setItemValue("_is_last_version", $lastVersion);
+        $this->setIsLastVersion($record, $lastVersion);
+    }
+    /**
+     * Установить признак последней версии
+     * 
+     * @param CActiveRecord $record
+     * @param int $version
+     */
+    public function setIsLastVersion(CActiveRecord $record, $version) {
+        $record->setItemValue("_is_last_version", $version);
     }
     /**
      * Установить значение id

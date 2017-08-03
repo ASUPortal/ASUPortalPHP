@@ -5,14 +5,13 @@
 
 class UrlBuilder {
     private $_link = "";
+    private $params;
     
     /**
      * @param string $page
-     * @return $this
      */
-    public function __construct($page) {
-    	$this->_link = $page."?";
-    	return $this;
+    private function __construct($page) {
+        $this->_link = $page;
     }
     
     /**
@@ -21,8 +20,8 @@ class UrlBuilder {
      * @param string $page
      * @return UrlBuilder
      */
-    public function newBuilder($page) {
-    	$UrlBuilder = new UrlBuilder($page);
+    public static function newBuilder($page) {
+        $UrlBuilder = new UrlBuilder($page);
         return $UrlBuilder;
     }
     
@@ -34,34 +33,17 @@ class UrlBuilder {
      * @return $this
      */
     public function addParameter($param, $value) {
-    	$this->_link .= $param."=".$value."&";
-    	return $this;
+        $this->params[] = $param."=".$value;
+        return $this;
     }
     
     /**
      * Построить ссылку
      * 
-     * @return string $_link
+     * @return string $url
      */
     public function build() {
-    	return $this->_link;
-    }
-    
-    /**
-     * Получить значение параметра из ссылки
-     * 
-     * @param string $url
-     * @param string $param
-     * @return string $item
-     */
-    public function getValueByParam($url, $param) {
-    	$item = "";
-    	$values = explode("&", $url);
-    	foreach ($values as $value) {
-    		if (CUtils::strLeft($value, "=") == $param) {
-    			$item = CUtils::strRight($value, "=");
-    		}
-    	}
-    	return $item;
+        $url = $this->_link."?".implode("&", $this->params);
+        return $url;
     }
 }
