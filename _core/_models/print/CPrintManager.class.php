@@ -205,7 +205,7 @@ class CPrintManager {
      * @param int $id - произвольный id
      * @return CArrayList
      */
-    public static function getEmptyArrayList($id) {
+    public static function getCArrayListWithInstanceCModel($id) {
         $items = new CArrayList();
         $model = new CModel();
         $items->add($id, $model);

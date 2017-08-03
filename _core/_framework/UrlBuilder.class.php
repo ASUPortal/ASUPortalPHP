@@ -5,7 +5,7 @@
 
 class UrlBuilder {
     private $_link = "";
-    private $params;
+    private $params = array();
     
     /**
      * @param string $page
@@ -43,7 +43,11 @@ class UrlBuilder {
      * @return string $url
      */
     public function build() {
-        $url = $this->_link."?".implode("&", $this->params);
+        if (count($this->params) > 0) {
+            $url = $this->_link."?".implode("&", $this->params);
+        } else {
+            $url = $this->_link;
+        }
         return $url;
     }
 }
