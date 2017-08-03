@@ -211,8 +211,9 @@ class CActiveModel extends CModel implements IJSONSerializable{
             	}
             }
             // для текущей записи меняем признак последней версии
-            $this->setIsLastVersion($this->getRecord(), 0);
-            $this->getRecord()->update();
+            $currentAr = CActiveRecordProvider::getById($this->getTable(), $this->getId());
+            $this->setIsLastVersion($currentAr, 0);
+            $currentAr->update();
         } else {
             $this->getRecord()->update();
         }
