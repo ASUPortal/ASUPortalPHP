@@ -34,13 +34,12 @@
         <tbody>
 	        {counter start=0 print=false}
 	        {foreach $persons as $person}
-		        {$personId = $person['kadri_id']}
-		        {$url = $parameters|cat: $personId}
+		        {$parameters["kadri_id"] = CStaffManager::getPerson($person['kadri_id'])->getId()}
 		        <tr>
 		            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
 			            <td rel="stripe"><a href="#"><i title="Добавить" class="icon-plus" onclick="window.open('{$web_root}_modules/_study_loads/index.php?action=add&kadri_id={$person["kadri_id"]}&year_id={$person["year_id"]}')"></i></a></td>
 		            {/if}
-		            <td rel="stripe">{CHtml::checkboxGroupSelect($url)}</td>
+		            <td rel="stripe">{CHtml::checkboxGroupSelect(urlencode(serialize($parameters)))}</td>
 		            <td class="count" rel="stripe">{counter}</td>
 		            <td rel="stripe"><a href="?action=editLoads&kadri_id={$person['kadri_id']}&year_id={$person['year_id']}&base=1&additional=1&premium=1&byTime=1" title="{$person['fio']}">{$person['fio_short']}</a></td>
 		            <td rel="stripe">{$person['dolgnost']}</td>

@@ -1,21 +1,16 @@
 <?php
 
-class CStudyLoadFallPartTotal extends CAbstractPrintClassField {
+class CStudyLoadFallPartTotal extends CStudyLoadParameters {
     public function getFieldName()
     {
         return "Итого по учебной нагрузке за осенний семестр";
     }
-
-    public function getFieldDescription()
-    {
-        return "Используется при печати учебной нагрузки, принимает параметр url (значения параметров) учебной нагрузки";
-    }
-
-    public function getParentClassField()
-    {
-
-    }
     
+    /**
+     * Осенний семестр из учебной нагрузки
+     *
+     * @return CYearPart
+     */
     public function getYearPart()
     {
     	return CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::FALL);
@@ -28,12 +23,10 @@ class CStudyLoadFallPartTotal extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$url = CRequest::getString("id");
-    	 
-    	$lecturer = CStaffManager::getPerson(UrlBuilder::getValueByParam($url, "kadri_id"));
-    	$year = CTaxonomyManager::getYear(UrlBuilder::getValueByParam($url, "year_id"));
+    	$lecturer = $this->getLecturer();
+    	$year = $this->getYear();
+    	$loadTypes = $this->getLoadTypes();
     	$part = $this->getYearPart();
-    	$loadTypes = CStudyLoadService::getLoadTypesByUrl($url);
     	
     	$result = array();
     	$dataRow = array();
@@ -55,7 +48,7 @@ class CStudyLoadFallPartTotal extends CAbstractPrintClassField {
     				}
     			}
     		}
-    		$i++;
+    		$row++;
     	}
     	$rowTotal = CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes)->getCount()+7;
     	$dataRow[$rowTotal] = number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes),1,',','');

@@ -1,19 +1,9 @@
 <?php
 
-class CStudyLoadYear extends CAbstractPrintClassField {
+class CStudyLoadYear extends CStudyLoadParameters {
     public function getFieldName()
     {
         return "Год учебной нагрузки";
-    }
-
-    public function getFieldDescription()
-    {
-        return "Используется при печати учебной нагрузки, принимает параметр url (значения параметров) учебной нагрузки";
-    }
-
-    public function getParentClassField()
-    {
-
     }
 
     public function getFieldType()
@@ -23,11 +13,8 @@ class CStudyLoadYear extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$url = CRequest::getString("id");
-    	
-    	$year = CTaxonomyManager::getYear(UrlBuilder::getValueByParam($url, "year_id"));
+    	$year = $this->getYear();
     	$result = $year->getValue();
-    	
     	return $result;
     }
 }

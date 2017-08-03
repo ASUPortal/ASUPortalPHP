@@ -99,48 +99,6 @@ class CStudyLoadService {
     }
     
     /**
-     * Лист нагрузок преподавателя по году и типу нагрузки, переданным через строку url с необходимыми параметрами
-     *
-     * @param string $url - строка с необходимыми параметрами
-     * @return CArrayList
-     */
-    public static function getStudyLoadsByYearAndLoadTypeByUrl($url) {
-    	$person = CStaffManager::getPerson(UrlBuilder::getValueByParam($url, "kadri_id"));
-    	$year = CTaxonomyManager::getYear(UrlBuilder::getValueByParam($url, "year_id"));
-    	$loadTypes = CStudyLoadService::getLoadTypesByUrl($url);
-    	
-    	$loads = new CArrayList();
-    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$person->getId()." AND year_id = ".$year->getId()." AND load_type_id IN (".implode($loadTypes, ", ").") AND _is_last_version = 1")->getItems() as $item) {
-    		$study = new CStudyLoad($item);
-    		$loads->add($study->getId(), $study);
-    	}
-    	return $loads;
-    }
-    
-    /**
-     * Типы нагрузок, переданные через строку url с необходимыми параметрами
-     *
-     * @param string $url - строка с необходимыми параметрами
-     * @return array
-     */
-    public static function getLoadTypesByUrl($url) {
-    	$loadTypes = array();
-    	if (UrlBuilder::getValueByParam($url, "base") != 0) {
-    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::BASE)->getId();
-    	}
-    	if (UrlBuilder::getValueByParam($url, "additional") != 0) {
-    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::ADDITIONAL)->getId();
-    	}
-    	if (UrlBuilder::getValueByParam($url, "premium") != 0) {
-    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::PREMIUM)->getId();
-    	}
-    	if (UrlBuilder::getValueByParam($url, "byTime") != 0) {
-    		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::BY_TIME)->getId();
-    	}
-    	return $loadTypes;
-    }
-    
-    /**
      * Список преподавателей, у которых есть нагрузка по дисциплине
      *
      * @param CTerm $discipline

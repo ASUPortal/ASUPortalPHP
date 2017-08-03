@@ -1,21 +1,16 @@
 <?php
 
-class CStudyLoadFallPart extends CAbstractPrintClassField {
+class CStudyLoadFallPart extends CStudyLoadParameters {
     public function getFieldName()
     {
         return "Значения по учебной нагрузке за осенний семестр";
     }
-
-    public function getFieldDescription()
-    {
-        return "Используется при печати учебной нагрузки, принимает параметр url (значения параметров) учебной нагрузки";
-    }
-
-    public function getParentClassField()
-    {
-
-    }
     
+    /**
+     * Осенний семестр из учебной нагрузки
+     * 
+     * @return CYearPart
+     */
     public function getYearPart()
     {
     	return CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::FALL);
@@ -28,10 +23,13 @@ class CStudyLoadFallPart extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-    	$url = CRequest::getString("id");
-    	$loads = CStudyLoadService::getStudyLoadsByYearAndLoadTypeByUrl($url);
+    	$person = $this->getLecturer();
+    	$year = $this->getYear();
+    	$loadTypes = $this->getLoadTypes();
+    	$part = $this->getYearPart();
     	
-    	$studyLoads = CStudyLoadService::getStudyLoadsByPart($loads, $this->getYearPart());
+    	$loads = CStudyLoadService::getStudyLoadsByYearAndLoadType($person, $year, $loadTypes);
+    	$studyLoads = CStudyLoadService::getStudyLoadsByPart($loads, $part);
     	 
     	$result = array();
     	foreach ($studyLoads->getItems() as $studyLoad) {

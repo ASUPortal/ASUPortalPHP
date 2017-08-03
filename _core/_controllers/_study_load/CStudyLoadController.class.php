@@ -68,7 +68,7 @@ class CStudyLoadController extends CBaseController {
         /**
          * Параметры для групповой печати по шаблону
          */
-        $parameters = "year_id=".$selectedYear."&base=1&additional=1&premium=1&byTime=1&kadri_id=";
+        $parameters = array("year_id" => $selectedYear, "base" => 1, "additional" => 1, "premium" => 1, "byTime" => 1);
         $this->setData("parameters", $parameters);
         $this->setData("template", "formset_study_loads");
         $this->setData("selectedDoc", true);
@@ -112,7 +112,15 @@ class CStudyLoadController extends CBaseController {
         $this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
-                "link" => "index.php?action=editLoads&kadri_id=".$kadriId."&year_id=".$yearId."&base=1&additional=1&premium=1&byTime=1",
+                "link" => UrlBuilder::newBuilder("index.php")
+							->addParameter("action", "editLoads")
+							->addParameter("kadri_id", $kadriId)
+							->addParameter("year_id", $yearId)
+							->addParameter("base", 1)
+							->addParameter("additional", 1)
+							->addParameter("premium", 1)
+							->addParameter("byTime", 1)
+							->build(),
                 "icon" => "actions/edit-undo.png"
             )
         ));
@@ -193,7 +201,11 @@ class CStudyLoadController extends CBaseController {
     		$this->addActionsMenuItem(array(
     			array(
     				"title" => "Добавить",
-    				"link" => "index.php?action=add&kadri_id=".$selectedPerson."&year_id=".$selectedYear,
+    				"link" => UrlBuilder::newBuilder("index.php")
+							->addParameter("action", "add")
+							->addParameter("kadri_id", $selectedPerson)
+							->addParameter("year_id", $selectedYear)
+							->build(),
     				"icon" => "actions/list-add.png"
     			),
     			array(
@@ -309,7 +321,11 @@ class CStudyLoadController extends CBaseController {
     		),
             array(
                 "title" => "Добавить",
-                "link" => "index.php?action=add&kadri_id=".$selectedPerson."&year_id=".$selectedYear,
+                "link" => UrlBuilder::newBuilder("index.php")
+						->addParameter("action", "add")
+						->addParameter("kadri_id", $selectedPerson)
+						->addParameter("year_id", $selectedYear)
+						->build(),
                 "icon" => "actions/list-add.png"
             )
     	));
