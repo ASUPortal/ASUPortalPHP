@@ -113,14 +113,6 @@ class CActiveModel extends CModel implements IJSONSerializable{
                 }
             } else {
                 $lastId = $this->updateModel();
-                // обновляем многие-ко-многим отношения только если модель не поддерживает версионирование
-                if (!is_a($this, "IVersionControl")) {
-                	foreach ($this->relations() as $field=>$relation) {
-                		if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
-                			$this->saveRelationManyToMany($field, $relation, $this->getId(), false);
-                		}
-                	}
-                }
             }
         } catch (Exception $e) {
             $transaction->rollback();
@@ -215,6 +207,12 @@ class CActiveModel extends CModel implements IJSONSerializable{
             $this->setIsLastVersion($currentAr, 0);
             $currentAr->update();
         } else {
+            // обновляем многие-ко-многим отношения
+            foreach ($this->relations() as $field=>$relation) {
+            	if ($relation['relationPower'] == RELATION_MANY_TO_MANY) {
+            		$this->saveRelationManyToMany($field, $relation, $this->getId(), false);
+            	}
+            }
             $this->getRecord()->update();
         }
         return $lastId;
