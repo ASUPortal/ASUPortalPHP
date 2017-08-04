@@ -1,0 +1,12 @@
+ALTER TABLE `pl_corriculum_workload` DROP FOREIGN KEY `pl_corriculum_workload_ibfk_2`;
+ALTER TABLE `pl_corriculum_workload` ADD  CONSTRAINT `pl_corriculum_workload_ibfk_2` FOREIGN KEY (`year_id`) REFERENCES `asu`.`time_intervals`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `pl_corriculum_workload` DROP FOREIGN KEY `pl_corriculum_workload_ibfk_3`;
+ALTER TABLE `pl_corriculum_workload` ADD  CONSTRAINT `pl_corriculum_workload_ibfk_3` FOREIGN KEY (`year_part_id`) REFERENCES `asu`.`time_parts`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `pl_corriculum_workload` DROP FOREIGN KEY `pl_corriculum_workload_ibfk_4`;
+ALTER TABLE `pl_corriculum_workload` ADD  CONSTRAINT `pl_corriculum_workload_ibfk_4` FOREIGN KEY (`discipline_id`) REFERENCES `asu`.`subjects`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `pl_corriculum_workload` DROP FOREIGN KEY `pl_corriculum_workload_ibfk_5`;
+ALTER TABLE `pl_corriculum_workload` ADD  CONSTRAINT `pl_corriculum_workload_ibfk_5` FOREIGN KEY (`speciality_id`) REFERENCES `asu`.`specialities`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `pl_corriculum_workload` DROP FOREIGN KEY `pl_corriculum_workload_ibfk_6`;
+ALTER TABLE `pl_corriculum_workload` ADD  CONSTRAINT `pl_corriculum_workload_ibfk_6` FOREIGN KEY (`level_id`) REFERENCES `asu`.`levels`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `pl_corriculum_workload` DROP FOREIGN KEY `pl_corriculum_workload_ibfk_7`;
+ALTER TABLE `pl_corriculum_workload` ADD  CONSTRAINT `pl_corriculum_workload_ibfk_7` FOREIGN KEY (`load_type_id`) REFERENCES `asu`.`hours_kind_type`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
