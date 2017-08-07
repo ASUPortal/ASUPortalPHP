@@ -44,14 +44,28 @@ class CStudyLoadWork extends CActiveModel implements IVersionControl {
     }
     
     /**
+     * Сумма часов по id типов учебной нагрузки (основная, дополнительная, надбавка, почасовка)
+     *
+     * @param $type
+     * @return int
+     */
+    public function getSumWorkHoursByLoadTypeId($typeId) {
+    	$value = 0;
+    	if ($this->studyLoad->load_type_id == $typeId) {
+    		$value = $this->workload;
+    	}
+    	return $value;
+    }
+    
+    /**
      * Сумма часов по псевдонимам типов учебной нагрузки (основная, дополнительная, надбавка, почасовка)
      *
      * @param $type
      * @return int
      */
-    public function getSumWorkHoursByLoadType($type) {
+    public function getSumWorkHoursByLoadType($typeAlias) {
     	$value = 0;
-    	if ($this->studyLoad->load_type_id == CStudyLoadService::getStudyLoadTypeByAlias($type)->getId()) {
+    	if ($this->studyLoad->load_type_id == CStudyLoadService::getStudyLoadTypeByAlias($typeAlias)->getId()) {
     		$value = $this->workload;
     	}
     	return $value;

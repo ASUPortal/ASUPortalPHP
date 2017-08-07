@@ -139,6 +139,12 @@ class CStudyLoadService {
      * @return array
      */
     public static function getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear, $person = null) {
+    	// id типов учебной нагрузки (основная, дополнительная, надбавка, почасовка)
+    	$baseLoadId = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::BASE)->getId();
+    	$additionalLoadId = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::ADDITIONAL)->getId();
+    	$premiumLoadId = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::PREMIUM)->getId();
+    	$byTimeLoadId = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::BY_TIME)->getId();
+    	
     	if ($isBudget) {
     		$cacheBudget = "isBudget";
     	} else {
@@ -214,10 +220,10 @@ class CStudyLoadService {
     						$kind = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId();
     						foreach ($studyLoad->getWorksByKind($kind) as $work) {
     							$hoursSum += $work->workload;
-    							$hoursSumBase += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::BASE);
-    							$hoursSumAdditional += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::ADDITIONAL);
-    							$hoursSumPremium += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::PREMIUM);
-    							$hoursSumByTime += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::BY_TIME);
+    							$hoursSumBase += $work->getSumWorkHoursByLoadTypeId($baseLoadId);
+    							$hoursSumAdditional += $work->getSumWorkHoursByLoadTypeId($additionalLoadId);
+    							$hoursSumPremium += $work->getSumWorkHoursByLoadTypeId($premiumLoadId);
+    							$hoursSumByTime += $work->getSumWorkHoursByLoadTypeId($byTimeLoadId);
     						}
     					}
     					if ($isContract) {
@@ -225,10 +231,10 @@ class CStudyLoadService {
     						$kind = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId();
     						foreach ($studyLoad->getWorksByKind($kind) as $work) {
     							$hoursSum += $work->workload;
-    							$hoursSumBase += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::BASE);
-    							$hoursSumAdditional += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::ADDITIONAL);
-    							$hoursSumPremium += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::PREMIUM);
-    							$hoursSumByTime += $work->getSumWorkHoursByLoadType(CStudyLoadTypeConstants::BY_TIME);
+    							$hoursSumBase += $work->getSumWorkHoursByLoadTypeId($baseLoadId);
+    							$hoursSumAdditional += $work->getSumWorkHoursByLoadTypeId($additionalLoadId);
+    							$hoursSumPremium += $work->getSumWorkHoursByLoadTypeId($premiumLoadId);
+    							$hoursSumByTime += $work->getSumWorkHoursByLoadTypeId($byTimeLoadId);
     						}
     					}
     				}
