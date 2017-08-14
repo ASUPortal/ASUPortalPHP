@@ -209,4 +209,171 @@ class CProtocolManager {
     public static function getFieldName($id, $field) {
         return "CModel[data][".$id."][".$field."]";
     }
+    
+    /**
+     * Список протоколов для выдачи тем курсовых проектов - протокол от даты выдачи +1 неделя (до ближайшего)
+     *
+     * @param CCourseProject $courseProject
+     * @return CArrayList
+     */
+    public static function getIssueProtocols(CCourseProject $courseProject) {
+    	$results = new CArrayList();
+    	 
+    	// дата выдачи темы курсового проекта
+    	$issueDate = strtotime($courseProject->issue_date);
+    	// дата выдачи темы курсового проекта +1 неделя
+    	$issueDatePlusOneWeek = strtotime("+1 week", $issueDate);
+    	 
+    	if (!is_null($courseProject->getId())) {
+    		$protocols = new CArrayList();
+    		/**
+    		 * Берём протокол, попавший в промежуток дат между датой выдачи курсового проекта +1 неделя
+    		 */
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_DEPARTMENT_PROTOCOLS, 'date_text between "'.date("Y-m-d", $issueDate).'" and "'.date("Y-m-d", $issueDatePlusOneWeek).'"')->getItems() as $item) {
+    			$protocol = new CDepartmentProtocol($item);
+    			$protocols->add($protocol->getId(), $protocol);
+    		}
+    		foreach ($protocols as $protocol) {
+    			$results->add($protocol->getId(), $protocol);
+    		}
+    		/**
+    		 * Если в промежутке между датой выдачи курсового проекта и +1 неделя нет протокола,
+    		 * берём протокол, ближайший к дате выдачи
+    		 */
+    		if ($protocols->isEmpty()) {
+    			foreach (CActiveRecordProvider::getWithCondition(TABLE_DEPARTMENT_PROTOCOLS, 'date_text >= "'.date("Y-m-d", $issueDate).'"')->getItems() as $item) {
+    				$protocol = new CDepartmentProtocol($item);
+    				$protocols->add($protocol->getId(), $protocol);
+    			}
+    			/**
+    			 * Отсортируем протоколы по датам
+    			 */
+    			$arr = array();
+    			foreach ($protocols as $protocol) {
+    				$arr[$protocol->getId()] = date("Ymd", strtotime($protocol->getDate()));
+    			}
+    			arsort($arr, false);
+    			/**
+    			 * Получим протокол, ближайший к дате выдачи
+    			 */
+    			$protocolsNext = array();
+    			foreach ($arr as $key=>$value) {
+    				$protocolNext = CProtocolManager::getDepProtocol($key);
+    				$protocolsNext[$protocolNext->getId()] = $protocolNext;
+    			}
+    			$results->add(end(array_keys($protocolsNext)), end($protocolsNext));
+    		}
+    	}
+    	return $results;
+    }
+    
+    /**
+     * Список протоколов для хода работы курсовых проектов - протокол от даты выдачи +10 недель (до ближайшего)
+     *
+     * @param CCourseProject $courseProject
+     * @return CArrayList
+     */
+    public static function getProgressProtocols(CCourseProject $courseProject) {
+    	$results = new CArrayList();
+    	 
+    	// дата выдачи темы курсового проекта
+    	$issueDate = strtotime($courseProject->issue_date);
+    	// дата выдачи темы курсового проекта +10 недель
+    	$issueDatePlusTenWeek = strtotime("+10 week", $issueDate);
+    	 
+    	if (!is_null($courseProject->getId())) {
+    		$protocols = new CArrayList();
+    		/**
+    		 * Берём протокол, попавший в промежуток дат между датой выдачи курсового проекта +1 неделя
+    		 */
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_DEPARTMENT_PROTOCOLS, 'date_text between "'.date("Y-m-d", $issueDate).'" and "'.date("Y-m-d", $issueDatePlusTenWeek).'"')->getItems() as $item) {
+    			$protocol = new CDepartmentProtocol($item);
+    			$protocols->add($protocol->getId(), $protocol);
+    		}
+    		foreach ($protocols as $protocol) {
+    			$results->add($protocol->getId(), $protocol);
+    		}
+    		/**
+    		 * Если в промежутке между датой выдачи курсового проекта и +10 недель нет протокола,
+    		 * берём протокол, ближайший к дате выдачи
+    		 */
+    		if ($protocols->isEmpty()) {
+    			foreach (CActiveRecordProvider::getWithCondition(TABLE_DEPARTMENT_PROTOCOLS, 'date_text >= "'.date("Y-m-d", $issueDate).'"')->getItems() as $item) {
+    				$protocol = new CDepartmentProtocol($item);
+    				$protocols->add($protocol->getId(), $protocol);
+    			}
+    			/**
+    			 * Отсортируем протоколы по датам
+    			 */
+    			$arr = array();
+    			foreach ($protocols as $protocol) {
+    				$arr[$protocol->getId()] = date("Ymd", strtotime($protocol->getDate()));
+    			}
+    			arsort($arr, false);
+    			/**
+    			 * Получим протокол, ближайший к дате выдачи
+    			 */
+    			$protocolsNext = array();
+    			foreach ($arr as $key=>$value) {
+    				$protocolNext = CProtocolManager::getDepProtocol($key);
+    				$protocolsNext[$protocolNext->getId()] = $protocolNext;
+    			}
+    			$results->add(end(array_keys($protocolsNext)), end($protocolsNext));
+    		}
+    	}
+    	return $results;
+    }
+    
+    /**
+     * Список протоколов для результатов курсовых проектов - протокол от даты последней защиты (из журнала успеваемости)
+     *
+     * @param CCourseProject $courseProject
+     * @return CArrayList
+     */
+    public static function getResultsProtocols(CCourseProject $courseProject) {
+    	$results = new CArrayList();
+    	if (!is_null($courseProject->getId())) {
+    		/**
+    		 * Находим дату последней защиты в журнале успеваемости
+    		 */
+    		$dates = array();
+    		foreach ($courseProject->tasks->getItems() as $task) {
+    			if (!is_null(CStaffService::getStudentActivityByTypeAndDate($task->student, $task->courseProject->discipline, $task->courseProject->lecturer,
+    					CTaxonomyManager::getLegacyTaxonomy("study_act")->getTerm(CCourseProjectConstants::CONTROL_TYPE_COURSE_PROJECT), $task->courseProject->issue_date))) {
+    						$dates[] = strtotime(CStaffService::getStudentActivityByTypeAndDate($task->student, $task->courseProject->discipline, $task->courseProject->lecturer,
+    								CTaxonomyManager::getLegacyTaxonomy("study_act")->getTerm(CCourseProjectConstants::CONTROL_TYPE_COURSE_PROJECT), $task->courseProject->issue_date)->date_act);
+    					}
+    		}
+    		 
+    		$protocols = new CArrayList();
+    		/**
+    		 * Берём все протоколы, начиная от даты последней защиты в журнале успеваемости
+    		 */
+    		if (!empty($dates)) {
+    			$lastDate = max($dates);
+    			foreach (CActiveRecordProvider::getWithCondition(TABLE_DEPARTMENT_PROTOCOLS, 'date_text >= "'.date("Y-m-d", $lastDate).'"')->getItems() as $item) {
+    				$protocol = new CDepartmentProtocol($item);
+    				$protocols->add($protocol->getId(), $protocol);
+    			}
+    			/**
+    			 * Отсортируем протоколы по датам
+    			 */
+    			$arr = array();
+    			foreach ($protocols as $protocol) {
+    				$arr[$protocol->getId()] = date("Ymd", strtotime($protocol->getDate()));
+    			}
+    			arsort($arr, false);
+    			/**
+    			 * Получим протокол, ближайший к дате выдачи
+    			 */
+    			$protocolsNext = array();
+    			foreach ($arr as $key=>$value) {
+    				$protocolNext = CProtocolManager::getDepProtocol($key);
+    				$protocolsNext[$protocolNext->getId()] = $protocolNext;
+    			}
+    			$results->add(end(array_keys($protocolsNext)), end($protocolsNext));
+    		}
+    	}
+    	return $results;
+    }
 }

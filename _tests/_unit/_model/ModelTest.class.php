@@ -1,5 +1,4 @@
 <?php
-
 Use PHPUnit\Framework\TestCase;
 
 require_once("core_classloader.php");
@@ -32,6 +31,13 @@ final class ModelTest extends TestCase {
     }
 
     public function testModelsRelations() {
+        // установим объект для текущего сотрудника
+        $person = new CActiveRecord(array(
+            "id" => 1
+        ));
+        $model = new CPerson($person);
+        CSession::setCurrentPerson($model);
+    	
         // загрузим все модельные классы, проверим, что у них связи корректные
         $classes = CUtils::getAllClassesWithInterface('CActiveModel', '', self::$_excludes);
         foreach ($classes as $instance) {

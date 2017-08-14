@@ -30,7 +30,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
     private function getWorktypes() {
         if (is_null($this->_workTypes)) {
             $this->_workTypes = array();
-            foreach (CTaxonomyManager::getLegacyTaxonomy("spravochnik_uch_rab")->getTerms()->getItems() as $term) {
+            foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
                 $this->_workTypes[$term->getId()] = $term->getValue();
             }
         }
@@ -43,7 +43,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
     private function getWorktypesAlias() {
         if (is_null($this->_workTypesAlias)) {
             $this->_workTypesAlias = array();
-            foreach (CTaxonomyManager::getLegacyTaxonomy("spravochnik_uch_rab")->getTerms()->getItems() as $term) {
+            foreach (CTaxonomyManager::getLegacyTaxonomy(TABLE_WORKLOAD_WORK_TYPES)->getTerms()->getItems() as $term) {
                 $this->_workTypesAlias[$term->getId()] = $term->name_hours_kind;
             }
         }
@@ -236,11 +236,11 @@ class CIndPlanPersonLoadTable extends CFormModel{
      *      1 - только контракт
      *      2 - сумма бюджета и контракта
      *
-     * @param $typeAlias
-     * @param array $params
-     * @param int $period
-     * @param int $dataType
-     * @return int
+     * @param string $typeAlias - псевдоним типов нагрузок (лекция, практика, т.п.) из справочника учебных работ
+     * @param array $params - параметры
+     * @param int $period - семестр
+     * @param int $dataType - тип данных
+     * @return array
      */
     private function getLoadPlanByType($typeAlias, $params = array(), $period = 1, $dataType = 2) {
         $result = 0;
@@ -252,11 +252,13 @@ class CIndPlanPersonLoadTable extends CFormModel{
             "filials" => false
         );
         $params = array_merge($defaulParams, $params);
+        $typeId = CStudyLoadService::getWorktypeByAlias($typeAlias)->getId();
         // общие условия
         $condition = array(
-            "kadri_id = ".$this->getLoad()->person_id,
-            "year_id = ".$this->getLoad()->year->getId(),
-            "part_id = ".$period
+            "loads.person_id = ".$this->getLoad()->person_id,
+            "loads.year_id = ".$this->getLoad()->year->getId(),
+            "loads.year_part_id = ".$period,
+            "hours.type_id = ".$typeId
         );
         // типы нагрузки
         $types = array();
@@ -273,25 +275,27 @@ class CIndPlanPersonLoadTable extends CFormModel{
             $types[] = "4";
         }
         if (count($types) > 0) {
-            $condition[] = "hours_kind_type in (".implode(", ", $types).")";
+            $condition[] = "loads.load_type_id in (".implode(", ", $types).")";
         } else {
-            $condition[] = "hours_kind_type in (0)";
+            $condition[] = "loads.load_type_id in (0)";
         }
         if ($params["filials"]) {
-            $condition[] = "on_filial in (0, 1)";
+            $condition[] = "loads.on_filial in (0, 1)";
         } else {
-            $condition[] = "on_filial in (0)";
+            $condition[] = "loads.on_filial in (0)";
         }
         // какие столбцы брать и считать ли сумму
         $query = new CQuery();
         if ($dataType == 2) {
-            $query->select("IFNULL(SUM(".$typeAlias."), 0) + IFNULL(SUM(".$typeAlias."_add), 0) as value");
+            // для суммы бюджета и контракта не добавляем условий в запрос
         } elseif ($dataType == 1) {
-            $query->select("IFNULL(SUM(".$typeAlias."_add), 0) as value");
+            $condition[] = "hours.kind_id = ".CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId();
         } elseif ($dataType == 0) {
-            $query->select("IFNULL(SUM(".$typeAlias."), 0) as value");
+            $condition[] = "hours.kind_id = ".CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId();
         }
-        $query->from(TABLE_IND_PLAN_PLANNED);
+        $query->select("SUM(hours.workload) as value");
+        $query->from(TABLE_WORKLOAD." as loads");
+        $query->innerJoin(TABLE_WORKLOAD_WORKS." as hours", "hours.workload_id = loads.id");
         $query->condition(implode(" AND ", $condition));
         $data = $query->execute()->getFirstItem();
         $result = $data["value"];

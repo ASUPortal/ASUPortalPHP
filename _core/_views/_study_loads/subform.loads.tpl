@@ -1,8 +1,9 @@
 <form action="index.php" method="post" id="{$loadsId}">
-    <table class="table table-striped table-bordered table-hover table-condensed">
+    <table rel="stripe" class="table table-striped table-bordered table-hover table-condensed" border="1">
         <tr>
             {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
-            	<th></th>
+            	<th>&nbsp;</th>
+            	<th>&nbsp;</th>
             {/if}
             <th style="vertical-align:middle; text-align:center;">#</th>
             <th style="vertical-align:middle; text-align:center;">{CHtml::activeViewGroupSelect("id", $studyLoads->getFirstItem(), true)}</th>
@@ -24,11 +25,22 @@
             <th style="vertical-align:bottom;"><div class="vert-text">Всего</div></th>
             <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("on_filial", $studyLoads->getFirstItem(), false, false)}</div></th>
         </tr>
+        <tr>
+	        {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+	            {$ths = 14}
+	        {else}
+	            {$ths = 12}
+	        {/if}
+	        {for $i=1 to $ths + count($studyLoads->getFirstItem()->getStudyLoadTable()->getTableTotal())}
+	            <th style="text-align:center; background-color: #E6E6FF;">{$i}</th>
+	        {/for}
+        </tr>
         {counter start=0 print=false}
         {foreach $studyLoads->getItems() as $studyLoad}
 	        <tr>
 	            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
-	            	<td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузку')) { location.href='?action=delete&id={$studyLoad->getId()}'; }; return false;"></a></td>
+	            	<td><a href="#" class="icon-trash"  title="Удалить" onclick="if (confirm('Действительно удалить нагрузку')) { location.href='?action=delete&id={$studyLoad->getId()}'; }; return false;"></a></td>
+	            	<td><a href="../../_modules/_version_controls/index.php?action=index&id={$studyLoad->getId()}&module=_study_loads&class=CStudyLoad" class="icon-list-alt" title="Посмотреть версии" target="_blank"></a></td>
 	            {/if}
 	            <td>{counter}</td>
 	            <td>{CHtml::activeViewGroupSelect("id", $studyLoad, false, true)}</td>
@@ -52,11 +64,12 @@
 		                {/foreach}
 		            {/foreach}
 	            <td>{clearNullValues number=number_format($studyLoad->getSumWorksValue(),1,',','') level=0}</td>
-	            <td>{clearNullValues number=$studyLoad->on_filial level=0}</td>
+	            <td>{clearNullValues number=number_format($studyLoad->getWorkWithFilialsTotals(),1,',','') level=0}</td>
 	        </tr>
         {/foreach}
         <tr>
 			{if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+            	<td>&nbsp;</td>
             	<td>&nbsp;</td>
             {/if}
 			<td>&nbsp;</td>
@@ -77,7 +90,7 @@
 	                {/foreach}
 	            {/foreach}
 			<td><b>{clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes),1,',','') level=0}</b></td>
-			<td>&nbsp;</td>
+			<td><b>{clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPartWithFilials($lecturer, $year, $part, $loadTypes),1,',','') level=0}</b></td>
 		</tr>
     </table>
     {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
@@ -115,3 +128,18 @@
 		</table>
     {/if}
 </form>
+
+<script>
+	$(document).ready(function() {
+		updateTableStripe();
+		function updateTableStripe() {
+			$('.table[rel="stripe"] tr').each(function(i) {
+				if (i % 2 === 0) {
+					$(this).find("td").css('background', '#c5d0e6');
+				} else {
+					$(this).find("td").css('background', '#DFEFFF');
+				}
+			});
+		}
+	});
+</script>

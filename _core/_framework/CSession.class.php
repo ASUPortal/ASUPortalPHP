@@ -31,7 +31,14 @@ class CSession {
         return self::$_currentController;
     }
 
-
+    /**
+     * Сеттер для текущего сотрудника
+     *
+     * @param CPerson $person
+     */
+    public static function setCurrentPerson(CPerson $person) {
+        self::$_person = $person;
+    }
 
     /**
      * Объект текущего пользователя

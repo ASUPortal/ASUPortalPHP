@@ -81,6 +81,7 @@ class CCourseProjectsController extends CBaseController {
         $this->setData("groups", $groups);
         $this->setData("disciplines", $disciplines);
         $this->setData("courseProject", $courseProject);
+        $this->setData("disciplineId", 0);
         $this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
@@ -111,9 +112,29 @@ class CCourseProjectsController extends CBaseController {
                 $disciplines = CStaffService::getDisciplinesWithCourseProjectFromLoadByYear($courseProject->lecturer, $year);
             }
         }
+        
+        $issueProtocols = array();
+        foreach (CProtocolManager::getIssueProtocols($courseProject) as $issueProtocol) {
+            $issueProtocols[$issueProtocol->getId()] = "Протокол №".$issueProtocol->getNumber()." от ".date("d.m.Y", strtotime($issueProtocol->getDate()));
+        }
+        $this->setData("issueProtocols", $issueProtocols);
+        
+        $progressProtocols = array();
+        foreach (CProtocolManager::getProgressProtocols($courseProject) as $progressProtocol) {
+            $progressProtocols[$progressProtocol->getId()] = "Протокол №".$progressProtocol->getNumber()." от ".date("d.m.Y", strtotime($progressProtocol->getDate()));
+        }
+        $this->setData("progressProtocols", $progressProtocols);
+        
+        $resultsProtocols = array();
+        foreach (CProtocolManager::getResultsProtocols($courseProject) as $resultsProtocol) {
+            $resultsProtocols[$resultsProtocol->getId()] = "Протокол №".$resultsProtocol->getNumber()." от ".date("d.m.Y", strtotime($resultsProtocol->getDate()));
+        }
+        $this->setData("resultsProtocols", $resultsProtocols);
+        
         $this->setData("groups", $groups);
         $this->setData("disciplines", $disciplines);
         $this->setData("courseProject", $courseProject);
+        $this->setData("disciplineId", $courseProject->discipline_id);
         $this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
@@ -185,6 +206,7 @@ class CCourseProjectsController extends CBaseController {
         $this->setData("groups", $groups);
         $this->setData("disciplines", $disciplines);
         $this->setData("courseProject", $courseProject);
+        $this->setData("disciplineId", $courseProject->discipline_id);
         $this->renderView("_course_projects/add.tpl");
     }
 }

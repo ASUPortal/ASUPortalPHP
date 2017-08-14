@@ -37,7 +37,7 @@ class CPrintController extends CFlowController {
     }
 
     public function actionPrint() {
-        if (CRequest::getInt("id") == "") {
+        if (CRequest::getString("id") == "") {
             throw new Exception("Не выбраны объекты для печати!");
         }
         /**
@@ -50,7 +50,7 @@ class CPrintController extends CFlowController {
     	 */
     	$managerClass = CRequest::getString("manager");
     	$managerMethod = CRequest::getString("method");
-    	$objectId = CRequest::getInt("id");
+    	$objectId = CRequest::getString("id");
     	$formId = CRequest::getInt("template");
     	/**
     	 * Получаем объект через менеджер

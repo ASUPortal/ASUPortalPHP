@@ -52,14 +52,20 @@
 	        {/if}
         });
     </script>
-    <div class="form-horizontal">
-        <div class="control-group">
-            <label class="control-label" for="year.id">Учебный год</label>
-            <div class="controls">
-            	{CHtml::dropDownList("year.id", CTaxonomyManager::getYearsList(), $selectedYear, "year_selector", "span12")}
-            </div>
-        </div>
-    </div>
+    <table border="0" width="40%" class="tableBlank">
+		<tr>
+			<td>
+			    <div class="form-horizontal">
+			        <div class="control-group">
+			            <label class="control-label" for="year.id">Учебный год</label>
+			            <div class="controls">
+			            	{CHtml::dropDownList("year.id", CTaxonomyManager::getYearsList(), $selectedYear, "year_selector", "span12")}
+			            </div>
+			        </div>
+			    </div>
+			</td>
+		</tr>
+	</table>
     <table border="0" width="100%" class="tableBlank">
 		<tr>
 			<td valign="top" width="10%">
@@ -104,5 +110,5 @@
 {/block}
 
 {block name="asu_right"}
-	{include file="_study_loads/common.right.tpl"}
+	{include file="_study_loads/index.right.tpl"}
 {/block}

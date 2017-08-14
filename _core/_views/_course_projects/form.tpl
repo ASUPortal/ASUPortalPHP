@@ -46,14 +46,24 @@
         </div>
     </div>
     
-    <div class="control-group">
-	    {CHtml::activeLabel("commision_members", $courseProject)}
-	    <div class="controls">
-	        {CHtml::activeLookup("commision_members", $courseProject, "staff", true)}
-	        {CHtml::error("commision_members", $courseProject)}
-	    </div>
-	</div>
-	
+    {if ($disciplineId != 0)}
+	    <div class="control-group">
+		    {CHtml::activeLabel("commision_members", $courseProject)}
+		    <div class="controls">
+		        {CHtml::activeLookup("commision_members", $courseProject, "class.CSearchCatalogLecturersWithLoadByDiscipline", true, ["discipline_id" => $disciplineId])}
+		        {CHtml::error("commision_members", $courseProject)}
+		    </div>
+		</div>
+	{else}
+	    <div class="control-group">
+		    {CHtml::activeLabel("commision_members", $courseProject)}
+		    <div class="controls">
+		        {CHtml::activeLookup("commision_members", $courseProject, "staff", true)}
+		        {CHtml::error("commision_members", $courseProject)}
+		    </div>
+		</div>
+	{/if}
+		
 	<div class="control-group">
 	    {CHtml::activeLabel("issue_date", $courseProject)}
 	    <div class="controls">
@@ -118,6 +128,30 @@
 	    </div>
 	</div>
 	
+	<div class="control-group">
+	    {CHtml::activeLabel("issuing_themes", $courseProject)}
+	    <div class="controls">
+	        {CHtml::activeDropDownList("issuing_themes", $courseProject, $issueProtocols, "", "", "", "", true)}
+	        {CHtml::error("issuing_themes", $courseProject)}
+	    </div>
+	</div>
+
+	<div class="control-group">
+	    {CHtml::activeLabel("progress", $courseProject)}
+	    <div class="controls">
+	        {CHtml::activeDropDownList("progress", $courseProject, $progressProtocols, "", "", "", "", true)}
+	        {CHtml::error("progress", $courseProject)}
+	    </div>
+	</div>
+	
+	<div class="control-group">
+	    {CHtml::activeLabel("results", $courseProject)}
+	    <div class="controls">
+	        {CHtml::activeDropDownList("results", $courseProject, $resultsProtocols, "", "", "", "", true)}
+	        {CHtml::error("results", $courseProject)}
+	    </div>
+	</div>
+			
     <div class="control-group">
         <div class="controls">
             {CHtml::submit("Сохранить")}

@@ -7,10 +7,13 @@
 {/function}
 
 <form action="index.php" method="post" id="withLoadView">
-    <table class="table table-striped table-bordered table-hover table-condensed" id="dataTable">
+    <table rel="stripe" class="table table-striped table-bordered table-hover" border="1" id="dataTable">
         <thead>
 	        <tr>
-	            <th></th>
+	            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+					<th>&nbsp;</th>
+	            {/if}
+	            <th>{CHtml::checkboxGroupSelect("", true)}</th>
 	            <th>#</th>
 	            <th>ФИО преподавателя</th>
 	            <th>долж.</th>
@@ -31,39 +34,46 @@
         <tbody>
 	        {counter start=0 print=false}
 	        {foreach $persons as $person}
+		        {$parameters["kadri_id"] = CStaffManager::getPerson($person['kadri_id'])->getId()}
 		        <tr>
-		            <td><a href="#"><i title="Добавить" class="icon-plus" onclick="window.open('{$web_root}_modules/_study_loads/index.php?action=add&kadri_id={$person["kadri_id"]}&year_id={$person["year_id"]}')"></i></a></td>
-		            <td>{counter}</td>
-		            <td><a href="?action=editLoads&kadri_id={$person['kadri_id']}&year_id={$person['year_id']}&base=1&additional=1&premium=1&byTime=1" title="{$person['fio']}">{$person['fio_short']}</a></td>
-		            <td>{$person['dolgnost']}</td>
+		            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+			            <td rel="stripe"><a href="#"><i title="Добавить" class="icon-plus" onclick="window.open('{$web_root}_modules/_study_loads/index.php?action=add&kadri_id={$person["kadri_id"]}&year_id={$person["year_id"]}')"></i></a></td>
+		            {/if}
+		            <td rel="stripe">{CHtml::checkboxGroupSelect(urlencode(serialize($parameters)))}</td>
+		            <td class="count" rel="stripe">{counter}</td>
+		            <td rel="stripe"><a href="?action=editLoads&kadri_id={$person['kadri_id']}&year_id={$person['year_id']}&base=1&additional=1&premium=1&byTime=1" title="{$person['fio']}">{$person['fio_short']}</a></td>
+		            <td rel="stripe">{$person['dolgnost']}</td>
 		            {if ($person['rate'] != 0)}
-			            <td>{number_format($person['hours_sum']/$person['rate'],2,',','')}</td>
+			            <td rel="stripe">{number_format($person['hours_sum']/$person['rate'],2,',','')}</td>
 			        {else}
-			            <td>&nbsp;</td>
+			            <td rel="stripe">&nbsp;</td>
 			        {/if}
 			        {if ($person['rate_sum'] != 0)}
-			            <td>{number_format($person['rate_sum'],2,',','')}<sup>{$person['ord_cnt']}</sup></td>
+			            <td rel="stripe">{number_format($person['rate_sum'],2,',','')}<sup>{$person['ord_cnt']}</sup></td>
 			        {else}
-			            <td>&nbsp;</td>
+			            <td rel="stripe">&nbsp;</td>
 			        {/if}
-		            <td>{$person['groups_cnt_sum_']}</td>
-		            <td>{$person['stud_cnt_sum_']}</td>
+		            <td rel="stripe">{$person['groups_cnt_sum_']}</td>
+		            <td rel="stripe">{$person['stud_cnt_sum_']}</td>
 		            {foreach CStudyLoadService::getStudyWorksTotalValues($person['kadri_id'], $person['year_id'], $isBudget, $isContract) as $typeId=>$rows}
 						{foreach $rows as $kindId=>$value}
 							{if !in_array($kindId, array(0))}
-								<td>{clearNullValues number=number_format($value,1,',','') level=0}</td>
+								<td rel="stripe">{clearNullValues number=number_format($value,1,',','') level=0}</td>
 							{/if}
 		                {/foreach}
 		            {/foreach}
-		            <td>{clearNullValues number=number_format($person['hours_sum_base'],1,',','') level=0}</td>
-		            <td>{clearNullValues number=number_format($person['hours_sum_additional'],1,',','') level=0}</td>
-		            <td>{clearNullValues number=number_format($person['hours_sum_premium'],1,',','') level=0}</td>
-		            <td>{clearNullValues number=number_format($person['hours_sum_by_time'],1,',','') level=0}</td>
-		            <td>{clearNullValues number=number_format($person['hours_sum'],1,',','') level=0}</td>
+		            <td rel="stripe">{clearNullValues number=number_format($person['hours_sum_base'],1,',','') level=0}</td>
+		            <td rel="stripe">{clearNullValues number=number_format($person['hours_sum_additional'],1,',','') level=0}</td>
+		            <td rel="stripe">{clearNullValues number=number_format($person['hours_sum_premium'],1,',','') level=0}</td>
+		            <td rel="stripe">{clearNullValues number=number_format($person['hours_sum_by_time'],1,',','') level=0}</td>
+		            <td rel="stripe">{clearNullValues number=number_format($person['hours_sum'],1,',','') level=0}</td>
 		        </tr>
 	        {/foreach}
         </tbody>
-        <tr bgcolor="#ff9966">
+        <tr>
+        	{if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+            	<td>&nbsp;</td>
+        	{/if}
         	<td>&nbsp;</td>
         	<td>&nbsp;</td>
             <td><b>Итого</b></td>
@@ -97,3 +107,33 @@
 		</tr>
     </table>
 </form>
+
+<script>
+	$(document).ready(function() {
+		updateTableNumeration();
+		jQuery("input[class='filter']").on("change", function(){
+			$.ajax({
+				success: function(data) {
+					updateTableNumeration();
+				}
+			});
+		});
+		jQuery(".header").on("click", function(){
+			$.ajax({
+				success: function(data) {
+					updateTableNumeration();
+				}
+			});
+		});
+		function updateTableNumeration() {
+			$('.table[rel="stripe"] tbody tr:not([style="display: none;"])').each(function(i) {
+				$(this).find('.count').text(i+1);
+				if (i % 2 === 0) {
+					$(this).find("td[rel='stripe']").css('background', '#c5d0e6');
+				} else {
+					$(this).find("td[rel='stripe']").css('background', '#DFEFFF');
+				}
+			});
+		}
+	});
+</script>

@@ -6,10 +6,10 @@ class CStudyLoadYearPartsConstants {
 	/**
 	 * Осенний
 	 */
-	const FALL = 1;
+	const FALL = "fall";
 	
 	/**
 	 * Весенний
 	 */
-	const SPRING = 2;
+	const SPRING = "spring";
 }

@@ -1,7 +1,6 @@
 <form action="index.php" method="post" class="form-horizontal">
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $studyLoad)}
-    {CHtml::activeHiddenField("_created_by", $studyLoad)}
 
     {CHtml::errorSummary($studyLoad)}
 

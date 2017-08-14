@@ -8,6 +8,11 @@ class CCourseProject extends CActiveModel {
     protected $_group = null;
     protected $_discipline = null;
     protected $_lecturer = null;
+    protected $_chairman_of_commission = null;
+    protected $_protocol = null;
+    protected $_protocolIssuingThemes = null;
+    protected $_protocolProgress = null;
+    protected $_protocolResults = null;
     
     protected function relations() {
         return array(
@@ -59,6 +64,27 @@ class CCourseProject extends CActiveModel {
                 "relationPower" => RELATION_HAS_ONE,
                 "storageProperty" => "_protocol",
                 "storageField" => "protocol_id",
+                "managerClass" => "CProtocolManager",
+                "managerGetObject" => "getDepProtocol"
+            ),
+            "protocolIssuingThemes" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_protocolIssuingThemes",
+                "storageField" => "issuing_themes",
+                "managerClass" => "CProtocolManager",
+                "managerGetObject" => "getDepProtocol"
+            ),
+            "protocolProgress" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_protocolProgress",
+                "storageField" => "progress",
+                "managerClass" => "CProtocolManager",
+                "managerGetObject" => "getDepProtocol"
+            ),
+            "protocolResults" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_protocolResults",
+                "storageField" => "results",
                 "managerClass" => "CProtocolManager",
                 "managerGetObject" => "getDepProtocol"
             )
@@ -114,7 +140,10 @@ class CCourseProject extends CActiveModel {
             "graduation_time" => "Время защит",
             "auditorium" => "Аудитория",
             "protocol_id" => "Протокол заседания кафедры",
-            "requirements_for_registration" => "Требования к оформлению"
+            "requirements_for_registration" => "Требования к оформлению",
+            "issuing_themes" => "Выдача тем",
+            "progress" => "Ход работы",
+            "results" => "Результаты"
         );
     }
     

@@ -197,4 +197,18 @@ class CPrintManager {
         }
         return $field;
     }
+    
+    /**
+     * Получить пустой CArrayList с экземпляром CModel
+     * (для совместимости с подсистемой печати и при указании в настройках контекста дополнительных параметров)
+     *
+     * @param int $id - произвольный id
+     * @return CArrayList
+     */
+    public static function getCArrayListWithInstanceCModel($id) {
+        $items = new CArrayList();
+        $model = new CModel();
+        $items->add($id, $model);
+        return $items;
+    }
 }

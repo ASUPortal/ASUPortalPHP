@@ -3,7 +3,7 @@
 /**
  * Стратегия генерации имён файлов для курсового проектирования
  *
- * Class CIndPlanFilenameGenerationStrategy
+ * Class CCourseProjectFilenameGenerationStrategy
  */
 class CCourseProjectFilenameGenerationStrategy implements IPrintFilenameGenerationStrategy {
     private $form;
