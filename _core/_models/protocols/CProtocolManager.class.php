@@ -214,10 +214,10 @@ class CProtocolManager {
      * Список протоколов для выдачи тем курсовых проектов - протокол от даты выдачи +1 неделя (до ближайшего)
      *
      * @param CCourseProject $courseProject
-     * @return array
+     * @return CArrayList
      */
-    public static function getIssueProtocolsList(CCourseProject $courseProject) {
-    	$res = array();
+    public static function getIssueProtocols(CCourseProject $courseProject) {
+    	$results = new CArrayList();
     	 
     	// дата выдачи темы курсового проекта
     	$issueDate = strtotime($courseProject->issue_date);
@@ -234,7 +234,7 @@ class CProtocolManager {
     			$protocols->add($protocol->getId(), $protocol);
     		}
     		foreach ($protocols as $protocol) {
-    			$res[$protocol->getId()] = "Протокол №".$protocol->getNumber()." от ".date("d.m.Y", strtotime($protocol->getDate()));
+    			$results->add($protocol->getId(), $protocol);
     		}
     		/**
     		 * Если в промежутке между датой выдачи курсового проекта и +1 неделя нет протокола,
@@ -259,22 +259,22 @@ class CProtocolManager {
     			$protocolsNext = array();
     			foreach ($arr as $key=>$value) {
     				$protocolNext = CProtocolManager::getDepProtocol($key);
-    				$protocolsNext[$protocolNext->getId()] = "Протокол №".$protocolNext->getNumber()." от ".date("d.m.Y", strtotime($protocolNext->getDate()));
+    				$protocolsNext[$protocolNext->getId()] = $protocolNext;
     			}
-    			$res[end(array_keys($protocolsNext))] = end($protocolsNext);
+    			$results->add(end(array_keys($protocolsNext)), end($protocolsNext));
     		}
     	}
-    	return $res;
+    	return $results;
     }
     
     /**
      * Список протоколов для хода работы курсовых проектов - протокол от даты выдачи +10 недель (до ближайшего)
      *
      * @param CCourseProject $courseProject
-     * @return array
+     * @return CArrayList
      */
-    public static function getProgressProtocolsList(CCourseProject $courseProject) {
-    	$res = array();
+    public static function getProgressProtocols(CCourseProject $courseProject) {
+    	$results = new CArrayList();
     	 
     	// дата выдачи темы курсового проекта
     	$issueDate = strtotime($courseProject->issue_date);
@@ -291,7 +291,7 @@ class CProtocolManager {
     			$protocols->add($protocol->getId(), $protocol);
     		}
     		foreach ($protocols as $protocol) {
-    			$res[$protocol->getId()] = "Протокол №".$protocol->getNumber()." от ".date("d.m.Y", strtotime($protocol->getDate()));
+    			$results->add($protocol->getId(), $protocol);
     		}
     		/**
     		 * Если в промежутке между датой выдачи курсового проекта и +10 недель нет протокола,
@@ -316,22 +316,22 @@ class CProtocolManager {
     			$protocolsNext = array();
     			foreach ($arr as $key=>$value) {
     				$protocolNext = CProtocolManager::getDepProtocol($key);
-    				$protocolsNext[$protocolNext->getId()] = "Протокол №".$protocolNext->getNumber()." от ".date("d.m.Y", strtotime($protocolNext->getDate()));
+    				$protocolsNext[$protocolNext->getId()] = $protocolNext;
     			}
-    			$res[end(array_keys($protocolsNext))] = end($protocolsNext);
+    			$results->add(end(array_keys($protocolsNext)), end($protocolsNext));
     		}
     	}
-    	return $res;
+    	return $results;
     }
     
     /**
      * Список протоколов для результатов курсовых проектов - протокол от даты последней защиты (из журнала успеваемости)
      *
      * @param CCourseProject $courseProject
-     * @return array
+     * @return CArrayList
      */
-    public static function getResultsProtocolsList(CCourseProject $courseProject) {
-    	$res = array();
+    public static function getResultsProtocols(CCourseProject $courseProject) {
+    	$results = new CArrayList();
     	if (!is_null($courseProject->getId())) {
     		/**
     		 * Находим дату последней защиты в журнале успеваемости
@@ -369,12 +369,11 @@ class CProtocolManager {
     			$protocolsNext = array();
     			foreach ($arr as $key=>$value) {
     				$protocolNext = CProtocolManager::getDepProtocol($key);
-    				$protocolsNext[$protocolNext->getId()] = "Протокол №".$protocolNext->getNumber()." от ".date("d.m.Y", strtotime($protocolNext->getDate()));
+    				$protocolsNext[$protocolNext->getId()] = $protocolNext;
     			}
-    			$res[end(array_keys($protocolsNext))] = end($protocolsNext);
-    
+    			$results->add(end(array_keys($protocolsNext)), end($protocolsNext));
     		}
     	}
-    	return $res;
+    	return $results;
     }
 }
