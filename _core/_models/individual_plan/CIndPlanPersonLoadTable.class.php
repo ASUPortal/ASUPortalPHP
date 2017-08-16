@@ -293,6 +293,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
         } elseif ($dataType == 0) {
             $condition[] = "hours.kind_id = ".CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId();
         }
+        $condition[] = "loads._is_last_version = 1";
         $query->select("SUM(hours.workload) as value");
         $query->from(TABLE_WORKLOAD." as loads");
         $query->innerJoin(TABLE_WORKLOAD_WORKS." as hours", "hours.workload_id = loads.id");

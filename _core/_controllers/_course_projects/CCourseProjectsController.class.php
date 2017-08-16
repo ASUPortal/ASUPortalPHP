@@ -203,6 +203,9 @@ class CCourseProjectsController extends CBaseController {
         if (count(CStaffService::getDisciplinesWithCourseProjectFromLoadByYear(CSession::getCurrentPerson(), CUtils::getCurrentYear())) > 0) {
             $disciplines = CStaffService::getDisciplinesWithCourseProjectFromLoadByYear(CSession::getCurrentPerson(), CUtils::getCurrentYear());
         }
+        $this->setData("issueProtocols", array());
+        $this->setData("progressProtocols", array());
+        $this->setData("resultsProtocols", array());
         $this->setData("groups", $groups);
         $this->setData("disciplines", $disciplines);
         $this->setData("courseProject", $courseProject);
