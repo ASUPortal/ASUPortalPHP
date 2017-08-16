@@ -174,12 +174,14 @@ class CStaffService {
      */
     public static function getDisciplinesWithCourseProjectFromLoadByYear(CPerson $lecturer, CTerm $year) {
         $disciplines = array();
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_PLANNED, "kadri_id = ".$lecturer->getId()." AND year_id = ".$year->getId())->getItems() as $item) {
-    		$studyKursProj = 0;
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$lecturer->getId()." AND year_id = ".$year->getId()." AND _is_last_version = 1")->getItems() as $item) {
+        	$studyKursProj = 0;
     		$study = new CStudyLoad($item);
-			$studyKursProj += $study->kurs_proj + $study->kurs_proj_add;
+    		foreach ($study->works as $work) {
+    			$studyKursProj += $work->getSumWorkHoursByType(CStudyLoadWorkTypeConstants::LABOR_COURSE_PROJECT);
+    		}
 			if ($studyKursProj != 0) {
-				$disciplines[$study->subject_id] = CDisciplinesManager::getDiscipline($study->subject_id)->name;
+				$disciplines[$study->discipline_id] = CDisciplinesManager::getDiscipline($study->discipline_id)->name;
 			}
         }
         if (!empty($disciplines)) {
