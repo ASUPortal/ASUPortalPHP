@@ -119,10 +119,10 @@ class CLecturerOuter extends CPerson {
     		$query = new CQuery();
     		$query->select("schedule.*")
 	    		->from(TABLE_SCHEDULE." as schedule")
-	    		->condition("schedule.id=".$this->getId()." and schedule.year=".CUtils::getCurrentYear()->getId()." and schedule.month=".CUtils::getCurrentYearPart()->getId());
+	    		->condition("schedule.user_id=".$this->getId()." and schedule.year=".CUtils::getCurrentYear()->getId()." and schedule.month=".CUtils::getCurrentYearPart()->getId());
     		foreach ($query->execute()->getItems() as $item) {
     			$schedule = new CSchedule(new CActiveRecord($item));
-    			$this->_schedules->add($schedule->getId(), $schedule);
+    			$this->_schedules->add($schedule->user_id, $schedule);
     		}
     	}
     	return $this->_schedules;
