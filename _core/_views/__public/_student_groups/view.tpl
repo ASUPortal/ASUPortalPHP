@@ -29,7 +29,7 @@
 				</td>
 				<td>
 					{if {$group->getSchedule()->getCount()}!=0}
-						<a href="{$web_root}p_time_table.php?onget=1&idlect={$group->getSchedule()->getFirstItem()->grup}&gr_mode=1">посмотреть</a>
+						<a href="{$web_root}_modules/_schedule/public.php?action=viewGroups&id={$group->getSchedule()->getFirstItem()->grup}">посмотреть</a>
 		         	{else}
 		         		расписания на портале нет
 					{/if}

@@ -133,4 +133,20 @@ class CLibraryManager {
         }
         return $result;
     }
+    
+    /**
+     * Документ с учебными материалами по пользователю и дисциплине
+     * 
+     * @param CUser $user
+     * @param CDiscipline $discipline
+     * @return CLibraryDocument
+     */
+    public static function getLibraryDocumentByUserAndDiscipline(CUser $user, CTerm $discipline) {
+        $documents = new CArrayList();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_LIBRARY_DOCUMENTS, "user_id = '".$user->getId()."' and subj_id = '".$discipline->getId()."'")->getItems() as $ar) {
+            $document = new CLibraryDocument($ar);
+            $documents->add($document->getId(), $document);
+        }
+        return $documents->getFirstItem();
+    }
 }

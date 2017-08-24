@@ -6,7 +6,7 @@
  * Time: 10:53
  * To change this template use File | Settings | File Templates.
  */
-class CDiscipline extends CActiveModel {
+class CDiscipline extends CTerm {
 	protected $_table = TABLE_DISCIPLINES;
 	protected $_books = null;
     private $_questions = null;
@@ -47,5 +47,16 @@ class CDiscipline extends CActiveModel {
             }
         }
         return $this->_questions;
+    }
+    /**
+     * 
+     * @return string
+     */
+    public function getAlias() {
+        if ($this->getRecord()->getItemValue("name_short") != "") {
+            return $this->getRecord()->getItemValue("name_short");
+        } else {
+            return $this->getRecord()->getItemValue("name");
+        }
     }
 }

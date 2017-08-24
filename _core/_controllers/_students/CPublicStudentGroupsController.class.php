@@ -60,6 +60,18 @@ class CPublicStudentGroupsController extends CBaseController {
     		$group = new CStudentGroup($item);
     		$groups->add($group->getId(), $group);
     	}
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Расписание по преподавателю",
+    			"link" => WEB_ROOT."_modules/_lecturers/index.php",
+    			"icon" => "apps/office-calendar.png"
+    		),
+    		array(
+    			"title" => "Общее расписание",
+    			"link" => WEB_ROOT."_modules/_schedule/public.php?action=allSchedule",
+    			"icon" => "apps/office-calendar.png"
+    		)
+    	));
     	$this->setData("resRusLetters", $resRusLetters);
     	$this->setData("letterId", $letterId);
     	$this->setData("firstLet", $firstLet);

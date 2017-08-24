@@ -106,7 +106,7 @@ class CLecturersController extends CBaseController {
     							"title" => "Добавить биографию",
     							"link" => WEB_ROOT."_modules/_biography/index.php",
     							"icon" => "actions/list-add.png"
-    					)
+    						)
     				)
     			);
     		}
@@ -117,6 +117,18 @@ class CLecturersController extends CBaseController {
     			$lects->add($lect->getId(), $lect);
     		}
     	}
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Расписание по группе",
+    			"link" => WEB_ROOT."_modules/_student_groups/public.php",
+    			"icon" => "apps/office-calendar.png"
+    		),
+    		array(
+    			"title" => "Общее расписание",
+    			"link" => WEB_ROOT."_modules/_schedule/public.php?action=allSchedule",
+    			"icon" => "apps/office-calendar.png"
+    		)
+    	));
         $this->setData("resRusLetters", $resRusLetters);
         $this->setData("letterId", $letterId);
         $this->setData("firstLet", $firstLet);

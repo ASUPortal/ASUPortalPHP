@@ -20,7 +20,7 @@
     	</table>
     	{if {$lect->getSchedule()->getCount()}!=0}
 			{foreach $lect->getSchedule()->getItems() as $rasp}
-				<div><b><a href="{$web_root}p_time_table.php?onget=1&idlect={$rasp->id}">Расписание</a></b></div>
+				<div><b><a href="{$web_root}_modules/_schedule/public.php?action=viewLecturers&id={$rasp->id}">Расписание</a></b></div>
 			{/foreach}
 		{else}
 			Расписания на портале нет<br>

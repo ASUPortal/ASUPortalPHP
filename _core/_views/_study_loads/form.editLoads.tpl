@@ -43,7 +43,7 @@
 		Нет объектов для отображения
 	{else}
 		{if $loadsFall->getCount() != 0}
-			<div class="alert alert-info" style="text-align:center;">ОСЕННИЙ семестр</div>
+			<div class="alert alert-info" style="text-align:center;">Осенний семестр</div>
 			
 			{$studyLoads = $loadsFall}
 			{$loadsId = "loadsFall"}

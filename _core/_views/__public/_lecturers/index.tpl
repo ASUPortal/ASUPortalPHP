@@ -56,7 +56,7 @@
 		        <td>
 					{if {$lect->getSchedule()->getCount()}!=0}
 						{foreach $lect->getSchedule()->getItems() as $rasp}
-		    				<a href="{$web_root}p_time_table.php?onget=1&idlect={$rasp->id}">посмотреть</a>
+		    				<a href="{$web_root}_modules/_schedule/public.php?action=viewLecturers&id={$rasp->user_id}">посмотреть</a>
 						{/foreach}
 		         	{else}
 		         		расписания на портале нет

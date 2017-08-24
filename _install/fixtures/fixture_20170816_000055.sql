@@ -1,0 +1,3 @@
+ALTER TABLE `time` CHANGE `id` `user_id` INT(11) NOT NULL DEFAULT '0' COMMENT 'ID пользователя [users]';
+
+ALTER TABLE `time` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
