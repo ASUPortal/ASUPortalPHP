@@ -12,9 +12,13 @@
 		        {foreach CScheduleService::getLecturersWithSchedulesByYearAndPart($year, $yearPart)->getItems() as $lecturer}
 		        	<td style="background-color: #EFEFFF; text-align:center;" width=150>
 			        	<b>
-			        		<a href="{$web_root}_modules/_schedule/{$link}?action=viewLecturers&id={$lecturer->getId()}" 
-			        			style="text-decoration: none; color:#000000;" title="Посмотреть расписание" target="_blank">{$lecturer->getName()}
-			        		</a>
+			        		{if !$print}
+				        		<a href="{$web_root}_modules/_schedule/{$link}?action=viewLecturers&id={$lecturer->getId()}" 
+				        			style="text-decoration: none; color:#000000;" title="Посмотреть расписание" target="_blank">{$lecturer->getName()}
+				        		</a>
+			        		{else}
+			        			{$lecturer->getName()}
+			        		{/if}
 			        	</b>
 		        	</td>
 		        {/foreach}
@@ -48,7 +52,7 @@
 					        		{counter start=0 print=false assign=countAllWork}
 					        		{foreach CScheduleService::getScheduleByLecturerDayAndNumber($year, $yearPart, $lecturer, $day, $number)->getItems() as $schedule}
 					        			{if ($schedule->kind == 1)}
-							            	{CScheduleService::getCellForAllSchedule($schedule)}
+							            	{CPublicScheduleController::getCellForAllSchedule($schedule)}
 							            	{counter}
 								            {if ($countAllWork != $countLabWork)}
 								            	<hr>
@@ -71,7 +75,7 @@
 												<img src="{$web_root}images/toupdate.png">
 											</a>
 								    	{/if}
-					        			{CScheduleService::getCellForAllSchedule($schedule)}
+					        			{CPublicScheduleController::getCellForAllSchedule($schedule)}
 					        			{if (!$isPublic)}
 					        				<a href="#" class="icon-trash" title="Удалить" onclick="if (confirm('Действительно удалить запись {$schedule->getId()}?')) 
 					        					{ location.href='index.php?action=delete&id={$schedule->getId()}&nameId={$lecturer->getId()}&redirect={CRequest::getString("action")}'; }; return false;"></a>

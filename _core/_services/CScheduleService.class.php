@@ -77,68 +77,6 @@ class CScheduleService {
     }
     
     /**
-     * Строка для отображения индивидуального расписания в ячейке
-     * 
-     * @param CSchedule $schedule - объект расписания
-     * @param CUser/CStudentGroup $nameInCell - пользователь, либо учебная группа в зависимости от выбора
-     * @param boolean $cellLab - признак лабораторной работы
-     * @return string
-     */
-    public static function getCellForSchedule(CSchedule $schedule, $nameInCell, $cellLab = false) {
-    	$libraryDocument = null;
-    	$disciplineValue = "";
-    	$disciplineAlias = "";
-    	if (!is_null($nameInCell)) {
-    		$name = $nameInCell->getName();
-    	} else {
-    		$name = "";
-    	}
-    	if (!is_null($schedule->discipline)) {
-    		if (!is_null($schedule->lecturer)) {
-    			$libraryDocument = CLibraryManager::getLibraryDocumentByUserAndDiscipline($schedule->lecturer, $schedule->discipline);
-    		}
-    		$disciplineValue = $schedule->discipline->getValue();
-    		$disciplineAlias = $schedule->discipline->getAlias();
-    	}
-    	if (!is_null($libraryDocument) and !$cellLab) {
-    		$cell = $schedule->length.' нед. '.$name.', <br> ауд. '.$schedule->place.',
-    			<a href="../../_modules/_library/index.php?action=publicView&id='.$libraryDocument->nameFolder.'
-    				"title="'.$disciplineValue.'" target="_blank"><b>'.$disciplineAlias.'</b></a> ('.$schedule->kindWork->getValue().')';
-    	} elseif ($cellLab) {
-    		$cell = '<font color="silver">'.$schedule->length.' нед. '.$name.', <br> ауд. '.$schedule->place.',
-    			<a style="color:silver;" title="'.$disciplineValue.'"><b>'.$disciplineAlias.'</b></a> ('.$schedule->kindWork->getValue().')</font>';
-    	} else {
-    		$cell = $schedule->length.' нед. '.$name.', <br> ауд. '.$schedule->place.',
-    			<a style="color:silver;" title="'.$disciplineValue.'"><b>'.$disciplineAlias.'</b></a> ('.$schedule->kindWork->getValue().')';
-    	}
-    	return $cell;
-    }
-    
-    /**
-     * Строка для отображения общего расписания в ячейке
-     *
-     * @param CSchedule $schedule - объект расписания
-     * @return string
-     */
-    public static function getCellForAllSchedule(CSchedule $schedule) {
-    	if (!is_null($schedule->studentGroup)) {
-    		$name = $schedule->studentGroup->getName();
-    	} else {
-    		$name = "";
-    	}
-    	if (!is_null($schedule->discipline)) {
-    		$disciplineValue = $schedule->discipline->getValue();
-    		$disciplineAlias = $schedule->discipline->getAlias();
-    	} else {
-    		$disciplineValue = "";
-    		$disciplineAlias = "";
-    	}
-    	$cell = $schedule->length.' нед. '.$name.', ауд. '.$schedule->place.',
-    		<a title="'.$disciplineValue.'"><b>'.$disciplineAlias.'</b></a> ('.$schedule->kindWork->getValue().')';
-    	return $cell;
-    }
-    
-    /**
      * Преподаватели для общего расписания по году и семестру
      *
      * @param CTerm $year - учебный год

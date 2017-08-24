@@ -17,7 +17,7 @@
 	{counter start=0 print=false assign=countAllWork}
 	{foreach CScheduleService::getScheduleByDayAndNumber($schedules, $day, $number)->getItems() as $schedule}
 		{if ($schedule->kindWork->getAlias() == CScheduleKindWorkConstants::LAB_WORK)}
-        	{CScheduleService::getCellForSchedule($schedule, $schedule->$nameInCell, true)}
+        	{CPublicScheduleController::getCellForSchedule($schedule, $schedule->$nameInCell, true)}
         	{counter}
             {if ($countAllWork != $countLabWork)}
             	<hr>
@@ -39,7 +39,7 @@
                 <img src="{$web_root}images/toupdate.png">
             </a>
     	{/if}
-		{CScheduleService::getCellForSchedule($schedule, $schedule->$nameInCell)}
+		{CPublicScheduleController::getCellForSchedule($schedule, $schedule->$nameInCell)}
 		{if (!$isPublic)}
 			<a href="#" class="icon-trash" title="Удалить" onclick="if (confirm('Действительно удалить запись {$schedule->getId()}?')) 
 			{ location.href='index.php?action=delete&id={$schedule->getId()}&nameId={$name->getId()}&redirect={CRequest::getString("action")}'; }; return false;"></a>

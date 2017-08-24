@@ -44,11 +44,7 @@ class CPublicScheduleController extends CPublicStudentGroupsController {
     	}
     }
     public function actionViewLecturers() {
-    	if ($this->isPublic()) {
-    		$this->setData("isPublic", true);
-    	} else {
-    		$this->setData("isPublic", false);
-    	}
+    	$this->setData("isPublic", $this->isPublic());
     	
     	$selectedName = null;
     	if (CRequest::getInt("year") != 0) {
@@ -172,11 +168,7 @@ class CPublicScheduleController extends CPublicStudentGroupsController {
     	$this->renderView("__public/_schedule/view.tpl");
     }
     public function actionViewGroups() {
-    	if ($this->isPublic()) {
-    		$this->setData("isPublic", true);
-    	} else {
-    		$this->setData("isPublic", false);
-    	}
+    	$this->setData("isPublic", $this->isPublic());
     	
     	$selectedName = null;
     	if (CRequest::getInt("year") != 0) {
@@ -313,11 +305,8 @@ class CPublicScheduleController extends CPublicStudentGroupsController {
     		$schedules = CScheduleService::getScheduleGroupByYearAndPart($group, $year, $yearPart);
     		$this->setData("name", $group);
     	}
-    	if (CRequest::getInt("invert") == 1) {
-    		$this->setData("invert", true);
-    	} else {
-    		$this->setData("invert", false);
-    	}
+    	$this->setData("invert", CRequest::getInt("invert") == 1);
+    	$this->setData("link", $this->getLink());
     	$this->setData("year", $year);
     	$this->setData("yearPart", $yearPart);
     	$this->setData("nameInCell", CRequest::getString("nameInCell"));
@@ -327,11 +316,7 @@ class CPublicScheduleController extends CPublicStudentGroupsController {
     	$this->renderView("__public/_schedule/printView.tpl");
     }
     public function actionAllSchedule() {
-    	if ($this->isPublic()) {
-    		$this->setData("isPublic", true);
-    	} else {
-    		$this->setData("isPublic", false);
-    	}
+    	$this->setData("isPublic", $this->isPublic());
     	
     	if (CRequest::getInt("year") != 0) {
     		$year = CTaxonomyManager::getYear(CRequest::getInt("year"));
@@ -375,6 +360,7 @@ class CPublicScheduleController extends CPublicStudentGroupsController {
     	));
     	
     	$this->setData("link", $this->getLink());
+    	$this->setData("print", false);
     	$this->setData("name", "all");
     	$this->setData("selectedName", null);
     	$this->setData("nameInCell", "all");
@@ -393,6 +379,7 @@ class CPublicScheduleController extends CPublicStudentGroupsController {
     	$countLecturers = CScheduleService::getLecturersWithSchedulesByYearAndPart($year, $yearPart)->getCount();
     	
     	$this->setData("link", $this->getLink());
+    	$this->setData("print", true);
     	$this->setData("year", $year);
     	$this->setData("yearPart", $yearPart);
     	$this->setData("time", $this->getTime());
@@ -444,5 +431,63 @@ class CPublicScheduleController extends CPublicStudentGroupsController {
     public function getAllDay() {
     	$existDays = array(1=>'Понедельник',2=>'Вторник',3=>'Среда',4=>'Четверг',5=>'Пятница',6=>'Суббота');
     	return $existDays;
+    }
+    /**
+     * Строка для отображения индивидуального расписания в ячейке
+     *
+     * @param CSchedule $schedule - объект расписания
+     * @param CUser/CStudentGroup $nameInCell - пользователь, либо учебная группа в зависимости от выбора
+     * @param boolean $cellLab - признак лабораторной работы
+     * @return string
+     */
+    public static function getCellForSchedule(CSchedule $schedule, $nameInCell, $cellLab = false) {
+    	$libraryDocument = null;
+    	$disciplineValue = "";
+    	$disciplineAlias = "";
+    	$name = "";
+    	if (!is_null($nameInCell)) {
+    		$name = $nameInCell->getName();
+    	}
+    	if (!is_null($schedule->discipline)) {
+    		if (!is_null($schedule->lecturer)) {
+    			$libraryDocument = CLibraryManager::getLibraryDocumentByUserAndDiscipline($schedule->lecturer, $schedule->discipline);
+    		}
+    		$disciplineValue = $schedule->discipline->getValue();
+    		$disciplineAlias = $schedule->discipline->getAlias();
+    	}
+    	if (!is_null($libraryDocument) and !$cellLab) {
+    		$cell = $schedule->length.' нед. '.$name.', <br> ауд. '.$schedule->place.',
+    			<a href="../../_modules/_library/index.php?action=publicView&id='.$libraryDocument->nameFolder.'
+    				"title="'.$disciplineValue.'" target="_blank"><b>'.$disciplineAlias.'</b></a> ('.$schedule->kindWork->getValue().')';
+    	} elseif ($cellLab) {
+    		$cell = '<font color="silver">'.$schedule->length.' нед. '.$name.', <br> ауд. '.$schedule->place.',
+    			<a style="color:silver;" title="'.$disciplineValue.'"><b>'.$disciplineAlias.'</b></a> ('.$schedule->kindWork->getValue().')</font>';
+    	} else {
+    		$cell = $schedule->length.' нед. '.$name.', <br> ауд. '.$schedule->place.',
+    			<a style="color:silver;" title="'.$disciplineValue.'"><b>'.$disciplineAlias.'</b></a> ('.$schedule->kindWork->getValue().')';
+    	}
+    	return $cell;
+    } 
+    /**
+     * Строка для отображения общего расписания в ячейке
+     *
+     * @param CSchedule $schedule - объект расписания
+     * @return string
+     */
+    public static function getCellForAllSchedule(CSchedule $schedule) {
+    	$name = "";
+    	if (!is_null($schedule->studentGroup)) {
+    		$name = $schedule->studentGroup->getName();
+    	}
+    	if (!is_null($schedule->discipline)) {
+    		$disciplineValue = $schedule->discipline->getValue();
+    		$disciplineAlias = $schedule->discipline->getAlias();
+    	} else {
+    		$disciplineValue = "";
+    		$disciplineAlias = "";
+    	}
+    	$cell = $schedule->length.' нед. '.$name.', ауд. '.$schedule->place.',
+    		<a title="'.$disciplineValue.'"><b>'.$disciplineAlias.'</b></a> ('.$schedule->kindWork->getValue().')';
+    	return $cell;
     }
 }
