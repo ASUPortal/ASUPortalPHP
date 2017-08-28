@@ -68,7 +68,10 @@ class CStudyLoadParameters extends CAbstractPrintClassField {
     public function getLoadTypes()
     {
     	$loadTypes = array();
-    	$params = unserialize(urldecode(CRequest::getString("id")));
+    	$params = array();
+    	if (CRequest::getString("id") != 1) {
+    		$params = unserialize(urldecode(CRequest::getString("id")));
+    	}
     	
     	if (CRequest::getInt("base") != 0) {
     		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::BASE)->getId();
