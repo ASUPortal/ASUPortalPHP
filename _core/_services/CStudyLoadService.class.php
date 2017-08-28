@@ -381,7 +381,7 @@ class CStudyLoadService {
     public static function getAllStudyWorksTotalValuesByLecturerAndPart(CPerson $lecturer, CTerm $year, CYearPart $part, $loadTypes) {
     	$sum = 0;
     	foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
-    		if ($studyLoad->year_part_id == $part) {
+    		if ($studyLoad->year_part_id == $part->getId()) {
     			$sum += $studyLoad->getSumWorksValue();
     		}
     	}
@@ -401,7 +401,7 @@ class CStudyLoadService {
     public static function getAllStudyWorksTotalValuesByLecturerAndPartWithFilials(CPerson $lecturer, CTerm $year, CYearPart $part, $loadTypes) {
     	$sum = 0;
     	foreach (CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes)->getItems() as $studyLoad) {
-    		if ($studyLoad->year_part_id == $part) {
+    		if ($studyLoad->year_part_id == $part->getId()) {
     			$sum += $studyLoad->getWorkWithFilialsTotals();
     		}
     	}
