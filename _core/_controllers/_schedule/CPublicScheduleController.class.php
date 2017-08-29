@@ -2,15 +2,17 @@
 /**
  * Учебное расписание
  */
-class CPublicScheduleController extends CPublicStudentGroupsController {
+class CPublicScheduleController extends CBaseController {
 	public $allowedAnonymous = array(
 			"index",
+			"lecturers",
 			"viewLecturers",
 			"viewGroups",
 			"printView",
 			"allSchedule",
 			"printAll",
-			"showSchedules"
+			"showSchedules",
+			"search"
 	);
     public function __construct() {
         if (!CSession::isAuth()) {
@@ -26,11 +28,11 @@ class CPublicScheduleController extends CPublicStudentGroupsController {
         $this->_smartyEnabled = true;
         $this->setPageTitle("Расписание");
 
-        CBaseController::__construct();
+        parent::__construct();
     }
     /**
      * Контроллер открытого доступа?
-     * 
+     *
      * @return boolean
      */
     protected function isPublic() {
@@ -42,6 +44,172 @@ class CPublicScheduleController extends CPublicStudentGroupsController {
     	} else {
     		return "index.php";
     	}
+    }
+    public function actionIndex() {
+    	$set = new CRecordSet();
+    	$query = new CQuery();
+    	$query->select("distinct st_group.*")
+	    	->from(TABLE_STUDENT_GROUPS." as st_group")
+	    	->innerJoin(TABLE_SCHEDULE." as schedule", "st_group.id = schedule.grup")
+	    	->condition("st_group.year_id =".CUtils::getCurrentYear()->id." and schedule.year=".CUtils::getCurrentYear()->getId()." and schedule.month=".CUtils::getCurrentYearPart()->getId())
+	    	->order("st_group.name asc");
+    	$set->setQuery($query);
+    	$queryLetter = new CQuery();
+    	$queryLetter->select("st_group.*, UPPER(left(st_group.name,1)) as name, count(*) as cnt")
+	    	->from(TABLE_STUDENT_GROUPS." as st_group")
+	    	->innerJoin(TABLE_SCHEDULE." as schedule", "st_group.id = schedule.grup")
+	    	->condition("st_group.year_id = ".CUtils::getCurrentYear()->id." and schedule.year=".CUtils::getCurrentYear()->getId()." and schedule.month=".CUtils::getCurrentYearPart()->getId())
+	    	->group(1)
+	    	->order("st_group.name asc");
+    	$resRus = array();
+    	foreach ($queryLetter->execute()->getItems() as $ar) {
+    		$res = new CStudentGroup(new CActiveRecord($ar));
+    		$resRus[$res->id] = $res->name;
+    	}
+    	$resRusLetters = array();
+    	$resRusLetters = array_count_values($resRus);
+    	$firstLet = array(1);
+    	foreach ($resRusLetters as $key=>$value) {
+    		$firstLet[] = $key;
+    	}
+    	$letter = $firstLet[CRequest::getInt("getsub")];
+    	$letterId = -1;
+    	if (CRequest::getInt("getsub") > 0 and is_null(CRequest::getFilter("id"))) {
+    		if (CRequest::getInt("getsub")>0) {
+    			$letterId = CRequest::getInt("getsub");
+    		}
+    		$query->condition('st_group.name like "'.$letter.'%" and st_group.year_id ='.CUtils::getCurrentYear()->id);
+    	}
+    	$groups = new CArrayList();
+    	foreach($set->getPaginated()->getItems() as $item) {
+    		$group = new CStudentGroup($item);
+    		$groups->add($group->getId(), $group);
+    	}
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Расписание по преподавателям",
+    			"link" => WEB_ROOT."_modules/_schedule/public.php?action=lecturers",
+    			"icon" => "apps/office-calendar.png"
+    		),
+    		array(
+    			"title" => "Общее расписание",
+    			"link" => WEB_ROOT."_modules/_schedule/public.php?action=allSchedule",
+    			"icon" => "apps/office-calendar.png"
+    		)
+    	));
+    	$this->setData("resRusLetters", $resRusLetters);
+    	$this->setData("letterId", $letterId);
+    	$this->setData("firstLet", $firstLet);
+    	$this->setData("groups", $groups);
+    	$this->setData("paginator", $set->getPaginator());
+    	$this->renderView("__public/_schedule/index.tpl");
+    }
+    public function actionLecturers() {
+    	if (CSettingsManager::getSettingValue("hide_personal_data")) {
+    		$set = new CRecordSet();
+    		$query = new CQuery();
+    		$query->select("distinct users.*")
+	    		->from(TABLE_USERS." as users")
+	    		->innerJoin(TABLE_USER_IN_GROUPS." as userGroup", "userGroup.user_id=users.id")
+	    		->innerJoin(TABLE_SCHEDULE." as schedule", "users.id = schedule.user_id")
+	    		->condition("userGroup.group_id=1 and users.FIO not like '%/_%'ESCAPE'/' and schedule.year=".CUtils::getCurrentYear()->getId()." and schedule.month=".CUtils::getCurrentYearPart()->getId())
+	    		->order("users.FIO asc");
+    		$queryLetter = new CQuery();
+    		$queryLetter->select("users.*, UPPER(left(users.FIO,1)) as name, count(*) as cnt")
+	    		->from(TABLE_USERS." as users")
+	    		->innerJoin(TABLE_USER_IN_GROUPS." as userGroup", "userGroup.user_id=users.id")
+	    		->innerJoin(TABLE_SCHEDULE." as schedule", "users.id = schedule.user_id")
+	    		->condition("userGroup.group_id=1 and users.FIO not like '%/_%'ESCAPE'/' and schedule.year=".CUtils::getCurrentYear()->getId()." and schedule.month=".CUtils::getCurrentYearPart()->getId())
+	    		->group(1)
+	    		->order("users.FIO asc");
+    		$resRus = array();
+    		foreach ($queryLetter->execute()->getItems() as $ar) {
+    			$res = new CLecturerOuter(new CActiveRecord($ar));
+    			$resRus[$res->id] = $res->name;
+    		}
+    		$resRusLetters = array();
+    		$resRusLetters = array_count_values($resRus);
+    		$firstLet = array(1);
+    		foreach ($resRusLetters as $key=>$value) {
+    			$firstLet[] = $key;
+    		}
+    		$letter = $firstLet[CRequest::getInt("getsub")];
+    		$letterId = -1;
+    		if (CRequest::getInt("getsub") > 0 and is_null(CRequest::getFilter("user.id"))) {
+    			if (CRequest::getInt("getsub") > 0) {
+    				$letterId = CRequest::getInt("getsub");
+    			}
+    			$query->condition('users.FIO like "'.$letter.'%" and userGroup.group_id=1');
+    		}
+    		$lects = new CArrayList();
+    		$set->setQuery($query);
+    		foreach ($set->getPaginated()->getItems() as $ar) {
+    			$lect = new CLecturerOuter($ar);
+    			$lects->add($lect->getId(), $lect);
+    		}
+    	} else {
+    		$set = new CRecordSet();
+    		$query = new CQuery();
+    		$query->select("distinct person.*")
+	    		->from(TABLE_PERSON." as person")
+	    		->innerJoin(TABLE_USERS." as users", "users.kadri_id=person.id")
+	    		->innerJoin(TABLE_USER_IN_GROUPS." as userGroup", "userGroup.user_id=users.id")
+	    		->innerJoin(TABLE_SCHEDULE." as schedule", "users.id = schedule.user_id")
+	    		->condition("userGroup.group_id=1 and person.fio not like '%/_%'ESCAPE'/' and schedule.year=".CUtils::getCurrentYear()->getId()." and schedule.month=".CUtils::getCurrentYearPart()->getId())
+	    		->order("person.fio asc");
+    		$queryLetter = new CQuery();
+    		$queryLetter->select("person.*, UPPER(left(person.fio,1)) as name, count(*) as cnt")
+	    		->from(TABLE_PERSON." as person")
+	    		->innerJoin(TABLE_USERS." as users", "users.kadri_id=person.id")
+	    		->innerJoin(TABLE_USER_IN_GROUPS." as userGroup", "userGroup.user_id=users.id")
+	    		->innerJoin(TABLE_SCHEDULE." as schedule", "users.id = schedule.user_id")
+	    		->condition("userGroup.group_id=1 and person.fio not like '%/_%'ESCAPE'/' and schedule.year=".CUtils::getCurrentYear()->getId()." and schedule.month=".CUtils::getCurrentYearPart()->getId())
+	    		->group(1)
+	    		->order("person.fio asc");
+    		$resRus = array();
+    		foreach ($queryLetter->execute()->getItems() as $ar) {
+    			$res = new CPerson(new CActiveRecord($ar));
+    			$resRus[$res->id] = $res->name;
+    		}
+    		$resRusLetters = array();
+    		$resRusLetters = array_count_values($resRus);
+    		$firstLet = array(1);
+    		foreach ($resRusLetters as $key=>$value) {
+    			$firstLet[] = $key;
+    		}
+    		$letter = $firstLet[CRequest::getInt("getsub")];
+    		$letterId = -1;
+    		if (CRequest::getInt("getsub") > 0 and is_null(CRequest::getFilter("person.id"))) {
+    			if (CRequest::getInt("getsub") > 0) {
+    				$letterId = CRequest::getInt("getsub");
+    			}
+    			$query->condition('person.fio like "'.$letter.'%" and userGroup.group_id=1 and schedule.year='.CUtils::getCurrentYear()->getId().' and schedule.month='.CUtils::getCurrentYearPart()->getId());
+    		}
+    		$lects = new CArrayList();
+    		$set->setQuery($query);
+    		foreach ($set->getPaginated()->getItems() as $ar) {
+    			$lect = new CPerson($ar);
+    			$lects->add($lect->getId(), $lect);
+    		}
+    	}
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Расписание по группе",
+    			"link" => WEB_ROOT."_modules/_schedule/public.php",
+    			"icon" => "apps/office-calendar.png"
+    		),
+    		array(
+    			"title" => "Общее расписание",
+    			"link" => WEB_ROOT."_modules/_schedule/public.php?action=allSchedule",
+    			"icon" => "apps/office-calendar.png"
+    		)
+    	));
+    	$this->setData("resRusLetters", $resRusLetters);
+    	$this->setData("letterId", $letterId);
+    	$this->setData("firstLet", $firstLet);
+    	$this->setData("paginator", $set->getPaginator());
+    	$this->setData("lects", $lects);
+    	$this->renderView("__public/_schedule/lecturers.tpl");
     }
     public function actionViewLecturers() {
     	$this->setData("isPublic", $this->isPublic());
@@ -74,7 +242,7 @@ class CPublicScheduleController extends CPublicStudentGroupsController {
     		$this->addActionsMenuItem(array(
     			array(
     				"title" => "К списку преподавателей",
-    				"link" => WEB_ROOT."_modules/_lecturers/index.php",
+    				"link" => WEB_ROOT."_modules/_schedule/public.php?action=lecturers",
     				"icon" => "actions/edit-undo.png"
     			)
     		));
@@ -198,7 +366,7 @@ class CPublicScheduleController extends CPublicStudentGroupsController {
     		$this->addActionsMenuItem(array(
     			array(
     				"title" => "К списку групп",
-    				"link" => WEB_ROOT."_modules/_student_groups/public.php",
+    				"link" => WEB_ROOT."_modules/_schedule/public.php",
     				"icon" => "actions/edit-undo.png"
     			)
     		));
@@ -334,7 +502,7 @@ class CPublicScheduleController extends CPublicStudentGroupsController {
     		$this->addActionsMenuItem(array(
     			array(
     				"title" => "К списку преподавателей",
-    				"link" => WEB_ROOT."_modules/_lecturers/index.php",
+    				"link" => WEB_ROOT."_modules/_schedule/public.php?action=lecturers",
     				"icon" => "actions/edit-undo.png"
     			)
     		));
@@ -489,5 +657,47 @@ class CPublicScheduleController extends CPublicStudentGroupsController {
     	$cell = $schedule->length.' нед. '.$name.', ауд. '.$schedule->place.',
     		<a title="'.$disciplineValue.'"><b>'.$disciplineAlias.'</b></a> ('.$schedule->kindWork->getValue().')';
     	return $cell;
+    }
+    public function actionSearch() {
+    	$res = array();
+    	$term = CRequest::getString("query");
+    	/**
+    	 * Поиск по ФИО преподавателя
+    	*/
+    	if (CSettingsManager::getSettingValue("hide_personal_data")) {
+    		$query = new CQuery();
+    		$query->select("distinct(users.id) as id, users.FIO as name")
+	    		->from(TABLE_USERS." as users")
+	    		->innerJoin(TABLE_USER_IN_GROUPS." as userGroup", "userGroup.user_id=users.id")
+	    		->innerJoin(TABLE_SCHEDULE." as schedule", "users.id = schedule.user_id")
+	    		->condition("users.FIO like '%".$term."%' and userGroup.group_id=1 and schedule.year=".CUtils::getCurrentYear()->getId()." and schedule.month=".CUtils::getCurrentYearPart()->getId())
+	    		->limit(0, 5);
+    		foreach ($query->execute()->getItems() as $item) {
+    			$res[] = array(
+    				"field" => "users.id",
+    				"value" => $item["id"],
+    				"label" => $item["name"],
+    				"class" => "CLecturerOuter"
+    			);
+    		}
+    	} else {
+    		$query = new CQuery();
+    		$query->select("distinct(person.id) as id, person.fio as name")
+	    		->from(TABLE_PERSON." as person")
+	    		->innerJoin(TABLE_USERS." as users", "users.kadri_id=person.id")
+	    		->innerJoin(TABLE_SCHEDULE." as schedule", "users.id = schedule.user_id")
+	    		->innerJoin(TABLE_USER_IN_GROUPS." as userGroup", "userGroup.user_id=users.id")
+	    		->condition("person.fio like '%".$term."%' and userGroup.group_id=1 and schedule.year=".CUtils::getCurrentYear()->getId()." and schedule.month=".CUtils::getCurrentYearPart()->getId())
+	    		->limit(0, 5);
+    		foreach ($query->execute()->getItems() as $item) {
+    			$res[] = array(
+    				"field" => "person.id",
+    				"value" => $item["id"],
+    				"label" => $item["name"],
+    				"class" => "CPerson"
+    			);
+    		}
+    	}
+    	echo json_encode($res);
     }
 }
