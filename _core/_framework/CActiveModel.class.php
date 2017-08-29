@@ -102,8 +102,7 @@ class CActiveModel extends CModel implements IJSONSerializable{
                 }
             }
             if (is_null($this->getId()) | $this->getId() == "") {
-                $this->saveModel();
-                $lastId = $this->getLastInsertId();
+                $lastId = $this->saveModel();
                 $this->setId($lastId);
                 // для первого сохранения попытаемся сразу сохранить многие-ко-многим отношения
                 foreach ($this->relations() as $field=>$relation) {
@@ -180,7 +179,10 @@ class CActiveModel extends CModel implements IJSONSerializable{
     		$currentAr->update();
     	} else {
     		$this->getRecord()->insert();
+    		// получим идентификатор, сгенерированный при последнем INSERT-запросе
+    		$lastId = $this->getLastInsertId();
     	}
+    	return $lastId;
     }
     /**
      * Обновление существующей модели
