@@ -62,7 +62,7 @@ class CPublicStudentGroupsController extends CBaseController {
     	}
     	$this->addActionsMenuItem(array(
     		array(
-    			"title" => "Расписание по преподавателю",
+    			"title" => "Расписание по преподавателям",
     			"link" => WEB_ROOT."_modules/_lecturers/index.php",
     			"icon" => "apps/office-calendar.png"
     		),
@@ -98,13 +98,13 @@ class CPublicStudentGroupsController extends CBaseController {
          * Ищем группу по названию
          */
         $query = new CQuery();
-        $query->select("st_group.id, st_group.name")
+        $query->select("st_group.id as id, st_group.name as name")
             ->from(TABLE_STUDENT_GROUPS." as st_group")
             ->condition("LCASE(st_group.name) like '%".mb_strtolower($term)."%' and st_group.year_id =".CUtils::getCurrentYear()->id)
             ->limit(0, 5);
         foreach ($query->execute()->getItems() as $item) {
             $res[] = array(
-                "field" => "id",
+                "field" => "st_group.id",
                 "value" => $item["id"],
                 "label" => $item["name"],
                 "class" => "CStudentGroup"

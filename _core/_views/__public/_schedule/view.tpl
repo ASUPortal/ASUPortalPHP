@@ -10,6 +10,10 @@
 	{$name->getName()}</a>
 {/if}</h2><br>
 
+	{if (!$isPublic)}
+		{CHtml::helpForCurrentPage()}
+    {/if}
+    
 	{include file="__public/_schedule/subform.showSchedules.tpl"}
 	
 	{include file="__public/_schedule/view.form.tpl"}
