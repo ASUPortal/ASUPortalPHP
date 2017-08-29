@@ -7,12 +7,19 @@
  * To change this template use File | Settings | File Templates.
  */
 class CGradebookController extends CBaseController {
+	public $allowedAnonymous = array(
+		"view",
+		"search"
+	);
     public function __construct() {
         if (!CSession::isAuth()) {
-            $this->redirectNoAccess();
-        }
-        if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_NO_ACCESS) {
-            $this->redirectNoAccess();
+            $action = CRequest::getString("action");
+            if ($action == "") {
+                $action = "index";
+            }
+            if (!in_array($action, $this->allowedAnonymous)) {
+                $this->redirectNoAccess();
+            }
         }
 
         $this->_smartyEnabled = true;
@@ -223,6 +230,193 @@ class CGradebookController extends CBaseController {
         $this->setData("records", $items);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_gradebook/index.tpl");
+    }
+    public function actionView() {
+    	$set = new CRecordSet(false);
+    	$query = new CQuery();
+    	if (CRequest::getString("filter") !== "") {
+    		$query->select("activity.*")
+    			->from(TABLE_STUDENTS_ACTIVITY." as activity");
+    	}
+    	// сортировки по столбцам
+    	if (CRequest::getString("order") == "") {
+    		$query->order("activity.id desc");
+    	} elseif (CRequest::getString("order") == "date_act") {
+    		if (CRequest::getString("direction") == "") {
+    			$query->order("activity.date_act desc");
+    		} else {
+    			$query->order("activity.id ".CRequest::getString("direction"));
+    		}
+    	} elseif(CRequest::getString("order") == "subject_id") {
+    		$query->leftJoin(TABLE_DISCIPLINES." as discipline", "activity.subject_id = discipline.id");
+    		if (CRequest::getString("direction") == "") {
+    			$query->order("discipline.name asc");
+    		} else {
+    			$query->order("discipline.name ".CRequest::getString("direction"));
+    		}
+    	} elseif(CRequest::getString("order") == "kadri_id") {
+    		$query->leftJoin(TABLE_PERSON." as person", "activity.kadri_id = person.id");
+    		if (CRequest::getString("direction") == "") {
+    			$query->order("person.fio asc");
+    		} else {
+    			$query->order("person.fio ".CRequest::getString("direction"));
+    		}
+    	} elseif(CRequest::getString("order") == "student_id") {
+    		$query->leftJoin(TABLE_STUDENTS." as student_f", "student_f.id = activity.student_id");
+    		if (CRequest::getString("direction") == "") {
+    			$query->order("student_f.fio asc");
+    		} else {
+    			$query->order("student_f.fio ".CRequest::getString("direction"));
+    		}
+    	} elseif(CRequest::getString("order") == "study_act_id") {
+    		$query->leftJoin(TABLE_STUDENTS_CONTROL_TYPES." as control", "control.id = activity.study_act_id");
+    		if (CRequest::getString("direction") == "") {
+    			$query->order("control.name asc");
+    		} else {
+    			$query->order("control.name ".CRequest::getString("direction"));
+    		}
+    	} elseif(CRequest::getString("order") == "study_mark") {
+    		$query->leftJoin(TABLE_MARKS." as mark", "mark.id = activity.study_mark");
+    		if (CRequest::getString("direction") == "") {
+    			$query->order("mark.name asc");
+    		} else {
+    			$query->order("mark.name ".CRequest::getString("direction"));
+    		}
+    	} elseif(CRequest::getString("order") == "study_act_comment") {
+    		if (CRequest::getString("direction") == "") {
+    			$query->order("activity.study_act_comment asc");
+    		} else {
+    			$query->order("activity.study_act_comment ".CRequest::getString("direction"));
+    		}
+    	} elseif(CRequest::getString("order") == "comment") {
+    		if (CRequest::getString("direction") == "") {
+    			$query->order("activity.comment asc");
+    		} else {
+    			$query->order("activity.comment ".CRequest::getString("direction"));
+    		}
+    	}
+    	// запросы для получения списка групп и списка преподавателей
+    	$personQuery = new CQuery();
+    	$personQuery->select("distinct(person.id) as id, person.fio as name")
+	    	->from(TABLE_STUDENTS_ACTIVITY." as activity")
+	    	->innerJoin(TABLE_PERSON." as person", "activity.kadri_id = person.id")
+	    	->order("person.fio asc");
+    	$groupQuery = new CQuery();
+    	$groupQuery->select("distinct(st_group.id) as id, st_group.name as name")
+	    	->from(TABLE_STUDENTS_ACTIVITY." as activity")
+	    	->innerJoin(TABLE_STUDENTS." as student", "student.id = activity.student_id")
+	    	->innerJoin(TABLE_STUDENT_GROUPS." as st_group", "st_group.id = student.group_id")
+	    	->order("st_group.name asc");
+    	$disciplineQuery = new CQuery();
+    	$disciplineQuery->select("distinct(subject.id) as id, subject.name as name")
+	    	->from(TABLE_STUDENTS_ACTIVITY." as activity")
+	    	->innerJoin(TABLE_DISCIPLINES." as subject", "activity.subject_id = subject.id")
+	    	->order("subject.name asc");
+    	// фильтры
+    	$selectedPerson = null;
+    	$selectedGroup = null;
+    	$selectedDiscipline = null;
+    	$selectedStudent = null;
+    	$selectedControl = null;
+    	if (CRequest::getString("filter") !== "") {
+    		$filters = explode("_", CRequest::getString("filter"));
+    		foreach ($filters as $filter) {
+    			$f = explode(":", $filter);
+    			if (count($f) > 1) {
+    				$key = $f[0];
+    				$value = $f[1];
+    				if ($key == "person") {
+    					if ($value != 0) {
+    						$selectedPerson = $value;
+    						$query->condition("kadri_id=".$value);
+    					}
+    				} elseif ($key == "group") {
+    					if ($value != 0) {
+    						$selectedGroup = $value;
+    						$query->innerJoin(TABLE_STUDENTS." as student", "activity.student_id = student.id");
+    						$query->innerJoin(TABLE_STUDENT_GROUPS." as st_group", "student.group_id = st_group.id AND st_group.id=".$value);
+    					}
+    				} elseif ($key == "discipline") {
+    					if ($value != 0) {
+    						$selectedDiscipline = $value;
+    						$query->innerJoin(TABLE_DISCIPLINES." as subject", "subject.id = activity.subject_id AND subject.id=".$value);
+    					}
+    				} elseif ($key == "student") {
+    					if ($value != 0) {
+    						$selectedStudent = CStaffManager::getStudent($value);
+    						$query->innerJoin(TABLE_STUDENTS." as student", "activity.student_id = student.id AND student.id=".$value);
+    					}
+    				} elseif($key == "control") {
+    					if ($value != 0) {
+    						$selectedControl = CTaxonomyManager::getControlType($value);
+    						$query->innerJoin(TABLE_STUDENTS_CONTROL_TYPES." as control", "activity.study_act_id = control.id AND control.id=".$value);
+    					}
+    				}
+    			}
+    		}
+    		/**
+    		 * Дополняем фильтры по преподавателям, группам и дисциплинам
+    		 */
+    		if (!is_null($selectedPerson)) {
+    			$groupQuery->innerJoin(TABLE_PERSON." as person", "person.id = activity.kadri_id AND person.id=".$selectedPerson);
+    			$disciplineQuery->innerJoin(TABLE_PERSON." as person", "person.id = activity.kadri_id AND person.id=".$selectedPerson);
+    		}
+    		if (!is_null($selectedGroup)) {
+    			$personQuery->innerJoin(TABLE_STUDENTS." as student", "student.id = activity.student_id");
+    			$personQuery->innerJoin(TABLE_STUDENT_GROUPS." as st_group", "st_group.id = student.group_id and st_group.id=".$selectedGroup);
+    			$disciplineQuery->innerJoin(TABLE_STUDENTS." as student", "student.id = activity.student_id");
+    			$disciplineQuery->innerJoin(TABLE_STUDENT_GROUPS." as st_group", "st_group.id = student.group_id and st_group.id=".$selectedGroup);
+    		}
+    		if (!is_null($selectedDiscipline)) {
+    			$personQuery->innerJoin(TABLE_DISCIPLINES." as subject", "subject.id = activity.subject_id AND subject.id=".$selectedDiscipline);
+    			$groupQuery->innerJoin(TABLE_DISCIPLINES." as subject", "subject.id = activity.subject_id AND subject.id=".$selectedDiscipline);
+    		}
+    		if (!is_null($selectedStudent)) {
+    			$personQuery->innerJoin(TABLE_STUDENTS." as student_s", "student_s.id = activity.student_id AND student_s.id=".$selectedStudent->getId());
+    			$groupQuery->innerJoin(TABLE_STUDENTS." as student_s", "student_s.id = activity.student_id AND student_s.id=".$selectedStudent->getId());
+    			$disciplineQuery->innerJoin(TABLE_STUDENTS." as student_s", "student_s.id = activity.student_id AND student_s.id=".$selectedStudent->getId());
+    		}
+    		if (!is_null($selectedControl)) {
+    			$personQuery->innerJoin(TABLE_STUDENTS_CONTROL_TYPES." as control", "activity.study_act_id = control.id AND control.id=".$selectedControl->getId());
+    			$groupQuery->innerJoin(TABLE_STUDENTS_CONTROL_TYPES." as control", "activity.study_act_id = control.id AND control.id=".$selectedControl->getId());
+    			$disciplineQuery->innerJoin(TABLE_STUDENTS_CONTROL_TYPES." as control", "activity.study_act_id = control.id AND control.id=".$selectedControl->getId());
+    		}
+    	}
+    	$set->setQuery($query);
+    	// ищем преподавателей, у которых есть оценки в списке
+    	$persons = array();
+    	foreach ($personQuery->execute()->getItems() as $item) {
+    		$persons[$item["id"]] = $item["name"];
+    	}
+    	// ищем группы, из которых студенты есть в списке
+    	$groups = array();
+    	foreach ($groupQuery->execute()->getItems() as $item) {
+    		$groups[$item["id"]] = $item["name"];
+    	}
+    	// ищем дисциплины, по которым ставились оценки
+    	$disciplines = array();
+    	foreach ($disciplineQuery->execute()->getItems() as $item) {
+    		$disciplines[$item["id"]] = $item["name"];
+    	}
+    	// остальные данные
+    	$items = new CArrayList();
+    	if (CRequest::getString("filter") !== "") {
+    		foreach ($set->getPaginated()->getItems() as $item) {
+    			$a = new CStudentActivity($item);
+    			$items->add($a->getId(), $a);
+    		}
+    	}
+    	$this->setData("persons", $persons);
+    	$this->setData("selectedPerson", $selectedPerson);
+    	$this->setData("groups", $groups);
+    	$this->setData("selectedGroup", $selectedGroup);
+    	$this->setData("disciplines", $disciplines);
+    	$this->setData("selectedDiscipline", $selectedDiscipline);
+    	$this->setData("selectedStudent", $selectedStudent);
+    	$this->setData("selectedControl", $selectedControl);
+    	$this->setData("records", $items);
+    	$this->setData("paginator", $set->getPaginator());
+    	$this->renderView("__public/_gradebook/view.tpl");
     }
     public function actionRemoveGroup() {
         foreach (CRequest::getGlobalRequestVariables()->getItem("selectedInView") as $value) {
