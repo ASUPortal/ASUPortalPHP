@@ -38,8 +38,10 @@ class CScheduleController extends CPublicScheduleController {
     		$yearPart = CUtils::getCurrentYearPart();
     	}
     	$lecturers = array();
-    	foreach (CScheduleService::getLecturersWithSchedulesByYearAndPart($year, $yearPart)->getItems() as $lecturer) {
-    		$lecturers[$lecturer->getId()] = $lecturer->getName();
+    	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+    		foreach (CScheduleService::getLecturersWithSchedulesByYearAndPart($year, $yearPart)->getItems() as $lecturer) {
+    			$lecturers[$lecturer->getId()] = $lecturer->getName();
+    		}
     	}
     	$user = CSession::getCurrentUser();
     	$selectedUser = $user->getId();
