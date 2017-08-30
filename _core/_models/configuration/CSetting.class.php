@@ -37,11 +37,34 @@ class CSetting extends CActiveModel {
      * @return mixed|null
      */
     public function getValue() {
-        if ($this->type == 1) {
+        if ($this->type == 1 or $this->solr != 0) {
             return $this->value;
         } elseif ($this->type == 2) {
             eval('$res = '.$this->value.";");
             return $res;
         }
+    }
+    
+    /**
+     * Получить псевдоним настройки
+     *
+     * @return mixed|null
+     */
+    public function getAlias() {
+        return $this->alias;
+    }
+    
+    /**
+     * Список настроек коллекции Solr
+     *
+     * @return CArrayList
+     */
+    public function getSearchSettingsList() {
+        $settings = new CArrayList();
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_SETTINGS, "solr=".$this->getId(), "title asc")->getItems() as $ar) {
+            $setting = new CSetting($ar);
+            $settings->add($setting->getId(), $setting);
+        }
+        return $settings;
     }
 }

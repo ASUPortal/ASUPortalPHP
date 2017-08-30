@@ -59,4 +59,21 @@ class CSettingsManager {
         }
         return self::getSetting($key)->getValue();
     }
+    
+    /**
+     * Получить элемент настройки коллекции Solr по псевдониму или ключевому полю
+     *
+     * @param CSetting $core
+     * @param String $alias
+     * @return CSetting
+     */
+    public static function getSettingSolr(CSetting $core, $alias) {
+        if (is_string($alias)) {
+            $alias = strtoupper($alias);
+        }
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_SETTINGS, "solr = ".$core->getId()." and UPPER(alias) = '".$alias."'")->getItems() as $item) {
+        	$setting = new CSetting($item);
+        }
+        return $setting;
+    }
 }

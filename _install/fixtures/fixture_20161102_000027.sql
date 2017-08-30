@@ -1,0 +1,1 @@
+ALTER TABLE `settings` ADD `solr` INT(11) NOT NULL DEFAULT '0';

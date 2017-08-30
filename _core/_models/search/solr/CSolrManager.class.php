@@ -18,12 +18,17 @@ class CSolrManager extends CComponent {
         }
     }
 
-    public function updateIndex() {
+    /**
+     * Обновление индекса Solr
+     *
+     * @param CSetting $coreId
+     */
+    public function updateIndex(CSetting $coreId) {
     	$messages = array();
         foreach ($this->sources as $source) {
             try {
-                foreach ($source->getFilesToIndex() as $file) {
-                    $messages[] = $this->addToIndex($file);
+                foreach ($source->getFilesToIndex($coreId) as $file) {
+                    $messages[] = $this->addToIndex($file, $coreId);
                 }
             } catch (Exception $e) {
                 // тут будет исключение
@@ -33,14 +38,20 @@ class CSolrManager extends CComponent {
         return $messages;
     }
 
-    private function addToIndex(CSearchFile $file) {
+    /**
+     * Добавление файлов в индекс Solr
+     *
+     * @param CSearchFile $file
+     * @param CSetting $coreId
+     */
+    private function addToIndex(CSearchFile $file, CSetting $coreId) {
         CApp::getApp()->cache->set($file->getFileId(), $file);
         // сообщение о результате обработки файла
         $message = "";
         // добавление в Solr
         $ch = curl_init();
         $data = array("myfile"=>"@".$file->getFileSource());
-        curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles($file->getFileId()));
+        curl_setopt($ch, CURLOPT_URL, CSolr::commitFiles($file->getFileId(), $coreId));
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         $result = curl_exec($ch);
@@ -63,15 +74,13 @@ class CSolrManager extends CComponent {
         }
         
         return $message;
-
-        /*
-         * $solrObject.id = $file->getId()
-         * $solrObject.$fileSource
-         * $solrObject.$realFilePath
-         * $solrObject.$sourceId
-         */
     }
 
+    /**
+     * Получить файл по id, сохранённому в кэше
+     *
+     * @param String $fileId
+     */
     public function getFile($fileId) {
         $sourceId = CUtils::strLeft($fileId, "||");
         foreach ($this->sources as $source) {

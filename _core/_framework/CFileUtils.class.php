@@ -31,7 +31,7 @@ class CFileUtils {
         if (file_exists($folder)) {
         	$handler = opendir($folder);
         	while ($file = readdir($handler)) {
-        		$filename = $folder . $file;
+        		$filename = $folder.CORE_DS.$file;
         		if (is_file($filename)) {
         			$files[] = $filename;
         		} elseif ($file != "." && $file != "..") {

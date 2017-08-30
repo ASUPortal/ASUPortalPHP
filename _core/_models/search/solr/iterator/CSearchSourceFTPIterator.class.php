@@ -8,10 +8,19 @@ class CSearchSourceFTPIterator implements Iterator {
     private $source;
     private $index;
 
-    function __construct($filesList, $source) {
-        $this->server = CSettingsManager::getSettingValue("ftp_server");
-        $this->login = CSettingsManager::getSettingValue("ftp_server_user");
-        $this->password = CSettingsManager::getSettingValue("ftp_server_password");
+    /**
+     * @param array $filesList
+     * @param ISearchSource $source
+     * @param CSetting $coreId
+     */
+    function __construct($filesList, $source, CSetting $coreId) {
+        /**
+         * Получаем настройки коллекции Solr
+         */
+        $this->server = CSettingsManager::getSettingSolr($coreId, $this->server)->getValue();
+        $this->login = CSettingsManager::getSettingSolr($coreId, $this->login)->getValue();
+        $this->password = CSettingsManager::getSettingSolr($coreId, $this->password)->getValue();
+    	
         $this->filesList = $filesList;
         $this->source = $source;
     }

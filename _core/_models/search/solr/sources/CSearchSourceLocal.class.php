@@ -11,14 +11,25 @@ class CSearchSourceLocal extends CComponent implements ISearchSource {
     public $id;
     public $suffix;
 
-    private function scanDirectory() {
-        return CFileUtils::getListFiles(CSettingsManager::getSettingValue($this->path));
+    private function scanDirectory($path) {
+        return CFileUtils::getListFiles($path);
     }
 
-    public function getFilesToIndex() {
-        $files = $this->scanDirectory();
+    /**
+     * Получение файлов для индексирования
+     *
+     * @param CSetting $coreId
+     */
+    public function getFilesToIndex(CSetting $coreId) {
+        /**
+         * Получаем настройки коллекции Solr
+         */
+        $suffix = CSettingsManager::getSettingSolr($coreId, $this->suffix)->getValue();
+        $path = CSettingsManager::getSettingSolr($coreId, $this->path)->getValue();
+    	
+        $files = $this->scanDirectory($path);
         $filelist = array();
-        $suffixes = explode(";", CSettingsManager::getSettingValue($this->suffix));
+        $suffixes = explode(";", $suffix);
         foreach ($files as $file) {
         	$extension = end(explode(".", $file));
         	if (in_array($extension, $suffixes)) {

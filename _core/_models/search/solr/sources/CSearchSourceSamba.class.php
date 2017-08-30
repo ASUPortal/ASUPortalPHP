@@ -9,7 +9,12 @@
 class CSearchSourceSamba extends CComponent implements ISearchSource {
     public $id;
 
-    public function getFilesToIndex() {
+    /**
+     * Получение файлов для индексирования
+     *
+     * @param CSetting $coreId
+     */
+    public function getFilesToIndex(CSetting $coreId) {
         return array();
     }
 
