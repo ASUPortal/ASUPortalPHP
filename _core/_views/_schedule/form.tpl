@@ -9,7 +9,7 @@
     <div class="control-group">
         {CHtml::activeLabel("user_id", $schedule)}
         <div class="controls">
-            {CHtml::activeDropDownList("user_id", $schedule, CStaffManager::getAllUsersList())}
+            {CHtml::activeDropDownList("user_id", $schedule, $lecturers)}
             {CHtml::error("user_id", $schedule)}
         </div>
     </div>

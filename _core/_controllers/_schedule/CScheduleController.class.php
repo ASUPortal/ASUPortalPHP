@@ -108,6 +108,12 @@ class CScheduleController extends CPublicScheduleController {
         foreach ($taxonomy->getTerms()->getItems() as $term) {
         	$kindWorks[$term->getId()] = $term->getValue();
         }
+        $lecturers = array();
+        if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+        	$lecturers = CStaffManager::getAllUsersList();
+        } else {
+        	$lecturers[CSession::getCurrentUser()->getId()] = CSession::getCurrentUser()->getName();
+        }
         $this->addActionsMenuItem(array(
         	array(
         		"title" => "Назад",
@@ -117,6 +123,7 @@ class CScheduleController extends CPublicScheduleController {
         ));
         $this->setData("nameId", CRequest::getInt("nameId"));
         $this->setData("groups", $groups);
+        $this->setData("lecturers", $lecturers);
         $this->setData("times", $this->getTime());
         $this->setData("days", $this->getAllDay());
         $this->setData("kindWorks", $kindWorks);
@@ -131,6 +138,12 @@ class CScheduleController extends CPublicScheduleController {
         foreach ($taxonomy->getTerms()->getItems() as $term) {
         	$kindWorks[$term->getId()] = $term->getValue();
         }
+        $lecturers = array();
+        if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+        	$lecturers = CStaffManager::getAllUsersList();
+        } else {
+        	$lecturers[CSession::getCurrentUser()->getId()] = CSession::getCurrentUser()->getName();
+        }
         $this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
@@ -139,6 +152,7 @@ class CScheduleController extends CPublicScheduleController {
             )
         ));
         $this->setData("groups", CStaffManager::getAllStudentGroupsList());
+        $this->setData("lecturers", $lecturers);
         $this->setData("times", $this->getTime());
         $this->setData("days", $this->getAllDay());
         $this->setData("kindWorks", $kindWorks);
