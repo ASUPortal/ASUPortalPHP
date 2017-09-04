@@ -190,6 +190,13 @@ class CScheduleController extends CPublicScheduleController {
         foreach ($taxonomy->getTerms()->getItems() as $term) {
         	$kindWorks[$term->getId()] = $term->getValue();
         }
+        $lecturers = array();
+        if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+        	$lecturers = CStaffManager::getAllUsersList();
+        } else {
+        	$lecturers[CSession::getCurrentUser()->getId()] = CSession::getCurrentUser()->getName();
+        }
+        $this->setData("lecturers", $lecturers);
         $this->setData("groups", $groups);
         $this->setData("times", $this->getTime());
         $this->setData("days", $this->getAllDay());
