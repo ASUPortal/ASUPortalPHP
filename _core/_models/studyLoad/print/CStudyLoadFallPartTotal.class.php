@@ -52,12 +52,14 @@ class CStudyLoadFallPartTotal extends CStudyLoadParameters {
     	}
     	$rowTotal = CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes)->getCount()+7;
     	$dataRow[$rowTotal] = number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes),1,',','');
+    	/*
     	$onFilial = CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPartWithFilials($lecturer, $year, $part, $loadTypes);
     	if ($onFilial != 0) {
     		$dataRow[$rowTotal+1] = number_format($onFilial,1,',','');
     	} else {
     		$dataRow[$rowTotal+1] = "";
     	}
+    	*/
     	$result[] = $dataRow;
     	
     	return $result;
