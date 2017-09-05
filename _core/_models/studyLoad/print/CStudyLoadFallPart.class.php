@@ -56,11 +56,13 @@ class CStudyLoadFallPart extends CStudyLoadParameters {
     		}
     		$rowTotal = count($studyLoad->getStudyLoadTable()->getTableTotal())+7;
     		$dataRow[$rowTotal] = number_format($studyLoad->getSumWorksValue(),1,',','');
+    		/*
     		if ($studyLoad->on_filial) {
     			$dataRow[$rowTotal+1] = number_format($studyLoad->getWorkWithFilialsTotals(),1,',','');
     		} else {
     			$dataRow[$rowTotal+1] = "";
     		}
+    		*/
     		$result[] = $dataRow;
     	}
     	return $result;
