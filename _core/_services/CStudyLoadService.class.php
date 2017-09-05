@@ -643,7 +643,7 @@ class CStudyLoadService {
     			$newLoad->year_id = $yearId;
     			$newLoad->year_part_id = $partId;
     			$newLoad->comment = $newLoad->comment." копия от ".
-    						CStaffManager::getPerson($lecturerId)->getNameShort().", ".
+    						$studyLoad->lecturer->getNameShort().", ".
     						CTaxonomyManager::getYear($yearId)->getValue().", ".
     						CTaxonomyManager::getYearPart($partId)->getValue();
     			$newLoad->save();
@@ -667,7 +667,7 @@ class CStudyLoadService {
     			$newLoad->year_id = $yearId;
     			$newLoad->year_part_id = $partId;
     			$newLoad->comment = $newLoad->comment." копия от ".
-    						CStaffManager::getPerson($lecturerId)->getNameShort().", ".
+    						$studyLoad->lecturer->getNameShort().", ".
     						CTaxonomyManager::getYear($yearId)->getValue().", ".
     						CTaxonomyManager::getYearPart($partId)->getValue();
     			$newLoad->save();
