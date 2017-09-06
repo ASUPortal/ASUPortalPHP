@@ -192,15 +192,10 @@ class CStudyLoadService {
     			$personsWithLoad = $query->execute()->getItems();
     			$i = 0;
     			foreach ($personsWithLoad as $person) {
-    				$queryOrders = new CQuery();
-    				$queryOrders->select("round(sum(rate),2) as rate_sum, count(id) as ord_cnt")
-    				->from(TABLE_STAFF_ORDERS." as orders")
-    				->condition('concat(substring(date_end, 7, 4), ".", substring(date_end, 4, 2), ".", substring(date_end, 1, 2)) >= "'.$dateFrom.'" and kadri_id = "'.$person['kadri_id'].'"');
-    				foreach ($queryOrders->execute()->getItems() as $order) {
-    					$personsWithLoad[$i]['rate_sum'] = $order['rate_sum'];
-    					$personsWithLoad[$i]['ord_cnt'] = $order['ord_cnt'];
-    					$i++;
-    				}
+    				$personWithOrders = CBaseManager::getPersonTime($person['kadri_id']);
+    				$personsWithLoad[$i]['rate_sum'] = $personWithOrders->getOrdersRate();
+    				$personsWithLoad[$i]['ord_cnt'] = $personWithOrders->getOrdersCount();
+    				$i++;
     			}
     			$i = 0;
     			foreach ($personsWithLoad as $person) {
