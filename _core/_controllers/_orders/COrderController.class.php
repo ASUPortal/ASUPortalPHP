@@ -58,12 +58,13 @@ class COrderController extends CBaseController {
         $this->addJSInclude("_modules/_orders/filter.js");
         */
         foreach (CStaffManager::getAllPersons()->getItems() as $person) {
+            $personWithOrders = CBaseManager::getPersonTime($person->getId());
             if ($rated == 1) {
                 if ($person->getActiveOrders()->getCount() > 0) {
-                    $persons->add($person->getId(), $person);
+                    $persons->add($personWithOrders->getId(), $personWithOrders);
                 }
             } else {
-                $persons->add($person->getId(), $person);
+                $persons->add($personWithOrders->getId(), $personWithOrders);
             }
         }
         $this->setData("rated", $rated);
