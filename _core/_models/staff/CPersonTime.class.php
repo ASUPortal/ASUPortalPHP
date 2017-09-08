@@ -1,6 +1,6 @@
 <?php
 
-class CPersonTime extends CActiveModel{
+class CPersonTime extends CPerson {
     protected $_table = TABLE_PERSON;
     protected $_orders = null;
         
