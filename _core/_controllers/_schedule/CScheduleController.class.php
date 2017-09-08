@@ -95,9 +95,13 @@ class CScheduleController extends CPublicScheduleController {
         	$schedule->user_id = CRequest::getInt("nameId");
         }
         $schedule->year = CRequest::getInt("year");
-        $schedule->month= CRequest::getInt("yearPart");
+        $schedule->month = CRequest::getInt("yearPart");
         $schedule->day = CRequest::getInt("day");
         $schedule->number = CRequest::getInt("number");
+        $schedule->kind = CRequest::getInt("kind");
+        $schedule->length = CRequest::getString("length");
+        $schedule->study = CRequest::getInt("study");
+        $schedule->place = CRequest::getString("place");
         $year = CUtils::getCurrentYear();
         $groups = array();
         foreach (CStaffManager::getStudentGroupsByYear($year)->getItems() as $group) {
@@ -144,12 +148,38 @@ class CScheduleController extends CPublicScheduleController {
         } else {
         	$lecturers[CSession::getCurrentUser()->getId()] = CSession::getCurrentUser()->getName();
         }
+        $nameInCell = "";
+        if (CRequest::getString("redirect") == "viewLecturers") {
+        	$nameInCell = "studentGroup";
+        } elseif (CRequest::getString("redirect") == "viewGroups") {
+        	$nameInCell = "lecturer";
+        } elseif (CRequest::getString("redirect") == "allSchedule") {
+        	$nameInCell = "all";
+        }
         $this->addActionsMenuItem(array(
             array(
                 "title" => "Назад",
                 "link" => WEB_ROOT."_modules/_schedule/index.php",
                 "icon" => "actions/edit-undo.png"
-            )
+            ),
+        	array(
+        		"title" => "Добавить для другой группы",
+        		"link" => UrlBuilder::newBuilder("index.php")
+        			->addParameter("action", "add")
+        			->addParameter("nameId", CRequest::getInt("nameId"))
+        			->addParameter("redirect", CRequest::getString("redirect"))
+        			->addParameter("nameInCell", $nameInCell)
+        			->addParameter("year", $schedule->year)
+        			->addParameter("yearPart", $schedule->month)
+        			->addParameter("day", $schedule->day)
+        			->addParameter("number", $schedule->number)
+        			->addParameter("kind", $schedule->kind)
+        			->addParameter("length", $schedule->length)
+        			->addParameter("study", $schedule->study)
+        			->addParameter("place", $schedule->place)
+        			->build(),
+        		"icon" => "actions/list-add.png"
+        	)
         ));
         $this->setData("groups", CStaffManager::getAllStudentGroupsList());
         $this->setData("lecturers", $lecturers);
