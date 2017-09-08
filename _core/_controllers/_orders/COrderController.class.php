@@ -18,7 +18,6 @@ class COrderController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
-        $persons = new CRecordSet();
         if (array_key_exists("rated", $_GET)) {
             $rated = $_GET["rated"];
         } else {
@@ -57,18 +56,30 @@ class COrderController extends CBaseController {
         $this->setData("types_url", implode(";", $types));
         $this->addJSInclude("_modules/_orders/filter.js");
         */
-        foreach (CStaffManager::getAllPersons()->getItems() as $person) {
-            $personWithOrders = CBaseManager::getPersonTime($person->getId());
-            if ($rated == 1) {
-                if ($person->getActiveOrders()->getCount() > 0) {
-                    $persons->add($personWithOrders->getId(), $personWithOrders);
-                }
-            } else {
-                $persons->add($personWithOrders->getId(), $personWithOrders);
-            }
+        $set = new CRecordSet();
+        $query = new CQuery();
+        $query->select("person.*")
+	        ->from(TABLE_PERSON." as person")
+	        ->order("person.fio asc");
+        $set->setQuery($query);
+        $persons = new CArrayList();
+        if ($rated == 1) {
+        	$set->setPageSize(PAGINATION_ALL);
+        	foreach ($set->getPaginated()->getItems() as $ar) {
+        		$person = new CPerson($ar);
+        		if ($person->getActiveOrders()->getCount() > 0) {
+        			$persons->add($person->getId(), $person);
+        		}
+        	}
+        } else {
+        	foreach ($set->getPaginated()->getItems() as $ar) {
+        		$person = new CPerson($ar);
+        		$persons->add($person->getId(), $person);
+        	}
         }
         $this->setData("rated", $rated);
         $this->setData("persons", $persons);
+        $this->setData("paginator", $set->getPaginator());
         $this->renderView("_orders/index.tpl");
     }
     public function actionView() {

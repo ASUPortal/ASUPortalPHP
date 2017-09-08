@@ -31,8 +31,8 @@
         <th>Дополнительно</th>
     </tr>
 
-    {counter start=($persons->getPageSize() * ($persons->getCurrentPage() - 1)) print=false}
-    {foreach $persons->getPaginated()->getItems() as $person}
+    {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
+    {foreach $persons->getItems() as $person}
     <tr>
         <td>{counter}</td>
         <td><a href="?action=view&id={$person->getId()}">{$person->getName()}</a></td>
@@ -58,8 +58,7 @@
     </tr>
     {/foreach}
 </table>
-
-{CHtml::paginator($persons->getPaginator(), "?action=index&rated=$rated")}
+{CHtml::paginator($paginator, "?action=index&rated=$rated")}
 {/block}
 
 {block name="asu_right"}
