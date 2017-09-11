@@ -723,4 +723,26 @@ class CStudyLoadService {
     	}
     	return $parts->getFirstItem();
     }
+    
+    /**
+     * Сумма (Лекции+Практики+ЛабРаб) для сверки с расписанием
+     *
+     * @param CPerson $lecturer - преподаватель
+     * @param CTerm $year - учебный год
+     * @param CYearPart $part - семестр
+     *
+     * @return int
+     */
+    public static function getSumTimeTableCheck(CPerson $lecturer, CTerm $year, CYearPart $part) {
+    	$sum = 0;
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$lecturer->getId()." AND year_id = ".$year->getId()." AND year_part_id = ".$part->getId()." AND _is_last_version = 1")->getItems() as $item) {
+    		$study = new CStudyLoad($item);
+    		foreach ($study->works as $work) {
+    			$sum += $work->getSumWorkHoursByType(CStudyLoadWorkTypeConstants::LABOR_LECTURE);
+    			$sum += $work->getSumWorkHoursByType(CStudyLoadWorkTypeConstants::LABOR_PRACTICE);
+    			$sum += $work->getSumWorkHoursByType(CStudyLoadWorkTypeConstants::LABOR_LAB_WORK);
+    		}
+    	}
+    	return $sum;
+    }
 }

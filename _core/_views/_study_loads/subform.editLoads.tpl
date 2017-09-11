@@ -16,6 +16,7 @@
             <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("level_id", $studyLoads->getFirstItem(), false, false)}</div></th>
             <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("groups_count", $studyLoads->getFirstItem(), false, false)}</div></th>
             <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("students_count", $studyLoads->getFirstItem(), false, false)}</div></th>
+            <th style="vertical-align:middle; text-align:center;">Учебные группы</th>
             <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("load_type_id", $studyLoads->getFirstItem(), false, false)}</th>
             <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("comment", $studyLoads->getFirstItem(), false, false)}</th>
             {foreach $studyLoads->getFirstItem()->getStudyLoadTable()->getTableTotal() as $typeId=>$rows}
@@ -27,7 +28,7 @@
             {/foreach}
         </tr>
         <tr>
-	        {$ths = 11}
+	        {$ths = 12}
 	        {for $i=1 to $ths + count($studyLoads->getFirstItem()->getStudyLoadTable()->getTableTotal())}
 	            <th style="text-align:center; background-color: #E6E6FF;">{$i}</th>
 	        {/for}
@@ -50,6 +51,11 @@
 	            <td>{$studyLoad->studyLevel->name}</td>
 	            <td>{$studyLoad->groups_count}</td>
 	            <td>{$studyLoad->students_count + $studyLoad->students_contract_count}</td>
+	            <td>
+	            	{foreach $studyLoad->study_groups->getItems() as $studyGroup}
+	            		{$studyGroup->getName()}<br>
+	            	{/foreach}
+	            </td>
 	            <td>{$studyLoad->studyLoadType->name}</td>
 	            <td>{$studyLoad->comment}</td>
 	            {foreach $studyLoad->getStudyLoadTable()->getTableByKind($isBudget, $isContract) as $typeId=>$rows}

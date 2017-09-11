@@ -13,6 +13,7 @@
             <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("level_id", $studyLoads->getFirstItem(), false, false)}</div></th>
             <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("groups_count", $studyLoads->getFirstItem(), false, false)}</div></th>
             <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("students_count", $studyLoads->getFirstItem(), false, false)}</div></th>
+            <th style="vertical-align:middle; text-align:center;">Учебные группы</th>
             <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("load_type_id", $studyLoads->getFirstItem(), false, false)}</th>
             <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("comment", $studyLoads->getFirstItem(), false, false)}</th>
 	            {foreach $studyLoads->getFirstItem()->getStudyLoadTable()->getTableTotal() as $typeId=>$rows}
@@ -27,9 +28,9 @@
         </tr>
         <tr>
 	        {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
-	            {$ths = 14}
+	            {$ths = 15}
 	        {else}
-	            {$ths = 12}
+	            {$ths = 13}
 	        {/if}
 	        {for $i=1 to $ths + count($studyLoads->getFirstItem()->getStudyLoadTable()->getTableTotal())}
 	            <th style="text-align:center; background-color: #E6E6FF;">{$i}</th>
@@ -54,6 +55,11 @@
 	            <td>{$studyLoad->studyLevel->name}</td>
 	            <td>{$studyLoad->groups_count}</td>
 	            <td>{$studyLoad->students_count + $studyLoad->students_contract_count}</td>
+	            <td>
+	            	{foreach $studyLoad->study_groups->getItems() as $studyGroup}
+	            		{$studyGroup->getName()}<br>
+	            	{/foreach}
+	            </td>
 	            <td>{$studyLoad->studyLoadType->name}</td>
 	            <td>{$studyLoad->comment}</td>
 		            {foreach $studyLoad->getStudyLoadTable()->getTableTotal() as $typeId=>$rows}
@@ -75,6 +81,7 @@
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td><b>Итого</b></td>
+			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
@@ -128,6 +135,7 @@
 		</table>
     {/if}
 </form>
+{CStudyLoadService::getSumTimeTableCheck($lecturer, $year, $part)}
 
 <script>
 	$(document).ready(function() {

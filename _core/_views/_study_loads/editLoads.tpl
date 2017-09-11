@@ -22,8 +22,14 @@
   {/if}
 {/function}
 
+{if (is_null($lecturer))}
+	{CHtml::helpForCurrentPage()}
+	{include file="_study_loads/subform.showLoads.tpl"}
+{/if}
+
 {if (!is_null($lecturer))}
 <h2>План годовой нагрузки {$lecturer->getName()}</h2>
+<h3>{$position}</h3>
     {CHtml::helpForCurrentPage()}
 	
 	{include file="_study_loads/subform.showLoads.tpl"}
