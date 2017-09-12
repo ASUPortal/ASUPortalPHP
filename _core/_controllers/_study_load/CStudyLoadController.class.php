@@ -127,15 +127,20 @@ class CStudyLoadController extends CBaseController {
         $this->renderView("_study_loads/edit.tpl");
     }
     public function actionEditLoads() {
+    	$selectedPerson = null;
+    	$selectedYear = null;
     	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_OWN_ONLY, ACCESS_LEVEL_WRITE_OWN_ONLY])) {
     		$lecturer = CSession::getCurrentPerson();
-    		$selectedPerson = $lecturer->getId();
     	} else {
     		$lecturer = CStaffManager::getPerson(CRequest::getInt("kadri_id"));
+    	}
+    	if (!is_null($lecturer)) {
     		$selectedPerson = $lecturer->getId();
     	}
     	$year = CTaxonomyManager::getYear(CRequest::getInt("year_id"));
-    	$selectedYear = $year->getId();
+    	if (!is_null($year)) {
+    		$selectedYear = $year->getId();
+    	}
     	
     	$loadTypes = array();
     	$base = true;
@@ -162,8 +167,20 @@ class CStudyLoadController extends CBaseController {
     	} else {
     		$loadTypes[] = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::BY_TIME)->getId();
     	}
+    	// Должность, ученая степень, ученое звание
+    	$position = "";
     	if (!is_null($lecturer) and !is_null($year) and !empty($loadTypes)) {
     		$loads = CStudyLoadService::getStudyLoadsByYearAndLoadType($lecturer, $year, $loadTypes);
+    		
+    		if (!is_null($lecturer->getPost())) {
+    			$position = $lecturer->getPost()->getValue();
+    		}
+    		if (!is_null($lecturer->title)) {
+    			$position .= ", ".$lecturer->title->getValue();
+    		}
+    		if (!is_null($lecturer->degree)) {
+    			$position .= ", ".$lecturer->degree->getValue();
+    		}
     	} else {
     		$loads = new CArrayList();
     	}
@@ -178,6 +195,7 @@ class CStudyLoadController extends CBaseController {
     	$loadsSpring = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::SPRING));
     	
     	$this->setData("lecturer", $lecturer);
+    	$this->setData("position", $position);
     	$this->setData("year", $year);
     	$this->setData("selectedYear", $selectedYear);
     	$this->setData("selectedPerson", $selectedPerson);
@@ -245,6 +263,14 @@ class CStudyLoadController extends CBaseController {
     	$copyWays[0] = "копировать с перемещением (удаляем у одного - добавляем другому)";
     	$copyWays[1] = "только копирование (сохраняем у одного и добавляем другому)";
     	$this->setData("copyWays", $copyWays);
+    	
+    	// Типы занятий: л, пр, л/р для сверки с расписанием
+    	$kindTypes = array();
+    	$kindTypes[] = CStudyLoadWorkTypeConstants::LABOR_LECTURE;
+    	$kindTypes[] = CStudyLoadWorkTypeConstants::LABOR_PRACTICE;
+    	$kindTypes[] = CStudyLoadWorkTypeConstants::LABOR_LAB_WORK;
+    	$this->setData("kindTypes", $kindTypes);
+    	
     	$this->renderView("_study_loads/editLoads.tpl");
     }
     public function actionEditLoadsByType() {

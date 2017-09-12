@@ -13,6 +13,7 @@
             <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("level_id", $studyLoads->getFirstItem(), false, false)}</div></th>
             <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("groups_count", $studyLoads->getFirstItem(), false, false)}</div></th>
             <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("students_count", $studyLoads->getFirstItem(), false, false)}</div></th>
+            <th style="vertical-align:middle; text-align:center;">Учебные группы</th>
             <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("load_type_id", $studyLoads->getFirstItem(), false, false)}</th>
             <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("comment", $studyLoads->getFirstItem(), false, false)}</th>
 	            {foreach $studyLoads->getFirstItem()->getStudyLoadTable()->getTableTotal() as $typeId=>$rows}
@@ -27,9 +28,9 @@
         </tr>
         <tr>
 	        {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
-	            {$ths = 14}
+	            {$ths = 15}
 	        {else}
-	            {$ths = 12}
+	            {$ths = 13}
 	        {/if}
 	        {for $i=1 to $ths + count($studyLoads->getFirstItem()->getStudyLoadTable()->getTableTotal())}
 	            <th style="text-align:center; background-color: #E6E6FF;">{$i}</th>
@@ -54,6 +55,11 @@
 	            <td>{$studyLoad->studyLevel->name}</td>
 	            <td>{$studyLoad->groups_count}</td>
 	            <td>{$studyLoad->students_count + $studyLoad->students_contract_count}</td>
+	            <td>
+	            	{foreach $studyLoad->study_groups->getItems() as $studyGroup}
+	            		{$studyGroup->getName()}<br>
+	            	{/foreach}
+	            </td>
 	            <td>{$studyLoad->studyLoadType->name}</td>
 	            <td>{$studyLoad->comment}</td>
 		            {foreach $studyLoad->getStudyLoadTable()->getTableTotal() as $typeId=>$rows}
@@ -82,10 +88,16 @@
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
+			<td>&nbsp;</td>
 	            {foreach CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes)->getItems() as $typeId=>$rows}
 					{foreach $rows as $kindId=>$value}
 						{if !in_array($kindId, array(0))}
-							<td><b>{clearNullValues number=number_format($value,1,',','') level=0}</b></td>
+							{$sumHours = CStudyLoadService::getSumHoursInScheduleByKindTypes($lecturer, $year, $part, $typeId)}
+							{if ($value != $sumHours and $value != 0)}
+								<td style="white-space:nowrap;"><span><b>{clearNullValues number=number_format($value,1,',','') level=0}</b><sup><font color="#FF0000">{$sumHours}</sup></font></span></td>
+							{else}
+								<td><b>{clearNullValues number=number_format($value,1,',','') level=0}</b></td>
+							{/if}
 						{/if}
 	                {/foreach}
 	            {/foreach}
@@ -128,6 +140,16 @@
 		</table>
     {/if}
 </form>
+
+{$sumHours = CStudyLoadService::getSumHoursInSchedule($lecturer, $year, $part)}
+{$sumTimeTableCheck = CStudyLoadService::getSumTotalHoursByKindTypes($lecturer, $year, $part, $kindTypes)}
+
+{if ($sumHours != $sumTimeTableCheck)}
+	<div><font color="#FF0000">за <u>{$part->getValue()}</u> семестр ошибка сверки с расписанием: в расписании={$sumHours}, в нагрузке={$sumTimeTableCheck}</font></div>
+{else}
+	<div><font color="#33CC00">за <u>{$part->getValue()}</u> семестр сверено с расписанием</font></div>
+{/if}
+<br>
 
 <script>
 	$(document).ready(function() {

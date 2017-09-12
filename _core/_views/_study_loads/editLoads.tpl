@@ -22,8 +22,14 @@
   {/if}
 {/function}
 
+{if (is_null($lecturer))}
+	{CHtml::helpForCurrentPage()}
+	{include file="_study_loads/subform.showLoads.tpl"}
+{/if}
+
 {if (!is_null($lecturer))}
 <h2>План годовой нагрузки {$lecturer->getName()}</h2>
+<h3>{$position}</h3>
     {CHtml::helpForCurrentPage()}
 	
 	{include file="_study_loads/subform.showLoads.tpl"}
@@ -53,6 +59,10 @@
 		{/if}
 		<div class="alert alert-info"><b>Всего за год: {clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturer($lecturer, $year, $loadTypes),1,',','') level=0}
 						( с учётом филиалов: {clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerWithFilials($lecturer, $year, $loadTypes),1,',','') level=0})</b></div>
+    	
+		<div><p><b>Примечание:</b><br>
+			сверка с расписанием производится только по сумме Лекции+ЛабРаботы+Практики, не включаются Курс.Проекты и пр.
+		</div>
     {/if}
 {else}
     <div class="alert">Не выбран преподаватель!</div>

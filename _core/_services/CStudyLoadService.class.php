@@ -723,4 +723,141 @@ class CStudyLoadService {
     	}
     	return $parts->getFirstItem();
     }
+    
+    /**
+     * Сумма часов по итоговой нагрузке преподавателя в указанном году/семестре по типу занятий (для сверки с расписанием)
+     *
+     * @param CPerson $lecturer - преподаватель
+     * @param CTerm $year - учебный год
+     * @param CYearPart $part - семестр
+     * @param array $kindTypes - массив с типами занятий (лекция, практика, лаб. раб.)
+     *
+     * @return int
+     */
+    public static function getSumTotalHoursByKindTypes(CPerson $lecturer, CTerm $year, CYearPart $part, $kindTypes) {
+    	$sum = 0;
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD, "person_id = ".$lecturer->getId()." AND year_id = ".$year->getId()." AND year_part_id = ".$part->getId()." AND _is_last_version = 1")->getItems() as $item) {
+    		$study = new CStudyLoad($item);
+    		foreach ($study->works as $work) {
+    			foreach ($kindTypes as $kindType) {
+    				$sum += $work->getSumWorkHoursByType($kindType);
+    			}
+    		}
+    	}
+    	return $sum;
+    }
+    /**
+     * Сумма часов в расписании у преподавателя в указанном году/семестре по типу занятий: л, пр, л/р
+     *
+     * @param CPerson $lecturer - преподаватель
+     * @param CTerm $year - учебный год
+     * @param CYearPart $part - семестр
+     *
+     * @return int
+     */
+    public static function getSumHoursInSchedule(CPerson $lecturer, CTerm $year, CYearPart $part) {
+    	$schedules = CScheduleService::getScheduleUserByYearAndPart($lecturer->getUser(), $year, $part);
+    	$sum = 0;
+    	foreach ($schedules as $schedule) {
+    		$item = 0;
+    		//формируем массив недель
+    		$curArray = CStudyLoadService::curWeekInTimeWeeks($schedule->length);
+    		//считаем число часов (для л/р *4, для остальных *2)
+    		if ($schedule->kindWork->getAlias() == CScheduleKindWorkConstants::LAB_WORK) {
+    			$item = count($curArray)*4;
+    		} elseif ($schedule->kindWork->getAlias() == CScheduleKindWorkConstants::LECTURE) {
+    			$item = count($curArray)*2;
+    		} elseif ($schedule->kindWork->getAlias() == CScheduleKindWorkConstants::PRACTICE) {
+    			$item = count($curArray)*2;
+    		}
+    		$sum += $item;
+    	}
+    	return $sum;
+    }
+    /**
+     * Сумма часов в расписании у преподавателя в указанном году/семестре по указанному типу занятий
+     *
+     * @param CPerson $lecturer - преподаватель
+     * @param CTerm $year - учебный год
+     * @param CYearPart $part - семестр
+     * @param int $typeId - тип занятия в нагрузке
+     *
+     * @return int
+     */
+    public static function getSumHoursInScheduleByKindTypes(CPerson $lecturer, CTerm $year, CYearPart $part, $typeId) {
+    	// сопоставим тип занятия в нагрузке и тип занятия в расписании
+    	$typeKindSchedule = "";
+    	$typeAliasLoadWork = CBaseManager::getStudyLoadWorkType($typeId)->name_hours_kind;
+    	if ($typeAliasLoadWork == CStudyLoadWorkTypeConstants::LABOR_LAB_WORK) {
+    		$typeKindSchedule = CScheduleKindWorkConstants::LAB_WORK;
+    	} elseif ($typeAliasLoadWork == CStudyLoadWorkTypeConstants::LABOR_LECTURE) {
+    		$typeKindSchedule = CScheduleKindWorkConstants::LECTURE;
+    	} elseif ($typeAliasLoadWork == CStudyLoadWorkTypeConstants::LABOR_PRACTICE) {
+    		$typeKindSchedule = CScheduleKindWorkConstants::PRACTICE;
+    	} elseif ($typeAliasLoadWork == CStudyLoadWorkTypeConstants::LABOR_COURSE_PROJECT) {
+    		$typeKindSchedule = CScheduleKindWorkConstants::PROJECT;
+    	} elseif ($typeAliasLoadWork == CStudyLoadWorkTypeConstants::LABOR_EXAMEN) {
+    		$typeKindSchedule = CScheduleKindWorkConstants::EXAMEN;
+    	} elseif ($typeAliasLoadWork == CStudyLoadWorkTypeConstants::LABOR_CREDIT) {
+    		$typeKindSchedule = CScheduleKindWorkConstants::CREDIT;
+    	} elseif ($typeAliasLoadWork == CStudyLoadWorkTypeConstants::LABOR_CONSULTATION) {
+    		$typeKindSchedule = CScheduleKindWorkConstants::CONSULTATION;
+    	} elseif ($typeAliasLoadWork == CStudyLoadWorkTypeConstants::LABOR_STUDY_PRACTICE) {
+    		$typeKindSchedule = CScheduleKindWorkConstants::LECTURE_AND_PRACTICE;
+    	} elseif ($typeAliasLoadWork == CStudyLoadWorkTypeConstants::LABOR_WORK_PRACTICE) {
+    		$typeKindSchedule = CScheduleKindWorkConstants::LAB_WORK_AND_PRACTICE;
+    	}
+    	
+    	$schedules = CScheduleService::getScheduleUserByYearAndPart($lecturer->getUser(), $year, $part);
+    	$sum = 0;
+    	foreach ($schedules as $schedule) {
+    		$item = 0;
+    		//формируем массив недель
+    		$curArray = CStudyLoadService::curWeekInTimeWeeks($schedule->length);
+    		//считаем число часов (для л/р *4, для остальных *2)
+    		if ($schedule->kindWork->getAlias() == $typeKindSchedule and $typeKindSchedule == CScheduleKindWorkConstants::LAB_WORK) {
+    			$item = count($curArray)*4;
+    		} elseif ($schedule->kindWork->getAlias() == $typeKindSchedule) {
+    			$item = count($curArray)*2;
+    		}
+    		$sum += $item;
+    	}
+    	return $sum;
+    }
+    /**
+     * Массив номеров недель
+     * 
+     * @param string $strNedeli
+     * @return array $str_arr
+     */
+    public static function curWeekInTimeWeeks($strNedeli) {
+    	//временный массив
+    	$str_tmp_arr = array();	
+    	//конечный массив номеров недель
+    	$str_arr = array();
+    	
+    	//удалили пробелы
+    	$strNedeli = str_replace(' ','', $strNedeli);
+    	//получили разбивку по запятым
+    	$str_tmp_arr = split(',',$strNedeli);
+    
+    	$k = 0; 
+    	$findId = 0;
+    	for ($i=0; $i < count($str_tmp_arr); $i++){
+    		//т.е. элемент включает тире (-)
+    		$findId = strpos($str_tmp_arr[$i], '-');
+    		if ($findId >= 1) {
+    			$valMin = substr($str_tmp_arr[$i], 0, $findId);
+    			$valMax = substr($str_tmp_arr[$i], $findId+1);
+    			for ($j = $valMin; $j <= $valMax; $j++) {
+    				$str_arr[$k] = $j;
+    				$k++;
+    			}
+    		} else {
+    			$str_arr[$k] = $str_tmp_arr[$i];
+    			$k++;
+    		}
+    	}
+    	return $str_arr;
+    }
 }
