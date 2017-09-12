@@ -36,7 +36,7 @@ class CStudyLoadWorkTypeConstants {
 	/**
 	 * Экзамены
 	 */
-	const LABOR_EXAMEN = "examen";
+	const LABOR_EXAMEN = "exams";
 	
 	/**
 	 * Производственная и преддипломная практика

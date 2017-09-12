@@ -92,7 +92,12 @@
 	            {foreach CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes)->getItems() as $typeId=>$rows}
 					{foreach $rows as $kindId=>$value}
 						{if !in_array($kindId, array(0))}
-							<td><b>{clearNullValues number=number_format($value,1,',','') level=0}</b></td>
+							{$sumHours = CStudyLoadService::getSumHoursInScheduleByKindTypes($lecturer, $year, $part, $typeId)}
+							{if ($value != $sumHours and $value != 0)}
+								<td style="white-space:nowrap;"><span><b>{clearNullValues number=number_format($value,1,',','') level=0}</b><sup><font color="#FF0000">{$sumHours}</sup></font></span></td>
+							{else}
+								<td><b>{clearNullValues number=number_format($value,1,',','') level=0}</b></td>
+							{/if}
 						{/if}
 	                {/foreach}
 	            {/foreach}
@@ -135,7 +140,16 @@
 		</table>
     {/if}
 </form>
-{CStudyLoadService::getSumTimeTableCheck($lecturer, $year, $part)}
+
+{$sumHours = CStudyLoadService::getSumHoursInSchedule($lecturer, $year, $part)}
+{$sumTimeTableCheck = CStudyLoadService::getSumTotalHoursByKindTypes($lecturer, $year, $part, $kindTypes)}
+
+{if ($sumHours != $sumTimeTableCheck)}
+	<div><font color="#FF0000">за <u>{$part->getValue()}</u> семестр ошибка сверки с расписанием: в расписании={$sumHours}, в нагрузке={$sumTimeTableCheck}</font></div>
+{else}
+	<div><font color="#33CC00">за <u>{$part->getValue()}</u> семестр сверено с расписанием</font></div>
+{/if}
+<br>
 
 <script>
 	$(document).ready(function() {

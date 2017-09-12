@@ -263,6 +263,14 @@ class CStudyLoadController extends CBaseController {
     	$copyWays[0] = "копировать с перемещением (удаляем у одного - добавляем другому)";
     	$copyWays[1] = "только копирование (сохраняем у одного и добавляем другому)";
     	$this->setData("copyWays", $copyWays);
+    	
+    	// Типы занятий: л, пр, л/р для сверки с расписанием
+    	$kindTypes = array();
+    	$kindTypes[] = CStudyLoadWorkTypeConstants::LABOR_LECTURE;
+    	$kindTypes[] = CStudyLoadWorkTypeConstants::LABOR_PRACTICE;
+    	$kindTypes[] = CStudyLoadWorkTypeConstants::LABOR_LAB_WORK;
+    	$this->setData("kindTypes", $kindTypes);
+    	
     	$this->renderView("_study_loads/editLoads.tpl");
     }
     public function actionEditLoadsByType() {

@@ -46,5 +46,5 @@ class CScheduleKindWorkConstants {
 	/**
 	 * Лабораторные работы и практики
 	 */
-	const KOLLOKVIUM = "labWorkAndPractice";
+	const LAB_WORK_AND_PRACTICE = "labWorkAndPractice";
 }
