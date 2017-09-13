@@ -145,7 +145,7 @@ class CStudyLoadService {
     	$premiumLoadId = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::PREMIUM)->getId();
     	$byTimeLoadId = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::BY_TIME)->getId();
     	
-    	if ($isBudget) {
+    	/*if ($isBudget) {
     		$cacheBudget = "isBudget";
     	} else {
     		$cacheBudget = "notBudget";
@@ -163,12 +163,9 @@ class CStudyLoadService {
     	$cacheKey = "cachePersonsWithLoadByYear_".$cacheBudget."_".$cacheContract."_".$selectedYear."_".$cachePerson;
     	if (CApp::getApp()->cache->hasCache($cacheKey)) {
     		return CApp::getApp()->cache->get($cacheKey);
-    	} else {
+    	} else {*/
     		$personsWithLoad = array();
-    		 
-    		// текущая дата для расчета ставки по актуальным приказам ОК
-    		$dateFrom = date('Y.m.d', mktime(0, 0, 0, date("m"), date("d"), date("Y")));
-    		 
+    		
     		if ($isBudget or $isContract) {
     			$query = new CQuery();
     			$query->select("kadri.id as kadri_id,
@@ -245,9 +242,9 @@ class CStudyLoadService {
     				$i++;
     			}
     		}
-    		CApp::getApp()->cache->set($cacheKey, $personsWithLoad);
-    		return CApp::getApp()->cache->get($cacheKey);
-    	}
+    		//CApp::getApp()->cache->set($cacheKey, $personsWithLoad);
+    		return $personsWithLoad;
+    	//}
     }
     
     /**
@@ -629,7 +626,7 @@ class CStudyLoadService {
     		$studyLoad = CStudyLoadService::getStudyLoad($loadId);
     	
     		// очистка кэша
-    		CStudyLoadService::clearCache($studyLoad);
+    		//CStudyLoadService::clearCache($studyLoad);
     	
     		if ($choice == 0) {
     			// копирование с перемещением

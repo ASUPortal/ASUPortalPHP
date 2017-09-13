@@ -407,7 +407,7 @@ class CStudyLoadController extends CBaseController {
     	$studyLoad = CStudyLoadService::getStudyLoad(CRequest::getInt("id"));
     	
     	// очистка кэша
-    	CStudyLoadService::clearCache($studyLoad);
+    	//CStudyLoadService::clearCache($studyLoad);
     	
     	$kadriId = $studyLoad->person_id;
     	$yearId = $studyLoad->year_id;
@@ -431,7 +431,7 @@ class CStudyLoadController extends CBaseController {
             $lastId = $studyLoad->save();
             
             // очистка кэша
-            CStudyLoadService::clearCache($studyLoad);
+            //CStudyLoadService::clearCache($studyLoad);
             
             $object = new CStudyLoadTable($studyLoad);
             $object->setAttributes(CRequest::getArray($object::getClassName()));
