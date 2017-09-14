@@ -406,9 +406,6 @@ class CStudyLoadController extends CBaseController {
     public function actionDelete() {
     	$studyLoad = CStudyLoadService::getStudyLoad(CRequest::getInt("id"));
     	
-    	// очистка кэша
-    	CStudyLoadService::clearCache($studyLoad);
-    	
     	$kadriId = $studyLoad->person_id;
     	$yearId = $studyLoad->year_id;
     	if (!is_null($studyLoad)) {
@@ -429,9 +426,6 @@ class CStudyLoadController extends CBaseController {
         $studyLoad->setAttributes(CRequest::getArray($studyLoad::getClassName()));
         if ($studyLoad->validate()) {
             $lastId = $studyLoad->save();
-            
-            // очистка кэша
-            CStudyLoadService::clearCache($studyLoad);
             
             $object = new CStudyLoadTable($studyLoad);
             $object->setAttributes(CRequest::getArray($object::getClassName()));
