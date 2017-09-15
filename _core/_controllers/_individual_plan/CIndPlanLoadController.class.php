@@ -87,6 +87,11 @@ class CIndPlanLoadController extends CBaseController{
                     "link" => "#",
                     "icon" => "devices/printer.png",
                     "template" => "formset_ind_plan_view"
+                ),
+                array(
+                    "title" => "Добавить",
+                    "link" => "load.php?action=add&id=".CSession::getCurrentPerson()->getId(),
+                    "icon" => "actions/list-add.png"
                 )
             )
         );
@@ -205,7 +210,12 @@ class CIndPlanLoadController extends CBaseController{
     public function actionAdd() {
         $load = new CIndPlanPersonLoad();
         $load->person_id = CRequest::getInt("id");
-        $year = CRequest::getInt("year");
+        $load->year_id = CRequest::getInt("year");
+        if (CRequest::getInt("year") != 0) {
+        	$year = CRequest::getInt("year");
+        } else {
+        	$year = CUtils::getCurrentYear()->id;
+        }
         $this->addActionsMenuItem(
         	array(
         		"title" => "Назад",

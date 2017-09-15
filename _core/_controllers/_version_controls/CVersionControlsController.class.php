@@ -34,6 +34,16 @@ class CVersionControlsController extends CBaseController {
     	}
     	$this->setData("modelName", $modelName);
     	
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Удалить выделенные",
+    			"icon" => "actions/edit-delete.png",
+    			"form" => "#MainView",
+    			"link" => "index.php",
+    			"action" => "delete"
+    		)
+    	));
+    	
         $this->setData("items", $items);
         $this->setData("itemId", CRequest::getInt("id"));
         $this->setData("class", $class);
@@ -45,7 +55,15 @@ class CVersionControlsController extends CBaseController {
     	$module = CRequest::getString("module");
     	$class = CRequest::getString("class");
     	
-    	CVersionControlService::delete(CRequest::getInt("id"), $class);
+    	if (CRequest::getInt("id") != 0) {
+    		CVersionControlService::delete(CRequest::getInt("id"), $class);
+    	} else {
+    		$items = CRequest::getArray("selectedInView");
+    		foreach ($items as $id){
+    			CVersionControlService::delete($id, $class);
+    		}
+    	}
+    	
         $this->redirect("?action=index&id=".$itemId."&module=".$module."&class=".$class);
     }
 }
