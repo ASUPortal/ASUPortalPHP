@@ -8,6 +8,10 @@
 		Нет объектов для отображения
 	{else}
 		<form action="index.php" method="post" id="MainView">
+		{CHtml::hiddenField("itemId", $itemId)}
+		{CHtml::hiddenField("class", $class)}
+		{CHtml::hiddenField("module", $module)}
+		
 	    <table class="table table-striped table-bordered table-hover table-condensed">
 	        <tr>
 	            <th></th>
@@ -30,7 +34,7 @@
 	            <td>{counter}</td>
 	            <td>
 	            	{if (!$item->_is_last_version)}
-	            		{CHtml::activeViewGroupSelect("id", $item, false, true)}
+	            		{CHtml::activeViewGroupSelect("id", $item, false)}
 	            	{/if}
 	            </td>
 	            <td><a href="../../_modules/{$module}/index.php?action=edit&id={$item->getId()}" target="_blank">{$item->getId()}</a></td>                       
