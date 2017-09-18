@@ -15,10 +15,10 @@
 </style>
 
 {function name=clearNullValues level=0}
-  {if (floatval(str_replace(',','.',$number)) == 0 or $number == 0)}
-     &nbsp;
-  {else}
+  {if (floatval(str_replace(',','.',$number)) != 0 or $number != 0)}
      {$number}
+  {else}
+     &nbsp;
   {/if}
 {/function}
 
