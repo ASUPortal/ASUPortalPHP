@@ -733,6 +733,16 @@ class CPerson extends CActiveModel{
         }
         return $result;
     }
+    
+    /**
+     * Количество приказов сотрудника
+     * 
+     * @return number
+     */
+    public function getOrdersCount() {
+        $cnt = $this->getActiveOrders()->getCount();
+        return $cnt;
+    }
 
     /**
      * Дата рождения

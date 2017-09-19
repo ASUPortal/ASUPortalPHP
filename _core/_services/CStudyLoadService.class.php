@@ -170,7 +170,7 @@ class CStudyLoadService {
     		$personsWithLoad = $query->execute()->getItems();
     		$i = 0;
     		foreach ($personsWithLoad as $person) {
-    			$personWithOrders = CBaseManager::getPersonTime($person['kadri_id']);
+    			$personWithOrders = CStaffManager::getPerson($person['kadri_id']);
     			$personsWithLoad[$i]['rate_sum'] = $personWithOrders->getOrdersRate();
     			$personsWithLoad[$i]['ord_cnt'] = $personWithOrders->getOrdersCount();
     			$i++;
