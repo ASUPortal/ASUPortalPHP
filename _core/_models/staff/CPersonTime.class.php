@@ -44,17 +44,6 @@ class CPersonTime extends CPerson {
     	}
     	return $result;
     }
-    public function getOrdersRate() {
-    	$result = 0;
-    	foreach ($this->getActiveOrders()->getItems() as $order) {
-    		$result += $order->rate;
-    	}
-    	return $result;
-    }
-    public function getOrdersCount() {
-    	$cnt = $this->getActiveOrders()->getCount();
-    	return $cnt;
-    }
     /**
      * Список приказов с номером, датой и ставкой
      * 
