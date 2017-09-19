@@ -795,83 +795,76 @@ class CUtils {
      */
     public static function getMimetype($filename) {
         $filetype = "";
-        if (class_exists("finfo")) {
-            $finfo = new finfo(FILEINFO_MIME);
-            $filetype = $finfo->file($filename);
-            $filetype = CUtils::strLeft($filetype, ";");
-            $filetype = str_replace("/", "-", $filetype);
-        } elseif (function_exists("mime_content_type")) {
-            $filetype = mime_content_type($filename);
-            $filetype = str_replace("/", "-", $filetype);
+        $mime_types = array(
+        
+        		'txt' => 'text/plain',
+        		'htm' => 'text/html',
+        		'html' => 'text/html',
+        		'php' => 'text/html',
+        		'css' => 'text/css',
+        		'js' => 'text/x-javascript',
+        		'json' => 'application/json',
+        		'xml' => 'text/xml',
+        		'swf' => 'application/x-flash-video',
+        		'flv' => 'video/x-flv',
+        
+        		// images
+        		'png' => 'image/png',
+        		'jpe' => 'image/jpeg',
+        		'jpeg' => 'image/jpeg',
+        		'jpg' => 'image/jpeg',
+        		'gif' => 'image/gif',
+        		'bmp' => 'image/bmp',
+        		'ico' => 'image/x-ico',
+        		'tiff' => 'image/tiff',
+        		'tif' => 'image/tiff',
+        		'svg' => 'image/svg+xml',
+        		'svgz' => 'image/svg+xml',
+        
+        		// archives
+        		'zip' => 'application/x-zip',
+        		'7z' => 'application/x-7zip',
+        		'tar' => 'application/x-tar',
+        		'rar' => 'application/x-rar',
+        		'exe' => 'application/x-executable',
+        		'msi' => 'application/x-msdownload',
+        		'cab' => 'application/vnd.ms-cab-compressed',
+        
+        		// audio/video
+        		'mp3' => 'audio/x-mpeg',
+        		'qt' => 'video/quicktime',
+        		'mov' => 'video/quicktime',
+        
+        		// adobe
+        		'pdf' => 'application/pdf',
+        		'psd' => 'image/vnd.adobe.photoshop',
+        		'ai' => 'application/postscript',
+        		'eps' => 'application/postscript',
+        		'ps' => 'application/postscript',
+        
+        		// ms office
+        		'doc' => 'application/msword',
+        		'rtf' => 'text/richtext',
+        		'xls' => 'application/vnd.ms-excel',
+        		'ppt' => 'application/vnd.ms-powerpoint',
+        
+        		// ms office new
+        		'docx' => 'application/msword',
+        		'xlsx' => 'application/vnd.ms-excel',
+        		'pptx' => 'application/vnd.ms-powerpoint',
+        
+        		// open office
+        		'odt' => 'x-office-document',
+        		'ods' => 'x-office-spreadsheet',
+        		'odp' => 'x-office-presentation',
+        		'odg' => 'x-office-drawing',
+        );
+        $ext = strtolower(array_pop(explode('.', $filename)));
+        if (array_key_exists($ext, $mime_types)) {
+        	$filetype = $mime_types[$ext];
+        	$filetype = str_replace("/", "-", $filetype);
         } else {
-            $mime_types = array(
-
-                'txt' => 'text/plain',
-                'htm' => 'text/html',
-                'html' => 'text/html',
-                'php' => 'text/html',
-                'css' => 'text/css',
-                'js' => 'application/javascript',
-                'json' => 'application/json',
-                'xml' => 'application/xml',
-                'swf' => 'application/x-shockwave-flash',
-                'flv' => 'video/x-flv',
-
-                // images
-                'png' => 'image/png',
-                'jpe' => 'image/jpeg',
-                'jpeg' => 'image/jpeg',
-                'jpg' => 'image/jpeg',
-                'gif' => 'image/gif',
-                'bmp' => 'image/bmp',
-                'ico' => 'image/vnd.microsoft.icon',
-                'tiff' => 'image/tiff',
-                'tif' => 'image/tiff',
-                'svg' => 'image/svg+xml',
-                'svgz' => 'image/svg+xml',
-
-                // archives
-                'zip' => 'application/zip',
-                'rar' => 'application/x-rar-compressed',
-                'exe' => 'application/x-msdownload',
-                'msi' => 'application/x-msdownload',
-                'cab' => 'application/vnd.ms-cab-compressed',
-
-                // audio/video
-                'mp3' => 'audio/mpeg',
-                'qt' => 'video/quicktime',
-                'mov' => 'video/quicktime',
-
-                // adobe
-                'pdf' => 'application/pdf',
-                'psd' => 'image/vnd.adobe.photoshop',
-                'ai' => 'application/postscript',
-                'eps' => 'application/postscript',
-                'ps' => 'application/postscript',
-
-                // ms office
-                'doc' => 'application/msword',
-                'rtf' => 'application/rtf',
-                'xls' => 'application/vnd.ms-excel',
-                'ppt' => 'application/vnd.ms-powerpoint',
-
-                // ms office new
-                'docx' => 'application/msword',
-                'xlsx' => 'application/vnd.ms-excel',
-                'pptx' => 'application/vnd.ms-powerpoint',
-
-                // open office
-                'odt' => 'application/vnd.oasis.opendocument.text',
-                'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
-            );
-
-            $ext = strtolower(array_pop(explode('.', $filename)));
-            if (array_key_exists($ext, $mime_types)) {
-                $filetype = $mime_types[$ext];
-                $filetype = str_replace("/", "-", $filetype);
-            } else {
-                $filetype = "unknown";
-            }
+        	$filetype = "unknown";
         }
         return $filetype;
     }
@@ -969,5 +962,5 @@ class CUtils {
     public static function getDocumentRoot() {
     	return $_SERVER["DOCUMENT_ROOT"];
     }
-    
+
 }

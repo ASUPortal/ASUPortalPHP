@@ -38,7 +38,7 @@ if(! defined('FILE_CACHE_MAX_FILE_AGE') ) 	define ('FILE_CACHE_MAX_FILE_AGE', 86
 if(! defined('FILE_CACHE_SUFFIX') ) 		define ('FILE_CACHE_SUFFIX', '.timthumb.txt');			// What to put at the end of all files in the cache directory so we can identify them
 if(! defined('FILE_CACHE_PREFIX') ) 		define ('FILE_CACHE_PREFIX', 'timthumb');				// What to put at the beg of all files in the cache directory so we can identify them
 if(! defined('FILE_CACHE_DIRECTORY') ) 		define ('FILE_CACHE_DIRECTORY', './cache');				// Directory where images are cached. Left blank it will use the system temporary directory (which is better for security)
-if(! defined('MAX_FILE_SIZE') )				define ('MAX_FILE_SIZE', 10485760);						// 10 Megs is 10485760. This is the max internal or external file size that we'll process.  
+if(! defined('MAX_FILE_SIZE') )				define ('MAX_FILE_SIZE', 26214400);						// 10 Megs is 10485760. This is the max internal or external file size that we'll process.  
 if(! defined('CURL_TIMEOUT') )				define ('CURL_TIMEOUT', 20);							// Timeout duration for Curl. This only applies if you have Curl installed and aren't using PHP's default URL fetching mechanism.
 if(! defined('WAIT_BETWEEN_FETCH_ERRORS') )	define ('WAIT_BETWEEN_FETCH_ERRORS', 3600);				// Time to wait between errors fetching remote file
 
@@ -47,8 +47,8 @@ if(! defined('BROWSER_CACHE_MAX_AGE') ) 	define ('BROWSER_CACHE_MAX_AGE', 864000
 if(! defined('BROWSER_CACHE_DISABLE') ) 	define ('BROWSER_CACHE_DISABLE', false);				// Use for testing if you want to disable all browser caching
 
 //Image size and defaults
-if(! defined('MAX_WIDTH') ) 			define ('MAX_WIDTH', 1500);									// Maximum image width
-if(! defined('MAX_HEIGHT') ) 			define ('MAX_HEIGHT', 1500);								// Maximum image height
+if(! defined('MAX_WIDTH') ) 			define ('MAX_WIDTH', 5000);									// Maximum image width
+if(! defined('MAX_HEIGHT') ) 			define ('MAX_HEIGHT', 5000);								// Maximum image height
 if(! defined('NOT_FOUND_IMAGE') )		define ('NOT_FOUND_IMAGE', '');								// Image to serve if any 404 occurs 
 if(! defined('ERROR_IMAGE') )			define ('ERROR_IMAGE', '');									// Image to serve if an error occurs instead of showing error message 
 if(! defined('PNG_IS_TRANSPARENT') ) 	define ('PNG_IS_TRANSPARENT', FALSE);						// Define if a png image should have a transparent background color. Use False value if you want to display a custom coloured canvas_colour 
@@ -491,7 +491,7 @@ class timthumb {
         $mimeType = $sData['mime'];
 
         $this->debug(3, "Mime type of image is $mimeType");
-        if(! preg_match('/^image\/(?:gif|jpg|jpeg|png)$/i', $mimeType)){
+        if(! preg_match('/^image\/(?:gif|jpg|jpeg|png|x-ms-bmp)$/i', $mimeType)){
             return $this->error("The image being resized is not a valid gif, jpg or png.");
         }
 
@@ -748,6 +748,9 @@ class timthumb {
         } else if(preg_match('/^image\/gif$/i', $mimeType)){
             $imgType = 'gif';
             imagegif($canvas, $tempfile);
+        } else if(preg_match('/^image\/x-ms-bmp$/i', $mimeType)){
+            $imgType = 'jpg';
+            imagejpeg($canvas, $tempfile, $quality);
         } else {
             return $this->sanityFail("Could not match mime type after verifying it previously.");
         }
@@ -1093,6 +1096,10 @@ class timthumb {
 
             case 'image/gif':
                 $image = imagecreatefromgif ($src);
+                break;
+
+            case 'image/x-ms-bmp':
+                $image = CImageService::imageCreateFromBMP($src);
                 break;
 
             default:
