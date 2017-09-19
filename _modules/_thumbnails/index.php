@@ -1099,7 +1099,7 @@ class timthumb {
                 break;
 
             case 'image/x-ms-bmp':
-                $image = CUtils::imageCreateFromBMP($src);
+                $image = CImageService::imageCreateFromBMP($src);
                 break;
 
             default:
