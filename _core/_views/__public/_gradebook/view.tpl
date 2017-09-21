@@ -143,26 +143,33 @@
     });
 </script>
 	{if $records->getCount() == 0}
-		<table border="0" width="100%" class="tableBlank">
-		    <tr>
-		        <td valign="top">
-		            <form>
-			            <p>
-				        	<label>Введите Фамилию студента для поиска</label>
-				            <input type="text" id="search" style="width: 40%; " placeholder="Поиск">
-				        </p>
-		            </form>
-		        </td>
-		    </tr>
-		</table>
+		<form>
+			<table border="0" width="100%" class="tableBlank">
+			    <tr>  
+		            <td valign="top">
+			        	{CHtml::hiddenField("action", "view")}
+			        	<label>Введите фамилию студента для поиска</label>
+			            {CHtml::textField("textSearch", $term, "", "", "placeholder=Поиск")}
+			        </td>
+			    </tr>
+			    <tr>
+			        <td valign="top">
+				    	<div class="controls">
+							<input name="" type="submit" class="btn" value="Найти">
+						</div>	
+					</td>
+			    </tr>
+			</table>
+		</form>
 	{else}
 		<table border="0" width="100%" class="tableBlank">
 		    <tr>
 		        <td valign="top">
 		            <form>
 		            <p>
-			        	<label>Введите Фамилию студента для поиска</label>
-			            <input type="text" id="search" style="width: 40%; " placeholder="Поиск">
+			        	{CHtml::hiddenField("action", "view")}
+				        <label>Введите фамилию студента для поиска</label>
+				        {CHtml::textField("textSearch", $term, "", "", "placeholder=Поиск")}
 			        </p>
 		            <p>
 		                <label for="person">Преподаватель</label>

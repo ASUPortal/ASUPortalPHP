@@ -234,8 +234,9 @@ class CGradebookController extends CBaseController {
     public function actionView() {
     	$set = new CRecordSet(false);
     	$query = new CQuery();
-    	if (CRequest::getString("filter") !== "") {
+    	if (CRequest::getString("filter") !== "" or CRequest::getString("textSearch") !== "") {
     		$query->select("activity.*")
+        		->innerJoin(TABLE_STUDENTS." as student", "student.id = activity.student_id")
     			->from(TABLE_STUDENTS_ACTIVITY." as activity");
     	}
     	// сортировки по столбцам
@@ -382,6 +383,13 @@ class CGradebookController extends CBaseController {
     			$disciplineQuery->innerJoin(TABLE_STUDENTS_CONTROL_TYPES." as control", "activity.study_act_id = control.id AND control.id=".$selectedControl->getId());
     		}
     	}
+    	
+    	$term = CRequest::getString("textSearch");
+    	if ($term != "") {
+    		//поиск по ФИО студента
+    		$query->condition("student.fio like '%".$term."%'");
+    	}
+    	
     	$set->setQuery($query);
     	// ищем преподавателей, у которых есть оценки в списке
     	$persons = array();
@@ -400,7 +408,7 @@ class CGradebookController extends CBaseController {
     	}
     	// остальные данные
     	$items = new CArrayList();
-    	if (CRequest::getString("filter") !== "") {
+    	if (CRequest::getString("filter") !== "" or CRequest::getString("textSearch") !== "") {
     		foreach ($set->getPaginated()->getItems() as $item) {
     			$a = new CStudentActivity($item);
     			$items->add($a->getId(), $a);
@@ -416,6 +424,7 @@ class CGradebookController extends CBaseController {
     	$this->setData("selectedControl", $selectedControl);
     	$this->setData("records", $items);
     	$this->setData("paginator", $set->getPaginator());
+    	$this->setData("term", $term);
     	$this->renderView("__public/_gradebook/view.tpl");
     }
     public function actionRemoveGroup() {
