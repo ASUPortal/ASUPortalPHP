@@ -25,7 +25,7 @@
         {if !is_null($selectedStudent)}
             filters.student = {$selectedStudent->getId()};
         {/if}
-        var action = "?action=view&filter=";
+        var action = "?action=view&textSearch={$textSearch}&filter=";
         var actions = new Array();
         jQuery.each(filters, function(key, value){
             if (key !== type) {
@@ -37,7 +37,7 @@
     }
     jQuery(document).ready(function(){
         jQuery("#person").change(function(){
-            window.location.href = "?action=view&filter=person:" + jQuery(this).val()
+            window.location.href = "?action=view&textSearch={$textSearch}&filter=person:" + jQuery(this).val()
             {if !is_null($selectedGroup)}
                 + "_group:{$selectedGroup}"
             {/if}
@@ -52,7 +52,7 @@
             {/if};
         });
         jQuery("#group").change(function(){
-            window.location.href = "?action=view&filter=group:" + jQuery(this).val()
+            window.location.href = "?action=view&textSearch={$textSearch}&filter=group:" + jQuery(this).val()
             {if !is_null($selectedPerson)}
                 + "_person:{$selectedPerson}"
             {/if}
@@ -67,7 +67,7 @@
             {/if};
         });
         jQuery("#discipline").change(function(){
-            window.location.href = "?action=view&filter=discipline:" + jQuery(this).val()
+            window.location.href = "?action=view&textSearch={$textSearch}&filter=discipline:" + jQuery(this).val()
             {if !is_null($selectedPerson)}
                 + "_person:{$selectedPerson}"
             {/if}
@@ -81,65 +81,6 @@
                 + "_student:{$selectedStudent->getId()}"
             {/if};
         });
-        /**
-         * Это старый код адаптированный под Bootstrap
-         * Он не страшный, он оставлен таким, какой он есть, чтобы бэкэнд
-         * не переписывать
-         **/
-        var searchResults = new Object();
-        jQuery("#search").typeahead({
-            source: function (query, process) {
-                return jQuery.ajax({
-                    url: "#",
-                    type: "get",
-                    cache: false,
-                    dataType: "json",
-                    data: {
-                        "query": query,
-                        "action": "search"
-                    },
-                    beforeSend: function(){
-                        /**
-                         * Показываем индикатор активности
-                         */
-                        jQuery("#search").css({
-                            "background-image": 'url({$web_root}images/ajax-loader.gif)',
-                            "background-repeat": "no-repeat",
-                            "background-position": "95% center"
-                        });
-                    },
-                    success: function(data){
-                        var lookup = new Array();
-                        searchResults = new Object();
-                        for (var i = 0; i < data.length; i++) {
-                            lookup.push(data[i].label);
-                            searchResults[data[i].label] = data[i];
-                        }
-                        process(lookup);
-                        jQuery("#search").css("background-image", "none");
-                    }
-                });
-            },
-            updater: function(item){
-                var selected = searchResults[item];
-                if (selected.type == 1) {
-                    // выбран преподаватель
-                    window.location.href = "?action=view&filter=person:" + selected.object_id;
-                } else if(selected.type == 2) {
-                    // выбрана дисциплина
-                    window.location.href = "?action=view&filter=discipline:" + selected.object_id;
-                } else if(selected.type == 3) {
-                    // студенческая группа
-                    window.location.href = "?action=view&filter=group:" + selected.object_id;
-                } else if(selected.type == 4) {
-                    // студент
-                    window.location.href = "?action=view&filter=student:" + selected.object_id;
-                } else if(selected.type == 5) {
-                    // вид контроля
-                    window.location.href = "?action=view&filter=control:" + selected.object_id;
-                }
-            }
-        });
     });
 </script>
 	{if $records->getCount() == 0}
@@ -149,7 +90,7 @@
 		            <td valign="top">
 			        	{CHtml::hiddenField("action", "view")}
 			        	<label>Введите фамилию студента для поиска</label>
-			            {CHtml::textField("textSearch", $term, "", "", "placeholder=Поиск")}
+			            {CHtml::textField("textSearch", $textSearch, "", "", "placeholder=Поиск")}
 			        </td>
 			    </tr>
 			    <tr>
@@ -169,7 +110,7 @@
 		            <p>
 			        	{CHtml::hiddenField("action", "view")}
 				        <label>Введите фамилию студента для поиска</label>
-				        {CHtml::textField("textSearch", $term, "", "", "placeholder=Поиск")}
+				        {CHtml::textField("textSearch", $textSearch, "", "", "placeholder=Поиск")}
 			        </p>
 		            <p>
 		                <label for="person">Преподаватель</label>
