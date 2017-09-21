@@ -234,8 +234,9 @@ class CGradebookController extends CBaseController {
     public function actionView() {
     	$set = new CRecordSet(false);
     	$query = new CQuery();
-    	if (CRequest::getString("filter") !== "") {
+    	if (CRequest::getString("filter") !== "" or CRequest::getString("textSearch") !== "") {
     		$query->select("activity.*")
+        		->innerJoin(TABLE_STUDENTS." as student", "student.id = activity.student_id")
     			->from(TABLE_STUDENTS_ACTIVITY." as activity");
     	}
     	// сортировки по столбцам
@@ -300,6 +301,7 @@ class CGradebookController extends CBaseController {
     	$personQuery->select("distinct(person.id) as id, person.fio as name")
 	    	->from(TABLE_STUDENTS_ACTIVITY." as activity")
 	    	->innerJoin(TABLE_PERSON." as person", "activity.kadri_id = person.id")
+	    	->innerJoin(TABLE_STUDENTS." as student", "student.id = activity.student_id")
 	    	->order("person.fio asc");
     	$groupQuery = new CQuery();
     	$groupQuery->select("distinct(st_group.id) as id, st_group.name as name")
@@ -311,7 +313,16 @@ class CGradebookController extends CBaseController {
     	$disciplineQuery->select("distinct(subject.id) as id, subject.name as name")
 	    	->from(TABLE_STUDENTS_ACTIVITY." as activity")
 	    	->innerJoin(TABLE_DISCIPLINES." as subject", "activity.subject_id = subject.id")
+	    	->innerJoin(TABLE_STUDENTS." as student", "student.id = activity.student_id")
 	    	->order("subject.name asc");
+    	//поиск по ФИО студента
+    	$textSearch = CRequest::getString("textSearch");
+    	if ($textSearch !== "") {
+    		$query->condition("student.fio like '%".$textSearch."%'");
+    		$personQuery->condition("student.fio like '%".$textSearch."%'");
+    		$groupQuery->condition("student.fio like '%".$textSearch."%'");
+    		$disciplineQuery->condition("student.fio like '%".$textSearch."%'");
+    	}
     	// фильтры
     	$selectedPerson = null;
     	$selectedGroup = null;
@@ -326,9 +337,12 @@ class CGradebookController extends CBaseController {
     				$key = $f[0];
     				$value = $f[1];
     				if ($key == "person") {
-    					if ($value != 0) {
+    					if ($value != 0 and $textSearch == "") {
     						$selectedPerson = $value;
     						$query->condition("kadri_id=".$value);
+    					} elseif ($value != 0 and $textSearch !== "") {
+    						$selectedPerson = $value;
+    						$query->condition("activity.kadri_id=".$value." and student.fio like '%".$textSearch."%'");
     					}
     				} elseif ($key == "group") {
     					if ($value != 0) {
@@ -382,6 +396,7 @@ class CGradebookController extends CBaseController {
     			$disciplineQuery->innerJoin(TABLE_STUDENTS_CONTROL_TYPES." as control", "activity.study_act_id = control.id AND control.id=".$selectedControl->getId());
     		}
     	}
+    	
     	$set->setQuery($query);
     	// ищем преподавателей, у которых есть оценки в списке
     	$persons = array();
@@ -400,7 +415,7 @@ class CGradebookController extends CBaseController {
     	}
     	// остальные данные
     	$items = new CArrayList();
-    	if (CRequest::getString("filter") !== "") {
+    	if (CRequest::getString("filter") !== "" or CRequest::getString("textSearch") !== "") {
     		foreach ($set->getPaginated()->getItems() as $item) {
     			$a = new CStudentActivity($item);
     			$items->add($a->getId(), $a);
@@ -416,6 +431,7 @@ class CGradebookController extends CBaseController {
     	$this->setData("selectedControl", $selectedControl);
     	$this->setData("records", $items);
     	$this->setData("paginator", $set->getPaginator());
+    	$this->setData("textSearch", $textSearch);
     	$this->renderView("__public/_gradebook/view.tpl");
     }
     public function actionRemoveGroup() {

@@ -85,7 +85,11 @@ class CBaseController {
          * что у пользователя есть доступ к текущей задаче
          */
         if (!is_null(CSession::getCurrentUser())) {
-            if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_NO_ACCESS) {
+            $action = CRequest::getString("action");
+            if ($action == "") {
+                $action = "index";
+            }
+            if (CSession::getCurrentUser()->getLevelForCurrentTask() == ACCESS_LEVEL_NO_ACCESS and !in_array($action, $this->allowedAnonymous)) {
                 $url = WEB_ROOT;
                 if (array_key_exists("HTTP_REFERER", $_SERVER)) {
                     $url = $_SERVER["HTTP_REFERER"];
