@@ -9,4 +9,14 @@
 
 class CDashboardReport extends CActiveModel{
     protected $_table = TABLE_DASHBOARD_REPORTS;
+    
+    protected function relations() {
+    	return array(
+    		"report" => array(
+    			"relationPower" => RELATION_HAS_ONE,
+    			"storageField" => "report_id",
+    			"targetClass" => "CReport"
+    		)
+    	);
+    }
 }

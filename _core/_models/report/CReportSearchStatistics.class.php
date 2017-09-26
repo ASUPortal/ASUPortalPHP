@@ -35,7 +35,7 @@ class CReportSearchStatistics extends CReportObjectAbstract {
         $result = array();
         // получаем данные о статистике
         // за промежуток времени
-        $condition = "time_stamp BETWEEN '".date("Y-m-d", strtotime($this->start))."' AND '".date("Y-m-d", strtotime($this->end))."'";
+        $condition = "time_stamp BETWEEN '".date("Y-m-d 00:00:00", strtotime($this->start))."' AND '".date("Y-m-d 23:59:59", strtotime($this->end))."'";
         $condition .= " and (s.q_string like '%action=search%'";
         $condition .= " or s.q_string like '%action=getGlobalSearchSubform%'";
         $condition .= " or s.q_string like '%action=LookupGetCreationDialog%'";
