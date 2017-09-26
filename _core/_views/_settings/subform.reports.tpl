@@ -16,7 +16,7 @@
                 <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить отчет?')) { location.href='reports.php?action=delete&id={$report->getId()}'; }; return false;"></a></td>
                 <td>{counter}</td>
                 <td><a href="reports.php?action=edit&id={$report->getId()}" class="icon-pencil"></a></td>
-                <td>{$report->title}</td>
+                <td>{$report->report->title}</td>
             </tr>
         {/foreach}
     </tbody>

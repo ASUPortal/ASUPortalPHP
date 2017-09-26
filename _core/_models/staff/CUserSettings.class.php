@@ -14,14 +14,12 @@ class CUserSettings extends CActiveModel {
     public function relations() {
         return array(
             "reports" => array(
-                "relationPower" => RELATION_MANY_TO_MANY,
+                "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_reports",
-                "joinTable" => TABLE_DASHBOARD_REPORTS,
-                "leftCondition" => "settings_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
-                "rightKey" => "report_id",
-                "managerClass" => "CReportManager",
-                "managerGetObject" => "getReport"
-            ),
+                "storageTable" => TABLE_DASHBOARD_REPORTS,
+                "storageCondition" => "settings_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CDashboardReport"
+            )
         );
     }
 

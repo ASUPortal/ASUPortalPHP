@@ -37,36 +37,50 @@ class CPrintController extends CFlowController {
     }
 
     public function actionPrint() {
-        if (CRequest::getString("id") == "") {
-            throw new Exception("Не выбраны объекты для печати!");
-        }
-        /**
-    	 * Получаем обратно параметры контекста из запроса.
-    	 * Мы получаем:
-    	 * 1. Класс менеджера
-    	 * 2. Метод менеджера для получения нужного объекта
-    	 * 3. Идентификатор объекта
-    	 * 4. Идентификатор печатной формы
-    	 */
-    	$managerClass = CRequest::getString("manager");
-    	$managerMethod = CRequest::getString("method");
-    	$objectId = CRequest::getString("id");
-    	$formId = CRequest::getInt("template");
-    	/**
-    	 * Получаем объект через менеджер
-    	 */
-    	// если объект является экземпляром CArrayList, для совместимости получим первое значение экземпляра CModel из CArrayList
-    	if (!$managerClass::$managerMethod($objectId) instanceof CArrayList) {
-    		$object = $managerClass::$managerMethod($objectId);
-    	} else {
-    		$object = $managerClass::$managerMethod($objectId)->getFirstItem();
-    	}
-    	$form = CPrintManager::getForm($formId);
-        /**
-         * Печатаем
-         */
-		try {
-			$filename = $this->getPrintService()->printTemplate($form, $object);
+    	try {
+	        if (CRequest::getString("id") == "") {
+	            throw new Exception("Не выбраны объекты для печати!");
+	        }
+	        /**
+	    	 * Получаем обратно параметры контекста из запроса.
+	    	 * Мы получаем:
+	    	 * 1. Класс менеджера
+	    	 * 2. Метод менеджера для получения нужного объекта
+	    	 * 3. Идентификатор объекта
+	    	 * 4. Идентификатор печатной формы
+	    	 */
+	    	$managerClass = CRequest::getString("manager");
+	    	$managerMethod = CRequest::getString("method");
+	    	$objectId = CRequest::getString("id");
+	    	$ids = explode(":", CRequest::getString("id"));
+	    	foreach ($ids as $id) {
+	    		$objectId = $id;
+	    	}
+	    	$formId = CRequest::getInt("template");
+	    	/**
+	    	 * Получаем объект через менеджер
+	    	 * (если объект является экземпляром CArrayList, для совместимости получим первое значение экземпляра CModel из CArrayList)
+	    	 */
+	    	if (!$managerClass::$managerMethod($objectId) instanceof CArrayList) {
+	    		$object = $managerClass::$managerMethod($objectId);
+	    	} else {
+	    		$object = $managerClass::$managerMethod($objectId)->getFirstItem();
+	    	}
+	    	if (is_null($object)) {
+	    		throw new Exception("Объекта для печати с указанным ID нет!");
+	    	}
+	    	$form = CPrintManager::getForm($formId);
+	    	if (is_null($form)) {
+	    		throw new Exception("Указанного шаблона для печати нет в базе!");
+	    	}
+	        /**
+	         * Печатаем
+	         */
+	    	if ($object instanceof CModel) {
+	    		$filename = $this->getPrintService()->printTemplate($form, $object);
+	    	} else {
+	    		throw new Exception("Объект для печати должен быть экземпляром класса CModel!");
+	    	}
 			/**
 			 * Отдаем документ пользователю
 			 * Не отдаем, если у нас тут групповая печать

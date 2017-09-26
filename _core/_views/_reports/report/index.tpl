@@ -40,5 +40,5 @@
 {/block}
 
 {block name="asu_right"}
-    {include file="_reports/report/index.right.tpl"}
+    {include file="_reports/report/common.right.tpl"}
 {/block}
