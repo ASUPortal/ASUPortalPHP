@@ -21,6 +21,9 @@ class CCourseProjectsController extends CBaseController {
         $query->select("course_projects.*")
             ->from(TABLE_COURSE_PROJECTS." as course_projects")
 			->order("course_projects.order_date desc");
+        if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_OWN_ONLY, ACCESS_LEVEL_WRITE_OWN_ONLY])) {
+            $query->condition("course_projects.lecturer_id=".CSession::getCurrentPerson()->getId());
+        }
         $set->setQuery($query);
         $courseProjects = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $item) {
@@ -78,6 +81,11 @@ class CCourseProjectsController extends CBaseController {
         if (count(CStaffService::getDisciplinesWithCourseProjectFromLoadByYear(CSession::getCurrentPerson(), CUtils::getCurrentYear())) > 0) {
             $disciplines = CStaffService::getDisciplinesWithCourseProjectFromLoadByYear(CSession::getCurrentPerson(), CUtils::getCurrentYear());
         }
+        
+        $this->setData("issueProtocols", array());
+        $this->setData("progressProtocols", array());
+        $this->setData("resultsProtocols", array());
+        
         $this->setData("groups", $groups);
         $this->setData("disciplines", $disciplines);
         $this->setData("courseProject", $courseProject);
@@ -114,20 +122,27 @@ class CCourseProjectsController extends CBaseController {
         }
         
         $issueProtocols = array();
-        foreach (CProtocolManager::getIssueProtocols($courseProject) as $issueProtocol) {
-            $issueProtocols[$issueProtocol->getId()] = "Протокол №".$issueProtocol->getNumber()." от ".date("d.m.Y", strtotime($issueProtocol->getDate()));
+        
+        foreach (CProtocolManager::getIssueProtocols($courseProject)->getItems() as $issueProtocol) {
+        	if ($issueProtocol instanceof CActiveModel) {
+        		$issueProtocols[$issueProtocol->getId()] = "Протокол №".$issueProtocol->getNumber()." от ".date("d.m.Y", strtotime($issueProtocol->getDate()));
+        	}
         }
         $this->setData("issueProtocols", $issueProtocols);
         
         $progressProtocols = array();
-        foreach (CProtocolManager::getProgressProtocols($courseProject) as $progressProtocol) {
-            $progressProtocols[$progressProtocol->getId()] = "Протокол №".$progressProtocol->getNumber()." от ".date("d.m.Y", strtotime($progressProtocol->getDate()));
+        foreach (CProtocolManager::getProgressProtocols($courseProject)->getItems() as $progressProtocol) {
+        	if ($issueProtocol instanceof CActiveModel) {
+        		$progressProtocols[$progressProtocol->getId()] = "Протокол №".$progressProtocol->getNumber()." от ".date("d.m.Y", strtotime($progressProtocol->getDate()));
+        	}
         }
         $this->setData("progressProtocols", $progressProtocols);
         
         $resultsProtocols = array();
-        foreach (CProtocolManager::getResultsProtocols($courseProject) as $resultsProtocol) {
-            $resultsProtocols[$resultsProtocol->getId()] = "Протокол №".$resultsProtocol->getNumber()." от ".date("d.m.Y", strtotime($resultsProtocol->getDate()));
+        foreach (CProtocolManager::getResultsProtocols($courseProject)->getItems() as $resultsProtocol) {
+        	if ($issueProtocol instanceof CActiveModel) {
+        		$resultsProtocols[$resultsProtocol->getId()] = "Протокол №".$resultsProtocol->getNumber()." от ".date("d.m.Y", strtotime($resultsProtocol->getDate()));
+        	}
         }
         $this->setData("resultsProtocols", $resultsProtocols);
         
