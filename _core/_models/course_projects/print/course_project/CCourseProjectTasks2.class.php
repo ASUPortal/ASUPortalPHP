@@ -24,7 +24,7 @@ class CCourseProjectTasks2 extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = array();
-        if (!is_null($contextObject->tasks)) {
+        if (!$contextObject->tasks->isEmpty()) {
             foreach ($contextObject->tasks->getItems() as $item) {
                 $dataRow = array();
                 $dataRow[0] = count($result) + 1;

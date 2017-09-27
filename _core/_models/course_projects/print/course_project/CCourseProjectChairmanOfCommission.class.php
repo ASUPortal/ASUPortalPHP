@@ -24,7 +24,9 @@ class CCourseProjectChairmanOfCommission extends CAbstractPrintClassField {
     public function execute($contextObject)
     {
         $result = $contextObject->chairmanOfCommission->getNameShort()." – ";
-        $result .= $contextObject->chairmanOfCommission->degree->comment;
+        if (!is_null($contextObject->chairmanOfCommission->degree)) {
+            $result .= $contextObject->chairmanOfCommission->degree->comment;
+        }
         if (!is_null($contextObject->chairmanOfCommission->title)) {
             $result .= ", ".$contextObject->chairmanOfCommission->title->getValue();
         }
