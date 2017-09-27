@@ -23,7 +23,11 @@ class CCourseProjectLecturerWithPost extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
-        $result = $contextObject->lecturer->getPost()->getValue()." каф. АСУ ".$contextObject->lecturer->getNameShort();
+        $result = "";
+        if (!is_null($contextObject->lecturer->getPost())) {
+            $result = $contextObject->lecturer->getPost()->getValue()." каф. АСУ ";
+        }
+        $result .= $contextObject->lecturer->getNameShort();
         return $result;
     }
 }
