@@ -86,11 +86,9 @@ class CFileUtils {
     }
     
     /**
-     * Создать архив из массива с файлами,
-     * где в значении у файла слева от || указан путь, справа название
+     * Создать архив из массива с файлами
      * 
-     * @param array $filesWithNames
-     * @param array $filesWithNames
+     * @param CArrayList $filesWithNames
      * @param string $archiveName
      * @return string
      */
