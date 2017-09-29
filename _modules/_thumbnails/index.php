@@ -1096,7 +1096,7 @@ class timthumb {
                     throw new Exception();
                 } catch (Exception $e) {
                     // обработка повреждённой картинки через ImageMagick
-                    $tmp_name = tempnam("/tmp", "GD");
+                    $tmp_name = tempnam(CORE_CWD, "GD");
                     $im = new Imagick($src);
                     $im->writeImage($tmp_name);
                     $image = imagecreatefromjpeg($tmp_name);
@@ -1121,7 +1121,7 @@ class timthumb {
                 break;
 
             default:
-                $tmp_name = tempnam("/tmp", "GD");
+                $tmp_name = tempnam(CORE_CWD, "GD");
                 $extension = end(explode(".", $tmp_name));
                 $tmp_name = str_replace($extension, "jpg", $tmp_name);
                 $im = new Imagick($src);

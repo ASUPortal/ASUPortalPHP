@@ -101,10 +101,8 @@ class CFileUtils {
         	$archiveName = CUtils::toTranslit($archiveName);
         }
         $zip->open(ZIP_DOCUMENTS_DIR.$archiveName, ZipArchive::CREATE);
-    	foreach ($filesWithNames as $file) {
-            $path = CUtils::strLeft($file, "||");
+    	foreach ($filesWithNames as $path=>$name) {
             $extension = end(explode(".", $path));
-            $name = CUtils::strRightBack($file, "||");
             if (CSettingsManager::getSettingValue("template_filename_translit")) {
                 $name = CUtils::toTranslit($name);
             }

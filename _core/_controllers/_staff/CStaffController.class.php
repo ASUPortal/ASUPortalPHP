@@ -267,17 +267,12 @@ class CStaffController extends CBaseController{
     }
     public function actionUploadFilesEducationForPersons() {
         $items = CRequest::getArray("selectedDoc");
-        $archives = array();
-        $filesEducationPersons = array();
+        $files = new CArrayList();
         foreach ($items as $id) {
             $person = CStaffManager::getPerson($id);
-            $filesEducationPersons[] = CStaffService::getFilesEducationPerson($person);
-        }
-        $files = array();
-        foreach ($filesEducationPersons as $filesEducationPerson) {
-        	foreach ($filesEducationPerson as $file) {
-        		$files[] = $file;
-        	}
+            foreach (CStaffService::getFilesEducationPerson($person) as $path=>$name) {
+                $files->add($path, $name);
+            }
         }
         $archiveName = "Документы об образовании сотрудников";
         CFileUtils::createZipArchiveFromArray($files, $archiveName);
