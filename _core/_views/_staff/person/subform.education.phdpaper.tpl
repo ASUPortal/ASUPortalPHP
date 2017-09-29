@@ -1,11 +1,11 @@
 <table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
-        <th></th>
-        <th>#</th>
-        <th>Тема</th>
+        <th width="10"></th>
+        <th width="10">#</th>
+        <th width="30%">Тема</th>
         <th>Номер спец-ти по ВАК</th>
         <th>Год защиты</th>
-        <th>Доп. информация</th>
+        <th width="20%">Доп. информация</th>
         <th width="32"><i class="icon-camera"></i></th>
     </tr>
     {counter start=0 print=false}

@@ -190,4 +190,50 @@ class CStaffService {
         return $disciplines;
     }
     
+    /**
+     * Выгрузить файлы об образовании сотрудника
+     * 
+     * @param CPerson $person
+     * 
+     * @return array
+     */
+    public static function getFilesEducationPerson(CPerson $person) {
+    	$files = array();
+    	$personName = $person->getNameShort();
+    	foreach ($person->diploms->getItems() as $diplom) {
+    		$link = CFileUtils::getLinkAttachment("file_attach", $diplom);
+    		if (!is_null($link)) {
+    			$files[] = $link."||".$personName."_Диплом ВУЗа ".$diplom->zaved_name;
+    		}
+    	}
+    	foreach ($person->cources->getItems() as $course) {
+    		$link = CFileUtils::getLinkAttachment("file_attach", $course);
+    		if (!is_null($link)) {
+    			$files[] = $link."||".$personName."_Курс ".$course->name;
+    		}
+    	}
+    	foreach ($person->phdpapers->getItems() as $paper) {
+    		$link = CFileUtils::getLinkAttachment("file_attach", $paper);
+    		if (!is_null($link)) {
+    			$files[] = $link."||".$personName."_Кандидатская диссертация по теме ".$paper->tema;
+    		}
+    	}
+    	foreach ($person->doctorpapers->getItems() as $paper) {
+    		$link = CFileUtils::getLinkAttachment("file_attach", $paper);
+    		if (!is_null($link)) {
+    			$files[] = $link."||".$personName."_Докторская диссертация по теме ".$paper->tema;
+    		}
+    	}
+    	foreach ($person->degrees->getItems() as $degree) {
+    		$link = CFileUtils::getLinkAttachment("file_attach", $degree);
+    		$title = "";
+    		if (!is_null($degree->degree)) {
+    			$title = $degree->degree->getValue();
+    		}
+    		if (!is_null($link)) {
+    			$files[] = $link."||".$personName."_Степень ".$title;
+    		}
+    	}
+    	return $files;
+    }
 }
