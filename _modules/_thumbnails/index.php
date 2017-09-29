@@ -491,9 +491,11 @@ class timthumb {
         $mimeType = $sData['mime'];
 
         $this->debug(3, "Mime type of image is $mimeType");
+        /*
         if(! preg_match('/^image\/(?:gif|jpg|jpeg|png|x-ms-bmp)$/i', $mimeType)){
             return $this->error("The image being resized is not a valid gif, jpg or png.");
         }
+        */
 
         if (!function_exists ('imagecreatetruecolor')) {
             return $this->error('GD Library Error: imagecreatetruecolor does not exist - please contact your webhost and ask them to install the GD library');
@@ -752,7 +754,8 @@ class timthumb {
             $imgType = 'jpg';
             imagejpeg($canvas, $tempfile, $quality);
         } else {
-            return $this->sanityFail("Could not match mime type after verifying it previously.");
+            $imgType = 'jpg';
+            imagejpeg($canvas, $tempfile, $quality);
         }
 
         if($imgType == 'png' && OPTIPNG_ENABLED && OPTIPNG_PATH && @is_file(OPTIPNG_PATH)){
@@ -1085,7 +1088,22 @@ class timthumb {
     protected function openImage($mimeType, $src){
         switch ($mimeType) {
             case 'image/jpeg':
-                $image = imagecreatefromjpeg ($src);
+                $prev_eh = set_error_handler(function () {
+                    throw new Exception();
+                }, E_WARNING);
+                try {
+                    $image = imagecreatefromjpeg($src);
+                    throw new Exception();
+                } catch (Exception $e) {
+                    // обработка повреждённой картинки через ImageMagick
+                    $tmp_name = tempnam("/tmp", "GD");
+                    $im = new Imagick($src);
+                    $im->writeImage($tmp_name);
+                    $image = imagecreatefromjpeg($tmp_name);
+                    $im->destroy();
+                    unlink($tmp_name);
+                };
+                set_error_handler($prev_eh);
                 break;
 
             case 'image/png':
@@ -1103,7 +1121,14 @@ class timthumb {
                 break;
 
             default:
-                $this->error("Unrecognised mimeType");
+                $tmp_name = tempnam("/tmp", "GD");
+                $extension = end(explode(".", $tmp_name));
+                $tmp_name = str_replace($extension, "jpg", $tmp_name);
+                $im = new Imagick($src);
+                $im->writeImage($tmp_name);
+                $image = imagecreatefromjpeg($tmp_name);
+                $im->destroy();
+                unlink($tmp_name);
         }
 
         return $image;

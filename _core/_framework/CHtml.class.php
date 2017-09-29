@@ -1419,7 +1419,10 @@ class CHtml {
             if ($addLinkToOriginal) {
                 echo '<a href="'.WEB_ROOT.''.$link.'" target="_blank"';
                 if (CUtils::isImage($storage.$file)) {
-                    echo ' class="image_clearboxy"';
+                	// прочие типы изображений не открываем во всплывающем окне (например, формат .tif)
+                    if (in_array(end(explode(".", $file)), array("gif","jpg","jpeg","png","bmp"))) {
+                        echo ' class="image_clearboxy"';
+                    }
                 }
                 echo '>';
             }
