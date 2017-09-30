@@ -1,11 +1,11 @@
 <table class="table table-striped table-bordered table-hover table-condensed">
     <tr>
-        <th></th>
-        <th>#</th>
-        <th>ВУЗ</th>
+        <th width="10"></th>
+        <th width="10">#</th>
+        <th width="30%">ВУЗ</th>
         <th>Год окончания</th>
         <th>Специальность в дипломе</th>
-        <th>Доп. информация</th>
+        <th width="20%">Доп. информация</th>
         <th width="32"><i class="icon-camera"></i></th>
     </tr>
     {counter start=0 print=false}

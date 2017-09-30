@@ -63,4 +63,51 @@ class CFileUtils {
 			throw new Exception("Попытка получить название для не указанного файла!");
 		}
     }
+    
+    /**
+     * Получить ссылку на файл
+     * 
+     * @param string $nameField - имя поля со ссылкой на файл
+     * @param CModel $model
+     * @return string|NULL
+     */
+    public static function getLinkAttachment($name, CModel $model) {
+        $attributes = $model->fieldsProperty();
+        $field = $attributes[$name];
+        $storage = $field["upload_dir"];
+        $file = $model->$name;
+        if (is_file($storage.$file)) {
+            $linkWithBackSlash = $storage.$file;
+            $link = str_replace('\\', '/', $linkWithBackSlash);
+            return $link;
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * Создать архив из массива с файлами
+     * 
+     * @param CArrayList $filesWithNames: массив, где ключ - ссылка на файл, значение - название выгружаемого файла
+     * @param string $archiveName
+     * @return string
+     */
+    public static function createZipArchiveFromArray($filesWithNames, $archiveName) {
+        $zip = new ZipArchive();
+        $archiveName = $archiveName."_".date("dmY_Hns").".zip";
+        if (CSettingsManager::getSettingValue("template_filename_translit")) {
+        	$archiveName = CUtils::toTranslit($archiveName);
+        }
+        $zip->open(ZIP_DOCUMENTS_DIR.$archiveName, ZipArchive::CREATE);
+    	foreach ($filesWithNames as $path=>$name) {
+            $extension = end(explode(".", $path));
+            if (CSettingsManager::getSettingValue("template_filename_translit")) {
+                $name = CUtils::toTranslit($name);
+            }
+            $fileName = $name.".".$extension;
+            $zip->addFile($path, $fileName);
+        }
+        $zip->close();
+        header("location: ".ZIP_DOCUMENTS_URL.$archiveName);
+    }
 }

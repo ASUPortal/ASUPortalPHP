@@ -42,12 +42,16 @@
             // если это картинка, то даем возможность просмотреть ее
             // во всплывающем окне
             if (data.isImage) {
-                jQuery(link).colorbox({
-                    maxHeight: "100%",
-                    title: '<a href="' + data.fullUrl + '" target="_blank">Открыть в полном размере</a>'
-                });
+                var string = data.fullUrl;
+                if ((string.indexOf(".gif") + 1) || (string.indexOf(".jpg") + 1) || 
+                	(string.indexOf(".png") + 1) || (string.indexOf(".bmp") + 1) || 
+                	(string.indexOf(".jpeg") + 1)) {
+	                    jQuery(link).colorbox({
+	                        maxHeight: "100%",
+	                        title: '<a href="' + data.fullUrl + '" target="_blank">Открыть в полном размере</a>'
+	                    });
+                }
             }
-
             jQuery(container).on("click", this._onItemClick);
         };
         /**

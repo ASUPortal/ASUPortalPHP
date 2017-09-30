@@ -92,6 +92,13 @@ class CStaffController extends CBaseController{
                     "form" => "#MainView",
                     "link" => "staffInfo.php",
                     "action" => "addGroup"
+                ),
+                array(
+                    "title" => "Выгрузить файлы об образовании сотрудников",
+                    "icon" => "actions/document-save.png",
+                    "form" => "#MainView",
+                    "link" => "index.php",
+                    "action" => "uploadFilesEducationForPersons"
                 )
             )
         );
@@ -216,6 +223,11 @@ class CStaffController extends CBaseController{
                 "icon" => "actions/document-save.png"
             ),
             array(
+                "title" => "Выгрузить файлы об образовании сотрудника",
+                "link" => "index.php?action=uploadFilesEducation&id=".CRequest::getInt("id"),
+                "icon" => "actions/document-save.png"
+            ),
+            array(
                 "title" => "Печать по карточке сотрудника",
                 "link" => "#",
                 "icon" => "devices/printer.png",
@@ -246,6 +258,24 @@ class CStaffController extends CBaseController{
         $person = CStaffManager::getPerson(CRequest::getInt("id"));
         $person->remove();
         $this->redirect("?action=index");
+    }
+    public function actionUploadFilesEducation() {
+        $person = CStaffManager::getPerson(CRequest::getInt("id"));
+        $files = CStaffService::getFilesEducationPerson($person);
+        $archiveName = $person->getNameShort();
+        CFileUtils::createZipArchiveFromArray($files, $archiveName);
+    }
+    public function actionUploadFilesEducationForPersons() {
+        $items = CRequest::getArray("selectedDoc");
+        $files = new CArrayList();
+        foreach ($items as $id) {
+            $person = CStaffManager::getPerson($id);
+            foreach (CStaffService::getFilesEducationPerson($person) as $path=>$name) {
+                $files->add($path, $name);
+            }
+        }
+        $archiveName = "Документы об образовании сотрудников";
+        CFileUtils::createZipArchiveFromArray($files, $archiveName);
     }
     public function actionSearch() {
         $res = array();
