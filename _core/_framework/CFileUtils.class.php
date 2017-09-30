@@ -67,7 +67,7 @@ class CFileUtils {
     /**
      * Получить ссылку на файл
      * 
-     * @param string $name
+     * @param string $nameField - имя поля со ссылкой на файл
      * @param CModel $model
      * @return string|NULL
      */
@@ -88,7 +88,7 @@ class CFileUtils {
     /**
      * Создать архив из массива с файлами
      * 
-     * @param CArrayList $filesWithNames
+     * @param CArrayList $filesWithNames: массив, где ключ - ссылка на файл, значение - название выгружаемого файла
      * @param string $archiveName
      * @return string
      */

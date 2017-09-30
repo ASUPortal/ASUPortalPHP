@@ -1096,12 +1096,15 @@ class timthumb {
                     throw new Exception();
                 } catch (Exception $e) {
                     // обработка повреждённой картинки через ImageMagick
-                    $tmp_name = tempnam(CORE_CWD, "GD");
+                    $tmp_name = tempnam(CACHE_DIR, "GD");
+                    $extension = end(explode(".", $tmp_name));
+                    $tmp_name_jpg = str_replace(".".$extension, ".jpg", $tmp_name);
                     $im = new Imagick($src);
-                    $im->writeImage($tmp_name);
-                    $image = imagecreatefromjpeg($tmp_name);
+                    $im->writeImage($tmp_name_jpg);
+                    $image = imagecreatefromjpeg($tmp_name_jpg);
                     $im->destroy();
                     unlink($tmp_name);
+                    unlink($tmp_name_jpg);
                 };
                 set_error_handler($prev_eh);
                 break;
@@ -1121,14 +1124,15 @@ class timthumb {
                 break;
 
             default:
-                $tmp_name = tempnam(CORE_CWD, "GD");
+                $tmp_name = tempnam(CACHE_DIR, "GD");
                 $extension = end(explode(".", $tmp_name));
-                $tmp_name = str_replace($extension, "jpg", $tmp_name);
+                $tmp_name_jpg = str_replace(".".$extension, ".jpg", $tmp_name);
                 $im = new Imagick($src);
-                $im->writeImage($tmp_name);
-                $image = imagecreatefromjpeg($tmp_name);
+                $im->writeImage($tmp_name_jpg);
+                $image = imagecreatefromjpeg($tmp_name_jpg);
                 $im->destroy();
                 unlink($tmp_name);
+                unlink($tmp_name_jpg);
         }
 
         return $image;

@@ -195,7 +195,7 @@ class CStaffService {
      * 
      * @param CPerson $person
      * 
-     * @return CArrayList
+     * @return CArrayList - где ключ - ссылка на файл, значение - название файла
      */
     public static function getFilesEducationPerson(CPerson $person) {
     	$files = new CArrayList();

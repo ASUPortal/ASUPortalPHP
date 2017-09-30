@@ -11,7 +11,7 @@ class CImageService {
 	 * @return resource|boolean
 	 */
 	public static function imageCreateFromBMP($filename) {
-		$tmp_name = tempnam(CORE_CWD, "GD");
+		$tmp_name = tempnam(CACHE_DIR, "GD");
 		if (CImageService::convertBMP2GD($filename, $tmp_name)) {
 			$img = imagecreatefromgd($tmp_name);
 			unlink($tmp_name);
