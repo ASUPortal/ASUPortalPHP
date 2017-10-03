@@ -90,34 +90,24 @@
         });
     </script>
 
-<table border="0" width="100%" class="tableBlank">
-    <tr>
-        <td valign="top">
-            <form id="filters">
-                {if !is_null($selectedOrder)}
-                    <p>
-                        <label for="order">Приказ</label>
-                        <input type="hidden" name="order" value="{$selectedOrder->getId()}">
-                        {$selectedOrder->getName()}
-                        <span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('order'); return false; "/></span>
-                    </p>
-                {/if}
-                <p>
-                    <label for="type">Тип приказа</label>
-                    {CHtml::dropDownList("type", CTaxonomyManager::getUsatuOrderTypesList(), $selectedType, "type")}
-                    {if !is_null($selectedType)}
-                        <span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('type'); return false; "/></span>
-                    {/if}
-                </p>
-            </form>
-        </td>
-        <td valign="top" width="200px">
-            <p>
-                <input type="text" id="search" style="width: 100%; " placeholder="Поиск">
-            </p>
-        </td>
-    </tr>
-</table>
+<form>
+	<table border="0" width="100%" class="tableBlank">
+	    <tr>  
+            <td valign="top">
+	        	{CHtml::hiddenField("action", "index")}
+	        	<label>Поиск по приказам</label>
+	            {CHtml::textField("textSearch", $textSearch, "", "", "placeholder=Поиск")}
+	        </td>
+	    </tr>
+	    <tr>
+	        <td valign="top">
+		    	<div class="controls">
+					<input name="" type="submit" class="btn" value="Найти">
+				</div>	
+			</td>
+	    </tr>
+	</table>
+</form>
 
 <table class="table table-striped table-bordered table-hover table-condensed">
     <tr>

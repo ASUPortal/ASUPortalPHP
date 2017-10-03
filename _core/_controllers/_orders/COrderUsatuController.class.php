@@ -54,6 +54,15 @@ class COrderUsatuController extends CBaseController {
             $query->condition("orders_type = ".CRequest::getFilter("type"));
             $selectedType = CTaxonomyManager::getUsatuOrderType(CRequest::getFilter("type"))->getId();
         }
+        $textSearch = CRequest::getString("textSearch");
+        if ($textSearch != "") {
+        	//поиск по дате, номеру, заголовку, тексту, комментарию приказа
+        	$query->condition("usatu_order.date like '%".$textSearch."%' or
+        			usatu_order.num like '%".$textSearch."%' or
+        			usatu_order.title like '%".$textSearch."%' or
+        			usatu_order.text like '%".$textSearch."%' or
+        			usatu_order.comment like '%".$textSearch."%'");
+        }
         /**
          * Выборка приказов
          */
@@ -62,6 +71,7 @@ class COrderUsatuController extends CBaseController {
             $order = new COrderUsatu($item);
             $orders->add($order->getId(), $order);
         }
+        $this->setData("textSearch", $textSearch);
         $this->setData("selectedOrder", $selectedOrder);
         $this->setData("selectedType", $selectedType);
         $this->setData("orders", $orders);
