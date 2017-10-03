@@ -21,6 +21,8 @@
 	            <th>ставка план</th>
 	            <th>число групп</th>
 	            <th>число студ.</th>
+	            <th>дип. (зима)</th>
+	            <th>дип. (лето)</th>
 				{foreach CStudyLoadService::getStudyWorksTotalTitles() as $title}
 					<th>{$title}</th>
 				{/foreach}
@@ -55,6 +57,8 @@
 			        {/if}
 		            <td rel="stripe">{$person['groups_cnt_sum_']}</td>
 		            <td rel="stripe">{$person['stud_cnt_sum_']}</td>
+		            <td rel="stripe">{$person['dipl_cnt_winter']}</td>
+		            <td rel="stripe">{$person['dipl_cnt_summer']}</td>
 		            {foreach CStudyLoadService::getStudyWorksTotalValues($person['kadri_id'], $person['year_id'], $isBudget, $isContract) as $typeId=>$rows}
 						{foreach $rows as $kindId=>$value}
 							{if !in_array($kindId, array(0))}
@@ -79,6 +83,8 @@
             <td><b>Итого</b></td>
 			<td>&nbsp;</td>
 		    <td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>

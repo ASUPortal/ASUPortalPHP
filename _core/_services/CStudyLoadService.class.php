@@ -167,16 +167,21 @@ class CStudyLoadService {
     		}
     		$query->group("kadri.id");
     		$query->order("kadri.fio_short asc");
+    		
+    		// дисциплина "Консультация, руководство ВКР"
+    		$discipline = CTaxonomyManager::getLegacyTaxonomy(TABLE_DISCIPLINES)->getTerm(CStudyLoadDisciplineConstants::DIPLOM_CONSULTATION);
+    		$partFall = CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::FALL);
+    		$partSpring = CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::SPRING);
+    		
     		$personsWithLoad = $query->execute()->getItems();
     		$i = 0;
-    		foreach ($personsWithLoad as $person) {
-    			$personWithOrders = CStaffManager::getPerson($person['kadri_id']);
-    			$personsWithLoad[$i]['rate_sum'] = $personWithOrders->getOrdersRate();
-    			$personsWithLoad[$i]['ord_cnt'] = $personWithOrders->getOrdersCount();
-    			$i++;
-    		}
-    		$i = 0;
-    		foreach ($personsWithLoad as $person) {
+    		foreach ($personsWithLoad as $personLoad) {
+    			$person = CStaffManager::getPerson($personLoad['kadri_id']);
+    			
+    			// количество приказов и ставок
+    			$personsWithLoad[$i]['rate_sum'] = $person->getOrdersRate();
+    			$personsWithLoad[$i]['ord_cnt'] = $person->getOrdersCount();
+    			
     			$groupsCountSum = 0;
     			$studentsCountSum = 0;
     			$hoursSumBase = 0;
@@ -184,8 +189,12 @@ class CStudyLoadService {
     			$hoursSumPremium = 0;
     			$hoursSumByTime = 0;
     			$hoursSum = 0;
+    			
+    			$diplCountWinter = 0;
+    			$diplCountSummer = 0;
+    			
     			$year = CTaxonomyManager::getYear($selectedYear);
-    			$studyLoads = CStudyLoadService::getStudyLoadsByYear(CStaffManager::getPerson($person['kadri_id']), $year);
+    			$studyLoads = CStudyLoadService::getStudyLoadsByYear($person, $year);
     			foreach ($studyLoads->getItems() as $studyLoad) {
     				$groupsCountSum += $studyLoad->groups_count;
     				if ($isBudget) {
@@ -198,6 +207,10 @@ class CStudyLoadService {
     						$hoursSumPremium += $work->getSumWorkHoursByLoadTypeId($premiumLoadId);
     						$hoursSumByTime += $work->getSumWorkHoursByLoadTypeId($byTimeLoadId);
     					}
+    					
+    					// количество дипломников по дисциплине "Консультация, руководство ВКР" (бюджет)
+    					$diplCountWinter += CStudyLoadService::getStudentsCountFromLoadByDisciplineAndPart($studyLoad, $discipline, $partFall, $kind);
+    					$diplCountSummer += CStudyLoadService::getStudentsCountFromLoadByDisciplineAndPart($studyLoad, $discipline, $partSpring, $kind);
     				}
     				if ($isContract) {
     					$studentsCountSum += $studyLoad->students_contract_count;
@@ -209,8 +222,15 @@ class CStudyLoadService {
     						$hoursSumPremium += $work->getSumWorkHoursByLoadTypeId($premiumLoadId);
     						$hoursSumByTime += $work->getSumWorkHoursByLoadTypeId($byTimeLoadId);
     					}
+    					
+    					// количество дипломников по дисциплине "Консультация, руководство ВКР" (контракт)
+    					$diplCountWinter += CStudyLoadService::getStudentsCountFromLoadByDisciplineAndPart($studyLoad, $discipline, $partFall, $kind);
+    					$diplCountSummer += CStudyLoadService::getStudentsCountFromLoadByDisciplineAndPart($studyLoad, $discipline, $partSpring, $kind);
     				}
     			}
+    			
+    			$personsWithLoad[$i]['dipl_cnt_winter'] = $diplCountWinter;
+    			$personsWithLoad[$i]['dipl_cnt_summer'] = $diplCountSummer;
     				
     			$personsWithLoad[$i]['groups_cnt_sum_'] = $groupsCountSum;
     			$personsWithLoad[$i]['stud_cnt_sum_'] = $studentsCountSum;
@@ -712,7 +732,10 @@ class CStudyLoadService {
      * @return int
      */
     public static function getSumHoursInSchedule(CPerson $lecturer, CTerm $year, CYearPart $part) {
-    	$schedules = CScheduleService::getScheduleUserByYearAndPart($lecturer->getUser(), $year, $part);
+    	$schedules = new CArrayList();
+    	if (!is_null($lecturer->getUser())) {
+    		$schedules = CScheduleService::getScheduleUserByYearAndPart($lecturer->getUser(), $year, $part);
+    	}
     	$sum = 0;
     	foreach ($schedules as $schedule) {
     		$item = 0;
@@ -764,7 +787,10 @@ class CStudyLoadService {
     		$typeKindSchedule = CScheduleKindWorkConstants::LAB_WORK_AND_PRACTICE;
     	}
     	
-    	$schedules = CScheduleService::getScheduleUserByYearAndPart($lecturer->getUser(), $year, $part);
+    	$schedules = new CArrayList();
+    	if (!is_null($lecturer->getUser())) {
+    		$schedules = CScheduleService::getScheduleUserByYearAndPart($lecturer->getUser(), $year, $part);
+    	}
     	$sum = 0;
     	foreach ($schedules as $schedule) {
     		$item = 0;
@@ -815,5 +841,25 @@ class CStudyLoadService {
     		}
     	}
     	return $str_arr;
+    }
+    /**
+     * Количество студентов из нагрузки по дисциплине и семестру
+     * 
+     * @param CStudyLoad $studyLoad - учебная нагрузка
+     * @param CTerm $discipline - дисциплина
+     * @param CYearPart $part - учебный семестр
+     * @param $kind - вид работы - бюджет/контракт
+     * @return int
+     */
+    public static function getStudentsCountFromLoadByDisciplineAndPart(CStudyLoad $studyLoad, CTerm $discipline, CYearPart $part, $kind) {
+    	$studentsCount = 0;
+    	if ($studyLoad->discipline_id == $discipline->getId() and $studyLoad->year_part_id == $part->getId()) {
+    		if ($kind == CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId()) {
+    			$studentsCount += $studyLoad->students_count;
+    		} else {
+    			$studentsCount += $studyLoad->students_contract_count;
+    		}
+    	}
+    	return $studentsCount;
     }
 }
