@@ -39,7 +39,7 @@ class CStaffTimeController extends CBaseController{
         }
         $persons = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
-            $person = new CPersonTime($ar);
+            $person = new CPerson($ar);
             $persons->add($person->getId(), $person);
         }
         $this->setData("paginator", $set->getPaginator());

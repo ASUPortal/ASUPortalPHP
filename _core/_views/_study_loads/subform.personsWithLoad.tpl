@@ -51,7 +51,7 @@
 			            <td rel="stripe">&nbsp;</td>
 			        {/if}
 			        {if ($person['rate_sum'] != 0)}
-			            <td rel="stripe">{number_format($person['rate_sum'],2,',','')}<sup><a href="{$web_root}_modules/_orders/index.php?action=view&id={$person['kadri_id']}" title="{implode('&#013;', CBaseManager::getPersonTime($person['kadri_id'])->getActiveOrdersListWithRate())}" target="_blank">{$person['ord_cnt']}</a></sup></td>
+			            <td rel="stripe">{number_format($person['rate_sum'],2,',','')}<sup><a href="{$web_root}_modules/_orders/index.php?action=view&id={$person['kadri_id']}" title="{implode('&#013;', CBaseManager::getPerson($person['kadri_id'])->getActiveOrdersListWithRate())}" target="_blank">{$person['ord_cnt']}</a></sup></td>
 			        {else}
 			            <td rel="stripe">&nbsp;</td>
 			        {/if}

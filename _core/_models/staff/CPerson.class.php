@@ -281,7 +281,8 @@ class CPerson extends CActiveModel{
             "nagradi" => "Научные награды",
             "primech" => "Примечание",
             "order_seb_id" => "Приказ по ГАК",
-            "workplans" => "Рабочие программы"
+            "workplans" => "Рабочие программы",
+            "stavka" => "Ставка план"
         );
     }
     public function fieldsProperty() {
@@ -742,6 +743,25 @@ class CPerson extends CActiveModel{
     public function getOrdersCount() {
         $cnt = $this->getActiveOrders()->getCount();
         return $cnt;
+    }
+    
+    /**
+     * Список приказов с номером, датой и ставкой
+     *
+     * @return array
+     */
+    public function getActiveOrdersListWithRate() {
+    	$result = array();
+    	foreach ($this->getActiveOrders()->getItems() as $order) {
+    		$typeMoney = "";
+    		if ($order->type_money == 2) {
+    			$typeMoney = "Б";
+    		} elseif ($order->type_money == 3) {
+    			$typeMoney = "К";
+    		}
+    		$result[$order->getId()] = "Приказ №".$order->num_order." от ".$order->date_order." (".$order->rate.") ".$typeMoney;
+    	}
+    	return $result;
     }
 
     /**
