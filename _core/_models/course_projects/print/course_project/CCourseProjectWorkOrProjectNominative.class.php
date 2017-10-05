@@ -1,9 +1,9 @@
 <?php
 
-class CCourseProjectWorkOrProject extends CAbstractPrintClassField {
+class CCourseProjectWorkOrProjectNominative extends CAbstractPrintClassField {
     public function getFieldName()
     {
-        return "Курсовой проект или курсовая работа для курсового проектирования (родительный падеж)";
+        return "Курсовой проект или курсовая работа для курсового проектирования (именительный падеж)";
     }
 
     public function getFieldDescription()
@@ -32,10 +32,10 @@ class CCourseProjectWorkOrProject extends CAbstractPrintClassField {
 	        				foreach ($discipline->sections->getItems() as $section) {
 	        					foreach ($section->labors->getItems() as $labor) {
 	        						if ($labor->type->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_COURSE_WORK) {
-	        							$result = "курсовой работы";
+	        							$result = "курсовая работа";
 	        						}
 	        						if ($labor->type->getAlias() == CWorkPlanLoadTypeConstants::CURRICULUM_LABOR_COURSE_PROJECT) {
-	        							$result = "курсового проекта";
+	        							$result = "курсовой проект";
 	        						}
 	        					}
 	        				}

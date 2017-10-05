@@ -492,11 +492,9 @@ class timthumb {
 
         $this->debug(3, "Mime type of image is $mimeType");
         /*
-         */
         if(! preg_match('/^image\/(?:gif|jpg|jpeg|png|x-ms-bmp)$/i', $mimeType)){
             return $this->error("The image being resized is not a valid gif, jpg or png.");
         }
-        /*
          */
 
         if (!function_exists ('imagecreatetruecolor')) {
@@ -1090,17 +1088,23 @@ class timthumb {
     protected function openImage($mimeType, $src){
         switch ($mimeType) {
             case 'image/jpeg':
-                $image = imagecreatefromjpeg($src);
-            	
-                /*$tmp_name = tempnam(CACHE_DIR, "GD");
-                $extension = end(explode(".", $tmp_name));
-                $tmp_name_jpg = str_replace(".".$extension, ".jpg", $tmp_name);
+                $tmp_name = tempnam(CACHE_DIR, "GD");
+                $path_parts = pathinfo($tmp_name);
+                $extension = "";
+                if (array_key_exists("extension", $path_parts)) {
+                    $extension = $path_parts["extension"];
+                }
+                if ($extension != "") {
+                    $tmp_name_jpg = str_replace(".".$extension, ".jpg", $tmp_name);
+                } else {
+                    $tmp_name_jpg = $tmp_name.".jpg";
+                }
                 $im = new Imagick($src);
                 $im->writeImage($tmp_name_jpg);
                 $image = imagecreatefromjpeg($tmp_name_jpg);
                 $im->destroy();
                 unlink($tmp_name);
-                unlink($tmp_name_jpg);*/
+                unlink($tmp_name_jpg);
                 break;
 
             case 'image/png':
@@ -1118,17 +1122,23 @@ class timthumb {
                 break;
 
             default:
-                $this->error("Unrecognised mimeType");
-            	
-                /*$tmp_name = tempnam(CACHE_DIR, "GD");
-                $extension = end(explode(".", $tmp_name));
-                $tmp_name_jpg = str_replace(".".$extension, ".jpg", $tmp_name);
+                $tmp_name = tempnam(CACHE_DIR, "GD");
+                $path_parts = pathinfo($tmp_name);
+                $extension = "";
+                if (array_key_exists("extension", $path_parts)) {
+                    $extension = $path_parts["extension"];
+                }
+                if ($extension != "") {
+                    $tmp_name_jpg = str_replace(".".$extension, ".jpg", $tmp_name);
+                } else {
+                    $tmp_name_jpg = $tmp_name.".jpg";
+                }
                 $im = new Imagick($src);
                 $im->writeImage($tmp_name_jpg);
                 $image = imagecreatefromjpeg($tmp_name_jpg);
                 $im->destroy();
                 unlink($tmp_name);
-                unlink($tmp_name_jpg);*/
+                unlink($tmp_name_jpg);
         }
 
         return $image;
