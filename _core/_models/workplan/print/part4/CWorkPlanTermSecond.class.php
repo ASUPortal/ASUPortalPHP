@@ -23,21 +23,23 @@ class CWorkPlanTermSecond extends CAbstractPrintClassField {
 
     public function execute($contextObject)
     {
+    	$result = "";
     	$discipline = CCorriculumsManager::getDiscipline($contextObject->corriculum_discipline_id);
     	if (!empty($contextObject->terms->getItems())) {
     		$terms = array();
     		foreach ($contextObject->terms->getItems() as $term) {
     			$terms[] = $term->corriculum_discipline_section->title;
     		}
+    		$result = $terms[1];
     	} else {
     		if (!empty($discipline->sections->getItems())) {
     			$terms = array();
     			foreach ($discipline->sections->getItems() as $section) {
     				$terms[] = $section->title;
     			}
+    			$result = $terms[1];
     		}
     	}
-        $result = $terms[1];
         return $result;
     }
 }
