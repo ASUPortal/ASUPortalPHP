@@ -763,6 +763,24 @@ class CPerson extends CActiveModel{
     	}
     	return $result;
     }
+    
+    /**
+     * Сумма ставок по типу приказа
+     * 
+     * @param int $typeMoney
+     * @return int
+     */
+    public function getSumOrdersRateByTypeMoney($typeMoney) {
+        $result = 0;
+        foreach ($this->getActiveOrders()->getItems() as $order) {
+            if ($order->type_money == $typeMoney) {
+                $result += $order->rate;
+            } elseif ($order->type_money == $typeMoney) {
+                $result += $order->rate;
+            }
+        }
+        return $result;
+    }
 
     /**
      * Дата рождения

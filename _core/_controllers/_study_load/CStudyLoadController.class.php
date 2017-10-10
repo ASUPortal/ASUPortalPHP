@@ -38,8 +38,6 @@ class CStudyLoadController extends CBaseController {
     		$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear);
     	}
     	
-    	$lectsTotal = 0;
-    	$diplTotal = 0;
     	$mainTotal = 0;
     	$additionalTotal = 0;
     	$premiumTotal = 0;
@@ -62,6 +60,14 @@ class CStudyLoadController extends CBaseController {
     	
         if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
             $this->setTableFilter("dataTable");
+            
+            $this->addActionsMenuItem(array(
+            	array(
+            		"title" => "Сведения о ППС",
+            		"link" => WEB_ROOT."_modules/_study_loads/index.php?action=information",
+            		"icon" => "mimetypes/x-office-spreadsheet.png"
+            	)
+            ));
         }
         $this->setTableSort("dataTable");
         
@@ -81,8 +87,6 @@ class CStudyLoadController extends CBaseController {
         $this->setData("selectedYear", $selectedYear);
         $this->setData("isBudget", $isBudget);
         $this->setData("isContract", $isContract);
-        $this->setData("lectsTotal", $lectsTotal);
-        $this->setData("diplTotal", $diplTotal);
         $this->setData("mainTotal", $mainTotal);
         $this->setData("additionalTotal", $additionalTotal);
         $this->setData("premiumTotal", $premiumTotal);
@@ -504,5 +508,87 @@ class CStudyLoadController extends CBaseController {
 					->addParameter("byTime", 1)
 					->build());
     	}
+    }
+    public function actionInformation() {
+    	// фильтр по году
+    	$selectedYear = CUtils::getCurrentYear()->getId();
+    	if (!is_null(CRequest::getFilter("year.id"))) {
+    		$selectedYear = CRequest::getFilter("year.id");
+    	}
+    	 
+    	// сотрудники с нагрузкой в указанном году
+    	$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYearForStatistic($selectedYear);
+    	
+    	// общее количество часов по нагрузке
+    	$sumTotal = 0;
+    	// общее количество ставок по приказам
+    	$rateSum = 0;
+    	// общее количество ставок фактически
+    	$rateSumFact = 0;
+    	$posts = array();
+    	if (count($personsWithLoad) != 0) {
+    		foreach ($personsWithLoad as $personLoad) {
+    			if (!is_null($personLoad['dolgnost'])) {
+    				$posts[] = $personLoad['dolgnost'];
+    			}
+    			$sumTotal += $personLoad['hours_sum'];
+    			$rateSum += $personLoad['rate_sum'];
+    			if ($personLoad['rate'] != 0) {
+    				$rateSumFact += $personLoad['hours_sum']/$personLoad['rate'];
+    			}
+    		}
+    	}
+    	$values = array();
+    	foreach (array_count_values($posts) as $post=>$count) {
+    		$rate = 0;
+    		$rateBudget = 0;
+    		$rateContract = 0;
+    		$rateTotal = 0;
+    		if (count($personsWithLoad) != 0) {
+    			foreach ($personsWithLoad as $personLoad) {
+    				$person = CStaffManager::getPerson($personLoad['kadri_id']);
+    				if ($personLoad['dolgnost'] == $post) {
+    					if ($personLoad['rate'] != 0) {
+    						$rate += $personLoad['hours_sum']/$personLoad['rate'];
+    					}
+    					$rateBudget += $person->getSumOrdersRateByTypeMoney(COrderConstants::TYPE_MONEY_BUDGET);
+    					$rateContract += $person->getSumOrdersRateByTypeMoney(COrderConstants::TYPE_MONEY_CONTRACT);
+    					$rateTotal += $person->getOrdersRate();
+    				}
+    			}
+    		}
+    		$values[] = 
+    		// название должности
+    		$post.";"
+    		// количество человек по должностям
+    		.$count.";"
+    		// количество ставок по приказам (бюджет)
+    		.number_format($rateBudget,2,',','').";"
+    		// количество ставок по приказам (контракт)
+    		.number_format($rateContract,2,',','').";"
+    		// общее количество ставок по приказам
+    		.number_format($rateTotal,2,',','').";"
+    		// общее количество ставок фактически по нагрузке
+    		.number_format($rate,2,',','');
+    	}
+    	$postsWithRates = array();
+    	foreach ($values as $value) {
+    		$postsWithRates[] = explode(";", $value);
+    	}
+    	$this->addActionsMenuItem(array(
+    		array(
+    			"title" => "Назад",
+    			"link" => WEB_ROOT."_modules/_study_loads/index.php",
+    			"icon" => "actions/edit-undo.png"
+    		)
+    	));
+    	
+    	$this->setData("personsWithLoad", $personsWithLoad);
+    	$this->setData("selectedYear", $selectedYear);
+    	$this->setData("sumTotal", number_format($sumTotal,2,',',''));
+    	$this->setData("rateSum", number_format($rateSum,2,',',''));
+    	$this->setData("rateSumFact", number_format($rateSumFact,2,',',''));
+    	$this->setData("postsWithRates", $postsWithRates);
+    	$this->renderView("_study_loads/info.tpl");
     }
 }

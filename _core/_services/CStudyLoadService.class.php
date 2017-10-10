@@ -168,8 +168,8 @@ class CStudyLoadService {
     		$query->group("kadri.id");
     		$query->order("kadri.fio_short asc");
     		
-    		// дисциплина "Консультация, руководство ВКР"
-    		$discipline = CTaxonomyManager::getLegacyTaxonomy(TABLE_DISCIPLINES)->getTerm(CStudyLoadDisciplineConstants::DIPLOM_CONSULTATION);
+    		// дисциплина "Дипломное проектирование"
+    		$discipline = CTaxonomyManager::getLegacyTaxonomy(TABLE_DISCIPLINES)->getTerm(CStudyLoadDisciplineConstants::DIPLOM_PROJECT);
     		$partFall = CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::FALL);
     		$partSpring = CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::SPRING);
     		
@@ -208,7 +208,7 @@ class CStudyLoadService {
     						$hoursSumByTime += $work->getSumWorkHoursByLoadTypeId($byTimeLoadId);
     					}
     					
-    					// количество дипломников по дисциплине "Консультация, руководство ВКР" (бюджет)
+    					// количество дипломников по дисциплине "Дипломное проектирование" (бюджет)
     					$diplCountWinter += CStudyLoadService::getStudentsCountFromLoadByDisciplineAndPart($studyLoad, $discipline, $partFall, $kind);
     					$diplCountSummer += CStudyLoadService::getStudentsCountFromLoadByDisciplineAndPart($studyLoad, $discipline, $partSpring, $kind);
     				}
@@ -223,7 +223,7 @@ class CStudyLoadService {
     						$hoursSumByTime += $work->getSumWorkHoursByLoadTypeId($byTimeLoadId);
     					}
     					
-    					// количество дипломников по дисциплине "Консультация, руководство ВКР" (контракт)
+    					// количество дипломников по дисциплине "Дипломное проектирование" (контракт)
     					$diplCountWinter += CStudyLoadService::getStudentsCountFromLoadByDisciplineAndPart($studyLoad, $discipline, $partFall, $kind);
     					$diplCountSummer += CStudyLoadService::getStudentsCountFromLoadByDisciplineAndPart($studyLoad, $discipline, $partSpring, $kind);
     				}
@@ -861,5 +861,59 @@ class CStudyLoadService {
     		}
     	}
     	return $studentsCount;
+    }
+    
+    /**
+     * Сотрудники с нагрузкой в указанном году для статистики
+     *
+     * @param int $selectedYear - выбранный учебный год
+     * @return array
+     */
+    public static function getPersonsWithLoadByYearForStatistic($selectedYear) {
+    	$personsWithLoad = array();
+    	
+    	$query = new CQuery();
+    	$query->select("kadri.id as kadri_id,
+						loads.year_id as year_id,
+						kadri.fio as fio,
+						kadri.fio_short,
+						dolgnost.name as dolgnost,
+						hr.rate as rate");
+    	$query->from(TABLE_PERSON." as kadri");
+    	$query->leftJoin(TABLE_WORKLOAD." as loads", "loads.person_id = kadri.id");
+    	$query->leftJoin(TABLE_WORKLOAD_WORKS." as hours", "hours.workload_id = loads.id");
+    	$query->leftJoin(TABLE_POSTS." as dolgnost", "dolgnost.id = kadri.dolgnost");
+    	$query->leftJoin(TABLE_HOURS_RATE." as hr", "hr.dolgnost_id = kadri.dolgnost");
+    	$query->condition("loads.year_id = ".$selectedYear." AND loads._is_last_version = 1");
+    	$query->group("kadri.id");
+    	$query->order("kadri.fio_short asc");
+    	
+    	$personsWithLoad = $query->execute()->getItems();
+    	$i = 0;
+    	$kindBudget = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId();
+    	$kindContract = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId();
+    	foreach ($personsWithLoad as $personLoad) {
+    		$person = CStaffManager::getPerson($personLoad['kadri_id']);
+    	
+    		// количество приказов и ставок
+    		$personsWithLoad[$i]['rate_sum'] = $person->getOrdersRate();
+    		$personsWithLoad[$i]['ord_cnt'] = $person->getOrdersCount();
+    		
+    		$hoursSum = 0;
+    		$queryHours = new CQuery();
+    		$queryHours->select("hours.workload as workload, hours.kind_id as kind");
+    		$queryHours->from(TABLE_WORKLOAD." as loads");
+    		$queryHours->innerJoin(TABLE_WORKLOAD_WORKS." as hours", "hours.workload_id = loads.id");
+    		$queryHours->condition("loads.year_id = ".$selectedYear." AND loads.person_id = ".$person->getId()." AND loads._is_last_version = 1");
+    		foreach ($queryHours->execute()->getItems() as $hours) {
+    			$hoursSum += $hours['workload'];
+    			/*if ($hours['kind'] == $kindBudget) {
+    				$hoursSum += $hours['workload'];
+    			}*/
+    		}
+    		$personsWithLoad[$i]['hours_sum'] = $hoursSum;
+    		$i++;
+    	}
+    	return $personsWithLoad;
     }
 }

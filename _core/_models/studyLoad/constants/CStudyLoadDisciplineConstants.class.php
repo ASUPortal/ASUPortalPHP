@@ -4,8 +4,8 @@
  */
 class CStudyLoadDisciplineConstants {
 	/**
-	 * Дисциплина "Консультация, руководство ВКР"
+	 * Дисциплина "Дипломное проектирование"
 	 */
-	const DIPLOM_CONSULTATION = "ДП";
+	const DIPLOM_PROJECT = "ДП";
 	
 }
