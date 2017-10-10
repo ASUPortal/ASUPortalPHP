@@ -136,7 +136,7 @@ class CStudyLoadService {
      * @param int $isBudget - вид работы нагрузки: бюджет
      * @param int $isContract - вид работы нагрузки: контракт
      * @param int $selectedYear - выбранный учебный год
-     * @return array
+     * @return CArrayList
      */
     public static function getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear, $person = null) {
     	// id типов учебной нагрузки (основная, дополнительная, надбавка, почасовка)
@@ -243,7 +243,13 @@ class CStudyLoadService {
     			$i++;
     		}
     	}
-    	return $personsWithLoad;
+    	$result = new CArrayList();
+    	$i = 0;
+    	foreach ($personsWithLoad as $personLoad) {
+    		$result->add($i, $personLoad);
+    		$i++;
+    	}
+    	return $result;
     }
     
     /**
@@ -867,7 +873,7 @@ class CStudyLoadService {
      * Сотрудники с нагрузкой в указанном году для статистики
      *
      * @param int $selectedYear - выбранный учебный год
-     * @return array
+     * @return CArrayList
      */
     public static function getPersonsWithLoadByYearForStatistic($selectedYear) {
     	$personsWithLoad = array();
@@ -890,8 +896,6 @@ class CStudyLoadService {
     	
     	$personsWithLoad = $query->execute()->getItems();
     	$i = 0;
-    	$kindBudget = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::BUDGET)->getId();
-    	$kindContract = CTaxonomyManager::getTaxonomy(CStudyLoadKindsConstants::TAXONOMY_HOURS_KIND)->getTerm(CStudyLoadKindsConstants::CONTRACT)->getId();
     	foreach ($personsWithLoad as $personLoad) {
     		$person = CStaffManager::getPerson($personLoad['kadri_id']);
     	
@@ -907,13 +911,16 @@ class CStudyLoadService {
     		$queryHours->condition("loads.year_id = ".$selectedYear." AND loads.person_id = ".$person->getId()." AND loads._is_last_version = 1");
     		foreach ($queryHours->execute()->getItems() as $hours) {
     			$hoursSum += $hours['workload'];
-    			/*if ($hours['kind'] == $kindBudget) {
-    				$hoursSum += $hours['workload'];
-    			}*/
     		}
     		$personsWithLoad[$i]['hours_sum'] = $hoursSum;
     		$i++;
     	}
-    	return $personsWithLoad;
+    	$result = new CArrayList();
+    	$i = 0;
+    	foreach ($personsWithLoad as $personLoad) {
+    		$result->add($i, $personLoad);
+    		$i++;
+    	}
+    	return $result;
     }
 }

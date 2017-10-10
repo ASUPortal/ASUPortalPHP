@@ -26,7 +26,7 @@
 		</tr>
 	</table>
 	
-	{if count($personsWithLoad) == 0}
+	{if $personsWithLoad->getCount() == 0}
 		Нет объектов для отображения
 	{else}
 		<div>

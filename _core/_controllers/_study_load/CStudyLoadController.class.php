@@ -43,9 +43,9 @@ class CStudyLoadController extends CBaseController {
     	$premiumTotal = 0;
     	$byTimeTotal = 0;
     	$sumTotal = 0;
-    	if (count($personsWithLoad) != 0) {
+    	if ($personsWithLoad->getCount() != 0) {
     		if ($isBudget or $isContract) {
-    			foreach ($personsWithLoad as $person) {
+    			foreach ($personsWithLoad->getItems() as $person) {
     				$mainTotal += $person['hours_sum_base'];
     				$additionalTotal += $person['hours_sum_additional'];
     				$premiumTotal += $person['hours_sum_premium'];
@@ -518,7 +518,6 @@ class CStudyLoadController extends CBaseController {
     	 
     	// сотрудники с нагрузкой в указанном году
     	$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYearForStatistic($selectedYear);
-    	
     	// общее количество часов по нагрузке
     	$sumTotal = 0;
     	// общее количество ставок по приказам
@@ -526,7 +525,7 @@ class CStudyLoadController extends CBaseController {
     	// общее количество ставок фактически
     	$rateSumFact = 0;
     	$posts = array();
-    	if (count($personsWithLoad) != 0) {
+    	if ($personsWithLoad->getCount() != 0) {
     		foreach ($personsWithLoad as $personLoad) {
     			if (!is_null($personLoad['dolgnost'])) {
     				$posts[] = $personLoad['dolgnost'];
@@ -571,9 +570,11 @@ class CStudyLoadController extends CBaseController {
     		// общее количество ставок фактически по нагрузке
     		.number_format($rate,2,',','');
     	}
-    	$postsWithRates = array();
+    	$postsWithRates = new CArrayList();
+    	$i = 0;
     	foreach ($values as $value) {
-    		$postsWithRates[] = explode(";", $value);
+    		$postsWithRates->add($i, explode(";", $value));
+    		$i++;
     	}
     	$this->addActionsMenuItem(array(
     		array(

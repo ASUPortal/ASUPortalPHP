@@ -91,10 +91,10 @@
 		</tr>
 	</table>
 	
-	{if $personsWithoutLoad->getCount() == 0 and count($personsWithLoad) == 0}
+	{if $personsWithoutLoad->getCount() == 0 and $personsWithLoad->getCount() == 0}
 		Нет объектов для отображения
 	{else}
-		{if count($personsWithLoad) != 0}
+		{if $personsWithLoad->getCount() != 0}
 			<div class="alert alert-info">Свод нагрузки за {CTaxonomyManager::getYear($selectedYear)->getValue()} год. <b>Итого: {number_format($sumTotal,1,',','')}</b></div>
 			{$persons = $personsWithLoad}
 			{include file="_study_loads/subform.personsWithLoad.tpl"}
