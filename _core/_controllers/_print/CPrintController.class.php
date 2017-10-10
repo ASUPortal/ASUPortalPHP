@@ -7,6 +7,11 @@
  * To change this template use File | Settings | File Templates.
  */
 class CPrintController extends CFlowController {
+	public $allowedAnonymous = array(
+		"print",
+		"ShowForms"
+	);
+	
     private $_isDebug = false;
     private $printService = null;
 
