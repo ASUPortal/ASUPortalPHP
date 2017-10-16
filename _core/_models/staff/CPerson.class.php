@@ -48,6 +48,17 @@ class CPerson extends CActiveModel{
     private $_infoPages = null;
     public $to_tabel = 0;
     public $is_slave = 0;
+    
+    // переменные для учебной нагрузки
+    public $workloadSum = 0;
+    public $groupsCountSum = 0;
+    public $studentsCountSum = 0;
+    public $hoursSumBase = 0;
+    public $hoursSumAdditional = 0;
+    public $hoursSumPremium = 0;
+    public $hoursSumByTime = 0;
+    public $diplCountWinter = 0;
+    public $diplCountSummer = 0;
 
     protected function relations() {
         return array(

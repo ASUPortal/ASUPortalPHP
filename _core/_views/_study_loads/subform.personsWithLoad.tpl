@@ -34,39 +34,47 @@
         <tbody>
 	        {counter start=0 print=false}
 	        {foreach $persons as $person}
-		        {$parameters["kadri_id"] = CStaffManager::getPerson($person['kadri_id'])->getId()}
+		        {$parameters["kadri_id"] = $person->getId()}
 		        <tr>
 		            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
-			            <td rel="stripe"><a href="#"><i title="Добавить" class="icon-plus" onclick="window.open('{$web_root}_modules/_study_loads/index.php?action=add&kadri_id={$person["kadri_id"]}&year_id={$person["year_id"]}')"></i></a></td>
+			            <td rel="stripe"><a href="#"><i title="Добавить" class="icon-plus" onclick="window.open('{$web_root}_modules/_study_loads/index.php?action=add&kadri_id={$person->getId()}&year_id={$selectedYear}')"></i></a></td>
 		            {/if}
 		            <td rel="stripe">{CHtml::checkboxGroupSelect(urlencode(serialize($parameters)))}</td>
 		            <td class="count" rel="stripe">{counter}</td>
-		            <td rel="stripe"><a href="?action=editLoads&kadri_id={$person['kadri_id']}&year_id={$person['year_id']}&base=1&additional=1&premium=1&byTime=1" title="{$person['fio']}">{$person['fio_short']}</a></td>
-		            <td rel="stripe">{$person['dolgnost']}</td>
-		            {if ($person['rate_sum'] != 0)}
-						<td rel="stripe">{number_format($person['rate_sum'],2,',','')}<sup><a href="{$web_root}_modules/_orders/index.php?action=view&id={$person['kadri_id']}" title="{implode('&#013;', CBaseManager::getPerson($person['kadri_id'])->getActiveOrdersListWithRate())}" target="_blank">{$person['ord_cnt']}</a></sup></td>
+		            <td rel="stripe"><a href="?action=editLoads&kadri_id={$person->getId()}&year_id={$selectedYear}&base=1&additional=1&premium=1&byTime=1" title="{$person->getName()}">{$person->getNameShort()}</a></td>
+		            {if (!is_null($person->getPost()))}
+		            	<td rel="stripe">{$person->getPost()->name_short}</td>
+		            {else}
+		            	<td rel="stripe">&nbsp;</td>
+		            {/if}
+		            {if ($person->getOrdersRate() != 0)}
+						<td rel="stripe">{number_format($person->getOrdersRate(),2,',','')}<sup><a href="{$web_root}_modules/_orders/index.php?action=view&id={$person->getId()}" title="{implode('&#013;', $person->getActiveOrdersListWithRate())}" target="_blank">{$person->getOrdersCount()}</a></sup></td>
 		            {else}
 						<td rel="stripe">&nbsp;</td>
 		            {/if}
-		            {if ($person['rate'] != 0)}
-						<td rel="stripe">{number_format($person['hours_sum']/$person['rate'],2,',','')}</td>
+		            {if (!is_null($person->getPost()))}
+		            	{if (CStaffService::getHoursPersonInHoursRateByPost($person->getPost(), $year) != 0)}
+							<td rel="stripe">{number_format($person->workloadSum/CStaffService::getHoursPersonInHoursRateByPost($person->getPost(), $year),2,',','')}</td>
+			            {else}
+							<td rel="stripe">&nbsp;</td>
+			            {/if}
 		            {else}
 						<td rel="stripe">&nbsp;</td>
 		            {/if}
-			        <td rel="stripe">{clearNullValues number=number_format($person['hours_sum_base'],1,',','') level=0}</td>
-		            <td rel="stripe">{clearNullValues number=number_format($person['hours_sum_additional'],1,',','') level=0}</td>
-		            <td rel="stripe">{clearNullValues number=number_format($person['hours_sum_premium'],1,',','') level=0}</td>
-		            <td rel="stripe">{clearNullValues number=number_format($person['hours_sum_by_time'],1,',','') level=0}</td>
-		            <td rel="stripe">{$person['dipl_cnt_winter']}</td>
-		            <td rel="stripe">{$person['dipl_cnt_summer']}</td>
-		            {foreach CStudyLoadService::getStudyWorksTotalValues($person['kadri_id'], $person['year_id'], $isBudget, $isContract) as $typeId=>$rows}
+			        <td rel="stripe">{clearNullValues number=number_format($person->hoursSumBase,1,',','') level=0}</td>
+		            <td rel="stripe">{clearNullValues number=number_format($person->hoursSumAdditional,1,',','') level=0}</td>
+		            <td rel="stripe">{clearNullValues number=number_format($person->hoursSumPremium,1,',','') level=0}</td>
+		            <td rel="stripe">{clearNullValues number=number_format($person->hoursSumByTime,1,',','') level=0}</td>
+		            <td rel="stripe">{$person->diplCountWinter}</td>
+		            <td rel="stripe">{$person->diplCountSummer}</td>
+		            {foreach CStudyLoadService::getStudyWorksTotalValues($person->getId(), $selectedYear, $isBudget, $isContract) as $typeId=>$rows}
 						{foreach $rows as $kindId=>$value}
 							{if !in_array($kindId, array(0))}
 								<td rel="stripe">{clearNullValues number=number_format($value,1,',','') level=0}</td>
 							{/if}
 		                {/foreach}
 		            {/foreach}
-		            <td rel="stripe">{clearNullValues number=number_format($person['hours_sum'],1,',','') level=0}</td>
+		            <td rel="stripe">{clearNullValues number=number_format($person->workloadSum,1,',','') level=0}</td>
 		        </tr>
 	        {/foreach}
         </tbody>
@@ -87,7 +95,7 @@
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			{if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_OWN_ONLY, $ACCESS_LEVEL_WRITE_OWN_ONLY]))}
-	            {foreach CStudyLoadService::getAllStudyWorksTotalValuesByPerson($person['kadri_id'], $person['year_id'], $isBudget, $isContract)->getItems() as $typeId=>$rows}
+	            {foreach CStudyLoadService::getAllStudyWorksTotalValuesByPerson($person->getId(), $selectedYear, $isBudget, $isContract)->getItems() as $typeId=>$rows}
 					{foreach $rows as $kindId=>$value}
 						{if !in_array($kindId, array(0))}
 							<td><b>{clearNullValues number=number_format($value,1,',','') level=0}</b></td>
@@ -95,7 +103,7 @@
 	                {/foreach}
 	            {/foreach}
 	        {else}
-	            {foreach CStudyLoadService::getAllStudyWorksTotalValues($person['year_id'], $isBudget, $isContract)->getItems() as $typeId=>$rows}
+	            {foreach CStudyLoadService::getAllStudyWorksTotalValues($selectedYear, $isBudget, $isContract)->getItems() as $typeId=>$rows}
 					{foreach $rows as $kindId=>$value}
 						{if !in_array($kindId, array(0))}
 							<td><b>{clearNullValues number=number_format($value,1,',','') level=0}</b></td>

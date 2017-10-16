@@ -26,16 +26,18 @@ class CStudyLoadController extends CBaseController {
     	}
     	
     	// фильтр по году
-    	$selectedYear = CUtils::getCurrentYear()->getId();
+    	$year = CUtils::getCurrentYear();
+    	$selectedYear = $year->getId();
     	if (!is_null(CRequest::getFilter("year.id"))) {
     		$selectedYear = CRequest::getFilter("year.id");
+    		$year = CTaxonomyManager::getYear($selectedYear);
     	}
     	
     	// сотрудники с нагрузкой в указанном году
     	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_OWN_ONLY, ACCESS_LEVEL_WRITE_OWN_ONLY])) {
-    		$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear, CSession::getCurrentPerson());
+    		$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $year, CSession::getCurrentPerson());
     	} else {
-    		$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $selectedYear);
+    		$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYear($isBudget, $isContract, $year);
     	}
     	
     	$mainTotal = 0;
@@ -46,11 +48,11 @@ class CStudyLoadController extends CBaseController {
     	if ($personsWithLoad->getCount() != 0) {
     		if ($isBudget or $isContract) {
     			foreach ($personsWithLoad->getItems() as $person) {
-    				$mainTotal += $person['hours_sum_base'];
-    				$additionalTotal += $person['hours_sum_additional'];
-    				$premiumTotal += $person['hours_sum_premium'];
-    				$byTimeTotal += $person['hours_sum_by_time'];
-    				$sumTotal += $person['hours_sum'];
+    				$mainTotal += $person->hoursSumBase;
+    				$additionalTotal += $person->hoursSumAdditional;
+    				$premiumTotal += $person->hoursSumPremium;
+    				$byTimeTotal += $person->hoursSumByTime;
+    				$sumTotal += $person->workloadSum;
     			}
     		}
     	}
@@ -85,6 +87,7 @@ class CStudyLoadController extends CBaseController {
         $this->setData("personsWithLoad", $personsWithLoad);
         $this->setData("personsWithoutLoad", $personsWithoutLoad);
         $this->setData("selectedYear", $selectedYear);
+        $this->setData("year", $year);
         $this->setData("isBudget", $isBudget);
         $this->setData("isContract", $isContract);
         $this->setData("mainTotal", $mainTotal);
@@ -511,13 +514,15 @@ class CStudyLoadController extends CBaseController {
     }
     public function actionInformation() {
     	// фильтр по году
-    	$selectedYear = CUtils::getCurrentYear()->getId();
+    	$year = CUtils::getCurrentYear();
+    	$selectedYear = $year->getId();
     	if (!is_null(CRequest::getFilter("year.id"))) {
     		$selectedYear = CRequest::getFilter("year.id");
+    		$year = CTaxonomyManager::getYear($selectedYear);
     	}
     	 
     	// сотрудники с нагрузкой в указанном году
-    	$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYearForStatistic($selectedYear);
+    	$personsWithLoad = CStudyLoadService::getPersonsWithLoadByYearForStatistic($year);
     	// общее количество часов по нагрузке
     	$sumTotal = 0;
     	// общее количество ставок по приказам
@@ -526,15 +531,15 @@ class CStudyLoadController extends CBaseController {
     	$rateSumFact = 0;
     	$posts = array();
     	if ($personsWithLoad->getCount() != 0) {
-    		foreach ($personsWithLoad as $personLoad) {
-    			if (!is_null($personLoad['dolgnost'])) {
-    				$posts[] = $personLoad['dolgnost'];
+    		foreach ($personsWithLoad as $person) {
+    			if (!is_null($person->getPost())) {
+    				$posts[] = $person->getPost()->getValue();
+    				if (CStaffService::getHoursPersonInHoursRateByPost($person->getPost(), $year) != 0) {
+    					$rateSumFact += $person->workloadSum/CStaffService::getHoursPersonInHoursRateByPost($person->getPost(), $year);
+    				}
     			}
-    			$sumTotal += $personLoad['hours_sum'];
-    			$rateSum += $personLoad['rate_sum'];
-    			if ($personLoad['rate'] != 0) {
-    				$rateSumFact += $personLoad['hours_sum']/$personLoad['rate'];
-    			}
+    			$sumTotal += $person->workloadSum;
+    			$rateSum += $person->getOrdersRate();
     		}
     	}
     	$values = array();
@@ -543,16 +548,17 @@ class CStudyLoadController extends CBaseController {
     		$rateBudget = 0;
     		$rateContract = 0;
     		$rateTotal = 0;
-    		if (count($personsWithLoad) != 0) {
-    			foreach ($personsWithLoad as $personLoad) {
-    				$person = CStaffManager::getPerson($personLoad['kadri_id']);
-    				if ($personLoad['dolgnost'] == $post) {
-    					if ($personLoad['rate'] != 0) {
-    						$rate += $personLoad['hours_sum']/$personLoad['rate'];
+    		if ($personsWithLoad->getCount() != 0) {
+    			foreach ($personsWithLoad as $person) {
+    				if (!is_null($person->getPost())) {
+    					if ($person->getPost()->getValue() == $post) {
+    						if (CStaffService::getHoursPersonInHoursRateByPost($person->getPost(), $year) != 0) {
+    							$rate += $person->workloadSum/CStaffService::getHoursPersonInHoursRateByPost($person->getPost(), $year);
+    						}
+    						$rateBudget += $person->getSumOrdersRateByTypeMoney(COrderConstants::TYPE_MONEY_BUDGET);
+    						$rateContract += $person->getSumOrdersRateByTypeMoney(COrderConstants::TYPE_MONEY_CONTRACT);
+    						$rateTotal += $person->getOrdersRate();
     					}
-    					$rateBudget += $person->getSumOrdersRateByTypeMoney(COrderConstants::TYPE_MONEY_BUDGET);
-    					$rateContract += $person->getSumOrdersRateByTypeMoney(COrderConstants::TYPE_MONEY_CONTRACT);
-    					$rateTotal += $person->getOrdersRate();
     				}
     			}
     		}
@@ -570,11 +576,9 @@ class CStudyLoadController extends CBaseController {
     		// общее количество ставок фактически по нагрузке
     		.number_format($rate,2,',','');
     	}
-    	$postsWithRates = new CArrayList();
-    	$i = 0;
+    	$postsWithRates = array();
     	foreach ($values as $value) {
-    		$postsWithRates->add($i, explode(";", $value));
-    		$i++;
+    		$postsWithRates[] = explode(";", $value);
     	}
     	$this->addActionsMenuItem(array(
     		array(

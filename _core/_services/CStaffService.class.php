@@ -236,4 +236,26 @@ class CStaffService {
     	}
     	return $files;
     }
+    
+    /**
+     * Количество часов у сотрудника из справочника ставок по должности
+     *
+     * @param CTerm $post
+     * @param CTerm $year
+     * @return int
+     */
+    public static function getHoursPersonInHoursRateByPost(CTerm $post, CTerm $year) {
+    	$hours = 0;
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_HOURS_RATE, "dolgnost_id=".$post->getId()." and year_id=".$year->getId())->getItems() as $item) {
+    		$hour = new CHoursRate($item);
+    		$hours += $hour->rate;
+    	}
+    	if ($hours == 0) {
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_HOURS_RATE, "dolgnost_id=".$post->getId())->getItems() as $item) {
+    			$hour = new CHoursRate($item);
+    			$hours += $hour->rate;
+    		}
+    	}
+    	return $hours;
+    }
 }
