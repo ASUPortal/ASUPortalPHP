@@ -102,6 +102,13 @@ class CStaffPublicationsController extends CBaseController{
         				"icon" => "devices/printer.png",
         				"template" => "formset_publications"
         		),
+        		array(
+        				"title" => "Выгрузить файлы публикаций",
+        				"icon" => "actions/document-save.png",
+        				"form" => "#mainView",
+        				"link" => "publications.php",
+        				"action" => "uploadPublicationFiles"
+        		)
         ));
         /**
          * Отображение представления
@@ -186,5 +193,22 @@ class CStaffPublicationsController extends CBaseController{
             );
         }
         echo json_encode($res);
+    }
+    public function actionUploadPublicationFiles() {
+    	$items = CRequest::getArray("selectedDoc");
+    	$files = new CArrayList();
+    	foreach ($items as $id) {
+    		$publication = CStaffManager::getPublication($id);
+    		$link = CFileUtils::getLinkAttachment("copy", $publication);
+    		if (!is_null($link)) {
+    			$fileName = $publication->name;
+    			if ($publication->page_range != "") {
+    				$fileName .= " (c. ".$publication->page_range.")";
+    			}
+    			$files->add($link, $fileName);
+    		}
+    	}
+    	$archiveName = "Файлы публикаций";
+    	CFileUtils::createZipArchiveFromArray($files, $archiveName);
     }
 }
