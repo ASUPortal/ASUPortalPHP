@@ -209,6 +209,13 @@ class CStaffPublicationsController extends CBaseController{
     		}
     	}
     	$archiveName = "Файлы публикаций";
-    	CFileUtils::createZipArchiveFromArray($files, $archiveName);
+    	try {
+    		if ($files->getCount() == 0) {
+    			throw new Exception("Нет файлов для выгрузки!");
+    		}
+    		CFileUtils::createZipArchiveFromArray($files, $archiveName);
+    	} catch (Exception $e) {
+    		echo $e->getMessage();
+    	}
     }
 }

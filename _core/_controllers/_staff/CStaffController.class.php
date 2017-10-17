@@ -263,7 +263,14 @@ class CStaffController extends CBaseController{
         $person = CStaffManager::getPerson(CRequest::getInt("id"));
         $files = CStaffService::getFilesEducationPerson($person);
         $archiveName = $person->getNameShort();
-        CFileUtils::createZipArchiveFromArray($files, $archiveName);
+        try {
+        	if ($files->getCount() == 0) {
+        		throw new Exception("Нет файлов для выгрузки!");
+        	}
+        	CFileUtils::createZipArchiveFromArray($files, $archiveName);
+        } catch (Exception $e) {
+        	echo $e->getMessage();
+        }
     }
     public function actionUploadFilesEducationForPersons() {
         $items = CRequest::getArray("selectedDoc");
@@ -275,7 +282,14 @@ class CStaffController extends CBaseController{
             }
         }
         $archiveName = "Документы об образовании сотрудников";
-        CFileUtils::createZipArchiveFromArray($files, $archiveName);
+        try {
+        	if ($files->getCount() == 0) {
+        		throw new Exception("Нет файлов для выгрузки!");
+        	}
+        	CFileUtils::createZipArchiveFromArray($files, $archiveName);
+        } catch (Exception $e) {
+        	echo $e->getMessage();
+        }
     }
     public function actionSearch() {
         $res = array();
