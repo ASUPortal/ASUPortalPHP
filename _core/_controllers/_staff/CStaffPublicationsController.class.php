@@ -107,7 +107,7 @@ class CStaffPublicationsController extends CBaseController{
         				"icon" => "actions/document-save.png",
         				"form" => "#mainView",
         				"link" => "publications.php",
-        				"action" => "uploadPublicationFiles"
+        				"action" => "downloadPublicationFiles"
         		)
         ));
         /**
@@ -194,7 +194,7 @@ class CStaffPublicationsController extends CBaseController{
         }
         echo json_encode($res);
     }
-    public function actionUploadPublicationFiles() {
+    public function actionDownloadPublicationFiles() {
     	$items = CRequest::getArray("selectedDoc");
     	$files = new CArrayList();
     	foreach ($items as $id) {

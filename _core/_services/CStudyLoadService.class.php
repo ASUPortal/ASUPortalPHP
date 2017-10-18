@@ -167,7 +167,7 @@ class CStudyLoadService {
     		$partSpring = CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::SPRING);
     		
     		foreach ($set->getItems() as $item) {
-    			$person = new CPerson($item);
+    			$person = new CStudyLoadReportRow($item);
     			
     			$groupsCountSum = 0;
     			$studentsCountSum = 0;
@@ -865,7 +865,7 @@ class CStudyLoadService {
     	$query->order("kadri.fio asc");
     	$set->setQuery($query);
     	foreach ($set->getItems() as $item) {
-    		$person = new CPerson($item);
+    		$person = new CStudyLoadReportRow($item);
     		$hoursSum = 0;
     		$queryHours = new CQuery();
     		$queryHours->select("hours.workload as workload");

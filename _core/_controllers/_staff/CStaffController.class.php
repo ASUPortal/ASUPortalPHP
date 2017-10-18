@@ -98,7 +98,7 @@ class CStaffController extends CBaseController{
                     "icon" => "actions/document-save.png",
                     "form" => "#MainView",
                     "link" => "index.php",
-                    "action" => "uploadFilesEducationForPersons"
+                    "action" => "downloadFilesEducationForPersons"
                 )
             )
         );
@@ -224,7 +224,7 @@ class CStaffController extends CBaseController{
             ),
             array(
                 "title" => "Выгрузить файлы об образовании сотрудника",
-                "link" => "index.php?action=uploadFilesEducation&id=".CRequest::getInt("id"),
+                "link" => "index.php?action=downloadFilesEducation&id=".CRequest::getInt("id"),
                 "icon" => "actions/document-save.png"
             ),
             array(
@@ -259,7 +259,7 @@ class CStaffController extends CBaseController{
         $person->remove();
         $this->redirect("?action=index");
     }
-    public function actionUploadFilesEducation() {
+    public function actionDownloadFilesEducation() {
         $person = CStaffManager::getPerson(CRequest::getInt("id"));
         $files = CStaffService::getFilesEducationPerson($person);
         $archiveName = $person->getNameShort();
@@ -272,7 +272,7 @@ class CStaffController extends CBaseController{
         	echo $e->getMessage();
         }
     }
-    public function actionUploadFilesEducationForPersons() {
+    public function actionDownloadFilesEducationForPersons() {
         $items = CRequest::getArray("selectedDoc");
         $files = new CArrayList();
         foreach ($items as $id) {
