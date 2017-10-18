@@ -444,8 +444,12 @@ class CPerson extends CActiveModel{
      */
     public function getUserId() {
     	$person = CStaffManager::getPerson($this->getId());
-    	if (!is_null($person->getUser())) {
-    		$userId = $person->getUser()->id;
+    	if (!is_null($person)) {
+    		if (!is_null($person->getUser())) {
+    			$userId = $person->getUser()->id;
+    		} else {
+    			$userId = 0;
+    		}
     	} else {
     		$userId = 0;
     	}
