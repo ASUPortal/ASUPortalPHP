@@ -12,8 +12,12 @@ class CSessionService {
 	 * @return boolean
 	 */
 	public static function hasAnyRole($roles = array()) {
-		if (in_array(CSession::getCurrentUser()->getLevelForCurrentTask(), $roles)) {
-			return true;
+		if (!is_null(CSession::getCurrentUser())) {
+			if (in_array(CSession::getCurrentUser()->getLevelForCurrentTask(), $roles)) {
+				return true;
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}

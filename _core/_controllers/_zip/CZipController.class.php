@@ -7,6 +7,10 @@
  * To change this template use File | Settings | File Templates.
  */
 class CZipController extends CBaseController {
+	public $allowedAnonymous = array(
+		"archive"
+	);
+	
     public function __construct() {
         if (!CSession::isAuth()) {
             if (!in_array(CRequest::getString("action"), $this->allowedAnonymous)) {

@@ -48,7 +48,7 @@ class CPerson extends CActiveModel{
     private $_infoPages = null;
     public $to_tabel = 0;
     public $is_slave = 0;
-
+    
     protected function relations() {
         return array(
             "orders" => array(
@@ -444,8 +444,12 @@ class CPerson extends CActiveModel{
      */
     public function getUserId() {
     	$person = CStaffManager::getPerson($this->getId());
-    	if (!is_null($person->getUser())) {
-    		$userId = $person->getUser()->id;
+    	if (!is_null($person)) {
+    		if (!is_null($person->getUser())) {
+    			$userId = $person->getUser()->id;
+    		} else {
+    			$userId = 0;
+    		}
     	} else {
     		$userId = 0;
     	}
@@ -762,6 +766,24 @@ class CPerson extends CActiveModel{
     		$result[$order->getId()] = "Приказ №".$order->num_order." от ".$order->date_order." (".$order->rate.") ".$typeMoney;
     	}
     	return $result;
+    }
+    
+    /**
+     * Сумма ставок по типу приказа
+     * 
+     * @param int $typeMoney
+     * @return int
+     */
+    public function getSumOrdersRateByTypeMoney($typeMoney) {
+        $result = 0;
+        foreach ($this->getActiveOrders()->getItems() as $order) {
+            if ($order->type_money == $typeMoney) {
+                $result += $order->rate;
+            } elseif ($order->type_money == $typeMoney) {
+                $result += $order->rate;
+            }
+        }
+        return $result;
     }
 
     /**

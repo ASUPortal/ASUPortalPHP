@@ -148,6 +148,7 @@
     {if ($objects->getCount() == 0)}
         Нет объектов для отображения
     {else}
+        <form action="publications.php" method="post" id="mainView">
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
                 <tr>
@@ -206,6 +207,7 @@
             {/foreach}
             </tbody>
         </table>
+        </form>
 
         {CHtml::paginator($paginator, "publications.php?action=index")}
     {/if}
