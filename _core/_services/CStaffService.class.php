@@ -240,20 +240,22 @@ class CStaffService {
     /**
      * Количество часов у сотрудника из справочника ставок по должности
      *
-     * @param CTerm $post
+     * @param int $postId
      * @param CTerm $year
      * @return int
      */
-    public static function getHoursPersonInHoursRateByPost(CTerm $post, CTerm $year) {
+    public static function getHoursPersonInHoursRateByPost($postId, CTerm $year) {
     	$hours = 0;
-    	foreach (CActiveRecordProvider::getWithCondition(TABLE_HOURS_RATE, "dolgnost_id=".$post->getId()." and year_id=".$year->getId())->getItems() as $item) {
-    		$hour = new CHoursRate($item);
-    		$hours += $hour->rate;
-    	}
-    	if ($hours == 0) {
-    		foreach (CActiveRecordProvider::getWithCondition(TABLE_HOURS_RATE, "dolgnost_id=".$post->getId())->getItems() as $item) {
+    	if ($postId != "") {
+    		foreach (CActiveRecordProvider::getWithCondition(TABLE_HOURS_RATE, "dolgnost_id=".$postId." and year_id=".$year->getId())->getItems() as $item) {
     			$hour = new CHoursRate($item);
     			$hours += $hour->rate;
+    		}
+    		if ($hours == 0) {
+    			foreach (CActiveRecordProvider::getWithCondition(TABLE_HOURS_RATE, "dolgnost_id=".$postId)->getItems() as $item) {
+    				$hour = new CHoursRate($item);
+    				$hours += $hour->rate;
+    			}
     		}
     	}
     	return $hours;

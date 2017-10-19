@@ -146,28 +146,43 @@ class CStudyLoadService {
     	$byTimeLoadId = CStudyLoadService::getStudyLoadTypeByAlias(CStudyLoadTypeConstants::BY_TIME)->getId();
     	
     	$personsWithLoad = new CArrayList();
-    	
     	if ($isBudget or $isContract) {
-    		$set = new CRecordSet(false);
     		$query = new CQuery();
-    		$query->select("kadri.*");
+    		$query->select("kadri.id as kadri_id,
+    						loads.year_id as year_id,
+    						kadri.fio as fio,
+    						kadri.fio_short,
+    						dolgnost.name_short as dolgnost,
+    						dolgnost.id as dolgnostId");
     		$query->from(TABLE_PERSON." as kadri");
     		$query->leftJoin(TABLE_WORKLOAD." as loads", "loads.person_id = kadri.id");
+    		$query->leftJoin(TABLE_WORKLOAD_WORKS." as hours", "hours.workload_id = loads.id");
+    		$query->leftJoin(TABLE_POSTS." as dolgnost", "dolgnost.id = kadri.dolgnost");
     		if (!is_null($person)) {
     			$query->condition("loads.year_id = ".$year->getId()." and loads.person_id = ".$person->getId()." AND loads._is_last_version = 1");
     		} else {
     			$query->condition("loads.year_id = ".$year->getId()." AND loads._is_last_version = 1");
     		}
+    		$query->group("kadri.id");
     		$query->order("kadri.fio asc");
-    		$set->setQuery($query);
     		
     		// дисциплина "Дипломное проектирование"
     		$discipline = CTaxonomyManager::getLegacyTaxonomy(TABLE_DISCIPLINES)->getTerm(CStudyLoadDisciplineConstants::DIPLOM_PROJECT);
     		$partFall = CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::FALL);
     		$partSpring = CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::SPRING);
     		
-    		foreach ($set->getItems() as $item) {
-    			$person = new CStudyLoadReportRow($item);
+    		foreach ($query->execute()->getItems() as $personLoad) {
+    			$person = CStaffManager::getPerson($personLoad['kadri_id']);
+    			
+    			$row = new CStudyLoadReportRow();
+    			$row->personId = $personLoad['kadri_id'];
+    			$row->yearId = $personLoad['year_id'];
+    			$row->personName = $personLoad['fio'];
+    			$row->personShortName = $personLoad['fio_short'];
+    			$row->personPost = $personLoad['dolgnost'];
+    			$row->personPostId = $personLoad['dolgnostId'];
+    			$row->rateSum = $person->getOrdersRate();
+    			$row->orderCount = $person->getOrdersCount();
     			
     			$groupsCountSum = 0;
     			$studentsCountSum = 0;
@@ -214,18 +229,18 @@ class CStudyLoadService {
     					$diplCountSummer += CStudyLoadService::getStudentsCountFromLoadByDisciplineAndPart($studyLoad, $discipline, $partSpring, $kind);
     				}
     			}
-    			$person->groupsCountSum = $groupsCountSum;
-    			$person->studentsCountSum = $studentsCountSum;
-    			$person->hoursSumBase = $hoursSumBase;
-    			$person->hoursSumAdditional = $hoursSumAdditional;
-    			$person->hoursSumPremium = $hoursSumPremium;
-    			$person->hoursSumByTime = $hoursSumByTime;
-    			$person->workloadSum = $hoursSum;
+    			$row->groupsCountSum = $groupsCountSum;
+    			$row->studentsCountSum = $studentsCountSum;
+    			$row->hoursSumBase = $hoursSumBase;
+    			$row->hoursSumAdditional = $hoursSumAdditional;
+    			$row->hoursSumPremium = $hoursSumPremium;
+    			$row->hoursSumByTime = $hoursSumByTime;
+    			$row->workloadSum = $hoursSum;
     			
-    			$person->diplCountWinter = $diplCountWinter;
-    			$person->diplCountSummer = $diplCountSummer;
+    			$row->diplCountWinter = $diplCountWinter;
+    			$row->diplCountSummer = $diplCountSummer;
     			
-    			$personsWithLoad->add($person->getId(), $person);
+    			$personsWithLoad->add($row->personId, $row);
     		}
     	}
     	return $personsWithLoad;
@@ -856,16 +871,24 @@ class CStudyLoadService {
      */
     public static function getPersonsWithLoadByYearForStatistic(CTerm $year) {
     	$personsWithLoad = new CArrayList();
-    	$set = new CRecordSet(false);
     	$query = new CQuery();
-    	$query->select("kadri.*");
+    	$query->select("kadri.id as kadri_id,
+						dolgnost.name_short as dolgnost,
+						dolgnost.id as dolgnostId");
     	$query->from(TABLE_PERSON." as kadri");
     	$query->leftJoin(TABLE_WORKLOAD." as loads", "loads.person_id = kadri.id");
+    	$query->leftJoin(TABLE_POSTS." as dolgnost", "dolgnost.id = kadri.dolgnost");
     	$query->condition("loads.year_id = ".$year->getId()." AND loads._is_last_version = 1");
+    	$query->group("kadri.id");
     	$query->order("kadri.fio asc");
-    	$set->setQuery($query);
-    	foreach ($set->getItems() as $item) {
-    		$person = new CStudyLoadReportRow($item);
+    	foreach ($query->execute()->getItems() as $personLoad) {
+    		$person = CStaffManager::getPerson($personLoad['kadri_id']);
+    		$row = new CStudyLoadReportRow();
+    		$row->personId = $person->getId();
+    		$row->personPost = $personLoad['dolgnost'];
+    		$row->personPostId = $personLoad['dolgnostId'];
+    		$row->rateSum = $person->getOrdersRate();
+    		
     		$hoursSum = 0;
     		$queryHours = new CQuery();
     		$queryHours->select("hours.workload as workload");
@@ -875,8 +898,8 @@ class CStudyLoadService {
     		foreach ($queryHours->execute()->getItems() as $hours) {
     			$hoursSum += $hours['workload'];
     		}
-    		$person->workloadSum = $hoursSum;
-    		$personsWithLoad->add($person->getId(), $person);
+    		$row->workloadSum = $hoursSum;
+    		$personsWithLoad->add($row->personId, $row);
     	}
     	return $personsWithLoad;
     }

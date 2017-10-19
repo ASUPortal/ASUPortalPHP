@@ -19,8 +19,7 @@ final class ModelTest extends TestCase {
     private static $_excludes = array(
         'CPrintClassFieldToFieldAdapter',
         'CLecturerOuter',
-        'CPerson',
-        'CStudyLoadReportRow'
+        'CPerson'
     );
 
     public function testModelsInstantiation() {

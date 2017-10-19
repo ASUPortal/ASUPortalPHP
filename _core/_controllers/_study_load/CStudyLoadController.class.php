@@ -532,14 +532,14 @@ class CStudyLoadController extends CBaseController {
     	$posts = array();
     	if ($personsWithLoad->getCount() != 0) {
     		foreach ($personsWithLoad as $person) {
-    			if (!is_null($person->getPost())) {
-    				$posts[] = $person->getPost()->getValue();
-    				if (CStaffService::getHoursPersonInHoursRateByPost($person->getPost(), $year) != 0) {
-    					$rateSumFact += $person->workloadSum/CStaffService::getHoursPersonInHoursRateByPost($person->getPost(), $year);
-    				}
+    			if ($person->personPost != "") {
+    				$posts[] = $person->personPost;
+    			}
+    			if (CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year) != 0) {
+    				$rateSumFact += $person->workloadSum/CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year);
     			}
     			$sumTotal += $person->workloadSum;
-    			$rateSum += $person->getOrdersRate();
+    			$rateSum += $person->rateSum;
     		}
     	}
     	$values = array();
@@ -550,15 +550,14 @@ class CStudyLoadController extends CBaseController {
     		$rateTotal = 0;
     		if ($personsWithLoad->getCount() != 0) {
     			foreach ($personsWithLoad as $person) {
-    				if (!is_null($person->getPost())) {
-    					if ($person->getPost()->getValue() == $post) {
-    						if (CStaffService::getHoursPersonInHoursRateByPost($person->getPost(), $year) != 0) {
-    							$rate += $person->workloadSum/CStaffService::getHoursPersonInHoursRateByPost($person->getPost(), $year);
-    						}
-    						$rateBudget += $person->getSumOrdersRateByTypeMoney(COrderConstants::TYPE_MONEY_BUDGET);
-    						$rateContract += $person->getSumOrdersRateByTypeMoney(COrderConstants::TYPE_MONEY_CONTRACT);
-    						$rateTotal += $person->getOrdersRate();
+    				if ($person->personPost == $post) {
+    					$staffPerson = CStaffManager::getPerson($person->personId);
+    					if (CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year) != 0) {
+    						$rate += $person->workloadSum/CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year);
     					}
+    					$rateBudget += $staffPerson->getSumOrdersRateByTypeMoney(COrderConstants::TYPE_MONEY_BUDGET);
+    					$rateContract += $staffPerson->getSumOrdersRateByTypeMoney(COrderConstants::TYPE_MONEY_CONTRACT);
+    					$rateTotal += $person->rateSum;
     				}
     			}
     		}

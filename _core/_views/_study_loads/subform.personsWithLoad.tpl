@@ -34,40 +34,32 @@
         <tbody>
 	        {counter start=0 print=false}
 	        {foreach $persons as $person}
-		        {$parameters["kadri_id"] = $person->getId()}
+		        {$parameters["kadri_id"] = $person->personId}
 		        <tr>
 		            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
-			            <td rel="stripe"><a href="#"><i title="Добавить" class="icon-plus" onclick="window.open('{$web_root}_modules/_study_loads/index.php?action=add&kadri_id={$person->getId()}&year_id={$selectedYear}')"></i></a></td>
+			            <td rel="stripe"><a href="#"><i title="Добавить" class="icon-plus" onclick="window.open('{$web_root}_modules/_study_loads/index.php?action=add&kadri_id={$person->personId}&year_id={$person->yearId}')"></i></a></td>
 		            {/if}
 		            <td rel="stripe">{CHtml::checkboxGroupSelect(urlencode(serialize($parameters)))}</td>
 		            <td class="count" rel="stripe">{counter}</td>
-		            <td rel="stripe"><a href="?action=editLoads&kadri_id={$person->getId()}&year_id={$selectedYear}&base=1&additional=1&premium=1&byTime=1" title="{$person->getName()}">{$person->getNameShort()}</a></td>
-		            {if (!is_null($person->getPost()))}
-		            	<td rel="stripe">{$person->getPost()->name_short}</td>
-		            {else}
-		            	<td rel="stripe">&nbsp;</td>
-		            {/if}
-		            {if ($person->getOrdersRate() != 0)}
-						<td rel="stripe">{number_format($person->getOrdersRate(),2,',','')}<sup><a href="{$web_root}_modules/_orders/index.php?action=view&id={$person->getId()}" title="{implode('&#013;', $person->getActiveOrdersListWithRate())}" target="_blank">{$person->getOrdersCount()}</a></sup></td>
+		            <td rel="stripe"><a href="?action=editLoads&kadri_id={$person->personId}&year_id={$person->yearId}&base=1&additional=1&premium=1&byTime=1" title="{$person->personName}">{$person->personShortName}</a></td>
+		            <td rel="stripe">{$person->personPost}</td>
+		            {if ($person->rateSum != 0)}
+						<td rel="stripe">{number_format($person->rateSum,2,',','')}<sup><a href="{$web_root}_modules/_orders/index.php?action=view&id={$person->personId}" title="{implode('&#013;', CStaffManager::getPerson($person->personId)->getActiveOrdersListWithRate())}" target="_blank">{$person->orderCount}</a></sup></td>
 		            {else}
 						<td rel="stripe">&nbsp;</td>
 		            {/if}
-		            {if (!is_null($person->getPost()))}
-		            	{if (CStaffService::getHoursPersonInHoursRateByPost($person->getPost(), $year) != 0)}
-							<td rel="stripe">{number_format($person->workloadSum/CStaffService::getHoursPersonInHoursRateByPost($person->getPost(), $year),2,',','')}</td>
-			            {else}
-							<td rel="stripe">&nbsp;</td>
-			            {/if}
-		            {else}
+		            {if (CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year) != 0)}
+						<td rel="stripe">{number_format($person->workloadSum/CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year),2,',','')}</td>
+					{else}
 						<td rel="stripe">&nbsp;</td>
-		            {/if}
+					{/if}
 			        <td rel="stripe">{clearNullValues number=number_format($person->hoursSumBase,1,',','') level=0}</td>
 		            <td rel="stripe">{clearNullValues number=number_format($person->hoursSumAdditional,1,',','') level=0}</td>
 		            <td rel="stripe">{clearNullValues number=number_format($person->hoursSumPremium,1,',','') level=0}</td>
 		            <td rel="stripe">{clearNullValues number=number_format($person->hoursSumByTime,1,',','') level=0}</td>
 		            <td rel="stripe">{$person->diplCountWinter}</td>
 		            <td rel="stripe">{$person->diplCountSummer}</td>
-		            {foreach CStudyLoadService::getStudyWorksTotalValues($person->getId(), $selectedYear, $isBudget, $isContract) as $typeId=>$rows}
+		            {foreach CStudyLoadService::getStudyWorksTotalValues($person->personId, $selectedYear, $isBudget, $isContract) as $typeId=>$rows}
 						{foreach $rows as $kindId=>$value}
 							{if !in_array($kindId, array(0))}
 								<td rel="stripe">{clearNullValues number=number_format($value,1,',','') level=0}</td>
@@ -95,7 +87,7 @@
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			{if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_OWN_ONLY, $ACCESS_LEVEL_WRITE_OWN_ONLY]))}
-	            {foreach CStudyLoadService::getAllStudyWorksTotalValuesByPerson($person->getId(), $selectedYear, $isBudget, $isContract)->getItems() as $typeId=>$rows}
+	            {foreach CStudyLoadService::getAllStudyWorksTotalValuesByPerson($person->personId, $selectedYear, $isBudget, $isContract)->getItems() as $typeId=>$rows}
 					{foreach $rows as $kindId=>$value}
 						{if !in_array($kindId, array(0))}
 							<td><b>{clearNullValues number=number_format($value,1,',','') level=0}</b></td>

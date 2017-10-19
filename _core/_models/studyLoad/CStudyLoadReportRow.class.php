@@ -2,7 +2,16 @@
 /**
  * Класс для отчёта сотрудника по учебной нагрузке
  */
-class CStudyLoadReportRow extends CPerson {
+class CStudyLoadReportRow {
+	public $personId = 0;
+	public $yearId = 0;
+	public $personName = "";
+	public $personShortName = "";
+	public $personPost = "";
+	public $personPostId = 0;
+	public $rateSum = 0;
+	public $orderCount = 0;
+	
 	public $workloadSum = 0;
 	public $groupsCountSum = 0;
 	public $studentsCountSum = 0;
