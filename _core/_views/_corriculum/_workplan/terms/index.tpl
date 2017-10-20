@@ -17,10 +17,16 @@
             {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
             {foreach $objects->getItems() as $object}
                 <tr>
-                    <td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить семестр')) { location.href='workplanterms.php?action=delete&id={$object->getId()}'; }; return false;"></a></td>
+                    <td>
+                    	{if (!in_array($object->number, $sectionsDisciplines) or is_null($object->corriculum_discipline_section) or in_array($object->id, $loadTerms))}
+                    		&nbsp;
+                    	{else}
+                    		<a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить семестр')) { location.href='workplanterms.php?action=delete&id={$object->getId()}'; }; return false;"></a>
+                    	{/if}
+                    </td>
                     <td>{$object->ordering}</td>
                     <td><a href="workplanterms.php?action=edit&id={$object->getId()}" class="icon-pencil"></a></td>
-                    {if !is_null($object->corriculum_discipline_section)}
+                    {if !is_null($object->corriculum_discipline_section) and in_array($object->number, $sectionsDisciplines)}
                     	<td>{$object->corriculum_discipline_section->title}</td>
                     {else}
                     	<td><font color="#FF0000">Обновите значение из дисциплины!</font></td>

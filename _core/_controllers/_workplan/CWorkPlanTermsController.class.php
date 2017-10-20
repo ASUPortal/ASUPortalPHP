@@ -33,6 +33,28 @@ class CWorkPlanTermsController extends CBaseController{
         }
         $this->setData("objects", $objects);
         $this->setData("paginator", $set->getPaginator());
+        
+        $plan = CWorkPlanManager::getWorkplan(CRequest::getInt("plan_id"));
+        $discipline = $plan->corriculumDiscipline;
+        
+        // семестры дисциплины учебного плана
+        $sectionsDisciplines = array();
+        foreach ($discipline->sections->getItems() as $section) {
+        	$sectionsDisciplines[] = $section->id;
+        }
+        $this->setData("sectionsDisciplines", $sectionsDisciplines);
+        
+        // семестры нагрузок рабочей программы
+        $loadTerms = array();
+        foreach ($plan->categories->getItems() as $category) {
+        	foreach ($category->sections->getItems() as $section) {
+        		foreach ($section->loadsDisplay->getItems() as $load) {
+        			$loadTerms[] = $load->term->getId();
+        		}
+        	}
+        }
+        $this->setData("loadTerms", $loadTerms);
+        
         /**
          * Генерация меню
          */
