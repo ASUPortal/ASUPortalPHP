@@ -34,8 +34,8 @@
             {/sf_showIfVisible}
             {sf_showIfEditable bean=$bean element="load_{$load->getId()}"}
                 <tr>
-                    <td>&nbsp;</td>
                     <td>{sf_toggleEdit address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}" object=$section}</td>
+                    <td width="30">{sf_input bean=$bean model=$load element="load_{$load->getId()}" attribute='ordering' class='span12'}</td>
                     <td>{sf_submit bean=$bean element="load_{$load->getId()}"}</td>
                     <td>{sf_toggleVisible address='workplancontentloads.php' bean=$bean element="load_{$load->getId()}_details" object=$section}</td>
                     <td>{sf_select bean=$bean model=$load element="load_{$load->getId()}" attribute='load_type_id' source='corriculum_labor_types' class='span12'}</td>
