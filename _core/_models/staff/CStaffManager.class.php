@@ -1376,6 +1376,8 @@ class CStaffManager{
                 $paper = new CPersonDoctorPaper($ar);
             } elseif ($ar->getItemValue("disser_type") == DISSER_DEGREE) {
                 $paper = new CPersonDegree($ar);
+            } elseif ($ar->getItemValue("disser_type") == DISSER_PORTFOLIO) {
+                $paper = new CPersonPortfolio($ar);
             }
         }
         return $paper;

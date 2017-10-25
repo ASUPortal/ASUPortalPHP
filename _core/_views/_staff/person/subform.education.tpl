@@ -22,3 +22,8 @@
 <div id="tab-education-title">
     {include file="_staff/person/subform.education.title.tpl"}
 </div>
+
+<h3>Портфолио</h3>
+<div id="tab-education-portfolio">
+    {include file="_staff/person/subform.education.portfolio.tpl"}
+</div>

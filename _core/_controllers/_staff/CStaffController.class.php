@@ -192,6 +192,11 @@ class CStaffController extends CBaseController{
                         "title" => "Добавить звание",
                         "link" => "papers.php?action=add&id=".$person->getId()."&type=3",
                         "icon" => "actions/address-book-new.png"
+                    ),
+                    array(
+                        "title" => "Добавить портфолио",
+                        "link" => "papers.php?action=add&id=".$person->getId()."&type=4",
+                        "icon" => "actions/address-book-new.png"
                     )
                 )
             ),
