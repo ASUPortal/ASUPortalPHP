@@ -153,6 +153,7 @@
 				<th>{CHtml::tableOrder("god_zach", $dissers->getFirstItem(), true)}</th>
 				<th>{CHtml::tableOrder("date_end", $dissers->getFirstItem(), true)}</th>
 				<th>{CHtml::tableOrder("comment", $dissers->getFirstItem(), true)}</th>
+				<th>Портфолио</th>
 			</tr>
 			{counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
 			{foreach $dissers->getItems() as $disser}
@@ -183,6 +184,15 @@
 				<td>{$disser->god_zach}</td>
 				<td>{$disser->date_end}</td>
 				<td>{$disser->comment}</td>
+				<td>
+					<ul>
+						{foreach CStaffManager::getPerson({$disser->person->getId()})->portfoliopapers->getItems() as $portfolio}
+					        <li>
+					            {$portfolio->tema}<br>{CHtml::activeAttachPreview("file_attach", $portfolio, true)}
+					        </li>
+						{/foreach}
+					</ul>
+			    </td>
 			</tr>
 			{/foreach}
 		</table>

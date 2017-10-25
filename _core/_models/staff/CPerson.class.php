@@ -29,6 +29,7 @@ class CPerson extends CActiveModel{
     protected $_cources = null;
     protected $_phdpapers = null;
     protected $_doctorpapers = null;
+    protected $_portfoliopapers = null;
     protected $_degree = null;
     protected $_orders_sab = null;
     protected $_indPlanLoads = null;
@@ -103,7 +104,7 @@ class CPerson extends CActiveModel{
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_degrees",
                 "storageTable" => TABLE_PERSON_DISSER,
-                "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and disser_type = 'степень'",
+                "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId()) . " and disser_type = '".DISSER_DEGREE."'",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPersonPaper"
             ),
@@ -140,7 +141,7 @@ class CPerson extends CActiveModel{
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_phdpapers",
                 "storageTable" => TABLE_PERSON_DISSER,
-                "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND disser_type='кандидат'",
+                "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND disser_type='".DISSER_PHD."'",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPersonPHDPaper"
             ),
@@ -148,9 +149,16 @@ class CPerson extends CActiveModel{
                 "relationPower" => RELATION_HAS_MANY,
                 "storageProperty" => "_doctorpapers",
                 "storageTable" => TABLE_PERSON_DISSER,
-                "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND disser_type='доктор'",
+                "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND disser_type='".DISSER_DOCTOR."'",
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPersonDoctorPaper"
+            ),
+            "portfoliopapers" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_portfoliopapers",
+                "storageTable" => TABLE_PERSON_DISSER,
+                "storageCondition" => "kadri_id = " . (is_null($this->getId()) ? 0 : $this->getId())." AND disser_type='".DISSER_PORTFOLIO."'",
+                "targetClass" => "CPersonPortfolio"
             ),
             "loads" => array(
                 "relationPower" => RELATION_HAS_MANY,

@@ -90,9 +90,8 @@ class CWorkPlanCompetentionsOuts extends CAbstractPrintClassField {
     					$str = $comp->competention->getValue();
     					//удаляем текст в скобках - код компетенции
     					$text = preg_replace("|\(.*?\)|is", "", $str);
-    					//удаляем последний символ пробела из строки
-    					$rest = substr($text, 0, -1);
-    					$dataRow[1] = $rest;
+    					//удаляем пробелы из начала и конца строки
+        				$dataRow[1] = trim($text);
     					//берем код компетенции - текст из скобок
     					preg_match('/\((.+)\)/', $str, $m);
     					$dataRow[2] = $m[1];

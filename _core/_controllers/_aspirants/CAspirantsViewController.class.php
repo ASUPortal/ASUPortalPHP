@@ -24,7 +24,7 @@ class CAspirantsViewController extends CBaseController{
         $query->select("disser.*")
             ->from(TABLE_PERSON_DISSER." as disser")
             ->innerJoin(TABLE_PERSON." as person", "disser.kadri_id = person.id")
-            ->condition("disser.disser_type = 'кандидат'")
+            ->condition("disser.disser_type = ".DISSER_PHD)
             ->order("person.fio asc");
         $set->setQuery($query);
         if (CRequest::getString("order") == "person.fio") {

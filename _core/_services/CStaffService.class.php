@@ -234,6 +234,12 @@ class CStaffService {
     			$files->add($link, $personName."_Степень ".$title);
     		}
     	}
+    	foreach ($person->portfoliopapers->getItems() as $portfolio) {
+    		$link = CFileUtils::getLinkAttachment("file_attach", $portfolio);
+    		if (!is_null($link)) {
+    			$files->add($link, $personName."_Портфолио ".$portfolio->tema);
+    		}
+    	}
     	return $files;
     }
     
