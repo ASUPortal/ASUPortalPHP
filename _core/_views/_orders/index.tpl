@@ -15,10 +15,18 @@
         });
     });
 </script>
-
+<div>
+	Сотрудники, у которых в этом году заканчивается приказ:&nbsp;
+	{foreach $persons->getItems() as $person}
+	    {if ($person->getActiveOrdersEndsThisYearByType(COrderConstants::TYPE_ORDER_BASE)->getCount()) != 0}
+	    	 {$person->getNameShort()}&nbsp;
+	    {/if}
+	{/foreach}
+</div>
+<br>
 {CHtml::checkBox("rated", 1, $rated, "rated")} - с приказами
 
-    <table class="table table-striped table-bordered table-hover table-condensed">
+    <table class="table table-bordered table-hover table-condensed">
     <tr>
         <th rowspan="2">#</th>
         <th rowspan="2">Сотрудник</th>
@@ -33,7 +41,11 @@
 
     {counter start=($paginator->getRecordSet()->getPageSize() * ($paginator->getCurrentPageNumber() - 1)) print=false}
     {foreach $persons->getItems() as $person}
-    <tr>
+    {if ($person->getActiveOrdersEndsThisYearByType(COrderConstants::TYPE_ORDER_BASE)->getCount()) != 0}
+    	<tr bgcolor="LightSalmon">
+    {else}
+    	<tr>
+    {/if}
         <td>{counter}</td>
         <td><a href="?action=view&id={$person->getId()}">{$person->getName()}</a></td>
         <td>{$person->getOrdersRate()}</td>

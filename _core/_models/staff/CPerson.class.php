@@ -704,6 +704,22 @@ class CPerson extends CActiveModel{
         }
         return $result;
     }
+    
+    /**
+     * Активные приказы указанного типа сотрудников ППС, заканчивающиеся в этом году
+     * 
+     * @param int $order_type
+     * @return CArrayList
+     */
+    public function getActiveOrdersEndsThisYearByType($order_type) {
+    	$result = new CArrayList();
+    	foreach ($this->getActiveOrders()->getItems() as $order) {
+    		if ($this->hasPersonType(TYPE_PPS) && $order->isEndsThisYear() && $order->type_order == $order_type) {
+    			$result->add($order->getId(), $order);
+    		}
+    	}
+    	return $result;
+    }
 
     /**
      * Все приказы указанного типа

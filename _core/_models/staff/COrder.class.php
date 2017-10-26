@@ -23,6 +23,17 @@ class COrder extends CActiveModel {
         }
         return false;
     }
+    /**
+     * Заканчивается ли в этом году
+     * 
+     * @return boolean
+     */
+    public function isEndsThisYear() {
+    	if (date("Y-m-d", strtotime($this->date_end)) >= date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_start)) and date("Y-m-d", strtotime($this->date_end)) <= date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_end))) {
+    		return true;
+    	}
+    	return false;
+    }
     protected function relations() {
         return array(
             "person" => array(
