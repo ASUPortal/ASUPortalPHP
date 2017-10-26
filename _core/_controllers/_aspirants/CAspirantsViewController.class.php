@@ -24,7 +24,7 @@ class CAspirantsViewController extends CBaseController{
         $query->select("disser.*")
             ->from(TABLE_PERSON_DISSER." as disser")
             ->innerJoin(TABLE_PERSON." as person", "disser.kadri_id = person.id")
-            ->condition("disser.disser_type = ".DISSER_PHD)
+            ->condition("disser.disser_type = '".DISSER_PHD."'")
             ->order("person.fio asc");
         $set->setQuery($query);
         if (CRequest::getString("order") == "person.fio") {
@@ -88,15 +88,15 @@ class CAspirantsViewController extends CBaseController{
         }
         // фильтр по теме
         if (!is_null(CRequest::getFilter("tema"))) {
-        	$query->condition("disser.id = ".CRequest::getFilter("tema"));
+        	$query->condition("disser.disser_type = '".DISSER_PHD."' and disser.id = ".CRequest::getFilter("tema"));
         }
         // фильтр по комментарию
         if (!is_null(CRequest::getFilter("comment"))) {
-        	$query->condition("disser.id = ".CRequest::getFilter("comment"));
+        	$query->condition("disser.disser_type = '".DISSER_PHD."' and disser.id = ".CRequest::getFilter("comment"));
         }
         $isArchive = (CRequest::getString("isArchive") == "1");
         if (!$isArchive) {
-			$query->condition('disser.date_end > "'.date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_start)).'"');
+			$query->condition("disser.disser_type = '".DISSER_PHD."' and disser.date_end > '".date("Y-m-d", strtotime(CUtils::getCurrentYear()->date_start))."'");
         }
         if ($isArchive) {
         	$requestParams = array();

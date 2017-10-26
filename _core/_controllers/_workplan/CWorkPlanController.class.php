@@ -74,7 +74,7 @@ class CWorkPlanController extends CFlowController{
         $set = new CRecordSet();
         $query = new CQuery();
         $set->setQuery($query);
-        $query->select("wp.*")
+        $query->select("distinct wp.*")
             ->from(TABLE_WORK_PLANS." as wp")
             ->leftJoin(TABLE_DISCIPLINES." as discipline", "wp.discipline_id=discipline.id")
             ->leftJoin(TABLE_CORRICULUM_DISCIPLINES." as corr_discipline", "wp.corriculum_discipline_id=corr_discipline.id")
