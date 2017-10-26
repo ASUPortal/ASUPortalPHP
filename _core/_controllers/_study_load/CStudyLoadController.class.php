@@ -45,6 +45,10 @@ class CStudyLoadController extends CBaseController {
     	$premiumTotal = 0;
     	$byTimeTotal = 0;
     	$sumTotal = 0;
+    	$rateSum = 0;
+    	$rateSumFact = 0;
+    	$diplCountWinterSum = 0;
+    	$diplCountSummerSum = 0;
     	if ($personsWithLoad->getCount() != 0) {
     		if ($isBudget or $isContract) {
     			foreach ($personsWithLoad->getItems() as $person) {
@@ -53,6 +57,12 @@ class CStudyLoadController extends CBaseController {
     				$premiumTotal += $person->hoursSumPremium;
     				$byTimeTotal += $person->hoursSumByTime;
     				$sumTotal += $person->workloadSum;
+    				$rateSum += $person->rateSum;
+    				if (CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year) != 0) {
+    					$rateSumFact += $person->workloadSum/CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year);
+    				}
+    				$diplCountWinterSum += $person->diplCountWinter;
+    				$diplCountSummerSum += $person->diplCountSummer;
     			}
     		}
     	}
@@ -95,6 +105,10 @@ class CStudyLoadController extends CBaseController {
         $this->setData("premiumTotal", $premiumTotal);
         $this->setData("byTimeTotal", $byTimeTotal);
         $this->setData("sumTotal", $sumTotal);
+        $this->setData("rateSum", number_format($rateSum,2,',',''));
+        $this->setData("rateSumFact", number_format($rateSumFact,2,',',''));
+        $this->setData("diplCountWinterSum", $diplCountWinterSum);
+        $this->setData("diplCountSummerSum", $diplCountSummerSum);
         $this->renderView("_study_loads/index.tpl");
     }
     public function actionAdd() {

@@ -78,14 +78,14 @@
         	<td>&nbsp;</td>
             <td><b>Итого</b></td>
 			<td>&nbsp;</td>
-		    <td>&nbsp;</td>
-			<td>&nbsp;</td>
+			<td><b>{clearNullValues number=$rateSum level=0}</b></td>
+			<td><b>{clearNullValues number=$rateSumFact level=0}</b></td>
 			<td><b>{clearNullValues number=number_format($mainTotal,1,',','') level=0}</b></td>
 			<td><b>{clearNullValues number=number_format($additionalTotal,1,',','') level=0}</b></td>
 			<td><b>{clearNullValues number=number_format($premiumTotal,1,',','') level=0}</b></td>
 			<td><b>{clearNullValues number=number_format($byTimeTotal,1,',','') level=0}</b></td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
+			<td><b>{clearNullValues number=$diplCountWinterSum level=0}</b></td>
+			<td><b>{clearNullValues number=$diplCountSummerSum level=0}</b></td>
 			{if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_OWN_ONLY, $ACCESS_LEVEL_WRITE_OWN_ONLY]))}
 	            {foreach CStudyLoadService::getAllStudyWorksTotalValuesByPerson($person->personId, $selectedYear, $isBudget, $isContract)->getItems() as $typeId=>$rows}
 					{foreach $rows as $kindId=>$value}
