@@ -150,6 +150,7 @@
     define("TABLE_PERSON_BY_TYPES", "kadri_in_ptypes");
     define("TABLE_PERSON_DIPLOMS", "obrazov");
     define("TABLE_PERSON_COURCES", "courses");
+    define("TABLE_PERSON_RESOURCES", "scientific_resources_authors");
     define("TABLE_SAB_COMMISSIONS", "sab_commission");
     define("TABLE_SAB_COMMISSION_MEMBERS", "sab_commission_members");
     define("TABLE_SAB_COMMISSION_DIPLOMS", "sab_commission_diploms");
