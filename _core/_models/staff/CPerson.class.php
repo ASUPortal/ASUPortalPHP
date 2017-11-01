@@ -47,6 +47,7 @@ class CPerson extends CActiveModel{
     private $_questions = null;
     private $_supervisedGroups = null;
     private $_infoPages = null;
+    private $_resources = null;
     public $to_tabel = 0;
     public $is_slave = 0;
     
@@ -243,6 +244,13 @@ class CPerson extends CActiveModel{
         		"storageCondition" => "user_id_insert = ".(is_null($this->getId()) ? 0 : $this->getUserId())." and pg_cat=1",
         		"managerClass" => "CPageManager",
         		"managerGetObject" => "getPage"
+        	),
+        	"resources" => array(
+        		"relationPower" => RELATION_HAS_MANY,
+        		"storageProperty" => "_resources",
+        		"storageTable" => TABLE_PERSON_RESOURCES,
+        		"storageCondition" => "person_id = ". (is_null($this->getId()) ? 0 : $this->getId()),
+        		"targetClass" => "CPersonResource"
         	)
         );
     }
