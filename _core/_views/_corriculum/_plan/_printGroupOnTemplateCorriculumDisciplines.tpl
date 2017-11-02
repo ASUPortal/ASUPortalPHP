@@ -1,7 +1,7 @@
 <a href="#printDialog" data-toggle="modal">
     <center>
         <img src="{$web_root}images/{$icon_theme}/32x32/devices/printer.png"><br>
-        Взаимосвязь дисциплин учебного плана
+        Взаимосвязь дисциплин<br>учебного плана
     </center>
 </a>
 

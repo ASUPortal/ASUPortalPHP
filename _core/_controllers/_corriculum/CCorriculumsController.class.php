@@ -171,8 +171,55 @@ class CCorriculumsController extends CBaseController {
         $this->setData("template", $template);
         
         /**
+         * Список нереализованных компетенций и дисциплин без компетенций
+         */
+        // специальность
+        $direction = $corriculum->direction;
+        // компетенции из справочника Учебный план - Компетенции
+        $competentions = array();
+        $taxonomy = CTaxonomyManager::getTaxonomy("corriculum_competentions");
+        $query = new CQuery();
+        $query->select("distinct(taxonomy.id) as id, taxonomy.name as name")
+	        ->from(TABLE_TAXONOMY_TERMS." as taxonomy")
+	        // берём компетенции, у которых специальность (alias) совпадает с направлением $direction учебного плана
+	        ->condition("taxonomy.taxonomy_id=".$taxonomy->getId()." and taxonomy.alias=".$direction->getId());
+        foreach ($query->execute()->getItems() as $item) {
+        	$competentions[$item["id"]] = $item["name"];
+        }
+        // список нереализованных компетенций
+        $unrealizedCompetentions = array();
+        // список дисциплин без компетенций
+        $disciplinesWithOutCompetentions = array();
+        foreach ($corriculum->cycles->getItems() as $cycle) {
+        	$cycleName = "<br><b>".$cycle->number." ".$cycle->title." (".$cycle->title_abbreviated."):</b><br><br>";
+        	$unrealizedCompetentions[] = $cycleName;
+        	$disciplinesWithOutCompetentions[] = $cycleName;
+        	foreach ($cycle->allDisciplines->getItems() as $discipline) {
+        		if ($discipline->competentions->isEmpty()) {
+        			$disciplinesWithOutCompetentions[] = "<li>".$discipline->discipline->getValue()."</li>";
+        		}
+        	}
+        	foreach ($competentions as $competentionId=>$competention) {
+        		$disciplinesWithCompetentions = array();
+        		foreach ($cycle->allDisciplines->getItems() as $discipline) {
+        			foreach ($discipline->competentions->getItems() as $comp) {
+        				if (!is_null($comp->competention)) {
+        					if ($comp->competention->getId() == $competentionId) {
+        						$disciplinesWithCompetentions[] = $discipline->discipline->getValue();
+        					}
+        				}
+        			}
+        		}
+        		if (empty($disciplinesWithCompetentions)) {
+        			$unrealizedCompetentions[] = "<li>".$competention."</li>";
+        		}
+        	}
+        }
+        /**
          * Передаем данные представлению
          */
+        $this->setData("unrealizedCompetentions", $unrealizedCompetentions);
+        $this->setData("disciplinesWithOutCompetentions", $disciplinesWithOutCompetentions);
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("labors", $labors);
