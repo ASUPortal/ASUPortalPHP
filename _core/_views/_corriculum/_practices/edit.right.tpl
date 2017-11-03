@@ -6,7 +6,9 @@
 </p>
 
 <p>
-    <a href="?action=del&id={$practice->getId()}"><center>
+    <a href="#" onclick="if (confirm('Действительно удалить практику?')) 
+	{ location.href='?action=del&id={$practice->getId()}'; }; return false;">
+    <center>
         <img src="{$web_root}images/{$icon_theme}/32x32/places/user-trash.png"><br>
         Удалить
     </center></a>

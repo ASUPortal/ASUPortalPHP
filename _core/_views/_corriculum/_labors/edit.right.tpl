@@ -10,7 +10,9 @@
 </p>
 
 <p>
-    <a href="?action=del&id={$labor->getId()}"><center>
+    <a href="#" onclick="if (confirm('Действительно удалить нагрузку?')) 
+	{ location.href='?action=del&id={$labor->getId()}'; }; return false;">
+    <center>
         <img src="{$web_root}images/{$icon_theme}/32x32/places/user-trash.png"><br>
         Удалить
     </center></a>

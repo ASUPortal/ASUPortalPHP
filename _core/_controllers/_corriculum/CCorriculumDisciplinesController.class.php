@@ -118,6 +118,17 @@ class CCorriculumDisciplinesController extends CFlowController {
         $discipline->remove();
         $this->redirect("cycles.php?action=edit&id=".$id);
     }
+    public function actionDelWorkplans() {
+    	$discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("id"));
+    	$id = $discipline->cycle_id;
+    	/**
+    	 * Удаляем рабочие программы из дисциплины
+    	 */
+    	foreach ($discipline->plans->getItems() as $plan) {
+    		$plan->remove();
+    	}
+    	$this->redirect("cycles.php?action=edit&id=".$id);
+    }
     public function actionUp() {
         $discipline = CCorriculumsManager::getDiscipline(CRequest::getInt("id"));
         /**
