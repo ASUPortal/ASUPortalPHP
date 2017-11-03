@@ -191,14 +191,17 @@ class CCorriculumsController extends CBaseController {
         // список дисциплин без компетенций
         $disciplinesWithOutCompetentions = array();
         foreach ($corriculum->cycles->getItems() as $cycle) {
-        	$cycleName = "<br><b>".$cycle->number." ".$cycle->title." (".$cycle->title_abbreviated."):</b><br><br>";
+        	$cycleName = $cycle->number." ".$cycle->title." (".$cycle->title_abbreviated."):";
         	$unrealizedCompetentions[] = $cycleName;
         	$disciplinesWithOutCompetentions[] = $cycleName;
+        	$disciplinesValues = array();
         	foreach ($cycle->allDisciplines->getItems() as $discipline) {
         		if ($discipline->competentions->isEmpty()) {
-        			$disciplinesWithOutCompetentions[] = "<li>".$discipline->discipline->getValue()."</li>";
+        			$disciplinesValues[] = $discipline->discipline->getValue();
         		}
         	}
+        	$disciplinesWithOutCompetentions[] = $disciplinesValues;
+        	$competentionsValues = array();
         	foreach ($competentions as $competentionId=>$competention) {
         		$disciplinesWithCompetentions = array();
         		foreach ($cycle->allDisciplines->getItems() as $discipline) {
@@ -211,9 +214,10 @@ class CCorriculumsController extends CBaseController {
         			}
         		}
         		if (empty($disciplinesWithCompetentions)) {
-        			$unrealizedCompetentions[] = "<li>".$competention."</li>";
+        			$competentionsValues[] = $competention;
         		}
         	}
+        	$unrealizedCompetentions[] = $competentionsValues;
         }
         /**
          * Передаем данные представлению

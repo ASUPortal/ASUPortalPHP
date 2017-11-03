@@ -1,5 +1,48 @@
-{CHtml::modalWindow("listUnrealizedCompetentions", "Список нереализованных компетенций", implode($unrealizedCompetentions, ""))}
-{CHtml::modalWindow("listDisciplinesWithOutCompetentions", "Список дисциплин без компетенций", implode($disciplinesWithOutCompetentions, ""))}
+<div id="listUnrealizedCompetentions" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Список нереализованных компетенций</h3>
+	</div>
+	<div class="modal-body">
+		{foreach $unrealizedCompetentions as $unrealizedCompetention}
+        	{if (is_string($unrealizedCompetention))}
+        		<b>{$unrealizedCompetention}</b><br><br>
+        	{/if}
+        	{if (is_array($unrealizedCompetention))}
+        		{foreach $unrealizedCompetention as $competention}
+        			<li>{$competention}</li>
+        		{/foreach}
+        		<br>
+        	{/if}
+        {/foreach}
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+	</div>
+</div>
+
+<div id="listDisciplinesWithOutCompetentions" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Список дисциплин без компетенций</h3>
+	</div>
+	<div class="modal-body">
+		{foreach $disciplinesWithOutCompetentions as $disciplines}
+        	{if (is_string($disciplines))}
+        		<b>{$disciplines}</b><br><br>
+        	{/if}
+        	{if (is_array($disciplines))}
+        		{foreach $disciplines as $discipline}
+        			<li>{$discipline}</li>
+        		{/foreach}
+        		<br>
+        	{/if}
+        {/foreach}
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+	</div>
+</div>
 
 <ul class="nav nav-pills nav-justified">
 	<li>
