@@ -6,6 +6,8 @@
         <a href="index.php?action=index"><center>
 	        <img src="{$web_root}images/{$icon_theme}/32x32/actions/edit-undo.png"><br>
 	        Назад
+	        <br>&nbsp;
+	        <br>&nbsp;
 	    </center></a>
 	</li>
 	<li>
@@ -18,12 +20,15 @@
         <a href="cycles.php?action=add&id={$corriculum->id}"><center>
 	        <img src="{$web_root}images/{$icon_theme}/32x32/actions/list-add.png"><br>
 	        Добавить цикл
+	        <br>&nbsp;
+	        <br>&nbsp;
 	    </center></a>
 	</li>
 	<li>
         <a href="index.php?action=copy&id={$corriculum->id}"><center>
 	        <img src="{$web_root}images/{$icon_theme}/32x32/actions/edit-copy.png"><br>
 	        Копировать текущий<br>учебный план
+	        <br>&nbsp;
 	    </center></a>
 	</li>
 	<li>
@@ -36,12 +41,14 @@
         <a href="#listUnrealizedCompetentions" data-toggle="modal"><center>
 	        <img src="{$web_root}images/{$icon_theme}/32x32/actions/edit-copy.png"><br>
 	        Список нереализованных<br>компетенций
+	        <br>&nbsp;
 	    </center></a>
 	</li>
 	<li>
         <a href="#listDisciplinesWithOutCompetentions" data-toggle="modal"><center>
 	        <img src="{$web_root}images/{$icon_theme}/32x32/actions/edit-copy.png"><br>
 	        Список дисциплин<br>без компетенций
+	        <br>&nbsp;
 	    </center></a>
 	</li>
 	<li>
@@ -60,7 +67,7 @@
         	{/if}
 	        <center>
 		        <img src="{$web_root}images/{$icon_theme}/32x32/devices/printer.png"><br>
-		        Форма 1<br>Форма 2
+		        Форма 1<br>Форма 2<br>&nbsp;
 		    </center>
 	    </a>
 	</li>
