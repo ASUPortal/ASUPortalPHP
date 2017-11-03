@@ -6,7 +6,9 @@
 		</center></a>
 	</li>
 	<li>
-	    <a href="?action=del&id={$cycle->getId()}"><center>
+	    <a href="#" onclick="if (confirm('Действительно удалить цикл {$cycle->title}?')) 
+	    { location.href='?action=del&id={$cycle->getId()}'; }; return false;">
+	    <center>
 	        <img src="{$web_root}images/{$icon_theme}/32x32/places/user-trash.png"><br>
 	        Удалить цикл дисциплин
 	    </center></a>
