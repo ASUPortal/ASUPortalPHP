@@ -190,34 +190,37 @@ class CCorriculumsController extends CBaseController {
         $unrealizedCompetentions = array();
         // список дисциплин без компетенций
         $disciplinesWithOutCompetentions = array();
+        // все дисциплины учебного плана
+        $allDisciplines = new CArrayList();
         foreach ($corriculum->cycles->getItems() as $cycle) {
         	$cycleName = $cycle->number." ".$cycle->title." (".$cycle->title_abbreviated."):";
-        	$unrealizedCompetentions[] = $cycleName;
         	$disciplinesWithOutCompetentions[] = $cycleName;
         	$disciplinesValues = array();
         	foreach ($cycle->allDisciplines->getItems() as $discipline) {
-        		if ($discipline->competentions->isEmpty()) {
-        			$disciplinesValues[] = $discipline->discipline->getValue();
+        		$allDisciplines->add($discipline->getId(), $discipline);
+        		if ($discipline->children->isEmpty()) {
+        			if ($discipline->competentions->isEmpty()) {
+        				$disciplinesValues[] = $discipline->discipline->getValue();
+        			}
         		}
         	}
         	$disciplinesWithOutCompetentions[] = $disciplinesValues;
-        	$competentionsValues = array();
-        	foreach ($competentions as $competentionId=>$competention) {
-        		$disciplinesWithCompetentions = array();
-        		foreach ($cycle->allDisciplines->getItems() as $discipline) {
-        			foreach ($discipline->competentions->getItems() as $comp) {
-        				if (!is_null($comp->competention)) {
-        					if ($comp->competention->getId() == $competentionId) {
-        						$disciplinesWithCompetentions[] = $discipline->discipline->getValue();
-        					}
+        }
+        $competentionsValues = array();
+        foreach ($competentions as $competentionId=>$competention) {
+        	$disciplinesWithCompetentions = array();
+        	foreach ($allDisciplines->getItems() as $discipline) {
+        		foreach ($discipline->competentions->getItems() as $comp) {
+        			if (!is_null($comp->competention)) {
+        				if ($comp->competention->getId() == $competentionId) {
+        					$disciplinesWithCompetentions[] = $discipline->discipline->getValue();
         				}
         			}
         		}
-        		if (empty($disciplinesWithCompetentions)) {
-        			$competentionsValues[] = $competention;
-        		}
         	}
-        	$unrealizedCompetentions[] = $competentionsValues;
+        	if (empty($disciplinesWithCompetentions)) {
+        		$unrealizedCompetentions[] = $competention;
+        	}
         }
         /**
          * Передаем данные представлению
