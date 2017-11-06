@@ -5,15 +5,7 @@
 	</div>
 	<div class="modal-body">
 		{foreach $unrealizedCompetentions as $unrealizedCompetention}
-        	{if (is_string($unrealizedCompetention))}
-        		<b>{$unrealizedCompetention}</b><br><br>
-        	{/if}
-        	{if (is_array($unrealizedCompetention))}
-        		{foreach $unrealizedCompetention as $competention}
-        			<li>{$competention}</li>
-        		{/foreach}
-        		<br>
-        	{/if}
+        	<li>{$unrealizedCompetention}</li>
         {/foreach}
 	</div>
 	<div class="modal-footer">
