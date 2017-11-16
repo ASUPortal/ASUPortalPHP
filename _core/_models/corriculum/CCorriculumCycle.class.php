@@ -14,6 +14,7 @@ class CCorriculumCycle extends CActiveModel {
     protected $_table = TABLE_CORRICULUM_CYCLES;
     protected $_corriculum = null;
     protected $_disciplines = null;
+    protected $_allDisciplines = null;
     protected $_basicDisciplines = null;
     protected $_variativeDisciplines = null;
     protected $_labors = null;
@@ -71,7 +72,7 @@ class CCorriculumCycle extends CActiveModel {
             ),
             "allDisciplines" => array(
                 "relationPower" => RELATION_HAS_MANY,
-                "storageProperty" => "_disciplines",
+                "storageProperty" => "_allDisciplines",
                 "storageTable" => TABLE_CORRICULUM_DISCIPLINES,
                 "storageCondition" => "cycle_id=".$this->id,
                 "managerClass" => "CCorriculumsManager",
