@@ -92,6 +92,12 @@ class CActionsMenuRenderer {
         echo $item['title'];
         echo '</a>';
     }
+    private function renderMenuItemHtmlAttribute(array $item) {
+        echo '<a href="'.$item["link"].'" '.$item["html"].'>';
+        echo '<div><img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'"></div>';
+        echo $item['title'];
+        echo '</a>';
+    }
     private function renderMenuItemJS(array $item) {
     	echo '<a href="'.$item["link"].'" onclick="'.$item["onclick"].'">';
     	echo '<div><img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'"></div>';
@@ -134,6 +140,8 @@ class CActionsMenuRenderer {
             $this->renderMenuItemAjaxAction($item);
         } elseif (array_key_exists("onclick", $item)) {
             $this->renderMenuItemJS($item);
+        } elseif (array_key_exists("html", $item)) {
+            $this->renderMenuItemHtmlAttribute($item);
         } else {
             $this->renderMenuItemDefault($item);
         }
