@@ -121,6 +121,12 @@ class CCorriculumDisciplinesController extends CFlowController {
         foreach ($discipline->plans->getItems() as $plan) {
         	$plan->remove();
         }
+        /**
+         * Удаляем дочерние дисциплины из родительской
+         */
+        foreach ($discipline->children->getItems() as $child) {
+        	$child->remove();
+        }
         $discipline->remove();
         $this->redirect("cycles.php?action=edit&id=".$id);
     }
