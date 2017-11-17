@@ -34,8 +34,31 @@ class CDepProtocolController extends CBaseController {
         		"title" => "Добавить протокол",
         		"link" => "index.php?action=add",
         		"icon" => "actions/list-add.png"
+        	),
+        	array(
+        		"title" => "Групповые операции",
+        		"link" => "#",
+        		"icon" => "apps/utilities-terminal.png",
+        		"child" => array(
+        			array(
+        				"title" => "Удалить выделенные",
+        				"icon" => "actions/edit-delete.png",
+        				"form" => "#mainView",
+        				"link" => "index.php",
+        				"action" => "delete"
+        			)
+        		)
         	)
         ));
+        /**
+         * Параметры для групповой печати по шаблону
+         */
+        $this->setData("template", "formset_protocols_department");
+        $this->setData("selectedDoc", true);
+        $this->setData("url", null);
+        $this->setData("action", null);
+        $this->setData("id", null);
+
         $this->setData("onControl", $onControl);
         $this->setData("protocols", $protocols);
         $this->setData("paginator", $set->getPaginator());
@@ -133,10 +156,20 @@ class CDepProtocolController extends CBaseController {
     }
     public function actionDelete() {
         $protocol = CProtocolManager::getDepProtocol(CRequest::getInt("id"));
-        foreach ($protocol->visits->getItems() as $visit) {
-            $visit->remove();
+        if (!is_null($protocol)) {
+        	foreach ($protocol->visits->getItems() as $visit) {
+        		$visit->remove();
+        	}
+        	$protocol->remove();
         }
-        $protocol->remove();
+        $items = CRequest::getArray("selectedDoc");
+        foreach ($items as $id) {
+        	$protocol = CProtocolManager::getDepProtocol($id);
+        	foreach ($protocol->visits->getItems() as $visit) {
+        		$visit->remove();
+        	}
+        	$protocol->remove();
+        }
         $this->redirect("?action=index");
     }
     public function actionSearch() {
