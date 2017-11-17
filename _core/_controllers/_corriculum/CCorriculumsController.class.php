@@ -160,13 +160,17 @@ class CCorriculumsController extends CBaseController {
         				"title" => "Список нереализованных компетенций",
         				"icon" => "actions/edit-copy.png",
         				"link" => "#listUnrealizedCompetentions",
-        				"html" => 'data-toggle="modal"'
+        				"attributes" => array(
+        					"data-toggle" => "modal"
+        				)
         			),
         			array(
         				"title" => "Список дисциплин без компетенций",
         				"icon" => "actions/edit-copy.png",
         				"link" => "#listDisciplinesWithOutCompetentions",
-        				"html" => 'data-toggle="modal"'
+        				"attributes" => array(
+        					"data-toggle" => "modal"
+        				)
         			)
         		)
         	)
