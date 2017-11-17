@@ -50,8 +50,7 @@ class CIndPlanPersonsReportTableTotalByTime extends CAbstractPrintClassField {
                 }
             }
         }
-        $month = $bean->getItem("month");
-        $month = $month->getFirstItem();
+        $months = $bean->getItem("months");
         $result = array();
         /**
          * @var $plan CIndPlanPersonLoad
@@ -141,6 +140,13 @@ class CIndPlanPersonsReportTableTotalByTime extends CAbstractPrintClassField {
             	$row[21] = $resultForYearContract;
             	
             	$rows = array(
+            			/**
+            			 * Столбцы для изменений
+            			 *
+            			 * Номер слева соответствует номеру столбца в шаблоне, начиная с 0
+            			 * Номер справа соответствует порядковому номеру нагрузки из справочника, начиная с 0
+            			 * -1 означает, что столбец будет пропущен
+            			 */
             			3 => 0, //лекц
             			4 => 1, //прак
             			5 => 2, //лаб
@@ -156,7 +162,7 @@ class CIndPlanPersonsReportTableTotalByTime extends CAbstractPrintClassField {
             			15 => 9, //дип. проект.
             			16 => 10, //ГЭК
             			17 => 16, //КСР
-            			18 => -1,
+            			18 => 13, //занятия с аспирантами
             			19 => 12 //асп
             	);
             } else {
@@ -169,6 +175,13 @@ class CIndPlanPersonsReportTableTotalByTime extends CAbstractPrintClassField {
             	}
             	$row[1] = $plannedForYear;
             	$rows = array(
+            			/**
+            			 * Столбцы для изменений
+            			 *
+            			 * Номер слева соответствует номеру столбца в шаблоне, начиная с 0
+            			 * Номер справа соответствует порядковому номеру нагрузки из справочника, начиная с 0
+            			 * -1 означает, что столбец будет пропущен
+            			 */
             			2 => 0, //лекц
             			3 => 1, //прак
             			4 => 2, //лаб
@@ -184,7 +197,7 @@ class CIndPlanPersonsReportTableTotalByTime extends CAbstractPrintClassField {
             			14 => 9, //дип. проект.
             			15 => 10, //ГЭК
             			16 => 16, //КСР
-            			17 => -1,
+            			17 => 13, //занятия с аспирантами
             			18 => 12 //асп
             	);
             }
@@ -193,7 +206,9 @@ class CIndPlanPersonsReportTableTotalByTime extends CAbstractPrintClassField {
                     $row[$target] = 0;
                 }
                 if ($source != -1) {
-                    $row[$target] += $preparedData[$source][$month];
+                	foreach ($months as $month) {
+                		$row[$target] += $preparedData[$source][$month];
+                	}
                 }
             }
             if (!$plan->isSeparateContract()) {
@@ -216,8 +231,8 @@ class CIndPlanPersonsReportTableTotalByTime extends CAbstractPrintClassField {
     			$sum[$i] += $item[$i];
     		}
     	}
-    	$total = array($sum);
-        return $total;
+    	$value = array($sum);
+        return $value;
     }
 
 } 

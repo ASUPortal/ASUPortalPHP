@@ -135,6 +135,7 @@ class CIndPlanPrintController extends CFlowController{
             5 => "декабрь"
         ));
         $this->setData("items", $months);
+        $this->setData("multiple", true);
         $this->renderView("_flow/pickList.tpl", get_class($this), "PrintIndPlayByMonth");
     }
     public function actionPrintIndPlayByMonth() {
@@ -144,7 +145,7 @@ class CIndPlanPrintController extends CFlowController{
             return true;
         }
         $bean = self::getStatefullBean();
-        $bean->add("month", $this->getSelectedInPickListDialog());
+        $bean->add("months", $this->getSelectedInPickListDialog());
         // редирект на печать
         $this->redirectNextAction("CPrintController", "PrintWithBeanData");
     }

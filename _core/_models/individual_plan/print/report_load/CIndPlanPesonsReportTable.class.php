@@ -56,18 +56,17 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
                 }
             }
         }
-        $month = $bean->getItem("month");
-        $month = $month->getFirstItem();
-        $result = array();
+        $months = $bean->getItem("months");
+        $value = array();
         /**
          * @var $plan CIndPlanPersonLoad
          */
         foreach ($targetPlans->getItems() as $plan) {
             $row = array();
-            if (array_key_exists($plan->person_id, $result)) {
-                $row = $result[$plan->person_id];
+            if (array_key_exists($plan->person_id, $value)) {
+                $row = $value[$plan->person_id];
             }
-            $row[0] = count($result) + 1;
+            $row[0] = count($value) + 1;
             $row[1] = "";
             if (!is_null($plan->person)) {
                 if (!is_null($plan->person->getPost())) {
@@ -113,6 +112,13 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
             }
             $row[4] = $plannedForYear;
             $rows = array(
+            	/**
+            	 * Столбцы для изменений
+            	 *
+            	 * Номер слева соответствует номеру столбца в шаблоне, начиная с 0
+            	 * Номер справа соответствует порядковому номеру нагрузки из справочника, начиная с 0
+            	 * -1 означает, что столбец будет пропущен
+            	 */	
                 5 => 0, //лекц
                 6 => 1, //прак
                 7 => 2, //лаб
@@ -128,7 +134,7 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
                 17 => 9, //дип. проект.
                 18 => 10, //ГЭК
                 19 => 16, //КСР
-                20 => -1,
+                20 => 13, //занятия с аспирантами
             	21 => 12 //асп
             );
             foreach ($rows as $target=>$source) {
@@ -139,16 +145,18 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
     				$row[22] = 0;
     			}
     			if ($source != -1) {
-    				$row[$target] += $preparedData[$source][$month];
-    				$row[22] += $preparedData[$source][$month];
+    				foreach ($months as $month) {
+    					$row[$target] += $preparedData[$source][$month];
+    					$row[22] += $preparedData[$source][$month];
+    				}
     			}
     			if ($row[$target] == 0) {
     				$row[$target] = "";
     			}
     		}
-            $result[$plan->person_id] = $row;
+            $value[$plan->person_id] = $row;
         }
-        return $result;
+        return $value;
     }
 
 } 

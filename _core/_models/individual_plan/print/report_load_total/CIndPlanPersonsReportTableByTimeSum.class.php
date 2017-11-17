@@ -50,8 +50,6 @@ class CIndPlanPersonsReportTableByTimeSum extends CAbstractPrintClassField {
                 }
             }
         }
-        $month = $bean->getItem("month");
-        $month = $month->getFirstItem();
         $result = array();
         /**
          * @var $plan CIndPlanPersonLoad
@@ -123,7 +121,7 @@ class CIndPlanPersonsReportTableByTimeSum extends CAbstractPrintClassField {
                 }
             }
             if ($plan->isSeparateContract()) {
-            	if (in_array($month, array(
+            	if (in_array($months, array(
             			2, 3, 4, 5, 6
             	))) {
             		foreach ($preparedData as $preparedRow) {
@@ -160,7 +158,7 @@ class CIndPlanPersonsReportTableByTimeSum extends CAbstractPrintClassField {
             			22 => 12 //асп
             	);
             } else {
-            	if (in_array($month, array(
+            	if (in_array($months, array(
             			2, 3, 4, 5, 6
             	))) {
             		foreach ($preparedData as $preparedRow) {
@@ -196,7 +194,9 @@ class CIndPlanPersonsReportTableByTimeSum extends CAbstractPrintClassField {
     				$r[$target] = 0;
     			}
     			if ($source != -1) {
-    				$r[$target] += $preparedData[$source][$month];
+    				foreach ($months as $month) {
+    					$r[$target] += $preparedData[$source][$month];
+    				}
     			}
             }
             if (!$plan->isSeparateContract()) {

@@ -50,8 +50,7 @@ class CIndPlanPersonsReportTableTotal extends CAbstractPrintClassField {
                 }
             }
         }
-        $month = $bean->getItem("month");
-        $month = $month->getFirstItem();
+        $months = $bean->getItem("months");
         $result = array();
         /**
          * @var $plan CIndPlanPersonLoad
@@ -88,6 +87,13 @@ class CIndPlanPersonsReportTableTotal extends CAbstractPrintClassField {
             }
             $row[1] = $plannedForYear;
             $rows = array(
+            	/**
+            	 * Столбцы для изменений
+            	 *
+            	 * Номер слева соответствует номеру столбца в шаблоне, начиная с 0
+            	 * Номер справа соответствует порядковому номеру нагрузки из справочника, начиная с 0
+            	 * -1 означает, что столбец будет пропущен
+            	 */
                 2 => 0, //лекц
                 3 => 1, //прак
                 4 => 2, //лаб
@@ -103,7 +109,7 @@ class CIndPlanPersonsReportTableTotal extends CAbstractPrintClassField {
                 14 => 9, //дип. проект.
                 15 => 10, //ГЭК
                 16 => 16, //КСР
-                17 => -1,
+                17 => 13, //занятия с аспирантами
             	18 => 12 //асп
             );
             foreach ($rows as $target=>$source) {
@@ -111,7 +117,9 @@ class CIndPlanPersonsReportTableTotal extends CAbstractPrintClassField {
                     $row[$target] = 0;
                 }
                 if ($source != -1) {
-                    $row[$target] += $preparedData[$source][$month];
+                	foreach ($months as $month) {
+                		$row[$target] += $preparedData[$source][$month];
+                	}
                 }
                 if ($row[$target] == 0) {
                 	$row[$target] = "";
@@ -135,8 +143,8 @@ class CIndPlanPersonsReportTableTotal extends CAbstractPrintClassField {
     			$sum[$i] += $item[$i];
     		}
     	}
-    	$total = array($sum);
-        return $total;
+    	$value = array($sum);
+        return $value;
     }
 
 } 
