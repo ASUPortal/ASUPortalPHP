@@ -50,18 +50,17 @@ class CIndPlanPersonsReportTableByTime extends CAbstractPrintClassField {
                 }
             }
         }
-        $month = $bean->getItem("month");
-        $month = $month->getFirstItem();
-        $result = array();
+        $months = $bean->getItem("months");
+        $value = array();
         /**
          * @var $plan CIndPlanPersonLoad
          */
         foreach ($targetPlans->getItems() as $plan) {
             $row = array();
-            if (array_key_exists($plan->person_id, $result)) {
-                $row = $result[$plan->person_id];
+            if (array_key_exists($plan->person_id, $value)) {
+                $row = $value[$plan->person_id];
             }
-            $row[0] = count($result) + 1;
+            $row[0] = count($value) + 1;
             $row[1] = "";
             if (!is_null($plan->person)) {
                 if (!is_null($plan->person->getPost())) {
@@ -160,6 +159,13 @@ class CIndPlanPersonsReportTableByTime extends CAbstractPrintClassField {
             	$row[24] = $resultForYearContract;
             	
             	$rows = array(
+            			/**
+            			 * Столбцы для изменений
+            			 *
+            			 * Номер слева соответствует номеру столбца в шаблоне, начиная с 0
+            			 * Номер справа соответствует порядковому номеру нагрузки из справочника, начиная с 0
+            			 * -1 означает, что столбец будет пропущен
+            			 */
             			6 => 0, //лекц
             			7 => 1, //прак
             			8 => 2, //лаб
@@ -175,7 +181,7 @@ class CIndPlanPersonsReportTableByTime extends CAbstractPrintClassField {
             			18 => 9, //дип. проект.
             			19 => 10, //ГЭК
             			20 => 16, //КСР
-            			21 => -1,
+            			21 => 13, //занятия с аспирантами
             			22 => 12 //асп
             	);
             } else {
@@ -188,23 +194,31 @@ class CIndPlanPersonsReportTableByTime extends CAbstractPrintClassField {
             	}
             	$row[4] = $plannedForYear;
             	$rows = array(
-            			5 => 0, //лекц
-            			6 => 1, //прак
-            			7 => 2, //лаб
-            			8 => -1,
-            			9 => 4, //кп
-            			10 => 8, //коллоквиум
-            			11 => 14, //ргр
-            			12 => 3, //конс
-            			13 => 15, //уч. прак.
-            			14 => 7, //произв. прак.
-            			15 => 5, //зач
-            			16 => 6, //экз
-            			17 => 9, //дип. проект.
-            			18 => 10, //ГЭК
-            			19 => 16, //КСР
-            			20 => -1,
-            			21 => 12 //асп
+            			/**
+            			 * Столбцы для изменений
+            			 *
+            			 * Номер слева соответствует номеру столбца в шаблоне, начиная с 0
+            			 * Номер справа соответствует порядковому номеру нагрузки из справочника, начиная с 0
+            			 * -1 означает, что столбец будет пропущен
+            			 */
+            			5 => -1,
+            			6 => 0, //лекц
+            			7 => 1, //прак
+            			8 => 2, //лаб
+            			9 => -1,
+            			10 => 4, //кп
+            			11 => 8, //коллоквиум
+            			12 => 14, //ргр
+            			13 => 3, //конс
+            			14 => 15, //уч. прак.
+            			15 => 7, //произв. прак.
+            			16 => 5, //зач
+            			17 => 6, //экз
+            			18 => 9, //дип. проект.
+            			19 => 10, //ГЭК
+            			20 => 16, //КСР
+            			21 => 13, //занятия с аспирантами
+            			22 => 12 //асп
             	);
             }
             foreach ($rows as $target=>$source) {
@@ -212,20 +226,22 @@ class CIndPlanPersonsReportTableByTime extends CAbstractPrintClassField {
     				$row[$target] = 0;
     			}
     			if ($source != -1) {
-    				$row[$target] += $preparedData[$source][$month];
+    				foreach ($months as $month) {
+    					$row[$target] += $preparedData[$source][$month];
+    				}
     			}
             }
             if (!$plan->isSeparateContract()) {
-            	if (!array_key_exists(22, $row)) {
-            		$row[22] = 0;
+            	if (!array_key_exists(23, $row)) {
+            		$row[23] = 0;
             	}
-            	for ($i = 5; $i <= 21; $i++) {
-            		$row[22] += $row[$i];
+            	for ($i = 6; $i <= 22; $i++) {
+            		$row[23] += $row[$i];
             	}
             }
-            $result[$plan->person_id] = $row;
+            $value[$plan->person_id] = $row;
         }
-        return $result;
+        return $value;
     }
 
 } 

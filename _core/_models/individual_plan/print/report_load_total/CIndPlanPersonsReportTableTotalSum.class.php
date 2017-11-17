@@ -50,8 +50,7 @@ class CIndPlanPersonsReportTableTotalSum extends CAbstractPrintClassField {
                 }
             }
         }
-        $month = $bean->getItem("month");
-        $month = $month->getFirstItem();
+        $months = $bean->getItem("months");
         $result = array();
         /**
          * @var $plan CIndPlanPersonLoad
@@ -79,7 +78,7 @@ class CIndPlanPersonsReportTableTotalSum extends CAbstractPrintClassField {
                     $preparedData[] = $r;
                 }
             }
-            if (in_array($month, array(
+            if (in_array($months, array(
                 2, 3, 4, 5, 6
             ))) {
                 foreach ($preparedData as $preparedRow) {
@@ -114,7 +113,9 @@ class CIndPlanPersonsReportTableTotalSum extends CAbstractPrintClassField {
                     $row[$target] = 0;
                 }
                 if ($source != -1) {
-                    $row[$target] += $preparedData[$source][$month];
+                	foreach ($months as $month) {
+                		$row[$target] += $preparedData[$source][$month];
+                	}
                 }
                 if ($row[$target] == 0) {
                 	$row[$target] = "";
