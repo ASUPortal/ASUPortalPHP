@@ -87,7 +87,15 @@ class CActionsMenuRenderer {
         self::$childContainers++;
     }
     private function renderMenuItemDefault(array $item) {
-        echo '<a href="'.$item["link"].'">';
+        if (array_key_exists("attributes", $item)) {
+            $attributes = array();
+            foreach ($item["attributes"] as $key=>$value) {
+                $attributes[] = $key.'='."'".$value."'";
+            }
+            echo '<a href="'.$item["link"].'" '.implode(" ", $attributes).'>';
+        } else {
+            echo '<a href="'.$item["link"].'">';
+        }
         echo '<div><img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'"></div>';
         echo $item['title'];
         echo '</a>';

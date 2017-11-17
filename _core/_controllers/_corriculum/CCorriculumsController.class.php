@@ -150,6 +150,29 @@ class CCorriculumsController extends CBaseController {
         				"action" => "selectCycle"
         			)
         		)
+        	),
+        	array(
+        		"title" => "Аналитика",
+        		"link" => "#",
+        		"icon" => "mimetypes/x-office-spreadsheet.png",
+        		"child" => array(
+        			array(
+        				"title" => "Список нереализованных компетенций",
+        				"icon" => "actions/edit-copy.png",
+        				"link" => "#listUnrealizedCompetentions",
+        				"attributes" => array(
+        					"data-toggle" => "modal"
+        				)
+        			),
+        			array(
+        				"title" => "Список дисциплин без компетенций",
+        				"icon" => "actions/edit-copy.png",
+        				"link" => "#listDisciplinesWithOutCompetentions",
+        				"attributes" => array(
+        					"data-toggle" => "modal"
+        				)
+        			)
+        		)
         	)
         ));
         /**
@@ -473,6 +496,24 @@ class CCorriculumsController extends CBaseController {
         			foreach ($discipline->labors->getItems() as $labor) {
         				$labor->remove();
         			}
+        			/**
+        			 * Удаляем рабочие программы из дисциплин
+        			 */
+        			foreach ($discipline->plans->getItems() as $plan) {
+        				$plan->remove();
+        			}
+        			/**
+        			 * Удаляем дочерние дисциплины из родительской
+        			 */
+        			foreach ($discipline->children->getItems() as $child) {
+        				/**
+        				 * Удаляем рабочие программы из дочерних дисциплин
+        				 */
+        				foreach ($child->plans->getItems() as $plan) {
+        					$plan->remove();
+        				}
+        				$child->remove();
+        			}
         			$discipline->remove();
         		}
         		$cycle->remove();
@@ -535,6 +576,18 @@ class CCorriculumsController extends CBaseController {
     			$corriculum = $discipline->cycle->corriculum_id;
     			foreach ($items as $id){
     				$discipline = CCorriculumsManager::getDiscipline($id);
+    				/**
+    				 * Удаляем рабочие программы из дисциплины
+    				 */
+    				foreach ($discipline->plans->getItems() as $plan) {
+    					$plan->remove();
+    				}
+    				/**
+    				 * Удаляем дочерние дисциплины из родительской
+    				 */
+    				foreach ($discipline->children->getItems() as $child) {
+    					$child->remove();
+    				}
     				$discipline->remove();
     			}
     		}

@@ -93,7 +93,13 @@ class CStaffService {
     public static function getActiveOrdersListForYear(CPerson $person, CTerm $year) {
         $result = array();
         foreach (CStaffService::getActiveOrdersForYear($person, $year)->getItems() as $order) {
-            $result[$order->getId()] = "Приказ № ".$order->num_order." от ".$order->date_order." (".$order->rate.")";
+            $typeMoney = "";
+            if ($order->type_money == 2) {
+                $typeMoney = "Б";
+            } elseif ($order->type_money == 3) {
+                $typeMoney = "К";
+            }
+            $result[$order->getId()] = "Приказ № ".$order->num_order." от ".$order->date_order." (".$order->rate.") ".$typeMoney;
         }
         return $result;
     }

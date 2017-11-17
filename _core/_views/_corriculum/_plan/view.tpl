@@ -24,3 +24,7 @@
     </tr>
 </table>
 {/block}
+
+{block name="asu_right"}
+    {CHtml::displayActionsMenu($_actions_menu)}
+{/block}

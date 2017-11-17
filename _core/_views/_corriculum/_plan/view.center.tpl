@@ -68,22 +68,8 @@
 	</li>
 	<li>
         <a href="workplans.php?action=index&corriculumId={$corriculum->id}"><center>
-	        <img src="{$web_root}images/{$icon_theme}/32x32/actions/edit-copy.png"><br>
+	        <img src="{$web_root}images/{$icon_theme}/32x32/actions/edit-select-all.png"><br>
 	        Список рабочих программ<br>с авторами, статусами<br>и комментариями
-	    </center></a>
-	</li>
-	<li>
-        <a href="#listUnrealizedCompetentions" data-toggle="modal"><center>
-	        <img src="{$web_root}images/{$icon_theme}/32x32/actions/edit-copy.png"><br>
-	        Список нереализованных<br>компетенций
-	        <br>&nbsp;
-	    </center></a>
-	</li>
-	<li>
-        <a href="#listDisciplinesWithOutCompetentions" data-toggle="modal"><center>
-	        <img src="{$web_root}images/{$icon_theme}/32x32/actions/edit-copy.png"><br>
-	        Список дисциплин<br>без компетенций
-	        <br>&nbsp;
 	    </center></a>
 	</li>
 	<li>

@@ -13,7 +13,13 @@ class CSearchCatalogOrdersIndPlan extends CAbstractSearchCatalog{
         $result = array();
         $order = CStaffManager::getOrder($id);
         if (!is_null($order)) {
-            $result[$order->getId()] = "Приказ № ".$order->num_order." от ".$order->date_order." (".$order->rate.")";
+            $typeMoney = "";
+            if ($order->type_money == 2) {
+                $typeMoney = "Б";
+            } elseif ($order->type_money == 3) {
+                $typeMoney = "К";
+            }
+            $result[$order->getId()] = "Приказ № ".$order->num_order." от ".$order->date_order." (".$order->rate.") ".$typeMoney;
         }
         return $result;
     }
