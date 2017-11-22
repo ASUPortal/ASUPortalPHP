@@ -1,11 +1,11 @@
-<div id="listUnrealizedCompetentions" class="modal hide fade">
+<div id="listUnrealizedCompetentionsCorriculum" class="modal hide fade">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h3>Список нереализованных компетенций</h3>
+		<h3>Список нереализованных компетенций учебного плана</h3>
 	</div>
 	<div class="modal-body">
-		{foreach $unrealizedCompetentions as $unrealizedCompetention}
-        	<li>{$unrealizedCompetention}</li>
+		{foreach $unrealizedCompetentionsCorriculum as $competention}
+        	<li>{$competention}</li>
         {/foreach}
 	</div>
 	<div class="modal-footer">
@@ -13,19 +13,103 @@
 	</div>
 </div>
 
-<div id="listDisciplinesWithOutCompetentions" class="modal hide fade">
+<div id="listUnrealizedCompetentionsWorkPlans" class="modal hide fade">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h3>Список дисциплин без компетенций</h3>
+		<h3>Список нереализованных компетенций рабочих программ</h3>
 	</div>
 	<div class="modal-body">
-		{foreach $disciplinesWithOutCompetentions as $disciplines}
+		{foreach $unrealizedCompetentionsWorkPlans as $competentions}
+        	{if (is_string($competentions))}
+        		<b>{$competentions}</b><br><br>
+        	{/if}
+        	{if (is_array($competentions))}
+        		{foreach $competentions as $competention}
+        			<li>{$competention}</li>
+        		{/foreach}
+        		<br>
+        	{/if}
+        {/foreach}
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+	</div>
+</div>
+
+<div id="listDisciplinesWithOutCompetentionsCorriculum" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Список дисциплин без компетенций УП</h3>
+	</div>
+	<div class="modal-body">
+		{foreach $disciplinesWithOutCompetentionsCorriculum as $disciplines}
         	{if (is_string($disciplines))}
         		<b>{$disciplines}</b><br><br>
         	{/if}
         	{if (is_array($disciplines))}
         		{foreach $disciplines as $discipline}
         			<li>{$discipline}</li>
+        		{/foreach}
+        		<br>
+        	{/if}
+        {/foreach}
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+	</div>
+</div>
+
+<div id="listDisciplinesWithOutCompetentionsWorkPlans" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Список дисциплин без компетенций РП</h3>
+	</div>
+	<div class="modal-body">
+		{foreach $disciplinesWithOutCompetentionsWorkPlans as $discipline}
+        	<li>{$discipline}</li>
+        {/foreach}
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+	</div>
+</div>
+
+<div id="listCorriculumCompetentionsWithoutQES" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Список компетенций без ЗУН УП</h3>
+	</div>
+	<div class="modal-body">
+		{foreach $corriculumCompetentionsWithoutQES as $competentions}
+        	{if (is_string($competentions))}
+        		<b>{$competentions}</b><br><br>
+        	{/if}
+        	{if (is_array($competentions))}
+        		{foreach $competentions as $competention}
+        			<li>{$competention}</li>
+        		{/foreach}
+        		<br>
+        	{/if}
+        {/foreach}
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+	</div>
+</div>
+
+<div id="listWorkPlansCompetentionsWithoutQES" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Список компетенций без ЗУН РП УП</h3>
+	</div>
+	<div class="modal-body">
+		{foreach $workPlansCompetentionsWithoutQES as $competentions}
+        	{if (is_string($competentions))}
+        		<b>{$competentions}</b><br><br>
+        	{/if}
+        	{if (is_array($competentions))}
+        		{foreach $competentions as $competention}
+        			<li>{$competention}</li>
         		{/foreach}
         		<br>
         	{/if}
