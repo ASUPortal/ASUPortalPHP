@@ -178,7 +178,7 @@ class CIndividualPlanLoadService {
         foreach ($load->orders->getItems() as $order) {
             // если приказ активный, значит, что сегодня между началом и концом срока действия приказа
             if ($order->isActive()) {
-                $rate = $order->rate;
+                $rate += $order->rate;
             }
         }
         $totalHours = $rate*$hours;
