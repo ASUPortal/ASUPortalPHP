@@ -857,36 +857,38 @@ class CWorkPlan extends CActiveModel {
     			 * @var CWorkPlanContentSectionLoad $load
     			*/
     			foreach ($section->loads->getItems() as $load) {
-    				$newLoad = $load->copy();
-    				$newLoad->section_id = $newSection->getId();
-    				$newLoad->term_id = $termsMapping[$load->term_id];
-    				$newLoad->save();
-    				/**
-    				 * Копируем темы из нагрузки
-    				 * @var CWorkPlanContentSectionLoadTopic $topic
-    				*/
-    				foreach ($load->topics->getItems() as $topic) {
-    					$newTopic = $topic->copy();
-    					$newTopic->load_id = $newLoad->getId();
-    					$newTopic->save();
-    				}
-    				/**
-    				 * Копируем технологии из нагрузки
-    				 * @var CWorkPlanContentSectionLoadTechnology $technologie
-    				 */
-    				foreach ($load->technologies->getItems() as $technologie) {
-    					$newTechnologie = $technologie->copy();
-    					$newTechnologie->load_id = $newLoad->getId();
-    					$newTechnologie->save();
-    				}
-    				/**
-    				 * Копируем вопросы самоподготовки из нагрузки
-    				 * @var CWorkPlanSelfEducationBlock $selfEducation
-    				 */
-    				foreach ($load->selfEducations->getItems() as $selfEducation) {
-    					$newSelfEducation = $selfEducation->copy();
-    					$newSelfEducation->load_id = $newLoad->getId();
-    					$newSelfEducation->save();
+    				if ($termsMapping[$load->term_id] != "") {
+    					$newLoad = $load->copy();
+    					$newLoad->section_id = $newSection->getId();
+    					$newLoad->term_id = $termsMapping[$load->term_id];
+    					$newLoad->save();
+    					/**
+    					 * Копируем темы из нагрузки
+    					 * @var CWorkPlanContentSectionLoadTopic $topic
+    					*/
+    					foreach ($load->topics->getItems() as $topic) {
+    						$newTopic = $topic->copy();
+    						$newTopic->load_id = $newLoad->getId();
+    						$newTopic->save();
+    					}
+    					/**
+    					 * Копируем технологии из нагрузки
+    					 * @var CWorkPlanContentSectionLoadTechnology $technologie
+    					 */
+    					foreach ($load->technologies->getItems() as $technologie) {
+    						$newTechnologie = $technologie->copy();
+    						$newTechnologie->load_id = $newLoad->getId();
+    						$newTechnologie->save();
+    					}
+    					/**
+    					 * Копируем вопросы самоподготовки из нагрузки
+    					 * @var CWorkPlanSelfEducationBlock $selfEducation
+    					 */
+    					foreach ($load->selfEducations->getItems() as $selfEducation) {
+    						$newSelfEducation = $selfEducation->copy();
+    						$newSelfEducation->load_id = $newLoad->getId();
+    						$newSelfEducation->save();
+    					}
     				}
     			}
     			/**

@@ -646,6 +646,24 @@ class CCorriculumsController extends CBaseController {
         				foreach ($discipline->labors->getItems() as $labor) {
         					$labor->remove();
         				}
+        				/**
+        				 * Удаляем рабочие программы из дисциплин
+        				 */
+        				foreach ($discipline->plans->getItems() as $plan) {
+        					$plan->remove();
+        				}
+        				/**
+        				 * Удаляем дочерние дисциплины из родительской
+        				 */
+        				foreach ($discipline->children->getItems() as $child) {
+        					/**
+        					 * Удаляем рабочие программы из дочерних дисциплин
+        					 */
+        					foreach ($child->plans->getItems() as $plan) {
+        						$plan->remove();
+        					}
+        					$child->remove();
+        				}
         				$discipline->remove();
         			}
         			$cycle->remove();
