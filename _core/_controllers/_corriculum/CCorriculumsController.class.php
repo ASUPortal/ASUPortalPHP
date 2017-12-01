@@ -203,6 +203,14 @@ class CCorriculumsController extends CBaseController {
         				"attributes" => array(
         					"data-toggle" => "modal"
         				)
+        			),
+        			array(
+        				"title" => "Список рабочих программ с ошибками семестров в нагрузке",
+        				"icon" => "actions/edit-copy.png",
+        				"link" => "#listWorkPlansWithErrorLoadTerms",
+        				"attributes" => array(
+        					"data-toggle" => "modal"
+        				)
         			)
         		)
         	)
@@ -226,7 +234,7 @@ class CCorriculumsController extends CBaseController {
         $this->setData("template", $template);
         
         /**
-         * Список нереализованных компетенций и дисциплин без компетенций
+         * Списки для аналитики
          */
         // специальность
         $direction = $corriculum->direction;
@@ -241,6 +249,7 @@ class CCorriculumsController extends CBaseController {
         foreach ($query->execute()->getItems() as $item) {
         	$competentions[$item["id"]] = $item["name"];
         }
+        
         // список нереализованных компетенций учебного плана
         $unrealizedCompetentionsCorriculum = array();
         
@@ -253,11 +262,20 @@ class CCorriculumsController extends CBaseController {
         // список дисциплин без компетенций рабочих программ
         $disciplinesWithOutCompetentionsWorkPlans = array();
         
+        // разница между компетенциями учебного плана и компетенциями рабочих программ
+        $differenceCorriculumCompetentionsAndWorkPlanCompetentions = array();
+        
+        // отличия компетенций рабочих программ от учебного плана
+        $differenceCorriculumCompetentionsAndWorkPlanCompetentions = array();
+        
         // список компетенций без ЗУН учебного плана
         $corriculumCompetentionsWithoutQES = array();
         
         // список компетенций без ЗУН рабочих программ учебного плана
         $workPlansCompetentionsWithoutQES = array();
+        
+        // рабочие программы с ошибками семестров в нагрузке
+        $workPlansWithErrorLoadTerms = array();
         
         // все дисциплины учебного плана
         $allDisciplines = new CArrayList();
@@ -278,13 +296,14 @@ class CCorriculumsController extends CBaseController {
         		$disciplinesWithOutCompetentionsCorriculum[] = $disciplinesValues;
         	}
         }
-        
-        $competentionsValues = array();
+        foreach ($allDisciplines->getItems() as $discipline) {
+        	
+        }
         foreach ($competentions as $competentionId=>$competention) {
         	$disciplinesWithCompetentions = array();
         	foreach ($allDisciplines->getItems() as $discipline) {
         		$disciplineName = $discipline->discipline->getValue();
-        		$competentionValues = array();
+        		$compValues = array();
         		// определяем дисциплины с компетенциями в учебном плане
         		foreach ($discipline->competentions->getItems() as $comp) {
         			if (!is_null($comp->competention)) {
@@ -292,53 +311,82 @@ class CCorriculumsController extends CBaseController {
         					$disciplinesWithCompetentions[] = $discipline->discipline->getValue();
         				}
         				if ($comp->knowledges->isEmpty() or $comp->skills->isEmpty() or $comp->experiences->isEmpty()) {
-        					$competentionValues[] = $comp->competention->getValue();;
+        					$compValues[] = $comp->competention->getValue();
         				}
         			}
         		}
-        		if (!empty($competentionValues)) {
+        		if (!empty($compValues)) {
         			$corriculumCompetentionsWithoutQES[] = $disciplineName;
-        			$corriculumCompetentionsWithoutQES[] = $competentionValues;
+        			$corriculumCompetentionsWithoutQES[] = $compValues;
         		}
         	}
         	if (empty($disciplinesWithCompetentions)) {
         		$unrealizedCompetentionsCorriculum[] = $competention;
         	}
         }
-        // определяем дисциплины с компетенциями в рабочих программах
+        
         foreach ($allDisciplines->getItems() as $discipline) {
+        	$disciplineName = $discipline->discipline->getValue();
+        	$compValues = array();
+        	$disciplineCompetentions = array();
+        	// определяем компетенции дисциплин в учебном плане
+        	foreach ($discipline->competentions->getItems() as $comp) {
+        		if (!is_null($comp->competention)) {
+        			$disciplineCompetentions[$comp->competention->getId()] = $comp->competention->getValue();
+        		}
+        	}
+        	// определяем дисциплины с компетенциями в рабочих программах
         	foreach ($discipline->plans->getItems() as $plan) {
-        		$planName = $plan->title_display;
-        		$competentionValues = array();
-        		foreach ($competentions as $competentionId=>$competention) {
-        			$isCompetention = false;
-        			$competentionWithoutQES = array();
-        			foreach ($plan->competentions->getItems() as $comp) {
-        				if (!is_null($comp)) {
-        					if ($comp->competention->getId() == $competentionId) {
-        						$isCompetention = true;
+        		if (!empty($disciplineCompetentions)) {
+        			$planName = $plan->title_display;
+        			$competentionValues = array();
+        			foreach ($disciplineCompetentions as $competentionId=>$competention) {
+        				$isCompetention = false;
+        				$competentionWithoutQES = array();
+        				foreach ($plan->competentions->getItems() as $comp) {
+        					if (!is_null($comp)) {
+        						if ($comp->competention->getId() == $competentionId) {
+        							$isCompetention = true;
+        						}
+        						if ($comp->knowledges->isEmpty() or $comp->skills->isEmpty() or $comp->experiences->isEmpty()) {
+        							$competentionWithoutQES[] = $comp->competention->getValue();
+        						}
         					}
-        					if ($comp->knowledges->isEmpty() or $comp->skills->isEmpty() or $comp->experiences->isEmpty()) {
-        						$competentionWithoutQES[] = $comp->competention->getValue();
+        				}
+        				if (!$isCompetention) {
+        					$competentionValues[] = $competention;
+        				}
+        			}
+        			if (!empty($competentionWithoutQES)) {
+        				$workPlansCompetentionsWithoutQES[$plan->getId()] = $planName;
+        				$workPlansCompetentionsWithoutQES[] = $competentionWithoutQES;
+        			}
+        			if (!empty($competentionValues)) {
+        				$unrealizedCompetentionsWorkPlans[$plan->getId()] = $planName;
+        				$unrealizedCompetentionsWorkPlans[] = $competentionValues;
+        			}
+        			if ($plan->competentions->isEmpty()) {
+        				$disciplinesWithOutCompetentionsWorkPlans[] = $discipline->discipline->getValue();
+        			}
+        		}
+        
+        		$termsMapping = array();
+        		foreach ($plan->terms->getItems() as $term) {
+        			$termsMapping[$term->getId()] = $term->getId();
+        		}
+        
+        		foreach ($plan->categories->getItems() as $categorie) {
+        			foreach ($categorie->sections->getItems() as $section) {
+        				foreach ($section->loads->getItems() as $load) {
+        					if (!array_key_exists($load->term_id, $termsMapping)) {
+        						$workPlansWithErrorLoadTerms[$plan->getId()] = $planName;
         					}
         				}
         			}
-        			if (!$isCompetention) {
-        				$competentionValues[] = $competention;
-        			}
-        			if (!empty($competentionWithoutQES)) {
-        				$workPlansCompetentionsWithoutQES[] = $planName;
-        				$workPlansCompetentionsWithoutQES[] = $competentionWithoutQES;
-        			}
         		}
-        		if (!empty($competentionValues)) {
-        			$unrealizedCompetentionsWorkPlans[] = $planName;
-        			$unrealizedCompetentionsWorkPlans[] = $competentionValues;
-        		}
-        		if ($plan->competentions->isEmpty()) {
-        			$disciplinesWithOutCompetentionsWorkPlans[] = $discipline->discipline->getValue();
-        		}
+        		 
         	}
+        
         }
         /**
          * Передаем данные представлению
@@ -349,6 +397,7 @@ class CCorriculumsController extends CBaseController {
         $this->setData("disciplinesWithOutCompetentionsWorkPlans", $disciplinesWithOutCompetentionsWorkPlans);
         $this->setData("corriculumCompetentionsWithoutQES", $corriculumCompetentionsWithoutQES);
         $this->setData("workPlansCompetentionsWithoutQES", $workPlansCompetentionsWithoutQES);
+        $this->setData("workPlansWithErrorLoadTerms", $workPlansWithErrorLoadTerms);
         $this->addJSInclude(JQUERY_UI_JS_PATH);
         $this->addCSSInclude(JQUERY_UI_CSS_PATH);
         $this->setData("labors", $labors);

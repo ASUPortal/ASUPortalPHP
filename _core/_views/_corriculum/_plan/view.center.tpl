@@ -19,9 +19,9 @@
 		<h3>Список нереализованных компетенций рабочих программ</h3>
 	</div>
 	<div class="modal-body">
-		{foreach $unrealizedCompetentionsWorkPlans as $competentions}
+		{foreach $unrealizedCompetentionsWorkPlans as $planId=>$competentions}
         	{if (is_string($competentions))}
-        		<b>{$competentions}</b><br><br>
+        		<b><a href="../../_modules/_corriculum/workplans.php?action=edit&id={$planId}" target="_blank">{$competentions}</a></b><br><br>
         	{/if}
         	{if (is_array($competentions))}
         		{foreach $competentions as $competention}
@@ -103,9 +103,9 @@
 		<h3>Список компетенций без ЗУН РП УП</h3>
 	</div>
 	<div class="modal-body">
-		{foreach $workPlansCompetentionsWithoutQES as $competentions}
+		{foreach $workPlansCompetentionsWithoutQES as $planId=>$competentions}
         	{if (is_string($competentions))}
-        		<b>{$competentions}</b><br><br>
+        		<b><a href="../../_modules/_corriculum/workplans.php?action=edit&id={$planId}" target="_blank">{$competentions}</a></b><br><br>
         	{/if}
         	{if (is_array($competentions))}
         		{foreach $competentions as $competention}
@@ -113,6 +113,21 @@
         		{/foreach}
         		<br>
         	{/if}
+        {/foreach}
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+	</div>
+</div>
+
+<div id="listWorkPlansWithErrorLoadTerms" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Список рабочих программ с ошибками семестров в нагрузке</h3>
+	</div>
+	<div class="modal-body">
+		{foreach $workPlansWithErrorLoadTerms as $planId=>$planName}
+        	<li><a href="../../_modules/_corriculum/workplans.php?action=edit&id={$planId}" target="_blank">{$planName}</a></li>
         {/foreach}
 	</div>
 	<div class="modal-footer">

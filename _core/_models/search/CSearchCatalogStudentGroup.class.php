@@ -13,12 +13,17 @@ class CSearchCatalogStudentGroup extends CAbstractSearchCatalog{
         $result = array();
         // выбор студенческих групп
         $query = new CQuery();
-        $query->select("distinct(gr.id) as id, gr.name as name")
+        $query->select("distinct(gr.id) as id, gr.name as name, gr.year_id as year")
             ->from(TABLE_STUDENT_GROUPS." as gr")
             ->condition("gr.name like '%".$lookup."%'")
             ->limit(0, 10);
         foreach ($query->execute()->getItems() as $item) {
-            $result[$item["id"]] = $item["name"];
+        	$year = CTaxonomyManager::getYear($item["year"]);
+        	if (!is_null($year)) {
+                $result[$item["id"]] = $item["name"]." (".$year->getValue().")";
+            } else {
+                $result[$item["id"]] = $item["name"];
+            }
         }
         return $result;
     }
@@ -29,7 +34,12 @@ class CSearchCatalogStudentGroup extends CAbstractSearchCatalog{
         // группы студентов
         $group = CStaffManager::getStudentGroup($id);
         if (!is_null($group)) {
-            $result[$group->getId()] = $group->getName();
+        	$year = CTaxonomyManager::getYear($group->year_id);
+        	if (!is_null($year)) {
+                $result[$group->getId()] = $group->getName()." (".$year->getValue().")";
+            } else {
+                $result[$group->getId()] = $group->getName();
+            }
         }
         return $result;
     }
@@ -39,7 +49,12 @@ class CSearchCatalogStudentGroup extends CAbstractSearchCatalog{
         $result = array();
         // выбор студенческих групп
         foreach (CStaffManager::getAllStudentGroups()->getItems() as $group) {
-            $result[$group->getId()] = $group->getName();
+        	$year = CTaxonomyManager::getYear($group->year_id);
+        	if (!is_null($year)) {
+                $result[$group->getId()] = $group->getName()." (".$year->getValue().")";
+            } else {
+                $result[$group->getId()] = $group->getName();
+            }
         }
         return $result;
     }
