@@ -14,7 +14,7 @@ class CSearchCatalogWorkPlanTerms extends CAbstractSearchCatalog{
         $query->select("term.id as id, disc_term.title as name")
             ->from(TABLE_WORK_PLAN_TERMS." as term")
             ->innerJoin(TABLE_CORRICULUM_DISCIPLINE_SECTIONS." as disc_term", "disc_term.id = term.number")
-            ->condition("disc_term.title like '%".$lookup."%' AND term.plan_id=".CRequest::getInt("plan_id"))
+            ->condition("disc_term.title like '%".$lookup."%' AND term.plan_id=".CRequest::getInt("plan_id").' AND term._deleted=0')
             ->limit(0, 10);
         foreach ($query->execute()->getItems() as $item) {
             $result[$item["id"]] = $item["name"];
@@ -41,7 +41,7 @@ class CSearchCatalogWorkPlanTerms extends CAbstractSearchCatalog{
         $query->select("term.id as id, disc_term.title as name")
             ->from(TABLE_WORK_PLAN_TERMS." as term")
             ->innerJoin(TABLE_CORRICULUM_DISCIPLINE_SECTIONS." as disc_term", "disc_term.id = term.number")
-            ->condition("term.plan_id=".CRequest::getInt("plan_id"))
+            ->condition("term.plan_id=".CRequest::getInt("plan_id")." AND term._deleted=0")
             ->limit(0, 10);
         foreach ($query->execute()->getItems() as $item) {
             $result[$item["id"]] = $item["name"];
