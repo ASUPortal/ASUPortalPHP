@@ -294,6 +294,12 @@ class CStudyLoadController extends CBaseController {
     	$kindTypes[] = CStudyLoadWorkTypeConstants::LABOR_LAB_WORK;
     	$this->setData("kindTypes", $kindTypes);
     	
+    	$accessLevel = false;
+    	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+    		$accessLevel = true;
+    	}
+    	$this->setData("accessLevel", $accessLevel);
+    	
     	$this->renderView("_study_loads/editLoads.tpl");
     }
     public function actionEditLoadsByType() {
@@ -378,6 +384,13 @@ class CStudyLoadController extends CBaseController {
                 "icon" => "actions/list-add.png"
             )
     	));
+    	
+    	$accessLevel = false;
+    	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+    		$accessLevel = true;
+    	}
+    	$this->setData("accessLevel", $accessLevel);
+    	
     	$this->renderView("_study_loads/form.editLoads.tpl");
     }
     /**

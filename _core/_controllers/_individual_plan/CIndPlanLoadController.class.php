@@ -178,6 +178,11 @@ class CIndPlanLoadController extends CBaseController{
         $this->setData("years", $years);
         $this->setData("selectedYear", $selectedYear);
         $this->setData("isAll", $isAll);
+        $accessLevel = false;
+        if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+            $accessLevel = true;
+        }
+        $this->setData("accessLevel", $accessLevel);
         $this->renderView("_individual_plan/load/viewLoads.tpl");
     }
     public function actionView() {
@@ -225,6 +230,11 @@ class CIndPlanLoadController extends CBaseController{
         );
         $this->setData("load", $load);
         $this->setData("year", $year);
+        $accessLevel = false;
+        if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+            $accessLevel = true;
+        }
+        $this->setData("accessLevel", $accessLevel);
         $this->renderView("_individual_plan/load/add.tpl");
     }
     public function actionEdit() {
@@ -239,6 +249,11 @@ class CIndPlanLoadController extends CBaseController{
         );
         $this->setData("load", $load);
         $this->setData("year", $load->year_id);
+        $accessLevel = false;
+        if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+            $accessLevel = true;
+        }
+        $this->setData("accessLevel", $accessLevel);
         $this->renderView("_individual_plan/load/edit.tpl");
     }
     public function actionSave() {
@@ -256,6 +271,11 @@ class CIndPlanLoadController extends CBaseController{
             return true;
         }
         $this->setData("load", $load);
+        $accessLevel = false;
+        if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+            $accessLevel = true;
+        }
+        $this->setData("accessLevel", $accessLevel);
         $this->renderView("_individual_plan/load/add.tpl");
     }
     public function actionDelete() {

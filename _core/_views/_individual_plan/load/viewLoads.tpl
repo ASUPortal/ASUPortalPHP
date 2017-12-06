@@ -55,7 +55,7 @@
 
         <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
-                {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+                {if ($accessLevel)}
                     <th>&nbsp;</th>
                 {/if}
                 <th>#</th>
@@ -66,7 +66,7 @@
             {counter start=0 print=false}
             {foreach $loads->getItems() as $load}
             <tr>
-                {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+                {if ($accessLevel)}
                     <td>
 	                    <span>
 	                        <span title="Возможность редактирования" class="changeEditStatus" asu-id="{$load->getId()}" asu-action="updateEditStatus">

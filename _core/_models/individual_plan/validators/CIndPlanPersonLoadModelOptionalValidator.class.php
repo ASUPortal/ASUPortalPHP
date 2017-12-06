@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Класс для отображения информации по ошибкам и предупреждениям для модели CIndPlanPersonLoad
+ * 
+ * (задаётся в модели при помощи функции modelValidators() и отображается в шаблоне при помощи {CHtml::warningSummary($object)})
+ */
 class CIndPlanPersonLoadModelOptionalValidator extends IModelValidatorOptional {
 	private $model;
 	

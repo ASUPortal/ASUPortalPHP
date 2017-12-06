@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Класс для отображения информации по ошибкам и предупреждениям для модели CStudyLoad
+ * 
+ * (задаётся в модели при помощи функции modelValidators() и отображается в шаблоне при помощи {CHtml::warningSummary($object)})
+ */
 class CStudyLoadModelOptionalValidator extends IModelValidatorOptional {
 	private $model;
 	

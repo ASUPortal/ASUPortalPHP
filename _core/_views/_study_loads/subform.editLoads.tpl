@@ -18,7 +18,7 @@
 	
     <table rel="stripe" class="table table-striped table-bordered table-hover table-condensed table-load" border="1">
         <tr>
-            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+            {if ($accessLevel)}
             	<th>&nbsp;</th>
             	<th>&nbsp;</th>
             {/if}
@@ -42,7 +42,7 @@
             {/foreach}
         </tr>
         <tr>
-	        {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+	        {if ($accessLevel)}
 	            {$ths = 13}
 	        {else}
 	            {$ths = 11}
@@ -54,7 +54,7 @@
         {counter start=0 print=false}
         {foreach $studyLoads->getItems() as $studyLoad}
 	        <tr>
-	            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+	            {if ($accessLevel)}
                     <td>
 	                    <span>
 	                        <span title="Возможность редактирования" class="changeEditStatus" asu-id="{$studyLoad->getId()}" asu-action="updateEditStatus">
@@ -66,7 +66,7 @@
 	            {/if}
 	            <td>{counter}</td>
 	            <td>{CHtml::activeViewGroupSelect("id", $studyLoad, false, true)}</td>
-	            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+	            {if ($accessLevel)}
 	            	<td><a href="?action=edit&id={$studyLoad->getId()}" title="{", "|join:CStudyLoadService::getLecturersNameByDiscipline($studyLoad->discipline)->getItems()}">{$studyLoad->discipline->getValue()}</a></td>
 	            {else}
 	            	<td>{$studyLoad->discipline->getValue()}</td>
