@@ -8,7 +8,7 @@
  */
 
 class CIndPlanPersonLoadTable extends CFormModel{
-    private $_load = null;
+    protected $_load = null;
     private $_workTypes = null;
     private $_workTypesAlias = null;
     public $work_type = 1;

@@ -245,6 +245,8 @@ class CIndPlanLoadController extends CBaseController{
         $load = new CIndPlanPersonLoad();
         $load->setAttributes(CRequest::getArray($load::getClassName()));
         if ($load->validate()) {
+            $load->_created_at = date('Y-m-d G:i:s');
+            $load->_created_by = CSession::getCurrentPerson()->getId();
             $load->save();
             if ($this->continueEdit()) {
                 $this->redirect("?action=edit&id=".$load->getId()."&year=".$load->year_id);
@@ -400,5 +402,24 @@ class CIndPlanLoadController extends CBaseController{
             $this->setData("message", "Нугрузка не выбрана, продолжение невозможно!");
             $this->renderView("_individual_plan/load/error.tpl");
         }
+    }
+    /**
+     * Обновление статуса доступности для редактирования
+     */
+    public function actionUpdateEditStatus() {
+        $load = CIndPlanManager::getLoad(CRequest::getInt("id"));
+        if ($load->_edit_restriction == 0) {
+            $load->_edit_restriction = 1;
+            $load->_created_at = date('Y-m-d G:i:s');
+            $load->_created_by = CSession::getCurrentPerson()->getId();
+            $result["title"] = "✖";
+        } else {
+            $load->_edit_restriction = 0;
+            $load->_created_at = date('Y-m-d G:i:s');
+            $load->_created_by = CSession::getCurrentPerson()->getId();
+            $result["title"] = "✔";
+        }
+        $load->save();
+        echo json_encode($result);
     }
 }

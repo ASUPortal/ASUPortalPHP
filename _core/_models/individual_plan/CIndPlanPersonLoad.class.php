@@ -63,7 +63,14 @@ class CIndPlanPersonLoad extends CActiveModel{
     
     public function attributeLabels() {
         return array(
-                "orders" => "Приказы"
+                "orders" => "Приказы",
+                "_edit_restriction" => "Ограничение редактирования"
+        );
+    }
+    
+    protected function modelValidators() {
+        return array(
+            new CIndPlanPersonLoadModelOptionalValidator()
         );
     }
     

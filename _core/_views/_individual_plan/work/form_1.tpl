@@ -134,7 +134,7 @@
                         {if in_array($col_id, array(0, 7, 15, 16, 17))}
                             {$col}
                         {else}
-                            {CHtml::textField($object->getFieldName($row_id, $col_id), $col, "", "input-indplan")}
+                            {CHtml::textField($object->getFieldName($row_id, $col_id), $col, "", "input-indplan", $restrictionAttribute)}
                         {/if}
                     </td>
                 {/foreach}

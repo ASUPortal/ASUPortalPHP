@@ -16,6 +16,7 @@ class CIndPlanPersonWork extends CActiveModel{
     protected $_load = null;
     protected $_workType = null;
     protected $_publication = null;
+    public $_edit_restriction;
 
     public function relations() {
         return array(
@@ -40,6 +41,11 @@ class CIndPlanPersonWork extends CActiveModel{
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPublication"
             )
+        );
+    }
+    protected function modelValidators() {
+        return array(
+            new CIndPlanPersonLoadModelOptionalValidator()
         );
     }
     public function getTitle() {

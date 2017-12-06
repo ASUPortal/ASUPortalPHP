@@ -7,6 +7,8 @@
             {$object->load->person->getName()}
         {/if})</h2>
 
+    {CHtml::warningSummary($object)}
+    
     {CHtml::helpForCurrentPage()}
 
     {include file="_individual_plan/work//form.tpl"}

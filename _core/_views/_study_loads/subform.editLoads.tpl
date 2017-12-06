@@ -1,3 +1,14 @@
+{$restricted = false}
+{foreach $studyLoads->getItems() as $studyLoad}
+	{if ($studyLoad->isEditRestriction())}
+		{$restricted = true}
+	{/if}
+{/foreach}
+
+{if ($restricted)}
+	<div class="alert">Для недоступных полей установлено ограничение на редактирование!</div>
+{/if}
+
 <form action="index.php" method="post" id="{$loadsId}">
 	{CHtml::hiddenField("action", "saveAll")}
 	{CHtml::hiddenField("kadri_id", $lecturer->getId())}
@@ -7,7 +18,10 @@
 	
     <table rel="stripe" class="table table-striped table-bordered table-hover table-condensed table-load" border="1">
         <tr>
-            <th>&nbsp;</th>
+            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+            	<th>&nbsp;</th>
+            	<th>&nbsp;</th>
+            {/if}
             <th style="vertical-align:middle; text-align:center;">#</th>
             <th style="vertical-align:middle; text-align:center;">{CHtml::activeViewGroupSelect("id", $studyLoads->getFirstItem(), true)}</th>
             <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("discipline_id", $studyLoads->getFirstItem(), false, false)}</th>
@@ -28,7 +42,11 @@
             {/foreach}
         </tr>
         <tr>
-	        {$ths = 12}
+	        {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+	            {$ths = 13}
+	        {else}
+	            {$ths = 11}
+	        {/if}
 	        {for $i=1 to $ths + count($studyLoads->getFirstItem()->getStudyLoadTable()->getTableTotal())}
 	            <th style="text-align:center; background-color: #E6E6FF;">{$i}</th>
 	        {/for}
@@ -37,6 +55,13 @@
         {foreach $studyLoads->getItems() as $studyLoad}
 	        <tr>
 	            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+                    <td>
+	                    <span>
+	                        <span title="Возможность редактирования" class="changeEditStatus" asu-id="{$studyLoad->getId()}" asu-action="updateEditStatus">
+	                            {if ($studyLoad->_edit_restriction == 0)}✔{else}✖{/if}
+	                        </span>
+	                    </span>
+                    </td>
 	            	<td><a href="#" class="icon-trash" onclick="if (confirm('Действительно удалить нагрузку')) { location.href='?action=delete&id={$studyLoad->getId()}'; }; return false;"></a></td>
 	            {/if}
 	            <td>{counter}</td>
@@ -61,7 +86,7 @@
 	            {foreach $studyLoad->getStudyLoadTable()->getTableByKind($isBudget, $isContract) as $typeId=>$rows}
 					{foreach $rows as $kindId=>$value}
 						{if !in_array($kindId, array(0))}
-							<td>{CHtml::textField($studyLoad->getStudyLoadTable()->getFieldNameAllLoads($studyLoad->getId(), $typeId, $kindId), $value, "", "input-load")}</td>
+							<td>{CHtml::textField($studyLoad->getStudyLoadTable()->getFieldNameAllLoads($studyLoad->getId(), $typeId, $kindId), $value, "", "input-load", $studyLoad->restrictionAttribute())}</td>
 						{/if}
 	                {/foreach}
 	            {/foreach}

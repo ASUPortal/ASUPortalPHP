@@ -3,6 +3,8 @@
 {block name="asu_center"}
     <h2>Редактирование учебной нагрузки</h2>
 
+    {CHtml::warningSummary($load)}
+    
     {CHtml::helpForCurrentPage()}
 
     {include file="_individual_plan/load/form.tpl"}

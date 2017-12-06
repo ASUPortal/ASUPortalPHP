@@ -44,6 +44,16 @@
             {CHtml::error("separate_contract", $load)}
         </div>
     </div>
+    
+    {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+	    <div class="control-group">
+	        {CHtml::activeLabel("_edit_restriction", $load)}
+	        <div class="controls">
+	            {CHtml::activeCheckBox("_edit_restriction", $load)}
+	            {CHtml::error("_edit_restriction", $load)}
+	        </div>
+	    </div> 
+    {/if}
 
     <div class="control-group">
         <div class="controls">

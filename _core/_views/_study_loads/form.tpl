@@ -122,7 +122,7 @@
 							</td>
 						{else}
 							<td align="center">
-		                       {CHtml::textField($studyLoad->getStudyLoadTable()->getFieldName($typeId, $kindId), $value)}
+		                       {CHtml::textField($studyLoad->getStudyLoadTable()->getFieldName($typeId, $kindId), $value, "", "", $restrictionAttribute)}
 		                    </td>
 						{/if}
 	                {/foreach}

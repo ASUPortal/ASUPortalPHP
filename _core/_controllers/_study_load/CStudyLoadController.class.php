@@ -129,6 +129,7 @@ class CStudyLoadController extends CBaseController {
         $studyLoad = CStudyLoadService::getStudyLoad(CRequest::getInt("id"));
         $kadriId = $studyLoad->person_id;
         $yearId = $studyLoad->year_id;
+        $this->setData("restrictionAttribute", $studyLoad->restrictionAttribute());
         $this->setData("studyLoad", $studyLoad);
         $this->addActionsMenuItem(array(
             array(
@@ -283,6 +284,7 @@ class CStudyLoadController extends CBaseController {
     	$copyWays = array();
     	$copyWays[0] = "копировать с перемещением (удаляем у одного - добавляем другому)";
     	$copyWays[1] = "только копирование (сохраняем у одного и добавляем другому)";
+    	$copyWays[2] = "смена ограничения редактирования";
     	$this->setData("copyWays", $copyWays);
     	
     	// Типы занятий: л, пр, л/р для сверки с расписанием
@@ -408,10 +410,15 @@ class CStudyLoadController extends CBaseController {
     	$lecturerId = CRequest::getInt("lecturer");
     	$yearId = CRequest::getInt("year");
     	$partId = CRequest::getInt("part");
-    	$loadsToCopy = CRequest::getArray("selectedDoc");
+    	$selectedLoads = CRequest::getArray("selectedDoc");
     	
-    	if ($lecturerId != 0 and $yearId != 0 and $partId != 0) {
-    		CStudyLoadService::copySelectedLoads($choice, $lecturerId, $yearId, $partId, $loadsToCopy);
+    	if ($lecturerId != 0 and $yearId != 0 and $partId != 0 and $choice != 2) {
+    		CStudyLoadService::copySelectedLoads($choice, $lecturerId, $yearId, $partId, $selectedLoads);
+    	}
+    	
+    	// $choice == 2 - смена ограничения редактирования
+    	if ($choice == 2) {
+    		CStudyLoadService::setEditRestrictionSelectedLoads($selectedLoads);
     	}
     	
     	$this->redirect(UrlBuilder::newBuilder("index.php")
@@ -608,5 +615,24 @@ class CStudyLoadController extends CBaseController {
     	$this->setData("rateSumFact", number_format($rateSumFact,2,',',''));
     	$this->setData("postsWithRates", $postsWithRates);
     	$this->renderView("_study_loads/info.tpl");
+    }
+    /**
+     * Обновление статуса доступности для редактирования
+     */
+    public function actionUpdateEditStatus() {
+        $studyLoad = CBaseManager::getStudyLoadWithOutVersionControl(CRequest::getInt("id"));
+        if ($studyLoad->_edit_restriction == 0) {
+            $studyLoad->_edit_restriction = 1;
+            $studyLoad->_created_at = date('Y-m-d G:i:s');
+            $studyLoad->_created_by = CSession::getCurrentPerson()->getId();
+            $result["title"] = "✖";
+        } else {
+            $studyLoad->_edit_restriction = 0;
+            $studyLoad->_created_at = date('Y-m-d G:i:s');
+            $studyLoad->_created_by = CSession::getCurrentPerson()->getId();
+            $result["title"] = "✔";
+        }
+        $studyLoad->save();
+        echo json_encode($result);
     }
 }

@@ -4,6 +4,7 @@
             {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
             	<th>&nbsp;</th>
             	<th>&nbsp;</th>
+            	<th>&nbsp;</th>
             {/if}
             <th style="vertical-align:middle; text-align:center;">#</th>
             <th style="vertical-align:middle; text-align:center;">{CHtml::activeViewGroupSelect("id", $studyLoads->getFirstItem(), true)}</th>
@@ -28,7 +29,7 @@
         </tr>
         <tr>
 	        {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
-	            {$ths = 15}
+	            {$ths = 16}
 	        {else}
 	            {$ths = 13}
 	        {/if}
@@ -40,6 +41,13 @@
         {foreach $studyLoads->getItems() as $studyLoad}
 	        <tr>
 	            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+                    <td>
+	                    <span>
+	                        <span title="Возможность редактирования" class="changeEditStatus" asu-id="{$studyLoad->getId()}" asu-action="updateEditStatus">
+	                            {if ($studyLoad->_edit_restriction == 0)}✔{else}✖{/if}
+	                        </span>
+	                    </span>
+                    </td>
 	            	<td><a href="#" class="icon-trash"  title="Удалить" onclick="if (confirm('Действительно удалить нагрузку')) { location.href='?action=delete&id={$studyLoad->getId()}'; }; return false;"></a></td>
 	            	<td><a href="../../_modules/_version_controls/index.php?action=index&id={$studyLoad->getId()}&module=_study_loads&class=CStudyLoad" class="icon-list-alt" title="Посмотреть версии" target="_blank"></a></td>
 	            {/if}
@@ -75,6 +83,7 @@
         {/foreach}
         <tr>
 			{if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+            	<td>&nbsp;</td>
             	<td>&nbsp;</td>
             	<td>&nbsp;</td>
             {/if}
@@ -113,7 +122,7 @@
 			<tr>
 				<td valign="top" width="500">
 					<div class="controls">
-						{CHtml::dropDownList("choice", $copyWays, "", null, "span12")}
+						{CHtml::dropDownList("choice", $copyWays, "", null, "span12", "", "", true)}
 					</div>
 				</td>
 			    <td valign="top">
@@ -134,6 +143,13 @@
 			    <td valign="top">
 			    	<div class="controls">
 						<input name="" type="submit" class="btn" value="ok">
+					</div>	
+				</td>
+			</tr>
+			<tr>
+			    <td valign="top">
+			    	<div class="controls">
+						<input name="" type="submit" class="btn" value="Сменить ограничение редактирования">
 					</div>	
 				</td>
 			</tr>
