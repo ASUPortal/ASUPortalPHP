@@ -385,8 +385,10 @@ class CHtml {
         }
         ?>
         <div class="input-append date <?php echo self::getFielsizeClass(); ?> datepicker" id="<?php echo $id; ?>" data-date="<?php echo $model->$name; ?>" data-toggle="tooltip" title="<?php echo $tooltipTitle; ?>" data-date-format="<?php echo $format; ?>">
-            <input name="<?php echo $field; ?>" class="<?php echo self::getFielsizeClass(); ?>" type="text" value="<?php echo $model->$name; ?>">
+            <input name="<?php echo $field; ?>" class="<?php echo self::getFielsizeClass(); ?>" type="text" value="<?php echo $model->$name; ?>" <?php echo $html; ?>>
+            <?php if (mb_strpos($html, "readonly") === false) {?>
             <span class="add-on"><i class="icon-th"></i></span>
+            <?php }?>
         </div>
         <?php
         if (!self::$_calendarInit) {
@@ -1294,7 +1296,7 @@ class CHtml {
     private static function requiredStar() {
         echo '<span class="field_required">*</span>';
     }
-    public static function activeLookup($name, CModel $model, $catalog = "", $isMultiple = false, $properties = array(), $allowCreation = false) {
+    public static function activeLookup($name, CModel $model, $catalog = "", $isMultiple = false, $properties = array(), $allowCreation = false, $html = "") {
         /**
          * Безумно полезная штука для работы со связанными
          * моделями. Если в названии поля есть скобки, то производится
@@ -1343,10 +1345,12 @@ class CHtml {
         <table <?php echo $inline; ?> id="<?php echo $name;?>" style="margin-left: 0px; ">
             <tr>
                 <td width="100%">
-                    <input type="text" data-toggle="tooltip" title="<?php echo $tooltipTitle; ?>" value="" asu-name="lookup" placeholder="Введите текст для поиска" style="width: 95%; ">
+                    <input type="text" data-toggle="tooltip" title="<?php echo $tooltipTitle; ?>" value="" asu-name="lookup" placeholder="Введите текст для поиска" style="width: 95%; " <?php echo $html; ?>>
                 </td>
                 <td style="width: 16px; ">
+                    <?php if (mb_strpos($html, "readonly") === false) {?>
                     <i class="icon-search" />
+                    <?php }?>
                 </td>
             </tr>
             <tr>
@@ -1356,7 +1360,9 @@ class CHtml {
                     </div>
                 </td>
                 <td style="width: 16px; ">
+                    <?php if (mb_strpos($html, "readonly") === false) {?>
                     <i class="icon-remove" />
+                    <?php }?>
                 </td>
             </tr>
         </table>
