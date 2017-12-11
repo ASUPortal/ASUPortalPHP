@@ -63,7 +63,14 @@ class CIndPlanPersonLoad extends CActiveModel{
     
     public function attributeLabels() {
         return array(
-                "orders" => "Приказы"
+                "orders" => "Приказы",
+                "_edit_restriction" => "Ограничение редактирования"
+        );
+    }
+    
+    protected function modelValidators() {
+        return array(
+            new CIndPlanPersonLoadModelOptionalValidator()
         );
     }
     
@@ -127,5 +134,27 @@ class CIndPlanPersonLoad extends CActiveModel{
             $ar->remove();
         }
         parent::remove();
+    }
+    
+    /**
+     * Отмечена ли запись как нередактируемая
+     *
+     * @return bool
+     */
+    public function isEditRestriction() {
+    	return $this->_edit_restriction == 1;
+    }
+    
+    /**
+     * Атрибут нередактируемой записи
+     *
+     * @return string
+     */
+    public function restrictionAttribute() {
+    	$attribute = "";
+    	if ($this->isEditRestriction()) {
+    		$attribute = "readonly";
+    	}
+    	return $attribute;
     }
 }

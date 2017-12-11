@@ -6,7 +6,11 @@
         {else}
             {$object->load->person->getName()}
         {/if})</h2>
-
+        
+    {if ($object->isEditRestriction())}
+		<div class="alert">Установлено ограничение на редактирование!</div>
+	{/if}
+    
     {CHtml::helpForCurrentPage()}
 
     {include file="_individual_plan/work//form.tpl"}

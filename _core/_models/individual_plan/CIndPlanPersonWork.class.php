@@ -16,6 +16,7 @@ class CIndPlanPersonWork extends CActiveModel{
     protected $_load = null;
     protected $_workType = null;
     protected $_publication = null;
+    public $_edit_restriction;
 
     public function relations() {
         return array(
@@ -40,6 +41,11 @@ class CIndPlanPersonWork extends CActiveModel{
                 "managerClass" => "CStaffManager",
                 "managerGetObject" => "getPublication"
             )
+        );
+    }
+    protected function modelValidators() {
+        return array(
+            new CIndPlanPersonLoadModelOptionalValidator()
         );
     }
     public function getTitle() {
@@ -68,5 +74,27 @@ class CIndPlanPersonWork extends CActiveModel{
             return "Вып";
         }
         return "";
+    }
+    
+    /**
+     * Отмечена ли запись как нередактируемая
+     *
+     * @return bool
+     */
+    public function isEditRestriction() {
+    	return $this->_edit_restriction == 1;
+    }
+    
+    /**
+     * Атрибут нередактируемой записи
+     *
+     * @return string
+     */
+    public function restrictionAttribute() {
+    	$attribute = "";
+    	if ($this->isEditRestriction()) {
+    		$attribute = "readonly";
+    	}
+    	return $attribute;
     }
 }

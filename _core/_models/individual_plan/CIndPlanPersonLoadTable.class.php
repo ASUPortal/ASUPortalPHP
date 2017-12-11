@@ -13,7 +13,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
     private $_workTypesAlias = null;
     public $work_type = 1;
     public $load_id;
-
+    
     /**
      * @param CIndPlanPersonLoad $load
      */
@@ -442,5 +442,27 @@ class CIndPlanPersonLoadTable extends CFormModel{
             }
         }
         return $result;
+    }
+    
+    /**
+     * Отмечена ли запись как нередактируемая
+     *
+     * @return bool
+     */
+    public function isEditRestriction() {
+    	return $this->_load->_edit_restriction == 1;
+    }
+    
+    /**
+     * Атрибут нередактируемой записи
+     *
+     * @return string
+     */
+    public function restrictionAttribute() {
+    	$attribute = "";
+    	if ($this->isEditRestriction()) {
+    		$attribute = "readonly";
+    	}
+    	return $attribute;
     }
 }

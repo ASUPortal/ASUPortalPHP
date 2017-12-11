@@ -55,6 +55,9 @@
 
         <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
+                {if ($hasOwnAccessLevel)}
+                    <th>&nbsp;</th>
+                {/if}
                 <th>#</th>
                 <th><input type="checkbox" id="selectAll" checked></th>
                 <th>{CHtml::tableOrder("person_id", $loads->getFirstItem())}</th>
@@ -63,6 +66,15 @@
             {counter start=0 print=false}
             {foreach $loads->getItems() as $load}
             <tr>
+                {if ($hasOwnAccessLevel)}
+                    <td>
+	                    <span>
+	                        <span title="Возможность редактирования" class="changeEditStatus" asu-id="{$load->getId()}" asu-action="updateEditStatus">
+	                            {if ($load->_edit_restriction == 0)}&#10004;{else}&#10006;{/if}
+	                        </span>
+	                    </span>
+                    </td>
+                {/if}
                 <td>{counter}</td>
                 <td>
                     <input type="checkbox" value="{$load->getId()}" name="selectedDoc[]" checked>
@@ -76,6 +88,57 @@
             {/foreach}
         </table>
     {/if}
+    
+<script>
+    /**
+     * Функция смены статуса
+     *
+     * @param value
+     */
+    function changeStatus(item) {
+    	var container = item.target || item.srcElement;
+        var id = jQuery(container).attr("asu-id");
+        var action = jQuery(container).attr("asu-action");
+        jQuery.ajax({
+            url: web_root + "_modules/_individual_plan/load.php",
+            beforeSend: function(){
+                jQuery(container).html('<i class="icon-signal"></i>');
+            },
+            cache: false,
+            context: item,
+            data: {
+                action: action,
+                id: id
+            },
+            dataType: "json",
+            method: "GET",
+            success: function(data){
+                jQuery(container).html(data.title);
+            }
+        });
+    }
+    jQuery(document).ready(function(){
+        var classes = new Array(".changeEditStatus");
+        /**
+         * Обрабатываем смену статуса
+         */
+        classes.forEach(function(elem, i, arr) {
+            jQuery(elem).on("click", function(item){
+            	// изменяем статус
+                changeStatus(item);
+            });
+        });
+    });
+</script>
+<style>
+    .changeEditStatus {
+        cursor: pointer;
+    }
+    .changeEditStatus:hover {
+        text-decoration: underline;
+    }
+</style>
+
 {/block}
 
 {block name="asu_right"}

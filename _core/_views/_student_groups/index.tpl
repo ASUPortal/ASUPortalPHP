@@ -5,6 +5,39 @@
 
     {CHtml::helpForCurrentPage()}
     
+	<script>
+	    function removeFilter() {
+	        var action = "?action=index";
+	        window.location.href = action;
+	    }
+		jQuery(document).ready(function( ){
+			jQuery("#corriculum_selector").change(function(){
+                window.location.href=web_root + "_modules/_student_groups/index.php?filter=corriculum.id:" + jQuery(this).val();
+            });
+		});
+	</script>
+	<form action="index.php" method="post" enctype="multipart/form-data" class="form-horizontal">
+			<table border="0" width="100%" class="tableBlank">
+				<tr>
+					<td valign="top" width="90%">
+						<div class="form-horizontal">
+		        			<div class="control-group">
+		            			<label class="control-label" for="corriculum.id">Учебный план</label>
+		            			<div class="controls">
+		                			{CHtml::dropDownList("corriculum.id", $corriculums, $currentCorriculum, "corriculum_selector", "span12")}
+		            			</div>
+		        			</div>
+		    			</div>
+					</td>
+					<td valign="top">
+						<p align="center">
+							<span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter(); return false; " title="очистить фильтры"/></span>
+						</p>
+					</td>
+				</tr>
+			</table>
+	</form>
+	    
     {include file="_core.searchLocal.tpl"}
 
     <table class="table table-striped table-bordered table-hover table-condensed">

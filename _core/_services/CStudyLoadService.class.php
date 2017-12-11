@@ -903,4 +903,25 @@ class CStudyLoadService {
     	}
     	return $personsWithLoad;
     }
+    
+    /**
+     * Установить ограничение редактирования
+     * 
+     * @param array $loadsToCopy - массив из id нагрузок, выбранных для копирования 
+     */
+    public static function setEditRestrictionSelectedLoads($selectedLoads) {
+    	foreach ($selectedLoads as $loadId) {
+    		$studyLoad = CBaseManager::getStudyLoadWithOutVersionControl($loadId);
+    		if ($studyLoad->_edit_restriction == 0) {
+    			$studyLoad->_edit_restriction = 1;
+    			$studyLoad->_created_at = date('Y-m-d G:i:s');
+    			$studyLoad->_created_by = CSession::getCurrentPerson()->getId();
+    		} else {
+    			$studyLoad->_edit_restriction = 0;
+    			$studyLoad->_created_at = date('Y-m-d G:i:s');
+    			$studyLoad->_created_by = CSession::getCurrentPerson()->getId();
+    		}
+    		$studyLoad->save();
+    	}
+    }
 }

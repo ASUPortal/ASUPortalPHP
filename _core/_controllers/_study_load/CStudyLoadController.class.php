@@ -283,6 +283,7 @@ class CStudyLoadController extends CBaseController {
     	$copyWays = array();
     	$copyWays[0] = "копировать с перемещением (удаляем у одного - добавляем другому)";
     	$copyWays[1] = "только копирование (сохраняем у одного и добавляем другому)";
+    	$copyWays[2] = "смена ограничения редактирования";
     	$this->setData("copyWays", $copyWays);
     	
     	// Типы занятий: л, пр, л/р для сверки с расписанием
@@ -291,6 +292,12 @@ class CStudyLoadController extends CBaseController {
     	$kindTypes[] = CStudyLoadWorkTypeConstants::LABOR_PRACTICE;
     	$kindTypes[] = CStudyLoadWorkTypeConstants::LABOR_LAB_WORK;
     	$this->setData("kindTypes", $kindTypes);
+    	
+    	$hasOwnAccessLevel = false;
+    	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+    		$hasOwnAccessLevel = true;
+    	}
+    	$this->setData("hasOwnAccessLevel", $hasOwnAccessLevel);
     	
     	$this->renderView("_study_loads/editLoads.tpl");
     }
@@ -345,6 +352,26 @@ class CStudyLoadController extends CBaseController {
     	$loadsFall = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::FALL));
     	$loadsSpring = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::SPRING));
     	
+    	$restrictedFall = false;
+    	if ($loadsFall->getCount() != 0) {
+    		foreach ($loadsFall->getItems() as $studyLoad) {
+    			if ($studyLoad->isEditRestriction()) {
+    				$restrictedFall = true;
+    			}
+    		}
+    	}
+    	$this->setData("restrictedFall", $restrictedFall);
+    	
+    	$restrictedSpring = false;
+    	if ($loadsSpring->getCount() != 0) {
+    		foreach ($loadsSpring->getItems() as $studyLoad) {
+    			if ($studyLoad->isEditRestriction()) {
+    				$restrictedSpring = true;
+    			}
+    		}
+    	}
+    	$this->setData("restrictedSpring", $restrictedSpring);
+    	
     	$this->setData("lecturer", $lecturer);
     	$this->setData("year", $year);
     	$this->setData("loadsFall", $loadsFall);
@@ -376,6 +403,13 @@ class CStudyLoadController extends CBaseController {
                 "icon" => "actions/list-add.png"
             )
     	));
+    	
+    	$hasOwnAccessLevel = false;
+    	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+    		$hasOwnAccessLevel = true;
+    	}
+    	$this->setData("hasOwnAccessLevel", $hasOwnAccessLevel);
+    	
     	$this->renderView("_study_loads/form.editLoads.tpl");
     }
     /**
@@ -408,10 +442,15 @@ class CStudyLoadController extends CBaseController {
     	$lecturerId = CRequest::getInt("lecturer");
     	$yearId = CRequest::getInt("year");
     	$partId = CRequest::getInt("part");
-    	$loadsToCopy = CRequest::getArray("selectedDoc");
+    	$selectedLoads = CRequest::getArray("selectedDoc");
     	
-    	if ($lecturerId != 0 and $yearId != 0 and $partId != 0) {
-    		CStudyLoadService::copySelectedLoads($choice, $lecturerId, $yearId, $partId, $loadsToCopy);
+    	if ($lecturerId != 0 and $yearId != 0 and $partId != 0 and $choice != 2) {
+    		CStudyLoadService::copySelectedLoads($choice, $lecturerId, $yearId, $partId, $selectedLoads);
+    	}
+    	
+    	// $choice == 2 - смена ограничения редактирования
+    	if ($choice == 2) {
+    		CStudyLoadService::setEditRestrictionSelectedLoads($selectedLoads);
     	}
     	
     	$this->redirect(UrlBuilder::newBuilder("index.php")
@@ -608,5 +647,24 @@ class CStudyLoadController extends CBaseController {
     	$this->setData("rateSumFact", number_format($rateSumFact,2,',',''));
     	$this->setData("postsWithRates", $postsWithRates);
     	$this->renderView("_study_loads/info.tpl");
+    }
+    /**
+     * Обновление статуса доступности для редактирования
+     */
+    public function actionUpdateEditStatus() {
+        $studyLoad = CBaseManager::getStudyLoadWithOutVersionControl(CRequest::getInt("id"));
+        if ($studyLoad->_edit_restriction == 0) {
+            $studyLoad->_edit_restriction = 1;
+            $studyLoad->_created_at = date('Y-m-d G:i:s');
+            $studyLoad->_created_by = CSession::getCurrentPerson()->getId();
+            $result["title"] = "&#10006;";
+        } else {
+            $studyLoad->_edit_restriction = 0;
+            $studyLoad->_created_at = date('Y-m-d G:i:s');
+            $studyLoad->_created_by = CSession::getCurrentPerson()->getId();
+            $result["title"] = "&#10004;";
+        }
+        $studyLoad->save();
+        echo json_encode($result);
     }
 }

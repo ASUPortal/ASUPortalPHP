@@ -89,7 +89,8 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
     		"comment" => "Комментарий",
     		"on_filial" => "Надбавка&nbsp;за филиалы",
     		"students_count_add" => "число коммерческих студентов",
-    		"study_groups" => "Студенческие группы"
+    		"study_groups" => "Студенческие группы",
+    		"_edit_restriction" => "Ограничение редактирования"
     	);
     }
     protected function validationRules() {
@@ -104,6 +105,11 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
     			"load_type_id"
     		)
     	);
+    }
+    protected function modelValidators() {
+        return array(
+            new CStudyLoadModelOptionalValidator()
+        );
     }
     
     /**
@@ -226,5 +232,27 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
     		$this->_loadTable = new CStudyLoadTable($this);
     	}
     	return $this->_loadTable;
+    }
+    
+    /**
+     * Отмечена ли запись как нередактируемая
+     *
+     * @return bool
+     */
+    public function isEditRestriction() {
+    	return $this->_edit_restriction == 1;
+    }
+    
+    /**
+     * Атрибут нередактируемой записи
+     *
+     * @return string
+     */
+    public function restrictionAttribute() {
+    	$attribute = "";
+    	if ($this->isEditRestriction()) {
+    		$attribute = "readonly";
+    	}
+    	return $attribute;
     }
 }

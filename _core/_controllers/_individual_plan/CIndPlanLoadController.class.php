@@ -178,6 +178,11 @@ class CIndPlanLoadController extends CBaseController{
         $this->setData("years", $years);
         $this->setData("selectedYear", $selectedYear);
         $this->setData("isAll", $isAll);
+        $hasOwnAccessLevel = false;
+        if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+            $hasOwnAccessLevel = true;
+        }
+        $this->setData("hasOwnAccessLevel", $hasOwnAccessLevel);
         $this->renderView("_individual_plan/load/viewLoads.tpl");
     }
     public function actionView() {
@@ -225,6 +230,11 @@ class CIndPlanLoadController extends CBaseController{
         );
         $this->setData("load", $load);
         $this->setData("year", $year);
+        $hasOwnAccessLevel = false;
+        if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+            $hasOwnAccessLevel = true;
+        }
+        $this->setData("hasOwnAccessLevel", $hasOwnAccessLevel);
         $this->renderView("_individual_plan/load/add.tpl");
     }
     public function actionEdit() {
@@ -239,12 +249,19 @@ class CIndPlanLoadController extends CBaseController{
         );
         $this->setData("load", $load);
         $this->setData("year", $load->year_id);
+        $hasOwnAccessLevel = false;
+        if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+            $hasOwnAccessLevel = true;
+        }
+        $this->setData("hasOwnAccessLevel", $hasOwnAccessLevel);
         $this->renderView("_individual_plan/load/edit.tpl");
     }
     public function actionSave() {
         $load = new CIndPlanPersonLoad();
         $load->setAttributes(CRequest::getArray($load::getClassName()));
         if ($load->validate()) {
+            $load->_created_at = date('Y-m-d G:i:s');
+            $load->_created_by = CSession::getCurrentPerson()->getId();
             $load->save();
             if ($this->continueEdit()) {
                 $this->redirect("?action=edit&id=".$load->getId()."&year=".$load->year_id);
@@ -254,6 +271,11 @@ class CIndPlanLoadController extends CBaseController{
             return true;
         }
         $this->setData("load", $load);
+        $hasOwnAccessLevel = false;
+        if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
+            $hasOwnAccessLevel = true;
+        }
+        $this->setData("hasOwnAccessLevel", $hasOwnAccessLevel);
         $this->renderView("_individual_plan/load/add.tpl");
     }
     public function actionDelete() {
@@ -397,8 +419,27 @@ class CIndPlanLoadController extends CBaseController{
     				"icon" => "actions/edit-undo.png"
                 )
             ));
-            $this->setData("message", "Нугрузка не выбрана, продолжение невозможно!");
+            $this->setData("message", "Нагрузка не выбрана, продолжение невозможно!");
             $this->renderView("_individual_plan/load/error.tpl");
         }
+    }
+    /**
+     * Обновление статуса доступности для редактирования
+     */
+    public function actionUpdateEditStatus() {
+        $load = CIndPlanManager::getLoad(CRequest::getInt("id"));
+        if ($load->_edit_restriction == 0) {
+            $load->_edit_restriction = 1;
+            $load->_created_at = date('Y-m-d G:i:s');
+            $load->_created_by = CSession::getCurrentPerson()->getId();
+            $result["title"] = "&#10006;";
+        } else {
+            $load->_edit_restriction = 0;
+            $load->_created_at = date('Y-m-d G:i:s');
+            $load->_created_by = CSession::getCurrentPerson()->getId();
+            $result["title"] = "&#10004;";
+        }
+        $load->save();
+        echo json_encode($result);
     }
 }

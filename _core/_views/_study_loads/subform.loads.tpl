@@ -1,7 +1,8 @@
 <form action="index.php" method="post" id="{$loadsId}">
     <table rel="stripe" class="table table-striped table-bordered table-hover table-condensed" border="1">
         <tr>
-            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+            {if ($hasOwnAccessLevel)}
+            	<th>&nbsp;</th>
             	<th>&nbsp;</th>
             	<th>&nbsp;</th>
             {/if}
@@ -27,8 +28,8 @@
             <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("on_filial", $studyLoads->getFirstItem(), false, false)}</div></th>
         </tr>
         <tr>
-	        {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
-	            {$ths = 15}
+	        {if ($hasOwnAccessLevel)}
+	            {$ths = 16}
 	        {else}
 	            {$ths = 13}
 	        {/if}
@@ -40,12 +41,19 @@
         {foreach $studyLoads->getItems() as $studyLoad}
 	        <tr>
 	            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+                    <td>
+	                    <span>
+	                        <span title="Возможность редактирования" class="changeEditStatus" asu-id="{$studyLoad->getId()}" asu-action="updateEditStatus">
+	                            {if ($studyLoad->_edit_restriction == 0)}&#10004;{else}&#10006;{/if}
+	                        </span>
+	                    </span>
+                    </td>
 	            	<td><a href="#" class="icon-trash"  title="Удалить" onclick="if (confirm('Действительно удалить нагрузку')) { location.href='?action=delete&id={$studyLoad->getId()}'; }; return false;"></a></td>
 	            	<td><a href="../../_modules/_version_controls/index.php?action=index&id={$studyLoad->getId()}&module=_study_loads&class=CStudyLoad" class="icon-list-alt" title="Посмотреть версии" target="_blank"></a></td>
 	            {/if}
 	            <td>{counter}</td>
 	            <td>{CHtml::activeViewGroupSelect("id", $studyLoad, false, true)}</td>
-	            {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+	            {if ($hasOwnAccessLevel)}
 	            	<td><a href="?action=edit&id={$studyLoad->getId()}" title="{", "|join:CStudyLoadService::getLecturersNameByDiscipline($studyLoad->discipline)->getItems()}">{$studyLoad->discipline->getValue()}</a></td>
 	            {else}
 	            	<td>{$studyLoad->discipline->getValue()}</td>
@@ -74,7 +82,8 @@
 	        </tr>
         {/foreach}
         <tr>
-			{if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+			{if ($hasOwnAccessLevel)}
+            	<td>&nbsp;</td>
             	<td>&nbsp;</td>
             	<td>&nbsp;</td>
             {/if}
@@ -105,7 +114,7 @@
 			<td><b>{clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPartWithFilials($lecturer, $year, $part, $loadTypes),1,',','') level=0}</b></td>
 		</tr>
     </table>
-    {if (CSessionService::hasAnyRole([$ACCESS_LEVEL_READ_ALL, $ACCESS_LEVEL_WRITE_ALL]))}
+    {if ($hasOwnAccessLevel)}
     	{CHtml::hiddenField("action", "copy")}
 		{CHtml::hiddenField("kadri_id", $lecturer->getId())}
 		{CHtml::hiddenField("year_id", $year->getId())}
@@ -113,7 +122,7 @@
 			<tr>
 				<td valign="top" width="500">
 					<div class="controls">
-						{CHtml::dropDownList("choice", $copyWays, "", null, "span12")}
+						{CHtml::dropDownList("choice", $copyWays, "", null, "span12", "", "", true)}
 					</div>
 				</td>
 			    <td valign="top">
@@ -134,6 +143,13 @@
 			    <td valign="top">
 			    	<div class="controls">
 						<input name="" type="submit" class="btn" value="ok">
+					</div>	
+				</td>
+			</tr>
+			<tr>
+			    <td valign="top">
+			    	<div class="controls">
+						<input name="" type="submit" class="btn" value="Сменить ограничение редактирования">
 					</div>	
 				</td>
 			</tr>
