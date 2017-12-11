@@ -164,12 +164,7 @@ class CHtml {
         if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
             $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
         }
-        $inline = "";
-        $inline .= $model->restrictionAttribute();
-        if ($html != "") {
-            $inline .= " ".$html;
-        }
-        self::dropDownList($field, $values, $model->$name, $id, $class, $inline, $tooltipTitle, $sort);
+        self::dropDownList($field, $values, $model->$name, $id, $class, $html, $tooltipTitle, $sort);
         if ($fieldRequired) {
             self::requiredStar();
         }
@@ -319,12 +314,7 @@ class CHtml {
         if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
             $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
         }
-        $inline = "";
-        $inline .= $model->restrictionAttribute();
-        if ($html != "") {
-            $inline .= " ".$html;
-        }
-        self::textField($field, $model->$name, $id, $class, $inline, $tooltipTitle);
+        self::textField($field, $model->$name, $id, $class, $html, $tooltipTitle);
         if ($fieldRequired) {
             self::requiredStar();
         }
@@ -340,14 +330,9 @@ class CHtml {
         if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
             $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
         }
-        $inline = "";
-        $inline .= $model->restrictionAttribute();
-        if ($html != "") {
-            $inline .= " ".$html;
-        }
         ?>
         <div class="input-append bootstrap-timepicker">
-            <input id="<?php echo $id; ?>" type="text" data-toggle="tooltip" title="<?php echo $tooltipTitle; ?>" name="<?php echo $field; ?>" class="timepicker <?php echo self::getFielsizeClass(); ?>" value="<?php echo $model->$name; ?>" <?php echo $inline; ?>>
+            <input id="<?php echo $id; ?>" type="text" data-toggle="tooltip" title="<?php echo $tooltipTitle; ?>" name="<?php echo $field; ?>" class="timepicker <?php echo self::getFielsizeClass(); ?>" value="<?php echo $model->$name; ?>">
             <span class="add-on"><i class="icon-time"></i></span>
         </div>
         <?php
@@ -398,17 +383,10 @@ class CHtml {
         if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
             $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
         }
-        $inline = "";
-        $inline .= $model->restrictionAttribute();
-        if ($html != "") {
-            $inline .= " ".$html;
-        }
         ?>
         <div class="input-append date <?php echo self::getFielsizeClass(); ?> datepicker" id="<?php echo $id; ?>" data-date="<?php echo $model->$name; ?>" data-toggle="tooltip" title="<?php echo $tooltipTitle; ?>" data-date-format="<?php echo $format; ?>">
-            <input name="<?php echo $field; ?>" class="<?php echo self::getFielsizeClass(); ?>" type="text" value="<?php echo $model->$name; ?>" <?php echo $inline; ?>>
-            <?php if (!$model->isEditRestriction()) {?>
-                <span class="add-on"><i class="icon-th"></i></span>
-            <?php }?>
+            <input name="<?php echo $field; ?>" class="<?php echo self::getFielsizeClass(); ?>" type="text" value="<?php echo $model->$name; ?>">
+            <span class="add-on"><i class="icon-th"></i></span>
         </div>
         <?php
         if (!self::$_calendarInit) {
@@ -455,12 +433,7 @@ class CHtml {
         if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
             $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
         }
-        $inline = "";
-        $inline .= $model->restrictionAttribute();
-        if ($html != "") {
-            $inline .= " ".$html;
-        }
-        self::textBox($field, $model->$name, $id, $class, $inline, $tooltipTitle);
+        self::textBox($field, $model->$name, $id, $class, $html, $tooltipTitle);
         $fieldRequired = false;
         $validators = CCoreObjectsManager::getFieldValidators($model);
         if (array_key_exists($name, $validators)) {
@@ -790,19 +763,12 @@ class CHtml {
         if (!is_null(CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name))) {
             $tooltipTitle = CCoreObjectsManager::getCoreModelFieldByFieldName($model, $name)->comment;
         }
-        $inline = "";
-        if ($name != "_edit_restriction") {
-            $inline .= $model->restrictionAttribute();
-        }
-        if ($html != "") {
-            $inline .= " ".$html;
-        }
         if ($model->$name == true) {
             $name = $model::getClassName()."[".$name."]";
-            self::checkBox($name, "1", true, $id, $class, $inline, $tooltipTitle);
+            self::checkBox($name, "1", true, $id, $class, $html, $tooltipTitle);
         } else {
             $name = $model::getClassName()."[".$name."]";
-            self::checkBox($name, "1", false, $id, $class, $inline, $tooltipTitle);
+            self::checkBox($name, "1", false, $id, $class, $html, $tooltipTitle);
         }
     }
     public static function error($name, CModel $model) {
@@ -1377,12 +1343,10 @@ class CHtml {
         <table <?php echo $inline; ?> id="<?php echo $name;?>" style="margin-left: 0px; ">
             <tr>
                 <td width="100%">
-                    <input type="text" data-toggle="tooltip" title="<?php echo $tooltipTitle; ?>" value="" asu-name="lookup" placeholder="Введите текст для поиска" style="width: 95%; " <?php echo $model->restrictionAttribute(); ?>>
+                    <input type="text" data-toggle="tooltip" title="<?php echo $tooltipTitle; ?>" value="" asu-name="lookup" placeholder="Введите текст для поиска" style="width: 95%; ">
                 </td>
                 <td style="width: 16px; ">
-                    <?php if (!$model->isEditRestriction()) {?>
                     <i class="icon-search" />
-                    <?php }?>
                 </td>
             </tr>
             <tr>
@@ -1392,11 +1356,8 @@ class CHtml {
                     </div>
                 </td>
                 <td style="width: 16px; ">
-                    <?php if (!$model->isEditRestriction()) {?>
                     <i class="icon-remove" />
-                    <?php }?>
                 </td>
-                
             </tr>
         </table>
         </div>
