@@ -129,7 +129,6 @@ class CStudyLoadController extends CBaseController {
         $studyLoad = CStudyLoadService::getStudyLoad(CRequest::getInt("id"));
         $kadriId = $studyLoad->person_id;
         $yearId = $studyLoad->year_id;
-        $this->setData("restrictionAttribute", $studyLoad->restrictionAttribute());
         $this->setData("studyLoad", $studyLoad);
         $this->addActionsMenuItem(array(
             array(
@@ -294,11 +293,11 @@ class CStudyLoadController extends CBaseController {
     	$kindTypes[] = CStudyLoadWorkTypeConstants::LABOR_LAB_WORK;
     	$this->setData("kindTypes", $kindTypes);
     	
-    	$accessLevel = false;
+    	$hasOwnAccessLevel = false;
     	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
-    		$accessLevel = true;
+    		$hasOwnAccessLevel = true;
     	}
-    	$this->setData("accessLevel", $accessLevel);
+    	$this->setData("hasOwnAccessLevel", $hasOwnAccessLevel);
     	
     	$this->renderView("_study_loads/editLoads.tpl");
     }
@@ -353,6 +352,26 @@ class CStudyLoadController extends CBaseController {
     	$loadsFall = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::FALL));
     	$loadsSpring = CStudyLoadService::getStudyLoadsByPart($loads, CStudyLoadService::getYearPartByAlias(CStudyLoadYearPartsConstants::SPRING));
     	
+    	$restrictedFall = false;
+    	if ($loadsFall->getCount() != 0) {
+    		foreach ($loadsFall->getItems() as $studyLoad) {
+    			if ($studyLoad->isEditRestriction()) {
+    				$restrictedFall = true;
+    			}
+    		}
+    	}
+    	$this->setData("restrictedFall", $restrictedFall);
+    	
+    	$restrictedSpring = false;
+    	if ($loadsSpring->getCount() != 0) {
+    		foreach ($loadsSpring->getItems() as $studyLoad) {
+    			if ($studyLoad->isEditRestriction()) {
+    				$restrictedSpring = true;
+    			}
+    		}
+    	}
+    	$this->setData("restrictedSpring", $restrictedSpring);
+    	
     	$this->setData("lecturer", $lecturer);
     	$this->setData("year", $year);
     	$this->setData("loadsFall", $loadsFall);
@@ -385,11 +404,11 @@ class CStudyLoadController extends CBaseController {
             )
     	));
     	
-    	$accessLevel = false;
+    	$hasOwnAccessLevel = false;
     	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
-    		$accessLevel = true;
+    		$hasOwnAccessLevel = true;
     	}
-    	$this->setData("accessLevel", $accessLevel);
+    	$this->setData("hasOwnAccessLevel", $hasOwnAccessLevel);
     	
     	$this->renderView("_study_loads/form.editLoads.tpl");
     }
@@ -638,12 +657,12 @@ class CStudyLoadController extends CBaseController {
             $studyLoad->_edit_restriction = 1;
             $studyLoad->_created_at = date('Y-m-d G:i:s');
             $studyLoad->_created_by = CSession::getCurrentPerson()->getId();
-            $result["title"] = "✖";
+            $result["title"] = "&#10006;";
         } else {
             $studyLoad->_edit_restriction = 0;
             $studyLoad->_created_at = date('Y-m-d G:i:s');
             $studyLoad->_created_by = CSession::getCurrentPerson()->getId();
-            $result["title"] = "✔";
+            $result["title"] = "&#10004;";
         }
         $studyLoad->save();
         echo json_encode($result);

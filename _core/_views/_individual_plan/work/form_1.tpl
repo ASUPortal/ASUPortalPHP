@@ -87,9 +87,9 @@
                             {$col}
                         {else}
                             {if ($col_id % 2 == 1)}
-                                {CHtml::textField($object->getFieldName($row_id, $col_id, 0), $col, "", "input-indplan")}
+                                {CHtml::textField($object->getFieldName($row_id, $col_id, 0), $col, "", "input-indplan", $restrictionAttribute)}
                             {else}
-                                {CHtml::textField($object->getFieldName($row_id, $col_id, 1), $col, "", "input-indplan")}
+                                {CHtml::textField($object->getFieldName($row_id, $col_id, 1), $col, "", "input-indplan", $restrictionAttribute)}
                             {/if}
                         {/if}
                     </td>

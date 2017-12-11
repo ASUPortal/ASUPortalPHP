@@ -135,4 +135,26 @@ class CIndPlanPersonLoad extends CActiveModel{
         }
         parent::remove();
     }
+    
+    /**
+     * Отмечена ли запись как нередактируемая
+     *
+     * @return bool
+     */
+    public function isEditRestriction() {
+    	return $this->_edit_restriction == 1;
+    }
+    
+    /**
+     * Атрибут нередактируемой записи
+     *
+     * @return string
+     */
+    public function restrictionAttribute() {
+    	$attribute = "";
+    	if ($this->isEditRestriction()) {
+    		$attribute = "readonly";
+    	}
+    	return $attribute;
+    }
 }

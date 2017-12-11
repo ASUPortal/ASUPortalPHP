@@ -1,7 +1,7 @@
 <form action="index.php" method="post" id="{$loadsId}">
     <table rel="stripe" class="table table-striped table-bordered table-hover table-condensed" border="1">
         <tr>
-            {if ($accessLevel)}
+            {if ($hasOwnAccessLevel)}
             	<th>&nbsp;</th>
             	<th>&nbsp;</th>
             	<th>&nbsp;</th>
@@ -28,7 +28,7 @@
             <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("on_filial", $studyLoads->getFirstItem(), false, false)}</div></th>
         </tr>
         <tr>
-	        {if ($accessLevel)}
+	        {if ($hasOwnAccessLevel)}
 	            {$ths = 16}
 	        {else}
 	            {$ths = 13}
@@ -44,7 +44,7 @@
                     <td>
 	                    <span>
 	                        <span title="Возможность редактирования" class="changeEditStatus" asu-id="{$studyLoad->getId()}" asu-action="updateEditStatus">
-	                            {if ($studyLoad->_edit_restriction == 0)}✔{else}✖{/if}
+	                            {if ($studyLoad->_edit_restriction == 0)}&#10004;{else}&#10006;{/if}
 	                        </span>
 	                    </span>
                     </td>
@@ -53,7 +53,7 @@
 	            {/if}
 	            <td>{counter}</td>
 	            <td>{CHtml::activeViewGroupSelect("id", $studyLoad, false, true)}</td>
-	            {if ($accessLevel)}
+	            {if ($hasOwnAccessLevel)}
 	            	<td><a href="?action=edit&id={$studyLoad->getId()}" title="{", "|join:CStudyLoadService::getLecturersNameByDiscipline($studyLoad->discipline)->getItems()}">{$studyLoad->discipline->getValue()}</a></td>
 	            {else}
 	            	<td>{$studyLoad->discipline->getValue()}</td>
@@ -82,7 +82,7 @@
 	        </tr>
         {/foreach}
         <tr>
-			{if ($accessLevel)}
+			{if ($hasOwnAccessLevel)}
             	<td>&nbsp;</td>
             	<td>&nbsp;</td>
             	<td>&nbsp;</td>
@@ -114,7 +114,7 @@
 			<td><b>{clearNullValues number=number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPartWithFilials($lecturer, $year, $part, $loadTypes),1,',','') level=0}</b></td>
 		</tr>
     </table>
-    {if ($accessLevel)}
+    {if ($hasOwnAccessLevel)}
     	{CHtml::hiddenField("action", "copy")}
 		{CHtml::hiddenField("kadri_id", $lecturer->getId())}
 		{CHtml::hiddenField("year_id", $year->getId())}

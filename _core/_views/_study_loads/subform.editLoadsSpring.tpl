@@ -1,15 +1,8 @@
-{$restricted = false}
-{foreach $studyLoads->getItems() as $studyLoad}
-	{if ($studyLoad->isEditRestriction())}
-		{$restricted = true}
-	{/if}
-{/foreach}
-
-{if ($restricted)}
+{if ($restrictedSpring)}
 	<div class="alert">Для недоступных полей установлено ограничение на редактирование!</div>
 {/if}
 
-<form action="index.php" method="post" id="{$loadsId}">
+<form action="index.php" method="post" id="loadsSpring">
 	{CHtml::hiddenField("action", "saveAll")}
 	{CHtml::hiddenField("kadri_id", $lecturer->getId())}
 	{CHtml::hiddenField("year_id", $year->getId())}
@@ -18,22 +11,22 @@
 	
     <table rel="stripe" class="table table-striped table-bordered table-hover table-condensed table-load" border="1">
         <tr>
-            {if ($accessLevel)}
+            {if ($hasOwnAccessLevel)}
             	<th>&nbsp;</th>
             	<th>&nbsp;</th>
             {/if}
             <th style="vertical-align:middle; text-align:center;">#</th>
-            <th style="vertical-align:middle; text-align:center;">{CHtml::activeViewGroupSelect("id", $studyLoads->getFirstItem(), true)}</th>
-            <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("discipline_id", $studyLoads->getFirstItem(), false, false)}</th>
+            <th style="vertical-align:middle; text-align:center;">{CHtml::activeViewGroupSelect("id", $loadsSpring->getFirstItem(), true)}</th>
+            <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("discipline_id", $loadsSpring->getFirstItem(), false, false)}</th>
             <th style="vertical-align:bottom;"><div class="vert-text">Факультет</div></th>
-            <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("speciality_id", $studyLoads->getFirstItem(), false, false)}</div></th>
-            <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("level_id", $studyLoads->getFirstItem(), false, false)}</div></th>
-            <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("groups_count", $studyLoads->getFirstItem(), false, false)}</div></th>
-            <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("students_count", $studyLoads->getFirstItem(), false, false)}</div></th>
+            <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("speciality_id", $loadsSpring->getFirstItem(), false, false)}</div></th>
+            <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("level_id", $loadsSpring->getFirstItem(), false, false)}</div></th>
+            <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("groups_count", $loadsSpring->getFirstItem(), false, false)}</div></th>
+            <th style="vertical-align:bottom;"><div class="vert-text">{CHtml::tableOrder("students_count", $loadsSpring->getFirstItem(), false, false)}</div></th>
             <th style="vertical-align:middle; text-align:center;">Учебные группы</th>
-            <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("load_type_id", $studyLoads->getFirstItem(), false, false)}</th>
-            <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("comment", $studyLoads->getFirstItem(), false, false)}</th>
-            {foreach $studyLoads->getFirstItem()->getStudyLoadTable()->getTableTotal() as $typeId=>$rows}
+            <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("load_type_id", $loadsSpring->getFirstItem(), false, false)}</th>
+            <th style="vertical-align:middle; text-align:center;">{CHtml::tableOrder("comment", $loadsSpring->getFirstItem(), false, false)}</th>
+            {foreach $loadsSpring->getFirstItem()->getStudyLoadTable()->getTableTotal() as $typeId=>$rows}
 				{foreach $rows as $kindId=>$value}
 					{if in_array($kindId, array(0))}
 						<th style="vertical-align:bottom;"><div class="vert-text">{$value}</div></th>
@@ -42,23 +35,23 @@
             {/foreach}
         </tr>
         <tr>
-	        {if ($accessLevel)}
+	        {if ($hasOwnAccessLevel)}
 	            {$ths = 13}
 	        {else}
 	            {$ths = 11}
 	        {/if}
-	        {for $i=1 to $ths + count($studyLoads->getFirstItem()->getStudyLoadTable()->getTableTotal())}
+	        {for $i=1 to $ths + count($loadsSpring->getFirstItem()->getStudyLoadTable()->getTableTotal())}
 	            <th style="text-align:center; background-color: #E6E6FF;">{$i}</th>
 	        {/for}
         </tr>
         {counter start=0 print=false}
-        {foreach $studyLoads->getItems() as $studyLoad}
+        {foreach $loadsSpring->getItems() as $studyLoad}
 	        <tr>
-	            {if ($accessLevel)}
+	            {if ($hasOwnAccessLevel)}
                     <td>
 	                    <span>
 	                        <span title="Возможность редактирования" class="changeEditStatus" asu-id="{$studyLoad->getId()}" asu-action="updateEditStatus">
-	                            {if ($studyLoad->_edit_restriction == 0)}✔{else}✖{/if}
+	                            {if ($studyLoad->_edit_restriction == 0)}&#10004;{else}&#10006;{/if}
 	                        </span>
 	                    </span>
                     </td>
@@ -66,7 +59,7 @@
 	            {/if}
 	            <td>{counter}</td>
 	            <td>{CHtml::activeViewGroupSelect("id", $studyLoad, false, true)}</td>
-	            {if ($accessLevel)}
+	            {if ($hasOwnAccessLevel)}
 	            	<td><a href="?action=edit&id={$studyLoad->getId()}" title="{", "|join:CStudyLoadService::getLecturersNameByDiscipline($studyLoad->discipline)->getItems()}">{$studyLoad->discipline->getValue()}</a></td>
 	            {else}
 	            	<td>{$studyLoad->discipline->getValue()}</td>

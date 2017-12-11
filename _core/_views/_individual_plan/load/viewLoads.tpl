@@ -55,7 +55,7 @@
 
         <table class="table table-striped table-bordered table-hover table-condensed">
             <tr>
-                {if ($accessLevel)}
+                {if ($hasOwnAccessLevel)}
                     <th>&nbsp;</th>
                 {/if}
                 <th>#</th>
@@ -66,11 +66,11 @@
             {counter start=0 print=false}
             {foreach $loads->getItems() as $load}
             <tr>
-                {if ($accessLevel)}
+                {if ($hasOwnAccessLevel)}
                     <td>
 	                    <span>
 	                        <span title="Возможность редактирования" class="changeEditStatus" asu-id="{$load->getId()}" asu-action="updateEditStatus">
-	                            {if ($load->_edit_restriction == 0)}✔{else}✖{/if}
+	                            {if ($load->_edit_restriction == 0)}&#10004;{else}&#10006;{/if}
 	                        </span>
 	                    </span>
                     </td>

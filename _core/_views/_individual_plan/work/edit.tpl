@@ -6,8 +6,10 @@
         {else}
             {$object->load->person->getName()}
         {/if})</h2>
-
-    {CHtml::warningSummary($object)}
+        
+    {if ($object->isEditRestriction())}
+		<div class="alert">Установлено ограничение на редактирование!</div>
+	{/if}
     
     {CHtml::helpForCurrentPage()}
 
