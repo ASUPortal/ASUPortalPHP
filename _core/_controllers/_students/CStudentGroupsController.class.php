@@ -21,12 +21,28 @@ class CStudentGroupsController extends CBaseController {
         parent::__construct();
     }
     public function actionIndex() {
+        $currentCorriculum = null;
         $set = new CRecordSet(true);
         $query = new CQuery();
         $query->select("st_group.*")
             ->from(TABLE_STUDENT_GROUPS." as st_group")
             ->order("st_group.id desc");
         $set->setQuery($query);
+        // фильтр по учебному плану
+        if (!is_null(CRequest::getFilter("corriculum.id"))) {
+        	$currentCorriculum = CRequest::getFilter("corriculum.id");
+        	$query->innerJoin(TABLE_CORRICULUMS." as corriculum", "st_group.corriculum_id=corriculum.id and corriculum.id = ".$currentCorriculum);
+        }
+        $corriculumsQuery = new CQuery();
+        $corriculumsQuery->select("corriculum.*")
+	        ->from(TABLE_CORRICULUMS." as corriculum")
+	        ->order("corriculum.title asc")
+	        ->innerJoin(TABLE_STUDENT_GROUPS." as st_group", "st_group.corriculum_id=corriculum.id");
+        $corriculums = array();
+        foreach ($corriculumsQuery->execute()->getItems() as $ar) {
+        	$corriculum = new CCorriculum(new CActiveRecord($ar));
+        	$corriculums[$corriculum->getId()] = $corriculum->title;
+        }
         /**
          * Финишная выборка
          */
@@ -35,6 +51,20 @@ class CStudentGroupsController extends CBaseController {
             $group = new CStudentGroup($item);
             $groups->add($group->getId(), $group);
         }
+        
+        $this->addActionsMenuItem(array(
+        	array(
+    			"title" => "Добавить",
+    			"link" => "?action=add",
+    			"icon" => "actions/list-add.png"
+    		),
+        	array(
+        		"title" => "Печать по шаблону",
+        		"link" => "#",
+        		"icon" => "devices/printer.png",
+        		"template" => "formset_students_groups_list"
+        	)
+        ));
         /**
          * Параметры для групповой печати по шаблону по выбранным группам
          */
@@ -45,6 +75,8 @@ class CStudentGroupsController extends CBaseController {
         $this->setData("id", "selectedInView");
         
         $this->setData("groups", $groups);
+        $this->setData("currentCorriculum", $currentCorriculum);
+        $this->setData("corriculums", $corriculums);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_student_groups/index.tpl");
     }
