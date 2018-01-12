@@ -10,11 +10,29 @@
 	        var action = "?action=index";
 	        window.location.href = action;
 	    }
-		jQuery(document).ready(function( ){
-			jQuery("#corriculum_selector").change(function(){
-                window.location.href=web_root + "_modules/_student_groups/index.php?filter=corriculum.id:" + jQuery(this).val();
-            });
-		});
+	    jQuery(document).ready(function(){
+	    	var filters = new Object();
+	    	{if !is_null($currentCorriculum)}
+    			filters["corriculum.id"] = {$currentCorriculum};
+    		{/if}
+	    	function updateFilter() {
+	    		var query = new Array();
+	    		var filter = new Array();
+	    		$.each(filters, function(key, value){
+	    			if (value != 0) {
+	        			query[query.length] = key + "=" + value;
+	        			filter[filter.length] = key + ":" + value;	
+	    			}
+	    		});
+	    		query[query.length] = "filter=" + filter.join("&filter=");
+	    		query[query.length] = "action=index";
+	    		window.location.href = "index.php?" + query.join("&");
+	    	}
+	    	jQuery("#corriculum_selector").change(function(){
+	    		filters["corriculum.id"] = $(this).val();
+	    		updateFilter();
+	    	});
+	    });
 	</script>
 	<form action="index.php" method="post" enctype="multipart/form-data" class="form-horizontal">
 			<table border="0" width="100%" class="tableBlank">
