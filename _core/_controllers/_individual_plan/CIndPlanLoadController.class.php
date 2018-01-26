@@ -181,6 +181,14 @@ class CIndPlanLoadController extends CBaseController{
         $hasOwnAccessLevel = false;
         if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
             $hasOwnAccessLevel = true;
+            $this->addActionsMenuItem(array(
+            	array(
+            		"title" => "Смена возможности редактирования",
+            		"link" => "#",
+            		"icon" => "apps/preferences-system-session.png",
+            		"template" => "formset_individual_plan_dialog_editing"
+            	)
+            ));
         }
         $this->setData("hasOwnAccessLevel", $hasOwnAccessLevel);
         $this->renderView("_individual_plan/load/viewLoads.tpl");

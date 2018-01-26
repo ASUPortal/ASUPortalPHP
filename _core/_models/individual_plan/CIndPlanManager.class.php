@@ -129,4 +129,21 @@ class CIndPlanManager {
         }
         return $loads;
     }
+    
+    /**
+     * Получить единицы работы инд. плана по месяцу
+     *
+     * @param int $loadId - ID инд. плана
+     * @param int $workId - ID типа работы из справочника нагрузок
+     * @param int $monthId - номер месяца
+     * @return CArrayList
+     */
+    public static function getIndPlanPersonWorkByMonthId($loadId, $monthId) {
+    	$works = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_WORKS, "load_id = ".$loadId." and load_month_id = ".$monthId)->getItems() as $item) {
+    		$work = new CIndPlanPersonWork($item);
+    		$works->add($work->getId(), $work);
+    	}
+    	return $works;
+    }
 }

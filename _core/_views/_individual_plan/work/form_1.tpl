@@ -87,9 +87,21 @@
                             {$col}
                         {else}
                             {if ($col_id % 2 == 1)}
-                                {CHtml::textField($object->getFieldName($row_id, $col_id, 0), $col, "", "input-indplan", $restrictionAttribute)}
+                                {if ($restrictionAttribute != "")}
+                                	{CHtml::textField($object->getFieldName($row_id, $col_id, 0, 1), $col, "", "input-indplan", $restrictionAttribute)}
+                                {elseif (!is_null($object->getIndPlanPersonWorkByLoadTypeAndMonthId($row_id, $col_id)))}
+	                            	{CHtml::textField($object->getFieldName($row_id, $col_id, 0, $object->getIndPlanPersonWorkByLoadTypeAndMonthId($row_id, $col_id)->_edit_restriction), $col, "", "input-indplan", $object->getIndPlanPersonWorkByLoadTypeAndMonthId($row_id, $col_id)->restrictionAttribute())}
+	                            {else}
+	                            	{CHtml::textField($object->getFieldName($row_id, $col_id, 0, 0), $col, "", "input-indplan")}
+	                            {/if}
                             {else}
-                                {CHtml::textField($object->getFieldName($row_id, $col_id, 1), $col, "", "input-indplan", $restrictionAttribute)}
+                                {if ($restrictionAttribute != "")}
+                                	{CHtml::textField($object->getFieldName($row_id, $col_id, 1, 1), $col, "", "input-indplan", $restrictionAttribute)}
+                                {elseif (!is_null($object->getIndPlanPersonWorkByLoadTypeAndMonthId($row_id, $col_id)))}
+	                            	{CHtml::textField($object->getFieldName($row_id, $col_id, 1, $object->getIndPlanPersonWorkByLoadTypeAndMonthId($row_id, $col_id)->_edit_restriction), $col, "", "input-indplan", $object->getIndPlanPersonWorkByLoadTypeAndMonthId($row_id, $col_id)->restrictionAttribute())}
+	                            {else}
+	                            	{CHtml::textField($object->getFieldName($row_id, $col_id, 1, 0), $col, "", "input-indplan")}	
+	                            {/if}
                             {/if}
                         {/if}
                     </td>
@@ -134,7 +146,13 @@
                         {if in_array($col_id, array(0, 7, 15, 16, 17))}
                             {$col}
                         {else}
-                            {CHtml::textField($object->getFieldName($row_id, $col_id), $col, "", "input-indplan", $restrictionAttribute)}
+                            {if ($restrictionAttribute != "")}
+                            	{CHtml::textField($object->getFieldName($row_id, $col_id, 0, 1), $col, "", "input-indplan", $restrictionAttribute)}
+                            {elseif (!is_null($object->getIndPlanPersonWorkByLoadTypeAndMonthId($row_id, $col_id)))}
+                            	{CHtml::textField($object->getFieldName($row_id, $col_id, 0, $object->getIndPlanPersonWorkByLoadTypeAndMonthId($row_id, $col_id)->_edit_restriction), $col, "", "input-indplan", $object->getIndPlanPersonWorkByLoadTypeAndMonthId($row_id, $col_id)->restrictionAttribute())}
+                            {else}
+                            	{CHtml::textField($object->getFieldName($row_id, $col_id, 0, 0), $col, "", "input-indplan")}
+                            {/if}
                         {/if}
                     </td>
                 {/foreach}
