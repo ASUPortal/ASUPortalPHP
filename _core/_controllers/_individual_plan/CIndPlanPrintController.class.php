@@ -141,12 +141,86 @@ class CIndPlanPrintController extends CFlowController{
     public function actionPrintIndPlayByMonth() {
         if ($this->getSelectedInPickListDialog()->getCount() == 0) {
             $this->setData("message", "Не выбран месяц, продолжение невозможно");
-            $this->renderView("_flow/pickList.tpl", "", "");
+            $this->renderView("_flow/dialog.ok.tpl", "", "");
             return true;
         }
         $bean = self::getStatefullBean();
         $bean->add("months", $this->getSelectedInPickListDialog());
         // редирект на печать
         $this->redirectNextAction("CPrintController", "PrintWithBeanData");
+    }
+    /**
+     * Диалог для смены возможности редактирования (выбор месяца)
+     */
+    public function actionDialogSelectMonthForPersonPlans() {
+    	$bean = self::getStatefullBean();
+    	$months = new CArrayList(array(
+    		20 => "план на осенний семестр",
+    		9 => "сентябрь",
+    		10 => "октябрь",
+    		11 => "ноябрь",
+    		12 => "декабрь",
+    		1 => "январь",
+    		21 => "план на весенний семестр",
+    		2 => "февраль",
+    		3 => "март",
+    		4 => "апрель",
+    		5 => "май",
+    		6 => "июнь",
+    		7 => "июль"
+    	));
+    	$this->setData("items", $months);
+    	$this->setData("multiple", true);
+    	$this->renderView("_flow/pickList.tpl", get_class($this), "DialogIndPlanSelectOption");
+    }
+    /**
+     * Диалог для смены возможности редактирования (выбор установки ограничения)
+     */
+    public function actionDialogIndPlanSelectOption() {
+    	if ($this->getSelectedInPickListDialog()->getCount() == 0) {
+    		$this->setData("message", "Не выбран месяц, продолжение невозможно");
+    		$this->renderView("_flow/dialog.ok.tpl", "", "");
+    		return true;
+    	}
+    	$bean = self::getStatefullBean();
+    	$bean->add("months", $this->getSelectedInPickListDialog());
+    	$options = new CArrayList(array(
+    		0 => "Снять ограничение",
+    		1 => "Ограничить редактирование"
+    	));
+    	$this->setData("items", $options);
+    	$this->renderView("_flow/pickList.tpl", get_class($this), "DialogIndPlanByEditChoice");
+    }
+    /**
+     * Переход на обработку смены статуса
+     */
+    public function actionDialogIndPlanByEditChoice() {
+    	$bean = self::getStatefullBean();
+    	$bean->add("options", $this->getSelectedInPickListDialog());
+    	$this->redirectNextAction("CIndPlanPrintController", "UpdateEditStatusFromDialog");
+    }
+    /**
+     * Обработку смены статуса редактирования
+     */
+    public function actionUpdateEditStatusFromDialog() {
+    	$bean = CApp::getApp()->beans->getStatefullBean(CRequest::getString("beanId"));
+    	$months = $bean->getItem("months");
+    	$options = $bean->getItem("options");
+    	$ids = $bean->getItem("id");
+    	foreach (explode(":", $ids) as $loadId) {
+    		foreach ($months->getItems() as $monthId) {
+    			$works = CIndPlanManager::getIndPlanPersonWorkByMonthId($loadId, $monthId);
+    			foreach ($works as $work) {
+    				if ($options->getFirstItem() == 0) {
+    					$work->_edit_restriction = 0;
+    				} else {
+    					$work->_edit_restriction = 1;
+    				}
+    				$work->save();
+    			}
+    		}
+    	}
+    	$url = WEB_ROOT."_modules/_individual_plan/load.php?action=viewLoads";
+    	$this->redirect($url);
     }
 }

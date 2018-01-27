@@ -1,0 +1,1 @@
+ALTER TABLE `ip_works` ADD `_edit_restriction` INT NOT NULL COMMENT 'Ограничение редактирования' ;

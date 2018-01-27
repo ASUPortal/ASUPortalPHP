@@ -15,6 +15,72 @@ class CIndPlanPersonLoadTable extends CFormModel{
     public $load_id;
     
     /**
+     * Отдельная единица работы инд. плана
+     * 
+     * @param int $workId - ID типа работы из справочника нагрузок
+     * @param int $columnId - номер колонки в плане
+     * @return CIndPlanPersonWork
+     */
+    public function getIndPlanPersonWorkByLoadTypeAndMonthId($workId, $columnId) {
+    	$months = array();
+    	// связь между номерами колонок и месяцами
+    	if ($this->getLoad()->isSeparateContract()) {
+    		$months = array(
+    				3 => 9,
+    				4 => 9,
+    				5 => 10,
+    				6 => 10,
+    				7 => 11,
+    				8 => 11,
+    				9 => 12,
+    				10 => 12,
+    				11 => 1,
+    				12 => 1,
+    				17 => 2,
+    				18 => 2,
+    				19 => 3,
+    				20 => 3,
+    				21 => 4,
+    				22 => 4,
+    				23 => 5,
+    				24 => 5,
+    				25 => 6,
+    				26 => 6,
+    				27 => 7,
+    				28 => 7,
+    	
+    				1 => 20,
+    				2 => 20,
+    				15 => 21,
+    				16 => 21
+    		);
+    	} else {
+    		$months = array(
+    				2 => 9,
+    				3 => 10,
+    				4 => 11,
+    				5 => 12,
+    				6 => 1,
+    				9 => 2,
+    				10 => 3,
+    				11 => 4,
+    				12 => 5,
+    				13 => 6,
+    				14 => 7,
+    	
+    				1 => 20,
+    				8 => 21
+    		);
+    	}
+    	$works = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_IND_PLAN_WORKS, "load_id = ".$this->getLoad()->getId()." and load_type_id = ".$workId." and load_month_id = ".$months[$columnId])->getItems() as $item) {
+    		$work = new CIndPlanPersonWork($item);
+    		$works->add($work->getId(), $work);
+    	}
+    	return $works->getFirstItem();
+    }
+    
+    /**
      * @param CIndPlanPersonLoad $load
      */
     function __construct(CIndPlanPersonLoad $load) {
@@ -302,7 +368,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
         $result = $data["value"];
         return $result;
     }
-    public function getFieldName($work_id, $column_id, $isContract = 0) {
+    public function getFieldName($work_id, $column_id, $isContract = 0, $edit_resriction = 0) {
         $months = array();
         // связь между номерами колонок и месяцами
         if ($this->getLoad()->isSeparateContract()) {
@@ -353,7 +419,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
                 8 => 21
             );
         }
-        return "CModel[data][".$isContract."][".$work_id."][".$months[$column_id]."]";
+        return "CModel[data][".$isContract."][".$work_id."][".$months[$column_id]."][".$edit_resriction."]";
     }
     public function save() {
         // удаляем старые данные
@@ -363,15 +429,18 @@ class CIndPlanPersonLoadTable extends CFormModel{
         // добавляем новые
         foreach ($this->data as $isContract=>$works) {
             foreach ($works as $type_id=>$months) {
-                foreach ($months as $month_id=>$value) {
-                    $obj = new CIndPlanPersonWork();
-                    $obj->load_id = $this->getLoad()->getId();
-                    $obj->work_type = "1";
-                    $obj->load_month_id = $month_id;
-                    $obj->load_type_id = $type_id;
-                    $obj->load_is_contract = $isContract;
-                    $obj->load_value = $value;
-                    $obj->save();
+                foreach ($months as $month_id=>$restrictions) {
+                	foreach ($restrictions as $edit_restriction=>$value) {
+                		$obj = new CIndPlanPersonWork();
+                		$obj->load_id = $this->getLoad()->getId();
+                		$obj->work_type = 1;
+                		$obj->load_month_id = $month_id;
+                		$obj->load_type_id = $type_id;
+                		$obj->load_is_contract = $isContract;
+                		$obj->load_value = $value;
+                		$obj->_edit_restriction = $edit_restriction;
+                		$obj->save();
+                	}
                 }
             }
         }
