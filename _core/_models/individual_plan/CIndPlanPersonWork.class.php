@@ -16,7 +16,6 @@ class CIndPlanPersonWork extends CActiveModel{
     protected $_load = null;
     protected $_workType = null;
     protected $_publication = null;
-    public $_edit_restriction;
 
     public function relations() {
         return array(
@@ -82,7 +81,11 @@ class CIndPlanPersonWork extends CActiveModel{
      * @return bool
      */
     public function isEditRestriction() {
-    	return $this->_edit_restriction == 1;
+    	if ($this->_edit_restriction == 1 or $this->load->_edit_restriction == 1) {
+    		return true;
+    	} else {
+    		return false;
+    	}
     }
     
     /**

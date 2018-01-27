@@ -29,7 +29,6 @@ class CIndPlanWorkController extends CBaseController{
             				"icon" => "actions/edit-undo.png"
             		)
             );
-            $this->setData("restrictionAttribute", $load->restrictionAttribute());
         } else {
             $object = new CIndPlanPersonWork();
             $object->load_id = CRequest::getInt("id");
