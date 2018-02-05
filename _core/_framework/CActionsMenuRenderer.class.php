@@ -107,7 +107,12 @@ class CActionsMenuRenderer {
     	echo '</a>';
     }
     private function renderMenuItemAjaxAction(array $item) {
-        echo '<a href="#" id="ajaxMenuAction_'.self::$childContainers.'">';
+        // $additionalId используется в случае, если на странице используется два и более компонента
+        $additionalId = 0;
+        if (array_key_exists("additionalId", $item)) {
+            $additionalId = $item["additionalId"];
+        }
+        echo '<a href="#" id="ajaxMenuAction_'.self::$childContainers.$additionalId.'">';
         echo '<img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'">';
         echo $item['title'];
         echo '</a>';
@@ -115,7 +120,7 @@ class CActionsMenuRenderer {
         ?>
         <script>
             jQuery(document).ready(function(){
-                jQuery("#ajaxMenuAction_<?php echo self::$childContainers; ?>").on("click", function(){
+                jQuery("#ajaxMenuAction_<?php echo self::$childContainers.$additionalId; ?>").on("click", function(){
                     var form = jQuery("<?php echo $item["form"]; ?>");
                     jQuery(form).attr("action", "<?php echo $item['link']; ?>");
                     var action = jQuery("[name=action]", form);

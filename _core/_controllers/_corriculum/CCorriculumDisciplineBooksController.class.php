@@ -30,7 +30,8 @@ class CCorriculumDisciplineBooksController extends CBaseController{
             "icon" => "actions/edit-delete.png",
             "form" => "#Books",
             "link" => "books.php",
-            "action" => "delete"
+            "action" => "delete",
+            "additionalId" => "books"
         ));
         $this->setData("discipline", $discipline);
         $this->renderView("_corriculum/_books/index.tpl");
