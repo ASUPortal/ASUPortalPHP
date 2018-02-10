@@ -406,8 +406,18 @@ class CBaseController {
     }
 
     /**
-     * Добавить элемент в меню действий (правая колонка)
-     *
+     * Добавить элемент в меню действий (правая колонка).
+     * 
+     * Отображение типа кнопки меню в зависимости от наличия определённого атрибута в массиве $item:
+     * атрибут template: печать по шаблону (CActionsMenuRenderer::renderMenuItemPrint);
+     * атрибут form: обработка нажатия на кнопку с помощью jQuery, для form необходим атрибут additionalId в случае, если на странице используется несколько компонентов (CActionsMenuRenderer::renderMenuItemAjaxAction);
+     * атрибут onclick: вызов скрипта js при нажатии на кнопку (CActionsMenuRenderer::renderMenuItemJS).
+     * 
+     * Обязательные атрибуты каждого элемента меню в массиве $item для элемента по умолчанию (CActionsMenuRenderer::renderMenuItemDefault):
+     * атрибут title: заголовок;
+     * атрибут link: ссылка для обработки;
+     * атрибут icon: картинка.
+     * 
      * @param array $item
      */
     protected function addActionsMenuItem(array $item) {
