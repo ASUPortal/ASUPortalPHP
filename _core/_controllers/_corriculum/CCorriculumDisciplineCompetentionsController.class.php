@@ -41,7 +41,8 @@ class CCorriculumDisciplineCompetentionsController extends CBaseController{
             "icon" => "actions/edit-delete.png",
             "form" => "#MainView",
             "link" => "competentions.php",
-            "action" => "delete"
+            "action" => "delete",
+            "additionalId" => "competentions"
         ));
         $this->setData("objects", $objects);
         $this->renderView("_corriculum/_competentions/index.tpl");

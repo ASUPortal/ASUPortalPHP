@@ -10,7 +10,8 @@
 class CActionsMenuRenderer {
     private static $childContainers = 0;
     /**
-     * Отображение меню справа на сайте
+     * Отображение меню справа на сайте.
+     * Тип элемента меню определяется в зависимости от наличия определённых атрибутов в массиве $items.
      *
      * @param array $items
      */
@@ -65,7 +66,8 @@ class CActionsMenuRenderer {
         echo '</div>';
     }
     /**
-     * Отрисовать печать по шаблону
+     * Отрисовать печать по шаблону.
+     * Атрибут template: указывает название используемого для печати набора шаблона.
      *
      * @param array $item
      */
@@ -86,6 +88,12 @@ class CActionsMenuRenderer {
         echo '</div>';
         self::$childContainers++;
     }
+    /**
+     * Элемент меню по умолчанию.
+     * Атрибут attributes: позволяет указать дополнительные html-атрибуты кнопки (например, для вызова модального окна "data-toggle" => "modal").
+     * 
+     * @param array $item
+     */
     private function renderMenuItemDefault(array $item) {
         if (array_key_exists("attributes", $item)) {
             $attributes = array();
@@ -100,14 +108,31 @@ class CActionsMenuRenderer {
         echo $item['title'];
         echo '</a>';
     }
+    /**
+     * Вызов скрипта js при нажатии на кнопку.
+     * Атрибут onclick: событие js, вызываемое при нажатии на кнопку.
+     * 
+     * @param array $item
+     */
     private function renderMenuItemJS(array $item) {
     	echo '<a href="'.$item["link"].'" onclick="'.$item["onclick"].'">';
     	echo '<div><img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'"></div>';
     	echo $item['title'];
     	echo '</a>';
     }
+    /**
+     * Обработка нажатия на кнопку с помощью jQuery.
+     * Атрибут additionalId: дополнительный id к элементу меню,
+     * необходим в случае, если на странице используется несколько компонентов, т.к. в каждом из них счётчик $childContainers начинается заново.
+     * 
+     * @param array $item
+     */
     private function renderMenuItemAjaxAction(array $item) {
-        echo '<a href="#" id="ajaxMenuAction_'.self::$childContainers.'">';
+        $additionalId = 0;
+        if (array_key_exists("additionalId", $item)) {
+            $additionalId = $item["additionalId"];
+        }
+        echo '<a href="#" id="ajaxMenuAction_'.self::$childContainers.$additionalId.'">';
         echo '<img src="'.WEB_ROOT.'images/'.ICON_THEME.'/32x32/'.$item['icon'].'">';
         echo $item['title'];
         echo '</a>';
@@ -115,7 +140,7 @@ class CActionsMenuRenderer {
         ?>
         <script>
             jQuery(document).ready(function(){
-                jQuery("#ajaxMenuAction_<?php echo self::$childContainers; ?>").on("click", function(){
+                jQuery("#ajaxMenuAction_<?php echo self::$childContainers.$additionalId; ?>").on("click", function(){
                     var form = jQuery("<?php echo $item["form"]; ?>");
                     jQuery(form).attr("action", "<?php echo $item['link']; ?>");
                     var action = jQuery("[name=action]", form);
@@ -135,6 +160,14 @@ class CActionsMenuRenderer {
         <?php
         self::$childContainers++;
     }
+    /**
+     * Отображение типа кнопки меню в зависимости от наличия определённого атрибута в массиве $item:
+     * атрибут template: печать по шаблону;
+     * атрибут form: обработка нажатия на кнопку с помощью jQuery;
+     * атрибут onclick: вызов скрипта js при нажатии на кнопку.
+     * 
+     * @param array $item
+     */
     private function renderItemContent(array $item) {
         if (array_key_exists("template", $item)) {
             $this->renderMenuItemPrint($item);
@@ -148,8 +181,15 @@ class CActionsMenuRenderer {
     }
 
     /**
-     * Отображение одного пункта меню
-     *
+     * Отображение одного пункта меню.
+     * 
+     * Обязательные атрибуты каждого элемента меню в массиве $item:
+     * атрибут title: заголовок;
+     * атрибут link: ссылка для обработки;
+     * атрибут icon: картинка.
+     * 
+     * Атрибут child: определяет дочерний элемент для кнопки.
+     * 
      * @param array $item
      */
     private function renderItem(array $item) {
