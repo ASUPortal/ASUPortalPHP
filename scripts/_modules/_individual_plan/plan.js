@@ -13,7 +13,7 @@ jQuery(document).ready(function(){
                 jQuery.each(data, function(isContract, works){
                     jQuery.each(works, function(workId, columns){
                         jQuery.each(columns, function(monthId, value){
-                            var fieldName = "CModel[data][" + isContract + "][" + workId + "][" + monthId + "]";
+                            var fieldName = "CModel[data][" + isContract + "][" + workId + "][" + monthId + "][0]";
                             jQuery("input[name='" + fieldName + "']").val(value);
                         });
                     });
@@ -31,14 +31,14 @@ function getWorkId(itemName) {
 }
 function autoPropogate(){
     // осенний семестр
-    var items = jQuery("input[name^='CModel[data][0]'][name$='[20]']");
+    var items = jQuery("input[name^='CModel[data][0]'][name$='[20]'][0]");
     var months = new Array(9, 10, 11, 12, 1);
     // нагрузка по бюджету есть всегда
     jQuery.each(items, function(key, item){
         var workId = getWorkId(jQuery(item).attr("name"));
         var monthLoad = (jQuery(item).val() / months.length).toFixed(2);
         for (var i = 0; i < months.length; i++) {
-            jQuery("input[name='CModel[data][0][" + workId + "][" + months[i] + "]']").val(monthLoad);
+            jQuery("input[name='CModel[data][0][" + workId + "][" + months[i] + "][0]']").val(monthLoad);
         }
     });
     // нагрузка по контракту
@@ -48,7 +48,7 @@ function autoPropogate(){
             var workId = getWorkId(jQuery(item).attr("name"));
             var monthLoad = (jQuery(item).val() / months.length).toFixed(2);
             for (var i = 0; i < months.length; i++) {
-                jQuery("input[name='CModel[data][1][" + workId + "][" + months[i] + "]']").val(monthLoad);
+                jQuery("input[name='CModel[data][1][" + workId + "][" + months[i] + "][0]']").val(monthLoad);
             }
         });
     }
@@ -60,7 +60,7 @@ function autoPropogate(){
         var workId = getWorkId(jQuery(item).attr("name"));
         var monthLoad = (jQuery(item).val() / months.length).toFixed(2);
         for (var i = 0; i < months.length; i++) {
-            jQuery("input[name='CModel[data][0][" + workId + "][" + months[i] + "]']").val(monthLoad);
+            jQuery("input[name='CModel[data][0][" + workId + "][" + months[i] + "][0]']").val(monthLoad);
         }
     });
     // нагрузка по контракту
@@ -70,7 +70,7 @@ function autoPropogate(){
             var workId = getWorkId(jQuery(item).attr("name"));
             var monthLoad = (jQuery(item).val() / months.length).toFixed(2);
             for (var i = 0; i < months.length; i++) {
-                jQuery("input[name='CModel[data][1][" + workId + "][" + months[i] + "]']").val(monthLoad);
+                jQuery("input[name='CModel[data][1][" + workId + "][" + months[i] + "][0]']").val(monthLoad);
             }
         });
     }
