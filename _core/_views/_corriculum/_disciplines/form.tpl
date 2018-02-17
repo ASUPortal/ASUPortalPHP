@@ -36,6 +36,14 @@
     </div>
     
     <div class="control-group">
+        {CHtml::activeLabel("choice_id", $discipline)}
+        <div class="controls">
+            {CHtml::activeLookup("choice_id", $discipline, "choiceCurriculumDiscipline", false, array(), true)}
+            {CHtml::error("choice_id", $discipline)}
+        </div>
+    </div>
+    
+    <div class="control-group">
         {CHtml::activeLabel("ordering", $discipline)}
         <div class="controls">
             {CHtml::activeTextField("ordering", $discipline)}

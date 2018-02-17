@@ -136,6 +136,13 @@ class CCorriculumDiscipline extends CActiveModel {
                 "storageField" => "component_type_id",
                 "managerClass" => "CTaxonomyManager",
                 "managerGetObject" => "getTerm"
+            ),
+            "choice" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_choice",
+                "storageField" => "choice_id",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getTerm"
             )
         );
     }
@@ -145,7 +152,8 @@ class CCorriculumDiscipline extends CActiveModel {
             "ordering" => "Порядок в списке",
             "parent_id" => "Родительская дисциплина",
 			"component_type_id" => "Вид компонента",
-			"department_id" => "Кафедра"
+			"department_id" => "Кафедра",
+			"choice_id" => "Выбор дисциплины"
         );
     }
     /**
