@@ -18,6 +18,7 @@
  * @property int comment_file
  * @property int status_on_portal
  * @property int status_workplan
+ * @property int choice_discipline_id
  * @property string year
  * @property string intended_for // предназначена для
  * @property string position
@@ -442,7 +443,14 @@ class CWorkPlan extends CActiveModel {
         		"storageField" => "status_workplan_prorektor",
         		"managerClass" => "CTaxonomyManager",
         		"managerGetObject" => "getTerm"
-        	)
+        	),
+            "choice_discipline" => array(
+                "relationPower" => RELATION_HAS_ONE,
+                "storageProperty" => "_choice_discipline",
+                "storageField" => "choice_discipline_id",
+                "managerClass" => "CTaxonomyManager",
+                "managerGetObject" => "getTerm"
+            )
         );
     }
 
@@ -495,7 +503,8 @@ class CWorkPlan extends CActiveModel {
             "status_workplan_nms" => "НМС",
             "status_workplan_dean" => "ДЕКАН",
             "status_workplan_prorektor" => "ПРОРЕКТОР",
-            "comment" => "Комментарий"
+            "comment" => "Комментарий",
+			"choice_discipline_id" => "Выбор дисциплины учебного плана"
         );
     }
 

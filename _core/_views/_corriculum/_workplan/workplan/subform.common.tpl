@@ -15,6 +15,14 @@
 </div>
 
 <div class="control-group">
+    {CHtml::activeLabel("choice_discipline_id", $plan)}
+    <div class="controls">
+        {CHtml::activeLookup("choice_discipline_id", $plan, "choiceCurriculumDiscipline", false, array(), true)}
+        {CHtml::error("choice_discipline_id", $plan)}
+    </div>
+</div>
+
+<div class="control-group">
     {CHtml::activeLabel("is_archive", $plan)}
     <div class="controls">
         {CHtml::activeCheckBox("is_archive", $plan)}
