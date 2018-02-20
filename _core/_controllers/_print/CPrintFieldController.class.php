@@ -26,7 +26,7 @@ class CPrintFieldController extends CBaseController {
             $fields->add($field->getId(), $field);
         }
         */
-        $set = new CRecordSet(false);
+        $set = new CRecordSet();
         $query = new CQuery();
         $set->setQuery($query);
         $query->select("field.*")
@@ -56,9 +56,9 @@ class CPrintFieldController extends CBaseController {
         /**
          * Набор шаблонов
          */
-        if (!is_null(CRequest::getFilter("formset"))) {
-            $query->condition("field.formset_id = ".CRequest::getFilter("formset"));
-            $selectedFormset = CPrintManager::getFormset(CRequest::getFilter("formset"))->getId();
+        if (!is_null(CRequest::getFilter("formset_id"))) {
+            $query->condition("field.formset_id = ".CRequest::getFilter("formset_id"));
+            $selectedFormset = CPrintManager::getFormset(CRequest::getFilter("formset_id"))->getId();
         }
         /**
          * Набираем выборку
@@ -250,7 +250,7 @@ class CPrintFieldController extends CBaseController {
     }
     public function actionSearch() {
         $res = array();
-        $term = CRequest::getString("term");
+        $term = CRequest::getString("query");
         /**
          * Поиск по псевдониму или названию описателя
          */

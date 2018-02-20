@@ -5,9 +5,13 @@
 {CHtml::helpForCurrentPage()}
 
     <script>
+	    function removeFilter() {
+	        var action = "?action=index";
+	        window.location.href = action;
+	    }
         jQuery(document).ready(function(){
             jQuery("#formset").on("change", function(){
-                window.location.href="field.php?action=index&filter=formset:" + this.value;
+                window.location.href="field.php?action=index&filter=formset_id:" + this.value;
             });
         });
     </script>
@@ -19,9 +23,7 @@
                     <p>
                         <label for="formset">Набор шаблонов</label>
                         {CHtml::dropDownList("formsets", $formsets, $selectedFormset, "formset")}
-                        {if !is_null($selectedFormset)}
-                            <span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter('formset'); return false; "/></span>
-                        {/if}
+                        <span><img src="{$web_root}images/del_filter.gif" style="cursor: pointer; " onclick="removeFilter(); return false; "/></span>
                     </p>
                     {if !is_null($selectedField)}
                         <p>
