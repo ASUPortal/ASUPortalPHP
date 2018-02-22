@@ -77,7 +77,7 @@ class CStaffJSONController extends CBaseJSONController {
         $group = CRequest::getInt("group");
         $res = array();
         foreach (CStaffManager::getStudentGroup($group)->getStudents()->getItems() as $student) {
-            $res[$student->getId()] = $student->getName();
+            $res["0".$student->getId()] = $student->getName();
         }
         echo json_encode($res);
     }
