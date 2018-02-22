@@ -28,7 +28,7 @@
                         students = new Object();
                         for (var i = 0; i < studentsForSort.length; i++) {
                             var item = studentsForSort[i];
-                            students[item.substr(item.indexOf("|") + 1)] = item.substr(0, item.indexOf("|"));
+                            students["0" + item.substr(item.indexOf("|") + 1)] = item.substr(0, item.indexOf("|"));
                         }
                         
                         jQuery("#student_container").empty();
