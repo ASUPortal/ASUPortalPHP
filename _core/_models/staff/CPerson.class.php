@@ -677,7 +677,8 @@ class CPerson extends CActiveModel{
      */
     public function getActiveOrders() {
         $result = new CArrayList();
-        foreach ($this->orders->getItems() as $order) {
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_STAFF_ORDERS, "kadri_id = ".$this->getId())->getItems() as $item) {
+            $order = new COrder($item);
             if ($order->isActive()) {
                 $result->add($order->getId(), $order);
             }
