@@ -228,14 +228,9 @@ class CStudyLoadController extends CBaseController {
                 "title" => "Назад",
                 "link" => WEB_ROOT."_modules/_study_loads/index.php",
                 "icon" => "actions/edit-undo.png"
-            ),
-            array(
-                "title" => "Печать по шаблону",
-                "link" => "#",
-                "icon" => "devices/printer.png",
-                "template" => "formset_study_loads"
             )
     	));
+    	
     	if (CSessionService::hasAnyRole([ACCESS_LEVEL_READ_ALL, ACCESS_LEVEL_WRITE_ALL])) {
     		$this->addActionsMenuItem(array(
     			array(
@@ -247,36 +242,43 @@ class CStudyLoadController extends CBaseController {
 							->build(),
     				"icon" => "actions/list-add.png"
     			),
-    			array(
-    				"title" => "Редактировать нагрузку по бюджету",
-    				"link" => UrlBuilder::newBuilder("index.php")
-							->addParameter("action", "editLoadsByType")
-							->addParameter("kadri_id", $selectedPerson)
-							->addParameter("year_id", $selectedYear)
-							->addParameter("base", 1)
-							->addParameter("additional", 1)
-							->addParameter("premium", 1)
-							->addParameter("byTime", 1)
-							->addParameter("isBudget", 1)
-							->addParameter("isContract", 0)
-							->build(),
-    				"icon" => "apps/accessories-text-editor.png"
-    			),
-    			array(
-    				"title" => "Редактировать нагрузку по контракту",
-    				"link" => UrlBuilder::newBuilder("index.php")
-							->addParameter("action", "editLoadsByType")
-							->addParameter("kadri_id", $selectedPerson)
-							->addParameter("year_id", $selectedYear)
-							->addParameter("base", 1)
-							->addParameter("additional", 1)
-							->addParameter("premium", 1)
-							->addParameter("byTime", 1)
-							->addParameter("isBudget", 0)
-							->addParameter("isContract", 1)
-							->build(),
-    				"icon" => "apps/accessories-text-editor.png"
-    			)
+				array(
+					"title" => "Редактировать нагрузку",
+					"link" => "#",
+					"icon" => "apps/accessories-text-editor.png",
+					"child" => array(
+						array(
+							"title" => "Редактировать нагрузку по бюджету",
+							"link" => UrlBuilder::newBuilder("index.php")
+								->addParameter("action", "editLoadsByType")
+								->addParameter("kadri_id", $selectedPerson)
+								->addParameter("year_id", $selectedYear)
+								->addParameter("base", 1)
+								->addParameter("additional", 1)
+								->addParameter("premium", 1)
+								->addParameter("byTime", 1)
+								->addParameter("isBudget", 1)
+								->addParameter("isContract", 0)
+								->build(),
+							"icon" => "apps/accessories-text-editor.png"
+						),
+						array(
+							"title" => "Редактировать нагрузку по контракту",
+							"link" => UrlBuilder::newBuilder("index.php")
+								->addParameter("action", "editLoadsByType")
+								->addParameter("kadri_id", $selectedPerson)
+								->addParameter("year_id", $selectedYear)
+								->addParameter("base", 1)
+								->addParameter("additional", 1)
+								->addParameter("premium", 1)
+								->addParameter("byTime", 1)
+								->addParameter("isBudget", 0)
+								->addParameter("isContract", 1)
+								->build(),
+							"icon" => "apps/accessories-text-editor.png"
+						)
+					)
+				)
     		));
     	}
     	

@@ -121,5 +121,5 @@
 {/block}
 
 {block name="asu_right"}
-	{include file="_study_loads/common.right.tpl"}
+	{include file="_study_loads/editLoads.right.tpl"}
 {/block}
