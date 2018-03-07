@@ -272,4 +272,27 @@ class CStaffService {
     	}
     	return $hours;
     }
+    
+    /**
+     * Получить студенческую группу, либо студента, в зависимости от id
+     * (используется для добавления шаблона с группой к шаблонам со студентами в архив при массовой печати заявлений на выбор дисциплин)
+     * (набор шаблонов formset_students_with_group)
+     * 
+     * @param int $key
+     * @return Ambigous <NULL, CStudentGroup, CStudent>
+     */
+    public static function getStudentGroupOrStudent($key) {
+    	$item = null;
+    	$ar = CActiveRecordProvider::getById(TABLE_STUDENT_GROUPS, $key);
+    	if (!is_null($ar)) {
+    		$item = new CStudentGroup($ar);
+    	}
+    	if (is_null($item)) {
+    		$ar = CActiveRecordProvider::getById(TABLE_STUDENTS, $key);
+    		if (!is_null($ar)) {
+    			$item = new CStudent($ar);
+    		}
+    	}
+    	return $item;
+    }
 }

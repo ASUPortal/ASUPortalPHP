@@ -69,9 +69,11 @@ class CStudentGroupsController extends CBaseController {
          * Параметры для групповой печати по шаблону по выбранным группам
          */
         $this->setData("template", "formset_students");
+        $this->setData("templateWithGroup", "formset_students_with_group");
         $this->setData("selectedDoc", false);
         $this->setData("url", WEB_ROOT."_modules/_student_groups/index.php");
         $this->setData("action", "JSONGetStudentsFromGroups");
+        $this->setData("actionWithGroup", "JSONGetStudentsFromGroupsWithGroup");
         $this->setData("id", "selectedInView");
         
         $this->setData("groups", $groups);
@@ -98,9 +100,11 @@ class CStudentGroupsController extends CBaseController {
          * Параметры для групповой печати по шаблону
          */
         $this->setData("template", "formset_students");
+        $this->setData("templateWithGroup", "formset_students_with_group");
         $this->setData("selectedDoc", false);
         $this->setData("url", WEB_ROOT."_modules/_student_groups/index.php");
         $this->setData("action", "JSONGetStudents");
+        $this->setData("actionWithGroup", "JSONGetStudentsWithGroup");
         $this->setData("id", CRequest::getInt("id"));
         
         $this->addJSInclude(JQUERY_UI_JS_PATH);
@@ -168,6 +172,17 @@ class CStudentGroupsController extends CBaseController {
         echo json_encode($arr);
     }
     /**
+     * Получаем список студентов JSON-ом с добавлением группы
+     */
+    public function actionJSONGetStudentsWithGroup() {
+        $group = CStaffManager::getStudentGroup(CRequest::getInt("id"));
+        $arr = array($group->getId()=>$group->getName());
+        foreach ($group->getStudentsWithChangeGroupsHistory()->getItems() as $student) {
+            $arr[$student->getId()] = $student->getName();
+        }
+        echo json_encode($arr);
+    }
+    /**
      * Получаем список студентов из выбранных групп JSON-ом
      */
     public function actionJSONGetStudentsFromGroups() {
@@ -175,6 +190,21 @@ class CStudentGroupsController extends CBaseController {
         $arr = array();
         foreach ($groups as $id) {
             $group = CStaffManager::getStudentGroup($id);
+            foreach ($group->getStudentsWithChangeGroupsHistory()->getItems() as $student) {
+                $arr[$student->getId()] = $student->getName();
+            }
+        }
+        echo json_encode($arr);
+    }
+    /**
+     * Получаем список студентов из выбранных групп JSON-ом с добавлением группы
+     */
+    public function actionJSONGetStudentsFromGroupsWithGroup() {
+        $groups = explode(":", CRequest::getString("id"));
+        $arr = array();
+        foreach ($groups as $id) {
+            $group = CStaffManager::getStudentGroup($id);
+            $arr[$group->getId()] = $group->getName();
             foreach ($group->getStudentsWithChangeGroupsHistory()->getItems() as $student) {
                 $arr[$student->getId()] = $student->getName();
             }

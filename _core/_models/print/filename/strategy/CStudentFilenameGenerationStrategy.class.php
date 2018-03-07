@@ -22,14 +22,27 @@ class CStudentFilenameGenerationStrategy implements IPrintFilenameGenerationStra
      */
     public function getFilename() {
         $object = $this->object;
+        $student = "";
         if (!CSettingsManager::getSettingValue("template_filename_translit")) {
-            $student = $object->getName();
-            $group = $object->group->getName();
+        	if (get_class($object) == "CStudentGroup") {
+        		$group = $object->getName();
+        	} elseif (get_class($object) == "CStudent") {
+        		$student = $object->getName();
+        		$group = $object->group->getName();
+        	}
         } else {
-            $student = CUtils::toTranslit($object->getName());
-            $group = CUtils::toTranslit($object->group->getName());
+            if (get_class($object) == "CStudentGroup") {
+            	$group = CUtils::toTranslit($object->getName());
+            } elseif (get_class($object) == "CStudent") {
+            	$student = CUtils::toTranslit($object->getName());
+            	$group = CUtils::toTranslit($object->group->getName());
+            }
         }
-        $filename = $student." - (".$group.").odt";
+        if ($student != "") {
+        	$filename = $student." - (".$group.").odt";
+        } else {
+        	$filename = $group.".odt";
+        }
         return $filename;
     }
 
