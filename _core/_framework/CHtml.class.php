@@ -1190,6 +1190,8 @@ class CHtml {
             foreach ($forms->getItems() as $form) {
             	if ($variables['manager'] == "CWorkPlanManager") {
             		echo '<li><a href="#" onclick="printWithTemplateWorkplans(';
+            	} elseif ($variables['manager'] == "CStaffService") {
+            		echo '<li><a href="#" onclick="printWithTemplateStaff(';
             	} else {
             		echo '<li><a href="#" onclick="printWithTemplate(';
             	}

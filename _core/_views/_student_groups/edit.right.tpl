@@ -51,3 +51,5 @@
 </script>
 
 {CHtml::displayActionsMenu($_actions_menu)}
+
+{include file="_student_groups/_printGroupOnTemplate.tpl"}
