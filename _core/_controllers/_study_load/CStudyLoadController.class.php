@@ -278,7 +278,13 @@ class CStudyLoadController extends CBaseController {
 							"icon" => "apps/accessories-text-editor.png"
 						)
 					)
-				)
+				),
+    			array(
+    				"title" => "Печать по шаблону",
+    				"link" => "#",
+    				"icon" => "devices/printer.png",
+    				"template" => "formset_study_loads"
+    			)
     		));
     	}
     	
