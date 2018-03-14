@@ -85,7 +85,8 @@ class CNewsController extends CBaseController {
                 VkApi::invoke("wall.post", array(
                     "owner_id" => CSettingsManager::getSettingValue("ID_group_vk"),
                     "message" => $message,
-                    "from_group" => 1
+                    "from_group" => 1,
+                    "v" => 5.52
                 ));
             }
             if ($this->continueEdit()) {
