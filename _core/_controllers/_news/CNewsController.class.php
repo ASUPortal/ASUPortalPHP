@@ -82,6 +82,8 @@ class CNewsController extends CBaseController {
             if (CRequest::getInt("post_in_vk")) {
                 require_once(CORE_CWD."/_core/_external/vk/Vkapi.php");
                 $message = $newsItem->title."\n".strip_tags($newsItem->file)."\n\n".$newsItem->getAuthorName();
+                // преобразуем HTML-сущности в соответствующие символы
+                $message = html_entity_decode($message);
                 VkApi::invoke("wall.post", array(
                     "owner_id" => CSettingsManager::getSettingValue("ID_group_vk"),
                     "message" => $message,
