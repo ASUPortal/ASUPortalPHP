@@ -29,5 +29,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_dashboard/index.right.tpl"}
+{include file="_dashboard/common.right.tpl"}
 {/block}

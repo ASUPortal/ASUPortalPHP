@@ -259,6 +259,18 @@
     define("ACCESS_LEVEL_READ_ALL", 2);
     define("ACCESS_LEVEL_WRITE_OWN_ONLY", 3);
     define("ACCESS_LEVEL_WRITE_ALL", 4);
+    /**
+     * Группы пользователей константами
+     */
+    define("ADMINISTRATORS", "admin");
+    define("LECTURERS", "lect");
+    define("SECRETAR", "sekretar");
+    define("TEST", "test");
+    define("SECRETAR_GAK", "sekretar_gak");
+    define("STUDENTS", "students");
+    define("UVP", "uvp");
+    define("STUDENTS_NIR", "stud_nirs");
+    define("TESTERS", "testers");
     // Типы участия на кафедре
     define("TYPE_PPS", "профессорско-преподавательский состав");
     define("TYPE_REVIEWER", "рецензент");

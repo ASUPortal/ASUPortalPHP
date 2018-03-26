@@ -233,6 +233,8 @@ if (!is_null(CSession::getCurrentUser())) {
         } else {
         	header("Location:_modules/_dashboard/index.php?action=tasks");
         }
+    } else {
+    	header("Location:_modules/_dashboard/index.php?action=tasks");
     }
 }
 // </abarmin>

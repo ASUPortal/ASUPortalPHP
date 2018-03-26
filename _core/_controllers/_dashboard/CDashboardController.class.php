@@ -107,6 +107,30 @@ class CDashboardController extends CBaseController {
 			$item = $roles->getItem($i);
 			$tasks->add($item->getId(), $item);
         }
+        
+        $this->addActionsMenuItem(array(
+        	array(
+        		"title" => "Управление",
+        		"link" => "index.php?action=list",
+        		"icon" => "apps/preferences-desktop-wallpaper.png"
+        	),
+        	array(
+        		"title" => "Личные настройки",
+        		"link" => WEB_ROOT."_modules/_settings/index.php",
+        		"icon" => "categories/applications-accessories.png"
+        	)
+        ));
+        
+        if (CSessionService::hasAnyUserGroup([ADMINISTRATORS])) {
+        	$this->addActionsMenuItem(array(
+        		array(
+        			"title" => "Настройки для групп пользователей",
+        			"link" => "index.php?action=settingsForGroups",
+        			"icon" => "apps/preferences-desktop-wallpaper.png"
+        		)
+        	));
+        }
+        
         $this->setData("tasks", $tasks);
 		$this->setData("dashboards", $dashboards);
         $this->setData("settings", $settings);
@@ -139,9 +163,48 @@ class CDashboardController extends CBaseController {
             $item = new CDashboardItem($ar);
             $items->add($item->getId(), $item);
         }
+        
+        $this->addActionsMenuItem(array(
+        	array(
+        		"title" => "Назад",
+        		"link" => "index.php?action=index",
+        		"icon" => "actions/edit-undo.png"
+        	),
+        	array(
+        		"title" => "Добавить",
+        		"link" => "index.php?action=add",
+        		"icon" => "actions/list-add.png"
+        	)
+        ));
+        
         $this->setData("paginator", $set->getPaginator());
         $this->setData("items", $items);
 		$this->renderView("_dashboard/list.tpl");		
+	}
+	public function actionSettingsForGroups() {
+		$set = CActiveRecordProvider::getWithCondition(TABLE_DASHBOARD, "parent_id = 0 and group_id != 0");
+		$items = new CArrayList();
+		foreach ($set->getPaginated()->getItems() as $ar) {
+			$item = new CDashboardItem($ar);
+			$items->add($item->getId(), $item);
+		}
+		
+		$this->addActionsMenuItem(array(
+			array(
+				"title" => "Назад",
+				"link" => "index.php?action=index",
+				"icon" => "actions/edit-undo.png"
+			),
+			array(
+				"title" => "Добавить",
+				"link" => "index.php?action=add&forGroups=1",
+				"icon" => "actions/list-add.png"
+			)
+		));
+		
+		$this->setData("paginator", $set->getPaginator());
+		$this->setData("items", $items);
+		$this->renderView("_dashboard/listForGroups.tpl");
 	}
 	public function actionAdd() {
 		$parents = new CArrayList();
@@ -191,13 +254,41 @@ class CDashboardController extends CBaseController {
             }
         }
         $item = new CDashboardItem();
-        $item->user_id = CSession::getCurrentUser()->getId();
+        if (CRequest::getInt("forGroups") != 1) {
+        	$item->user_id = CSession::getCurrentUser()->getId();
+        }
+        
         $this->addJSInclude("_core/jDropdown/jquery.dd.js");
         $this->addCSSInclude("_core/jDropdown/dd.css");
+        
+        $this->addActionsMenuItem(array(
+        	array(
+        		"title" => "Назад",
+        		"link" => "index.php?action=list",
+        		"icon" => "actions/edit-undo.png"
+        	)
+        ));
+        
+        $groups = array();
+        foreach (CStaffManager::getAllUserGroups()->getItems() as $group) {
+        	$groups[$group->getId()] = $group->comment;
+        }
+        $this->setData("groups", $groups);
+        
+        $accessLevel = false;
+        if (CSessionService::hasAnyUserGroup([ADMINISTRATORS])) {
+        	$accessLevel = true;
+        }
+        $this->setData("accessLevel", $accessLevel);
+        
         $this->setData("icons", $icons);
 		$this->setData("parents", $parents);
 		$this->setData("item", $item);
-		$this->renderView("_dashboard/add.tpl");
+		if (CRequest::getInt("forGroups") == 1) {
+			$this->renderView("_dashboard/addForGroups.tpl");
+		} else {
+			$this->renderView("_dashboard/add.tpl");
+		}
 	}
 	public function actionEdit() {
 		$parents = new CArrayList();
@@ -247,19 +338,47 @@ class CDashboardController extends CBaseController {
             }
         }
         $item = CDashboardManager::getDashboardItem(CRequest::getInt("id"));
+        $groups = array();
+        foreach (CStaffManager::getAllUserGroups()->getItems() as $group) {
+        	$groups[$group->getId()] = $group->comment;
+        }
+        $this->setData("groups", $groups);
+        
+        $accessLevel = false;
+        if (CSessionService::hasAnyUserGroup([ADMINISTRATORS])) {
+        	$accessLevel = true;
+        }
+        $this->setData("accessLevel", $accessLevel);
+        
+        $this->addActionsMenuItem(array(
+        	array(
+        		"title" => "Назад",
+        		"link" => "index.php?action=list",
+        		"icon" => "actions/edit-undo.png"
+        	)
+        ));
+        
         $this->addJSInclude("_core/jDropdown/jquery.dd.js");
         $this->addCSSInclude("_core/jDropdown/dd.css");
         $this->setData("icons", $icons);
 		$this->setData("parents", $parents);
 		$this->setData("item", $item);
-		$this->renderView("_dashboard/edit.tpl");		
+		if (CRequest::getInt("forGroups") == 1) {
+			$this->renderView("_dashboard/editForGroups.tpl");
+		} else {
+			$this->renderView("_dashboard/edit.tpl");
+		}
 	}
 	public function actionSave() {
 		$item = new CDashboardItem();
 		$item->setAttributes(CRequest::getArray($item::getClassName()));
 		if ($item->validate()) {
 			$item->save();
-			$this->redirect("?action=list");
+			if (CRequest::getInt("forGroups") == 1) {
+				$this->redirect("?action=settingsForGroups");
+			} else {
+				$this->redirect("?action=list");
+			}
 			return true;
 		}
 		$parents = new CArrayList();
