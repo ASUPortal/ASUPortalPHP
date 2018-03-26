@@ -8,6 +8,7 @@
 {CHtml::hiddenField("action", "save")}
 {CHtml::activeHiddenField("id", $item)}
 {CHtml::activeHiddenField("user_id", $item)}
+{CHtml::hiddenField("forGroups", CRequest::getInt("forGroups"))}
 
     {CHtml::errorSummary($item)}
 
@@ -47,6 +48,16 @@
             {CHtml::error("parent_id", $item)}
         </div>
     </div>
+    
+    {if ($accessLevel)}
+		<div class="control-group">
+		    {CHtml::activeLabel("group_id", $item)}
+		    <div class="controls">
+		        {CHtml::activeDropDownList("group_id", $item, $groups)}
+		        {CHtml::error("group_id", $item)}
+		    </div>
+		</div>
+	{/if}
 
     <div class="control-group">
         <div class="controls">

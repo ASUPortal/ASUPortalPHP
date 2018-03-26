@@ -8,5 +8,5 @@
 {/block}
 
 {block name="asu_right"}
-{include file="_dashboard/add.right.tpl"}
+{include file="_dashboard/common.right.tpl"}
 {/block}
