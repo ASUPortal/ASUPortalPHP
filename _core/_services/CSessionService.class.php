@@ -22,4 +22,29 @@ class CSessionService {
 			return false;
 		}
 	}
+	
+	/**
+	 * Проверка на наличие группы у пользователя
+	 * 
+	 * @param array $groups
+	 * @return boolean
+	 */
+	public static function hasAnyUserGroup($groups = array()) {
+		if (!is_null(CSession::getCurrentUser())) {
+			$userGroups = array();
+			foreach (CSession::getCurrentUser()->getGroups()->getItems() as $group) {
+				$userGroups[$group->getId()] = $group->getName();
+			}
+			foreach ($groups as $group) {
+				if (in_array($group, $userGroups)) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} else {
+			return false;
+		}
+		
+	}
 }
