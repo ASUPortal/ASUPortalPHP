@@ -8,8 +8,8 @@
             </div>
             <div class="item_content">
                 <h4>
-                    {if $item->link !== ""}
-                        <a href="{$web_root}{$item->link}">{$item->title}</a>
+                    {if $item->getLink() !== ""}
+                        <a href="{$web_root}{$item->getLink()}">{$item->title}</a>
                     {else}
                         {$item->title}
                     {/if}
@@ -18,8 +18,8 @@
                     <ul>
                         {foreach $item->children->getItems() as $child}
                             <li>
-                                {if $child->link !== ""}
-                                    <a href="{$web_root}{$child->link}">{$child->title}</a>
+                                {if $child->getLink() !== ""}
+                                    <a href="{$web_root}{$child->getLink()}">{$child->title}</a>
                                 {else}
                                     {$child->title}
                                 {/if}
