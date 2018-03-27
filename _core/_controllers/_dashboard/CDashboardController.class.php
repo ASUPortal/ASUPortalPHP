@@ -1,5 +1,8 @@
 <?php
 class CDashboardController extends CBaseController {
+	public $allowedAnonymous = array(
+		"tasks"
+	);
 	public function __construct() {
 		if (!CSession::isAuth()) {
 			$this->redirectNoAccess();
@@ -152,6 +155,15 @@ class CDashboardController extends CBaseController {
 		foreach ($sort->getSortedByKey(true)->getItems() as $i) {
 			$item = $roles->getItem($i);
 			$tasks->add($item->getId(), $item);
+		}
+		if (CSession::getCurrentUser()->getLevelForCurrentTask() != ACCESS_LEVEL_NO_ACCESS) {
+			$this->addActionsMenuItem(array(
+				array(
+					"title" => "Личные настройки",
+					"link" => WEB_ROOT."_modules/_settings/index.php",
+					"icon" => "categories/applications-accessories.png"
+				)
+			));
 		}
 		$this->setData("tasks", $tasks);
 		$this->renderView("_dashboard/tasks.tpl");
