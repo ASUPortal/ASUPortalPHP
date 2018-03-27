@@ -23,7 +23,9 @@ class CDashboardItem extends CActiveModel {
             "link" => "Ссылка",
             "icon" => "Значок",
             "parent_id" => "Родительский элемент",
-            "group_id" => "Группа пользователей, в которой показывать элемент"
+            "group_id" => "Группа пользователей, в которой показывать элемент",
+            "personal_staff" => "Личная ссылка сотрудника",
+            "personal_user" => "Личная ссылка пользователя"
         );
     }
     public function addChild(CDashboardItem $child = null) {
@@ -32,6 +34,20 @@ class CDashboardItem extends CActiveModel {
         }
         if (!is_null($child)) {
             $this->_children->add($child->getId(), $child);
+        }
+    }
+    /**
+     * Получить ссылку на элемент рабочего стола с учётом текущего пользователя или сотрудника
+     * 
+     * @return string
+     */
+    public function getLink() {
+        if ($this->personal_user) {
+            return $this->link.CSession::getCurrentUser()->getId();
+        } elseif ($this->personal_staff) {
+            return $this->link.CSession::getCurrentPerson()->getId();
+        } else {
+            return $this->link;
         }
     }
 }
