@@ -4,7 +4,7 @@
 <h2>Добавление новой записи для групп</h2>
 {CHtml::helpForCurrentPage()}
 
-    {include file="_dashboard/form.tpl"}
+    {include file="_dashboard/formForGroups.tpl"}
 {/block}
 
 {block name="asu_right"}

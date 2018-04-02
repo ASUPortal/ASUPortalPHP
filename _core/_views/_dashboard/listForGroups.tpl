@@ -24,7 +24,7 @@
 			{/if}
 		</td>
 		<td><a href="?action=edit&id={$item->id}&forGroups=1">{$item->title}</a></td>
-		<td>{CStaffManager::getUserGroup($item->group_id)->comment}</td>
+		<td>{$item->user_group->comment}</td>
 	</tr>
 		{foreach $item->children->getItems() as $child}
 		<tr>
@@ -32,7 +32,7 @@
 			<td>{counter}</td>
 			<td>&nbsp;</td>
 			<td>- <a href="?action=edit&id={$child->id}&forGroups=1">{$child->title}</a></td>
-			<td></td>
+			<td>{$child->user_group->comment}</td>
 		</tr>		
 		{/foreach}
 	{/foreach}

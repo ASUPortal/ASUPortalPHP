@@ -194,7 +194,7 @@ class CDashboardController extends CBaseController {
 		$this->renderView("_dashboard/list.tpl");		
 	}
 	public function actionSettingsForGroups() {
-		$set = CActiveRecordProvider::getWithCondition(TABLE_DASHBOARD, "parent_id = 0 and group_id != 0");
+		$set = CActiveRecordProvider::getWithCondition(TABLE_DASHBOARD, "user_id = 0 and parent_id = 0 and group_id != 0");
 		$items = new CArrayList();
 		foreach ($set->getPaginated()->getItems() as $ar) {
 			$item = new CDashboardItem($ar);
@@ -220,13 +220,23 @@ class CDashboardController extends CBaseController {
 	}
 	public function actionAdd() {
 		$parents = new CArrayList();
-		foreach (CActiveRecordProvider::getWithCondition(TABLE_DASHBOARD, "user_id = ".CSession::getCurrentUser()->getId()." and parent_id = 0")->getItems() as $ar) {
-			$item = new CDashboardItem($ar);
-			$parents->add($item->getId(), $item->title);
-			foreach ($item->children->getItems() as $child) {
-				$parents->add($child->getId(), " - ".$child->title);
-			}
-		}
+        if (CRequest::getInt("forGroups") == 1) {
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_DASHBOARD, "user_id = 0 and parent_id = 0 and group_id != 0")->getItems() as $ar) {
+                $item = new CDashboardItem($ar);
+                $parents->add($item->getId(), $item->title." (".$item->user_group->comment.")");
+                foreach ($item->children->getItems() as $child) {
+					$parents->add($child->getId(), " - ".$child->title." (".$item->user_group->comment.")");
+                }
+            }
+        } else {
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_DASHBOARD, "user_id = ".CSession::getCurrentUser()->getId()." and parent_id = 0")->getItems() as $ar) {
+                $item = new CDashboardItem($ar);
+                $parents->add($item->getId(), $item->title);
+                foreach ($item->children->getItems() as $child) {
+					$parents->add($child->getId(), " - ".$child->title);
+                }
+            }
+        }
         $icons = new CArrayList();
         $iconSources = new CArrayList();
         $dirs = array(
@@ -304,12 +314,22 @@ class CDashboardController extends CBaseController {
 	}
 	public function actionEdit() {
 		$parents = new CArrayList();
-		foreach (CActiveRecordProvider::getWithCondition(TABLE_DASHBOARD, "user_id = ".CSession::getCurrentUser()->getId()." and parent_id = 0")->getItems() as $ar) {
-			$item = new CDashboardItem($ar);
-			$parents->add($item->getId(), $item->title);
-			foreach ($item->children->getItems() as $child) {
-				$parents->add($child->getId(), " - ".$child->title);
-			}
+		if (CRequest::getInt("forGroups") == 1) {
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_DASHBOARD, "user_id = 0 and parent_id = 0 and group_id != 0")->getItems() as $ar) {
+                $item = new CDashboardItem($ar);
+                $parents->add($item->getId(), $item->title." (".$item->user_group->comment.")");
+                foreach ($item->children->getItems() as $child) {
+                    $parents->add($child->getId(), " - ".$child->title." (".$item->user_group->comment.")");
+                }
+            }
+		} else {
+            foreach (CActiveRecordProvider::getWithCondition(TABLE_DASHBOARD, "user_id = ".CSession::getCurrentUser()->getId()." and parent_id = 0")->getItems() as $ar) {
+                $item = new CDashboardItem($ar);
+                $parents->add($item->getId(), $item->title);
+                foreach ($item->children->getItems() as $child) {
+                    $parents->add($child->getId(), " - ".$child->title);
+                }
+            }
 		}
         $icons = new CArrayList();
         $iconSources = new CArrayList();
