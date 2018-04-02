@@ -48,32 +48,6 @@
             {CHtml::error("parent_id", $item)}
         </div>
     </div>
-    
-    {if ($accessLevel)}
-		<div class="control-group">
-		    {CHtml::activeLabel("group_id", $item)}
-		    <div class="controls">
-		        {CHtml::activeDropDownList("group_id", $item, $groups)}
-		        {CHtml::error("group_id", $item)}
-		    </div>
-		</div>
-		
-		<div class="control-group">
-		    {CHtml::activeLabel("personal_staff", $item)}
-		    <div class="controls">
-		        {CHtml::activeCheckBox("personal_staff", $item)}
-		        {CHtml::error("personal_staff", $item)}
-		    </div>
-		</div>
-		
-		<div class="control-group">
-		    {CHtml::activeLabel("personal_user", $item)}
-		    <div class="controls">
-		        {CHtml::activeCheckBox("personal_user", $item)}
-		        {CHtml::error("personal_user", $item)}
-		    </div>
-		</div>
-	{/if}
 
     <div class="control-group">
         <div class="controls">

@@ -14,7 +14,14 @@ class CDashboardItem extends CActiveModel {
 				"storageCondition" => "parent_id = " . $this->id,
 				"managerClass" => "CDashboardManager",
 				"managerGetObject" => "getDashboardItem"
-			)				
+			),
+			"user_group" => array(
+				"relationPower" => RELATION_HAS_ONE,
+				"storageProperty" => "_user_group",
+				"storageField" => "group_id",
+				"managerClass" => "CStaffManager",
+				"managerGetObject" => "getUserGroup"
+			)			
 		);
 	}
     public function attributeLabels() {
