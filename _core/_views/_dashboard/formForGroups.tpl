@@ -73,6 +73,30 @@
 		        {CHtml::error("personal_user", $item)}
 		    </div>
 		</div>
+		
+		<div class="control-group">
+		    {CHtml::activeLabel("current_year", $item)}
+		    <div class="controls">
+		        {CHtml::activeCheckBox("current_year", $item)}
+		        {CHtml::error("current_year", $item)}
+		    </div>
+		</div>
+		
+		<div class="control-group">
+	        {CHtml::activeLabel("year_addition", $item)}
+	        <div class="controls">
+	            {CHtml::activeDropDownList("year_addition", $item, CTaxonomyManager::getYearsList())}
+	            {CHtml::error("year_addition", $item)}
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        {CHtml::activeLabel("year_link", $item)}
+	        <div class="controls">
+	            {CHtml::activeTextField("year_link", $item)}
+	            {CHtml::error("year_link", $item)}
+	        </div>
+	    </div>
 	{/if}
 
     <div class="control-group">
