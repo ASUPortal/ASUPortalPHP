@@ -32,7 +32,10 @@ class CDashboardItem extends CActiveModel {
             "parent_id" => "Родительский элемент",
             "group_id" => "Группа пользователей, в которой показывать элемент",
             "personal_staff" => "Личная ссылка сотрудника",
-            "personal_user" => "Личная ссылка пользователя"
+            "personal_user" => "Личная ссылка пользователя",
+            "current_year" => "Учитывать текущий год",
+            "year_addition" => "Год в дополнение к ссылке",
+            "year_link" => "Ссылка на год в адресе"
         );
     }
     public function addChild(CDashboardItem $child = null) {
@@ -44,17 +47,25 @@ class CDashboardItem extends CActiveModel {
         }
     }
     /**
-     * Получить ссылку на элемент рабочего стола с учётом текущего пользователя или сотрудника
+     * Получить ссылку на элемент рабочего стола с учётом текущего пользователя или сотрудника,
+     * а также текущего или указанного года
      * 
      * @return string
      */
     public function getLink() {
+        $link = "";
         if ($this->personal_user) {
-            return $this->link.CSession::getCurrentUser()->getId();
+            $link = $this->link.CSession::getCurrentUser()->getId();
         } elseif ($this->personal_staff) {
-            return $this->link.CSession::getCurrentPerson()->getId();
+            $link = $this->link.CSession::getCurrentPerson()->getId();
         } else {
-            return $this->link;
+            $link = $this->link;
         }
+        if ($this->current_year) {
+            $link .= "&".$this->year_link."=".CUtils::getCurrentYear()->getId();
+        } elseif ($this->year_addition != 0) {
+            $link .= "&".$this->year_link."=".$this->year_addition;
+        }
+        return $link;
     }
 }
