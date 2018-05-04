@@ -4,6 +4,35 @@
     <h2>Ставки</h2>
 
     {CHtml::helpForCurrentPage()}
+    
+    <script>
+        jQuery(document).ready(function(){
+            jQuery("#year_selector").change(function(){
+                window.location.href=web_root + "_modules/_rates/index.php?filter=year.id:" + jQuery(this).val();
+            });
+			jQuery("#isAll").change(function(){
+				window.location.href=web_root + "_modules/_rates/index.php?isAll=" + (jQuery(this).is(":checked") ? "1":"0");
+			});
+        });
+    </script>
+    <div class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label" for="year.id">Учебный год</label>
+            <div class="controls">
+            	{CHtml::dropDownList("year.id", CTaxonomyManager::getYearsList(), $selectedYear, "year_selector", "span12")}
+            </div>
+        </div>
+    </div>
+    <td valign="top">
+		<div class="form-horizontal">
+			<div class="control-group">
+			<label class="control-label" for="isAll">Показать все</label>
+				<div class="controls">
+					{CHtml::checkBox("isAll", "1", $isAll, "isAll")}
+				</div>
+			</div>
+		</div>
+	</td>
 
     {if $rates->getCount() == 0}
         Нет данных для отображения

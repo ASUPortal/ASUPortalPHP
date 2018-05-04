@@ -26,11 +26,27 @@ class CRatesController extends CBaseController{
         parent::__construct();
     }
     public function actionIndex() {
-        $set = new CRecordSet();
+        $selectedYear = null;
+        $set = new CRecordSet(false);
         $query = new CQuery();
         $query->select("r.*")
             ->from(TABLE_RATES." as r")
             ->order("r.id desc");
+        
+        // фильтр по году
+        if (!is_null(CRequest::getFilter("year.id"))) {
+            $query->condition("r.year_id =".CRequest::getFilter("year.id"));
+            $selectedYear = CRequest::getFilter("year.id");
+        }
+        
+        $isAll = false;
+        if (CRequest::getInt("isAll") == "1") {
+            $isAll = true;
+        }
+        if (!$isAll and CRequest::getFilter("year.id") == "") {
+            $query->condition("r.year_id =".CUtils::getCurrentYear()->getId());
+        }
+        
         $set->setQuery($query);
         $rates = new CArrayList();
         foreach ($set->getPaginated()->getItems() as $ar) {
@@ -38,6 +54,8 @@ class CRatesController extends CBaseController{
             $rates->add($rate->getId(), $rate);
         }
         $this->setData("rates", $rates);
+        $this->setData("selectedYear", $selectedYear);
+        $this->setData("isAll", $isAll);
         $this->setData("paginator", $set->getPaginator());
         $this->renderView("_rates/rate/index.tpl");
     }
