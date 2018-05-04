@@ -18,12 +18,28 @@ class CIndPlanPrintController extends CFlowController{
          * @var $load CIndPlanPersonLoad
          */
         foreach ($person->loads->getItems() as $load) {
-            $item = "";
-            if (!is_null($load->year)) {
-                $item = $load->year->getValue();
-            }
-            $item .= " ".$load->getType();
-            $items->add($load->getId(), $item);
+        	/**
+        	 * При активной настройке "Показ архивных данных" отображать инд. планы за все года, 
+        	 * иначе только за текущий год
+        	 */
+        	if (CSettingsManager::getSettingValue("display_archived_data")) {
+        		$item = "";
+        		if (!is_null($load->year)) {
+        			$item = $load->year->getValue();
+        		}
+        		$item .= " ".$load->getType();
+        		$items->add($load->getId(), $item);
+        	} else {
+        		$item = "";
+        		if (!is_null($load->year)) {
+        			if ($load->year->getId() == CUtils::getCurrentYear()->getId()) {
+        				$item = $load->year->getValue();
+        				$item .= " ".$load->getType();
+        				$items->add($load->getId(), $item);
+        			}
+        		}
+        	}
+            
         }
         $this->setData("items", $items);
         $this->renderView("_flow/pickList.tpl", get_class($this), "PrintIndPlan");
