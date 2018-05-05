@@ -23,13 +23,19 @@
             {include file="_staff/person/subform.labor.tpl"}
         </div>
         <div class="tab-pane" id="tab-orders">
-            {include file="_staff/person/subform.orders.tpl"}
+            {if ($form->person->id != "")}
+                {include file="_staff/person/subform.orders.tpl"}
+            {/if}
         </div>
         <div class="tab-pane" id="tab-info">
-            {include file="_staff/person/staffInfo/index.tpl"}
+            {if ($form->person->id != "")}
+                {include file="_staff/person/staffInfo/index.tpl"}
+            {/if}
         </div>
         <div class="tab-pane" id="tab-resources">
-            {include file="_staff/person/resources/index.tpl"}
+            {if ($form->person->id != "")}
+                {include file="_staff/person/resources/index.tpl"}
+            {/if}
         </div>
     </div>
 

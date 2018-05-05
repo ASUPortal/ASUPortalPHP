@@ -16,7 +16,7 @@
 </p>
 
 <p>
-    <a href="{$web_root}s_hours.php"><center>
+    <a href="{$web_root}_modules/_study_loads/index.php"><center>
             <img src="{$web_root}images/{$icon_theme}/32x32/actions/format-justify-fill.png">
             Показатели нагрузки ППС
         </center></a>
