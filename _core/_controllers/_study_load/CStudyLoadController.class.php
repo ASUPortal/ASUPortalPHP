@@ -60,6 +60,8 @@ class CStudyLoadController extends CBaseController {
     				$rateSum += $person->rateSum;
     				if (CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year) != 0) {
     					$rateSumFact += $person->workloadSum/CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year);
+    				} else {
+    					$rateSumFact += 1;
     				}
     				$diplCountWinterSum += $person->diplCountWinter;
     				$diplCountSummerSum += $person->diplCountSummer;
@@ -598,6 +600,8 @@ class CStudyLoadController extends CBaseController {
     			}
     			if (CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year) != 0) {
     				$rateSumFact += $person->workloadSum/CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year);
+    			} else {
+    				$rateSumFact += 1;
     			}
     			$sumTotal += $person->workloadSum;
     			$rateSum += $person->rateSum;
@@ -615,6 +619,8 @@ class CStudyLoadController extends CBaseController {
     					$staffPerson = CStaffManager::getPerson($person->personId);
     					if (CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year) != 0) {
     						$rate += $person->workloadSum/CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year);
+    					} else {
+    						$rateSumFact += 1;
     					}
     					$rateBudget += $staffPerson->getSumOrdersRateByTypeMoney(COrderConstants::TYPE_MONEY_BUDGET);
     					$rateContract += $staffPerson->getSumOrdersRateByTypeMoney(COrderConstants::TYPE_MONEY_CONTRACT);
