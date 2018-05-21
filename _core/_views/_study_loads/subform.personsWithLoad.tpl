@@ -51,7 +51,7 @@
 		            {if (CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year) != 0)}
 						<td rel="stripe">{number_format($person->workloadSum/CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year),2,',','')}</td>
 					{else}
-						<td rel="stripe">&nbsp;</td>
+						<td rel="stripe">{number_format(1, 2, ',', '')}</td>
 					{/if}
 			        <td rel="stripe">{clearNullValues number=number_format($person->hoursSumBase,1,',','') level=0}</td>
 		            <td rel="stripe">{clearNullValues number=number_format($person->hoursSumAdditional,1,',','') level=0}</td>

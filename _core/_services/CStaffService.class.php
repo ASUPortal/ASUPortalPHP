@@ -263,12 +263,6 @@ class CStaffService {
     			$hour = new CHoursRate($item);
     			$hours += $hour->rate;
     		}
-    		if ($hours == 0) {
-    			foreach (CActiveRecordProvider::getWithCondition(TABLE_HOURS_RATE, "dolgnost_id=".$postId)->getItems() as $item) {
-    				$hour = new CHoursRate($item);
-    				$hours += $hour->rate;
-    			}
-    		}
     	}
     	return $hours;
     }
