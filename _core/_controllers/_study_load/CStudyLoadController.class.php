@@ -620,7 +620,7 @@ class CStudyLoadController extends CBaseController {
     					if (CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year) != 0) {
     						$rate += $person->workloadSum/CStaffService::getHoursPersonInHoursRateByPost($person->personPostId, $year);
     					} else {
-    						$rateSumFact += 1;
+    						$rate += 1;
     					}
     					$rateBudget += $staffPerson->getSumOrdersRateByTypeMoney(COrderConstants::TYPE_MONEY_BUDGET);
     					$rateContract += $staffPerson->getSumOrdersRateByTypeMoney(COrderConstants::TYPE_MONEY_CONTRACT);
