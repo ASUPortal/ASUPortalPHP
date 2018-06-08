@@ -200,7 +200,6 @@ class CNewsItem extends CActiveModel{
         /**
          * Сохраняем совместимость со старой версией
          */
-        $s=str_replace ("\r\n","<br>",$s);
         $s=str_replace ("[url]","<a href='http://",$s);
         $s=str_replace ("[/url]","' target='_blank' style='font-weight:normal; text-decoration:underline;'>Ресурс</a>",$s);
         $s=str_replace ("[quote]","<u>Цитата</u><br><span style='color:grey;background:white;'>",$s);
@@ -211,6 +210,17 @@ class CNewsItem extends CActiveModel{
         $s=str_replace ("[/u]","</u>",$s);
         $s=str_replace ("[i]","<i>",$s);
         $s=str_replace ("[/i]","</i>",$s);
+        /**
+         * Убираем теги таблицы из-за ошибки при отображении в таблице новостей
+         */
+        $s = str_replace("<table>", "", $s);
+        $s = str_replace("</table>", "", $s);
+        $s = str_replace("<tbody>", "", $s);
+        $s = str_replace("</tbody>", "", $s);
+        $s = str_replace("<tr>", "", $s);
+        $s = str_replace("</tr>", "", $s);
+        $s = str_replace("<td>", "", $s);
+        $s = str_replace("</td>", "", $s);
         /**
          * Если новость получилась длинная, то сокращаем ее
          */
