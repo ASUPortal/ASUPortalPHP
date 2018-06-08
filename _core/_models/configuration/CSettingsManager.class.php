@@ -71,7 +71,7 @@ class CSettingsManager {
         if (is_string($alias)) {
             $alias = strtoupper($alias);
         }
-        foreach (CActiveRecordProvider::getWithCondition(TABLE_SETTINGS, "solr = ".$core->getId()." and UPPER(alias) = '".$alias."'")->getItems() as $item) {
+        foreach (CActiveRecordProvider::getWithCondition(TABLE_SETTINGS, "id = ".$core->getId()." or UPPER(alias) = '".$alias."'")->getItems() as $item) {
         	$setting = new CSetting($item);
         }
         return $setting;
