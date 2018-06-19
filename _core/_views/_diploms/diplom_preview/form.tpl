@@ -3,16 +3,9 @@
     {CHtml::hiddenField("action", "save")}
     {CHtml::activeHiddenField("id", $preview)}
     {CHtml::activeHiddenField("diplom_id", $preview)}
+    {CHtml::activeHiddenField("student_id", $preview)}
 
     {CHtml::errorSummary($preview)}
-
-<div class="control-group">
-    {CHtml::activeLabel("student_id", $preview)}
-    <div class="controls">
-        {CHtml::activeLookup("student_id", $preview, "student")}
-        {CHtml::error("student_id", $preview)}
-    </div>
-</div>
 
 <div class="control-group">
     {CHtml::activeLabel("diplom_percent", $preview)}

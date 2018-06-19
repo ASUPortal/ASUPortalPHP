@@ -205,8 +205,11 @@ class CDiplomPreviewController extends CBaseController{
     	$commissions = array();
     	foreach ($commQuery->execute()->getItems() as $ar) {
     		$comm = new CDiplomPreviewComission(new CActiveRecord($ar));
-    		$secretar = CStaffManager::getPersonById($comm->secretary_id)->fio;
-    		$commissions[$comm->getId()] = $comm->name." ($secretar)";
+    		$secretar = "";
+    		if ($comm->secretary_id != 0) {
+    			$secretar = CStaffManager::getPersonById($comm->secretary_id)->fio;
+    		}
+    		$commissions[$comm->getId()] = $comm->name." (".$secretar.")";
     	}
     	$studentGroups = array();
     	foreach ($groupsQuery->execute()->getItems() as $ar) {

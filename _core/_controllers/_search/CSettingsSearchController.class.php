@@ -104,8 +104,11 @@ class CSettingsSearchController extends CBaseController {
     public function actionUpdateIndexFiles() {
         $messages = array();
         foreach (CActiveRecordProvider::getWithCondition(TABLE_SETTINGS, "solr=-1")->getItems() as $setting) {
-            $coreId = CSettingsManager::getSetting($setting->getId());
-            $messages[] = CApp::getApp()->search->updateIndex($coreId);
+            $item = CActiveRecordProvider::getById(TABLE_SETTINGS, $setting->getId());
+            if (!is_null($item)) {
+                $coreId = new CSetting($item);
+                $messages[] = CApp::getApp()->search->updateIndex($coreId);
+            }
         }
         $results = array();
         foreach ($messages as $message) {
