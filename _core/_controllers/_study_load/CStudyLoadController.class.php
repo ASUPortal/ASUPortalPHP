@@ -230,6 +230,12 @@ class CStudyLoadController extends CBaseController {
                 "title" => "Назад",
                 "link" => WEB_ROOT."_modules/_study_loads/index.php",
                 "icon" => "actions/edit-undo.png"
+            ),
+            array(
+                "title" => "Печать по шаблону",
+                "link" => "#",
+                "icon" => "devices/printer.png",
+                "template" => "formset_study_loads"
             )
     	));
     	
@@ -280,13 +286,7 @@ class CStudyLoadController extends CBaseController {
 							"icon" => "apps/accessories-text-editor.png"
 						)
 					)
-				),
-    			array(
-    				"title" => "Печать по шаблону",
-    				"link" => "#",
-    				"icon" => "devices/printer.png",
-    				"template" => "formset_study_loads"
-    			)
+				)
     		));
     	}
     	
