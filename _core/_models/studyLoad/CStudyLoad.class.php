@@ -11,6 +11,7 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
     protected $_lecturer = null;
     protected $_createdBy = null;
     protected $_works = null;
+    protected $_groups = null;
     private $_loadTable = null;
     
     protected function relations() {
@@ -71,6 +72,13 @@ class CStudyLoad extends CActiveModel implements IVersionControl {
                 "storageTable" => TABLE_WORKLOAD_WORKS,
                 "storageCondition" => "workload_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
                 "targetClass" => "CStudyLoadWork"
+            ),
+            "groups" => array(
+                "relationPower" => RELATION_HAS_MANY,
+                "storageProperty" => "_groups",
+                "storageTable" => TABLE_WORKLOAD_STUDY_GROUPS,
+                "storageCondition" => "workload_id = " . (is_null($this->getId()) ? 0 : $this->getId()),
+                "targetClass" => "CStudyLoadGroup"
             )
     	);
     }

@@ -13,6 +13,7 @@ class CStudyLoadService {
      * @return CStudyLoad
      */
     public static function getStudyLoad($key) {
+        $studyLoad = null;
         $ar = CActiveRecordProvider::getById(TABLE_WORKLOAD, $key);
         if (!is_null($ar)) {
             $studyLoad = new CStudyLoad($ar);
@@ -28,6 +29,10 @@ class CStudyLoadService {
     public static function deleteStudyLoad(CStudyLoad $studyLoad) {
     	// удаляем данные по значениям видов работ нагрузки
     	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD_WORKS, "workload_id=".$studyLoad->getId())->getItems() as $ar) {
+    		$ar->remove();
+    	}
+    	// удаляем данные по студенческим группам
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_WORKLOAD_STUDY_GROUPS, "workload_id=".$studyLoad->getId())->getItems() as $ar) {
     		$ar->remove();
     	}
     	// удаляем саму нагрузку
@@ -627,6 +632,15 @@ class CStudyLoadService {
     				$newWork->workload_id = $newLoad->getId();
     				$newWork->save();
     			}
+    			/**
+    			 * Копируем значения для учебных групп
+    			 * @var CStudyLoadGroup $group
+    			 */
+    			foreach ($studyLoad->groups->getItems() as $group) {
+    				$newGroup = $group->copy();
+    				$newGroup->workload_id = $newLoad->getId();
+    				$newGroup->save();
+    			}
     	
     			// удаляем оригинал нагрузки
     			CStudyLoadService::deleteStudyLoad($studyLoad);
@@ -650,6 +664,15 @@ class CStudyLoadService {
     				$newWork = $work->copy();
     				$newWork->workload_id = $newLoad->getId();
     				$newWork->save();
+    			}
+    			/**
+    			 * Копируем значения для учебных групп
+    			 * @var CStudyLoadGroup $group
+    			 */
+    			foreach ($studyLoad->groups->getItems() as $group) {
+    				$newGroup = $group->copy();
+    				$newGroup->workload_id = $newLoad->getId();
+    				$newGroup->save();
     			}
     		}
     	}
