@@ -54,7 +54,11 @@
 	            <td>{counter}</td>
 	            <td>{CHtml::activeViewGroupSelect("id", $studyLoad, false, true)}</td>
 	            {if ($hasOwnAccessLevel)}
-	            	<td><a href="?action=edit&id={$studyLoad->getId()}" title="{", "|join:CStudyLoadService::getLecturersNameByDiscipline($studyLoad->discipline)->getItems()}">{$studyLoad->discipline->getValue()}</a></td>
+	            	{if ($studyLoad->discipline->getId() == $diplomDisciplineId)}
+	            		<td><a href="?action=edit&id={$studyLoad->getId()}" title="{implode('&#013;', $diplomsInfo)}">{$studyLoad->discipline->getValue()}</a></td>
+	            	{else}
+	            		<td><a href="?action=edit&id={$studyLoad->getId()}" title="{", "|join:CStudyLoadService::getLecturersNameByDiscipline($studyLoad->discipline)->getItems()}">{$studyLoad->discipline->getValue()}</a></td>
+	            	{/if}
 	            {else}
 	            	<td>{$studyLoad->discipline->getValue()}</td>
 	            {/if}
