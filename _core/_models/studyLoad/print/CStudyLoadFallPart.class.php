@@ -41,7 +41,12 @@ class CStudyLoadFallPart extends CStudyLoadParameters {
     		$dataRow[4] = $studyLoad->studyLevel->name;
     		$dataRow[5] = $studyLoad->groups_count;
     		$dataRow[6] = $studyLoad->students_count + $studyLoad->students_contract_count;
-    		$row = 7;
+    		$studyGroups = array();
+    		foreach ($studyLoad->study_groups->getItems() as $studyGroup) {
+    			$studyGroups[] = $studyGroup->getName();
+    		}
+    		$dataRow[7] = implode(", ", $studyGroups);
+    		$row = 8;
     		foreach ($studyLoad->getStudyLoadTable()->getTableTotal() as $typeId=>$rows) {
     			foreach ($rows as $kindId=>$value) {
     				if (!in_array($kindId, array(0))) {
@@ -54,7 +59,7 @@ class CStudyLoadFallPart extends CStudyLoadParameters {
     			}
     			$row++;
     		}
-    		$rowTotal = count($studyLoad->getStudyLoadTable()->getTableTotal())+7;
+    		$rowTotal = count($studyLoad->getStudyLoadTable()->getTableTotal())+8;
     		$dataRow[$rowTotal] = number_format($studyLoad->getSumWorksValue(),1,',','');
     		/*
     		if ($studyLoad->on_filial) {
