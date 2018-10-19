@@ -37,7 +37,8 @@ class CStudyLoadFallPartTotal extends CStudyLoadParameters {
     	$dataRow[4] = "";
     	$dataRow[5] = "";
     	$dataRow[6] = "";
-    	$row = 7;
+    	$dataRow[7] = "";
+    	$row = 8;
     	foreach (CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes)->getItems() as $typeId=>$rows) {
     		foreach ($rows as $kindId=>$value) {
     			if (!in_array($kindId, array(0))) {
@@ -50,7 +51,7 @@ class CStudyLoadFallPartTotal extends CStudyLoadParameters {
     		}
     		$row++;
     	}
-    	$rowTotal = CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes)->getCount()+7;
+    	$rowTotal = CStudyLoadService::getStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes)->getCount()+8;
     	$dataRow[$rowTotal] = number_format(CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPart($lecturer, $year, $part, $loadTypes),1,',','');
     	/*
     	$onFilial = CStudyLoadService::getAllStudyWorksTotalValuesByLecturerAndPartWithFilials($lecturer, $year, $part, $loadTypes);

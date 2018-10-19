@@ -309,6 +309,15 @@ class CStudyLoadController extends CBaseController {
     	}
     	$this->setData("hasOwnAccessLevel", $hasOwnAccessLevel);
     	
+    	// ID дисциплины "Дипломное проектирование"
+    	$diplomDisciplineId = CTaxonomyManager::getLegacyTaxonomy(TABLE_DISCIPLINES)->getTerm(CStudyLoadDisciplineConstants::DIPLOM_PROJECT)->getId();
+    	
+    	// Информация по дипломникам преподавателя по году нагрузки
+    	$diplomsInfo = CStudyLoadService::getDiplomsInfo($lecturer, $year);
+
+    	$this->setData("diplomDisciplineId", $diplomDisciplineId);
+    	$this->setData("diplomsInfo", $diplomsInfo);
+    	
     	$this->renderView("_study_loads/editLoads.tpl");
     }
     public function actionEditLoadsByType() {

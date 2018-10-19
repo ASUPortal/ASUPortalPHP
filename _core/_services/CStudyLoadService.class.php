@@ -121,6 +121,43 @@ class CStudyLoadService {
     }
     
     /**
+     * Информация по дипломникам преподавателя по году нагрузки
+     *
+     * @param CPerson $lecturer
+     * @param CTerm $year
+     * @return array
+     */
+    public static function getDiplomsInfo(CPerson $lecturer, CTerm $year) {
+    	$diploms = new CArrayList();
+    	foreach (CActiveRecordProvider::getWithCondition(TABLE_DIPLOMS, '(date_act >= "'.$year->date_start.'" and date_act <= "'.$year->date_end.'")
+    			and kadri_id = '.$lecturer->getId())->getItems() as $item) {
+    		$diplom = new CDiplom($item);
+    		$diploms->add($diplom->getId(), $diplom);
+    	}
+    	$info = array();
+    	foreach ($diploms->getItems() as $diplom) {
+    		$fio = "";
+    		$practPlace = "";
+    		$group = "";
+    		if (!is_null($diplom->student)) {
+    			$fio = $diplom->student->getName();
+    			if (!is_null($diplom->student->getGroup())) {
+    				$group = $diplom->student->getGroup()->getName();
+    			}
+    			if (is_null($diplom->practPlace)) {
+    				$practPlace = $diplom->pract_place;
+    			} else {
+    				$practPlace = $diplom->practPlace->getValue();
+    			}
+    		}
+    		$string = $fio." - ".$practPlace." - ".$group;
+    		// замена кавычек для отображения во всплывающей подсказке
+    		$info[] = htmlspecialchars($string);
+    	}
+    	return $info;
+    }
+    
+    /**
      * Тип нагрузки из справочника учебных работ по названию
      * 
      * @param $nameHours
