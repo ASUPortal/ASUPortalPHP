@@ -5,18 +5,25 @@
     	{CHtml::helpForCurrentPage()}
     {/if}
     <h2 style="text-align:center">{$lect->FIO}</h2>
-    	<table class="table table-striped table-bordered table-hover table-condensed">
-	    	<tr>
-	    	<td>
-				{if ($lect->getBiographies()->getCount() == 0)}
-	        		Биография не выложена
-	    		{else}
-	    			{foreach $lect->getBiographies()->getItems() as $biogr}
-						{CUtils::getReplacedMessage($biogr->main_text)}
-					{/foreach}
-	    		{/if}
-	    	</td>
-	    	</tr>
+    	<table>
+    	<tr>
+    		<th></th>
+    		<th width="100"></th>
+    		<th width="20"></th>
+            <th></th>
+        </tr>
+    	<tr>
+    	<td>
+    		{if ($lect->getBiographies()->getCount() == 0)}
+        		Биография не выложена</td>
+    		{else}
+    			{foreach $lect->getBiographies()->getItems() as $biogr}
+	    			<td>{CHtml::activeAttachPreview("image", $biogr, 100)}</td>
+	    			<td></td>
+	    			<td>{CUtils::getReplacedMessage($biogr->main_text)}</td>
+				{/foreach}
+    		{/if}
+    	</tr>
     	</table>
     	{if {$lect->getSchedule()->getCount()}!=0}
 			{foreach $lect->getSchedule()->getItems() as $rasp}
