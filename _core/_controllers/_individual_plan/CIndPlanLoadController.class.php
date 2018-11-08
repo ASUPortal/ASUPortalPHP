@@ -343,6 +343,13 @@ class CIndPlanLoadController extends CBaseController{
             $newLoad->year_id = $newYear->getId();
             $newLoad->conclusion = "Скопировано из ".$year->getValue()." года ".$newLoad->conclusion;
             $newLoad->save();
+            if (!is_null($newLoad)) {
+                CIndividualPlanLoadService::copyLoadWorks($load, $newLoad, $year, $newYear, CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD);
+                CIndividualPlanLoadService::copyLoadWorks($load, $newLoad, $year, $newYear, CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD);
+                CIndividualPlanLoadService::copyLoadWorks($load, $newLoad, $year, $newYear, CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD);
+                CIndividualPlanLoadService::copyLoadWorks($load, $newLoad, $year, $newYear, CIndPlanPersonWorkType::LIST_SCIENTIFIC_WORKS);
+                CIndividualPlanLoadService::copyLoadWorks($load, $newLoad, $year, $newYear, CIndPlanPersonWorkType::CHANGE_RECORDS);
+            }
             $this->redirect("load.php?action=view&id=".$load->person_id."&year=".$newYear->getId());
         } else {
             $this->addActionsMenuItem(array(
