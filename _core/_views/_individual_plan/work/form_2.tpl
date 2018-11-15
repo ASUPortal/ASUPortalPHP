@@ -1,7 +1,7 @@
 <div class="control-group">
     {CHtml::activeLabel("title_id", $object)}
     <div class="controls">
-        {CHtml::activeDropDownList("title_id", $object, CIndPlanManager::getWorklistByCategory(2), "", "", $object->restrictionAttribute())}
+        {CHtml::activeDropDownList("title_id", $object, CIndPlanManager::getWorklistByCategory(CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD), "", "", $object->restrictionAttribute())}
         {CHtml::error("title_id", $object)}
     </div>
 </div>

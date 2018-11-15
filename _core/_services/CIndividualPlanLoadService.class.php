@@ -22,7 +22,10 @@ class CIndividualPlanLoadService {
                 }
             }		
         }
-        if ($type == CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD or $type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD) {
+        if ($type == CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD or 
+        		$type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD or 
+        			$type == CIndPlanPersonWorkType::ORGANIZATIONAL_AND_METHODICAL_LOAD or 
+        				$type == CIndPlanPersonWorkType::ASPIRANTS_LOAD) {
             foreach ($load->works->getItems() as $work) {
                 if ($work->work_type == $type) {
                     $result += $work->plan_hours;
@@ -200,8 +203,10 @@ class CIndividualPlanLoadService {
         $studyAndMethodicalLoadHours = CIndividualPlanLoadService::getSumPlanAmountWorksByType($load, CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD);
         $scientificMethodicalLoadHours = CIndividualPlanLoadService::getSumPlanAmountWorksByType($load, CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD);
         $studyAndEducationalLoadHours = CIndividualPlanLoadService::getSumPlanAmountWorksByType($load, CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD);
+        $orgLoadHours = CIndividualPlanLoadService::getSumPlanAmountWorksByType($load, CIndPlanPersonWorkType::ORGANIZATIONAL_AND_METHODICAL_LOAD);
+        $aspirantsLoadHours = CIndividualPlanLoadService::getSumPlanAmountWorksByType($load, CIndPlanPersonWorkType::ASPIRANTS_LOAD);
     	
-        $difference = $totalHours-$studyHours-$studyAndMethodicalLoadHours-$scientificMethodicalLoadHours-$studyAndEducationalLoadHours;
+        $difference = $totalHours-$studyHours-$studyAndMethodicalLoadHours-$scientificMethodicalLoadHours-$studyAndEducationalLoadHours-$orgLoadHours-$aspirantsLoadHours;
         return round($difference, 2);
     }
     
@@ -219,7 +224,9 @@ class CIndividualPlanLoadService {
             $newWork = $work->copy();
             if ($type == CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD or
                     $type == CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD or
-                    $type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD) {
+                    $type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD or 
+                    $type == CIndPlanPersonWorkType::ORGANIZATIONAL_AND_METHODICAL_LOAD or 
+                    $type == CIndPlanPersonWorkType::ASPIRANTS_LOAD) {
     					 
                 $newWork->comment = "Скопировано из ".$year->getValue()." года ".$newWork->comment;
     						
@@ -236,7 +243,9 @@ class CIndividualPlanLoadService {
             }
             if ($type == CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD or
                     $type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD or
-                    $type == CIndPlanPersonWorkType::CHANGE_RECORDS) {
+                    $type == CIndPlanPersonWorkType::CHANGE_RECORDS or 
+                    $type == CIndPlanPersonWorkType::ORGANIZATIONAL_AND_METHODICAL_LOAD or 
+                    $type == CIndPlanPersonWorkType::ASPIRANTS_LOAD) {
                 $newWork->is_executed = 0;
             }
             $newWork->load_id = $newLoad->getId();

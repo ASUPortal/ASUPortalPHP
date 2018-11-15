@@ -266,7 +266,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
     private function getLoadByMonthAndType($month, $type, $dataType = 2) {
         $result = 0;
         if ($dataType == 2) {
-            foreach ($this->getLoad()->getWorksByType(1)->getItems() as $work) {
+            foreach ($this->getLoad()->getWorksByType(CIndPlanPersonWorkType::STUDY_LOAD)->getItems() as $work) {
                 if ($work->load_month_id == $month &&
                     $work->load_type_id == $type) {
 
@@ -274,7 +274,7 @@ class CIndPlanPersonLoadTable extends CFormModel{
                 }
             }
         } else {
-            foreach ($this->getLoad()->getWorksByType(1)->getItems() as $work) {
+            foreach ($this->getLoad()->getWorksByType(CIndPlanPersonWorkType::STUDY_LOAD)->getItems() as $work) {
                 if ($work->load_month_id == $month &&
                     $work->load_type_id == $type &&
                     $work->load_is_contract == $dataType) {

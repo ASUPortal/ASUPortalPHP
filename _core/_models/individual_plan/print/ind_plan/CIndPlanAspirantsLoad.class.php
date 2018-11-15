@@ -1,9 +1,9 @@
 <?php
 
-class CIndPlanTrainLoad extends CAbstractPrintClassField{
+class CIndPlanAspirantsLoad extends CAbstractPrintClassField{
     public function getFieldName()
     {
-        return "Учебно-воспитательная работа";
+        return "Организационно-методическая работа";
     }
 
     public function getFieldDescription()
@@ -30,7 +30,7 @@ class CIndPlanTrainLoad extends CAbstractPrintClassField{
         } else {
             $load = CIndPlanManager::getLoad($contextObject->getId());
         }
-        $studyLoad = $load->getWorksByType(CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD);
+        $studyLoad = $load->getWorksByType(CIndPlanPersonWorkType::ASPIRANTS_LOAD);
         foreach ($studyLoad->getItems() as $row) {
         	$dataRow = array();
         	$dataRow[0] = count($result) + 1;

@@ -12,12 +12,13 @@ class CIndPlanWorktype extends CActiveModel {
 
     public static function getCategories() {
         return array(
-            2 => "Учебно- и организационно-методическая работа",
-            3 => "Научно-методическая и госбюджетная научно-исследовательская работа",
-            4 => "Учебно-воспитательная работа"
+            CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD => "Учебная работа",
+            CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD => "Научно-исследовательская работа",
+            CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD => "Учебно-методическая, научно-методическая и воспитательная работа",
+            CIndPlanPersonWorkType::ORGANIZATIONAL_AND_METHODICAL_LOAD => "Организационно-методическая работа",
+            CIndPlanPersonWorkType::ASPIRANTS_LOAD => "Подготовка кадров высшей квалификации в аспирантуре"
         );
     }
-
     /**
      * Возможно ли вычисление
      *

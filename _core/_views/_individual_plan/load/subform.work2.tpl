@@ -1,4 +1,4 @@
-{if ($load->getWorksByType(2)->getCount() == 0)}
+{if ($load->getWorksByType(CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD)->getCount() == 0)}
     <div class="alert alert-block">
         Нет данных для отображения
     </div>
@@ -8,15 +8,15 @@
             <th></th>
             <th></th>
             <th>#</th>
-            <th>{CHtml::tableOrder("title_id", $load->getWorksByType(2)->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("plan_amount", $load->getWorksByType(2)->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("plan_expiration_date", $load->getWorksByType(2)->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("plan_report_type", $load->getWorksByType(2)->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("is_executed", $load->getWorksByType(2)->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("comment", $load->getWorksByType(2)->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("title_id", $load->getWorksByType(CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD)->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("plan_amount", $load->getWorksByType(CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD)->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("plan_expiration_date", $load->getWorksByType(CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD)->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("plan_report_type", $load->getWorksByType(CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD)->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("is_executed", $load->getWorksByType(CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD)->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("comment", $load->getWorksByType(CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD)->getFirstItem())}</th>
         </tr>
         {counter start=0 print=false}
-        {foreach $load->getWorksByType(2)->getItems() as $work}
+        {foreach $load->getWorksByType(CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD)->getItems() as $work}
             <tr>
                 <td>
                     <a href="work.php?action=edit&id={$work->getId()}&year={$year}">
