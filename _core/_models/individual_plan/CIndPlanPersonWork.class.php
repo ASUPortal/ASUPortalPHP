@@ -49,21 +49,29 @@ class CIndPlanPersonWork extends CActiveModel{
     }
     public function getTitle() {
         $result = "";
-        if ($this->work_type == "2") {
+        if ($this->work_type == CIndPlanPersonWorkType::STUDY_AND_METHODICAL_LOAD) {
             if (!is_null($this->workType)) {
                 $result = $this->workType->name;
             }
-        } elseif ($this->work_type == "3") {
+        } elseif ($this->work_type == CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD) {
             if (!is_null($this->workType)) {
                 $result = $this->workType->name;
             }
-        } elseif ($this->work_type == "4") {
+        } elseif ($this->work_type == CIndPlanPersonWorkType::STUDY_AND_EDUCATIONAL_LOAD) {
             if (!is_null($this->workType)) {
                 $result = $this->workType->name;
             }
-        } elseif ($this->work_type == "5") {
+        } elseif ($this->work_type == CIndPlanPersonWorkType::LIST_SCIENTIFIC_WORKS) {
             if (!is_null($this->publication)) {
                 $result = $this->publication->name;
+            }
+        } elseif ($this->work_type == CIndPlanPersonWorkType::ORGANIZATIONAL_AND_METHODICAL_LOAD) {
+            if (!is_null($this->workType)) {
+                $result = $this->workType->name;
+            }
+        } elseif ($this->work_type == CIndPlanPersonWorkType::ASPIRANTS_LOAD) {
+            if (!is_null($this->workType)) {
+                $result = $this->workType->name;
             }
         }
         return $result;

@@ -1,4 +1,4 @@
-{if ($load->getWorksByType(CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD)->getCount() == 0)}
+{if ($load->getWorksByType(CIndPlanPersonWorkType::ORGANIZATIONAL_AND_METHODICAL_LOAD)->getCount() == 0)}
     <div class="alert alert-block">
         Нет данных для отображения
     </div>
@@ -8,15 +8,14 @@
             <th></th>
             <th></th>
             <th>#</th>
-            <th>{CHtml::tableOrder("title_id", $load->getWorksByType(CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD)->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("plan_amount", $load->getWorksByType(CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD)->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("plan_hours", $load->getWorksByType(CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD)->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("plan_expiration_date", $load->getWorksByType(CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD)->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("plan_report_type", $load->getWorksByType(CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD)->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("comment", $load->getWorksByType(CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD)->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("title_id", $load->getWorksByType(CIndPlanPersonWorkType::ORGANIZATIONAL_AND_METHODICAL_LOAD)->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("plan_hours", $load->getWorksByType(CIndPlanPersonWorkType::ORGANIZATIONAL_AND_METHODICAL_LOAD)->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("plan_expiration_date", $load->getWorksByType(CIndPlanPersonWorkType::ORGANIZATIONAL_AND_METHODICAL_LOAD)->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("is_executed", $load->getWorksByType(CIndPlanPersonWorkType::ORGANIZATIONAL_AND_METHODICAL_LOAD)->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("comment", $load->getWorksByType(CIndPlanPersonWorkType::ORGANIZATIONAL_AND_METHODICAL_LOAD)->getFirstItem())}</th>
         </tr>
         {counter start=0 print=false}
-        {foreach $load->getWorksByType(CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD)->getItems() as $work}
+        {foreach $load->getWorksByType(CIndPlanPersonWorkType::ORGANIZATIONAL_AND_METHODICAL_LOAD)->getItems() as $work}
             <tr>
                 <td>
                     <a href="work.php?action=edit&id={$work->getId()}&year={$year}">
@@ -30,15 +29,13 @@
                 </td>
                 <td>{counter}</td>
                 <td>{$work->getTitle()}</td>
-                <td>{$work->plan_amount}</td>
                 <td>{$work->plan_hours}</td>
                 <td>{$work->plan_expiration_date}</td>
-                <td>{$work->plan_report_type}</td>
+                <td>{$work->isExecuted()}</td>
                 <td>{$work->comment}</td>
             </tr>
         {/foreach}
             <tr>
-                <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -53,8 +50,7 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td><b>Итого запланировано</b></td>
-                <td><b>{CIndividualPlanLoadService::getSumPlanAmountWorksByType($load, CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD)}</b></td>
-                <td>&nbsp;</td>
+                <td><b>{CIndividualPlanLoadService::getSumPlanAmountWorksByType($load, CIndPlanPersonWorkType::ORGANIZATIONAL_AND_METHODICAL_LOAD)}</b></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -75,7 +71,6 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td>&nbsp;</td>
             </tr>
         {else}
             <tr>
@@ -83,7 +78,6 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>В нагрузке не указан приказ!</td>
-                <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>

@@ -30,7 +30,7 @@ class CIndPlanChangesLoad extends CAbstractPrintClassField{
         } else {
             $load = CIndPlanManager::getLoad($contextObject->getId());
         }
-        $studyLoad = $load->getWorksByType(6);
+        $studyLoad = $load->getWorksByType(CIndPlanPersonWorkType::CHANGE_RECORDS);
         foreach ($studyLoad->getItems() as $row) {
         	$dataRow = array();
         	$dataRow[0] = count($result) + 1;

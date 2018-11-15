@@ -30,7 +30,7 @@ class CIndPlanScienceLoad extends CAbstractPrintClassField{
         } else {
             $load = CIndPlanManager::getLoad($contextObject->getId());
         }
-        $studyLoad = $load->getWorksByType(3);
+        $studyLoad = $load->getWorksByType(CIndPlanPersonWorkType::SCIENTIFIC_METHODICAL_LOAD);
         foreach ($studyLoad->getItems() as $row) {
         	$dataRow = array();
         	$dataRow[0] = count($result) + 1;

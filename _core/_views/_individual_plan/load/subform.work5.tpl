@@ -1,4 +1,4 @@
-{if ($load->getWorksByType(5)->getCount() == 0)}
+{if ($load->getWorksByType(CIndPlanPersonWorkType::LIST_SCIENTIFIC_WORKS)->getCount() == 0)}
     <div class="alert alert-block">
         Нет данных для отображения
     </div>
@@ -8,11 +8,11 @@
             <th></th>
             <th></th>
             <th>#</th>
-            <th>{CHtml::tableOrder("title_id", $load->getWorksByType(5)->getFirstItem())}</th>
-            <th>{CHtml::tableOrder("paper_pages", $load->getWorksByType(5)->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("title_id", $load->getWorksByType(CIndPlanPersonWorkType::LIST_SCIENTIFIC_WORKS)->getFirstItem())}</th>
+            <th>{CHtml::tableOrder("paper_pages", $load->getWorksByType(CIndPlanPersonWorkType::LIST_SCIENTIFIC_WORKS)->getFirstItem())}</th>
         </tr>
         {counter start=0 print=false}
-        {foreach $load->getWorksByType(5)->getItems() as $work}
+        {foreach $load->getWorksByType(CIndPlanPersonWorkType::LIST_SCIENTIFIC_WORKS)->getItems() as $work}
             <tr>
                 <td>
                     <a href="work.php?action=edit&id={$work->getId()}&year={$year}">
