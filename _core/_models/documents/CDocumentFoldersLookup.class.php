@@ -27,7 +27,7 @@ class CDocumentFoldersLookup extends CAbstractSearchCatalog{
     {
         if ($id == 0) {
             return array(
-                "0" => "Корневая папка"
+                "00" => "Корневая папка"
             );
         }
         $folder = CDocumentsManager::getFolder($id);
