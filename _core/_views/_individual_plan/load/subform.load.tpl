@@ -10,25 +10,36 @@
     </li>
     <li>
         <a href="#work_{$load->getId()}_2" data-toggle="tab">
+            {*
             Учебная работа
+            *}
+            Учебно- и организационно-методическая
             <i title="Добавить" class="icon-plus-sign" onclick="window.open('{$web_root}_modules/_individual_plan/work.php?action=add&id={$load->getId()}&type=2&year={$load->year->id}')"></i>
             <i title="Скопировать" class="icon-share" onclick="window.open('{$web_root}_modules/_individual_plan/load.php?action=selectYearLoadWorks&load_id={$load->getId()}&type=2')"></i>
         </a>
     </li>
     <li>
         <a href="#work_{$load->getId()}_3" data-toggle="tab">
+            {*
             Научно-исследовательская
+            *}
+            Научно-методическая и госбюджетная научно-исследовательская
             <i title="Добавить" class="icon-plus-sign" onclick="window.open('{$web_root}_modules/_individual_plan/work.php?action=add&id={$load->getId()}&type=3&year={$load->year->id}')"></i>
             <i title="Скопировать" class="icon-share" onclick="window.open('{$web_root}_modules/_individual_plan/load.php?action=selectYearLoadWorks&load_id={$load->getId()}&type=3')"></i>
         </a>
     </li>
     <li>
         <a href="#work_{$load->getId()}_4" data-toggle="tab">
+            {*
             Учебно-методическая, научно-методическая и воспитательная
+            *}
+            Учебно-воспитательная
             <i title="Добавить" class="icon-plus-sign" onclick="window.open('{$web_root}_modules/_individual_plan/work.php?action=add&id={$load->getId()}&type=4&year={$load->year->id}')"></i>
             <i title="Скопировать" class="icon-share" onclick="window.open('{$web_root}_modules/_individual_plan/load.php?action=selectYearLoadWorks&load_id={$load->getId()}&type=4')"></i>
         </a>
     </li>
+    
+    {*
     <li>
         <a href="#work_{$load->getId()}_5" data-toggle="tab">
             Организационно-методическая работа
@@ -43,6 +54,8 @@
             <i title="Скопировать" class="icon-share" onclick="window.open('{$web_root}_modules/_individual_plan/load.php?action=selectYearLoadWorks&load_id={$load->getId()}&type=8')"></i>
         </a>
     </li>
+    *}
+    
     <li>
         <a href="#work_{$load->getId()}_7" data-toggle="tab">
             Перечень научных и научно-методических работ
@@ -76,12 +89,16 @@
     <div class="tab-pane" id="work_{$load->getId()}_4">
         {include file="_individual_plan/load/subform.work4.tpl"}
     </div>
+    
+    {*
     <div class="tab-pane" id="work_{$load->getId()}_5">
         {include file="_individual_plan/load/subform.work8.tpl"}
     </div>
     <div class="tab-pane" id="work_{$load->getId()}_6">
         {include file="_individual_plan/load/subform.work9.tpl"}
     </div>
+    *}
+    
     <div class="tab-pane" id="work_{$load->getId()}_7">
         {include file="_individual_plan/load/subform.work5.tpl"}
     </div>
