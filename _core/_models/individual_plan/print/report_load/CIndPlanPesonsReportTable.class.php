@@ -142,13 +142,13 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
             	if (!array_key_exists($target, $row)) {
     				$row[$target] = 0;
     			}
-    			if (!array_key_exists(22, $row)) {
-    				$row[22] = 0;
+    			if (!array_key_exists(23, $row)) {
+    				$row[23] = 0;
     			}
     			if ($source != -1) {
     				foreach ($months as $month) {
     					$row[$target] += $preparedData[$source][$month];
-    					$row[22] += $preparedData[$source][$month];
+    					$row[23] += $preparedData[$source][$month];
     				}
     			}
     			if ($row[$target] == 0) {
