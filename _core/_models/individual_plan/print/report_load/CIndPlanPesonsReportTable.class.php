@@ -94,7 +94,7 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
                     // если есть бюджет-контракт, то суммируем их
                     $preparedRow = array();
                     $preparedRow[0] = $r[0];
-                    for ($i = 1; $i <= 17; $i++) {
+                    for ($i = 1; $i <= 22; $i++) {
                         $preparedRow[$i] = $r[($i * 2)] + $r[($i * 2 - 1)];
                     }
                     $preparedData[] = $preparedRow;
