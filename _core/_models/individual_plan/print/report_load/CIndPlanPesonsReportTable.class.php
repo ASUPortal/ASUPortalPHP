@@ -116,7 +116,7 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
             	 * Столбцы для изменений
             	 *
             	 * Номер слева соответствует номеру столбца в шаблоне, начиная с 0
-            	 * Номер справа соответствует порядковому номеру нагрузки из справочника, начиная с 0
+            	 * Номер справа соответствует порядковому номеру нагрузки из справочника _modules/_taxonomy/index.php?action=legacy&id=37, начиная с 0
             	 * -1 означает, что столбец будет пропущен
             	 */	
                 5 => 0, //лекц
@@ -135,7 +135,8 @@ class CIndPlanPesonsReportTable extends CAbstractPrintClassField {
                 18 => 10, //ГЭК
                 19 => 16, //КСР
                 20 => 13, //занятия с аспирантами
-            	21 => 12 //асп
+            	21 => 12, //асп
+                22 => 18 //НИР
             );
             foreach ($rows as $target=>$source) {
             	if (!array_key_exists($target, $row)) {
