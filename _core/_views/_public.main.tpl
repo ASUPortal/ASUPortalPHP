@@ -58,6 +58,8 @@
 								<img src="{$web_root}images/design/blocks/block4.gif" alt="Cайт УГАТУ" border=1></a></td></tr><br>
 							<tr height=50 class=round_table><td colspan=3 align=center><a href=http://www.businessstudio.ru title="Управление бизнесом, бизнес-моделирование, бизнес-процесс, описание бизнес-процессов, оптимизация бизнес-процессов&nbsp;&mdash;&nbsp;Business Studio" target="_blank">
 								<img src="{$web_root}images/design/blocks/block8.gif" alt="Cайт Business Studio" border=0 style="background-color:White;"></a></td></tr>
+							<tr height=50 class=round_table><td colspan=3 align=center><a href=https://futu.ru title="Группа компаний «Информация Будущего»" target="_blank">
+								<img src="{$web_root}images/design/blocks/block7.gif" alt="Группа компаний «Информация Будущего»" border=0 style="background-color:White;"></a></td></tr>
 							<tr height=70 class=round_table><td colspan=3 align=center><a href=http://erp4students.ru title="Программа дистанционного обучения решениям SAP для студентов России и стран СНГ, организуемую университетом Дуйсбург-Эссена (Германия)   erp4students" target="_blank">
 								<img src="{$web_root}images/design/blocks/block9.gif" alt="erp4students" border=0 style="background-color:White;"></a></td></tr>
 			        		<tr height=50 class=round_table><td colspan=3 align=center><a href=http://www.library.ugatu.ac.ru/index.html title="Библиотека,электронный каталог УГАТУ" target="_blank">
