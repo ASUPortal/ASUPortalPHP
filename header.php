@@ -144,7 +144,12 @@ $head='
         <tr class=round_table><td colspan=3 align=center class=baner_img><a href=http://erp4students.ru title="Программа дистанционного обучения решениям SAP для студентов России и стран СНГ, организуемую университетом Дуйсбург-Эссена (Германия)   erp4students"  target="_blank">
                            <img src='.$web_root.'images/design/blocks/block9.gif alt="erp4students" border=0 style="background-color:White;"></a></td></tr>
         <tr class=round_table><td colspan=3 align=center class=baner_img><a href=http://www.ugatu.net title="Портал студгородка УГАТУ"  target="_blank">
-                           <img src='.$web_root.'images/design/blocks/block5.gif alt="Cтудгородок УГАТУ" border=1></a></td></tr>
+                           <img src='.$web_root.'images/design/blocks/block5.gif alt="Cтудгородок УГАТУ" border=1></a></td>
+	<tr class=round_table><td colspan=3 align=center class=baner_img><a href=https://futu.ru title="
+Группа компаний «Информация Будущего»
+ДИСТРИБЬЮТОР ИНФОРМАЦИОННО-ПРАВОВОГО КОНСОРЦИУМА «КОДЕКС»
+"  target="_blank">
+                           <img src='.$web_root.'images/design/blocks/block7.gif alt="Группа компаний «Информация Будущего»" border=1></a></td></tr>
         <tr class=round_table><td colspan=3 align=center class=baner_img><a href=http://www.library.ugatu.ac.ru/index.html title="Библиотека,электронный каталог УГАТУ" target="_blank">
                            <img src='.$web_root.'images/design/blocks/block6.gif alt="Библиотека УГАТУ" border=1></a></td></tr>'.$tab_end;
     /**
